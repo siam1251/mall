@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="menuTitles">
+        <item>@string/menu_home</item>
+        <item>@string/menu_directory</item>
+        <item>@string/menu_map</item>
+        <item>@string/menu_info</item>
+    </string-array>
+
+
+    <string-array name="menuIcons">
+        <item>@drawable/icn_home</item>
+        <item>@drawable/icn_directory</item>
+        <item>@drawable/icn_map</item>
+        <item>@drawable/icn_mall_info</item>
+
+    </string-array>
+
+</resources>

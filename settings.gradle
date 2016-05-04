@@ -1,0 +1,5 @@
+include ':app'
+def mfMallDir = file('../KCP/kcpandroidsdk')
+def rootProjectDescriptor = settings.rootProject
+settings.createProjectDescriptor(rootProjectDescriptor, 'kcpandroidsdk', mfMallDir)
+include ':kcpandroidsdk'

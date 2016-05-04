@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/mainTabHeight">
+
+    <!--hack to prevent the tablayout to limit its size to the minimum height of its children-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/mainTabHeight"
+        />
+
+        android:layout_marginTop="@dimen/homeTabIconTopMarginWhenNotSelected"
+    <ImageView
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/icn_home"
+        android:id="@+id/ivTabIcon"
+        android:layout_width="@dimen/mainTabIconWidth"
+        android:layout_height="@dimen/mainTabIconWidth"
+        />
+
+    <!--<com.kineticcafe.kcpmall.views.ThemedTextView-->
+        android:visibility="gone"
+        android:layout_below="@+id/ivTabIcon"
+    <TextView
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/main.tabTextSize"
+        android:layout_marginTop="@dimen/homeTabTitleTopMarginWhenSelected"
+        android:text="@string/menu_home"
+        android:id="@+id/tvTabTitle"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>
