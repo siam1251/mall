@@ -18,8 +18,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:layout_scrollFlags="scroll|snap|enterAlways"
                 >
+                app:layout_scrollFlags="scroll|snap|enterAlways"
                 app:expandedTitleMarginStart="48dp"
                 app:expandedTitleMarginEnd="64dp"
 
@@ -30,7 +30,7 @@
                     app:tabTextColor="@color/gray"
                     app:tabSelectedTextColor="@color/themeColor"
                     app:tabIndicatorColor="@color/themeColor"
-                    app:tabIndicatorHeight="@dimen/home.tabIndicatorHeight"
+                    app:tabIndicatorHeight="@dimen/home_tab_indicator_height"
                     app:tabMode="fixed"
                     app:tabGravity="fill"
                     />
@@ -46,15 +46,5 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             />
-            app:layout_behavior="com.kineticcafe.kcpmall.views.ScrollingTabBarBehavior"
-
-        <!--<android.support.design.widget.FloatingActionButton-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_margin="@dimen/activity_horizontal_margin"-->
-            <!--android:src="@drawable/btn_menu_map"-->
-            <!--app:layout_anchor="@id/ablTop"-->
-            <!--app:layout_anchorGravity="bottom|right|end"/>-->
-    <!--</RelativeLayout>-->
 
 </android.support.design.widget.CoordinatorLayout>

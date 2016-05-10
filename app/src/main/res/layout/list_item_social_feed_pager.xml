@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cvAncmt"
+        android:layout_marginTop="@dimen/card_vertical_margin"
+        android:layout_marginBottom="@dimen/card_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        card_view:cardCornerRadius="@dimen/card_corner_radius"
+        card_view:contentPadding="@dimen/card_content_padding"
+        >
+        card_view:cardPreventCornerOverlap="false"
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/llSocialFeedUserLayout"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_marginLeft="@dimen/social_feed_user_layout_left_margin"
+                android:layout_height="@dimen/social_feed_user_layout_height">
+
+                <ImageView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="@dimen/social_feed_icon_width"
+                    android:layout_height="@dimen/social_feed_icon_width"
+                    android:id="@+id/ivSocialFeedLogo"
+                    android:src="@drawable/icn_twitter"
+                    />
+
+                <TextView
+                    android:id="@+id/tvSocialFeedUser"
+                    android:layout_toRightOf="@+id/ivSocialFeedLogo"
+                    android:layout_marginLeft="@dimen/social_feed_user_txt_left_margin"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/social_feed_user_txt"
+                    android:text="@string/app_name"
+                    />
+
+            </LinearLayout>
+
+            <android.support.v4.view.ViewPager
+                android:layout_below="@+id/llSocialFeedUserLayout"
+                android:id="@+id/vpSocialFeed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <RelativeLayout
+                android:layout_below="@+id/vpSocialFeed"
+                android:id="@+id/viewPagerIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/social_feed_user_layout_height"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="5dp"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/llViewPagerCircle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:orientation="horizontal" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</android.support.design.widget.CoordinatorLayout>

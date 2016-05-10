@@ -34,4 +34,15 @@
     <color name="black">#000000</color>
 
 
+    <!--announcement card-->
+    <color name="ancmt_title_color">#de000000</color>
+    <color name="ancmt_date_color">#87000000</color>
+
+    <!--interest card-->
+    <color name="intrst_bg">#11aaba</color>
+    <color name="intrst_txt">#ffffff</color>
+
+    <!--insta card-->
+    <color name="tw_bg">#55acee</color>
+
 </resources>

@@ -3,21 +3,19 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="@dimen/mainTabHeight">
+    android:layout_height="@dimen/main_tab_height">
 
     <!--hack to prevent the tablayout to limit its size to the minimum height of its children-->
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/mainTabHeight"
-        />
+        android:layout_height="@dimen/main_tab_height"/>
 
-        android:layout_marginTop="@dimen/homeTabIconTopMarginWhenNotSelected"
     <ImageView
         android:layout_centerHorizontal="true"
         android:src="@drawable/icn_home"
         android:id="@+id/ivTabIcon"
-        android:layout_width="@dimen/mainTabIconWidth"
-        android:layout_height="@dimen/mainTabIconWidth"
+        android:layout_width="@dimen/main_tab_icon_width"
+        android:layout_height="@dimen/main_tab_icon_width"
         />
 
     <!--<com.kineticcafe.kcpmall.views.ThemedTextView-->
@@ -25,8 +23,8 @@
         android:layout_below="@+id/ivTabIcon"
     <TextView
         android:layout_centerHorizontal="true"
-        android:textSize="@dimen/main.tabTextSize"
-        android:layout_marginTop="@dimen/homeTabTitleTopMarginWhenSelected"
+        android:textSize="@dimen/main_tab_text_size"
+        android:layout_marginTop="@dimen/home_tab_title_top_margin_when_selected"
         android:text="@string/menu_home"
         android:id="@+id/tvTabTitle"
         android:visibility="invisible"

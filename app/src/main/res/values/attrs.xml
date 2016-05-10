@@ -9,4 +9,16 @@
         <attr name="metaButtonBarButtonStyle" format="reference" />
     </declare-styleable>
 
+
+    <declare-styleable name="kCPSetRatioImageView">
+        <attr name="imageRatio" format="dimension"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="KcpAnimatedViewPager">
+        <attr name="selectedColor" format="color"/>
+        <attr name="unSelectedColor" format="color"/>
+        <!--<attr name="finalYPosition" format="dimension"/>-->
+    </declare-styleable>
+
 </resources>

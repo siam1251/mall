@@ -6,6 +6,59 @@
     <dimen name="activity_margin_small">6dp</dimen>
     <dimen name="activity_margin_tiny">3dp</dimen>
 
+    <!--main bot nav bar-->
+    <dimen name="main_app_bar_layout_height">45dp</dimen>
+
+    <!--viewpager circle dot-->
+    <dimen name="viewpager_circle_dot_margin">2dp</dimen>
+    <dimen name="viewpager_circle_dot_size">8dp</dimen>
+
+
+    <!--card in general-->
+    <dimen name="card_horizontal_margin">8dp</dimen>
+    <dimen name="card_vertical_margin">4dp
+    </dimen> <!--divide the space between cards by two and add to top and bottom respectively ancmtCardContentPadding-->
+    <dimen name="card_corner_radius">2dp</dimen>
+    <dimen name="card_content_padding">-8dp
+    </dimen> <!--remove the the empty top padding coming from radius-->
+    <dimen name="card_desc_horizontal_padding">16dp</dimen>
+
+    <!--announcement card-->
+    <dimen name="ancmt_desc_top_margin">11.6dp</dimen>
+    <dimen name="ancmt_desc_height">105dp</dimen>
+    <dimen name="ancmt_title_txt">20dp</dimen>
+    <dimen name="ancmt_title_height">28dp</dimen>
+    <dimen name="ancmt_date_txt">14dp</dimen>
+    <dimen name="ancmt_date_height">24dp</dimen>
+
+    <item name="ancmt_image_ratio" format="float" type="dimen">1.6</item>
+
+    <!--interest card-->
+    <dimen name="intrst_card_height">157dp</dimen>
+    <dimen name="intrst_title_txt">20sp</dimen>
+    <dimen name="intrst_title_height">24dp</dimen>
+    <dimen name="intrst_desc_txt">14sp</dimen>
+    <dimen name="intrst_desc_height">40dp</dimen>
+    <dimen name="intrst_btn_txt">14sp</dimen>
+    <dimen name="intrst_btn_height">16dp</dimen>
+    <dimen name="intrst_title_top_margin">20dp</dimen>
+    <dimen name="intrst_desc_top_margin">7dp</dimen>
+    <dimen name="intrst_btn_top_margin">32dp</dimen>
+
+
+    <!--feed card-->
+    <dimen name="social_feed_icon_width">25dp</dimen>
+    <dimen name="social_feed_user_layout_left_margin">24dp</dimen>
+    <dimen name="social_feed_user_txt_left_margin">17dp</dimen>
+    <dimen name="social_feed_user_txt">16sp</dimen>
+    <dimen name="social_feed_user_layout_height">47.5dp</dimen>
+    <dimen name="social_feed_horizontal_margin">8dp</dimen>
+
+    <!--insta card-->
+    <dimen name="tw_desc_horizontal_padding">22dp</dimen>
+    <dimen name="tw_date_txt_top_margin">17dp</dimen>
+    <dimen name="tw_desc_txt">16sp</dimen>
+    <dimen name="tw_date_txt">14sp</dimen>
 
 
     <!-- Default screen margins, per the Android Design guidelines. -->
@@ -17,12 +70,12 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="custom_tab_layout_height">72dp</dimen>
     <dimen name="tab_label">14sp</dimen>
-    <dimen name="mainTabHeight">56dp</dimen>
-    <dimen name="mainTabIconWidth">20dp</dimen>
-    <dimen name="main.tabTextSize">8sp</dimen>
-    <dimen name="home.tabIndicatorHeight">4dp</dimen>
-    <dimen name="homeTabIconTopMarginWhenNotSelected">14dp</dimen>
-    <dimen name="homeTabIconTopMarginWhenSelected">8.5dp</dimen>
-    <dimen name="homeTabTitleTopMarginWhenSelected">28.5dp</dimen>
+    <dimen name="main_tab_height">56dp</dimen>
+    <dimen name="main_tab_icon_width">20dp</dimen>
+    <dimen name="main_tab_text_size">8sp</dimen>
+    <dimen name="home_tab_indicator_height">4dp</dimen>
+    <dimen name="home_tab_icon_top_margin_when_not_selected">14dp</dimen>
+    <dimen name="home_tab_icon_top_margin_when_selected">8.5dp</dimen>
+    <dimen name="home_tab_title_top_margin_when_selected">28.5dp</dimen>
 
 </resources>
