@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         HomeTopViewPagerAdapter adapter = new HomeTopViewPagerAdapter(getChildFragmentManager());
-        adapter.addFrag(new OneFragment(), "NEWS");
+        adapter.addFrag(new NewsFragment(), "NEWS");
         adapter.addFrag(new OneFragment(), "DEALS");
         viewPager.setAdapter(adapter);
     }

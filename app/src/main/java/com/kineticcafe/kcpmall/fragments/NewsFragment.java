@@ -5,16 +5,25 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kineticcafe.kcpmall.Cheeses;
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.adapters.NewsAdapter;
+import com.kineticcafe.kcpmall.model.InstagramFeed;
+import com.kineticcafe.kcpmall.model.TwitterFeed;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Kay on 2016-05-04.
  */
-public class NewsFragment extends Fragment{
+public class NewsFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -47,13 +56,23 @@ public class NewsFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mView = inflater.inflate(R.layout.fragment_one, container, false);
-        NestedScrollView nsvOne = (NestedScrollView) mView.findViewById(R.id.nsvOne);
-
-
-
+        mView = inflater.inflate(R.layout.fragment_news, container, false);
+        RecyclerView rv = (RecyclerView) mView.findViewById(R.id.rv_news);
+        rv.setNestedScrollingEnabled(true);
+        setupRecyclerView(rv);
 
         return mView;
+    }
+
+    private void setupRecyclerView(RecyclerView recyclerView) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        ArrayList<String> temp = new ArrayList<>();
+        temp.add("a");
+        temp.add("a");
+        temp.add("a");
+        temp.add("a");
+        temp.add("a");
+        recyclerView.setAdapter(new NewsAdapter(getActivity(), temp, new ArrayList<TwitterFeed>(), new ArrayList<InstagramFeed>()));
     }
 
 }

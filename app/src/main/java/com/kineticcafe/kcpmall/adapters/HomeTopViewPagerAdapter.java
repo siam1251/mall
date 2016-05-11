@@ -4,11 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.fragments.HomeFragment;
-import com.kineticcafe.kcpmall.fragments.OneFragment;
-import com.kineticcafe.kcpmall.widget.SlidingTabLayout;
-
 import java.util.ArrayList;
 import java.util.List;
 

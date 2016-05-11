@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cvIntrst"
+        android:layout_marginLeft="@dimen/card_horizontal_margin"
+        android:layout_marginRight="@dimen/card_horizontal_margin"
+        android:layout_marginTop="@dimen/card_vertical_margin"
+        android:layout_marginBottom="@dimen/card_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        card_view:cardCornerRadius="@dimen/card_corner_radius"
+        card_view:contentPadding="@dimen/card_content_padding"
+        >
+        card_view:cardUseCompatPadding="true"
+
+        <RelativeLayout
+            android:background="@color/intrst_bg"
+            android:paddingLeft="@dimen/card_desc_horizontal_padding"
+            android:paddingRight="@dimen/card_desc_horizontal_padding"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/intrst_card_height">
+
+            <TextView
+                android:layout_marginTop="@dimen/intrst_title_top_margin"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/intrst_title_height"
+                android:id="@+id/tvIntrstTitle"
+                android:textSize="@dimen/intrst_title_txt"
+                android:text="@string/intrst_card_title"
+                android:textColor="@color/intrst_txt"
+                />
+
+            <TextView
+                android:layout_marginTop="@dimen/intrst_desc_top_margin"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/intrst_desc_height"
+                android:id="@+id/tvIntrstDesc"
+                android:layout_below="@+id/tvIntrstTitle"
+                android:textSize="@dimen/intrst_desc_txt"
+                android:text="@string/intrst_card_desc"
+                android:textColor="@color/intrst_txt"
+                />
+
+            <TextView
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/intrst_btn_height"
+                android:id="@+id/tvIntrstBtn"
+                android:textSize="@dimen/intrst_btn_txt"
+                android:text="@string/intrst_card_btn"
+                android:textColor="@color/intrst_txt"
+                android:layout_below="@+id/tvIntrstDesc"
+                android:layout_marginTop="@dimen/intrst_btn_top_margin"
+                />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</android.support.design.widget.CoordinatorLayout>

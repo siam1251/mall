@@ -1,23 +1,24 @@
 <resources>
-    <string name="app_name">IvanhoeCambridge</string>
+    <string name="app_name">Shopping Mall</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
 
-    <string name="title_activity_splash">SplashActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-
+    <!--menu-->
     <string name="menu_home">HOME</string>
     <string name="menu_directory">DIRECTORY</string>
     <string name="menu_map">MAP</string>
     <string name="menu_info">INFO</string>
+
+
+    <!--interest card-->
+    <string name="intrst_card_title">What Are Your Interests?</string>
+    <string name="intrst_card_desc">Set your interests to get personalized deal recommendations just for you!</string>
+    <string name="intrst_card_btn">SET MY INTERESTS</string>
+
+
 
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non ante dictum, tempor orci nec, ultricies urna. Donec a consequat leo. Aliquam commodo venenatis nisi tempor lacinia. Aenean scelerisque, diam eu fringilla tempus, risus nisl dignissim nisl, at pharetra arcu orci et erat. Nullam pharetra gravida neque, sit amet accumsan nisl ornare volutpat. Nulla mauris turpis, consectetur consequat neque eget, egestas tristique felis. Fusce et sodales orci. Duis odio purus, consectetur a pulvinar a, ultrices mollis tortor. Duis efficitur posuere malesuada. Donec fringilla aliquet metus id faucibus. Aliquam erat volutpat. Integer felis ante, pharetra vel nibh in, blandit pulvinar enim. Duis sed eleifend lectus, eu accumsan risus. Maecenas tincidunt dignissim dictum. Fusce velit nibh, pellentesque at finibus sed, fringilla id ipsum.
 
@@ -28,7 +29,9 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 Sed euismod, tellus in gravida viverra, metus arcu imperdiet lorem, viverra malesuada dui velit et enim. Maecenas eget justo fermentum turpis elementum consequat. Pellentesque pharetra ante non sem dignissim sagittis. Cras eget euismod mi. Sed porta diam ac efficitur tincidunt. Etiam orci eros, faucibus in mollis et, placerat nec lacus. Cras vel accumsan leo. Aliquam erat volutpat. Interdum et malesuada fames ac ante ipsum primis in faucibus.
 
 Aenean tellus enim, varius ac odio at, luctus sollicitudin magna. Suspendisse imperdiet blandit mattis. Praesent tristique quam est, ac ornare erat ornare id. Donec imperdiet dui et orci fringilla porttitor. Donec semper ex eget urna cursus, sit amet tempus ex vulputate. Sed molestie nulla tempor, accumsan eros ac, condimentum enim. In hac habitasse platea dictumst. Mauris convallis pretium aliquam. Vivamus placerat turpis posuere massa venenatis, dictum pulvinar mauris facilisis. Vivamus rhoncus ex ipsum. Duis at nisl bibendum velit rhoncus suscipit. Ut placerat posuere finibus.</string>
+    <string name="title_activity_detail">DetailActivity</string>
 
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

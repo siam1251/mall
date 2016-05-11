@@ -1,6 +1,7 @@
 package com.kineticcafe.kcpmall;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -8,12 +9,15 @@ import android.view.MotionEvent;
 public class SplashActivity extends AppCompatActivity {
 
     private Thread mSplashThread;
-
+    private final static int MSG_CONTINUE = 1234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+//        mHandler.sendEmptyMessageDelayed(MSG_CONTINUE, Constants.DURATION_SPLASH_ANIMATION);
+
 
         mSplashThread = new Thread(){
             @Override
@@ -36,6 +40,24 @@ public class SplashActivity extends AppCompatActivity {
         mSplashThread.start();
 
     }
+
+    /*private final Handler mHandler = new Handler()
+    {
+        public void handleMessage(android.os.Message msg)
+        {
+            switch(msg.what){
+                case MSG_CONTINUE:
+                    finish();
+                    overridePendingTransition(R.anim.splashfadein,
+                            R.anim.splashfadeout);
+
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+
+                    break;
+            }
+        }
+    };*/
 
     @Override
     public boolean onTouchEvent(MotionEvent evt)
