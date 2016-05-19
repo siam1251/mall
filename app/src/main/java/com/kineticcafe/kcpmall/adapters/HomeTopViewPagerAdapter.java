@@ -39,4 +39,7 @@ public class HomeTopViewPagerAdapter extends FragmentPagerAdapter {
     }
 
 
+    public Fragment getFragment(int position){
+        return mFragmentList.get(position);
+    }
 }

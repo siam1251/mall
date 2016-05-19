@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryDark">#303F9F</color> <!--status bar-->
     <color name="colorAccent">#FFFFFF</color>
     <color name="black_overlay">#66000000</color>
 
@@ -16,6 +16,7 @@
     <color name="holo_gray_transparent">#CF000000</color>
 
 
+    <color name="transparent">#00000000</color>
     <color name="white">#FFFFFF</color>
     <color name="yellow">#FFFF00</color>
     <color name="fuchsia">#FF00FF</color>
@@ -44,5 +45,13 @@
 
     <!--insta card-->
     <color name="tw_bg">#55acee</color>
+
+    <!--detail-->
+    <!--<color name="detail_expiry_date_bg">#cc13bed0</color>-->
+    <color name="detail_expiry_date_bg_alpha">#00FFFFFF</color>
+    <color name="detail_separator_color">#e2e2e2</color>
+    <color name="detail_disclaimer_bg">#f5f5f5</color>
+    <color name="detail_disclaimer_text">#8b8b8b</color>
+    <!--<color name="detail_date_bg">#13bed0</color>--> <!--theme color-->
 
 </resources>

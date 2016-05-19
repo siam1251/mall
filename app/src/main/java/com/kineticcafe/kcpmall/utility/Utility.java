@@ -8,12 +8,23 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.WindowManager;
 
 import com.kineticcafe.kcpmall.R;
+
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
+
+import javax.xml.parsers.SAXParserFactory;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Kay on 2016-05-02.
@@ -79,6 +90,81 @@ public class Utility {
 
         return width;
     }
+
+    public static boolean existsInServer(String URLName){
+        try {
+            //TODO: look into this
+            new RetrieveFeedTask().execute(URLName);
+
+            long CONNECT_TIMEOUT_SEC = 20;
+            // Use okhttp library to check existsInServer(). The performance speed increased.
+            OkHttpClient client = new OkHttpClient.Builder()
+//                    .connectTimeout(timeout, TimeUnit.SECONDS)
+//                    .writeTimeout(timeout, TimeUnit.SECONDS)
+//                    .readTimeout(timeout, TimeUnit.SECONDS)
+                    .connectTimeout(CONNECT_TIMEOUT_SEC, TimeUnit.SECONDS)
+                    .writeTimeout(CONNECT_TIMEOUT_SEC, TimeUnit.SECONDS)
+                    .readTimeout(CONNECT_TIMEOUT_SEC, TimeUnit.SECONDS)
+                    .build();
+
+            Request request = new Request.Builder()
+
+                    .url(URLName)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if(response.code() == 200)
+                return true;
+            else
+                return false;
+        }
+        catch (Exception e) {
+            return false;
+        }
+       /* try {
+            return new RetrieveFeedTask().execute(URLName).get();
+        }
+        catch (Exception e) {
+            return false;
+        }*/
+    }
+
+    public static class RetrieveFeedTask extends AsyncTask<String, Void, Boolean> {
+
+        private Exception exception;
+
+        protected Boolean doInBackground(String... urls) {
+            try {
+
+                String URLName = urls[0].toString();
+
+                long CONNECT_TIMEOUT_SEC = 20;
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(CONNECT_TIMEOUT_SEC, TimeUnit.SECONDS)
+                        .writeTimeout(CONNECT_TIMEOUT_SEC, TimeUnit.SECONDS)
+                        .readTimeout(CONNECT_TIMEOUT_SEC, TimeUnit.SECONDS)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(URLName)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                if(response.code() == 200)
+                    return true;
+                else
+                    return false;
+            } catch (Exception e) {
+                this.exception = e;
+                return false;
+            }
+        }
+
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+        }
+    }
+
 
 
 

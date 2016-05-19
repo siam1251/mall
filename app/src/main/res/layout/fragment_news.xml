@@ -5,11 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srlNews"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rv_news"
-        android:gravity="center_horizontal"
-        />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rvNews"
+            android:gravity="center_horizontal"
+            />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

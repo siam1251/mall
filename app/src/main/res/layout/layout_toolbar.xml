@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:popupTheme="@style/AppTheme.PopupOverlay"
+    android:id="@+id/tbMain"
+    android:background="?attr/colorPrimary"
+    android:layout_width="match_parent"
+    app:layout_scrollFlags="scroll|enterAlways"
+    android:layout_height="?attr/actionBarSize">
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+
+    <ImageView
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo_vaughan_mills"/>
+</android.support.v7.widget.Toolbar>

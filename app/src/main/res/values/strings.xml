@@ -19,6 +19,8 @@
     <string name="intrst_card_btn">SET MY INTERESTS</string>
 
 
+    <!--transition-->
+    <string name="transition_news_image">transition news image</string>
 
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non ante dictum, tempor orci nec, ultricies urna. Donec a consequat leo. Aliquam commodo venenatis nisi tempor lacinia. Aenean scelerisque, diam eu fringilla tempus, risus nisl dignissim nisl, at pharetra arcu orci et erat. Nullam pharetra gravida neque, sit amet accumsan nisl ornare volutpat. Nulla mauris turpis, consectetur consequat neque eget, egestas tristique felis. Fusce et sodales orci. Duis odio purus, consectetur a pulvinar a, ultrices mollis tortor. Duis efficitur posuere malesuada. Donec fringilla aliquet metus id faucibus. Aliquam erat volutpat. Integer felis ante, pharetra vel nibh in, blandit pulvinar enim. Duis sed eleifend lectus, eu accumsan risus. Maecenas tincidunt dignissim dictum. Fusce velit nibh, pellentesque at finibus sed, fringilla id ipsum.
 
@@ -31,7 +33,9 @@ Sed euismod, tellus in gravida viverra, metus arcu imperdiet lorem, viverra male
 Aenean tellus enim, varius ac odio at, luctus sollicitudin magna. Suspendisse imperdiet blandit mattis. Praesent tristique quam est, ac ornare erat ornare id. Donec imperdiet dui et orci fringilla porttitor. Donec semper ex eget urna cursus, sit amet tempus ex vulputate. Sed molestie nulla tempor, accumsan eros ac, condimentum enim. In hac habitasse platea dictumst. Mauris convallis pretium aliquam. Vivamus placerat turpis posuere massa venenatis, dictum pulvinar mauris facilisis. Vivamus rhoncus ex ipsum. Duis at nisl bibendum velit rhoncus suscipit. Ut placerat posuere finibus.</string>
     <string name="title_activity_detail">DetailActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="test_disclaimer">* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non ante dictum, tempor orci nec, ultricies urna. Donec a consequat leo. Aliquam commodo venenatis nisi tempor lacinia. </string>
+    <string name="title_activity_test">Test</string>
+
 
 </resources>

@@ -7,32 +7,35 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.utility.Utility;
 
 /**
  * Created by Kay on 2016-05-05.
  */
-public class kCPSetRatioImageView extends ImageView {
+public class KCPSetRatioImageView extends ImageView {
 
     private float mImageRatio;
 
 
 
-    public kCPSetRatioImageView(Context context) {
+    public KCPSetRatioImageView(Context context) {
         super(context);
     }
 
-    public kCPSetRatioImageView(Context context, AttributeSet attrs) {
+    public KCPSetRatioImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.kCPSetRatioImageView);
-            mImageRatio = a.getFloat(R.styleable.kCPSetRatioImageView_imageRatio, 0);
+
+            float imageRatio = Utility.getFloat(context, R.dimen.ancmt_image_ratio);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KCPSetRatioImageView);
+            mImageRatio = a.getFloat(R.styleable.KCPSetRatioImageView_imageRatio, imageRatio);
 
             a.recycle();
         }
     }
 
-    public kCPSetRatioImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public KCPSetRatioImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
