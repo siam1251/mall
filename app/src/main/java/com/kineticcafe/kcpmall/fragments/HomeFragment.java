@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class HomeFragment extends Fragment {
 
     private NewsFragment mNewsFragment;
     private KcpService mKcpService;
+    private int mTwitterDownloadCounter = 3;
 
     private static HomeFragment sHomeFragment;
     public static HomeFragment getInstance(){
@@ -201,7 +203,10 @@ public class HomeFragment extends Fragment {
     }
 
     public void downloadTwitterTweets() {
+        Log.e("HomeFragment", "ATTEMPTING TW DOWNLOAD");
         if (Utility.isNetworkAvailable(getActivity())) {
+
+            Log.e("HomeFragment", "STARTING TW DOWNLOAD");
             new TwitterAsyncTask(
                     Constants.NUMB_OF_TWEETS,
                     Constants.TWITTER_API_KEY,
@@ -209,11 +214,26 @@ public class HomeFragment extends Fragment {
                     new TwitterAsyncTask.OnTwitterFeedDownloadCompleteListener() {
                         @Override
                         public void onTwitterFeedDownloadComplete(ArrayList<TwitterTweet> twitterTweets) {
-                            if (mNewsFragment.mNewsAdapter.getSocialFeedViewPagerAdapter() != null) {
-                                mNewsFragment.mNewsAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(twitterTweets);
+                            if(twitterTweets == null) {
+                                logger.debug("TWITTER NOT DOWNLOADED");
+                                Log.e("HomeFragment", "TWITTER NOT DOWNLOADED");
+                                mTwitterDownloadCounter--;
+                                if(mTwitterDownloadCounter > 0) {
+                                    logger.debug("twitter download counter : " + mTwitterDownloadCounter);
+                                    Log.e("HomeFragment", "TWITTER REDOWNLOADING");
+                                    downloadTwitterTweets();
+                                }
                             } else {
-                                sTwitterTweets = twitterTweets;
+                                mTwitterDownloadCounter = 3;
+                                logger.debug("TWITTER DOWNLOADED");
+                                if (mNewsFragment.mNewsAdapter.getSocialFeedViewPagerAdapter() != null) {
+                                    mNewsFragment.mNewsAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(twitterTweets);
+                                } else {
+                                    sTwitterTweets = twitterTweets;
+                                }
                             }
+
+
                         }
                     }).execute(Constants.TWITTER_SCREEN_NAME, 5, this);
         }

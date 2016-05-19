@@ -2,12 +2,13 @@ package com.kineticcafe.kcpmall.twitter;
 
 import android.os.AsyncTask;
 
+import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpmall.twitter.model.TwitterTweet;
 
 import java.util.ArrayList;
 
 public class TwitterAsyncTask extends AsyncTask<Object, Void, ArrayList<TwitterTweet>> {
-
+    protected final Logger logger = new Logger(getClass().getName());
     private int mNumbOfTweets;
     private String mTwitterAPIKey;
     private String mTwitterAPISecret;
@@ -26,16 +27,25 @@ public class TwitterAsyncTask extends AsyncTask<Object, Void, ArrayList<TwitterT
 
     @Override
     protected ArrayList<TwitterTweet> doInBackground(Object... params) {
+        logger.debug("TWITTER DOINBG");
         ArrayList<TwitterTweet> twitterTweets = null;
-        if (params.length > 0) {
-            TwitterAPI twitterAPI = new TwitterAPI(mTwitterAPIKey, mTwitterAPISecret, mNumbOfTweets);
-            twitterTweets = twitterAPI.getTwitterTweets(params[0].toString());
+        try {
+            if (params.length > 0) {
+                TwitterAPI twitterAPI = new TwitterAPI(mTwitterAPIKey, mTwitterAPISecret, mNumbOfTweets);
+                twitterTweets = twitterAPI.getTwitterTweets(params[0].toString());
+            }
+            return twitterTweets;
+        } catch (Exception e) {
+            logger.debug("TIWTTER ERROR");
+            logger.error(e);
         }
         return twitterTweets;
+
     }
 
     @Override
     protected void onPostExecute(ArrayList<TwitterTweet> twitterTweets) {
+        logger.debug("TIWTTER ONPOSTEXECUTE");
         if(mTwitterFeedDownloadCompleteListener != null) mTwitterFeedDownloadCompleteListener.onTwitterFeedDownloadComplete(twitterTweets);
     }
 }

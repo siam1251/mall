@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         >
 
-        <!--<RelativeLayout
+        <RelativeLayout
             android:id="@+id/rlDetailImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -28,7 +28,7 @@
                 android:transitionName="@string/transition_news_image"
                 />
 
-            &lt;!&ndash;<TextView&ndash;&gt;
+            <!--<TextView-->
             <com.kineticcafe.kcpmall.views.AlphaTextView
                 xmlns:textAlpha="http://schemas.android.com/apk/res-auto"
                 android:gravity="center"
@@ -43,18 +43,20 @@
                 textAlpha:alpha="@integer/detail_expiry_date_alpha"
                 />
 
-        </RelativeLayout>-->
-
+        </RelativeLayout>
         <FrameLayout
             android:layout_gravity="center"
             android:layout_width="@dimen/detail_logo_width"
             android:layout_height="wrap_content">
 
             <TextView
+                android:layout_marginTop="34dp"
+                android:layout_marginBottom="34dp"
                 android:visibility="gone"
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:textSize="@dimen/detail_logo_text"
+                android:textColor="@color/black"
                 android:text="HUDSON's BAY COMPANY"
                 android:id="@+id/tvDetailLogoText"
                 android:layout_width="match_parent"
@@ -81,6 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvDetailTitle"
+            android:textColor="@color/detail_title_text"
             android:layout_marginBottom="23dp"/>
 
         <android.support.v7.widget.AppCompatButton
@@ -92,10 +95,13 @@
             android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
             android:layout_height="@dimen/detail_date_button_height"
-            app:backgroundTint="@color/themeColor"
             android:layout_marginBottom="25dp"
             android:layout_marginLeft="70dp"
-            android:layout_marginRight="70dp"/>
+            android:layout_marginRight="70dp"
+            android:background="@drawable/btn_style_corner_radius"
+            />
+            android:background="@color/themeColor"
+            app:backgroundTint="@color/themeColor"
 
         <TextView
             android:id="@+id/tvDetailBody"
@@ -103,8 +109,10 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/detail_body_text"
             android:text="@string/lorem"
             android:layout_marginBottom="25dp"
+            android:textColor="@color/black"
             />
 
         <!--<View style="@style/separater" />-->
