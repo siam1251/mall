@@ -10,7 +10,7 @@
     </declare-styleable>
 
 
-    <declare-styleable name="kCPSetRatioImageView">
+    <declare-styleable name="KCPSetRatioImageView">
         <attr name="imageRatio" format="dimension"/>
     </declare-styleable>
 
@@ -19,6 +19,16 @@
         <attr name="selectedColor" format="color"/>
         <attr name="unSelectedColor" format="color"/>
         <!--<attr name="finalYPosition" format="dimension"/>-->
+    </declare-styleable>
+
+    <declare-styleable name="ThemedImageView">
+        <attr name="filterColor" format="color"/>
+        <attr name="filterColorUnselected" format="color"/>
+        <!--<attr name="finalYPosition" format="dimension"/>-->
+    </declare-styleable>
+
+    <declare-styleable name="AlphaTextView">
+        <attr name="alpha" format="integer"/>
     </declare-styleable>
 
 </resources>

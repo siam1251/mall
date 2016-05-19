@@ -3,19 +3,19 @@
     package="com.kineticcafe.kcpmall">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".ICApplication"
+        android:name=".activities.ICApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <!--
         <activity
-            android:name="com.kineticcafe.kcpmall.SplashActivity"
-            android:theme="@style/FullscreenTheme">
+            android:name=".activities.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,20 +23,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.kineticcafe.kcpmall.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        -->
-
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".activities.MainActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.DetailActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.Base"/>
+
+        <activity
+            android:name=".activities.Test"
+            android:label="@string/title_activity_test"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

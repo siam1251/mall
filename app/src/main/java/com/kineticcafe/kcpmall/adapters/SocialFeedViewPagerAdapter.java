@@ -10,9 +10,10 @@ import android.widget.TextView;
 
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
-import com.kineticcafe.kcpmall.model.InstagramFeed;
-import com.kineticcafe.kcpmall.model.TwitterFeed;
+import com.kineticcafe.kcpmall.instagram.model.InstagramFeed;
+import com.kineticcafe.kcpmall.twitter.model.TwitterTweet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,8 +31,8 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
     private static SocialFeedType mSocialFeedType;*/
 
     private Context mContext;
-    private List<TwitterFeed> mTwitterFeedList;
-    private List<InstagramFeed> mInstaFeedList;
+    private List<TwitterTweet> mTwitterFeedList = new ArrayList<>();
+    private List<InstagramFeed> mInstaFeedList = new ArrayList<>();
     private LayoutInflater mLayoutInflater;
     private SocialFeedType mSocialFeedType;
     private int mListSize;
@@ -42,10 +43,10 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
 
     public SocialFeedViewPagerAdapter(){}
 
-    public SocialFeedViewPagerAdapter getTwitterViewPagerAdapter(Context context, List<TwitterFeed> twitterFeedList, OnSocialFeedClickListener onSocialFeedClickListener) {
+    public SocialFeedViewPagerAdapter getTwitterViewPagerAdapter(Context context, List<TwitterTweet> twitterFeedList, OnSocialFeedClickListener onSocialFeedClickListener) {
         init(context);
 //        SocialFeedViewPagerAdapter socialFeedViewPagerAdapter = new SocialFeedViewPagerAdapter();
-        mTwitterFeedList = twitterFeedList;
+        mTwitterFeedList.addAll(twitterFeedList);
         mSocialFeedType = SocialFeedType.TWITTER;
         mListSize = mTwitterFeedList.size();
         mSocialFeedClickListener = onSocialFeedClickListener;
@@ -56,7 +57,7 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
     public SocialFeedViewPagerAdapter getInstaViewPagerAdapter(Context context, List<InstagramFeed> instaFeedList, OnSocialFeedClickListener onSocialFeedClickListener) {
         init(context);
 //        SocialFeedViewPagerAdapter instaViewPagerAdapter = new SocialFeedViewPagerAdapter();
-        mInstaFeedList = instaFeedList;
+        mInstaFeedList.addAll(instaFeedList);
         mSocialFeedType = SocialFeedType.INSTA;
         mListSize = mInstaFeedList.size();
         mSocialFeedClickListener = onSocialFeedClickListener;
@@ -81,6 +82,18 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
         }
     }*/
 
+    public void updateTwitterData(ArrayList<TwitterTweet> twitterTweets) {
+        mTwitterFeedList.clear();
+        mTwitterFeedList.addAll(twitterTweets);
+        notifyDataSetChanged();
+    }
+
+    public void updateInstaData(ArrayList<InstagramFeed> instagramFeeds) {
+        mInstaFeedList.clear();
+        mInstaFeedList.addAll(instagramFeeds);
+        notifyDataSetChanged();
+    }
+
     public Object instantiateItem(ViewGroup collection, int position) {
         if(mSocialFeedType.equals(SocialFeedType.TWITTER)){
             View itemView = mLayoutInflater.inflate(R.layout.list_item_tw, collection, false);
@@ -94,8 +107,8 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
             TextView tvTwDesc = (TextView) itemView.findViewById(R.id.tvTwDesc);
             TextView tvTwDate = (TextView) itemView.findViewById(R.id.tvTwDate);
 
-            tvTwDesc.setText(mTwitterFeedList.get(position).twDesc);
-            tvTwDate.setText(mTwitterFeedList.get(position).twDate);
+            tvTwDesc.setText(mTwitterFeedList.get(position).getText());
+            tvTwDate.setText(mTwitterFeedList.get(position).getCreatedAt());
 
             collection.addView(itemView);
             return itemView;
@@ -109,11 +122,17 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
             });
 
             ImageView ivInsta = (ImageView) itemView.findViewById(R.id.ivInsta);
+            /*new GlideFactory().glideWithDefaultRatio(
+                    mContext,
+                    mInstaFeedList.get(position).instaPicUrl,
+                    ivInsta,
+                    R.drawable.test
+                    );*/
             new GlideFactory().glideWithDefaultRatio(
                     mContext,
                     mInstaFeedList.get(position).instaPicUrl,
                     ivInsta
-                    );
+            );
 
             collection.addView(itemView);
             return itemView;
@@ -124,7 +143,6 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-//        return mTwitterFeedList.size();
         return mListSize;
     }
 

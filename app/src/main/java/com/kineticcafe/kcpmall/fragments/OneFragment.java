@@ -1,11 +1,9 @@
 package com.kineticcafe.kcpmall.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -16,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.kineticcafe.kcpmall.Cheeses;
+import com.kineticcafe.kcpmall.activities.Cheeses;
 import com.kineticcafe.kcpmall.R;
 
 import java.util.ArrayList;
@@ -33,13 +31,11 @@ import java.util.Random;
  * create an instance of this fragment.
  */
 public class OneFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private View mView;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -57,7 +53,6 @@ public class OneFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment OneFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static OneFragment newInstance(String param1, String param2) {
         OneFragment fragment = new OneFragment();
         Bundle args = new Bundle();
@@ -79,11 +74,7 @@ public class OneFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         mView = inflater.inflate(R.layout.fragment_one, container, false);
-//        NestedScrollView nsvOne = (NestedScrollView) mView.findViewById(R.id.recyclerview);
-//        nsvOne.layout
 
         RecyclerView rv = (RecyclerView) mView.findViewById(R.id.recyclerview);
         setupRecyclerView(rv);
@@ -91,7 +82,6 @@ public class OneFragment extends Fragment {
         return mView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -126,16 +116,19 @@ public class OneFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
 
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
-                getRandomSublist(Cheeses.sCheeseStrings, 30)));
+        try {
+            recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+            recyclerView.setAdapter(new SimpleStringRecyclerViewAdapter(getActivity(),
+                    getRandomSublist(Cheeses.sCheeseStrings, 30)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private List<String> getRandomSublist(String[] array, int amount) {
@@ -200,11 +193,6 @@ public class OneFragment extends Fragment {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Context context = v.getContext();
-//                    Intent intent = new Intent(context, CheeseDetailActivity.class);
-//                    intent.putExtra(CheeseDetailActivity.EXTRA_NAME, holder.mBoundString);
-//
-//                    context.startActivity(intent);
                 }
             });
 

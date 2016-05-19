@@ -1,13 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    android:id="@+id/svDetail"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.kineticcafe.kcpmall.DetailActivity"
+    tools:context=".activities.DetailActivity"
     tools:showIn="@layout/activity_detail">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <!--<RelativeLayout
+            android:id="@+id/rlDetailImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.kineticcafe.kcpmall.views.KCPSetRatioImageView
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ivDetailImage"
+                android:src="@drawable/bg_splash"
+                android:transitionName="@string/transition_news_image"
+                />
+
+            &lt;!&ndash;<TextView&ndash;&gt;
+            <com.kineticcafe.kcpmall.views.AlphaTextView
+                xmlns:textAlpha="http://schemas.android.com/apk/res-auto"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="ENDS TODAY"
+                android:textSize="@dimen/detail_expiry_date_text"
+                android:id="@+id/tvExpiryDate"
+                android:layout_alignBottom="@+id/ivDetailImage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/detail_expiry_date_height"
+                android:background="@color/themeColor"
+                textAlpha:alpha="@integer/detail_expiry_date_alpha"
+                />
+
+        </RelativeLayout>-->
+
+        <FrameLayout
+            android:layout_gravity="center"
+            android:layout_width="@dimen/detail_logo_width"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textSize="@dimen/detail_logo_text"
+                android:text="HUDSON's BAY COMPANY"
+                android:id="@+id/tvDetailLogoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+            <!--<com.kineticcafe.kcpmall.views.KCPSetRatioImageView-->
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/logo_vaughan_mills"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:id="@+id/ivDetailLogo"/>
+        </FrameLayout>
+
+        <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:textAlignment="center"
+            android:gravity="center_horizontal"
+            android:text="DETAIL TITLE"
+            android:textSize="@dimen/detail_title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvDetailTitle"
+            android:layout_marginBottom="23dp"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnDetailDate"
+            android:textAllCaps="false"
+            android:padding="0dp"
+            android:text="Closed now. Opens at 1:00PM"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/detail_date_button_height"
+            app:backgroundTint="@color/themeColor"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"/>
+
+        <TextView
+            android:id="@+id/tvDetailBody"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lorem"
+            android:layout_marginBottom="25dp"
+            />
+
+        <!--<View style="@style/separater" />-->
+
+        <include
+            android:id="@+id/layoutLocation"
+            layout="@layout/layout_detail_button"/>
+
+        <include
+            android:id="@+id/layoutParking"
+            layout="@layout/layout_detail_button"/>
+
+        <include
+            android:id="@+id/layoutPhone"
+            layout="@layout/layout_detail_button"/>
+
+        <include
+            layout="@layout/layout_disclaimer"/>
 
 
-
-</RelativeLayout>
+    </LinearLayout>
+</ScrollView>

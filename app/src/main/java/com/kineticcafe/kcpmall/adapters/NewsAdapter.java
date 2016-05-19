@@ -1,24 +1,37 @@
 package com.kineticcafe.kcpmall.adapters;
 
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
-import com.kineticcafe.kcpmall.model.InstagramFeed;
-import com.kineticcafe.kcpmall.model.TwitterFeed;
+import com.kineticcafe.kcpmall.fragments.HomeFragment;
+import com.kineticcafe.kcpmall.instagram.model.InstagramFeed;
+import com.kineticcafe.kcpmall.twitter.model.TwitterTweet;
 import com.kineticcafe.kcpmall.utility.Utility;
 
 import java.util.ArrayList;
@@ -29,23 +42,56 @@ import java.util.List;
  */
 public class NewsAdapter extends RecyclerView.Adapter {
 
-    private static final int TYPE_ANNOUNCEMENT = 0;
-    private static final int TYPE_SET_MY_INTEREST = 1;
-    private static final int TYPE_TWITTER = 2;
-    private static final int TYPE_INSTAGRAM = 3;
+    /*private static final int TYPE_LOADING = 0;
+    private static final int TYPE_ANNOUNCEMENT = 1;
+    private static final int TYPE_EVENT = 2;
+    private static final int TYPE_SET_MY_INTEREST = 3;
+    private static final int TYPE_TWITTER = 4;
+    private static final int TYPE_INSTAGRAM = 5;*/
 
     private Context mContext;
-    private List<String> mDataset;
-    private List<TwitterFeed> mTwitterFeedList;
+    private ArrayList<KcpContentPage> mKcpContentPages;
+    private SocialFeedViewPagerAdapter mSocialFeedViewPagerAdapter;
+    private List<TwitterTweet> mTwitterFeedList;
     private List<InstagramFeed> mInstaFeedList;
 
-    /** circle indicator */
-
-    public NewsAdapter(Context context, List<String> myDataset, List<TwitterFeed> twitterFeedList, List<InstagramFeed> instaFeedList) {
+    public NewsAdapter(Context context, ArrayList<KcpContentPage> kcpContentPages, List<TwitterTweet> twitterFeedList, List<InstagramFeed> instaFeedList) {
         mContext = context;
-        mDataset = myDataset;
+        mKcpContentPages = kcpContentPages;
         mTwitterFeedList = twitterFeedList;
         mInstaFeedList = instaFeedList;
+    }
+
+    public void updateData(ArrayList<KcpContentPage> kcpContentPages) {
+        mKcpContentPages.clear();
+        mKcpContentPages.addAll(kcpContentPages);
+        notifyDataSetChanged();
+    }
+
+    public void addData(ArrayList<KcpContentPage> kcpContentPages){
+        removeLoadingImage();
+        //testing
+
+        /*
+        for(int i = 0; i < 5; i++){
+            mKcpContentPages.add(new KcpContentPage());
+        }
+        int curSize = getItemCount();
+        notifyItemRangeInserted(curSize, 5 - 1);*/
+
+        mKcpContentPages.addAll(kcpContentPages);
+        int curSize = getItemCount();
+        notifyItemRangeInserted(curSize, kcpContentPages.size() - 1);
+    }
+
+    public void prepareLoadingImage(){
+        mKcpContentPages.add(null);
+        notifyItemInserted(mKcpContentPages.size() - 1);
+    }
+
+    public void removeLoadingImage(){
+        mKcpContentPages.remove(mKcpContentPages.size() - 1);
+        notifyItemRemoved(mKcpContentPages.size());
     }
 
 
@@ -74,19 +120,33 @@ public class NewsAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public class LoadingViewHolder extends MainViewHolder {
+        public ProgressBar progressBar;
+
+        public LoadingViewHolder(View itemView) {
+            super(itemView);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.pbNewsAdapter);
+        }
+    }
+
+
+
     public class AnnouncementHolder extends MainViewHolder {
         public CardView  cvAnnouncement;
+        public RelativeLayout rlAncmt;
         public ImageView ivAnnouncementLogo;
         public TextView  tvAnnouncementTitle;
         public TextView  tvAnnouncementDate;
-
+        public ImageView  ivFav;
 
         public AnnouncementHolder(View v) {
             super(v);
             cvAnnouncement      = (CardView)  v.findViewById(R.id.cvAncmt);
+            rlAncmt             = (RelativeLayout)  v.findViewById(R.id.rlAncmt);
             ivAnnouncementLogo  = (ImageView) v.findViewById(R.id.ivAncmtLogo);
             tvAnnouncementTitle = (TextView)  v.findViewById(R.id.tvAncmtTitle);
             tvAnnouncementDate  = (TextView)  v.findViewById(R.id.tvAncmtDate);
+            ivFav         = (ImageView)  v.findViewById(R.id.ivFav);
         }
     }
 
@@ -124,50 +184,113 @@ public class NewsAdapter extends RecyclerView.Adapter {
         void onSocialFeedCreated(int socialFeedIcon, String socialFeedType);
     }
 
-
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType){
-            case TYPE_ANNOUNCEMENT:
+            case Constants.TYPE_LOADING:
+                return new LoadingViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_loading_item, parent, false));
+            case Constants.TYPE_ANNOUNCEMENT:
                 return new AnnouncementHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_announcement, parent, false));
-            case TYPE_SET_MY_INTEREST:
+            case Constants.TYPE_EVENT:
+                return new AnnouncementHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_announcement, parent, false));
+            case Constants.TYPE_SET_MY_INTEREST:
                 return new SetMyInterestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_interest, parent, false));
-            case TYPE_TWITTER:
+            case Constants.TYPE_TWITTER:
                 return new TwitterFeedViewHolder(
                         LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_social_feed_pager, parent, false),
                         R.drawable.icn_twitter,
-                        mContext.getResources().getString(R.string.app_name));
-            case TYPE_INSTAGRAM:
+                        "@" + Constants.TWITTER_SCREEN_NAME);
+            case Constants.TYPE_INSTAGRAM:
                 return new InstagramFeedViewHolder(
                         LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_social_feed_pager, parent, false),
                         R.drawable.icn_instagram,
-                        mContext.getResources().getString(R.string.app_name));
+                        "@" + Constants.INSTAGRAM_USER_NAME);
         }
         return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == TYPE_ANNOUNCEMENT) {
+        final KcpContentPage kcpContentPage = mKcpContentPages.get(position);
+        if (holder instanceof LoadingViewHolder) {
+            LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
+            loadingViewHolder.progressBar.setIndeterminate(true);
+        }
+        //testing
+        /*else {
+            String title = position + "";
 
             AnnouncementHolder ancmtHolder = (AnnouncementHolder) holder;
             new GlideFactory().glideWithDefaultRatio(
                     ancmtHolder.ivAnnouncementLogo.getContext(),
-                    R.drawable.test,
-                    ancmtHolder.ivAnnouncementLogo);
+                    R.drawable.bg_splash,
+                    ancmtHolder.ivAnnouncementLogo
+                    );
 
-            ancmtHolder.tvAnnouncementTitle.setText("Special Shopping Event");
-            ancmtHolder.tvAnnouncementDate.setText("Monday, May 23 - Friday, May 27");
+            ancmtHolder.tvAnnouncementTitle.setText(title);
+        }*/
+
+
+
+        else if (holder.getItemViewType() == Constants.TYPE_ANNOUNCEMENT || holder.getItemViewType() == Constants.TYPE_EVENT) {
+            String imageUrl = kcpContentPage.getImageUrl();
+            String title = kcpContentPage.getTitle();
+//            String title = position + ""; //testing
+
+            final AnnouncementHolder ancmtHolder = (AnnouncementHolder) holder;
+            new GlideFactory().glideWithDefaultRatio(
+                    ancmtHolder.ivAnnouncementLogo.getContext(),
+                    imageUrl,
+                    ancmtHolder.ivAnnouncementLogo,
+                    R.drawable.bg_splash);
+
+            ancmtHolder.tvAnnouncementTitle.setText(title);
+            if(holder.getItemViewType() == Constants.TYPE_EVENT){
+                String time =
+                        kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EFFECTIVE) +
+                                " - " +
+                                kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EFFECTIVE);
+                ancmtHolder.tvAnnouncementDate.setText(time);
+            } else if(holder.getItemViewType() == Constants.TYPE_ANNOUNCEMENT){
+                ancmtHolder.tvAnnouncementDate.setVisibility(View.GONE);
+                ViewGroup.LayoutParams rlAncmtParam = (ViewGroup.LayoutParams) ancmtHolder.rlAncmt.getLayoutParams();
+                rlAncmtParam.height =  (int) mContext.getResources().getDimension(R.dimen.ancmt_desc_height_without_date);
+                ancmtHolder.rlAncmt.setLayoutParams(rlAncmtParam);
+            }
+
+            ancmtHolder.ivFav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO: implement fav functionality
+                    Toast.makeText(mContext, "fav clicked", Toast.LENGTH_SHORT).show();
+                    ancmtHolder.ivFav.setSelected(!ancmtHolder.ivFav .isSelected());
+                }
+            });
+
             ancmtHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(mContext, "ANNOUNCEMENT CLICKED", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(mContext, DetailActivity.class);
+                    intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
+                    String transitionName = mContext.getResources().getString(R.string.transition_news_image);
+
+
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    (Activity) mContext,
+                                    ancmtHolder.ivAnnouncementLogo,   // The view which starts the transition
+                                    transitionName    // The transitionName of the view we’re transitioning to
+                            );
+                    ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
+//                    ((Activity)mContext).startActivity(intent, options.toBundle());
+                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
                 }
             });
 
-
-        } else if(holder.getItemViewType() == TYPE_SET_MY_INTEREST){
+        } else if(holder.getItemViewType() == Constants.TYPE_SET_MY_INTEREST){
             SetMyInterestViewHolder intrstHolder = (SetMyInterestViewHolder) holder;
             intrstHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -176,36 +299,20 @@ public class NewsAdapter extends RecyclerView.Adapter {
                 }
             });
 
-        } else if(holder.getItemViewType() == TYPE_TWITTER || holder.getItemViewType() == TYPE_INSTAGRAM){
-            SocialFeedViewPagerAdapter socialFeedViewPagerAdapter = new SocialFeedViewPagerAdapter();
+        } else if(holder.getItemViewType() == Constants.TYPE_TWITTER || holder.getItemViewType() == Constants.TYPE_INSTAGRAM){
+            mSocialFeedViewPagerAdapter = new SocialFeedViewPagerAdapter();
             MainViewHolder viewHolder = null;
-            if(holder.getItemViewType() == TYPE_TWITTER) {
+            if(holder.getItemViewType() == Constants.TYPE_TWITTER) {
                 viewHolder = (TwitterFeedViewHolder) holder;
-                List<TwitterFeed> twitterFeedList = new ArrayList<>();
-                //TODO: temporarily using local feed list
-                for(int i = 0; i < 5; i++){
-                    twitterFeedList.add(new TwitterFeed(
-                            mContext.getResources().getString(R.string.app_name),
-                            i + 1 + " : " + mContext.getResources().getString(R.string.lorem),
-                            "Apr 25, 2016 at 11:02 AM"));
-                }
-
-                socialFeedViewPagerAdapter.getTwitterViewPagerAdapter(mContext, twitterFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
+                mSocialFeedViewPagerAdapter.getTwitterViewPagerAdapter(mContext, HomeFragment.sTwitterTweets, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
                         Toast.makeText(mContext, "TWITTER CLICKED", Toast.LENGTH_SHORT).show();
                     }
                 });
-            } else if(holder.getItemViewType() == TYPE_INSTAGRAM){
+            } else if(holder.getItemViewType() == Constants.TYPE_INSTAGRAM){
                 viewHolder = (InstagramFeedViewHolder) holder;
-                //TODO: temporarily using local feed list
-                List<InstagramFeed> instagramFeedList = new ArrayList<>();
-                for(int i = 0; i < 5; i++){
-                    instagramFeedList.add(new InstagramFeed(
-                            "https://api.metropolisatmetrotown.com/media/thumbs/event/MDay2016_Facebook.PNG.375x218_q85_crop-scale_upscale.png")
-                    );
-                }
-                socialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext, instagramFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
+                mSocialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext, HomeFragment.sInstagramFeeds, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
                         Toast.makeText(mContext, "INSTAGRAM CLICKED", Toast.LENGTH_SHORT).show();
@@ -216,7 +323,7 @@ public class NewsAdapter extends RecyclerView.Adapter {
             ViewGroup.LayoutParams vpTwParam = (ViewGroup.LayoutParams) viewHolder.vpTw.getLayoutParams();
             vpTwParam.height =  (int) (Utility.getScreenWidth(mContext) / Utility.getFloat(mContext, R.dimen.ancmt_image_ratio));
             viewHolder.vpTw.setLayoutParams(vpTwParam);
-            initializeSocialFeedViews(viewHolder, socialFeedViewPagerAdapter);
+            initializeSocialFeedViews(viewHolder, mSocialFeedViewPagerAdapter);
 
         }
     }
@@ -249,20 +356,39 @@ public class NewsAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+//        int twitterCount = mTwitterFeedList.size() == 0 ? 0 : 1;
+//        int instaCount = mInstaFeedList.size() == 0 ? 0 : 1;
+//        return mKcpContentPages.size() + twitterCount + instaCount;
+//        return mKcpContentPages.size();
+        return mKcpContentPages == null ? 0 : mKcpContentPages.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(position == 1) return TYPE_SET_MY_INTEREST;
-        else if(position == 2) return TYPE_TWITTER;
-        else if(position == 3) return TYPE_INSTAGRAM;
-        else return TYPE_ANNOUNCEMENT;
+        KcpContentPage kcpContentPage = mKcpContentPages.get(position);
+        if(kcpContentPage == null){
+            return Constants.TYPE_LOADING;
+        } else if(kcpContentPage.content_type.contains(Constants.CONTENT_TYPE_ANNOUNCEMENT)){
+            return Constants.TYPE_ANNOUNCEMENT;
+        } else if(kcpContentPage.content_type.contains(Constants.CONTENT_TYPE_EVENT)){
+            return Constants.TYPE_EVENT;
+        } else if(kcpContentPage.content_type.contains(Constants.CONTENT_TYPE_INTEREST)){
+            return Constants.TYPE_SET_MY_INTEREST;
+        } else if(kcpContentPage.content_type.contains(Constants.CONTENT_TYPE_TWITTER)){
+            return Constants.TYPE_TWITTER;
+        } else if(kcpContentPage.content_type.contains(Constants.CONTENT_TYPE_INSTAGRAM)){
+            return Constants.TYPE_INSTAGRAM;
+        } else {
+            return Constants.TYPE_ANNOUNCEMENT;
+        }
     }
 
+    public SocialFeedViewPagerAdapter getSocialFeedViewPagerAdapter(){
+        return mSocialFeedViewPagerAdapter;
+    }
 
     /** circle page indicator*/
-    private void setUiPageViewController(android.support.v4.view.PagerAdapter viewpagerAdapter, MainViewHolder holder) {
+    private void setUiPageViewController(PagerAdapter viewpagerAdapter, MainViewHolder holder) {
         holder.dotsCount = viewpagerAdapter.getCount();
         holder.dots = new ImageView[holder.dotsCount];
 

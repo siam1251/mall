@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    app:layout_collapseMode="none"
+    >
+    app:layout_collapseMode="pin"
+
+    <com.kineticcafe.kcpmall.views.ThemedImageView
+        xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+        android:layout_marginRight="24dp"
+        android:layout_gravity="right"
+        android:id="@+id/ivFav"
+        android:layout_width="@dimen/ancmt_fav_width"
+        android:layout_height="wrap_content"
+        android:src="@drawable/btn_fav"
+        android:adjustViewBounds="true"
+        ThemedImageView:filterColor="@color/white"
+        />
+        ThemedImageView:filterColor="@color/black"
+
+
+</android.support.v7.widget.Toolbar>
