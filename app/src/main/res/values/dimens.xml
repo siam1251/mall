@@ -33,7 +33,7 @@
     <dimen name="ancmt_date_height">24dp</dimen>
     <!--<dimen name="ancmt_fav_width">15.6dp</dimen>
     <dimen name="ancmt_fav_height">14dp</dimen>-->
-    <dimen name="ancmt_fav_width">20dp</dimen> <!--TODO: lil too smaller - made them little bigger-->
+    <dimen name="ancmt_fav_width">18dp</dimen> <!--TODO: lil too smaller - made them little bigger-->
     <!--<dimen name="ancmt_fav_height">14dp</dimen>-->
 
     <item name="ancmt_image_ratio" format="float" type="dimen">1.6</item>
@@ -78,6 +78,7 @@
     <dimen name="detail_button_text_left_margin">36dp</dimen>
     <dimen name="detail_disclaimer_top_bottom_margin">30dp</dimen>
     <dimen name="detail_logo_text">24sp</dimen>
+    <dimen name="detail_logo_text_bot_margin">34dp</dimen>
     <dimen name="detail_body_text">14sp</dimen>
     <integer name="detail_expiry_date_alpha">204</integer>
 

@@ -3,8 +3,7 @@ package com.kineticcafe.kcpmall.activities;
 public class Constants {
 
 	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 1000;
-	public final static int DURATION_SPLASH_ANIMATION = 5000;
-//	public final static int DURATION_SPLASH_ANIMATION = 5000;
+	public final static int DURATION_SPLASH_ANIMATION = 10000;
 	public final static long DURATION_MAIN_BOT_TAB_ICON_SLIDE_UP_ANIMATION = 100;
 	public final static long DURATION_MAIN_BOT_TAB_TITLE_ALPHA_ANIMATION = 100;
 	public final static long DURATION_DETAIL_EXPIRY_DATE_TEXT = 800;

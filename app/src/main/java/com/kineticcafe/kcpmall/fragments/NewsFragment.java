@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by Kay on 2016-05-04.
  */
-public class NewsFragment extends Fragment {
+public class NewsFragment extends BaseFragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -65,6 +65,7 @@ public class NewsFragment extends Fragment {
                     @Override
                     public void onRefresh() {
                         srlNews.setRefreshing(false);
+                        mMainActivity.showSnackBar(R.string.warning_download_completed, 0, null);
                     }
                 });
                 HomeFragment.getInstance().downloadNewsAndDeal();

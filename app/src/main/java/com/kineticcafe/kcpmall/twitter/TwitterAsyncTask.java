@@ -46,6 +46,10 @@ public class TwitterAsyncTask extends AsyncTask<Object, Void, ArrayList<TwitterT
     @Override
     protected void onPostExecute(ArrayList<TwitterTweet> twitterTweets) {
         logger.debug("TIWTTER ONPOSTEXECUTE");
-        if(mTwitterFeedDownloadCompleteListener != null) mTwitterFeedDownloadCompleteListener.onTwitterFeedDownloadComplete(twitterTweets);
+        if(mTwitterFeedDownloadCompleteListener != null) {
+            logger.debug("TIWTTER mTwitterFeedDownloadCompleteListener FOUND");
+            mTwitterFeedDownloadCompleteListener.onTwitterFeedDownloadComplete(twitterTweets);
+        } else logger.debug("TIWTTER mTwitterFeedDownloadCompleteListener NOT FOUND!!!!!!!!");
+
     }
 }

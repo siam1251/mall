@@ -1,6 +1,10 @@
 package com.kineticcafe.kcpmall.fragments;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -8,6 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationPage;
@@ -34,12 +42,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeFragment extends Fragment {
-    protected final Logger logger = new Logger(getClass().getName());
+public class HomeFragment extends BaseFragment {
 
     private NewsFragment mNewsFragment;
     private KcpService mKcpService;
     private int mTwitterDownloadCounter = 3;
+    public static ArrayList<TwitterTweet> sTwitterTweets = new ArrayList<>();
+    public static ArrayList<InstagramFeed> sInstagramFeeds = new ArrayList<>();
+
 
     private static HomeFragment sHomeFragment;
     public static HomeFragment getInstance(){
@@ -47,21 +57,17 @@ public class HomeFragment extends Fragment {
         return sHomeFragment;
     }
 
-//    https://api.instagram.com/v1/users/godbella/?access_token=36271034.1677ed0.c9ee1d858c3b4ee6845fe5b3d4414eba
-//    https://api.instagram.com/v1/users/1048431023/media/recent/?access_token=36271034.1677ed0.c9ee1d858c3b4ee6845fe5b3d4414eba
-//    https://api.instagram.com/v1/users/249069342/media/recent/?access_token=36271034.1677ed0.c9ee1d858c3b4ee6845fe5b3d4414eba
-//    https://api.instagram.com/v1/users/249069342/media/recent?count=1&access_token=36271034.1677ed0.c9ee1d858c3b4ee6845fe5b3d4414eba
-
+    private View.OnClickListener mDownloadDealOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            downloadNewsAndDeal();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        downloadNewsAndDeal();
     }
-
-
-    public static ArrayList<TwitterTweet> sTwitterTweets = new ArrayList<>();
-    public static ArrayList<InstagramFeed> sInstagramFeeds = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +80,12 @@ public class HomeFragment extends Fragment {
         TabLayout tablayout = (TabLayout) view.findViewById(R.id.tlHome);
         tablayout.setupWithViewPager(vpHome);
 
+        if(Utility.isNetworkAvailable(getActivity())){
+            downloadNewsAndDeal();
+        } else {
+            mMainActivity.onDataDownloaded(); //TODO: error here when offline
+            mMainActivity.showSnackBar(R.string.warning_no_internet_connection, R.string.warning_retry,  mDownloadDealOnClickListener);
+        }
         return view;
     }
 
@@ -104,6 +116,9 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<KcpNavigationRoot> call, Throwable t) {
+                String a = "ej";
+                mMainActivity.onDataDownloaded();
+                mMainActivity.showSnackBar(R.string.warning_no_internet_connection, R.string.warning_retry,  mDownloadDealOnClickListener);
             }
         });
 
@@ -121,8 +136,6 @@ public class HomeFragment extends Fragment {
                 String externalCode = kcpNavigationPageResponse.getExternalCode();
                 KcpNavigationRoot.getInstance().setNavigationpage(externalCode, kcpNavigationPageResponse);
                 String fullHref = kcpNavigationPageResponse.getSelfLink() + Constants.URL_VIEW_ALL_CONTENT;
-
-//                downloadContents(fullHref);
                 downloadContents(fullHref);
             }
 
@@ -133,7 +146,6 @@ public class HomeFragment extends Fragment {
         });
     }
 
-//    public void downloadContents(String url){
     public void downloadContents(String url){
         Call<KcpContentPage> call = mKcpService.getContentPage(url);
         call.enqueue(new Callback<KcpContentPage>() {
@@ -182,7 +194,6 @@ public class HomeFragment extends Fragment {
         } catch (Exception e) {
             logger.error(e);
         }
-
     }
 
     public void updateAdapter(){
@@ -190,7 +201,7 @@ public class HomeFragment extends Fragment {
         try {
             KcpNavigationPage kcpNavigationPage = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED);
             if(kcpNavigationPage != null && kcpNavigationPage.getKcpContentPageList() != null && kcpNavigationPage.getKcpContentPageList() != null && mNewsFragment.mNewsAdapter != null){
-                ((MainActivity)getActivity()).onDataDownloaded();
+                mMainActivity.onDataDownloaded();
                 mNewsFragment.mNewsAdapter.updateData(kcpNavigationPage.getKcpContentPageList());
                 if (mNewsFragment.mNewsAdapter.getSocialFeedViewPagerAdapter() != null) {
                     mNewsFragment.mNewsAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterTweets);
@@ -204,8 +215,7 @@ public class HomeFragment extends Fragment {
 
     public void downloadTwitterTweets() {
         Log.e("HomeFragment", "ATTEMPTING TW DOWNLOAD");
-        if (Utility.isNetworkAvailable(getActivity())) {
-
+        if (getActivity() != null && Utility.isNetworkAvailable(getActivity())) {
             Log.e("HomeFragment", "STARTING TW DOWNLOAD");
             new TwitterAsyncTask(
                     Constants.NUMB_OF_TWEETS,
@@ -220,12 +230,10 @@ public class HomeFragment extends Fragment {
                                 mTwitterDownloadCounter--;
                                 if(mTwitterDownloadCounter > 0) {
                                     logger.debug("twitter download counter : " + mTwitterDownloadCounter);
-                                    Log.e("HomeFragment", "TWITTER REDOWNLOADING");
                                     downloadTwitterTweets();
                                 }
                             } else {
                                 mTwitterDownloadCounter = 3;
-                                logger.debug("TWITTER DOWNLOADED");
                                 if (mNewsFragment.mNewsAdapter.getSocialFeedViewPagerAdapter() != null) {
                                     mNewsFragment.mNewsAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(twitterTweets);
                                 } else {
@@ -240,7 +248,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void downloadInstagram() {
-        if (Utility.isNetworkAvailable(getActivity())) {
+        if (getActivity() != null && Utility.isNetworkAvailable(getActivity())) {
             InstagramService instagramService = ServiceFactory.createRetrofitService(getActivity(), InstagramService.class, Constants.INSTAGRAM_BASE_URL);;
             Call<Recent> recent = instagramService.getRecent(Constants.INSTAGRAM_USER_ID, Constants.INSTAGRAM_ACCESS_TOKEN, Constants.NUMB_OF_INSTA, null, null, null, null);
             recent.enqueue(new Callback<Recent>() {
@@ -286,7 +294,4 @@ public class HomeFragment extends Fragment {
     public interface RefreshListener {
         void onRefresh();
     }
-
-
-
 }
