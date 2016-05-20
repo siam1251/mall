@@ -143,7 +143,6 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 });
 
-
                 new GlideFactory().glideWithDefaultRatio(
                         ivDetailImage.getContext(),
                         imageUrl,
@@ -177,8 +176,9 @@ public class DetailActivity extends AppCompatActivity {
 
             if(logoUrl.equals("")){
                 String placeName = kcpContentPage.getNameFromFirstPlace();
-                tvDetailLogoText.setVisibility(View.VISIBLE);
                 ivDetailLogo.setVisibility(View.GONE);
+
+                if(!placeName.equals("")) tvDetailLogoText.setVisibility(View.VISIBLE);
                 tvDetailLogoText.setText(placeName);
 
             } else {

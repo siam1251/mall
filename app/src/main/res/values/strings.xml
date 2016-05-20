@@ -38,5 +38,9 @@ Aenean tellus enim, varius ac odio at, luctus sollicitudin magna. Suspendisse im
     <string name="test_disclaimer">* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non ante dictum, tempor orci nec, ultricies urna. Donec a consequat leo. Aliquam commodo venenatis nisi tempor lacinia. </string>
     <string name="title_activity_test">Test</string>
 
+    <!--warning-->
+    <string name="warning_download_completed">Download completed</string>
+    <string name="warning_no_internet_connection">No Internet Connection</string>
+    <string name="warning_retry">RETRY</string>
 
 </resources>

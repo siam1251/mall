@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/clMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -30,8 +31,6 @@
             app:selectedColor="@color/themeColor"
             app:unSelectedColor="@color/unselected"
             />
-        app:selectedColor="@color/holo_red_light_transparent"
-        app:unSelectedColor="@color/unselected"
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -41,7 +40,9 @@
         android:layout_height="@dimen/main_app_bar_layout_height"
         android:background="@color/white"
         android:theme="@style/AppTheme.AppBarOverlay"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        app:layout_behavior="com.kineticcafe.kcpmall.widget.AppBarBehavior"
+        >
 
 
         <android.support.design.widget.TabLayout

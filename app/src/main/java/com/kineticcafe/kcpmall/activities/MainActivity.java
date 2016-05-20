@@ -2,12 +2,14 @@ package com.kineticcafe.kcpmall.activities;
 
 import android.animation.ValueAnimator;
 import android.content.res.TypedArray;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -35,11 +37,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OneFragment.OnFragmentInteractionListener, KcpDataListener {
+        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener {
 
     private DrawerLayout mDrawer;
     private Thread mSplashThread;
     private ActionBarDrawerToggle mToggle;
+    private Snackbar mOfflineSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,27 +79,6 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawer.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
         mToggle = new ActionBarDrawerToggle(
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(mToggle);
@@ -118,6 +100,34 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons(viewPager, tabLayout, fragmentTitleList, fragmentIconList);
         viewPager.setTabLayout(tabLayout);
+    }
+
+    public void showSnackBar(int msg, int action, @Nullable View.OnClickListener onClickListener){
+        final CoordinatorLayout clMain = (CoordinatorLayout) findViewById(R.id.clMain);
+
+        if(onClickListener == null){
+            mOfflineSnackbar = Snackbar
+                    .make(clMain, getResources().getString(msg), Snackbar.LENGTH_SHORT);
+        } else {
+            mOfflineSnackbar = Snackbar
+                    .make(clMain, getResources().getString(msg), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getResources().getString(action), onClickListener);
+        }
+
+        mOfflineSnackbar.setActionTextColor(getResources().getColor(R.color.themeColor));
+        View snackbarView = mOfflineSnackbar.getView();
+
+        CoordinatorLayout.LayoutParams param = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
+        param.bottomMargin = (int) getResources().getDimension(R.dimen.main_app_bar_layout_height);
+        snackbarView.setLayoutParams(param);
+
+        snackbarView.setBackgroundColor(Color.DKGRAY);
+        TextView textView = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(getResources().getColor(R.color.themeColor));
+        TextView actionText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_action);
+        actionText.setTextColor(getResources().getColor(R.color.warningColor));
+
+        mOfflineSnackbar.show();
     }
 
     private void animateHamburgerToArrow() {
@@ -225,11 +235,6 @@ public class MainActivity extends AppCompatActivity
 
         mDrawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
     @Override

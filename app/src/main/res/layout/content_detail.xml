@@ -47,11 +47,13 @@
         <FrameLayout
             android:layout_gravity="center"
             android:layout_width="@dimen/detail_logo_width"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/detail_logo_text_bot_margin"
+            >
 
             <TextView
-                android:layout_marginTop="34dp"
-                android:layout_marginBottom="34dp"
+                android:layout_marginTop="@dimen/detail_logo_text_bot_margin"
+                android:layout_marginBottom="@dimen/detail_logo_text_bot_margin"
                 android:visibility="gone"
                 android:layout_gravity="center"
                 android:textAlignment="center"
