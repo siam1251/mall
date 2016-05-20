@@ -1,16 +1,13 @@
 package com.kineticcafe.kcpmall.activities;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.animation.ValueAnimator;
 import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -21,12 +18,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.HomeBottomTapAdapter;
@@ -39,10 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OneFragment.OnFragmentInteractionListener, KcpDataListener, DrawerLayout.DrawerListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OneFragment.OnFragmentInteractionListener, KcpDataListener {
 
     private DrawerLayout mDrawer;
     private Thread mSplashThread;
+    private ActionBarDrawerToggle mToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,16 +71,36 @@ public class MainActivity extends AppCompatActivity
         };
         mSplashThread.start();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tbMain);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawer.addDrawerListener(this);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        mDrawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+        mToggle = new ActionBarDrawerToggle(
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        mDrawer.addDrawerListener(mToggle);
+        mToggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -103,6 +120,21 @@ public class MainActivity extends AppCompatActivity
         viewPager.setTabLayout(tabLayout);
     }
 
+    private void animateHamburgerToArrow() {
+        ValueAnimator anim = ValueAnimator.ofFloat(0f, 1f);
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float slideOffset = (Float) valueAnimator.getAnimatedValue();
+                mToggle.onDrawerSlide(mDrawer, slideOffset);
+            }
+        });
+        anim.setInterpolator(new DecelerateInterpolator());
+        // You can change this duration to more closely match that of the default animation.
+        anim.setDuration(500);
+        anim.start();
+    }
+
     /** prepares tab contents with fragments, tab icons and texts */
     private void prepareTabContents(List<Fragment> fragmentList, List<String> fragmentTitleList, List<Integer> fragmentIconList){
         String[] menuTitle  = getResources().getStringArray(R.array.menuTitles);
@@ -113,7 +145,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         fragmentList.add(HomeFragment.getInstance());
-//        fragmentList.add(new HomeFragment());
         fragmentList.add(new OneFragment());
         fragmentList.add(new OneFragment());
         fragmentList.add(new OneFragment());
@@ -157,17 +188,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
             return true;
         }
-
+        else if (id == R.id.action_test) {
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -177,15 +204,20 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        /*if (id == R.id.nav_camera) {
-            // Handle the camera action
+
+
+
+        if (id == R.id.nav_camera) {
+
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            fragmentManager.beginTransaction().replace(R.id.flContent, new OneFragment()).commit();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
+        }/* else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
@@ -205,25 +237,5 @@ public class MainActivity extends AppCompatActivity
         synchronized(mSplashThread){
             mSplashThread.notifyAll();
         }
-    }
-
-    @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
-
-    }
-
-    @Override
-    public void onDrawerOpened(View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerClosed(View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerStateChanged(int newState) {
-
     }
 }

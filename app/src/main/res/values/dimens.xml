@@ -71,20 +71,21 @@
     <dimen name="detail_expiry_date_height">30dp</dimen>
     <dimen name="detail_expiry_date_text">15sp</dimen>
     <dimen name="detail_logo_width">200dp</dimen>
-    <dimen name="detail_title_text">24sp</dimen>
+    <dimen name="detail_title_text">16sp</dimen>
     <dimen name="detail_button_height">48dp</dimen>
     <dimen name="detail_button_image_width">14dp</dimen>
     <dimen name="detail_button_image_left_margin">21dp</dimen>
     <dimen name="detail_button_text_left_margin">36dp</dimen>
     <dimen name="detail_disclaimer_top_bottom_margin">30dp</dimen>
     <dimen name="detail_logo_text">24sp</dimen>
-
+    <dimen name="detail_body_text">14sp</dimen>
     <integer name="detail_expiry_date_alpha">204</integer>
 
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
@@ -98,5 +99,9 @@
     <dimen name="home_tab_icon_top_margin_when_not_selected">14dp</dimen>
     <dimen name="home_tab_icon_top_margin_when_selected">8.5dp</dimen>
     <dimen name="home_tab_title_top_margin_when_selected">28.5dp</dimen>
+
+    <!--etc-->
+    <dimen name="button_corner_radius">2dp</dimen>
+    <dimen name="toolbar_elevation">2dp</dimen>
 
 </resources>

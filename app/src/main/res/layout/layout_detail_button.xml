@@ -15,6 +15,7 @@
         />
 
     <TextView
+        android:textColor="@color/black"
         android:layout_marginLeft="@dimen/detail_button_text_left_margin"
         android:layout_toRightOf="@+id/ivDetailBtnImage"
         android:gravity="center_vertical"

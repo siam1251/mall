@@ -13,6 +13,7 @@ import com.kineticcafe.kcpmall.utility.Utility;
 public class GlideFactory {
 
     public void glideWithDefaultRatio(Context context, int drawable, ImageView imageView){
+        if(imageView == null) return;
         Glide.with(context)
                 .load(drawable)
                 .centerCrop()
@@ -23,6 +24,7 @@ public class GlideFactory {
     }
 
     public void glideWithDefaultRatio(Context context, String url, ImageView imageView){
+        if(imageView == null) return;
         Glide.with(context)
                 .load(url)
 //                .centerCrop()
@@ -40,6 +42,7 @@ public class GlideFactory {
      * @param errorDrawable errorDrawable is passed
      */
     public void glideWithDefaultRatio(Context context, String url, ImageView imageView, int errorDrawable){
+        if(imageView == null) return;
         if(Utility.existsInServer(url)){
             Glide.with(context)
                     .load(url)

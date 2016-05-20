@@ -1,21 +1,17 @@
 package com.kineticcafe.kcpmall.activities;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.transition.Fade;
-import android.util.Log;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -66,13 +62,10 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-
-        KcpContentPage kcpContentPage = (KcpContentPage) getIntent().getSerializableExtra(Constants.ARG_CONTENT_PAGE);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         final ImageView ivFav = (ImageView) toolbar.findViewById(R.id.ivFav);
         ivFav.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +78,7 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+
         showContents();
     }
 
@@ -92,10 +86,11 @@ public class DetailActivity extends AppCompatActivity {
 
         try {
             final KcpContentPage kcpContentPage = (KcpContentPage) getIntent().getSerializableExtra(Constants.ARG_CONTENT_PAGE);
+            getSupportActionBar().setTitle(getDetailType(kcpContentPage));
 
-            final CollapsingToolbarLayout collapsingToolbar =
+            /*final CollapsingToolbarLayout collapsingToolbar =
                     (CollapsingToolbarLayout) findViewById(R.id.ctlDetail);
-            /** to show toolbar title only when collapsed */
+            //to show toolbar title only when collapsed
             AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.ablDetail);
             appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
                 boolean isShow = false;
@@ -114,7 +109,9 @@ public class DetailActivity extends AppCompatActivity {
                         isShow = false;
                     }
                 }
-            });
+            });*/
+
+
 
             RelativeLayout rlDetailImage = (RelativeLayout) findViewById(R.id.rlDetailImage);
             String imageUrl = kcpContentPage.getImageUrl();
@@ -122,7 +119,31 @@ public class DetailActivity extends AppCompatActivity {
                 //TODO: if it's necessary to have toolbar in white, change the theme here (now it's in themeColor)
                 rlDetailImage.setVisibility(View.GONE);
             } else {
-                ImageView ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
+                final ImageView ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
+
+                final ScrollView svDetail = (ScrollView) findViewById(R.id.svDetail);
+                svDetail.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        ViewTreeObserver observer = svDetail.getViewTreeObserver();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            observer.removeOnGlobalLayoutListener(this);
+                        } else {
+                            observer.removeGlobalOnLayoutListener(this);
+                        }
+                        observer.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+                            @Override
+                            public void onScrollChanged() {
+                                ivDetailImage.getLocalVisibleRect(mRect);
+                                if(mRect.bottom > 0){
+                                    ivDetailImage.setY((float) (mRect.top / Constants.PARALLAX_PARAM));
+                                }
+                            }
+                        });
+                    }
+                });
+
+
                 new GlideFactory().glideWithDefaultRatio(
                         ivDetailImage.getContext(),
                         imageUrl,
@@ -153,6 +174,7 @@ public class DetailActivity extends AppCompatActivity {
             String logoUrl = kcpContentPage.getLogoFromFirstPlace();
             TextView tvDetailLogoText = (TextView) findViewById(R.id.tvDetailLogoText);
             ImageView ivDetailLogo = (ImageView) findViewById(R.id.ivDetailLogo);
+
             if(logoUrl.equals("")){
                 String placeName = kcpContentPage.getNameFromFirstPlace();
                 tvDetailLogoText.setVisibility(View.VISIBLE);
@@ -164,19 +186,20 @@ public class DetailActivity extends AppCompatActivity {
                 new GlideFactory().glideWithDefaultRatio(
                         ivDetailLogo.getContext(),
                         logoUrl,
-                        ivDetailLogo/*,
-                        R.drawable.bg_splash*/);
+                        ivDetailLogo);
             }
 
             TextView tvDetailTitle = (TextView) findViewById(R.id.tvDetailTitle);
             String title = kcpContentPage.getTitle();
             tvDetailTitle.setText(title);
 
+
+            AppCompatButton btnDetailDate = (AppCompatButton) findViewById(R.id.btnDetailDate);
+
+
             TextView tvDetailBody = (TextView) findViewById(R.id.tvDetailBody);
             String body = kcpContentPage.getBody();
             tvDetailBody.setText(Html.fromHtml(body));
-
-            AppCompatButton btnDetailDate = (AppCompatButton) findViewById(R.id.btnDetailDate);
 
             View layoutLocation = (View) findViewById(R.id.layoutLocation);
             ImageView ivDetailBtnImageLocation = (ImageView) layoutLocation.findViewById(R.id.ivDetailBtnImage);

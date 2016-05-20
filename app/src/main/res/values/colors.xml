@@ -52,6 +52,7 @@
     <color name="detail_separator_color">#e2e2e2</color>
     <color name="detail_disclaimer_bg">#f5f5f5</color>
     <color name="detail_disclaimer_text">#8b8b8b</color>
+    <color name="detail_title_text">#8a000000</color>
     <!--<color name="detail_date_bg">#13bed0</color>--> <!--theme color-->
 
 </resources>

@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:orientation="vertical"
+    tools:context="com.kineticcafe.kcpmall.activities.Test">
+
+    <include
+        layout="@layout/layout_toolbar_detail" />
+
+    <include
+        layout="@layout/content_detail" />
+
+</LinearLayout>
+<!--<?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -17,10 +34,10 @@
             android:id="@+id/ctlDetail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="@color/themeColor"
-                >
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            >
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
             app:statusBarScrim="@color/colorPrimaryDark"
             app:contentScrim="@color/white"
 
@@ -55,15 +72,17 @@
 
             </RelativeLayout>
 
-            <include layout="@layout/layout_toolbar_detail" />
+            app:layout_collapseMode="pin"
+            <include
+                layout="@layout/layout_toolbar_detail" />
 
-            <!--<android.support.v7.widget.Toolbar
+            &lt;!&ndash;<android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:layout_collapseMode="pin"
-                />-->
+                />&ndash;&gt;
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -79,21 +98,4 @@
             layout="@layout/content_detail" />
 
     </android.support.v4.widget.NestedScrollView>
-
-
-</android.support.design.widget.CoordinatorLayout>
-
-    <!--<?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.kineticcafe.kcpmall.activities.Test">
-
-        <include
-            layout="@layout/content_detail" />
-
-    </RelativeLayout>-->
-
+</android.support.design.widget.CoordinatorLayout>-->

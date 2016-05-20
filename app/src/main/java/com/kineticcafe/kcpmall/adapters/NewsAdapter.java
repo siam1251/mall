@@ -2,17 +2,18 @@ package com.kineticcafe.kcpmall.adapters;
 
 
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -274,17 +275,16 @@ public class NewsAdapter extends RecyclerView.Adapter {
 
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
-                    String transitionName = mContext.getResources().getString(R.string.transition_news_image);
 
+                    String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
+                    String transitionNameFav = mContext.getResources().getString(R.string.transition_fav);
 
-                    ActivityOptionsCompat options =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                    (Activity) mContext,
-                                    ancmtHolder.ivAnnouncementLogo,   // The view which starts the transition
-                                    transitionName    // The transitionName of the view we’re transitioning to
-                            );
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            (Activity)mContext,
+                            Pair.create((View)ancmtHolder.ivAnnouncementLogo, transitionNameImage),
+                            Pair.create((View)ancmtHolder.ivFav, transitionNameFav));
+
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
-//                    ((Activity)mContext).startActivity(intent, options.toBundle());
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
                 }
