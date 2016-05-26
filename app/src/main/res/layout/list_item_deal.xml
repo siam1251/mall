@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_marginTop="@dimen/card_vertical_margin"
+        android:layout_marginBottom="@dimen/card_vertical_margin"
+        android:layout_marginLeft="@dimen/card_vertical_margin"
+        android:layout_marginRight="@dimen/card_vertical_margin"
+        card_view:cardCornerRadius="@dimen/card_corner_radius"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.kineticcafe.kcpmall.views.KCPSetRatioImageView
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ivDealLogo"
+                android:src="@drawable/test"
+                android:transitionName="@string/transition_news_image"
+                />
+
+
+            <com.kineticcafe.kcpmall.views.AlphaTextView
+                xmlns:textAlpha="http://schemas.android.com/apk/res-auto"
+                android:gravity="center"
+                android:textColor="@color/expiry_date_text"
+                android:text="ENDS TODAY"
+                android:textSize="@dimen/deal_expiry_date_text"
+                android:id="@+id/tvExpiryDate"
+                android:layout_alignBottom="@+id/ivDealLogo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/deal_expiry_date_height"
+                android:background="@color/themeColor"
+                textAlpha:alpha="@integer/detail_expiry_date_alpha"
+                />
+
+
+
+            <RelativeLayout
+                android:id="@+id/rlDeal"
+                android:paddingLeft="@dimen/deal_card_desc_horizontal_padding"
+                android:paddingRight="@dimen/deal_card_desc_horizontal_padding"
+                android:paddingBottom="@dimen/deal_card_desc_bot_padding"
+                android:layout_below="@+id/ivDealLogo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/deal_desc_height"
+                >
+
+                <TextView
+                    android:layout_marginTop="@dimen/deal_desc_top_margin"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="@dimen/deal_store_max_height"
+                    android:id="@+id/tvDealStoreName"
+                    android:textSize="@dimen/deal_store_txt"
+                    android:text="Deals Store Location"
+                    android:textColor="@color/ancmt_title_color"
+                    />
+
+                <TextView
+                    android:lineSpacingExtra="@dimen/deal_title_line_spacing_extra"
+                    android:layout_marginTop="@dimen/deal_title_top_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/deal_title_height"
+                    android:id="@+id/tvDealTitle"
+                    android:textSize="@dimen/deal_date_txt"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:layout_below="@+id/tvDealStoreName"
+                    android:text="Deals title"
+                    android:textColor="@color/ancmt_date_color"
+                    />
+                    android:gravity="center_vertical"
+
+                <ImageView
+                    android:id="@+id/ivFav"
+                    android:transitionName="@string/transition_fav"
+                    android:layout_width="@dimen/deal_fav_width"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/btn_fav"
+                    android:layout_alignParentBottom="true"
+                    />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</android.support.design.widget.CoordinatorLayout>
