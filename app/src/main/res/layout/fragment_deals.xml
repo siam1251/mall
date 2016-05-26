@@ -15,9 +15,9 @@
             android:layout_height="match_parent"
             android:id="@+id/rvDeals"
             android:gravity="center_horizontal"
+            />
             android:paddingLeft="@dimen/card_vertical_margin"
             android:paddingRight="@dimen/card_vertical_margin"
-            />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

@@ -55,7 +55,7 @@
 
 
     <!--section header-->
-    <dimen name="section_header_top_margin">8dp</dimen>
+    <dimen name="section_header_left_margin">15dp</dimen>
     <dimen name="section_header_text_height">48dp</dimen>
     <dimen name="section_header_text_size">16sp</dimen>
 
@@ -71,6 +71,8 @@
     <dimen name="intrst_title_top_margin">20dp</dimen>
     <dimen name="intrst_desc_top_margin">7dp</dimen>
     <dimen name="intrst_btn_top_margin">32dp</dimen>
+
+    <dimen name="intrst_card_bot_margin">20dp</dimen>
 
 
     <!--feed card-->

@@ -10,7 +10,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,39 +42,39 @@ import java.util.List;
 public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
-    private ArrayList<KcpContentPage> mKcpContentPages;
+    private ArrayList<KcpContentPage> mKcpContentPagesNews;
     private SocialFeedViewPagerAdapter mSocialFeedViewPagerAdapter;
     private List<TwitterTweet> mTwitterFeedList;
     private List<InstagramFeed> mInstaFeedList;
 
-    public NewsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> kcpContentPages, List<TwitterTweet> twitterFeedList, List<InstagramFeed> instaFeedList) {
+    public NewsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> news, List<TwitterTweet> twitterFeedList, List<InstagramFeed> instaFeedList) {
         mContext = context;
-        mKcpContentPages = kcpContentPages;
+        mKcpContentPagesNews = news;
         mTwitterFeedList = twitterFeedList;
         mInstaFeedList = instaFeedList;
     }
 
     public void updateData(ArrayList<KcpContentPage> kcpContentPages) {
-        mKcpContentPages.clear();
-        mKcpContentPages.addAll(kcpContentPages);
+        mKcpContentPagesNews.clear();
+        mKcpContentPagesNews.addAll(kcpContentPages);
         notifyDataSetChanged();
     }
 
     public void addData(ArrayList<KcpContentPage> kcpContentPages){
         removeLoadingImage();
-        mKcpContentPages.addAll(kcpContentPages);
+        mKcpContentPagesNews.addAll(kcpContentPages);
         int curSize = getItemCount();
         notifyItemRangeInserted(curSize, kcpContentPages.size() - 1);
     }
 
     public void prepareLoadingImage(){
-        mKcpContentPages.add(null);
-        notifyItemInserted(mKcpContentPages.size() - 1);
+        mKcpContentPagesNews.add(null);
+        notifyItemInserted(mKcpContentPagesNews.size() - 1);
     }
 
     public void removeLoadingImage(){
-        mKcpContentPages.remove(mKcpContentPages.size() - 1);
-        notifyItemRemoved(mKcpContentPages.size());
+        mKcpContentPagesNews.remove(mKcpContentPagesNews.size() - 1);
+        notifyItemRemoved(mKcpContentPagesNews.size());
     }
 
 
@@ -191,7 +190,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        final KcpContentPage kcpContentPage = mKcpContentPages.get(position);
+        final KcpContentPage kcpContentPage = mKcpContentPagesNews.get(position);
         if (holder instanceof LoadingViewHolder) {
             LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -264,7 +263,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             MainViewHolder viewHolder = null;
             if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_TWITTER) {
                 viewHolder = (TwitterFeedViewHolder) holder;
-                mSocialFeedViewPagerAdapter.getTwitterViewPagerAdapter(mContext, HomeFragment.sTwitterTweets, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
+                mSocialFeedViewPagerAdapter.getTwitterViewPagerAdapter(mContext, mTwitterFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
                         Toast.makeText(mContext, "TWITTER CLICKED", Toast.LENGTH_SHORT).show();
@@ -272,7 +271,8 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 });
             } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM){
                 viewHolder = (InstagramFeedViewHolder) holder;
-                mSocialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext, HomeFragment.sInstagramFeeds, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
+                mSocialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext, mInstaFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
+//                mSocialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext, HomeFragment.sInstagramFeeds, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
                         Toast.makeText(mContext, "INSTAGRAM CLICKED", Toast.LENGTH_SHORT).show();
@@ -315,12 +315,12 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mKcpContentPages == null ? 0 : mKcpContentPages.size();
+        return mKcpContentPagesNews == null ? 0 : mKcpContentPagesNews.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        KcpContentPage kcpContentPage = mKcpContentPages.get(position);
+        KcpContentPage kcpContentPage = mKcpContentPagesNews.get(position);
         return KcpContentTypeFactory.getContentType(kcpContentPage);
     }
 

@@ -196,10 +196,10 @@ public class OneFragment extends Fragment {
                 }
             });
 
-            Glide.with(holder.mImageView.getContext())
+            /*Glide.with(holder.mImageView.getContext())
                     .load(Cheeses.getRandomCheeseDrawable())
                     .fitCenter()
-                    .into(holder.mImageView);
+                    .into(holder.mImageView);*/
         }
 
         @Override

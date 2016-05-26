@@ -24,10 +24,10 @@ public class Constants {
 	public final static String URL_VIEW_ALL_CONTENT = "/view_all_content";
 //	public final static String URL_PER_PAGE = "10";
 
-	public final static String EXTERNAL_CODE_FEED = "icmp-feed-ios";
-	public final static String EXTERNAL_CODE_DEAL = "icmp-deals-ios";
-	public final static String EXTERNAL_CODE_RECOMMENDED = "icmp-recommended-deals-ios";
-	public final static String EXTERNAL_CODE_SYSTEM_MSG = "system-message-feed-ios";
+	public final static String EXTERNAL_CODE_DEAL = "deals-list";
+	public final static String EXTERNAL_CODE_FEED = "feed";
+	public final static String EXTERNAL_CODE_RECOMMENDED = "recommended-deals";
+	public final static String EXTERNAL_CODE_SYSTEM_MSG = "system-message";
 
 
 	//DATE FORMAT
@@ -54,8 +54,8 @@ public class Constants {
 	public final static String HEADER_VALUE_DATAHUB_LOCALE = "en-CA";
 	public final static String HEADER_VALUE_CLIENT_TOKEN = "OGEyZDYyZTgtNzRmMS00ODNjLTg2YzMtYjQ0YWY1MDc5NWM1OjdjODhjZmY0ZTBjNDk5MTRiM2EzZTY3YjAzZGY1ZTE4ZDM5YTg0ZjM2YTE0ZjI0NWYzNDViN2JhNWY4YTE4YjJiMDUwMWIxOWRiYTExYzE1ZGIzNTJmNzhlM2EzYzI5MGM2MWQ4MmRlMGRjYTkyMzAzZTQ2NWRjZDU3NDJkNGRl";
 	public final static String HEADER_VALUE_CONTENT_TYPE = "application/json";
-	public final static String HEADER_VALUE_ACCEPT = "application/json";
-//	public final static String HEADER_VALUE_ACCEPT = "application/json, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.place+json; version=1.0"; //From Tao
+	public final static String HEADER_VALUE_ACCEPT = "application/json, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.place+json; version=1.0";
+	public final static String HEADER_VALUE_AUTHROZATION = "Bearer 33cce977-6891-4ca5-9df9-6b1e7b9f0d84_YzU5YWM0ZjctODZiOS00ZGJiLTkzYjYtNjZkYzdkYjZkOTE1"; //TESTING
 
 	//DETAIL
 	public final static int DAYS_LEFT_TO_SHOW_IN_EXPIRY_DATE = 3; //if date left until (effective date) is equal or less than this number, show it

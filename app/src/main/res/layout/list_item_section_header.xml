@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/section_header_text_height"
+    android:orientation="vertical"
+    >
+
+    <View
+        style="@style/separater"
+        />
+
+
+<TextView
     android:gravity="center_vertical"
-    android:layout_marginLeft="8dp"
-    android:layout_marginTop="@dimen/section_header_top_margin"
+    android:layout_marginLeft="@dimen/section_header_left_margin"
+    android:layout_marginRight="@dimen/section_header_left_margin"
+    android:layout_marginTop="@dimen/card_vertical_margin"
     android:layout_width="match_parent"
     android:layout_height="@dimen/section_header_text_height"
     android:textColor="@color/detail_title_text"
     android:textSize="@dimen/section_header_text_size"
     android:id="@+id/tvSectionHeader"
     />
+</LinearLayout>
