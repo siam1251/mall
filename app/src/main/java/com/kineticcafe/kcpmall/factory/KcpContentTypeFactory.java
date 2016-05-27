@@ -26,10 +26,9 @@ public class KcpContentTypeFactory {
 
 
     public static final int ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS = 7;
-    public static final int ITEM_TYPE_RECOMMENDED_DEAL = 8;
+    public static final int ITEM_TYPE_SECTION_HEADER_OTHER_DEALS = 8;
     public static final int ITEM_TYPE_ADJUST_MY_INTEREST = 9;
-    public static final int ITEM_TYPE_SECTION_HEADER_OTHER_DEALS = 10;
-    public static final int ITEM_TYPE_OTHER_DEAL = 11;
+    public static final int ITEM_TYPE_DEAL = 10;
 
     public static final String TYPE_LOADING_TITLE = "";
     public static final String TYPE_ANNOUNCEMENT_TITLE = "Announcement";
@@ -73,7 +72,8 @@ public class KcpContentTypeFactory {
         } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_STORE)){
             return ITEM_TYPE_STORE;
         }  else if(kcpContentPage.content_type.contains(CONTENT_TYPE_DEAL)){
-            return ITEM_TYPE_OTHER_DEAL;
+//            return ITEM_TYPE_OTHER_DEAL;
+            return ITEM_TYPE_DEAL;
         } else {
             return ITEM_TYPE_ANNOUNCEMENT;
         }

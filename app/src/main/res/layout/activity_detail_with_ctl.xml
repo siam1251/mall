@@ -36,7 +36,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/ivDetailImage"
-                    android:src="@drawable/bg_splash"
                     android:transitionName="@string/transition_news_image"
                     />
 

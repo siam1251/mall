@@ -63,6 +63,7 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    //TODO: see if you need to update social adapter through news adapter or if notifyDatasetchanged needs to be called from news adapter afterwards
     public void updateTwitterData(ArrayList<TwitterTweet> twitterTweets) {
         mTwitterFeedList.clear();
         mTwitterFeedList.addAll(twitterTweets);

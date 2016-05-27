@@ -18,6 +18,10 @@
     <string name="intrst_card_desc">Set your interests to get personalized deal recommendations just for you!</string>
     <string name="intrst_card_btn">SET MY INTERESTS</string>
 
+    <string name="intrst_card_recommended_title">Recommended Deals</string>
+    <string name="intrst_card_recommended_desc">Fine tune your Recommended Deals by adding or removing interests.</string>
+    <string name="intrst_card_recommended_btn">ADJUST MY INTERESTS</string>
+
 
     <!--transition-->
     <string name="transition_news_image">transition news image</string>

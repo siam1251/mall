@@ -3,6 +3,7 @@ package com.kineticcafe.kcpmall.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -28,19 +29,62 @@ import java.util.ArrayList;
 
 public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
 
+    //TODO: should imeplemtn the filtering method so other deals don't have duplicates from recommended deals
     private Context mContext;
-    private ArrayList<KcpContentPage> mKcpContentPages;
 
-    public DealsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> kcpContentPages) {
+
+    private ArrayList<KcpContentPage> mKcpContentPagesOtherDeals;
+    private ArrayList<KcpContentPage> mKcpContentPagesRecommendedDeals;
+
+    private ArrayList<Object> mItems;
+
+    public DealsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> recommendedDeals, ArrayList<KcpContentPage> otherDeals) {
         mContext = context;
-        mKcpContentPages = kcpContentPages;
+
+        mKcpContentPagesRecommendedDeals = recommendedDeals;
+        mKcpContentPagesOtherDeals = otherDeals;
+
+        createItems();
     }
 
-    public void updateData(ArrayList<KcpContentPage> kcpContentPages) {
-        mKcpContentPages.clear();
-        mKcpContentPages.addAll(kcpContentPages);
+    public void createItems(){
+        if(mItems == null) mItems = new ArrayList<>();
+        else mItems.clear();
+
+        int sizeOfRecommendedDeals = mKcpContentPagesRecommendedDeals == null ? 0 : mKcpContentPagesRecommendedDeals.size();
+        int sizeOfOtherDeals = mKcpContentPagesOtherDeals == null ? 0 : mKcpContentPagesOtherDeals.size();
+
+        boolean recommendedDealsExist =  sizeOfRecommendedDeals > 0 ? true : false;
+        boolean otherDealsExist = sizeOfOtherDeals > 0 ? true : false;
+
+        if(recommendedDealsExist){
+            mItems.add(KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS);
+            mItems.addAll(mKcpContentPagesRecommendedDeals);
+            mItems.add(KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST);
+        } else {
+            mItems.add(KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST);
+        }
+
+        if(otherDealsExist){
+            mItems.add(KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_DEALS);
+            mItems.addAll(mKcpContentPagesOtherDeals);
+        }
+    }
+
+    public void updateRecommendedDealData(ArrayList<KcpContentPage> recommendedDeals) {
+        mKcpContentPagesRecommendedDeals.clear();
+        mKcpContentPagesRecommendedDeals.addAll(recommendedDeals);
+        createItems();
         notifyDataSetChanged();
     }
+
+    public void updateOtherDealData(ArrayList<KcpContentPage> otherDeals) {
+        mKcpContentPagesOtherDeals.clear();
+        mKcpContentPagesOtherDeals.addAll(otherDeals);
+        createItems();
+        notifyDataSetChanged();
+    }
+
 
     public class MainViewHolder extends RecyclerView.ViewHolder {
         public View mView;
@@ -63,11 +107,9 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
     public class SectionHeaderViewHolder extends MainViewHolder {
         public TextView  tvSectionHeader;
 
-        public SectionHeaderViewHolder(View v, String headerText) {
+        public SectionHeaderViewHolder(View v) {
             super(v);
             tvSectionHeader = (TextView)  v.findViewById(R.id.tvSectionHeader);
-            tvSectionHeader.setText(headerText);
-
             StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) v.getLayoutParams();
             p.setFullSpan(true);
         }
@@ -92,9 +134,31 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public class RecommendedDealsViewHolder extends MainViewHolder {
-        public RecommendedDealsViewHolder (View v){
+//    public class RecommendedDealsViewHolder extends MainViewHolder {
+//        public RecommendedDealsViewHolder (View v){
+//            super(v);
+//        }
+//    }
+
+    public class SetMyInterestViewHolder extends MainViewHolder {
+        public TextView tvIntrstTitle;
+        public TextView tvIntrstDesc;
+        public TextView tvIntrstBtn;
+
+
+        public SetMyInterestViewHolder(View v){
             super(v);
+
+            tvIntrstTitle = (TextView)  v.findViewById(R.id.tvIntrstTitle);
+            tvIntrstDesc = (TextView)  v.findViewById(R.id.tvIntrstDesc);
+            tvIntrstBtn = (TextView)  v.findViewById(R.id.tvIntrstBtn);
+
+            StaggeredGridLayoutManager.LayoutParams param = (StaggeredGridLayoutManager.LayoutParams) mView.getLayoutParams();
+            param.bottomMargin = (int) mContext.getResources().getDimension(R.dimen.intrst_card_bot_margin);
+            mView.setLayoutParams(param);
+
+            StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) v.getLayoutParams();
+            p.setFullSpan(true);
         }
     }
 
@@ -105,31 +169,69 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         switch (viewType){
             case KcpContentTypeFactory.ITEM_TYPE_LOADING:
                 return new LoadingViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_loading_item, parent, false));
-            case KcpContentTypeFactory.ITEM_TYPE_OTHER_DEAL:
+            case KcpContentTypeFactory.ITEM_TYPE_DEAL:
                 return new DealsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_deal, parent, false));
-            case KcpContentTypeFactory.ITEM_TYPE_RECOMMENDED_DEAL:
-                return new RecommendedDealsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_interest, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST:
-                return new RecommendedDealsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_interest, parent, false));
+                return new SetMyInterestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_interest, parent, false));
+            case KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST:
+                return new SetMyInterestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_interest, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS:
                 return new SectionHeaderViewHolder(
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_section_header, parent, false),
-                        parent.getContext().getResources().getString(R.string.section_header_recommended_deals));
+                        LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_section_header, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_DEALS:
                 return new SectionHeaderViewHolder(
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_section_header, parent, false),
-                        parent.getContext().getResources().getString(R.string.section_header_other_deals));
+                        LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_section_header, parent, false));
         }
         return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        final KcpContentPage kcpContentPage = mKcpContentPages.get(position);
+//        final KcpContentPage kcpContentPage = mKcpContentPagesOtherDeals.get(position);
+
         if (holder instanceof LoadingViewHolder) {
             LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
-        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_OTHER_DEAL){
+        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST){
+            SetMyInterestViewHolder setMyInterestViewHolder = (SetMyInterestViewHolder) holder;
+            setMyInterestViewHolder.tvIntrstTitle.setText(mContext.getResources().getString(R.string.intrst_card_recommended_title));
+
+            setMyInterestViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "ADJUST MY INTEREST CLICKED", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            //intrst card has top margin when recommended deals list are empty
+            StaggeredGridLayoutManager.LayoutParams param = (StaggeredGridLayoutManager.LayoutParams) setMyInterestViewHolder.mView.getLayoutParams();
+//            param.topMargin = (int) mContext.getResources().getDimension(R.dimen.intrst_card_bot_margin);
+            param.topMargin = (int) mContext.getResources().getDimension(R.dimen.card_vertical_margin);
+            setMyInterestViewHolder.mView.setLayoutParams(param);
+
+
+        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST){
+            SetMyInterestViewHolder setMyInterestViewHolder = (SetMyInterestViewHolder) holder;
+            setMyInterestViewHolder.tvIntrstTitle.setText(mContext.getResources().getString(R.string.intrst_card_recommended_title));
+            setMyInterestViewHolder.tvIntrstDesc.setText(mContext.getResources().getString(R.string.intrst_card_recommended_desc));
+            setMyInterestViewHolder.tvIntrstBtn.setText(mContext.getResources().getString(R.string.intrst_card_recommended_btn));
+
+            setMyInterestViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "ADJUST MY INTEREST CLICKED", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS){
+            SectionHeaderViewHolder sectionHeaderViewHolder = (SectionHeaderViewHolder) holder;
+            sectionHeaderViewHolder.tvSectionHeader.setText(mContext.getResources().getString(R.string.section_header_recommended_deals));
+        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_DEALS){
+            SectionHeaderViewHolder sectionHeaderViewHolder = (SectionHeaderViewHolder) holder;
+            sectionHeaderViewHolder.tvSectionHeader.setText(mContext.getResources().getString(R.string.section_header_other_deals));
+        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_DEAL){
+            final KcpContentPage kcpContentPage = (KcpContentPage) mItems.get(position);
             final DealsViewHolder dealHolder = (DealsViewHolder) holder;
 
             String imageUrl = kcpContentPage.getImageUrl();
@@ -194,24 +296,21 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mKcpContentPages == null ? 0 : mKcpContentPages.size();
+        return mItems.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        KcpContentPage kcpContentPage = mKcpContentPages.get(position);
-//        return KcpContentTypeFactory.getContentType(kcpContentPage);
-        if(position == 0){
-            return KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS; //testing
-//        } else if(position == 1){
-//            return KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST; //testing
-//        else if(position == 2){
-//            return KcpContentTypeFactory.ITEM_TYPE_RECOMMENDED_DEAL; //testing
-//        } else if (position == 3){
-//            return KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_DEALS; //testing
+        Object item =  mItems.get(position);
+        if(item == null){
+            return KcpContentTypeFactory.ITEM_TYPE_LOADING;
+        } else if (item instanceof Integer) {
+            return (Integer) item;
         } else {
-            return KcpContentTypeFactory.ITEM_TYPE_OTHER_DEAL; //testing
+            return KcpContentTypeFactory.ITEM_TYPE_DEAL;
         }
     }
+
+
 
 }

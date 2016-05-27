@@ -12,6 +12,8 @@ import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.NewsRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.views.DealRecyclerItemDecoration;
+import com.kineticcafe.kcpmall.views.NewsRecyclerItemDecoration;
 import com.kineticcafe.kcpmall.widget.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
@@ -20,30 +22,25 @@ import java.util.ArrayList;
  * Created by Kay on 2016-05-04.
  */
 public class NewsFragment extends BaseFragment {
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
-
     public NewsRecyclerViewAdapter mNewsRecyclerViewAdapter;
     public EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
 
-//    public NewsFragment() {}
-
-    private static NewsFragment sNewsFragment;
+    /*private static NewsFragment sNewsFragment;
     public static NewsFragment getInstance(){
         if(sNewsFragment == null) sNewsFragment = new NewsFragment();
         return sNewsFragment;
+    }*/
+
+    public static NewsFragment newInstance() {
+        NewsFragment fragment = new NewsFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -78,8 +75,7 @@ public class NewsFragment extends BaseFragment {
     private void setupRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(recyclerView.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        ArrayList<KcpContentPage> temp = new ArrayList<>();
-        mNewsRecyclerViewAdapter = new NewsRecyclerViewAdapter(getActivity(), temp, HomeFragment.sTwitterTweets, HomeFragment.sInstagramFeeds);
+        mNewsRecyclerViewAdapter = new NewsRecyclerViewAdapter(getActivity(), new ArrayList<KcpContentPage>(), HomeFragment.getInstance().getTwitterTweets(), HomeFragment.getInstance().getInstagramFeeds());
         recyclerView.setAdapter(mNewsRecyclerViewAdapter);
 
         mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -89,5 +85,9 @@ public class NewsFragment extends BaseFragment {
             }
         };
         recyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
+
+        NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(getActivity(), R.dimen.card_vertical_margin);
+        recyclerView.addItemDecoration(itemDecoration);
+
     }
 }

@@ -166,7 +166,7 @@ public class DetailActivity extends AppCompatActivity {
             cTAList.add(info);
             cTAList.add(addToCalendar);
 
-        } else if(contentPageType == KcpContentTypeFactory.ITEM_TYPE_OTHER_DEAL){
+        } else if(contentPageType == KcpContentTypeFactory.ITEM_TYPE_DEAL){
             cTAList.add(location);
             cTAList.add(parking);
             cTAList.add(info);
