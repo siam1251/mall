@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/ablDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.PopupOverlay"
+        >
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/ctlDetail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="@color/themeColor"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            >
+            app:layout_scrollFlags="scroll|exitUntilCollapsed" <!--toolbar moves up-->
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" <!--toolbar fixed-->
+
+
+            <!--TODO: find a way to get 0.7 from xml-->
+            <RelativeLayout
+                app:layout_collapseParallaxMultiplier="0.7"
+                app:layout_collapseMode="parallax"
+                android:id="@+id/rlDetailImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.kineticcafe.kcpmall.views.KCPSetRatioImageView
+                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ivDetailImage"
+                    android:src="@drawable/bg_splash"
+                    android:transitionName="@string/transition_news_image"
+                    />
+
+                <com.kineticcafe.kcpmall.views.AlphaTextView
+                    xmlns:textAlpha="http://schemas.android.com/apk/res-auto"
+                    android:gravity="center"
+                    android:textColor="@color/expiry_date_text"
+                    android:text="ENDS TODAY"
+                    android:textSize="@dimen/detail_expiry_date_text"
+                    android:id="@+id/tvExpiryDate"
+                    android:layout_alignBottom="@+id/ivDetailImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/detail_expiry_date_height"
+                    android:background="@color/themeColor"
+                    textAlpha:alpha="@integer/detail_expiry_date_alpha"
+                    />
+
+            </RelativeLayout>
+
+            <include
+                layout="@layout/layout_toolbar_detail_with_ctl" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/contact_detail_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+        <include
+            layout="@layout/content_detail_with_ctl" />
+
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

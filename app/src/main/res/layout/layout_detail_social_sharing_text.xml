@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:background="@color/detail_social_sharing_bg"
+    android:layout_height="56dp"
+    android:visibility="gone"
+    >
+
+    <TextView
+        android:textColor="@color/detail_title_text"
+        android:layout_marginLeft="@dimen/detail_button_image_left_margin"
+        android:gravity="center_vertical"
+        android:text="Follow on"
+        android:id="@+id/tvDetailSocialSharingBtnHeader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <View android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        style="@style/separater"
+        />
+
+</RelativeLayout>

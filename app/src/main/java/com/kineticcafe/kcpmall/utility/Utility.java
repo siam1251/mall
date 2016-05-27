@@ -13,9 +13,14 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.activities.Constants;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -91,8 +96,48 @@ public class Utility {
         return width;
     }
 
-    public static boolean existsInServer(String URLName){
-        try {
+    private static boolean exist = false;
+    public synchronized static boolean existsInServer(final String URLName){
+
+
+        new Thread(){
+            @Override
+            public void run(){
+                try {
+                    //TODO: look into this
+                    new RetrieveFeedTask().execute(URLName);
+
+                    long CONNECT_TIMEOUT_SEC = 20;
+                    // Use okhttp library to check existsInServer(). The performance speed increased.
+                    OkHttpClient client = new OkHttpClient.Builder()
+//                    .connectTimeout(timeout, TimeUnit.SECONDS)
+//                    .writeTimeout(timeout, TimeUnit.SECONDS)
+//                    .readTimeout(timeout, TimeUnit.SECONDS)
+                            .connectTimeout(CONNECT_TIMEOUT_SEC, TimeUnit.SECONDS)
+                            .writeTimeout(CONNECT_TIMEOUT_SEC, TimeUnit.SECONDS)
+                            .readTimeout(CONNECT_TIMEOUT_SEC, TimeUnit.SECONDS)
+                            .build();
+
+                    Request request = new Request.Builder()
+
+                            .url(URLName)
+                            .build();
+
+                    Response response = client.newCall(request).execute();
+                    if(response.code() == 200)
+                        exist = true;
+                    else
+                        exist = false;
+                }
+                catch (Exception e) {
+                    exist = false;
+                }
+            }
+        }.start();
+        return exist;
+
+
+        /*try {
             //TODO: look into this
             new RetrieveFeedTask().execute(URLName);
 
@@ -120,7 +165,7 @@ public class Utility {
         }
         catch (Exception e) {
             return false;
-        }
+        }*/
        /* try {
             return new RetrieveFeedTask().execute(URLName).get();
         }

@@ -180,7 +180,7 @@ public class OneFragment extends Fragment {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item, parent, false);
+                    .inflate(R.layout.list_item_onefragment, parent, false);
             view.setBackgroundResource(mBackground);
             return new ViewHolder(view);
         }

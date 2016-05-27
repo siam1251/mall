@@ -31,12 +31,34 @@
     <dimen name="ancmt_title_height">28dp</dimen>
     <dimen name="ancmt_date_txt">14sp</dimen>
     <dimen name="ancmt_date_height">24dp</dimen>
-    <!--<dimen name="ancmt_fav_width">15.6dp</dimen>
-    <dimen name="ancmt_fav_height">14dp</dimen>-->
     <dimen name="ancmt_fav_width">18dp</dimen> <!--TODO: lil too smaller - made them little bigger-->
-    <!--<dimen name="ancmt_fav_height">14dp</dimen>-->
 
     <item name="ancmt_image_ratio" format="float" type="dimen">1.6</item>
+
+
+    <!--deal card-->
+
+    <dimen name="deal_desc_top_margin">15dp</dimen>
+    <dimen name="deal_desc_height">140dp</dimen>
+    <dimen name="deal_store_txt">18sp</dimen>
+    <!--<dimen name="deal_title_height">21dp</dimen>-->
+    <dimen name="deal_store_max_height">42dp</dimen>
+    <dimen name="deal_date_txt">14sp</dimen>
+    <dimen name="deal_title_height">40dp</dimen>
+    <dimen name="deal_title_top_margin">3.5dp</dimen>
+    <dimen name="deal_title_line_spacing_extra">4sp</dimen>
+    <dimen name="deal_fav_width">18dp</dimen> <!--TODO: lil too smaller - made them little bigger-->
+    <dimen name="deal_card_desc_horizontal_padding">12dp</dimen>
+    <dimen name="deal_card_desc_bot_padding">14dp</dimen>
+    <dimen name="deal_expiry_date_height">24dp</dimen>
+    <dimen name="deal_expiry_date_text">12sp</dimen>
+
+
+    <!--section header-->
+    <dimen name="section_header_top_margin">8dp</dimen>
+    <dimen name="section_header_text_height">48dp</dimen>
+    <dimen name="section_header_text_size">16sp</dimen>
+
 
     <!--interest card-->
     <dimen name="intrst_card_height">157dp</dimen>
@@ -104,5 +126,6 @@
     <!--etc-->
     <dimen name="button_corner_radius">2dp</dimen>
     <dimen name="toolbar_elevation">2dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 
 </resources>

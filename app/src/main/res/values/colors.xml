@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--default colors-->
+    <color name="themeColor">#13bed0</color>
+    <color name="warningColor">#ffffff</color> <!--#CFff4444-->
+    <color name="themeColorDark">#108E9C</color>
+
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#303F9F</color> <!--status bar-->
     <color name="colorAccent">#FFFFFF</color>
@@ -35,6 +41,9 @@
     <color name="black">#000000</color>
 
 
+    <!--card general-->
+    <color name="card_bg">#f5f5f5</color>
+
     <!--announcement card-->
     <color name="ancmt_title_color">#de000000</color>
     <color name="ancmt_date_color">#87000000</color>
@@ -53,6 +62,11 @@
     <color name="detail_disclaimer_bg">#f5f5f5</color>
     <color name="detail_disclaimer_text">#8b8b8b</color>
     <color name="detail_title_text">#8a000000</color>
+    <color name="detail_body_text">#8a000000</color>
+    <color name="detail_social_sharing_bg">#f5f5f5</color>
+
+    <color name="expiry_date_text">#fcfcfc</color>
+
     <!--<color name="detail_date_bg">#13bed0</color>--> <!--theme color-->
 
 </resources>

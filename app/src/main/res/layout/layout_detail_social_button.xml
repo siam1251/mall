@@ -2,26 +2,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:foreground="?android:attr/selectableItemBackground"
+    android:background="@color/detail_social_sharing_bg"
     android:visibility="gone"
     android:layout_height="@dimen/detail_button_height">
 
     <com.kineticcafe.kcpmall.views.ThemedImageView
         android:layout_marginLeft="@dimen/detail_button_image_left_margin"
         android:layout_centerVertical="true"
-        android:src="@drawable/icn_map"
-        android:id="@+id/ivDetailBtnImage"
+        android:src="@drawable/icn_instagram"
+        android:id="@+id/ivDetailSocialSharingBtn"
         android:layout_width="@dimen/detail_button_image_width"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         />
 
     <TextView
-        android:textColor="@color/black"
+        android:textColor="@color/detail_title_text"
         android:layout_marginLeft="@dimen/detail_button_text_left_margin"
-        android:layout_toRightOf="@+id/ivDetailBtnImage"
+        android:layout_toRightOf="@+id/ivDetailSocialSharingBtn"
         android:gravity="center_vertical"
         android:text="Ground Level (GL)"
-        android:id="@+id/tvDetailBtnTitle"
+        android:id="@+id/tvDetailSocialSharingBtnTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />

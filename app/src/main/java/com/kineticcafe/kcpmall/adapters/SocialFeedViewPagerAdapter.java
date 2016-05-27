@@ -2,6 +2,7 @@ package com.kineticcafe.kcpmall.adapters;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +24,6 @@ import java.util.List;
 public class SocialFeedViewPagerAdapter extends PagerAdapter {
 
     private enum SocialFeedType { TWITTER, INSTA };
-
-    /*private static Context mContext;
-    private static List<TwitterFeed> mTwitterFeedList;
-    private static List<InstagramFeed> mInstaFeedList;
-    private static LayoutInflater mLayoutInflater;
-    private static SocialFeedType mSocialFeedType;*/
-
     private Context mContext;
     private List<TwitterTweet> mTwitterFeedList = new ArrayList<>();
     private List<InstagramFeed> mInstaFeedList = new ArrayList<>();
@@ -45,7 +39,6 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
 
     public SocialFeedViewPagerAdapter getTwitterViewPagerAdapter(Context context, List<TwitterTweet> twitterFeedList, OnSocialFeedClickListener onSocialFeedClickListener) {
         init(context);
-//        SocialFeedViewPagerAdapter socialFeedViewPagerAdapter = new SocialFeedViewPagerAdapter();
         mTwitterFeedList.addAll(twitterFeedList);
         mSocialFeedType = SocialFeedType.TWITTER;
         mListSize = mTwitterFeedList.size();
@@ -56,7 +49,6 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
 
     public SocialFeedViewPagerAdapter getInstaViewPagerAdapter(Context context, List<InstagramFeed> instaFeedList, OnSocialFeedClickListener onSocialFeedClickListener) {
         init(context);
-//        SocialFeedViewPagerAdapter instaViewPagerAdapter = new SocialFeedViewPagerAdapter();
         mInstaFeedList.addAll(instaFeedList);
         mSocialFeedType = SocialFeedType.INSTA;
         mListSize = mInstaFeedList.size();
@@ -70,17 +62,6 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
         mContext = context;
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
-    /*public SocialFeedViewPagerAdapter(Context context, List<Object> twitterFeedList){
-        mContext = context;
-        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if(twitterFeedList.get(0) instanceof  TwitterFeed){
-            mTwitterFeedList = twitterFeedList;
-
-        } else if(){
-
-        }
-    }*/
 
     public void updateTwitterData(ArrayList<TwitterTweet> twitterTweets) {
         mTwitterFeedList.clear();
@@ -131,7 +112,9 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
             new GlideFactory().glideWithDefaultRatio(
                     mContext,
                     mInstaFeedList.get(position).instaPicUrl,
-                    ivInsta
+                    ivInsta,
+                    R.drawable.view_shadow
+
             );
 
             collection.addView(itemView);

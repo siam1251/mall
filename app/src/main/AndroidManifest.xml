@@ -39,10 +39,6 @@
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Base"/>
 
-        <activity
-            android:name=".activities.Test"
-            android:label="@string/title_activity_test"
-            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

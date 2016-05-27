@@ -28,9 +28,19 @@ public interface InstagramService {
             @Query("max_id") String maxId);
 
     @GET("users/{user_id}/media/recent")
-    public Call<Recent> getRecent(
+    public Call<Recent> getRecentWithAccessToken(
             @Path("user_id") String userId,
             @Query("access_token") String accessToken,
+            @Query("count") Integer count,
+            @Query("min_id") String minId,
+            @Query("max_id") String maxId,
+            @Query("min_timestamp") Long minTimestamp,
+            @Query("max_timestamp") Long maxTimestamp);
+
+    @GET("users/{user_id}/media/recent")
+    public Call<Recent> getRecentWithClientId(
+            @Path("user_id") String userId,
+            @Query("client_id") String clientId,
             @Query("count") Integer count,
             @Query("min_id") String minId,
             @Query("max_id") String maxId,

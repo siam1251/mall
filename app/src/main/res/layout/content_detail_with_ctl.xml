@@ -7,43 +7,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.DetailActivity"
-    tools:showIn="@layout/activity_detail">
+    tools:showIn="@layout/activity_detail_with_ctl">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
 
-        <RelativeLayout
-            android:id="@+id/rlDetailImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.kineticcafe.kcpmall.views.KCPSetRatioImageView
-                android:scaleType="centerCrop"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ivDetailImage"
-                android:src="@drawable/bg_splash"
-                android:transitionName="@string/transition_news_image"
-                />
-
-            <!--<TextView-->
-            <com.kineticcafe.kcpmall.views.AlphaTextView
-                xmlns:textAlpha="http://schemas.android.com/apk/res-auto"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:text="ENDS TODAY"
-                android:textSize="@dimen/detail_expiry_date_text"
-                android:id="@+id/tvExpiryDate"
-                android:layout_alignBottom="@+id/ivDetailImage"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/detail_expiry_date_height"
-                android:background="@color/themeColor"
-                textAlpha:alpha="@integer/detail_expiry_date_alpha"
-                />
-
-        </RelativeLayout>
         <FrameLayout
             android:layout_gravity="center"
             android:layout_width="@dimen/detail_logo_width"
@@ -65,8 +35,9 @@
                 android:layout_height="wrap_content"
                 />
 
-            <!--<com.kineticcafe.kcpmall.views.KCPSetRatioImageView-->
             <ImageView
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:layout_gravity="center"
                 android:src="@drawable/logo_vaughan_mills"
                 android:layout_width="match_parent"
@@ -88,22 +59,23 @@
             android:textColor="@color/detail_title_text"
             android:layout_marginBottom="23dp"/>
 
-        <android.support.v7.widget.AppCompatButton
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:id="@+id/tvDetailDate"
             android:textAllCaps="false"
             android:padding="0dp"
-            android:text="Closed now. Opens at 1:00PM"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:text="Thursday, May 12 - Wednesday, May 25"
             android:textColor="@color/white"
-            android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
             android:layout_height="@dimen/detail_date_button_height"
             android:layout_marginBottom="25dp"
-            android:layout_marginLeft="70dp"
-            android:layout_marginRight="70dp"
             android:background="@drawable/btn_style_corner_radius"
             />
-            android:background="@color/themeColor"
-            app:backgroundTint="@color/themeColor"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
 
         <TextView
             android:id="@+id/tvDetailBody"
@@ -114,10 +86,27 @@
             android:textSize="@dimen/detail_body_text"
             android:text="@string/lorem"
             android:layout_marginBottom="25dp"
-            android:textColor="@color/black"
+            android:textColor="@color/detail_body_text"
             />
 
         <!--<View style="@style/separater" />-->
+
+        <LinearLayout
+            android:id="@+id/llCTA"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <include
+            android:id="@+id/layoutSocialSharing"
+            layout="@layout/layout_detail_social_sharing_text"/>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/llSharing"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
 
         <include
             android:id="@+id/layoutLocation"
@@ -128,11 +117,41 @@
             layout="@layout/layout_detail_button"/>
 
         <include
+            android:id="@+id/layoutHours"
+            layout="@layout/layout_detail_button"/>
+
+        <include
+            android:id="@+id/layoutStoreInfo"
+            layout="@layout/layout_detail_button"/>
+
+        <include
             android:id="@+id/layoutPhone"
             layout="@layout/layout_detail_button"/>
 
         <include
+            android:visibility="gone"
+            android:id="@+id/layoutDisclaimer"
             layout="@layout/layout_disclaimer"/>
+
+        <!--SOCIAL SHARING-->
+
+        <include
+            android:id="@+id/layoutSocialSharing"
+            layout="@layout/layout_detail_social_sharing_text"/>
+
+        <include
+            android:id="@+id/layoutFacebook"
+            layout="@layout/layout_detail_social_button"/>
+
+        <include
+            android:id="@+id/layoutInstagram"
+            layout="@layout/layout_detail_social_button"/>
+
+        <include
+            android:id="@+id/layoutWebsite"
+            layout="@layout/layout_detail_social_button"/>
+
+
 
 
     </LinearLayout>

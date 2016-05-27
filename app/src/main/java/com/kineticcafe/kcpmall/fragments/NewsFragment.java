@@ -1,7 +1,6 @@
 package com.kineticcafe.kcpmall.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +11,7 @@ import android.view.ViewGroup;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.adapters.NewsAdapter;
+import com.kineticcafe.kcpmall.adapters.NewsRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.widget.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class NewsFragment extends BaseFragment {
     private String mParam1;
     private String mParam2;
 
-    public NewsAdapter mNewsAdapter;
+    public NewsRecyclerViewAdapter mNewsRecyclerViewAdapter;
     public EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
 
 //    public NewsFragment() {}
@@ -80,8 +79,8 @@ public class NewsFragment extends BaseFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(recyclerView.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         ArrayList<KcpContentPage> temp = new ArrayList<>();
-        mNewsAdapter = new NewsAdapter(getActivity(), temp, HomeFragment.sTwitterTweets, HomeFragment.sInstagramFeeds);
-        recyclerView.setAdapter(mNewsAdapter);
+        mNewsRecyclerViewAdapter = new NewsRecyclerViewAdapter(getActivity(), temp, HomeFragment.sTwitterTweets, HomeFragment.sInstagramFeeds);
+        recyclerView.setAdapter(mNewsRecyclerViewAdapter);
 
         mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override

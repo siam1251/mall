@@ -27,7 +27,6 @@ public class TwitterAsyncTask extends AsyncTask<Object, Void, ArrayList<TwitterT
 
     @Override
     protected ArrayList<TwitterTweet> doInBackground(Object... params) {
-        logger.debug("TWITTER DOINBG");
         ArrayList<TwitterTweet> twitterTweets = null;
         try {
             if (params.length > 0) {
@@ -36,7 +35,6 @@ public class TwitterAsyncTask extends AsyncTask<Object, Void, ArrayList<TwitterT
             }
             return twitterTweets;
         } catch (Exception e) {
-            logger.debug("TIWTTER ERROR");
             logger.error(e);
         }
         return twitterTweets;
@@ -45,9 +43,7 @@ public class TwitterAsyncTask extends AsyncTask<Object, Void, ArrayList<TwitterT
 
     @Override
     protected void onPostExecute(ArrayList<TwitterTweet> twitterTweets) {
-        logger.debug("TIWTTER ONPOSTEXECUTE");
         if(mTwitterFeedDownloadCompleteListener != null) {
-            logger.debug("TIWTTER mTwitterFeedDownloadCompleteListener FOUND");
             mTwitterFeedDownloadCompleteListener.onTwitterFeedDownloadComplete(twitterTweets);
         } else logger.debug("TIWTTER mTwitterFeedDownloadCompleteListener NOT FOUND!!!!!!!!");
 

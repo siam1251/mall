@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        if (id == R.id.nav_camera) {
+        /*if (id == R.id.nav_camera) {
 
 //            FragmentManager fragmentManager = getSupportFragmentManager();
 //            fragmentManager.beginTransaction().replace(R.id.flContent, new OneFragment()).commit();
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_manage) {
 
-        }/* else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
