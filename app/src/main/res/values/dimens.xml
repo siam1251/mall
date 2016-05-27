@@ -104,7 +104,7 @@
     <dimen name="detail_logo_text">24sp</dimen>
     <dimen name="detail_logo_text_bot_margin">34dp</dimen>
     <dimen name="detail_body_text">14sp</dimen>
-    <integer name="detail_expiry_date_alpha">204</integer>
+    <integer name="detail_expiry_date_alpha">241</integer>
 
 
     <!-- Default screen margins, per the Android Design guidelines. -->

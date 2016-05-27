@@ -21,7 +21,7 @@ public class AlphaTextView  extends TextView {
     public AlphaTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KcpAnimatedViewPager);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AlphaTextView);
         mAlpha = a.getColor(R.styleable.AlphaTextView_alpha, 133);
         getBackground().setAlpha(mAlpha);
 //        init();

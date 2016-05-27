@@ -37,8 +37,8 @@ public class GlideFactory {
         if(imageView == null) return;
         Glide.with(context)
                 .load(url)
-//                .override(Utility.getScreenWidth(context), (int) (Utility.getScreenWidth(context) / Utility.getFloat(context, R.dimen.ancmt_image_ratio)))
-                .crossFade(600)
+                .override(Utility.getScreenWidth(context), (int) (Utility.getScreenWidth(context) / Utility.getFloat(context, R.dimen.ancmt_image_ratio)))
+                .crossFade()
                 .into(imageView);
     }
 
@@ -57,78 +57,9 @@ public class GlideFactory {
         Glide.with(context)
                 .load(url)
                 .override(Utility.getScreenWidth(context), (int) (Utility.getScreenWidth(context) / Utility.getFloat(context, R.dimen.ancmt_image_ratio)))
-                .crossFade(800)
+                .crossFade()
                 .error(errorDrawable)
-                /*.listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        imageView.setImageResource(errorDrawable);
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        return false;
-                    }
-                })*/
+                .placeholder(errorDrawable)
                 .into(imageView);
-    }
-
-    public class PaddingAnimationFactory<T extends GlideDrawable> implements GlideAnimationFactory<T> {
-        private final DrawableCrossFadeFactory<T> realFactory;
-
-        public PaddingAnimationFactory(DrawableCrossFadeFactory<T> factory) {
-            this.realFactory = factory;
-        }
-
-        @Override public GlideAnimation<T> build(boolean isFromMemoryCache, boolean isFirstResource) {
-            return new PaddingAnimation<>(realFactory.build(isFromMemoryCache, isFirstResource));
-        }
-    }
-
-    public class PaddingAnimation<T extends GlideDrawable> implements GlideAnimation<T> {
-        private final GlideAnimation<? super T> realAnimation;
-
-        public PaddingAnimation(GlideAnimation<? super T> animation) {
-            this.realAnimation = animation;
-        }
-
-        @Override public boolean animate(T current, final ViewAdapter adapter) {
-            int width = current.getIntrinsicWidth();
-            int height = current.getIntrinsicHeight();
-            return realAnimation.animate(current, new PaddingViewAdapter(adapter, width, height));
-        }
-    }
-
-    public class PaddingViewAdapter implements GlideAnimation.ViewAdapter {
-        private final GlideAnimation.ViewAdapter realAdapter;
-        private final int targetWidth;
-        private final int targetHeight;
-
-        public PaddingViewAdapter(GlideAnimation.ViewAdapter adapter, int targetWidth, int targetHeight) {
-            this.realAdapter = adapter;
-            this.targetWidth = targetWidth;
-            this.targetHeight = targetHeight;
-        }
-
-        @Override public View getView() {
-            return realAdapter.getView();
-        }
-
-        @Override public Drawable getCurrentDrawable() {
-            Drawable drawable = realAdapter.getCurrentDrawable();
-            if (drawable != null) {
-                int padX = Math.max(0, targetWidth - drawable.getIntrinsicWidth()) / 2;
-                int padY = Math.max(0, targetHeight - drawable.getIntrinsicHeight()) / 2;
-                if (padX != 0 || padY != 0) {
-                    drawable = new InsetDrawable(drawable, padX, padY, padX, padY);
-                }
-            }
-            return drawable;
-        }
-
-        @Override public void setDrawable(Drawable drawable) {
-            realAdapter.setDrawable(drawable);
-        }
     }
 }

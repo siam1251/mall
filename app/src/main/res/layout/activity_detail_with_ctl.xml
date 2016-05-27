@@ -40,17 +40,18 @@
                     />
 
                 <com.kineticcafe.kcpmall.views.AlphaTextView
+                    android:visibility="gone"
                     xmlns:textAlpha="http://schemas.android.com/apk/res-auto"
                     android:gravity="center"
                     android:textColor="@color/expiry_date_text"
-                    android:text="ENDS TODAY"
-                    android:textSize="@dimen/detail_expiry_date_text"
                     android:id="@+id/tvExpiryDate"
                     android:layout_alignBottom="@+id/ivDetailImage"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/detail_expiry_date_height"
                     android:background="@color/themeColor"
                     textAlpha:alpha="@integer/detail_expiry_date_alpha"
+                    android:transitionName="@string/transition_news_expiry_date"
+                    android:textSize="@dimen/detail_expiry_date_text"
                     />
 
             </RelativeLayout>

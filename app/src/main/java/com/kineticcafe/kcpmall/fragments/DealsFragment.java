@@ -69,6 +69,7 @@ public class DealsFragment extends BaseFragment {
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(COLUMN_COUNT, StaggeredGridLayoutManager.VERTICAL);
+        staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         mDealsRecyclerViewAdapter = new DealsRecyclerViewAdapter(getActivity(), new ArrayList<KcpContentPage>(), new ArrayList<KcpContentPage>());

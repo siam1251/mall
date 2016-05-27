@@ -44,14 +44,14 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private ArrayList<KcpContentPage> mKcpContentPagesNews;
     private SocialFeedViewPagerAdapter mSocialFeedViewPagerAdapter;
-    private List<TwitterTweet> mTwitterFeedList;
-    private List<InstagramFeed> mInstaFeedList;
+//    private List<TwitterTweet> mTwitterFeedList;
+//    private List<InstagramFeed> mInstaFeedList;
 
-    public NewsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> news, List<TwitterTweet> twitterFeedList, List<InstagramFeed> instaFeedList) {
+    public NewsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> news/*, List<TwitterTweet> twitterFeedList, List<InstagramFeed> instaFeedList*/) {
         mContext = context;
         mKcpContentPagesNews = news;
-        mTwitterFeedList = twitterFeedList;
-        mInstaFeedList = instaFeedList;
+        /*mTwitterFeedList = twitterFeedList;
+        mInstaFeedList = instaFeedList;*/
     }
 
     public void updateData(ArrayList<KcpContentPage> kcpContentPages) {
@@ -201,7 +201,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                     ancmtHolder.ivAnnouncementLogo.getContext(),
                     imageUrl,
                     ancmtHolder.ivAnnouncementLogo,
-                    R.drawable.bg_splash);
+                    R.drawable.placeholder);
 
             String title = kcpContentPage.getTitle();
             ancmtHolder.tvAnnouncementTitle.setText(title);
@@ -230,8 +230,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             ancmtHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "ANNOUNCEMENT CLICKED", Toast.LENGTH_SHORT).show();
-
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
 
@@ -263,7 +261,8 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             MainViewHolder viewHolder = null;
             if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_TWITTER) {
                 viewHolder = (TwitterFeedViewHolder) holder;
-                mSocialFeedViewPagerAdapter.getTwitterViewPagerAdapter(mContext, mTwitterFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
+//                mSocialFeedViewPagerAdapter.getTwitterViewPagerAdapter(mContext/*, mTwitterFeedList*/, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
+                mSocialFeedViewPagerAdapter.getTwitterViewPagerAdapter(mContext, HomeFragment.sTwitterFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
                         Toast.makeText(mContext, "TWITTER CLICKED", Toast.LENGTH_SHORT).show();
@@ -271,8 +270,8 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 });
             } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM){
                 viewHolder = (InstagramFeedViewHolder) holder;
-                mSocialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext, mInstaFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
-//                mSocialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext, HomeFragment.sInstagramFeeds, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
+//                mSocialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext/*, mInstaFeedList*/, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
+                mSocialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext, HomeFragment.sInstaFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
                         Toast.makeText(mContext, "INSTAGRAM CLICKED", Toast.LENGTH_SHORT).show();
@@ -301,7 +300,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 for (int i = 0; i < holder.dotsCount; i++) {
                     holder.dots[i].setImageDrawable(mContext.getResources().getDrawable(R.drawable.viewpager_circle_page_incdicator_dot_unselected));
                 }
-                holder.dots[position].setImageDrawable(mContext.getResources().getDrawable(R.drawable.viewpager_circle_page_incdicator_dot_selected));
+                holder.dots[position % holder.dots.length].setImageDrawable(mContext.getResources().getDrawable(R.drawable.viewpager_circle_page_incdicator_dot_selected));
             }
 
             @Override
@@ -310,7 +309,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             }
         });
         Log.d("NewsRecyclerViewAdapter", "setUiPageViewController");
-        setUiPageViewController(pagerAdapter, holder);
+        setUiPageViewController(holder);
     }
 
     @Override
@@ -329,8 +328,8 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     /** circle page indicator*/
-    private void setUiPageViewController(PagerAdapter viewpagerAdapter, MainViewHolder holder) {
-        holder.dotsCount = viewpagerAdapter.getCount();
+    private void setUiPageViewController(MainViewHolder holder) {
+        holder.dotsCount = Constants.NUMB_OF_INSTA; //viewpagerAdapter.getCount(); used for actual counting
         holder.dots = new ImageView[holder.dotsCount];
 
         holder.llViewPagerCountDots.removeAllViews(); //prevent from creating second indicator

@@ -187,8 +187,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-//        final KcpContentPage kcpContentPage = mKcpContentPagesOtherDeals.get(position);
-
         if (holder instanceof LoadingViewHolder) {
             LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -205,7 +203,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
 
             //intrst card has top margin when recommended deals list are empty
             StaggeredGridLayoutManager.LayoutParams param = (StaggeredGridLayoutManager.LayoutParams) setMyInterestViewHolder.mView.getLayoutParams();
-//            param.topMargin = (int) mContext.getResources().getDimension(R.dimen.intrst_card_bot_margin);
             param.topMargin = (int) mContext.getResources().getDimension(R.dimen.card_vertical_margin);
             setMyInterestViewHolder.mView.setLayoutParams(param);
 
@@ -239,7 +236,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                     dealHolder.ivDealLogo.getContext(),
                     imageUrl,
                     dealHolder.ivDealLogo,
-                    R.drawable.bg_splash);
+                    R.drawable.placeholder);
 
 
             String storename = kcpContentPage.getStoreName();
@@ -258,37 +255,49 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            dealHolder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(mContext, "ANNOUNCEMENT CLICKED", Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(mContext, DetailActivity.class);
-                    intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
-
-                    String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
-                    String transitionNameFav = mContext.getResources().getString(R.string.transition_fav);
-
-                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            (Activity)mContext,
-                            Pair.create((View)dealHolder.ivDealLogo, transitionNameImage),
-                            Pair.create((View)dealHolder.ivFav, transitionNameFav));
-
-                    ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
-                }
-            });
 
             int daysLeftUntilEffectiveDate = kcpContentPage.getDaysLeftUntilEffectiveEndDate(kcpContentPage.effectiveEndTime);
-            String daysLeft = kcpContentPage.getDaysLeftText(daysLeftUntilEffectiveDate, Constants.DAYS_LEFT_TO_SHOW_IN_EXPIRY_DATE);
+            final String daysLeft = kcpContentPage.getDaysLeftText(daysLeftUntilEffectiveDate, Constants.DAYS_LEFT_TO_SHOW_IN_EXPIRY_DATE);
 
             if(daysLeft.equals("")){
                 dealHolder.tvExpiryDate.setVisibility(View.GONE);
             } else {
-                dealHolder.tvExpiryDate.setText(daysLeft);
-//                dealHolder.tvExpiryDate.setAnimation(new ExpiryDateAnimation().getAnimation());
+                dealHolder.tvExpiryDate.setVisibility(View.VISIBLE);
+                dealHolder.tvExpiryDate.setText(daysLeft); //setAnimation(new ExpiryDateAnimation().getAnimation());
             }
+
+
+            dealHolder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, DetailActivity.class);
+                    intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
+
+                    String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
+                    String transitionNameExpiry = mContext.getResources().getString(R.string.transition_news_expiry_date);
+                    String transitionNameFav = mContext.getResources().getString(R.string.transition_fav);
+
+                    ActivityOptionsCompat options;
+
+                    if(daysLeft.equals("")) {
+                        options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                (Activity)mContext,
+                                Pair.create((View)dealHolder.ivDealLogo, transitionNameImage),
+                                Pair.create((View)dealHolder.ivFav, transitionNameFav));
+                    } else {
+                        options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                (Activity)mContext,
+                                Pair.create((View)dealHolder.ivDealLogo, transitionNameImage),
+                                Pair.create((View)dealHolder.tvExpiryDate, transitionNameExpiry),
+                                Pair.create((View)dealHolder.ivFav, transitionNameFav));
+                    }
+
+                    ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
+                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
+            });
+
+
 
 
         }
