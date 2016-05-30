@@ -1,6 +1,7 @@
 package com.kineticcafe.kcpmall.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -26,6 +27,7 @@ import com.kineticcafe.kcpmall.twitter.TwitterAsyncTask;
 import com.kineticcafe.kcpmall.twitter.model.TwitterTweet;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,8 +41,11 @@ public class HomeFragment extends BaseFragment {
     /*public static ArrayList<TwitterTweet> mTwitterTweets = new ArrayList<>();
     public static ArrayList<InstagramFeed> mInstagramFeeds = new ArrayList<>();*/
 
-    private ArrayList<TwitterTweet> mTwitterTweets = new ArrayList<>();
-    private ArrayList<InstagramFeed> mInstagramFeeds = new ArrayList<>();
+    public static ArrayList<TwitterTweet> sTwitterFeedList = new ArrayList<>();
+    public static ArrayList<InstagramFeed> sInstaFeedList = new ArrayList<>();
+
+    /*private ArrayList<TwitterTweet> mTwitterTweets = new ArrayList<>();
+    private ArrayList<InstagramFeed> mInstagramFeeds = new ArrayList<>();*/
 
     private static HomeFragment sHomeFragment;
     public static HomeFragment getInstance(){
@@ -114,14 +119,13 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<KcpNavigationRoot> call, Throwable t) {
-                String a = "ej";
                 mMainActivity.onDataDownloaded();
                 mMainActivity.showSnackBar(R.string.warning_no_internet_connection, R.string.warning_retry,  mDownloadDealOnClickListener);
             }
         });
     }
 
-    public void downloadNavigationPage(String url, final String mode){
+    private void downloadNavigationPage(String url, final String mode){
 
         Call<KcpNavigationPage> call = mKcpService.getNavigationPage(url);
         call.enqueue(new Callback<KcpNavigationPage>() {
@@ -131,7 +135,7 @@ public class HomeFragment extends BaseFragment {
                     KcpNavigationPage kcpNavigationPageResponse = response.body();
                     KcpNavigationRoot.getInstance().setNavigationpage(mode, kcpNavigationPageResponse);
                     String fullHref = kcpNavigationPageResponse.getSelfLink() + Constants.URL_VIEW_ALL_CONTENT;
-                    downloadContents(fullHref);
+                    downloadContents(fullHref, mode);
                 }
             }
 
@@ -142,7 +146,7 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
-    public void downloadContents(String url){
+    private void downloadContents(String url, final String mode){
         Call<KcpContentPage> call = mKcpService.getContentPage(url);
         call.enqueue(new Callback<KcpContentPage>() {
             @Override
@@ -150,19 +154,13 @@ public class HomeFragment extends BaseFragment {
                 if (response.isSuccessful()) {
                     try {
                         final KcpContentPage kcpContentPageResponse = response.body();
-                        for (KcpNavigationPage kcpNavigationPage : KcpNavigationRoot.getInstance().getNavigationPage()) {
-                            String navigationPageLink = kcpNavigationPage.getSelfLink(); //"https://dit-kcp.kineticcafetech.com/core/content_pages/473/view_all_content"
-                            String kCPContentPageLink = kcpContentPageResponse.getSelfLink(); //"https://dit-kcp.kineticcafetech.com/core/content_pages/473/view_all_content?page=1"
-
-                            if(kCPContentPageLink.contains(navigationPageLink)){
-                                boolean isDataAdded = kcpNavigationPage.setKcpContentPage(kcpContentPageResponse);
-                                if(isDataAdded) {
-                                    mNewsFragment.mNewsRecyclerViewAdapter.addData(kcpContentPageResponse.getContentPageList());
-                                    mNewsFragment.mEndlessRecyclerViewScrollListener.onLoadDone();
-                                } else {
-                                    updateAdapter();
-                                }
-                            }
+                        KcpNavigationPage kcpNavigationPage = KcpNavigationRoot.getInstance().getNavigationpage(mode);
+                        boolean isDataAdded = kcpNavigationPage.setKcpContentPage(kcpContentPageResponse);
+                        if(isDataAdded) {
+                            mNewsFragment.mNewsRecyclerViewAdapter.addData(kcpContentPageResponse.getContentPageList());
+                            mNewsFragment.mEndlessRecyclerViewScrollListener.onLoadDone();
+                        } else {
+                            updateAdapter(mode);
                         }
                     } catch (Exception e) {
                         logger.error(e);
@@ -183,7 +181,7 @@ public class HomeFragment extends BaseFragment {
             String nextUrl = kcpNavigationPage.getNextContentPageUrl();
             if(!nextUrl.equals("")){
                 mNewsFragment.mNewsRecyclerViewAdapter.prepareLoadingImage();
-                downloadContents(nextUrl);
+                downloadContents(nextUrl, navigationPageType);
             } else {
                 //TODO: should stop loading image
             }
@@ -192,36 +190,41 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-    public void updateAdapter(){
+    /**
+     *
+     * @param mode determines which adapter it should update - if null, it updates all adapters
+     */
+    private void updateAdapter(String mode){
         if(mOnRefreshListener != null) mOnRefreshListener.onRefresh();
         try {
-            //News Fragment
-            KcpNavigationPage kcpNavigationPage = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED);
-            if(kcpNavigationPage != null && kcpNavigationPage.getKcpContentPageList() != null && mNewsFragment.mNewsRecyclerViewAdapter != null){
-                mMainActivity.onDataDownloaded();
-                mNewsFragment.mNewsRecyclerViewAdapter.updateData(kcpNavigationPage.getKcpContentPageList());
-                if (mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null) {
-                    mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(mTwitterTweets);
-                    mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateInstaData(mInstagramFeeds);
-                }
-            }
-
-            //Deals Fragment
-            kcpNavigationPage = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL);
-            if(kcpNavigationPage != null && kcpNavigationPage.getKcpContentPageList() != null && mDealsFragment.mDealsRecyclerViewAdapter != null){
-                mDealsFragment.mDealsRecyclerViewAdapter.updateOtherDealData(kcpNavigationPage.getKcpContentPageList());
-            }
-
-            kcpNavigationPage = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED);
-            if(kcpNavigationPage != null && kcpNavigationPage.getKcpContentPageList() != null && mDealsFragment.mDealsRecyclerViewAdapter != null){
-                mDealsFragment.mDealsRecyclerViewAdapter.updateRecommendedDealData(kcpNavigationPage.getKcpContentPageList());
+            KcpNavigationPage kcpNavigationPage = KcpNavigationRoot.getInstance().getNavigationpage(mode);
+            if(kcpNavigationPage != null){
+                if(mode.equals(Constants.EXTERNAL_CODE_FEED)) updateNewsAdapter(kcpNavigationPage.getKcpContentPageList(true));
+                else if(mode.equals(Constants.EXTERNAL_CODE_DEAL)) updateOtherDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
+                else if(mode.equals(Constants.EXTERNAL_CODE_RECOMMENDED)) updateRecommendedDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
             }
         } catch (Exception e) {
             logger.error(e);
         }
     }
 
-    public void downloadTwitterTweets() {
+    private void updateNewsAdapter(ArrayList<KcpContentPage> kcpContentPages){
+        mMainActivity.onDataDownloaded();
+        mNewsFragment.mNewsRecyclerViewAdapter.updateData(kcpContentPages);
+        if (mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null) {
+            mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);
+            mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateInstaData(sInstaFeedList);
+        }
+    }
+    private void updateOtherDealsAdapter(ArrayList<KcpContentPage> kcpContentPages){
+        mDealsFragment.mDealsRecyclerViewAdapter.updateOtherDealData(kcpContentPages);
+    }
+
+    private void updateRecommendedDealsAdapter(ArrayList<KcpContentPage> kcpContentPages){
+        mDealsFragment.mDealsRecyclerViewAdapter.updateRecommendedDealData(kcpContentPages);
+    }
+
+    private void downloadTwitterTweets() {
         try {
             if (getActivity() != null && Utility.isNetworkAvailable(getActivity())) {
                 new TwitterAsyncTask(
@@ -233,13 +236,11 @@ public class HomeFragment extends BaseFragment {
                             public void onTwitterFeedDownloadComplete(ArrayList<TwitterTweet> twitterTweets) {
                                 if(twitterTweets == null) {
                                 } else {
-                                    for(int i = 0; i < twitterTweets.size(); i++){
-                                        Log.d("TWITTER", twitterTweets.get(i).getText());
-                                    }
-                                    mTwitterTweets.clear();
-                                    mTwitterTweets.addAll(twitterTweets);
-                                    if (mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null ) {
-                                        mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(mTwitterTweets);
+                                    sTwitterFeedList.clear();
+                                    sTwitterFeedList.addAll(twitterTweets);
+                                    if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
+                                            mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null ) {
+                                        mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);
                                     } else {
                                     }
                                 }
@@ -251,7 +252,7 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-    public void downloadInstagram() {
+    private void downloadInstagram() {
         try {
             if (getActivity() != null && Utility.isNetworkAvailable(getActivity())) {
                 InstagramService instagramService = ServiceFactory.createRetrofitService(getActivity(), InstagramService.class, Constants.INSTAGRAM_BASE_URL);;
@@ -263,15 +264,15 @@ public class HomeFragment extends BaseFragment {
                             Recent recent = response.body();
                             int mediaSize = recent.getMediaList().size();
 
-                            mInstagramFeeds.clear();
+                            sInstaFeedList.clear();
                             for (int i = 0; i < mediaSize; i++) {
                                 Media media = recent.getMediaList().get(i);
-                                mInstagramFeeds.add(new InstagramFeed(media.getImages().getStandardResolution().getUrl()));
+                                sInstaFeedList.add(new InstagramFeed(media.getImages().getStandardResolution().getUrl()));
                             }
-                            if (mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null) {
-                                mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateInstaData(mInstagramFeeds);
+                            if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
+                                    mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null) {
+                                mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateInstaData(sInstaFeedList);
                             } else {
-                                //                            mTwitterTweets = twitterTweets;
                             }
                         } else {
                             logger.debug("instagram download unsuccessful");
@@ -289,18 +290,12 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-    public ArrayList<TwitterTweet> getTwitterTweets(){
-        return mTwitterTweets;
-    }
-
-    public ArrayList<InstagramFeed> getInstagramFeeds(){
-        return mInstagramFeeds;
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        updateAdapter();
+        updateAdapter(Constants.EXTERNAL_CODE_FEED);
+        updateAdapter(Constants.EXTERNAL_CODE_DEAL);
+        updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
     }
 
     private RefreshListener mOnRefreshListener;

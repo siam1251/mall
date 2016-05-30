@@ -2,7 +2,6 @@ package com.kineticcafe.kcpmall.adapters;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,7 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
     private List<InstagramFeed> mInstaFeedList = new ArrayList<>();
     private LayoutInflater mLayoutInflater;
     private SocialFeedType mSocialFeedType;
-    private int mListSize;
+    private int mActualTitleListSize;
     private OnSocialFeedClickListener mSocialFeedClickListener;
     public interface OnSocialFeedClickListener {
         void onSocialFeedClicked();
@@ -41,7 +40,7 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
         init(context);
         mTwitterFeedList.addAll(twitterFeedList);
         mSocialFeedType = SocialFeedType.TWITTER;
-        mListSize = mTwitterFeedList.size();
+        mActualTitleListSize = mTwitterFeedList.size();
         mSocialFeedClickListener = onSocialFeedClickListener;
 
         return this;
@@ -51,7 +50,7 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
         init(context);
         mInstaFeedList.addAll(instaFeedList);
         mSocialFeedType = SocialFeedType.INSTA;
-        mListSize = mInstaFeedList.size();
+        mActualTitleListSize = mInstaFeedList.size();
         mSocialFeedClickListener = onSocialFeedClickListener;
 
 
@@ -67,16 +66,23 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
     public void updateTwitterData(ArrayList<TwitterTweet> twitterTweets) {
         mTwitterFeedList.clear();
         mTwitterFeedList.addAll(twitterTweets);
+        mActualTitleListSize = mTwitterFeedList.size();
         notifyDataSetChanged();
     }
 
     public void updateInstaData(ArrayList<InstagramFeed> instagramFeeds) {
         mInstaFeedList.clear();
         mInstaFeedList.addAll(instagramFeeds);
+        mActualTitleListSize = mTwitterFeedList.size();
         notifyDataSetChanged();
     }
 
+    @Override
     public Object instantiateItem(ViewGroup collection, int position) {
+
+        int virtualPosition = position % mActualTitleListSize;
+        position = virtualPosition;
+
         if(mSocialFeedType.equals(SocialFeedType.TWITTER)){
             View itemView = mLayoutInflater.inflate(R.layout.list_item_tw, collection, false);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +133,7 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return mListSize;
+        return mActualTitleListSize == 0 ? 0 : Integer.MAX_VALUE;
     }
 
     @Override
@@ -138,6 +144,10 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
+
+//        int virtualPosition = position % mActualTitleListSize;
+//        super.destroyItem(container, virtualPosition, object);
+
     }
 
 

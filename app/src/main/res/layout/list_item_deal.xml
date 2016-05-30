@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
             <com.kineticcafe.kcpmall.views.KCPSetRatioImageView
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
@@ -28,20 +29,21 @@
                 android:transitionName="@string/transition_news_image"
                 />
 
-
             <com.kineticcafe.kcpmall.views.AlphaTextView
+                android:visibility="gone"
                 xmlns:textAlpha="http://schemas.android.com/apk/res-auto"
                 android:gravity="center"
                 android:textColor="@color/expiry_date_text"
-                android:text="ENDS TODAY"
-                android:textSize="@dimen/deal_expiry_date_text"
                 android:id="@+id/tvExpiryDate"
                 android:layout_alignBottom="@+id/ivDealLogo"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/deal_expiry_date_height"
                 android:background="@color/themeColor"
                 textAlpha:alpha="@integer/detail_expiry_date_alpha"
+                android:transitionName="@string/transition_news_expiry_date"
+                android:textSize="@dimen/deal_expiry_date_text"
                 />
+
 
 
 
@@ -50,9 +52,9 @@
                 android:paddingLeft="@dimen/deal_card_desc_horizontal_padding"
                 android:paddingRight="@dimen/deal_card_desc_horizontal_padding"
                 android:paddingBottom="@dimen/deal_card_desc_bot_padding"
-                android:layout_below="@+id/ivDealLogo"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/deal_desc_height"
+                android:layout_below="@+id/ivDealLogo"
                 >
 
                 <TextView
