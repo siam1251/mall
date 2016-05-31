@@ -38,7 +38,13 @@
             android:screenOrientation="portrait"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Base"/>
-
+        <activity
+            android:name=".activities.ZoomableImage"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Plain"
+            />
+            android:parentActivityName=".activities.DetailActivity"
+            android:theme="@style/AppTheme.Base"
     </application>
 
 </manifest>

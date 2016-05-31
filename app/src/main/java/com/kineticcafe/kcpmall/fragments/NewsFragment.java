@@ -73,7 +73,7 @@ public class NewsFragment extends BaseFragment {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(recyclerView.getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         mNewsRecyclerViewAdapter = new NewsRecyclerViewAdapter(getActivity(), new ArrayList<KcpContentPage>()/*, HomeFragment.getInstance().sTwitterFeedList, HomeFragment.getInstance().sInstaFeedList*/);
         recyclerView.setAdapter(mNewsRecyclerViewAdapter);
