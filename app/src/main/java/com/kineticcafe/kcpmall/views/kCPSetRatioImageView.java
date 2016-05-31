@@ -40,7 +40,7 @@ public class KCPSetRatioImageView extends ImageView implements ImageView.OnClick
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KCPSetRatioImageView);
             mImageRatio = a.getFloat(R.styleable.KCPSetRatioImageView_imageRatio, imageRatio);
             mZoomable = a.getBoolean(R.styleable.KCPSetRatioImageView_zoomable, false);
-//            if(mZoomable) setOnClickListener(this);
+            if(mZoomable) setOnClickListener(this);
             a.recycle();
         }
     }
@@ -71,30 +71,16 @@ public class KCPSetRatioImageView extends ImageView implements ImageView.OnClick
 
     @Override
     public void onClick(View v) {
-
         try {
             GlideBitmapDrawable drawable = (GlideBitmapDrawable) getDrawable();
             Bitmap bitmap = drawable.getBitmap();
             if(bitmap != null){
                 Intent intent = new Intent(mContext, ZoomableImage.class);
-//                intent.putExtra(Constants.ARG_IMAGE_BITMAP, bitmap);
+                intent.putExtra(Constants.ARG_IMAGE_BITMAP, bitmap);
                 mContext.startActivity(intent);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        /*Intent intent = new Intent(mContext, ZoomableImage.class);
-        intent.putExtra(Constants.ARG_IMAGE_URL, imageUrl);
-
-        String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
-
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                mContext,
-                Pair.create((View)ivDetailImage, transitionNameImage));
-
-        ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
-        ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);*/
     }
 }

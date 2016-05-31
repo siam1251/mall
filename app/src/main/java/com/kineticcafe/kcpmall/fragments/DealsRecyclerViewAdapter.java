@@ -3,10 +3,6 @@ package com.kineticcafe.kcpmall.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -21,19 +17,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.Resource;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.BitmapResource;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
-import com.kineticcafe.kcpmall.utility.Utility;
-import com.kineticcafe.kcpmall.views.BlurTransformation;
 
 import java.util.ArrayList;
 
@@ -243,16 +232,12 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
 
             String imageUrl = kcpContentPage.getImageUrl();
             dealHolder.ivDealLogo.setImageResource(R.drawable.placeholder);
-//            Utility.applyBlur(mContext, dealHolder.ivDealLogo, dealHolder.tvExpiryDate);
 
             new GlideFactory().glideWithDefaultRatio(
                     mContext,
                     imageUrl,
                     dealHolder.ivDealLogo,
                     R.drawable.placeholder);
-
-
-
 
             String storename = kcpContentPage.getStoreName();
             dealHolder.tvDealStoreName.setText(storename);
