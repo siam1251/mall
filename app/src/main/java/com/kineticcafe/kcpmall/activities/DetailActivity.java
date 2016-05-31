@@ -1,5 +1,6 @@
 package com.kineticcafe.kcpmall.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -7,7 +8,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
@@ -286,12 +290,21 @@ public class DetailActivity extends AppCompatActivity {
             });
 
             RelativeLayout rlDetailImage = (RelativeLayout) findViewById(R.id.rlDetailImage);
-            String imageUrl = kcpContentPage.getImageUrl();
+            final String imageUrl = kcpContentPage.getImageUrl();
             if(imageUrl.equals("")){
                 //TODO: if it's necessary to have toolbar in white, change the theme here (now it's in themeColor)
                 rlDetailImage.setVisibility(View.GONE);
             } else {
                 final ImageView ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
+                ivDetailImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(DetailActivity.this, ZoomableImage.class);
+                        intent.putExtra(Constants.ARG_IMAGE_URL, imageUrl);
+                        DetailActivity.this.startActivity(intent);
+                        DetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    }
+                });
                 new GlideFactory().glideWithDefaultRatio(
                         ivDetailImage.getContext(),
                         imageUrl,

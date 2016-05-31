@@ -3,6 +3,9 @@ package com.kineticcafe.kcpmall.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -18,12 +21,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.Resource;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapResource;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpmall.views.BlurTransformation;
 
 import java.util.ArrayList;
 
@@ -168,19 +178,19 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
 
         switch (viewType){
             case KcpContentTypeFactory.ITEM_TYPE_LOADING:
-                return new LoadingViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_loading_item, parent, false));
+                return new LoadingViewHolder(LayoutInflater.from(mContext).inflate(R.layout.layout_loading_item, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_DEAL:
-                return new DealsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_deal, parent, false));
+                return new DealsViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_deal, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST:
-                return new SetMyInterestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_interest, parent, false));
+                return new SetMyInterestViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_interest, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST:
-                return new SetMyInterestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_interest, parent, false));
+                return new SetMyInterestViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_interest, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS:
                 return new SectionHeaderViewHolder(
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_section_header, parent, false));
+                        LayoutInflater.from(mContext).inflate(R.layout.list_item_section_header, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_DEALS:
                 return new SectionHeaderViewHolder(
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_section_header, parent, false));
+                        LayoutInflater.from(mContext).inflate(R.layout.list_item_section_header, parent, false));
         }
         return null;
     }
@@ -232,11 +242,16 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             final DealsViewHolder dealHolder = (DealsViewHolder) holder;
 
             String imageUrl = kcpContentPage.getImageUrl();
+            dealHolder.ivDealLogo.setImageResource(R.drawable.placeholder);
+//            Utility.applyBlur(mContext, dealHolder.ivDealLogo, dealHolder.tvExpiryDate);
+
             new GlideFactory().glideWithDefaultRatio(
-                    dealHolder.ivDealLogo.getContext(),
+                    mContext,
                     imageUrl,
                     dealHolder.ivDealLogo,
                     R.drawable.placeholder);
+
+
 
 
             String storename = kcpContentPage.getStoreName();
@@ -296,10 +311,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             });
-
-
-
-
         }
     }
 

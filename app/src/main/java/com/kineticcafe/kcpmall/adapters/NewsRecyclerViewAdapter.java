@@ -167,21 +167,21 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType){
             case KcpContentTypeFactory.ITEM_TYPE_LOADING:
-                return new LoadingViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_loading_item, parent, false));
+                return new LoadingViewHolder(LayoutInflater.from(mContext).inflate(R.layout.layout_loading_item, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT:
-                return new AnnouncementViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_announcement, parent, false));
+                return new AnnouncementViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_announcement, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_EVENT:
-                return new AnnouncementViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_announcement, parent, false));
+                return new AnnouncementViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_announcement, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST:
-                return new SetMyInterestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_interest, parent, false));
+                return new SetMyInterestViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_interest, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_TWITTER:
                 return new TwitterFeedViewHolder(
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_social_feed_pager, parent, false),
+                        LayoutInflater.from(mContext).inflate(R.layout.list_item_social_feed_pager, parent, false),
                         R.drawable.icn_twitter,
                         "@" + Constants.TWITTER_SCREEN_NAME);
             case KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM:
                 return new InstagramFeedViewHolder(
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_social_feed_pager, parent, false),
+                        LayoutInflater.from(mContext).inflate(R.layout.list_item_social_feed_pager, parent, false),
                         R.drawable.icn_instagram,
                         "@" + Constants.INSTAGRAM_USER_NAME);
         }
@@ -198,7 +198,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             final AnnouncementViewHolder ancmtHolder = (AnnouncementViewHolder) holder;
             String imageUrl = kcpContentPage.getImageUrl();
             new GlideFactory().glideWithDefaultRatio(
-                    ancmtHolder.ivAnnouncementLogo.getContext(),
+                    mContext,
                     imageUrl,
                     ancmtHolder.ivAnnouncementLogo,
                     R.drawable.placeholder);

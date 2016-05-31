@@ -12,6 +12,7 @@
 
     <declare-styleable name="KCPSetRatioImageView">
         <attr name="imageRatio" format="dimension"/>
+        <attr name="zoomable" format="boolean"/>
     </declare-styleable>
 
 
