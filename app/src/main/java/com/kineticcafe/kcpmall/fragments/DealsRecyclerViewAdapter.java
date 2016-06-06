@@ -21,6 +21,7 @@ import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
+import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 
@@ -196,7 +197,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             setMyInterestViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "ADJUST MY INTEREST CLICKED", Toast.LENGTH_SHORT).show();
+                    ((Activity)mContext).startActivityForResult(new Intent(mContext, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
+                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             });
 
@@ -215,7 +217,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             setMyInterestViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "ADJUST MY INTEREST CLICKED", Toast.LENGTH_SHORT).show();
+                    ((Activity)mContext).startActivityForResult(new Intent(mContext, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
+                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             });
 

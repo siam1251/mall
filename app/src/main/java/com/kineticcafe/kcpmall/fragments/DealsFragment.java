@@ -1,15 +1,19 @@
 package com.kineticcafe.kcpmall.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.views.DealRecyclerItemDecoration;
 import com.kineticcafe.kcpmall.widget.EndlessRecyclerViewScrollListener;
 
@@ -19,12 +23,7 @@ public class DealsFragment extends BaseFragment {
     private final int COLUMN_COUNT = 2;
     public DealsRecyclerViewAdapter mDealsRecyclerViewAdapter;
     public EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
-
-    /*private static DealsFragment sDealsFragment;
-    public static DealsFragment getInstance(){
-        if(sDealsFragment == null) sDealsFragment = new DealsFragment();
-        return sDealsFragment;
-    }*/
+    private TextView tvEmptyState;
 
     public static DealsFragment newInstance(int columnCount) {
         DealsFragment fragment = new DealsFragment();
@@ -48,23 +47,29 @@ public class DealsFragment extends BaseFragment {
         setupRecyclerView(rvDeals);
 
         final SwipeRefreshLayout srlDeals = (SwipeRefreshLayout) view.findViewById(R.id.srlDeals);
+        tvEmptyState = (TextView) view.findViewById(R.id.tvEmptyState);
         srlDeals.setColorSchemeResources(R.color.themeColor);
         srlDeals.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 HomeFragment.getInstance().setOnRefreshListener(new HomeFragment.RefreshListener() {
                     @Override
-                    public void onRefresh() {
+                    public void onRefresh(int msg) {
                         srlDeals.setRefreshing(false);
-                        mMainActivity.showSnackBar(R.string.warning_download_completed, 0, null);
+                        mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                HomeFragment.getInstance().downloadNewsAndDeal();
+                HomeFragment.getInstance().initializeKcpData();
                 mEndlessRecyclerViewScrollListener.onLoadDone();
             }
         });
 
+
         return view;
+    }
+
+    public void setEmptyState(@Nullable String warningMsg){
+        if(mMainActivity != null) mMainActivity.setEmptyState(tvEmptyState, warningMsg);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
@@ -72,13 +77,15 @@ public class DealsFragment extends BaseFragment {
         staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
-        mDealsRecyclerViewAdapter = new DealsRecyclerViewAdapter(getActivity(), new ArrayList<KcpContentPage>(), new ArrayList<KcpContentPage>());
+        mDealsRecyclerViewAdapter = new DealsRecyclerViewAdapter(
+                getActivity(),
+                KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true),
+                KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED).getKcpContentPageList(true));
         recyclerView.setAdapter(mDealsRecyclerViewAdapter);
 
         mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
             public void onLoadMore() {
-//                HomeFragment.getInstance().downloadMoreFeeds(Constants.EXTERNAL_CODE_FEED);
             }
         };
         recyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);

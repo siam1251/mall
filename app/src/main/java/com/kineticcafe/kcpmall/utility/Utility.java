@@ -4,42 +4,36 @@ import android.animation.ArgbEvaluator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.activities.Constants;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
-
-import javax.xml.parsers.SAXParserFactory;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Kay on 2016-05-02.
@@ -144,5 +138,174 @@ public class Utility {
                 context.getResources(), overlay));
 
         rs.destroy();
+    }
+
+
+
+    public static void cacheFavs(Context context, String key, String value) {
+        String oldFavs = context.getSharedPreferences("PreferenceManager", Context.MODE_PRIVATE).getString(key, "");
+        String[] oldFavsArray = {};
+
+        if(oldFavs.equals("")) {
+            cacheToPreferences(context, key, value);
+            return;
+        } else {
+            oldFavsArray = oldFavs.split(",");
+            String newFavs = "";
+
+            boolean valueExist = false;
+            for(int i = 0; i < oldFavsArray.length; i++){
+                if(oldFavsArray[i].equals(value)){
+                    valueExist = true;
+                } else {
+                    newFavs = newFavs + oldFavsArray[i] + ",";
+                }
+            }
+
+            if(!valueExist){
+                oldFavs = oldFavs + "," + value;
+                cacheToPreferences(context, key, oldFavs);
+            } else {
+                if(newFavs != "" && newFavs.substring(newFavs.length() - 1).equals(",")) newFavs = newFavs.substring(0, newFavs.length() - 1);
+                cacheToPreferences(context, key, newFavs);
+            }
+        }
+    }
+
+    private static void cacheToPreferences(Context context, String key, String value){
+        Log.d("cacheToPreferences", value);
+        SharedPreferences.Editor editor = context.getSharedPreferences("PreferenceManager", Context.MODE_PRIVATE).edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public static boolean isFavs(Context context, String key, String storeId){
+        return isFavs(context, key, Integer.valueOf(storeId));
+    }
+
+    public static boolean isFavs(Context context, String key, int storeId){
+        try {
+            int[] favStoreList = loadFromCache(context, key, 0);
+            for(int i = 0; i < favStoreList.length; i++){
+                if(favStoreList[i] == storeId){
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static int[] loadFromCache(Context context, String key, int defaultValue) {
+        String favStores = context.getSharedPreferences("PreferenceManager", Context.MODE_PRIVATE).getString(key, "");
+        String[] _favStores = {};
+
+        if (favStores.length() > 0)
+            _favStores = favStores.split(",");
+
+        final int[] ints = new int[_favStores.length];
+        for (int i=0; i < _favStores.length; i++) {
+            ints[i] = Integer.parseInt(_favStores[i]);
+        }
+
+        return ints;
+    }
+
+    public static String loadFromCache(Context context, String key, @Nullable String defaultValue) {
+        if(key == null || context == null) return "";
+        return context.getSharedPreferences("PreferenceManager", Context.MODE_PRIVATE).getString(key, defaultValue == null ? "" : defaultValue);
+    }
+
+
+    public static void saveGson(Context context, String key, Object obj) {
+        SharedPreferences editor = context.getSharedPreferences("PreferenceManager", Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = editor.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(obj);
+        prefsEditor.putString(key, json);
+        prefsEditor.commit();
+    }
+
+    public static ArrayList<Integer> loadGsonArrayList(Context context, String key){
+        Gson gson = new Gson();
+        String json = context.getSharedPreferences("PreferenceManager", Context.MODE_PRIVATE).getString(key, "");
+        Type listType = new TypeToken<ArrayList<Integer>>() {}.getType();
+        ArrayList<Integer> obj = gson.fromJson(json, listType);
+        if(obj == null) return new ArrayList<Integer>();
+        else return obj;
+    }
+
+    public static ArrayList<String> loadGsonArrayListString(Context context, String key){
+        Gson gson = new Gson();
+        String json = context.getSharedPreferences("PreferenceManager", Context.MODE_PRIVATE).getString(key, "");
+        Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+        ArrayList<String> obj = gson.fromJson(json, listType);
+        if(obj == null) return new ArrayList<String>();
+        else return obj;
+    }
+
+    public static HashMap<Integer, String> loadGsonHashMap(Context context, String key){
+        Gson gson = new Gson();
+        String json = context.getSharedPreferences("PreferenceManager", Context.MODE_PRIVATE).getString(key, "");
+        Type listType = new TypeToken<HashMap<Integer, String>>() {}.getType();
+        HashMap<Integer, String> obj = gson.fromJson(json, listType);
+        if(obj == null) return new HashMap<Integer, String>();
+        else return obj;
+    }
+
+
+    public static String convertArrayListToStringWithComma(ArrayList arrayList){
+        return android.text.TextUtils.join(",", arrayList);
+    }
+
+    public static ArrayList<String> getRemovedObjectFromCache(ArrayList<String> cachedHM, ArrayList<String> newHM){
+        ArrayList<String> differenceHM = new ArrayList<String>();
+        for (final String value : cachedHM) {
+            if (!newHM.contains(value)) {
+                differenceHM.add(value);
+            }
+        }
+        return differenceHM;
+    }
+
+
+
+    public static boolean isTwoIntegerListsEqual(List<Integer> one, List<Integer> two){
+        if (one == null && two == null){
+            return true;
+        }
+        if((one == null && two != null)
+                || one != null && two == null
+                || one.size() != two.size()){
+            return false;
+        }
+        one = new ArrayList<Integer>(one);
+        two = new ArrayList<Integer>(two);
+
+        Collections.sort(one);
+        Collections.sort(two);
+
+        return one.equals(two);
+    }
+
+    public static boolean isTwoStringListsEqual(List<String> one, List<String> two){
+        if (one == null && two == null){
+            return true;
+        }
+
+        if((one == null && two != null)
+                || one != null && two == null
+                || one.size() != two.size()){
+            return false;
+        }
+
+        one = new ArrayList<String>(one);
+        two = new ArrayList<String>(two);
+
+        Collections.sort(one);
+        Collections.sort(two);
+
+        return one.equals(two);
     }
 }

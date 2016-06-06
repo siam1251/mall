@@ -1,0 +1,49 @@
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvIntrst"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="@dimen/intrstd_card_corner_radius"
+    card_view:cardUseCompatPadding="true"
+    android:layout_centerHorizontal="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:layout_width="wrap_content"
+    android:background="@drawable/btn_intrstd_store"
+    >
+
+    <RelativeLayout
+        android:layout_margin="@dimen/intrstd_img_margin"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        >
+
+        <com.kineticcafe.kcpmall.views.KcpSquareTextView
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tvIntrstd"
+            />
+
+        <com.kineticcafe.kcpmall.views.KcpSquareImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ivIntrstd"
+            />
+
+        <ImageView
+            android:id="@+id/ivFav"
+            android:transitionName="@string/transition_fav"
+            android:layout_width="@dimen/intrstd_fav_width"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/btn_fav"
+            android:layout_alignParentTop="true"
+            />
+
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

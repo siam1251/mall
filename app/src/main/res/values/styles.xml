@@ -20,6 +20,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="actionMenuTextColor">@color/themeColor</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
@@ -49,4 +50,24 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">1dp</item>
     </style>
+
+
+    <style name="emptyStateMsg">
+        <item name="android:visibility">gone</item>
+        <item name="android:textColor">@color/empty_state_msg_text</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    ?android:attr/progressBarStyleInverse
+    <style name="progressBarMedium" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_height">35dp</item>
+    </style>
+
 </resources>

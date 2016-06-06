@@ -32,4 +32,8 @@
         <attr name="alpha" format="integer"/>
     </declare-styleable>
 
+    <declare-styleable name="CustomFontTextView">
+        <attr name="fontFamily" format="string"/>
+    </declare-styleable>
+
 </resources>

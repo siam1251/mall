@@ -3,7 +3,7 @@
 
     <!--default colors-->
     <color name="themeColor">#13bed0</color>
-    <color name="warningColor">#ffffff</color> <!--#CFff4444-->
+    <color name="warningColor">#13bed0</color> <!--#CFff4444-->
     <color name="themeColorDark">#108E9C</color>
 
     <color name="colorPrimary">#FFFFFF</color>
@@ -67,6 +67,13 @@
 
     <color name="expiry_date_text">#fcfcfc</color>
 
-    <!--<color name="detail_date_bg">#13bed0</color>--> <!--theme color-->
+    <!--interested cat-->
+    <color name="intrstd_cat_desc">#89000000</color>
+    <color name="intrstd_txt">#787a86</color>
+    <color name="intrstd_card_bg">#fcfcfc</color>
+    <!--<color name="intrstd_card_bg_with_opacity">#8bfcfcfc</color>-->
+    <color name="intrstd_card_bg_with_opacity">#F7F7F7</color>
+
+    <color name="empty_state_msg_text">#894a4a4a</color>
 
 </resources>

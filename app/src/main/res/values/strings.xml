@@ -5,6 +5,11 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="action_reset">Reset</string>
+    <string name="action_unsaved_changes">Unsaved Changes</string>
+    <string name="action_ok">Ok</string>
+    <string name="action_exit">Exit</string>
+    <string name="action_cancel">Cancel</string>
 
     <!--menu-->
     <string name="menu_home">HOME</string>
@@ -41,11 +46,26 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <!--warning-->
     <string name="warning_download_completed">Download completed</string>
+    <string name="warning_download_failed">Download failed</string>
     <string name="warning_no_internet_connection">No Internet Connection</string>
     <string name="warning_retry">RETRY</string>
+    <string name="warning_empty_news">There are no news available.\nPlease check back later.</string>
+    <string name="warning_empty_deals">There are no deals available.\nPlease check back later.</string>
+    <string name="warning_exit_interest">If you leave this page then any unsaved changes will be lost. Are you sure you want to exit?</string>
 
     <!--section header-->
     <string name="section_header_recommended_deals">Recommended Deals</string>
     <string name="section_header_other_deals">Other Deals</string>
+
+    <!--activity title-->
+    <string name="activity_title_interested_category">What Interests You?</string>
+    <string name="activity_title_interested_store">Recommended Stores?</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+
+    <!--interested category-->
+    <string name="intrstd_cat_desc">To help us determine your preferences,\nhighlight categories below that interest you</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="intrstd_store_desc">Here are the stores we think you will like!\nSelect which are your favourite:</string>
+
 
 </resources>

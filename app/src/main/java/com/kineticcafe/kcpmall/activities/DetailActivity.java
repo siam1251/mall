@@ -1,32 +1,25 @@
 package com.kineticcafe.kcpmall.activities;
 
-import android.app.Activity;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.NavUtils;
-import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +28,6 @@ import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
-import com.kineticcafe.kcpmall.views.ExpiryDateAnimation;
 import com.kineticcafe.kcpmall.views.ThemedImageView;
 
 import java.util.ArrayList;
@@ -257,7 +249,16 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @SuppressWarnings("deprecation")
+    public void setToolbarBackground(Toolbar toolbar, @Nullable Drawable drawable){
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            toolbar.setBackgroundDrawable(drawable);
+        } else {
+            toolbar.setBackground(drawable);
+        }
+    }
 
     public void showContentsWithCTL(){
         try {
@@ -279,11 +280,11 @@ public class DetailActivity extends AppCompatActivity {
                     }
                     if (scrollRange + verticalOffset == 0) {
                         collapsingToolbar.setTitle(KcpContentTypeFactory.getContentTypeTitle(kcpContentPage));
-                        toolbar.setBackground(null);
+                        setToolbarBackground(toolbar, null);
                         isShow = true;
                     } else if(isShow) {
                         collapsingToolbar.setTitle("");
-                        toolbar.setBackground(getResources().getDrawable(R.drawable.view_shadow));
+                        setToolbarBackground(toolbar, getResources().getDrawable(R.drawable.view_shadow));
                         isShow = false;
                     }
                 }

@@ -2,7 +2,7 @@
 <resources>
     <!--<color name="themeColor">#33b5e5</color>-->
     <color name="themeColor">#13bed0</color>
-    <color name="warningColor">#ffffff</color> <!--#CFff4444-->
+    <color name="warningColor">#13bed0</color> <!--#CFff4444-->
     <color name="themeColorDark">#108E9C</color>
 
 </resources>
