@@ -33,7 +33,7 @@ public class DealRecyclerItemDecoration extends RecyclerView.ItemDecoration {
         int type = mAdapter.getItemViewType(position);
 
         if(position == 0){
-            outRect.top = mItemOffset;
+//            outRect.top = mItemOffset;
         }
 
         if(type == KcpContentTypeFactory.ITEM_TYPE_DEAL){

@@ -31,9 +31,11 @@
     <dimen name="ancmt_title_height">28dp</dimen>
     <dimen name="ancmt_date_txt">14sp</dimen>
     <dimen name="ancmt_date_height">24dp</dimen>
-    <dimen name="ancmt_fav_width">18dp</dimen> <!--TODO: lil too smaller - made them little bigger-->
+    <dimen name="ancmt_fav_width">18dp
+    </dimen> <!--TODO: lil too smaller - made them little bigger-->
 
     <item name="ancmt_image_ratio" format="float" type="dimen">1.6</item>
+    <item name="ancmt_image_ratio_square" format="float" type="dimen">1</item>
 
 
     <!--deal card-->
@@ -71,9 +73,22 @@
     <dimen name="intrst_title_top_margin">20dp</dimen>
     <dimen name="intrst_desc_top_margin">7dp</dimen>
     <dimen name="intrst_btn_top_margin">32dp</dimen>
-
     <dimen name="intrst_card_bot_margin">20dp</dimen>
+    <!--<dimen name="intrst_card_txt_horizontal_margin">14dp</dimen>-->
+    <dimen name="intrst_card_txt_horizontal_margin">10dp</dimen>
 
+    <!--interested category-->
+    <dimen name="intrstd_cat_txt_height">48dp</dimen>
+    <dimen name="intrstd_cat_next_btn_height">48dp</dimen>
+    <dimen name="intrstd_cat_desc_horizontal_margin">22.5dp</dimen>
+    <dimen name="intrstd_cat_desc_top_margin">15dp</dimen>
+    <dimen name="intrstd_cat_desc_txt_size">16sp</dimen>
+    <dimen name="intrstd_card_height">48dp</dimen>
+    <!--<dimen name="intrstd_card_height">53dp</dimen>-->
+    <dimen name="intrstd_card_corner_radius">3dp</dimen>
+    <dimen name="intrstd_name">14sp</dimen>
+    <dimen name="intrstd_img_margin">10dp</dimen>
+    <dimen name="intrstd_fav_width">15dp</dimen>
 
     <!--feed card-->
     <dimen name="social_feed_icon_width">25dp</dimen>
@@ -90,7 +105,6 @@
     <dimen name="tw_date_txt">14sp</dimen>
 
     <!--detail-->
-    <!--<dimen name="detail_date_button_width">487dp</dimen>-->
     <dimen name="detail_date_button_height">32dp</dimen>
     <dimen name="detail_expiry_date_height">30dp</dimen>
     <dimen name="detail_expiry_date_text">15sp</dimen>
@@ -130,5 +144,6 @@
     <dimen name="button_corner_radius">2dp</dimen>
     <dimen name="toolbar_elevation">2dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
 
 </resources>

@@ -1,14 +1,17 @@
 package com.kineticcafe.kcpmall.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.NewsRecyclerViewAdapter;
@@ -24,12 +27,7 @@ import java.util.ArrayList;
 public class NewsFragment extends BaseFragment {
     public NewsRecyclerViewAdapter mNewsRecyclerViewAdapter;
     public EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
-
-    /*private static NewsFragment sNewsFragment;
-    public static NewsFragment getInstance(){
-        if(sNewsFragment == null) sNewsFragment = new NewsFragment();
-        return sNewsFragment;
-    }*/
+    private TextView tvEmptyState;
 
     public static NewsFragment newInstance() {
         NewsFragment fragment = new NewsFragment();
@@ -51,7 +49,7 @@ public class NewsFragment extends BaseFragment {
         RecyclerView rvNews = (RecyclerView) view.findViewById(R.id.rvNews);
         rvNews.setNestedScrollingEnabled(true);
         setupRecyclerView(rvNews);
-
+        tvEmptyState = (TextView) view.findViewById(R.id.tvEmptyState);
         final SwipeRefreshLayout srlNews = (SwipeRefreshLayout) view.findViewById(R.id.srlNews);
         srlNews.setColorSchemeResources(R.color.themeColor);
         srlNews.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -59,12 +57,12 @@ public class NewsFragment extends BaseFragment {
             public void onRefresh() {
                 HomeFragment.getInstance().setOnRefreshListener(new HomeFragment.RefreshListener() {
                     @Override
-                    public void onRefresh() {
+                    public void onRefresh(int msg) {
                         srlNews.setRefreshing(false);
-                        mMainActivity.showSnackBar(R.string.warning_download_completed, 0, null);
+                        mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                HomeFragment.getInstance().downloadNewsAndDeal();
+                HomeFragment.getInstance().initializeKcpData();
                 mEndlessRecyclerViewScrollListener.onLoadDone();
             }
         });
@@ -72,10 +70,17 @@ public class NewsFragment extends BaseFragment {
         return view;
     }
 
+    public void setEmptyState(@Nullable String warningMsg){
+        if(mMainActivity != null) mMainActivity.setEmptyState(tvEmptyState, warningMsg);
+    }
+
+
     private void setupRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-        mNewsRecyclerViewAdapter = new NewsRecyclerViewAdapter(getActivity(), new ArrayList<KcpContentPage>()/*, HomeFragment.getInstance().sTwitterFeedList, HomeFragment.getInstance().sInstaFeedList*/);
+        mNewsRecyclerViewAdapter = new NewsRecyclerViewAdapter(
+                getActivity(),
+                KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED).getKcpContentPageList(true));
         recyclerView.setAdapter(mNewsRecyclerViewAdapter);
 
         mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {

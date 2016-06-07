@@ -1,0 +1,68 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cdlIntCat"
+        android:background="@color/card_bg"
+        tools:context="com.kineticcafe.kcpmall.activities.InterestedCategoryActivity">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/ablTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <include
+                    layout="@layout/layout_toolbar_intrstd_category" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <include
+            layout="@layout/content_intrstd_cat" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+    <FrameLayout
+        android:background="@color/themeColor"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:id="@+id/flIntrstdBot"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/intrstd_cat_next_btn_height"
+        android:layout_alignParentBottom="true"
+        >
+        <ProgressBar
+            android:layout_gravity="center"
+            android:id="@+id/pb"
+            style="@style/progressBarMedium"
+            android:visibility="gone"
+            />
+
+            android:indeterminateDrawable="@drawable/pb_indeterminate_theme_color"
+
+        <TextView
+            android:id="@+id/tvIntrstd"
+            android:gravity="center"
+            android:text="Done"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/intrstd_cat_next_btn_height"
+            />
+
+    </FrameLayout>
+
+
+    <ImageView
+        android:layout_above="@+id/flIntrstdBot"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:src="@drawable/view_shadow_inverted"/>
+
+</RelativeLayout>

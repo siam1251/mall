@@ -85,6 +85,7 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
 
         if(mSocialFeedType.equals(SocialFeedType.TWITTER)){
             View itemView = mLayoutInflater.inflate(R.layout.list_item_tw, collection, false);
+            if(mTwitterFeedList.size() == 0) return itemView;
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -102,6 +103,7 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
             return itemView;
         } else if(mSocialFeedType.equals(SocialFeedType.INSTA)){
             View itemView = mLayoutInflater.inflate(R.layout.list_item_insta, collection, false);
+            if(mInstaFeedList.size() == 0) return itemView;
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -110,18 +112,11 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
             });
 
             ImageView ivInsta = (ImageView) itemView.findViewById(R.id.ivInsta);
-            /*new GlideFactory().glideWithDefaultRatio(
-                    mContext,
-                    mInstaFeedList.get(position).instaPicUrl,
-                    ivInsta,
-                    R.drawable.test
-                    );*/
             new GlideFactory().glideWithDefaultRatio(
                     mContext,
                     mInstaFeedList.get(position).instaPicUrl,
                     ivInsta,
                     R.drawable.view_shadow
-
             );
 
             collection.addView(itemView);

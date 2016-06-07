@@ -50,7 +50,6 @@ public class GlideFactory {
         if(imageView == null) return;
         Glide.with(context)
                 .load(url)
-                .override(Utility.getScreenWidth(context), (int) (Utility.getScreenWidth(context) / Utility.getFloat(context, R.dimen.ancmt_image_ratio)))
                 .crossFade()
                 .into(imageView);
     }
@@ -64,9 +63,9 @@ public class GlideFactory {
      * @param errorDrawable errorDrawable is passed
      */
     public void glideWithDefaultRatio(final Context context, final String url, final ImageView imageView, final int errorDrawable){
+        if(imageView == null || url == null) return;
         Glide.with(context)
                 .load(url)
-                .override(Utility.getScreenWidth(context), (int) (Utility.getScreenWidth(context) / Utility.getFloat(context, R.dimen.ancmt_image_ratio)))
                 .crossFade()
                 .error(errorDrawable)
                 .placeholder(errorDrawable)

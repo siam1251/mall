@@ -16,26 +16,13 @@
             android:id="@+id/rvDeals"
             android:gravity="center_horizontal"
             />
-            android:paddingLeft="@dimen/card_vertical_margin"
-            android:paddingRight="@dimen/card_vertical_margin"
     </android.support.v4.widget.SwipeRefreshLayout>
 
-</RelativeLayout>
-
-
-    <!--
-    <?xml version="1.0" encoding="utf-8"?>
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/list"
-        android:name="com.kineticcafe.kcpmall.fragments.DealsFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context="com.kineticcafe.kcpmall.fragments.DealsFragment"
+    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        android:layout_below="@+id/ablTop"
+        android:id="@+id/tvEmptyState"
+        style="@style/emptyStateMsg"
+        app:fontFamily="@string/fontFamily_roboto_light"
         />
-        &lt;!&ndash;tools:listitem="@layout/item_deals"&ndash;&gt;
-    -->
+
+</RelativeLayout>

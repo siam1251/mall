@@ -1,9 +1,14 @@
 package com.kineticcafe.kcpmall.activities;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -26,15 +31,30 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
+import com.kineticcafe.kcpandroidsdk.models.KcpEmbedded;
+import com.kineticcafe.kcpandroidsdk.service.ServiceFactory;
+import com.kineticcafe.kcpandroidsdk.utils.Utility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.HomeBottomTapAdapter;
+import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
 import com.kineticcafe.kcpmall.fragments.OneFragment;
+import com.kineticcafe.kcpmall.instagram.model.InstagramFeed;
+import com.kineticcafe.kcpmall.instagram.model.Media;
+import com.kineticcafe.kcpmall.instagram.model.Recent;
+import com.kineticcafe.kcpmall.kcpData.KcpCategoryManager;
 import com.kineticcafe.kcpmall.kcpData.KcpDataListener;
+import com.kineticcafe.kcpmall.kcpData.KcpService;
+import com.kineticcafe.kcpmall.kcpData.KcpSocialFeedManager;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener {
@@ -100,11 +120,19 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons(viewPager, tabLayout, fragmentTitleList, fragmentIconList);
         viewPager.setTabLayout(tabLayout);
+
     }
 
-    public void showSnackBar(int msg, int action, @Nullable View.OnClickListener onClickListener){
-        final CoordinatorLayout clMain = (CoordinatorLayout) findViewById(R.id.clMain);
 
+    /**
+     * If there's snackbar showing, it simply returns unless onClickListener is set.
+     * @param msg
+     * @param action
+     * @param onClickListener
+     */
+    public void showSnackBar(int msg, int action, @Nullable View.OnClickListener onClickListener){
+        if(mOfflineSnackbar != null && mOfflineSnackbar.isShownOrQueued() && onClickListener == null) return;
+        final CoordinatorLayout clMain = (CoordinatorLayout) findViewById(R.id.clMain);
         if(onClickListener == null){
             mOfflineSnackbar = Snackbar
                     .make(clMain, getResources().getString(msg), Snackbar.LENGTH_SHORT);
@@ -122,8 +150,10 @@ public class MainActivity extends AppCompatActivity
         snackbarView.setLayoutParams(param);
 
         snackbarView.setBackgroundColor(Color.DKGRAY);
+
         TextView textView = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(getResources().getColor(R.color.themeColor));
+        textView.setTextColor(getResources().getColor(R.color.white));
+
         TextView actionText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_action);
         actionText.setTextColor(getResources().getColor(R.color.warningColor));
 
@@ -191,7 +221,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -211,36 +240,31 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-
-
-
-        /*if (id == R.id.nav_camera) {
-
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            fragmentManager.beginTransaction().replace(R.id.flContent, new OneFragment()).commit();
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
-
         mDrawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void setEmptyState(TextView tvEmptyState, @Nullable String warningMsg){
+        if(warningMsg != null) {
+            tvEmptyState.setVisibility(View.VISIBLE);
+            tvEmptyState.setText(warningMsg);
+        }
+        else tvEmptyState.setVisibility(View.GONE);
     }
 
     @Override
     public void onDataDownloaded() {
         synchronized(mSplashThread){
             mSplashThread.notifyAll();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_CODE_CHANGE_INTEREST) {
+            if(resultCode == Activity.RESULT_OK){
+                HomeFragment.getInstance().downloadNewsAndDeal();
+            }
         }
     }
 }

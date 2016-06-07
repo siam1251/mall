@@ -18,11 +18,16 @@ public class Constants {
 
 
 	//MALL SPECIFIC
-	public final static String URL_BASE = "https://dit-kcp.kineticcafetech.com/";
-//	public final static String URL_BASE = "https://staging-kcp.kineticcafetech.com/";
+//	public final static String URL_BASE = "https://dit-kcp.kineticcafetech.com/";
+	public final static String URL_BASE = "https://staging-kcp.kineticcafetech.com/";
 	public final static String URL_NAVIGATION_ROOT = "core/navigation_roots";
+//	public final static String URL_CATEGORIES = "core/categories/roots"; //TODO: which one is it?
+	public final static String URL_CATEGORIES = "core/categories"; //TODO: which one is it?
+	public final static String URL_CATEGORIES_WITH_CATEGORY_IDS = "core/places";
+	public final static String URL_POST_INTERESTED_STORES = "core/user/multi_like";
 	public final static String URL_VIEW_ALL_CONTENT = "/view_all_content";
-//	public final static String URL_PER_PAGE = "10";
+	public final static String QUERY_PAGE = "1";
+	public final static String QUERY_PER_PAGE = "200";
 
 	//HEADER
 	public final static String HEADER_VALUE_DATAHUB_CATALOG = "vaughan-mills";
@@ -30,7 +35,9 @@ public class Constants {
 	public final static String HEADER_VALUE_DATAHUB_LOCALE = "en-CA";
 	public final static String HEADER_VALUE_CLIENT_TOKEN = "OGEyZDYyZTgtNzRmMS00ODNjLTg2YzMtYjQ0YWY1MDc5NWM1OjdjODhjZmY0ZTBjNDk5MTRiM2EzZTY3YjAzZGY1ZTE4ZDM5YTg0ZjM2YTE0ZjI0NWYzNDViN2JhNWY4YTE4YjJiMDUwMWIxOWRiYTExYzE1ZGIzNTJmNzhlM2EzYzI5MGM2MWQ4MmRlMGRjYTkyMzAzZTQ2NWRjZDU3NDJkNGRl";
 	public final static String HEADER_VALUE_CONTENT_TYPE = "application/json";
-	public final static String HEADER_VALUE_ACCEPT = "application/json, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.place+json; version=1.0";
+//	public final static String HEADER_VALUE_ACCEPT = "application/json, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.place+json; version=1.0";
+	public final static String HEADER_VALUE_ACCEPT = "application/json";
+//	public final static String HEADER_VALUE_ACCEPT = "application/vnd.kcp.user-likes+json; version=1.0.0";
 	public final static String HEADER_VALUE_AUTHROZATION = "Bearer 33cce977-6891-4ca5-9df9-6b1e7b9f0d84_YzU5YWM0ZjctODZiOS00ZGJiLTkzYjYtNjZkYzdkYjZkOTE1"; //TESTING
 
 	public final static String EXTERNAL_CODE_DEAL = "deals-list";
@@ -52,8 +59,9 @@ public class Constants {
 	public final static int 	NUMB_OF_INSTA = 5; //how many twitter tweets it will show at a time
 	public final static String INSTAGRAM_BASE_URL = "https://api.instagram.com/v1/";
 	public final static String INSTAGRAM_USER_NAME = "Vaughan_Mills";
-	public final static String INSTAGRAM_USER_ID = "249069342"; //VAUGHAN MILLS
 	public final static String INSTAGRAM_CLIENT_ID = "038e1210bc3441f780a8c3f3562b2b41"; //VAUGHAN MILLS
+	public final static String INSTAGRAM_ACCESS_TOKEN = "36271034.1677ed0.c9ee1d858c3b4ee6845fe5b3d4414eba"; //TODO: temp access token
+	public final static String INSTAGRAM_USER_ID = "249069342"; //VAUGHAN MILLS
 //	public final static String INSTAGRAM_USER_ID = "1048431023"; //yjw
 
 
@@ -65,4 +73,12 @@ public class Constants {
 	public final static String ARG_IMAGE_URL = "arg_image_url";
 	public final static String ARG_IMAGE_BITMAP = "arg_image_bitmap";
 
+	//SHARED PREFERNCE DATABASE
+//	public final static String PREFS_KEY_INTRSTD_CATEGORY = "prefs_key_intrstd_category";
+	public final static String PREFS_KEY_CATEGORY = "prefs_key_category";
+//	public final static String PREFS_KEY_STORE = "prefs_key_store";
+	public final static String PREFS_KEY_FAV_STORE_LIKE_LINK = "prefs_key_store_like_link";
+
+	//REQUEST CODE
+	public final static int REQUEST_CODE_CHANGE_INTEREST = 101;
 }

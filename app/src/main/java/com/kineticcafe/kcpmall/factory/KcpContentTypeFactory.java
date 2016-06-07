@@ -25,6 +25,11 @@ public class KcpContentTypeFactory {
     public static final int ITEM_TYPE_STORE = 6;
 
 
+    //PREFERENCE ADAPTER ITEM TYPE
+    public static final int PREF_ITEM_TYPE_CAT = 0;
+    public static final int PREF_ITEM_TYPE_STORE = 1;
+
+
     public static final int ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS = 7;
     public static final int ITEM_TYPE_SECTION_HEADER_OTHER_DEALS = 8;
     public static final int ITEM_TYPE_ADJUST_MY_INTEREST = 9;

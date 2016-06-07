@@ -23,28 +23,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.kineticcafe.kcpmall.activities.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.DetailActivity"
+            android:parentActivityName="com.kineticcafe.kcpmall.activities.MainActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.Base"/>
+            android:theme="@style/AppTheme.Base" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kineticcafe.kcpmall.activities.MainActivity" />
+        </activity>
         <activity
-            android:name=".activities.ZoomableImage"
+            android:name="com.kineticcafe.kcpmall.activities.ZoomableImage"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Plain"
-            />
-            android:parentActivityName=".activities.DetailActivity"
-            android:theme="@style/AppTheme.Base"
+            android:theme="@style/AppTheme.Plain" />
+        <activity
+            android:name="com.kineticcafe.kcpmall.activities.InterestedCategoryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
+        <activity
+            android:name="com.kineticcafe.kcpmall.activities.InterestedStoreActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
     </application>
 
 </manifest>

@@ -1,11 +1,16 @@
 package com.kineticcafe.kcpmall.kcpData;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpCorePage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 
+import java.util.HashMap;
+
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -27,4 +32,40 @@ public interface KcpService {
     Call<KcpContentPage> getContentPage(
             @Url String url,
             @Query("perpage") String perpage);
+
+    @GET
+    Call<KcpCorePage> getCategories(
+            @Url String url,
+            @Query("page") String page,
+            @Query("perpage") String perpage);
+
+    @GET
+    Call<KcpCorePage> getCategories(
+            @Url String url,
+            @Query("page") String page,
+            @Query("perpage") String perpage,
+            @Query("category_ids") String categoryIds);
+
+    @POST
+    Call<KcpCorePage> postInterestedStores(
+            @Url String url,
+            @Body String multi_like);
+
+    @POST
+    Call<KcpCorePage> postInterestedStores(
+            @Url String url,
+            @Body HashMap multiLike);
+
+    @POST
+    Call<KcpCorePage> postInterestedStores(
+            @Url String url,
+            @Body KcpCategoryManager.MultiLike multiLike);
+
+
+
+    /*@POST
+    Call<KcpCorePage> postInterestedStores(
+            @Url String url,
+            @Field("multi_like") String body);*/
+
 }
