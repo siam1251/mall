@@ -7,6 +7,7 @@
     <dimen name="activity_margin_tiny">3dp</dimen>
 
     <!--main bot nav bar-->
+    <dimen name="vpMain_padding_bottom">48dp</dimen> <!--This should be little bigger than main_app_bar_layout_height to acommodate the space taken by the bot nav bar-->
     <dimen name="main_app_bar_layout_height">45dp</dimen>
 
     <!--viewpager circle dot-->
@@ -140,10 +141,21 @@
     <dimen name="home_tab_icon_top_margin_when_selected">8.5dp</dimen>
     <dimen name="home_tab_title_top_margin_when_selected">28.5dp</dimen>
 
+    <!--CATEGORY-->
+    <dimen name="category_item_height">57dp</dimen>
+    <dimen name="category_txt_left_margin">35dp</dimen>
+    <dimen name="category_image_width">17dp</dimen>
+    <dimen name="category_txt">16sp</dimen>
+
+    <!--SUB CATEGORY-->
+    <dimen name="sub_category_item_height">48dp</dimen>
+
+
     <!--etc-->
     <dimen name="button_corner_radius">2dp</dimen>
     <dimen name="toolbar_elevation">2dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="shadow_inverted_height">4dp</dimen>
 
 </resources>

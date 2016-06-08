@@ -1,14 +1,12 @@
 package com.kineticcafe.kcpmall.activities;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -98,7 +96,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         final int maxSpanCount = 100;
-        ArrayList<KcpCategories> kcpCategoriesArrayList = KcpCategoryRoot.getInstance().getCategoriesList();
+        ArrayList<KcpCategories> kcpCategoriesArrayList = KcpCategoryRoot.getInstance().getFingerPrintCategoriesList();
         final ArrayList<GridLayoutItem> gridLayoutItemArrayList = new ArrayList<GridLayoutItem>();
 
         float txtMar = getResources().getDimension(R.dimen.intrst_card_txt_horizontal_margin);
@@ -128,7 +126,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                     totalSize = spaceLeft + firstItemWidth + compatPadding + secondItemWidth + spaceLeft;
                     firstSpanSize = (int) ((float) (spaceLeft + firstItemWidth + compatPadding/2) / totalSize * maxSpanCount);
                     secondSpanSize = maxSpanCount - firstSpanSize;
-
                     replaceIfExist(gridLayoutItemArrayList, position, new GridLayoutItem(firstSpanSize, RelativeLayout.ALIGN_PARENT_RIGHT));
                     replaceIfExist(gridLayoutItemArrayList, position + 1, new GridLayoutItem(secondSpanSize, RelativeLayout.ALIGN_PARENT_LEFT));
 

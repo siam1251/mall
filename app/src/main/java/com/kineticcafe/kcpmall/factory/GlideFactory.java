@@ -1,35 +1,11 @@
 package com.kineticcafe.kcpmall.factory;
 
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.InsetDrawable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.DrawableCrossFadeFactory;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.animation.GlideAnimationFactory;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
-import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.activities.Constants;
-import com.kineticcafe.kcpmall.activities.DetailActivity;
-import com.kineticcafe.kcpmall.activities.ZoomableImage;
-import com.kineticcafe.kcpmall.utility.Utility;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 /**
  * Created by Kay on 2016-05-06.
@@ -68,6 +44,8 @@ public class GlideFactory {
                 .load(url)
                 .crossFade()
                 .error(errorDrawable)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .dontAnimate()
                 .placeholder(errorDrawable)
                 .into(imageView);
     }

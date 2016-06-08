@@ -45,9 +45,13 @@ public class KcpNavigationRootManager {
         logger = new Logger(getClass().getName());
     }
 
+    public KcpService getKcpService(){
+        if(mKcpService == null) mKcpService = ServiceFactory.createRetrofitService(mContext, new HeaderFactory().getHeaders(), KcpService.class, Constants.URL_BASE);
+        return mKcpService;
+    }
+
     public void downloadNewsAndDeal(){
-        mKcpService = ServiceFactory.createRetrofitService(mContext, new HeaderFactory().getHeaders(), KcpService.class, Constants.URL_BASE);
-        Call<KcpNavigationRoot> call = mKcpService.getNavigationRoot(Constants.URL_NAVIGATION_ROOT);
+        Call<KcpNavigationRoot> call = getKcpService().getNavigationRoot(Constants.URL_NAVIGATION_ROOT);
         call.enqueue(new Callback<KcpNavigationRoot>() {
             @Override
             public void onResponse(Call<KcpNavigationRoot> call, Response<KcpNavigationRoot> response) {
@@ -71,7 +75,7 @@ public class KcpNavigationRootManager {
     }
 
     private void downloadNavigationPage(String url, final String mode){
-        Call<KcpNavigationPage> call = mKcpService.getNavigationPage(url);
+        Call<KcpNavigationPage> call = getKcpService().getNavigationPage(url);
         call.enqueue(new Callback<KcpNavigationPage>() {
             @Override
             public void onResponse(Call<KcpNavigationPage> call, Response<KcpNavigationPage> response) {
@@ -91,7 +95,7 @@ public class KcpNavigationRootManager {
     }
 
     public void downloadContents(String url, final String mode){
-        Call<KcpContentPage> call = mKcpService.getContentPage(url);
+        Call<KcpContentPage> call = getKcpService().getContentPage(url);
         call.enqueue(new Callback<KcpContentPage>() {
             @Override
             public void onResponse(Call<KcpContentPage> call, Response<KcpContentPage> response) {

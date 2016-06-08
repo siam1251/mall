@@ -10,16 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.activities.MainActivity;
 import com.kineticcafe.kcpmall.adapters.NewsRecyclerViewAdapter;
-import com.kineticcafe.kcpmall.views.DealRecyclerItemDecoration;
 import com.kineticcafe.kcpmall.views.NewsRecyclerItemDecoration;
 import com.kineticcafe.kcpmall.widget.EndlessRecyclerViewScrollListener;
-
-import java.util.ArrayList;
 
 /**
  * Created by Kay on 2016-05-04.
@@ -45,24 +42,24 @@ public class NewsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_news, container, false);
-        RecyclerView rvNews = (RecyclerView) view.findViewById(R.id.rvNews);
+        View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
+        RecyclerView rvNews = (RecyclerView) view.findViewById(R.id.rv);
         rvNews.setNestedScrollingEnabled(true);
         setupRecyclerView(rvNews);
         tvEmptyState = (TextView) view.findViewById(R.id.tvEmptyState);
-        final SwipeRefreshLayout srlNews = (SwipeRefreshLayout) view.findViewById(R.id.srlNews);
-        srlNews.setColorSchemeResources(R.color.themeColor);
-        srlNews.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        final SwipeRefreshLayout srl = (SwipeRefreshLayout) view.findViewById(R.id.srl);
+        srl.setColorSchemeResources(R.color.themeColor);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                HomeFragment.getInstance().setOnRefreshListener(new HomeFragment.RefreshListener() {
+                mMainActivity.setOnRefreshListener(new MainActivity.RefreshListener() {
                     @Override
                     public void onRefresh(int msg) {
-                        srlNews.setRefreshing(false);
+                        srl.setRefreshing(false);
                         mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                HomeFragment.getInstance().initializeKcpData();
+                HomeFragment.getInstance().initializeHomeData();
                 mEndlessRecyclerViewScrollListener.onLoadDone();
             }
         });

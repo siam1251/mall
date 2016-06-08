@@ -1,15 +1,9 @@
 package com.kineticcafe.kcpmall.adapters;
 
-import android.app.Activity;
 import android.database.DataSetObserver;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
-
-import com.kineticcafe.kcpmall.fragments.HomeFragment;
-import com.kineticcafe.kcpmall.fragments.OneFragment;
-import com.kineticcafe.kcpmall.widget.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;

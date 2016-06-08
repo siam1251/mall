@@ -53,6 +53,11 @@
             android:name="com.kineticcafe.kcpmall.activities.InterestedStoreActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
+
+        <activity
+            android:name="com.kineticcafe.kcpmall.activities.SubCategoryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
     </application>
 
 </manifest>

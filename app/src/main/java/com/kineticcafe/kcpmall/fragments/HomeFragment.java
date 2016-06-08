@@ -4,40 +4,28 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
-import com.kineticcafe.kcpandroidsdk.service.ServiceFactory;
 import com.kineticcafe.kcpandroidsdk.utils.Utility;
+import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
-import com.kineticcafe.kcpmall.factory.HeaderFactory;
-import com.kineticcafe.kcpmall.instagram.InstagramService;
+import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
+import com.kineticcafe.kcpmall.instagram.model.InstagramFeed;
 import com.kineticcafe.kcpmall.instagram.model.Media;
 import com.kineticcafe.kcpmall.instagram.model.Recent;
 import com.kineticcafe.kcpmall.kcpData.KcpCategoryManager;
-import com.kineticcafe.kcpmall.kcpData.KcpService;
-import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
-import com.kineticcafe.kcpmall.instagram.model.InstagramFeed;
 import com.kineticcafe.kcpmall.kcpData.KcpNavigationRootManager;
 import com.kineticcafe.kcpmall.kcpData.KcpSocialFeedManager;
-import com.kineticcafe.kcpmall.twitter.TwitterAsyncTask;
 import com.kineticcafe.kcpmall.twitter.model.TwitterTweet;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class HomeFragment extends BaseFragment {
 
@@ -59,6 +47,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initializeHomeData();
     }
 
     @Override
@@ -72,33 +61,39 @@ public class HomeFragment extends BaseFragment {
         TabLayout tablayout = (TabLayout) view.findViewById(R.id.tlHome);
         tablayout.setupWithViewPager(vpHome);
 
-        initializeKcpData();
+        updateAdapter(Constants.EXTERNAL_CODE_FEED);
+        updateAdapter(Constants.EXTERNAL_CODE_DEAL);
+        updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
+        if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
+                mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null ) mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);
+        if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
+                mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null) mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateInstaData(sInstaFeedList);
 
         return view;
     }
 
-    public void initializeKcpData(){
+    public void initializeHomeData(){
         if(!Utility.isNetworkAvailable(getActivity())){
             mMainActivity.onDataDownloaded(); //TODO: error here when offline
             mMainActivity.showSnackBar(R.string.warning_no_internet_connection, R.string.warning_retry, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    initializeKcpData();
+                    initializeHomeData();
                 }
             });
             return;
         } else {
             downloadNewsAndDeal();
             downloadSocialFeeds();
-            downloadCategories();
+            downloadFingerPrintingCategories();
         }
     }
 
     public void downloadNewsAndDeal(){
 
         try {
-            mNewsFragment.setEmptyState(null);
-            mDealsFragment.setEmptyState(null);
+            if(mNewsFragment != null) mNewsFragment.setEmptyState(null);
+            if(mDealsFragment != null) mDealsFragment.setEmptyState(null);
 
             if(mKcpNavigationRootManager == null) {
                 mKcpNavigationRootManager = new KcpNavigationRootManager(getActivity(), new Handler(Looper.getMainLooper()) {
@@ -108,6 +103,7 @@ public class HomeFragment extends BaseFragment {
                             case KcpNavigationRootManager.DOWNLOAD_STARTED:
                                 break;
                             case KcpNavigationRootManager.DOWNLOAD_COMPLETE:
+                                if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
                                 String mode = (String) inputMessage.obj;
                                 updateAdapter(mode);
                                 break;
@@ -119,7 +115,7 @@ public class HomeFragment extends BaseFragment {
                                 break;
                             case KcpNavigationRootManager.DOWNLOAD_FAILED:
                                 mMainActivity.onDataDownloaded();
-                                if(mOnRefreshListener != null) mOnRefreshListener.onRefresh(R.string.warning_download_failed);
+                                if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
                                 break;
                             default:
                                 super.handleMessage(inputMessage);
@@ -178,13 +174,12 @@ public class HomeFragment extends BaseFragment {
         mKcpSocialFeedManager.downloadInstagram();
     }
 
-    private void downloadCategories(){
+    private void downloadFingerPrintingCategories(){
         KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
                 switch (inputMessage.arg1) {
                     case KcpCategoryManager.DOWNLOAD_FAILED:
-
                         break;
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:
                         break;
@@ -194,15 +189,18 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
-        kcpCategoryManager.downloadCategories();
+        kcpCategoryManager.downloadFingerPrintingCategories();
     }
+
+
+
 
     private void setupViewPager(ViewPager viewPager) {
         HomeTopViewPagerAdapter homeTopViewPagerAdapter = new HomeTopViewPagerAdapter(getChildFragmentManager());
         if(mNewsFragment == null) mNewsFragment = NewsFragment.newInstance();
         if(mDealsFragment == null) mDealsFragment = DealsFragment.newInstance(2);
-        homeTopViewPagerAdapter.addFrag(mNewsFragment, "NEWS");
-        homeTopViewPagerAdapter.addFrag(mDealsFragment, "DEALS");
+        homeTopViewPagerAdapter.addFrag(mNewsFragment, getResources().getString(R.string.fragment_news));
+        homeTopViewPagerAdapter.addFrag(mDealsFragment, getResources().getString(R.string.fragment_deals));
         viewPager.setAdapter(homeTopViewPagerAdapter);
     }
 
@@ -224,7 +222,6 @@ public class HomeFragment extends BaseFragment {
      * @param mode determines which adapter it should update - if null, it updates all adapters
      */
     private void updateAdapter(String mode){
-        if(mOnRefreshListener != null) mOnRefreshListener.onRefresh(R.string.warning_download_completed);
         try {
             KcpNavigationPage kcpNavigationPage = KcpNavigationRoot.getInstance().getNavigationpage(mode);
             if(kcpNavigationPage != null){
@@ -255,8 +252,6 @@ public class HomeFragment extends BaseFragment {
 
     private void updateRecommendedDealsAdapter(ArrayList<KcpContentPage> kcpContentPages){
         if(mDealsFragment.mDealsRecyclerViewAdapter == null) return;
-
-
         mDealsFragment.mDealsRecyclerViewAdapter.updateRecommendedDealData(kcpContentPages);
     }
 
@@ -268,18 +263,16 @@ public class HomeFragment extends BaseFragment {
         updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
     }
 
-    private RefreshListener mOnRefreshListener;
+    /*private RefreshListener mOnRefreshListener;
     public void setOnRefreshListener(RefreshListener refreshListener){
         mOnRefreshListener = refreshListener;
     }
-
     public interface RefreshListener {
         void onRefresh(int msg);
-    }
+    }*/
 
     @Override
     public void onPause(){
         super.onPause();
-        mOnRefreshListener = null;
     }
 }

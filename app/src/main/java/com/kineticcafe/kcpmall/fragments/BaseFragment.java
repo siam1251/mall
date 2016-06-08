@@ -2,6 +2,8 @@ package com.kineticcafe.kcpmall.fragments;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpmall.activities.MainActivity;

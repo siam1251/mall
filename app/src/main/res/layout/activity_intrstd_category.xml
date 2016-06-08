@@ -62,7 +62,7 @@
     <ImageView
         android:layout_above="@+id/flIntrstdBot"
         android:layout_width="match_parent"
-        android:layout_height="6dp"
+        android:layout_height="@dimen/shadow_inverted_height"
         android:src="@drawable/view_shadow_inverted"/>
 
 </RelativeLayout>

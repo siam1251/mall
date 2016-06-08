@@ -10,6 +10,7 @@
     <TextView
         android:textColor="@color/detail_title_text"
         android:layout_marginLeft="@dimen/detail_button_image_left_margin"
+        android:lines="1"
         android:gravity="center_vertical"
         android:text="Follow on"
         android:id="@+id/tvDetailSocialSharingBtnHeader"

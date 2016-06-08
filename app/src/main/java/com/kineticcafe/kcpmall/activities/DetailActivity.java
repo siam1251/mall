@@ -28,7 +28,7 @@ import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
-import com.kineticcafe.kcpmall.views.ThemedImageView;
+import com.kineticcafe.kcpmall.views.ThemeColorImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class DetailActivity extends AppCompatActivity {
                 //TODO: implement fav functionality
                 Toast.makeText(DetailActivity.this, "fav clicked", Toast.LENGTH_SHORT).show();
                 ivFav.setSelected(!ivFav.isSelected());
-                ((ThemedImageView) ivFav).onClick(v);
+                ((ThemeColorImageView) ivFav).onClick(v);
             }
         });
 
@@ -76,7 +76,7 @@ public class DetailActivity extends AppCompatActivity {
         //Store Location
         CTA location = new CTA(
                 R.layout.layout_detail_button,
-                R.drawable.icn_map,
+                R.drawable.icn_menu_map,
                 kcpContentPage.getStoreLevel(),
                 new View.OnClickListener() {
                     @Override
@@ -126,7 +126,7 @@ public class DetailActivity extends AppCompatActivity {
         //Store Info
         CTA info = new CTA(
                 R.layout.layout_detail_button,
-                R.drawable.icn_home,
+                R.drawable.icn_menu_home,
                 "Store Information",
                 new View.OnClickListener() {
                     @Override
@@ -138,7 +138,7 @@ public class DetailActivity extends AppCompatActivity {
         //Add to Calendar
         CTA addToCalendar = new CTA(
                 R.layout.layout_detail_button,
-                R.drawable.icn_home,
+                R.drawable.icn_menu_home,
                 "Add to Calendar",
                 new View.OnClickListener() {
                     @Override
@@ -196,7 +196,7 @@ public class DetailActivity extends AppCompatActivity {
 
             CTA webpage = new CTA(
                     R.layout.layout_detail_social_button,
-                    R.drawable.icn_mall_info,
+                    R.drawable.icn_menu_mall_info,
                     kcpContentPage.getStoreName(),
                     new View.OnClickListener() {
                         @Override
@@ -209,6 +209,8 @@ public class DetailActivity extends AppCompatActivity {
             //SOCIAL SHARING
             LinearLayout llSharing = (LinearLayout) findViewById(R.id.llSharing);
             RelativeLayout layoutSocialSharing = (RelativeLayout) findViewById(R.id.layoutSocialSharing);
+            TextView tvDetailSocialSharingBtnHeader = (TextView) layoutSocialSharing.findViewById(R.id.tvDetailSocialSharingBtnHeader);
+            tvDetailSocialSharingBtnHeader.setText("Follow " + kcpContentPage.getStoreName() + " on...");
             llSharing.setVisibility(View.VISIBLE);
             layoutSocialSharing.setVisibility(View.VISIBLE);
 
@@ -346,7 +348,8 @@ public class DetailActivity extends AppCompatActivity {
 
             TextView tvDetailTitle = (TextView) findViewById(R.id.tvDetailTitle);
             String title = kcpContentPage.getTitle();
-            tvDetailTitle.setText(title);
+            if(title.equals("")) tvDetailTitle.setVisibility(View.GONE);
+            else tvDetailTitle.setText(title);
 
             TextView tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
             String time =
@@ -369,9 +372,9 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+//                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);

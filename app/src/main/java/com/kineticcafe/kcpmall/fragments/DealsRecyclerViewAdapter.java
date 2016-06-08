@@ -134,12 +134,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-//    public class RecommendedDealsViewHolder extends MainViewHolder {
-//        public RecommendedDealsViewHolder (View v){
-//            super(v);
-//        }
-//    }
-
     public class SetMyInterestViewHolder extends MainViewHolder {
         public TextView tvIntrstTitle;
         public TextView tvIntrstDesc;

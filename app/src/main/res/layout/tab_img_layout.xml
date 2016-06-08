@@ -12,7 +12,7 @@
 
     <ImageView
         android:layout_centerHorizontal="true"
-        android:src="@drawable/icn_home"
+        android:src="@drawable/icn_menu_home"
         android:id="@+id/ivTabIcon"
         android:layout_width="@dimen/main_tab_icon_width"
         android:layout_height="@dimen/main_tab_icon_width"
