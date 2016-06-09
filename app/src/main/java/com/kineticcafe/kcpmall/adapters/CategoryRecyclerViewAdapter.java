@@ -1,7 +1,6 @@
 package com.kineticcafe.kcpmall.adapters;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -55,17 +54,6 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public class SubCategoryHolder extends RecyclerView.ViewHolder {
-        public View mView;
-        public TextView  tvCategory;
-
-        public SubCategoryHolder(View v) {
-            super(v);
-            mView = v;
-            tvCategory = (TextView)  v.findViewById(R.id.tvCategory);
-        }
-    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType){
@@ -105,15 +93,17 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter {
 
             final String externalCode = subKcpCategory.getExternalCode();
             final String categoryName = subKcpCategory.getCategoryName();
-            categoryHolder.tvCategory.setText(categoryName);
+
+            if(position == 0) categoryHolder.tvCategory.setText(mContext.getResources().getString(R.string.see_all_stores));
+            else categoryHolder.tvCategory.setText(categoryName);
+
 
             categoryHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String placeUrl = subKcpCategory.getPlacesLink();
                     if(!placeUrl.equals("")){
-//                        ((SubCategoryActivity)mContext).tryDownloadPlaces(categoryName, externalCode, placeUrl, categoryHolder.tvCategory);
-                        DirectoryFragment.getInstance().tryDownloadPlaces(mContext, categoryName, externalCode, placeUrl, categoryHolder.tvCategory);
+                        DirectoryFragment.getInstance().tryDownloadPlacesForThisCategory(mContext, categoryName, externalCode, placeUrl, categoryHolder.tvCategory);
                     }
                 }
             });

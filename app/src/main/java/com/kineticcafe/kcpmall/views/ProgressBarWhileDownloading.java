@@ -1,13 +1,17 @@
 package com.kineticcafe.kcpmall.views;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,22 +26,42 @@ public class ProgressBarWhileDownloading {
         void okClicked();
     }
 
-    public void insertProgressBar(Context context, ViewGroup viewGroup) {
-        ProgressBar pb = new ProgressBar(context, null, android.R.attr.progressBarStyleSmall);
-//        ProgressBar pb = new ProgressBar(context, null, R.style.progressBarMedium);
-//        pb.setBackgroundColor(context.getResources().getColor(R.color.gray));
-//        ProgressBar pb = new ProgressBar(context, null, android.R.attr.progressBarStyleLarge);
-        /*RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                550, // Width in pixels
-                RelativeLayout.LayoutParams.WRAP_CONTENT // Height of progress bar
-        );*/
-//        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) viewGroup.getLayoutParams();
-        /*RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                100, // Width in pixels
-                100 // Height of progress bar
-        );
-        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
-        pb.setLayoutParams(lp);*/
-        viewGroup.addView(pb);
+    private static ProgressDialog pd;
+    private static View progressBarView;
+    private static FrameLayout parentLayout;
+
+    public static void showProgressDialog(Context context, boolean enabled){
+        /*if(pd == null) {
+            pd = new ProgressDialog(context, R.style.ProgressBarStyle);
+            pd.setProgressStyle(android.R.attr.progressBarStyleLarge);
+            pd.setCancelable(true);
+            pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        }
+        if(enabled){
+            pd.show();
+        } else {
+            pd.dismiss();
+        }*/
+
+        if(parentLayout != null && progressBarView != null) {
+            parentLayout.removeView(progressBarView);
+        }
+
+        LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        parentLayout = (FrameLayout)((Activity)context).getWindow().getDecorView().findViewById(android.R.id.content);
+        progressBarView = vi.inflate(R.layout.layout_loading_item, null);
+        progressBarView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                parentLayout.removeView(progressBarView);
+                return false;
+            }
+        });
+
+        if(enabled){
+            parentLayout.addView(progressBarView);
+        } else {
+            parentLayout.removeView(progressBarView);
+        }
     }
 }

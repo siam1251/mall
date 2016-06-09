@@ -7,26 +7,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
-import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
+import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.MainActivity;
-import com.kineticcafe.kcpmall.adapters.CategoryRecyclerViewAdapter;
-import com.kineticcafe.kcpmall.adapters.ExpandableCategoryRecyclerViewAdapter;
-import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
+import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 
-import java.util.ArrayList;
 
-
-public class CategoriesFragment extends BaseFragment {
-    public CategoryRecyclerViewAdapter mCategoryRecyclerViewAdapter;
+public class PlacesFragment extends BaseFragment {
+    public CategoryStoreRecyclerViewAdapter mPlaceRecyclerViewAdapter;
     private TextView tvEmptyState;
 
-    public static CategoriesFragment newInstance() {
-        CategoriesFragment fragment = new CategoriesFragment();
+    public static PlacesFragment newInstance() {
+        PlacesFragment fragment = new PlacesFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -41,11 +37,13 @@ public class CategoriesFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
+        final SwipeRefreshLayout srl = (SwipeRefreshLayout) view.findViewById(R.id.srl);
         RecyclerView rvNews = (RecyclerView) view.findViewById(R.id.rv);
         rvNews.setNestedScrollingEnabled(true);
         setupRecyclerView(rvNews);
+
         tvEmptyState = (TextView) view.findViewById(R.id.tvEmptyState);
-        final SwipeRefreshLayout srl = (SwipeRefreshLayout) view.findViewById(R.id.srl);
+
         srl.setColorSchemeResources(R.color.themeColor);
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -57,7 +55,8 @@ public class CategoriesFragment extends BaseFragment {
                         mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                DirectoryFragment.getInstance().downloadCategories();
+
+                DirectoryFragment.getInstance().downloadPlaces();
             }
         });
         return view;
@@ -66,10 +65,12 @@ public class CategoriesFragment extends BaseFragment {
     private void setupRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-        mCategoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter(
+
+        recyclerView.setLayoutManager(linearLayoutManager);
+        mPlaceRecyclerViewAdapter = new CategoryStoreRecyclerViewAdapter(
                 getActivity(),
-                CategoryIconFactory.getFilteredKcpCategoryList(), KcpContentTypeFactory.PREF_ITEM_TYPE_CAT);
-        recyclerView.setAdapter(mCategoryRecyclerViewAdapter);
+                KcpPlacesRoot.getInstance().getPlacesList(), KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE);
+        recyclerView.setAdapter(mPlaceRecyclerViewAdapter);
     }
 
 }

@@ -23,7 +23,7 @@ public class Constants {
 	public final static String URL_POST_INTERESTED_STORES = 		"core/user/multi_like";
 	public final static String URL_VIEW_ALL_CONTENT =				"/view_all_content";
 	public final static String QUERY_PAGE = 						"1";
-	public final static String QUERY_PER_PAGE = 					"200";
+	public final static String QUERY_PER_PAGE = 					"500";
 
 	//HEADER
 //	public final static String HEADER_VALUE_DATAHUB_CATALOG = 	"vaughan-mills";
@@ -41,7 +41,8 @@ public class Constants {
 	public final static String EXTERNAL_CODE_FEED = 		"feed";
 	public final static String EXTERNAL_CODE_RECOMMENDED = 	"recommended-deals";
 	public final static String EXTERNAL_CODE_SYSTEM_MSG = 	"system-message";
-	public final static String EXTERNAL_CODE_CATEGORIES = 	"root-categories";
+	public final static String EXTERNAL_CODE_CATEGORIES = 	"categories";
+	public final static String EXTERNAL_CODE_PLACES = 		"places";
 
 
 	//DATE FORMAT

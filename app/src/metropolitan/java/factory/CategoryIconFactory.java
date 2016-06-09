@@ -1,7 +1,10 @@
 package com.kineticcafe.kcpmall.factory;
 
+import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
+import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpmall.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -23,9 +26,9 @@ public class CategoryIconFactory {
     private static final String EXTERNAL_CODE_SHEOS_AND_BAGS              = "20";
     private static final String EXTERNAL_CODE_SPORTS_AND_FITNESS          = "21";
     private static final String EXTERNAL_CODE_WOMENS_CLOTHING             = "22";
-    private static final String EXTERNAL_PARKING                          = "108";
+    /*private static final String EXTERNAL_PARKING                          = "108";
     private static final String EXTERNAL_COMMON_AREA                      = "109";
-    private static final String EXTERNAL_AND                              = "110";
+    private static final String EXTERNAL_AND                              = "110";*/
 
 
     private static HashMap<String, Integer> mCategoryMap;
@@ -53,9 +56,9 @@ public class CategoryIconFactory {
         mCategoryMap.put(EXTERNAL_CODE_SHEOS_AND_BAGS,              R.drawable.icn_shoes);
         mCategoryMap.put(EXTERNAL_CODE_SPORTS_AND_FITNESS,          R.drawable.icn_sports);
         mCategoryMap.put(EXTERNAL_CODE_WOMENS_CLOTHING,             R.drawable.icn_womens);
-        mCategoryMap.put(EXTERNAL_PARKING,                          getDefaultCategoryIcon());
+        /*mCategoryMap.put(EXTERNAL_PARKING,                          getDefaultCategoryIcon());
         mCategoryMap.put(EXTERNAL_COMMON_AREA,                      getDefaultCategoryIcon());
-        mCategoryMap.put(EXTERNAL_AND,                              getDefaultCategoryIcon());
+        mCategoryMap.put(EXTERNAL_AND,                              getDefaultCategoryIcon());*/
     }
 
     public static int getCategoryIcon(String externalCode){
@@ -63,7 +66,26 @@ public class CategoryIconFactory {
         else return getDefaultCategoryIcon();
     }
 
-    private static int getDefaultCategoryIcon(){
+    /*private static int getDefaultCategoryIcon(){
         return R.drawable.icn_fav_selected;
+    }*/
+
+    private static int getDefaultCategoryIcon(){
+        return 0;
     }
+
+    public static ArrayList<KcpCategories> getFilteredKcpCategoryList(){
+        ArrayList<KcpCategories> categoriesArrayList = KcpCategoryRoot.getInstance().getCategoriesList();
+        ArrayList<KcpCategories> filteredCategoriesList = new ArrayList<>();
+
+        //filter the categorylist to exclude ANC, Common Area, Common Areas, Parking that are not defined in CategoryHashMap in CategoryIconFactory
+        for(KcpCategories kcpCategory : categoriesArrayList){
+            String externalCode = kcpCategory.getExternalCode();
+            int drawableId = CategoryIconFactory.getCategoryIcon(externalCode);
+            if(drawableId != 0) filteredCategoriesList.add(kcpCategory);
+        }
+
+        return filteredCategoriesList;
+    }
+
 }

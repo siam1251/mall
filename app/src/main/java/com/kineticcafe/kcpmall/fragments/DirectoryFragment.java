@@ -10,8 +10,6 @@ import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -20,18 +18,21 @@ import android.view.ViewGroup;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
+import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.SubCategoryActivity;
 import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
+import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.kcpData.KcpCategoryManager;
+import com.kineticcafe.kcpmall.kcpData.KcpPlaceManager;
 
 import java.util.ArrayList;
 
 public class DirectoryFragment extends BaseFragment {
 
     private CategoriesFragment mCategoriesFragment;
-    private StoresFragment mStoresFragment;
+    private PlacesFragment mPlacesFragment;
 
     private static DirectoryFragment sDirectoryFragment;
     public static DirectoryFragment getInstance(){
@@ -42,7 +43,10 @@ public class DirectoryFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializeDirectoryData();
+
+        downloadCategories();
+        downloadPlaces();
+
     }
 
     @Override
@@ -56,15 +60,38 @@ public class DirectoryFragment extends BaseFragment {
         TabLayout tablayout = (TabLayout) view.findViewById(R.id.tlHome);
         tablayout.setupWithViewPager(vpHome);
 
-        updateAdapter();
+        updateCategoryAdapter();
+
         return view;
     }
 
-    public void initializeDirectoryData(){
-        downloadCategories();
+
+    private void setupViewPager(ViewPager viewPager) {
+        HomeTopViewPagerAdapter homeTopViewPagerAdapter = new HomeTopViewPagerAdapter(getChildFragmentManager());
+        if(mCategoriesFragment == null) mCategoriesFragment = CategoriesFragment.newInstance();
+        if(mPlacesFragment == null) mPlacesFragment = mPlacesFragment.newInstance();
+        homeTopViewPagerAdapter.addFrag(mCategoriesFragment, getResources().getString(R.string.fragment_categories));
+        homeTopViewPagerAdapter.addFrag(mPlacesFragment, getResources().getString(R.string.fragment_stores));
+        viewPager.setAdapter(homeTopViewPagerAdapter);
     }
 
-    private void downloadCategories(){
+    private void updateCategoryAdapter(){
+        try {
+            if(mCategoriesFragment != null && mCategoriesFragment.mCategoryRecyclerViewAdapter != null) mCategoriesFragment.mCategoryRecyclerViewAdapter.updateData(CategoryIconFactory.getFilteredKcpCategoryList());
+        } catch (Exception e) {
+            logger.error(e);
+        }
+    }
+
+    private void updatePlacesAdapter(){
+        try {
+            if(mPlacesFragment != null && mPlacesFragment.mPlaceRecyclerViewAdapter != null) mPlacesFragment.mPlaceRecyclerViewAdapter.updateData(KcpPlacesRoot.getInstance().getPlacesList());
+        } catch (Exception e) {
+            logger.error(e);
+        }
+    }
+
+    public void downloadCategories(){
         KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
@@ -74,7 +101,7 @@ public class DirectoryFragment extends BaseFragment {
                         break;
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:
                         if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
-                        updateAdapter();
+                        updateCategoryAdapter();
                         break;
                     default:
                         super.handleMessage(inputMessage);
@@ -105,8 +132,8 @@ public class DirectoryFragment extends BaseFragment {
         getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-
-    public void tryDownloadSubCategories(final Context context, final String externalCode, final String categoryName, String url, final int position, final View view){
+    public void tryDownloadSubCategories(final Context context, final String externalCode, final String categoryName, String url, final int position, final View view) {
+        //sub categories never downloaded - not likely happen as it should be done previously when categories were downloaded
         if(KcpCategoryRoot.getInstance().getSubcategories(externalCode) == null){
             KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), new Handler(Looper.getMainLooper()) {
                 @Override
@@ -124,13 +151,14 @@ public class DirectoryFragment extends BaseFragment {
             });
             kcpCategoryManager.downloadSubCategories(externalCode, url, true);
         } else {
+            //sub categories are downloaded but its size is 0 - open the store list
             if(KcpCategoryRoot.getInstance().getSubcategories(externalCode).size() == 0) {
                 ArrayList<KcpCategories> kcpCategories = KcpCategoryRoot.getInstance().getCategoriesList();
                 for(KcpCategories kcpCategory : kcpCategories) {
                     if(kcpCategory.getExternalCode().equals(externalCode)){
                         String placeUrl = kcpCategory.getPlacesLink();
                         if(!placeUrl.equals("")){
-                            DirectoryFragment.getInstance().tryDownloadPlaces(context, categoryName, externalCode, placeUrl, view);
+                            DirectoryFragment.getInstance().tryDownloadPlacesForThisCategory(context, categoryName, externalCode, placeUrl, view);
                         }
                     }
                 }
@@ -140,9 +168,9 @@ public class DirectoryFragment extends BaseFragment {
         }
     }
 
-    public void tryDownloadPlaces(final Context context, final String categoryName, final String externalCode, String url, final View view){
+    public void tryDownloadPlacesForThisCategory(final Context context, final String categoryName, final String externalCode, String url, final View view){
         if(KcpCategoryRoot.getInstance().getPlaces(externalCode) == null){
-            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), new Handler(Looper.getMainLooper()) {
+            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(context, new Handler(Looper.getMainLooper()) {
                 @Override
                 public void handleMessage(Message inputMessage) {
                     switch (inputMessage.arg1) {
@@ -156,28 +184,13 @@ public class DirectoryFragment extends BaseFragment {
                     }
                 }
             });
-            kcpCategoryManager.downloadPlaces(externalCode, url);
+            kcpCategoryManager.downloadPlacesForThisCategoryExternalId(externalCode, url);
         } else {
             showStores(context, externalCode, categoryName, view);
         }
     }
 
     public void showStores(Context context, String externalCode, String categoryName, View view) {
-        //FRAGMENT WAY
-        /*FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        CategoryStoreFragment articleFrag = (CategoryStoreFragment)
-                fragmentManager.findFragmentByTag(getResources().getString(R.string.fragment_category_stores));
-
-        if (articleFrag == null) {
-            articleFrag = CategoryStoreFragment.newInstance(externalCode, categoryName);
-        }
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.flContents, articleFrag, getResources().getString(R.string.fragment_category_stores));
-        fragmentTransaction.addToBackStack(getResources().getString(R.string.fragment_category_stores));
-        fragmentTransaction.commit();*/
-
-
         //SEPARATE ACTIVITY
         Intent intent = new Intent(context, SubCategoryActivity.class);
         intent.putExtra(Constants.ARG_CATEGORY_ACTIVITY_TYPE, Constants.CategoryActivityType.STORE.toString());
@@ -194,38 +207,27 @@ public class DirectoryFragment extends BaseFragment {
         ((Activity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        HomeTopViewPagerAdapter homeTopViewPagerAdapter = new HomeTopViewPagerAdapter(getChildFragmentManager());
-        if(mCategoriesFragment == null) mCategoriesFragment = CategoriesFragment.newInstance();
-        if(mStoresFragment == null) mStoresFragment = StoresFragment.newInstance();
-        homeTopViewPagerAdapter.addFrag(mCategoriesFragment, getResources().getString(R.string.fragment_categories));
-        homeTopViewPagerAdapter.addFrag(mStoresFragment, getResources().getString(R.string.fragment_stores));
-        viewPager.setAdapter(homeTopViewPagerAdapter);
+
+    public void downloadPlaces(){
+        KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(getActivity(), new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                        if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
+                        updatePlacesAdapter();
+                        break;
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        kcpPlaceManager.downloadPlaces();
     }
 
-    private void updateAdapter(){
-        try {
-//            if(mCategoriesFragment != null && mCategoriesFragment.mExpandableCategoryRecyclerViewAdapter != null) mCategoriesFragment.mExpandableCategoryRecyclerViewAdapter.updateData(KcpCategoryRoot.getInstance().getCategoriesList());
-            if(mCategoriesFragment != null && mCategoriesFragment.mCategoryRecyclerViewAdapter != null) mCategoriesFragment.mCategoryRecyclerViewAdapter.updateData(KcpCategoryRoot.getInstance().getCategoriesList());
-        } catch (Exception e) {
-            logger.error(e);
-        }
-    }
-
-    /*OnCategoryClickListener mCallback;
-    public interface OnCategoryClickListener {
-        public void onCategorySelected(String externalCode, String categoryName);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mCallback = (OnCategoryClickListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnHeadlineSelectedListener");
-        }
-    }*/
 
     @Override
     public void onResume() {

@@ -73,13 +73,15 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
                                 Utility.saveGson(InterestedCategoryActivity.this, Constants.PREFS_KEY_CATEGORY, mInterestRecyclerViewAdapter.getFavCatTempList());
                                 InterestedCategoryActivity.this.startActivityForResult(new Intent(InterestedCategoryActivity.this, InterestedStoreActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
+//                                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+
                                 break;
                             default:
                                 super.handleMessage(inputMessage);
                         }
                     }
                 });
-                kcpCategoryManager.downloadPlacesWithCategoryIds(mInterestRecyclerViewAdapter.getFavCatTempList());
+                kcpCategoryManager.downloadPlacesForTheseCategoryIds(mInterestRecyclerViewAdapter.getFavCatTempList());
             }
         });
     }
@@ -202,6 +204,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
             @Override
             public void okClicked() {
                 finish();
+//                overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
             }
         });
     }

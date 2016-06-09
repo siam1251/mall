@@ -1,7 +1,6 @@
 package com.kineticcafe.kcpmall.fragments;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -11,12 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
-import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.views.DealRecyclerItemDecoration;
-import com.kineticcafe.kcpmall.widget.EndlessRecyclerViewScrollListener;
 
 public class CategoryStoreFragment extends BaseFragment {
     private final int COLUMN_COUNT = 2;
@@ -76,7 +73,7 @@ public class CategoryStoreFragment extends BaseFragment {
 
         mCategoryStoreRecyclerViewAdapter = new CategoryStoreRecyclerViewAdapter(
                 getActivity(),
-                KcpCategoryRoot.getInstance().getPlaces(mExternalCode));
+                KcpCategoryRoot.getInstance().getPlaces(mExternalCode), KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE);
         recyclerView.setAdapter(mCategoryStoreRecyclerViewAdapter);
 
         DealRecyclerItemDecoration itemDecoration = new DealRecyclerItemDecoration(getActivity(), R.dimen.card_vertical_margin, mCategoryStoreRecyclerViewAdapter);

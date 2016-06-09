@@ -59,6 +59,9 @@ public class SubCategoryActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         ArrayList<KcpCategories> kcpCategories = KcpCategoryRoot.getInstance().getSubcategories(mExternalCode);
+
+        KcpCategories currentCategory = KcpCategoryRoot.getInstance().getCategory(mExternalCode);
+        if(currentCategory != null) kcpCategories.add(0, currentCategory);
         if(kcpCategories != null){
             mCategoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter(
                     this,
@@ -74,7 +77,7 @@ public class SubCategoryActivity extends AppCompatActivity {
 
         mCategoryStoreRecyclerViewAdapter = new CategoryStoreRecyclerViewAdapter(
                 this,
-                KcpCategoryRoot.getInstance().getPlaces(mExternalCode));
+                KcpCategoryRoot.getInstance().getPlaces(mExternalCode), KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE);
         recyclerView.setAdapter(mCategoryStoreRecyclerViewAdapter);
 
         DealRecyclerItemDecoration itemDecoration = new DealRecyclerItemDecoration(this, R.dimen.card_vertical_margin, mCategoryStoreRecyclerViewAdapter);

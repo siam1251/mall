@@ -34,10 +34,18 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
     private ArrayList<KcpPlaces> mKcpPlacesList;
+    private int mContentType;
 
-    public CategoryStoreRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces) {
+    public CategoryStoreRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces, int contentType) {
         mContext = context;
         mKcpPlacesList = kcpPlaces;
+        mContentType = contentType;
+    }
+
+    public void updateData(ArrayList<KcpPlaces> kcpPlaces) {
+        mKcpPlacesList.clear();
+        mKcpPlacesList.addAll(kcpPlaces);
+        notifyDataSetChanged();
     }
 
     public class StoreViewHolder extends RecyclerView.ViewHolder {
@@ -52,8 +60,16 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         public StoreViewHolder(View v) {
             super(v);
             mView = v;
+
             rlDeal             = (RelativeLayout)  v.findViewById(R.id.rlDeal);
             ivDealLogo  = (ImageView) v.findViewById(R.id.ivDealLogo);
+            ivDealLogo.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ivDealLogo.getLayoutParams();
+            int margin = (int) mContext.getResources().getDimension(R.dimen.card_desc_horizontal_padding);
+            params.setMargins(margin, margin, margin, margin);
+            ivDealLogo.setLayoutParams(params);
+
             tvDealStoreName = (TextView)  v.findViewById(R.id.tvDealStoreName);
             tvDealTitle = (TextView)  v.findViewById(R.id.tvDealTitle);
             tvExpiryDate = (TextView)  v.findViewById(R.id.tvExpiryDate);
@@ -64,35 +80,38 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType){
-            case KcpContentTypeFactory.PREF_ITEM_TYPE_STORE:
+            case KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE:
                 return new StoreViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_deal, parent, false));
+            case KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE:
+                return new StoreViewHolder(
+                        LayoutInflater.from(mContext).inflate(R.layout.list_item_place, parent, false));
         }
         return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (holder.getItemViewType() == KcpContentTypeFactory.PREF_ITEM_TYPE_STORE) {
 
-            final KcpPlaces kcpPlace = (KcpPlaces) mKcpPlacesList.get(position);
-            final StoreViewHolder storeViewHolder = (StoreViewHolder) holder;
+        final KcpPlaces kcpPlace = (KcpPlaces) mKcpPlacesList.get(position);
+        final StoreViewHolder storeViewHolder = (StoreViewHolder) holder;
 
-            String imageUrl = kcpPlace.getImageUrl();
-            storeViewHolder.ivDealLogo.setImageResource(R.drawable.placeholder);
+        String imageUrl = kcpPlace.getImageUrl();
+        storeViewHolder.ivDealLogo.setImageResource(R.drawable.placeholder);
 
-            new GlideFactory().glideWithDefaultRatio(
-                    mContext,
-                    imageUrl,
-                    storeViewHolder.ivDealLogo,
-                    R.drawable.placeholder);
+        new GlideFactory().glideWithDefaultRatio(
+                mContext,
+                imageUrl,
+                storeViewHolder.ivDealLogo,
+                R.drawable.placeholder);
 
-            String storename = kcpPlace.getPlaceName();
-            storeViewHolder.tvDealStoreName.setText(storename);
+        String storename = kcpPlace.getPlaceName();
+        storeViewHolder.tvDealStoreName.setText(storename);
 
-            String display = kcpPlace.getFirstDisplay();
-            storeViewHolder.tvDealTitle.setText(display);
+        String display = kcpPlace.getFirstDisplay();
+        storeViewHolder.tvDealTitle.setText(display);
 
+        if (holder.getItemViewType() == KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE) {
             storeViewHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -100,7 +119,6 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
                     storeViewHolder.ivFav.setSelected(!storeViewHolder.ivFav .isSelected());
                 }
             });
-
 
             storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -115,9 +133,30 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
                     String transitionNameFav = mContext.getResources().getString(R.string.transition_fav);
 
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                (Activity)mContext,
-                                Pair.create((View)storeViewHolder.ivDealLogo, transitionNameImage),
-                                Pair.create((View)storeViewHolder.ivFav, transitionNameFav));
+                            (Activity)mContext,
+                            Pair.create((View)storeViewHolder.ivDealLogo, transitionNameImage),
+                            Pair.create((View)storeViewHolder.ivFav, transitionNameFav));
+
+                    ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
+                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
+            });
+        } else if (holder.getItemViewType() == KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE) {
+
+            storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    KcpContentPage kcpContentPage = new KcpContentPage();
+                    kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
+
+                    Intent intent = new Intent(mContext, DetailActivity.class);
+                    intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
+
+                    String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
+
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            (Activity)mContext,
+                            Pair.create((View)storeViewHolder.ivDealLogo, transitionNameImage));
 
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -133,6 +172,6 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return KcpContentTypeFactory.PREF_ITEM_TYPE_STORE;
+        return mContentType;
     }
 }

@@ -64,6 +64,7 @@ public class HomeFragment extends BaseFragment {
         updateAdapter(Constants.EXTERNAL_CODE_FEED);
         updateAdapter(Constants.EXTERNAL_CODE_DEAL);
         updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
+
         if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
                 mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null ) mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);
         if (mNewsFragment.mNewsRecyclerViewAdapter != null &&

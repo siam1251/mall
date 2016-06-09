@@ -1,7 +1,6 @@
 package com.kineticcafe.kcpmall.adapters;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
@@ -18,7 +16,6 @@ import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DirectoryFragment;
-import com.kineticcafe.kcpmall.utility.Utility;
 
 import java.util.ArrayList;
 
@@ -150,7 +147,7 @@ public class ExpandableCategoryRecyclerViewAdapter extends RecyclerView.Adapter 
                 public void onClick(View v) {
                     String placeUrl = subKcpCategory.getPlacesLink();
                     if(!placeUrl.equals("")){
-                        DirectoryFragment.getInstance().tryDownloadPlaces(mContext, categoryName, externalCode, placeUrl, categoryHolder.tvCategory);
+                        DirectoryFragment.getInstance().tryDownloadPlacesForThisCategory(mContext, categoryName, externalCode, placeUrl, categoryHolder.tvCategory);
                     }
                     // NOTE : position is from the current list
 //                    Toast.makeText(mContext, "clicked : " + position, Toast.LENGTH_SHORT).show();

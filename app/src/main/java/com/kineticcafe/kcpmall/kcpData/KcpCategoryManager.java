@@ -12,10 +12,10 @@ import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.service.ServiceFactory;
-import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpmall.views.ProgressBarWhileDownloading;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,26 +50,13 @@ public class KcpCategoryManager {
         logger = new Logger(getClass().getName());
     }
 
-    public void showProgressDialog(boolean enabled){
-        if(pd == null) {
-            pd = new ProgressDialog(mContext, R.style.ProgressBarStyle);
-            pd.setCancelable(true);
-            pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        }
-        if(enabled){
-            pd.show();
-        } else {
-            pd.dismiss();
-        }
-    }
-
     public KcpService getKcpService(){
         if(mKcpService == null) mKcpService = ServiceFactory.createRetrofitService(mContext, new HeaderFactory().getHeaders(), KcpService.class, Constants.URL_BASE);
         return mKcpService;
     }
 
     public void downloadFingerPrintingCategories(){
-        Call<KcpContentPage> call = getKcpService().getCategories(Constants.URL_FINGERPRINTING_CATEGORIES, Constants.QUERY_PAGE, Constants.QUERY_PER_PAGE);
+        Call<KcpContentPage> call = getKcpService().getContentPage(Constants.URL_FINGERPRINTING_CATEGORIES, Constants.QUERY_PAGE, Constants.QUERY_PER_PAGE);
         call.enqueue(new Callback<KcpContentPage>() {
             @Override
             public void onResponse(Call<KcpContentPage> call, Response<KcpContentPage> response) {
@@ -89,7 +76,7 @@ public class KcpCategoryManager {
     }
 
     public void downloadCategories(){
-        Call<KcpContentPage> call = getKcpService().getCategories(Constants.URL_CATEGORIES, Constants.QUERY_PAGE, Constants.QUERY_PER_PAGE);
+        Call<KcpContentPage> call = getKcpService().getContentPage(Constants.URL_CATEGORIES, Constants.QUERY_PAGE, Constants.QUERY_PER_PAGE);
         call.enqueue(new Callback<KcpContentPage>() {
             @Override
             public void onResponse(Call<KcpContentPage> call, Response<KcpContentPage> response) {
@@ -115,8 +102,14 @@ public class KcpCategoryManager {
         });
     }
 
+    /**
+     *
+     * @param externalCode
+     * @param url
+     * @param callbackExist when preparing the sub categories, callback doesn't exist.
+     */
     public void downloadSubCategories(final String externalCode, String url, final boolean callbackExist){
-        handleState(DOWNLOAD_STARTED);
+        if(callbackExist) handleState(DOWNLOAD_STARTED);
         Call<KcpContentPage> call = getKcpService().getCorePage(url);
         call.enqueue(new Callback<KcpContentPage>() {
             @Override
@@ -136,7 +129,7 @@ public class KcpCategoryManager {
         });
     }
 
-    public void downloadPlaces(final String externalCode, String url){
+    public void downloadPlacesForThisCategoryExternalId(final String externalCode, String url){
         handleState(DOWNLOAD_STARTED);
         Call<KcpContentPage> call = getKcpService().getCorePage(url);
         call.enqueue(new Callback<KcpContentPage>() {
@@ -145,8 +138,7 @@ public class KcpCategoryManager {
                 if(response.isSuccessful()){
                     KcpCategoryRoot kcpCategoryRoot = KcpCategoryRoot.getInstance();
                     KcpContentPage kcpCorePage = response.body();
-
-                    kcpCategoryRoot.setPlacesMap(externalCode, kcpCorePage.getKcpEmbedded().getPlaceList());
+                    kcpCategoryRoot.setPlacesMap(externalCode, kcpCorePage.getKcpEmbedded().getPlaceList(), true);
                     handleState(DOWNLOAD_COMPLETE);
                 }
             }
@@ -158,7 +150,7 @@ public class KcpCategoryManager {
         });
     }
 
-    public void downloadPlacesWithCategoryIds(ArrayList categoryIds){
+    public void downloadPlacesForTheseCategoryIds(ArrayList categoryIds){
         String categories = Utility.convertArrayListToStringWithComma(categoryIds);
         Call<KcpContentPage> call = getKcpService().getPlacesWithCategories(Constants.URL_PLACES, Constants.QUERY_PAGE, Constants.QUERY_PER_PAGE, categories);
         call.enqueue(new Callback<KcpContentPage>() {
@@ -167,7 +159,7 @@ public class KcpCategoryManager {
                 if(response.isSuccessful()){
                     KcpCategoryRoot kcpCategoryRoot = KcpCategoryRoot.getInstance();
                     KcpContentPage kcpCorePage = response.body();
-                    kcpCategoryRoot.setPlacesList(kcpCorePage.getKcpEmbedded().getFilterdPlaceList(KcpPlaces.PLACE_TYPE_STORE));
+                    kcpCategoryRoot.setPlacesList(kcpCorePage.getKcpPlaces(KcpPlaces.PLACE_TYPE_STORE), true);
                     handleState(DOWNLOAD_COMPLETE);
                 }
             }
@@ -242,13 +234,13 @@ public class KcpCategoryManager {
         message.obj = mode;
         switch (state){
             case DOWNLOAD_STARTED:
-                showProgressDialog(true);
+                ProgressBarWhileDownloading.showProgressDialog(mContext, true);
                 break;
             case DOWNLOAD_FAILED:
-                showProgressDialog(false);
+                ProgressBarWhileDownloading.showProgressDialog(mContext, false);
                 break;
             case DOWNLOAD_COMPLETE:
-                showProgressDialog(false);
+                ProgressBarWhileDownloading.showProgressDialog(mContext, false);
                 break;
             case DATA_ADDED:
                 break;

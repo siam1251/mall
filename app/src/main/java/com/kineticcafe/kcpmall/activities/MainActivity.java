@@ -34,7 +34,8 @@ import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.HomeBottomTapAdapter;
 import com.kineticcafe.kcpmall.fragments.DirectoryFragment;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
-import com.kineticcafe.kcpmall.fragments.StoresFragment;
+import com.kineticcafe.kcpmall.fragments.PlacesFragment;
+import com.kineticcafe.kcpmall.fragments.TestFragment;
 import com.kineticcafe.kcpmall.kcpData.KcpDataListener;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 
@@ -197,8 +198,8 @@ public class MainActivity extends AppCompatActivity
 
         fragmentList.add(HomeFragment.getInstance());
         fragmentList.add(DirectoryFragment.getInstance());
-        fragmentList.add(new StoresFragment());
-        fragmentList.add(new StoresFragment());
+        fragmentList.add(new TestFragment());
+        fragmentList.add(new TestFragment());
     }
 
     /**

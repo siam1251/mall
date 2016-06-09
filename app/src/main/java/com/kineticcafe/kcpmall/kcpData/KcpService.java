@@ -34,7 +34,7 @@ public interface KcpService {
             @Query("perpage") String perpage);
 
     @GET
-    Call<KcpContentPage> getCategories(
+    Call<KcpContentPage> getContentPage(
             @Url String url,
             @Query("page") String page,
             @Query("perpage") String perpage);

@@ -193,6 +193,9 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     ((Activity)mContext).startActivityForResult(new Intent(mContext, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//                    ((Activity)mContext).overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+//                    ((Activity)mContext).overridePendingTransition(R.anim.righttoleft, R.anim.stable);
+
                 }
             });
 
@@ -213,6 +216,10 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     ((Activity)mContext).startActivityForResult(new Intent(mContext, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//                    ((Activity)mContext).overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+//                    ((Activity)mContext).overridePendingTransition(R.anim.righttoleft, R.anim.stable);
+
+
                 }
             });
 

@@ -2,6 +2,7 @@ package com.kineticcafe.kcpmall.adapters;
 
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,7 +25,6 @@ import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.utility.Utility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Kay on 2016-05-05.
@@ -119,7 +119,7 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_interested_category,
                                 parent,
                                 false));
-            case KcpContentTypeFactory.PREF_ITEM_TYPE_STORE:
+            case KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE:
                 return new InterestedStoreHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_interested_store,
                                 parent,
@@ -132,9 +132,11 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
         if(selected){
             cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.themeColor));
             textView.setTextColor(mContext.getResources().getColor(R.color.white));
+            textView.setTypeface(null, Typeface.BOLD);
         } else {
             cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.intrstd_card_bg));
             textView.setTextColor(mContext.getResources().getColor(R.color.intrstd_txt));
+            textView.setTypeface(null, Typeface.NORMAL);
         }
     }
 
@@ -174,7 +176,7 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                 param.addRule(relativeLayotRule);
                 interestedCategoryHolder.cvIntrst.setLayoutParams(param);
             }
-        } else if (holder.getItemViewType() == KcpContentTypeFactory.PREF_ITEM_TYPE_STORE) {
+        } else if (holder.getItemViewType() == KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE) {
             final InterestedStoreHolder interestedStoreHolder = (InterestedStoreHolder) holder;
             final KcpPlaces kcpPlaces = mKcpPlacesList.get(position);
 
@@ -225,7 +227,7 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         if(mInterestType.equals(InterestType.CATEGORY)) return KcpContentTypeFactory.PREF_ITEM_TYPE_CAT;
-        else if(mInterestType.equals(InterestType.STORE)) return KcpContentTypeFactory.PREF_ITEM_TYPE_STORE;
+        else if(mInterestType.equals(InterestType.STORE)) return KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE;
         else return 0;
     }
 

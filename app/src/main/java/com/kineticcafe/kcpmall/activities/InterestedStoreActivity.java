@@ -152,6 +152,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
             @Override
             public void okClicked() {
                 finish();
+//                overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
             }
         });
     }

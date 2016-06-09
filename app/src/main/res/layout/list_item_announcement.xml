@@ -2,7 +2,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -54,7 +54,8 @@
                 >
 
 
-                <TextView
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_medium"
                     android:layout_marginTop="@dimen/ancmt_desc_top_margin"
                     android:gravity="center_vertical"
                     android:layout_width="wrap_content"
