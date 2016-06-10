@@ -5,6 +5,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
@@ -12,6 +15,7 @@ import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.service.ServiceFactory;
+import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.utility.Utility;
@@ -79,20 +83,29 @@ public class KcpCategoryManager {
         Call<KcpContentPage> call = getKcpService().getContentPage(Constants.URL_CATEGORIES, Constants.QUERY_PAGE, Constants.QUERY_PER_PAGE);
         call.enqueue(new Callback<KcpContentPage>() {
             @Override
-            public void onResponse(Call<KcpContentPage> call, Response<KcpContentPage> response) {
-                if(response.isSuccessful()){
-                    KcpCategoryRoot kcpCategoryRoot = KcpCategoryRoot.getInstance();
-                    KcpContentPage kcpCorePage = response.body();
-                    ArrayList<KcpCategories> categoriesList = kcpCorePage.getKcpEmbedded().getCategoryList();
-                    kcpCategoryRoot.setCategoriesList(categoriesList);
-                    handleState(DOWNLOAD_COMPLETE);
+            public void onResponse(Call<KcpContentPage> call, final Response<KcpContentPage> response) {
 
-                    for(KcpCategories kcpCategories : categoriesList) {
-                        String externalCode = kcpCategories.getExternalCode();
-                        String subCategoriesUrl = kcpCategories.getSubCategoriesLink();
-                        downloadSubCategories(externalCode, subCategoriesUrl, false);
+                Thread mSplashThread = new Thread() {
+                    @Override
+                    public void run() {
+                        if(response.isSuccessful()){
+                            KcpCategoryRoot kcpCategoryRoot = KcpCategoryRoot.getInstance();
+                            KcpContentPage kcpCorePage = response.body();
+                            ArrayList<KcpCategories> categoriesList = kcpCorePage.getKcpEmbedded().getCategoryList();
+                            kcpCategoryRoot.setCategoriesList(categoriesList);
+                            handleState(DOWNLOAD_COMPLETE);
+
+                            for(KcpCategories kcpCategories : categoriesList) {
+                                String externalCode = kcpCategories.getExternalCode();
+                                String subCategoriesUrl = kcpCategories.getSubCategoriesLink();
+                                downloadSubCategories(externalCode, subCategoriesUrl, false);
+                            }
+                        }
                     }
-                }
+                };
+                mSplashThread.start();
+
+
             }
 
             @Override

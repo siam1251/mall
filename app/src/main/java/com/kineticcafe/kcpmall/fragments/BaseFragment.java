@@ -1,6 +1,8 @@
 package com.kineticcafe.kcpmall.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
@@ -19,6 +21,15 @@ public class BaseFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof MainActivity) {
             mMainActivity = (MainActivity) context;
+            if(mListener != null) mListener.onFragmentInteraction();
         }
+    }
+
+    private OnFragmentInteractionListener mListener;
+    public void setOnFragmentInteractionListener(OnFragmentInteractionListener listener){
+        mListener = listener;
+    }
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction();
     }
 }

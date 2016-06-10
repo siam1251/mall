@@ -22,15 +22,12 @@ import com.kineticcafe.kcpmall.R;
  * Created by Kay on 2016-06-08.
  */
 public class ProgressBarWhileDownloading {
-    public interface DialogAnsweredListener{
-        void okClicked();
-    }
-
     private static ProgressDialog pd;
     private static View progressBarView;
     private static FrameLayout parentLayout;
+    private static Context mContext;
 
-    public static void showProgressDialog(Context context, boolean enabled){
+    public static void showProgressDialog(Context context, final boolean enabled){
         /*if(pd == null) {
             pd = new ProgressDialog(context, R.style.ProgressBarStyle);
             pd.setProgressStyle(android.R.attr.progressBarStyleLarge);
@@ -43,25 +40,38 @@ public class ProgressBarWhileDownloading {
             pd.dismiss();
         }*/
 
-        if(parentLayout != null && progressBarView != null) {
-            parentLayout.removeView(progressBarView);
+        if(mContext != null && parentLayout != null && progressBarView != null) {
+            ((Activity)mContext).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    parentLayout.removeView(progressBarView);
+                }
+            });
         }
 
-        LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        parentLayout = (FrameLayout)((Activity)context).getWindow().getDecorView().findViewById(android.R.id.content);
-        progressBarView = vi.inflate(R.layout.layout_loading_item, null);
-        progressBarView.setOnTouchListener(new View.OnTouchListener() {
+        mContext = context;
+        ((Activity)mContext).runOnUiThread(new Runnable() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                parentLayout.removeView(progressBarView);
-                return false;
+            public void run() {
+                LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                parentLayout = (FrameLayout)((Activity)mContext).getWindow().getDecorView().findViewById(android.R.id.content);
+                progressBarView = vi.inflate(R.layout.layout_loading_item, null);
+                progressBarView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        parentLayout.removeView(progressBarView);
+                        return false;
+                    }
+                });
+
+                if(enabled){
+                    parentLayout.addView(progressBarView);
+                } else {
+                    parentLayout.removeView(progressBarView);
+                }
             }
         });
 
-        if(enabled){
-            parentLayout.addView(progressBarView);
-        } else {
-            parentLayout.removeView(progressBarView);
-        }
+
     }
 }

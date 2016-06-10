@@ -62,7 +62,6 @@ public class DealsFragment extends BaseFragment {
             }
         });
 
-
         return view;
     }
 

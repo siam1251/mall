@@ -80,7 +80,8 @@
     <!--PLACE-->
     <color name="place_txt">#dd000000</color>
     <color name="place_category_txt">#84000000</color>
-
+    <!--SECTION-->
+    <color name="section_place_txt">#de000000</color>
     <color name="empty_state_msg_text">#894a4a4a</color>
 
 </resources>

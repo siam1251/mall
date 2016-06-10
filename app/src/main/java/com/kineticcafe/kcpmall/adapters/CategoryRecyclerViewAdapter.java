@@ -15,6 +15,7 @@ import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DirectoryFragment;
+import com.kineticcafe.kcpmall.views.ProgressBarWhileDownloading;
 
 import java.util.ArrayList;
 

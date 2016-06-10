@@ -58,7 +58,7 @@ public class SubCategoryActivity extends AppCompatActivity {
     private void setupSubCatRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        ArrayList<KcpCategories> kcpCategories = KcpCategoryRoot.getInstance().getSubcategories(mExternalCode);
+        ArrayList<KcpCategories> kcpCategories = new ArrayList<KcpCategories>(KcpCategoryRoot.getInstance().getSubcategories(mExternalCode));
 
         KcpCategories currentCategory = KcpCategoryRoot.getInstance().getCategory(mExternalCode);
         if(currentCategory != null) kcpCategories.add(0, currentCategory);

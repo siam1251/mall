@@ -43,10 +43,6 @@ public class DirectoryFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        downloadCategories();
-        downloadPlaces();
-
     }
 
     @Override
@@ -63,6 +59,21 @@ public class DirectoryFragment extends BaseFragment {
         updateCategoryAdapter();
 
         return view;
+    }
+
+    public void initializeDirectoryData(){
+        if(getActivity() == null){
+            setOnFragmentInteractionListener(new OnFragmentInteractionListener() {
+                @Override
+                public void onFragmentInteraction() {
+                    downloadCategories();
+                    downloadPlaces();
+                }
+            });
+        } else {
+            downloadCategories();
+            downloadPlaces();
+        }
     }
 
 
@@ -85,7 +96,8 @@ public class DirectoryFragment extends BaseFragment {
 
     private void updatePlacesAdapter(){
         try {
-            if(mPlacesFragment != null && mPlacesFragment.mPlaceRecyclerViewAdapter != null) mPlacesFragment.mPlaceRecyclerViewAdapter.updateData(KcpPlacesRoot.getInstance().getPlacesList());
+//            if(mPlacesFragment != null && mPlacesFragment.mPlaceRecyclerViewAdapter != null) mPlacesFragment.mPlaceRecyclerViewAdapter.updateData(KcpPlacesRoot.getInstance().getPlacesList());
+            if(mPlacesFragment != null && mPlacesFragment.mPlaceRecyclerViewAdapter != null) mPlacesFragment.setupRecyclerView();
         } catch (Exception e) {
             logger.error(e);
         }
@@ -123,10 +135,9 @@ public class DirectoryFragment extends BaseFragment {
         intent.putExtra(Constants.ARG_CAT_NAME, categoryName);
 
         String transitionCatName = getActivity().getResources().getString(R.string.transition_category_name);
-
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 getActivity(),
-                Pair.create(view, transitionCatName));
+                Pair.create(view, ""));
 
         ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
         getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -198,10 +209,9 @@ public class DirectoryFragment extends BaseFragment {
         intent.putExtra(Constants.ARG_CAT_NAME, categoryName);
 
         String transitionCatName = context.getResources().getString(R.string.transition_category_name);
-
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 (Activity)context,
-                Pair.create(view, transitionCatName));
+                Pair.create(view, ""));
 
         ActivityCompat.startActivity(((Activity)context), intent, options.toBundle());
         ((Activity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

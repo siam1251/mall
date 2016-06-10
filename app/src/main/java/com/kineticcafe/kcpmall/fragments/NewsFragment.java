@@ -71,7 +71,6 @@ public class NewsFragment extends BaseFragment {
         if(mMainActivity != null) mMainActivity.setEmptyState(tvEmptyState, warningMsg);
     }
 
-
     private void setupRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);

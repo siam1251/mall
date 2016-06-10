@@ -6,6 +6,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.utility.Utility;
 
 /**
  * Created by Kay on 2016-05-06.
@@ -44,8 +46,10 @@ public class GlideFactory {
                 .load(url)
                 .crossFade()
                 .error(errorDrawable)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .dontAnimate()
+                .override(Utility.getScreenWidth(context), (int) (Utility.getScreenWidth(context) / Utility.getFloat(context, R.dimen.ancmt_image_ratio)))
+//                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .dontAnimate()
                 .placeholder(errorDrawable)
                 .into(imageView);
     }

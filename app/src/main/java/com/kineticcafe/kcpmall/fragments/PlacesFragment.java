@@ -10,16 +10,23 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.MainActivity;
 import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.adapters.adapterHelper.IndexableRecylerView;
+import com.kineticcafe.kcpmall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PlacesFragment extends BaseFragment {
     public CategoryStoreRecyclerViewAdapter mPlaceRecyclerViewAdapter;
     private TextView tvEmptyState;
+    private IndexableRecylerView rvNews;
 
     public static PlacesFragment newInstance() {
         PlacesFragment fragment = new PlacesFragment();
@@ -36,11 +43,11 @@ public class PlacesFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
+        View view = inflater.inflate(R.layout.fragment_recyclerview_indexablle, container, false);
         final SwipeRefreshLayout srl = (SwipeRefreshLayout) view.findViewById(R.id.srl);
-        RecyclerView rvNews = (RecyclerView) view.findViewById(R.id.rv);
+        rvNews = (IndexableRecylerView) view.findViewById(R.id.rv);
         rvNews.setNestedScrollingEnabled(true);
-        setupRecyclerView(rvNews);
+        setupRecyclerView();
 
         tvEmptyState = (TextView) view.findViewById(R.id.tvEmptyState);
 
@@ -62,15 +69,42 @@ public class PlacesFragment extends BaseFragment {
         return view;
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
+    public void setupRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
+        rvNews.setLayoutManager(linearLayoutManager);
+        rvNews.setLayoutManager(linearLayoutManager);
 
-        recyclerView.setLayoutManager(linearLayoutManager);
+        ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList();
         mPlaceRecyclerViewAdapter = new CategoryStoreRecyclerViewAdapter(
                 getActivity(),
-                KcpPlacesRoot.getInstance().getPlacesList(), KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE);
-        recyclerView.setAdapter(mPlaceRecyclerViewAdapter);
-    }
+                kcpPlaces, KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE);
 
+        List<SectionedLinearRecyclerViewAdapter.Section> sections =
+                new ArrayList<SectionedLinearRecyclerViewAdapter.Section>();
+        List<String> sectionName = new ArrayList<String>();
+        List<Integer> sectionPosition = new ArrayList<Integer>();
+        String startLetter = null;
+        for(int i = 0; i < kcpPlaces.size(); i++){
+            String currentStoreNameStartLetter = String.valueOf(kcpPlaces.get(i).getPlaceName().toUpperCase().charAt(0));
+            if(startLetter == null || !startLetter.equals(currentStoreNameStartLetter)) {
+                startLetter = currentStoreNameStartLetter;
+                sections.add(new SectionedLinearRecyclerViewAdapter.Section(i, startLetter));
+                sectionName.add(startLetter);
+                sectionPosition.add(i + sections.size());
+            }
+        }
+
+        rvNews.setFastScrollEnabled(true);
+        rvNews.setIndexAdapter(sectionName, sectionPosition);
+
+        SectionedLinearRecyclerViewAdapter.Section[] dummy = new SectionedLinearRecyclerViewAdapter.Section[sections.size()];
+        SectionedLinearRecyclerViewAdapter mSectionedAdapter = new SectionedLinearRecyclerViewAdapter(
+                getActivity(),
+                R.layout.list_section_place,
+                R.id.section_text,
+                rvNews,
+                mPlaceRecyclerViewAdapter);
+        mSectionedAdapter.setSections(sections.toArray(dummy));
+        rvNews.setAdapter(mSectionedAdapter);
+    }
 }

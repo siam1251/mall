@@ -16,7 +16,9 @@
         android:id="@+id/ivDealLogo"
         android:layout_width="@dimen/place_image_width"
         android:layout_height="wrap_content"
+        android:transitionName="@string/transition_news_logo"
         />
+        android:transitionName="@string/transition_news_image"
 
     <LinearLayout
         android:orientation="vertical"

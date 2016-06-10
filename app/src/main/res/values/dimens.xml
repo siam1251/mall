@@ -157,6 +157,10 @@
     <dimen name="place_txt">16sp</dimen>
     <dimen name="place_category_txt">14sp</dimen>
 
+    <!--SECTION-->
+    <dimen name="section_place_height">55dp</dimen>
+    <dimen name="section_place_text">14sp</dimen>
+
     <!--etc-->
     <dimen name="button_corner_radius">2dp</dimen>
     <dimen name="toolbar_elevation">2dp</dimen>

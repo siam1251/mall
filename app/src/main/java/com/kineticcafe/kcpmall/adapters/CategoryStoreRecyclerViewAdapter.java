@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -42,11 +43,11 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         mContentType = contentType;
     }
 
-    public void updateData(ArrayList<KcpPlaces> kcpPlaces) {
+    /*public void updateData(ArrayList<KcpPlaces> kcpPlaces) {
         mKcpPlacesList.clear();
         mKcpPlacesList.addAll(kcpPlaces);
         notifyDataSetChanged();
-    }
+    }*/
 
     public class StoreViewHolder extends RecyclerView.ViewHolder {
         public View mView;
@@ -74,6 +75,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
             tvDealTitle = (TextView)  v.findViewById(R.id.tvDealTitle);
             tvExpiryDate = (TextView)  v.findViewById(R.id.tvExpiryDate);
             ivFav         = (ImageView)  v.findViewById(R.id.ivFav);
+            v.setTag(this);
         }
     }
 
@@ -111,7 +113,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         String display = kcpPlace.getFirstDisplay();
         storeViewHolder.tvDealTitle.setText(display);
 
-        if (holder.getItemViewType() == KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE) {
+        if (getItemViewType(position) == KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE) {
             storeViewHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -129,20 +131,21 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
 
-                    String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
+                    String transitionNameLogo = mContext.getResources().getString(R.string.transition_news_logo);
                     String transitionNameFav = mContext.getResources().getString(R.string.transition_fav);
 
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             (Activity)mContext,
-                            Pair.create((View)storeViewHolder.ivDealLogo, transitionNameImage),
+                            Pair.create((View)storeViewHolder.ivDealLogo, transitionNameLogo),
                             Pair.create((View)storeViewHolder.ivFav, transitionNameFav));
 
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             });
-        } else if (holder.getItemViewType() == KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE) {
+        } else if (getItemViewType(position) == KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE) {
 
+            storeViewHolder.mView.setTag(position);
             storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -152,11 +155,10 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
 
-                    String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
-
+                    String transitionNameLogo = mContext.getResources().getString(R.string.transition_news_logo);
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             (Activity)mContext,
-                            Pair.create((View)storeViewHolder.ivDealLogo, transitionNameImage));
+                            Pair.create((View)storeViewHolder.ivDealLogo, transitionNameLogo));
 
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

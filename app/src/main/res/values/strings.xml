@@ -39,6 +39,7 @@
 
     <!--transition-->
     <string name="transition_news_image">transition news image</string>
+    <string name="transition_news_logo">transition news logo</string>
     <string name="transition_news_expiry_date">transition expiry date</string>
     <string name="transition_fav">transition fav</string>
     <string name="transition_category_name">transition category name</string>

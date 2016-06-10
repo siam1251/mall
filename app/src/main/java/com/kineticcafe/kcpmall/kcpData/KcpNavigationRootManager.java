@@ -15,6 +15,7 @@ import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
+import com.kineticcafe.kcpmall.views.ProgressBarWhileDownloading;
 
 import java.util.ArrayList;
 
@@ -139,8 +140,10 @@ public class KcpNavigationRootManager {
         message.obj = mode;
         switch (state){
             case DOWNLOAD_FAILED:
+                ProgressBarWhileDownloading.showProgressDialog(mContext, false);
                 break;
             case DOWNLOAD_COMPLETE:
+                ProgressBarWhileDownloading.showProgressDialog(mContext, false);
                 break;
             case DATA_ADDED:
                 break;

@@ -41,8 +41,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
     public DealsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> recommendedDeals, ArrayList<KcpContentPage> otherDeals) {
         mContext = context;
 
-        mKcpContentPagesRecommendedDeals = recommendedDeals;
-        mKcpContentPagesOtherDeals = otherDeals;
+        mKcpContentPagesRecommendedDeals = recommendedDeals == null ? new ArrayList<KcpContentPage>() : recommendedDeals;
+        mKcpContentPagesOtherDeals = otherDeals == null ? new ArrayList<KcpContentPage>() : otherDeals;
 
         createItems();
     }
@@ -62,7 +62,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             mItems.addAll(mKcpContentPagesRecommendedDeals);
             mItems.add(KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST);
         } else {
-            mItems.add(KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST);
+            if(otherDealsExist) mItems.add(KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST); //meaning the entire lists are empty
         }
 
         if(otherDealsExist){

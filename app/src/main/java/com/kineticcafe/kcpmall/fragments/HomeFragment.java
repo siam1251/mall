@@ -24,6 +24,7 @@ import com.kineticcafe.kcpmall.kcpData.KcpCategoryManager;
 import com.kineticcafe.kcpmall.kcpData.KcpNavigationRootManager;
 import com.kineticcafe.kcpmall.kcpData.KcpSocialFeedManager;
 import com.kineticcafe.kcpmall.twitter.model.TwitterTweet;
+import com.kineticcafe.kcpmall.views.ProgressBarWhileDownloading;
 
 import java.util.ArrayList;
 
@@ -47,7 +48,6 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializeHomeData();
     }
 
     @Override
@@ -74,15 +74,15 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void initializeHomeData(){
-        if(!Utility.isNetworkAvailable(getActivity())){
-            mMainActivity.onDataDownloaded(); //TODO: error here when offline
-            mMainActivity.showSnackBar(R.string.warning_no_internet_connection, R.string.warning_retry, new View.OnClickListener() {
+        if(getActivity() == null){
+            setOnFragmentInteractionListener(new OnFragmentInteractionListener() {
                 @Override
-                public void onClick(View v) {
-                    initializeHomeData();
+                public void onFragmentInteraction() {
+                    downloadNewsAndDeal();
+                    downloadSocialFeeds();
+                    downloadFingerPrintingCategories();
                 }
             });
-            return;
         } else {
             downloadNewsAndDeal();
             downloadSocialFeeds();
@@ -225,7 +225,7 @@ public class HomeFragment extends BaseFragment {
     private void updateAdapter(String mode){
         try {
             KcpNavigationPage kcpNavigationPage = KcpNavigationRoot.getInstance().getNavigationpage(mode);
-            if(kcpNavigationPage != null){
+            if(kcpNavigationPage != null && kcpNavigationPage.getKcpContentPageList(true) != null){
                 if(mode.equals(Constants.EXTERNAL_CODE_FEED)) updateNewsAdapter(kcpNavigationPage.getKcpContentPageList(true));
                 else if(mode.equals(Constants.EXTERNAL_CODE_DEAL)) updateOtherDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
                 else if(mode.equals(Constants.EXTERNAL_CODE_RECOMMENDED)) updateRecommendedDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));

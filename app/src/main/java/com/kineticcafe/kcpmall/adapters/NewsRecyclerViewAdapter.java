@@ -48,7 +48,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public NewsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> news) {
         mContext = context;
-        mKcpContentPagesNews = news;
+        mKcpContentPagesNews = news == null ? new ArrayList<KcpContentPage>() : news;
     }
 
     public void updateData(ArrayList<KcpContentPage> kcpContentPages) {
