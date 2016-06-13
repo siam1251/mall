@@ -88,7 +88,7 @@ public class DirectoryFragment extends BaseFragment {
 
     private void updateCategoryAdapter(){
         try {
-            if(mCategoriesFragment != null && mCategoriesFragment.mCategoryRecyclerViewAdapter != null) mCategoriesFragment.mCategoryRecyclerViewAdapter.updateData(CategoryIconFactory.getFilteredKcpCategoryList());
+            if(mCategoriesFragment != null && mCategoriesFragment.mCategoryRecyclerViewAdapter != null) mCategoriesFragment.mCategoryRecyclerViewAdapter.updateData(CategoryIconFactory.getFilteredKcpCategoryList(KcpCategoryRoot.getInstance().getCategoriesList()));
         } catch (Exception e) {
             logger.error(e);
         }
@@ -139,7 +139,8 @@ public class DirectoryFragment extends BaseFragment {
                 getActivity(),
                 Pair.create(view, ""));
 
-        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+//        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+        getActivity().startActivity(intent);
         getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
@@ -213,7 +214,8 @@ public class DirectoryFragment extends BaseFragment {
                 (Activity)context,
                 Pair.create(view, ""));
 
-        ActivityCompat.startActivity(((Activity)context), intent, options.toBundle());
+//        ActivityCompat.startActivity(((Activity)context), intent, options.toBundle());
+        getActivity().startActivity(intent);
         ((Activity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 

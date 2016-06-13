@@ -235,6 +235,13 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
+
+    private void removeDuplicates(){
+
+
+
+    }
+
     private void updateNewsAdapter(ArrayList<KcpContentPage> kcpContentPages){
         if(mNewsFragment.mNewsRecyclerViewAdapter == null) return;
         mMainActivity.onDataDownloaded();

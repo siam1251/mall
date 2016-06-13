@@ -23,6 +23,7 @@ import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.InterestRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.kcpData.KcpCategoryManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
@@ -42,6 +43,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intrstd_category);
+//        setContentView(R.layout.activity_intrstd_store);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -88,17 +90,19 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
     public static class GridLayoutItem {
         public int spanCount;
-        public int relativeLayotRule;
+        public int relativeLayoutRule;
 
         public GridLayoutItem(int spanCount, int relativelayoutRule){
             this.spanCount = spanCount;
-            this.relativeLayotRule = relativelayoutRule;
+            this.relativeLayoutRule = relativelayoutRule;
         }
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         final int maxSpanCount = 100;
-        ArrayList<KcpCategories> kcpCategoriesArrayList = KcpCategoryRoot.getInstance().getFingerPrintCategoriesList();
+//        ArrayList<KcpCategories> kcpCategoriesArrayList = KcpCategoryRoot.getInstance().getFingerPrintCategoriesList();
+        ArrayList<KcpCategories> kcpCategoriesArrayList = CategoryIconFactory.getFilteredKcpCategoryList(KcpCategoryRoot.getInstance().getFingerPrintCategoriesList());
+
         final ArrayList<GridLayoutItem> gridLayoutItemArrayList = new ArrayList<GridLayoutItem>();
 
         float txtMar = getResources().getDimension(R.dimen.intrst_card_txt_horizontal_margin);
@@ -158,6 +162,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
             }
         });
         recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.setHasFixedSize(true);
 
         mInterestRecyclerViewAdapter = new InterestRecyclerViewAdapter(this, kcpCategoriesArrayList, gridLayoutItemArrayList);
         recyclerView.setAdapter(mInterestRecyclerViewAdapter);
@@ -170,7 +175,8 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
     public float getTextSize(String string){
         Paint p = new Paint();
-        p.setTextSize(getResources().getDimension(R.dimen.intrstd_name));
+//        p.setTextSize(getResources().getDimension(R.dimen.intrstd_name));
+        p.setTextSize(Utility.dpToPx(this, 15));
         return p.measureText(string);
     }
 

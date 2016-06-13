@@ -68,7 +68,7 @@ public class CategoriesFragment extends BaseFragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         mCategoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter(
                 getActivity(),
-                CategoryIconFactory.getFilteredKcpCategoryList(), KcpContentTypeFactory.PREF_ITEM_TYPE_CAT);
+                CategoryIconFactory.getFilteredKcpCategoryList(KcpCategoryRoot.getInstance().getCategoriesList()), KcpContentTypeFactory.PREF_ITEM_TYPE_CAT);
         recyclerView.setAdapter(mCategoryRecyclerViewAdapter);
     }
 

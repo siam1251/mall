@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:text="@string/intrstd_cat_recommended_section_header"
+    android:layout_marginLeft="@dimen/intrstd_cat_desc_horizontal_margin"
+    android:layout_marginRight="@dimen/intrstd_cat_desc_horizontal_margin"
+    android:layout_marginTop="@dimen/intrstd_cat_desc_top_margin"
+    android:layout_marginBottom="@dimen/intrstd_cat_desc_top_margin"
+    android:textAlignment="center"
+    android:gravity="center"
+    android:id="@+id/tvIntrstdCatDesc"
+    android:layout_width="match_parent"
+    android:textSize="@dimen/intrstd_cat_desc_txt_size"
+    android:textColor="@color/intrstd_cat_desc"
+    android:layout_height="@dimen/intrstd_cat_txt_height"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

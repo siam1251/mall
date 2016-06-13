@@ -6,6 +6,9 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.utility.Utility;
 
@@ -47,6 +50,20 @@ public class GlideFactory {
                 .crossFade()
                 .error(errorDrawable)
                 .override(Utility.getScreenWidth(context), (int) (Utility.getScreenWidth(context) / Utility.getFloat(context, R.dimen.ancmt_image_ratio)))
+//                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .dontAnimate()
+                .placeholder(errorDrawable)
+                .into(imageView);
+    }
+
+    public void glideWithDefaultRatio(final Context context, final String url, final ImageView imageView, final int errorDrawable, int width){
+        if(imageView == null || url == null) return;
+        Glide.with(context)
+                .load(url)
+                .crossFade()
+                .error(errorDrawable)
+                .override(Utility.getScreenWidth(context), (int) (width / Utility.getFloat(context, R.dimen.ancmt_image_ratio)))
 //                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
 //                .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                .dontAnimate()

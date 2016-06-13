@@ -43,12 +43,6 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         mContentType = contentType;
     }
 
-    /*public void updateData(ArrayList<KcpPlaces> kcpPlaces) {
-        mKcpPlacesList.clear();
-        mKcpPlacesList.addAll(kcpPlaces);
-        notifyDataSetChanged();
-    }*/
-
     public class StoreViewHolder extends RecyclerView.ViewHolder {
         public View mView;
         public RelativeLayout rlDeal;
@@ -82,10 +76,10 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType){
-            case KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE:
+            case KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE: //Categorized Store list (gridlayout)
                 return new StoreViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_deal, parent, false));
-            case KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE:
+            case KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE: //A to Z store list
                 return new StoreViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_place, parent, false));
         }

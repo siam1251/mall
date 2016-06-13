@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpNavigationPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
@@ -41,8 +43,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
     public DealsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> recommendedDeals, ArrayList<KcpContentPage> otherDeals) {
         mContext = context;
 
-        mKcpContentPagesRecommendedDeals = recommendedDeals == null ? new ArrayList<KcpContentPage>() : recommendedDeals;
-        mKcpContentPagesOtherDeals = otherDeals == null ? new ArrayList<KcpContentPage>() : otherDeals;
+        mKcpContentPagesRecommendedDeals = recommendedDeals == null ? new ArrayList<KcpContentPage>() : new ArrayList<KcpContentPage>(recommendedDeals);
+        mKcpContentPagesOtherDeals = otherDeals == null ? new ArrayList<KcpContentPage>() : new ArrayList<KcpContentPage>(otherDeals);
 
         createItems();
     }
@@ -50,6 +52,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
     public void createItems(){
         if(mItems == null) mItems = new ArrayList<>();
         else mItems.clear();
+
+        removeDuplicateFromOtherDeals();
 
         int sizeOfRecommendedDeals = mKcpContentPagesRecommendedDeals == null ? 0 : mKcpContentPagesRecommendedDeals.size();
         int sizeOfOtherDeals = mKcpContentPagesOtherDeals == null ? 0 : mKcpContentPagesOtherDeals.size();
@@ -73,7 +77,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public void updateRecommendedDealData(ArrayList<KcpContentPage> recommendedDeals) {
         mKcpContentPagesRecommendedDeals.clear();
-        mKcpContentPagesRecommendedDeals.addAll(recommendedDeals);
+        mKcpContentPagesRecommendedDeals.addAll(recommendedDeals); //TESTING
         createItems();
         notifyDataSetChanged();
     }
@@ -83,6 +87,16 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         mKcpContentPagesOtherDeals.addAll(otherDeals);
         createItems();
         notifyDataSetChanged();
+    }
+
+    private void removeDuplicateFromOtherDeals(){
+        if(mKcpContentPagesOtherDeals != null && mKcpContentPagesRecommendedDeals != null){
+            for(KcpContentPage kcpContentPageRecommended : mKcpContentPagesRecommendedDeals){
+                if(mKcpContentPagesOtherDeals.contains(kcpContentPageRecommended)){
+                    mKcpContentPagesOtherDeals.remove(kcpContentPageRecommended);
+                }
+            }
+        }
     }
 
 

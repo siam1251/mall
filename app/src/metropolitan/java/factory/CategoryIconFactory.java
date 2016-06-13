@@ -12,6 +12,8 @@ import java.util.HashMap;
  */
 public class CategoryIconFactory {
 
+    private static final String[] mCategoryExclusion = {"Parking", "ANC", "Common Area", "Common Areas"};
+
     private static final String EXTERNAL_CODE_BEAUTY_AND_HEALTH           = "7";
     private static final String EXTERNAL_BOOKS_CARDS_AND_SPECIALTY        = "9";
     private static final String EXTERNAL_CODE_DEPARTMENT_AND_VARIETY      = "11";
@@ -74,18 +76,26 @@ public class CategoryIconFactory {
         return 0;
     }
 
-    public static ArrayList<KcpCategories> getFilteredKcpCategoryList(){
-        ArrayList<KcpCategories> categoriesArrayList = KcpCategoryRoot.getInstance().getCategoriesList();
+    public static ArrayList<KcpCategories> getFilteredKcpCategoryList(ArrayList<KcpCategories> categoriesArrayList){
         ArrayList<KcpCategories> filteredCategoriesList = new ArrayList<>();
 
         //filter the categorylist to exclude ANC, Common Area, Common Areas, Parking that are not defined in CategoryHashMap in CategoryIconFactory
-        for(KcpCategories kcpCategory : categoriesArrayList){
+        /*for(KcpCategories kcpCategory : categoriesArrayList){
             String externalCode = kcpCategory.getExternalCode();
             int drawableId = CategoryIconFactory.getCategoryIcon(externalCode);
             if(drawableId != 0) filteredCategoriesList.add(kcpCategory);
+        }*/
+
+        for(KcpCategories kcpCategory : categoriesArrayList){
+            String name = kcpCategory.getCategoryName();
+
+            boolean isExluded = false;
+            for(String exclusion : mCategoryExclusion){
+                if(name.equals(exclusion)) isExluded = true;
+            }
+            if(!isExluded) filteredCategoriesList.add(kcpCategory);
         }
 
         return filteredCategoriesList;
     }
-
 }
