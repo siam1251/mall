@@ -11,7 +11,9 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +27,7 @@ import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.InterestRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.kcpData.KcpCategoryManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
@@ -35,7 +38,7 @@ import java.util.ArrayList;
  * Created by Kay on 2016-05-31.
  */
 public class InterestedStoreActivity extends AppCompatActivity {
-
+    private final int MAX_SPAN = 3;
     protected final Logger logger = new Logger(getClass().getName());
     private InterestRecyclerViewAdapter mInterestRecyclerViewAdapter;
     private RecyclerView rvIntrstCat;
@@ -43,10 +46,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intrstd_category);
-
-        TextView tvIntrstdCatDesc = (TextView) findViewById(R.id.tvIntrstdCatDesc);
-        tvIntrstdCatDesc.setText(getResources().getString(R.string.intrstd_store_desc));
+        setContentView(R.layout.activity_intrstd_store);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,7 +55,6 @@ public class InterestedStoreActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getResources().getString(R.string.activity_title_interested_store));
 
         rvIntrstCat = (RecyclerView) findViewById(R.id.rvIntrstCat);
-        rvIntrstCat.setNestedScrollingEnabled(false); //set false for smooth scroll when nesting recyclerview inside nestedscrollview
         setupRecyclerView(rvIntrstCat);
 
         final TextView tvIntrstd = (TextView) findViewById(R.id.tvIntrstd);
@@ -92,39 +91,26 @@ public class InterestedStoreActivity extends AppCompatActivity {
         });
     }
 
-    public static class GridLayoutItem {
-        public int spanCount;
-        public int relativeLayotRule;
-
-        public GridLayoutItem(int spanCount, int relativelayoutRule){
-            this.spanCount = spanCount;
-            this.relativeLayotRule = relativelayoutRule;
-        }
-    }
-
     private void setupRecyclerView(RecyclerView recyclerView) {
         ArrayList<KcpPlaces> kcpPlacesArrayList = KcpCategoryRoot.getInstance().getPlacesList();
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, MAX_SPAN);
         recyclerView.setLayoutManager(gridLayoutManager);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                switch(mInterestRecyclerViewAdapter.getItemViewType(position)){
+                    case KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_STORES:
+                        return MAX_SPAN;
+                    case KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_STORES:
+                        return MAX_SPAN;
+                    default:
+                        return 1;
+                }
+            }
+        });
 
         mInterestRecyclerViewAdapter = new InterestRecyclerViewAdapter(this, kcpPlacesArrayList);
         recyclerView.setAdapter(mInterestRecyclerViewAdapter);
-    }
-
-    public void replaceIfExist(ArrayList<GridLayoutItem> list, int position, GridLayoutItem gridLayoutItem){
-        if(position < list.size() ) list.set(position, gridLayoutItem);
-        else list.add(position, gridLayoutItem);
-    }
-
-    public float getTextSize(String string){
-        Paint p = new Paint();
-        p.setTextSize(getResources().getDimension(R.dimen.intrstd_name));
-        return p.measureText(string);
-    }
-
-    public float getSpaceLeftFromOneSide(float size){
-        int screenWidth = Utility.getScreenWidth(this);
-        return (screenWidth - size) / 2f;
     }
 
     @Override
@@ -152,6 +138,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
             @Override
             public void okClicked() {
                 finish();
+//                overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
             }
         });
     }

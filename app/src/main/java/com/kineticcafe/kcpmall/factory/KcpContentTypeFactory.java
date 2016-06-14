@@ -16,31 +16,36 @@ public class KcpContentTypeFactory {
     public static final String CONTENT_TYPE_STORE = "store";
 
     //NEWS & DEAL ADAPTER ITEM TYPE
-    public static final int ITEM_TYPE_LOADING = 0;
-    public static final int ITEM_TYPE_ANNOUNCEMENT = 1;
-    public static final int ITEM_TYPE_EVENT = 2;
-    public static final int ITEM_TYPE_SET_MY_INTEREST = 3;
-    public static final int ITEM_TYPE_TWITTER = 4;
-    public static final int ITEM_TYPE_INSTAGRAM = 5;
-    public static final int ITEM_TYPE_STORE = 6;
+    public static final int ITEM_TYPE_LOADING =                             0;
+    public static final int ITEM_TYPE_ANNOUNCEMENT =                        1;
+    public static final int ITEM_TYPE_EVENT =                               2;
+    public static final int ITEM_TYPE_SET_MY_INTEREST =                     3;
+    public static final int ITEM_TYPE_TWITTER =                             4;
+    public static final int ITEM_TYPE_INSTAGRAM =                           5;
+    public static final int ITEM_TYPE_STORE =                               6;
+    public static final int ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS =    7;
+    public static final int ITEM_TYPE_SECTION_HEADER_OTHER_DEALS =          8;
+    public static final int ITEM_TYPE_ADJUST_MY_INTEREST =                  9;
+    public static final int ITEM_TYPE_DEAL =                                10;
 
+    public static final int ITEM_TYPE_SECTION_HEADER_CATEGORY =   11;
+    public static final int ITEM_TYPE_SECTION_HEADER_RECOMMENDED_STORES =   12;
+    public static final int ITEM_TYPE_SECTION_HEADER_OTHER_STORES =         13;
 
     //PREFERENCE ADAPTER ITEM TYPE
-    public static final int PREF_ITEM_TYPE_CAT = 0;
-    public static final int PREF_ITEM_TYPE_STORE = 1;
+    public static final int PREF_ITEM_TYPE_CAT =        0;
+    public static final int PREF_ITEM_TYPE_PLACE =      1;
+    public static final int PREF_ITEM_TYPE_SUB_CAT =    2;
+    public static final int PREF_ITEM_TYPE_ALL_PLACE =      3;
 
 
-    public static final int ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS = 7;
-    public static final int ITEM_TYPE_SECTION_HEADER_OTHER_DEALS = 8;
-    public static final int ITEM_TYPE_ADJUST_MY_INTEREST = 9;
-    public static final int ITEM_TYPE_DEAL = 10;
 
-    public static final String TYPE_LOADING_TITLE = "";
-    public static final String TYPE_ANNOUNCEMENT_TITLE = "Announcement";
-    public static final String TYPE_EVENT_TITLE = "Event";
+    public static final String TYPE_LOADING_TITLE =         "";
+    public static final String TYPE_ANNOUNCEMENT_TITLE =    "Announcement";
+    public static final String TYPE_EVENT_TITLE =           "Event";
     public static final String TYPE_SET_MY_INTEREST_TITLE = "Interest";
-    public static final String TYPE_TWITTER_TITLE = "Title";
-    public static final String TYPE_INSTAGRAM_TITLE = "Instagram";
+    public static final String TYPE_TWITTER_TITLE =         "Title";
+    public static final String TYPE_INSTAGRAM_TITLE =       "Instagram";
 
 
     public static String getContentTypeTitle(KcpContentPage kcpContentPage){
@@ -64,7 +69,9 @@ public class KcpContentTypeFactory {
     public static int getContentType(KcpContentPage kcpContentPage){
         if(kcpContentPage == null){
             return ITEM_TYPE_LOADING;
-        } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_ANNOUNCEMENT)){
+        }/* else if(kcpContentPage.content_type == null){
+            return ITEM_TYPE_STORE;
+        }*/else if(kcpContentPage.content_type.contains(CONTENT_TYPE_ANNOUNCEMENT)){
             return ITEM_TYPE_ANNOUNCEMENT;
         } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_EVENT)){
             return ITEM_TYPE_EVENT;

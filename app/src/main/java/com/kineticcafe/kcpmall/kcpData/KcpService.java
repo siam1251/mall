@@ -1,7 +1,7 @@
 package com.kineticcafe.kcpmall.kcpData;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
-import com.kineticcafe.kcpandroidsdk.models.KcpCorePage;
+import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 
@@ -34,37 +34,41 @@ public interface KcpService {
             @Query("perpage") String perpage);
 
     @GET
-    Call<KcpCorePage> getCategories(
+    Call<KcpContentPage> getContentPage(
             @Url String url,
             @Query("page") String page,
             @Query("perpage") String perpage);
 
     @GET
-    Call<KcpCorePage> getCategories(
+    Call<KcpContentPage> getCorePage(
+            @Url String url);
+
+    @GET
+    Call<KcpContentPage> getPlacesWithCategories(
             @Url String url,
             @Query("page") String page,
             @Query("perpage") String perpage,
             @Query("category_ids") String categoryIds);
 
     @POST
-    Call<KcpCorePage> postInterestedStores(
+    Call<KcpContentPage> postInterestedStores(
             @Url String url,
             @Body String multi_like);
 
     @POST
-    Call<KcpCorePage> postInterestedStores(
+    Call<KcpContentPage> postInterestedStores(
             @Url String url,
             @Body HashMap multiLike);
 
     @POST
-    Call<KcpCorePage> postInterestedStores(
+    Call<KcpContentPage> postInterestedStores(
             @Url String url,
             @Body KcpCategoryManager.MultiLike multiLike);
 
 
 
     /*@POST
-    Call<KcpCorePage> postInterestedStores(
+    Call<KcpContentPage> postInterestedStores(
             @Url String url,
             @Field("multi_like") String body);*/
 

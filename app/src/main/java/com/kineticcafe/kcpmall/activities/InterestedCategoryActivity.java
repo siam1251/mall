@@ -1,14 +1,12 @@
 package com.kineticcafe.kcpmall.activities;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +23,7 @@ import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.InterestRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.kcpData.KcpCategoryManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
@@ -44,6 +43,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intrstd_category);
+//        setContentView(R.layout.activity_intrstd_store);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -75,30 +75,34 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
                                 Utility.saveGson(InterestedCategoryActivity.this, Constants.PREFS_KEY_CATEGORY, mInterestRecyclerViewAdapter.getFavCatTempList());
                                 InterestedCategoryActivity.this.startActivityForResult(new Intent(InterestedCategoryActivity.this, InterestedStoreActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
+//                                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+
                                 break;
                             default:
                                 super.handleMessage(inputMessage);
                         }
                     }
                 });
-                kcpCategoryManager.downloadPlacesWithCategoryIds(mInterestRecyclerViewAdapter.getFavCatTempList());
+                kcpCategoryManager.downloadPlacesForTheseCategoryIds(mInterestRecyclerViewAdapter.getFavCatTempList());
             }
         });
     }
 
     public static class GridLayoutItem {
         public int spanCount;
-        public int relativeLayotRule;
+        public int relativeLayoutRule;
 
         public GridLayoutItem(int spanCount, int relativelayoutRule){
             this.spanCount = spanCount;
-            this.relativeLayotRule = relativelayoutRule;
+            this.relativeLayoutRule = relativelayoutRule;
         }
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         final int maxSpanCount = 100;
-        ArrayList<KcpCategories> kcpCategoriesArrayList = KcpCategoryRoot.getInstance().getCategoriesList();
+//        ArrayList<KcpCategories> kcpCategoriesArrayList = KcpCategoryRoot.getInstance().getFingerPrintCategoriesList();
+        ArrayList<KcpCategories> kcpCategoriesArrayList = CategoryIconFactory.getFilteredKcpCategoryList(KcpCategoryRoot.getInstance().getFingerPrintCategoriesList());
+
         final ArrayList<GridLayoutItem> gridLayoutItemArrayList = new ArrayList<GridLayoutItem>();
 
         float txtMar = getResources().getDimension(R.dimen.intrst_card_txt_horizontal_margin);
@@ -128,7 +132,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                     totalSize = spaceLeft + firstItemWidth + compatPadding + secondItemWidth + spaceLeft;
                     firstSpanSize = (int) ((float) (spaceLeft + firstItemWidth + compatPadding/2) / totalSize * maxSpanCount);
                     secondSpanSize = maxSpanCount - firstSpanSize;
-
                     replaceIfExist(gridLayoutItemArrayList, position, new GridLayoutItem(firstSpanSize, RelativeLayout.ALIGN_PARENT_RIGHT));
                     replaceIfExist(gridLayoutItemArrayList, position + 1, new GridLayoutItem(secondSpanSize, RelativeLayout.ALIGN_PARENT_LEFT));
 
@@ -159,6 +162,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
             }
         });
         recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.setHasFixedSize(true);
 
         mInterestRecyclerViewAdapter = new InterestRecyclerViewAdapter(this, kcpCategoriesArrayList, gridLayoutItemArrayList);
         recyclerView.setAdapter(mInterestRecyclerViewAdapter);
@@ -171,7 +175,8 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
     public float getTextSize(String string){
         Paint p = new Paint();
-        p.setTextSize(getResources().getDimension(R.dimen.intrstd_name));
+//        p.setTextSize(getResources().getDimension(R.dimen.intrstd_name));
+        p.setTextSize(Utility.dpToPx(this, 15));
         return p.measureText(string);
     }
 
@@ -205,6 +210,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
             @Override
             public void okClicked() {
                 finish();
+//                overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
             }
         });
     }

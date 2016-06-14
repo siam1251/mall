@@ -32,7 +32,6 @@ import retrofit2.Response;
 public class KcpSocialFeedManager {
 
     private Context mContext;
-    private KcpService mKcpService;
     protected Logger logger = null;
     private Handler mHandler;
     private ArrayList<TwitterTweet> mTwitterTweets;

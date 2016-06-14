@@ -5,10 +5,10 @@
     android:visibility="gone"
     android:layout_height="@dimen/detail_button_height">
 
-    <com.kineticcafe.kcpmall.views.ThemedImageView
+    <com.kineticcafe.kcpmall.views.ThemeColorImageView
         android:layout_marginLeft="@dimen/detail_button_image_left_margin"
         android:layout_centerVertical="true"
-        android:src="@drawable/icn_map"
+        android:src="@drawable/icn_menu_map"
         android:id="@+id/ivDetailBtnImage"
         android:layout_width="@dimen/detail_button_image_width"
         android:layout_height="wrap_content"

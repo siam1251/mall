@@ -10,10 +10,10 @@
 
 
     <string-array name="menuIcons">
-        <item>@drawable/icn_home</item>
-        <item>@drawable/icn_directory</item>
-        <item>@drawable/icn_map</item>
-        <item>@drawable/icn_mall_info</item>
+        <item>@drawable/icn_menu_home</item>
+        <item>@drawable/icn_menu_directory</item>
+        <item>@drawable/icn_menu_map</item>
+        <item>@drawable/icn_menu_mall_info</item>
 
     </string-array>
 

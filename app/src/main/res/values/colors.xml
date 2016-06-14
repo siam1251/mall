@@ -71,9 +71,17 @@
     <color name="intrstd_cat_desc">#89000000</color>
     <color name="intrstd_txt">#787a86</color>
     <color name="intrstd_card_bg">#fcfcfc</color>
-    <!--<color name="intrstd_card_bg_with_opacity">#8bfcfcfc</color>-->
     <color name="intrstd_card_bg_with_opacity">#F7F7F7</color>
 
+    <!--category-->
+    <color name="category_txt">#444444</color>
+    <!--sub category-->
+    <color name="sub_category_txt">#de000000</color>
+    <!--PLACE-->
+    <color name="place_txt">#dd000000</color>
+    <color name="place_category_txt">#84000000</color>
+    <!--SECTION-->
+    <color name="section_place_txt">#de000000</color>
     <color name="empty_state_msg_text">#894a4a4a</color>
 
 </resources>

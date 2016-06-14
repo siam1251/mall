@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/main_tab_height">
 
     <!--hack to prevent the tablayout to limit its size to the minimum height of its children-->
-    <TextView
+    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        app:fontFamily="@string/fontFamily_roboto_medium"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/main_tab_height"/>
 
     <ImageView
         android:layout_centerHorizontal="true"
-        android:src="@drawable/icn_home"
+        android:src="@drawable/icn_menu_home"
         android:id="@+id/ivTabIcon"
         android:layout_width="@dimen/main_tab_icon_width"
         android:layout_height="@dimen/main_tab_icon_width"

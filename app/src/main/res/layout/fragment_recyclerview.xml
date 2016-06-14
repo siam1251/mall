@@ -2,18 +2,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/card_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/srlDeals"
+        android:id="@+id/srl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/rvDeals"
+            android:id="@+id/rv"
             android:gravity="center_horizontal"
             />
     </android.support.v4.widget.SwipeRefreshLayout>
@@ -23,6 +24,7 @@
         android:id="@+id/tvEmptyState"
         style="@style/emptyStateMsg"
         app:fontFamily="@string/fontFamily_roboto_light"
+        android:paddingBottom="@dimen/vpMain_padding_bottom"
         />
 
 </RelativeLayout>

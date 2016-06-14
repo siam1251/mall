@@ -7,6 +7,7 @@
     <dimen name="activity_margin_tiny">3dp</dimen>
 
     <!--main bot nav bar-->
+    <dimen name="vpMain_padding_bottom">48dp</dimen> <!--This should be little bigger than main_app_bar_layout_height to acommodate the space taken by the bot nav bar-->
     <dimen name="main_app_bar_layout_height">45dp</dimen>
 
     <!--viewpager circle dot-->
@@ -80,7 +81,7 @@
     <!--interested category-->
     <dimen name="intrstd_cat_txt_height">48dp</dimen>
     <dimen name="intrstd_cat_next_btn_height">48dp</dimen>
-    <dimen name="intrstd_cat_desc_horizontal_margin">22.5dp</dimen>
+    <dimen name="intrstd_cat_desc_horizontal_margin">6dp</dimen>
     <dimen name="intrstd_cat_desc_top_margin">15dp</dimen>
     <dimen name="intrstd_cat_desc_txt_size">16sp</dimen>
     <dimen name="intrstd_card_height">48dp</dimen>
@@ -140,10 +141,31 @@
     <dimen name="home_tab_icon_top_margin_when_selected">8.5dp</dimen>
     <dimen name="home_tab_title_top_margin_when_selected">28.5dp</dimen>
 
+    <!--CATEGORY-->
+    <dimen name="category_item_height">57dp</dimen>
+    <dimen name="category_txt_left_margin">35dp</dimen>
+    <dimen name="category_image_width">17dp</dimen>
+    <dimen name="category_txt">16sp</dimen>
+
+    <!--SUB CATEGORY-->
+    <dimen name="sub_category_item_height">48dp</dimen>
+
+    <!--PLACE-->
+    <dimen name="place_item_height">72dp</dimen>
+    <dimen name="place_image_width">80dp</dimen>
+    <dimen name="place_txt_left_margin">40dp</dimen>
+    <dimen name="place_txt">16sp</dimen>
+    <dimen name="place_category_txt">14sp</dimen>
+
+    <!--SECTION-->
+    <dimen name="section_place_height">55dp</dimen>
+    <dimen name="section_place_text">14sp</dimen>
+
     <!--etc-->
     <dimen name="button_corner_radius">2dp</dimen>
     <dimen name="toolbar_elevation">2dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="shadow_inverted_height">4dp</dimen>
 
 </resources>

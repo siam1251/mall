@@ -15,7 +15,7 @@ import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
  */
 public class AlertDialogForInterest {
 
-    public static interface DialogAnsweredListener{
+    public interface DialogAnsweredListener{
         void okClicked();
     }
 

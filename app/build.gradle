@@ -23,6 +23,10 @@ android {
             applicationId "com.kineticcafe.kcpmall.metropolitan"
         }
 
+        vaughanmills {
+            applicationId "com.kineticcafe.kcpmall.vaughanmills"
+        }
+
         layouttest {
             applicationId "com.kineticcafe.kcpmall.layouttest"
         }

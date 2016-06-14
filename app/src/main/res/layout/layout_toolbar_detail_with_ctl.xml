@@ -10,7 +10,7 @@
     android:background="@drawable/view_shadow"
     >
 
-    <com.kineticcafe.kcpmall.views.ThemedImageView
+    <com.kineticcafe.kcpmall.views.ThemeColorImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
         android:layout_marginRight="24dp"
         android:layout_gravity="right"

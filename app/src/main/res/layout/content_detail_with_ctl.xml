@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.DetailActivity"
-    tools:showIn="@layout/activity_detail_with_ctl">
+    tools:showIn="@layout/activity_detail_with_ctl"
+    android:background="@color/white"
+    >
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -42,6 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"
+                android:transitionName="@string/transition_news_logo"
                 android:id="@+id/ivDetailLogo"/>
         </FrameLayout>
 
@@ -57,7 +60,7 @@
             android:textColor="@color/detail_title_text"
             android:layout_marginBottom="23dp"
             />
-            android:text="DETAIL TITLE"
+        android:text="DETAIL TITLE"
 
         <TextView
             android:layout_gravity="center_horizontal"
@@ -73,7 +76,7 @@
             android:layout_marginBottom="25dp"
             android:background="@drawable/btn_style_corner_radius"
             />
-            android:text="Thursday, May 12 - Wednesday, May 25"
+        android:text="Thursday, May 12 - Wednesday, May 25"
 
         <TextView
             android:id="@+id/tvDetailBody"
@@ -85,7 +88,7 @@
             android:layout_marginBottom="25dp"
             android:textColor="@color/detail_body_text"
             />
-            android:text="@string/lorem"
+        android:text="@string/lorem"
 
         <!--<View style="@style/separater" />-->
 
@@ -148,9 +151,6 @@
         <include
             android:id="@+id/layoutWebsite"
             layout="@layout/layout_detail_social_button"/>
-
-
-
 
     </LinearLayout>
 </ScrollView>

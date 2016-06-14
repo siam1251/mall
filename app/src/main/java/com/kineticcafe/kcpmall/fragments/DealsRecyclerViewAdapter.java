@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpNavigationPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
@@ -41,8 +43,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
     public DealsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> recommendedDeals, ArrayList<KcpContentPage> otherDeals) {
         mContext = context;
 
-        mKcpContentPagesRecommendedDeals = recommendedDeals;
-        mKcpContentPagesOtherDeals = otherDeals;
+        mKcpContentPagesRecommendedDeals = recommendedDeals == null ? new ArrayList<KcpContentPage>() : new ArrayList<KcpContentPage>(recommendedDeals);
+        mKcpContentPagesOtherDeals = otherDeals == null ? new ArrayList<KcpContentPage>() : new ArrayList<KcpContentPage>(otherDeals);
 
         createItems();
     }
@@ -50,6 +52,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
     public void createItems(){
         if(mItems == null) mItems = new ArrayList<>();
         else mItems.clear();
+
+        removeDuplicateFromOtherDeals();
 
         int sizeOfRecommendedDeals = mKcpContentPagesRecommendedDeals == null ? 0 : mKcpContentPagesRecommendedDeals.size();
         int sizeOfOtherDeals = mKcpContentPagesOtherDeals == null ? 0 : mKcpContentPagesOtherDeals.size();
@@ -62,7 +66,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             mItems.addAll(mKcpContentPagesRecommendedDeals);
             mItems.add(KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST);
         } else {
-            mItems.add(KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST);
+            if(otherDealsExist) mItems.add(KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST); //meaning the entire lists are empty
         }
 
         if(otherDealsExist){
@@ -73,7 +77,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public void updateRecommendedDealData(ArrayList<KcpContentPage> recommendedDeals) {
         mKcpContentPagesRecommendedDeals.clear();
-        mKcpContentPagesRecommendedDeals.addAll(recommendedDeals);
+        mKcpContentPagesRecommendedDeals.addAll(recommendedDeals); //TESTING
         createItems();
         notifyDataSetChanged();
     }
@@ -83,6 +87,16 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         mKcpContentPagesOtherDeals.addAll(otherDeals);
         createItems();
         notifyDataSetChanged();
+    }
+
+    private void removeDuplicateFromOtherDeals(){
+        if(mKcpContentPagesOtherDeals != null && mKcpContentPagesRecommendedDeals != null){
+            for(KcpContentPage kcpContentPageRecommended : mKcpContentPagesRecommendedDeals){
+                if(mKcpContentPagesOtherDeals.contains(kcpContentPageRecommended)){
+                    mKcpContentPagesOtherDeals.remove(kcpContentPageRecommended);
+                }
+            }
+        }
     }
 
 
@@ -133,12 +147,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             ivFav         = (ImageView)  v.findViewById(R.id.ivFav);
         }
     }
-
-//    public class RecommendedDealsViewHolder extends MainViewHolder {
-//        public RecommendedDealsViewHolder (View v){
-//            super(v);
-//        }
-//    }
 
     public class SetMyInterestViewHolder extends MainViewHolder {
         public TextView tvIntrstTitle;
@@ -199,6 +207,9 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     ((Activity)mContext).startActivityForResult(new Intent(mContext, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//                    ((Activity)mContext).overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+//                    ((Activity)mContext).overridePendingTransition(R.anim.righttoleft, R.anim.stable);
+
                 }
             });
 
@@ -219,6 +230,10 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     ((Activity)mContext).startActivityForResult(new Intent(mContext, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//                    ((Activity)mContext).overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+//                    ((Activity)mContext).overridePendingTransition(R.anim.righttoleft, R.anim.stable);
+
+
                 }
             });
 

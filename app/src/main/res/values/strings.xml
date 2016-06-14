@@ -11,6 +11,15 @@
     <string name="action_exit">Exit</string>
     <string name="action_cancel">Cancel</string>
 
+
+    <!--FRAGMENT TITLE-->
+    <string name="fragment_news">NEWS</string>
+    <string name="fragment_deals">DEALS</string>
+    <string name="fragment_categories">CATEGORIES</string>
+    <string name="fragment_stores">STORES A-Z</string>
+    <string name="fragment_sub_categories">SUB CATEGORIES</string>
+    <string name="fragment_category_stores">CATEGORY STORES</string>
+
     <!--menu-->
     <string name="menu_home">HOME</string>
     <string name="menu_directory">DIRECTORY</string>
@@ -30,8 +39,10 @@
 
     <!--transition-->
     <string name="transition_news_image">transition news image</string>
+    <string name="transition_news_logo">transition news logo</string>
     <string name="transition_news_expiry_date">transition expiry date</string>
     <string name="transition_fav">transition fav</string>
+    <string name="transition_category_name">transition category name</string>
 
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non ante dictum, tempor orci nec, ultricies urna. Donec a consequat leo. Aliquam commodo venenatis nisi tempor lacinia. Aenean scelerisque, diam eu fringilla tempus, risus nisl dignissim nisl, at pharetra arcu orci et erat. Nullam pharetra gravida neque, sit amet accumsan nisl ornare volutpat. Nulla mauris turpis, consectetur consequat neque eget, egestas tristique felis. Fusce et sodales orci. Duis odio purus, consectetur a pulvinar a, ultrices mollis tortor. Duis efficitur posuere malesuada. Donec fringilla aliquet metus id faucibus. Aliquam erat volutpat. Integer felis ante, pharetra vel nibh in, blandit pulvinar enim. Duis sed eleifend lectus, eu accumsan risus. Maecenas tincidunt dignissim dictum. Fusce velit nibh, pellentesque at finibus sed, fringilla id ipsum.
 
@@ -63,9 +74,17 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="title_activity_scrolling">ScrollingActivity</string>
 
     <!--interested category-->
-    <string name="intrstd_cat_desc">To help us determine your preferences,\nhighlight categories below that interest you</string>
+    <string name="intrstd_cat_help_us">To help us determine your preferences,\nhighlight categories below that interest you</string>
+    <string name="intrstd_cat_recommended_section_header">Here are the stores we think you will like!\nSelect which are your favourite:</string>
+    <string name="intrstd_cat_other_section_header">... and if we missed any, make sure to\ncapture them below:</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="intrstd_store_desc">Here are the stores we think you will like!\nSelect which are your favourite:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--ETC-->
+    <string name="see_all_stores">See All Stores</string>
 
 
 </resources>

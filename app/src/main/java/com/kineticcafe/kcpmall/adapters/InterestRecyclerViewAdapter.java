@@ -2,6 +2,7 @@ package com.kineticcafe.kcpmall.adapters;
 
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
+import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
@@ -24,7 +26,6 @@ import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.utility.Utility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Kay on 2016-05-05.
@@ -35,15 +36,18 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
     private InterestType mInterestType;
     private Context mContext;
     private ArrayList<KcpCategories> mKcpCategoriesList;
-    private ArrayList<KcpPlaces> mKcpPlacesList;
+    private ArrayList<KcpPlaces> mKcpPlacesRecommendedList;
+    private ArrayList<KcpPlaces> mKcpPlacesOthersList;
     private ArrayList<InterestedCategoryActivity.GridLayoutItem> mGridLayoutItemArrayList;
     private ArrayList<Integer> mFavCatTempList;
     private ArrayList<String> mFavStoreLikeLinkList;
 
+    private ArrayList<Object> mItems;
+
     public InterestRecyclerViewAdapter(Context context, ArrayList<KcpCategories> news, ArrayList<InterestedCategoryActivity.GridLayoutItem> gridLayoutItemArrayList) {
         mContext = context;
         mInterestType = InterestType.CATEGORY;
-        mKcpCategoriesList = news;
+        mKcpCategoriesList = new ArrayList<KcpCategories>(news);
         mGridLayoutItemArrayList = gridLayoutItemArrayList;
         mFavCatTempList = Utility.loadGsonArrayList(context, Constants.PREFS_KEY_CATEGORY);
     }
@@ -51,14 +55,53 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
     public InterestRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces) {
         mInterestType = InterestType.STORE;
         mContext = context;
-        mKcpPlacesList = kcpPlaces;
+        mKcpPlacesRecommendedList = new ArrayList<>(kcpPlaces);
         mFavStoreLikeLinkList = Utility.loadGsonArrayListString(context, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK);
+        mKcpPlacesOthersList = new ArrayList<>(KcpPlacesRoot.getInstance().getPlacesList());
+
+        createItems();
     }
 
-    public void updateData(ArrayList<KcpCategories> kcpContentPages) {
-        mKcpCategoriesList.clear();
-        mKcpCategoriesList.addAll(kcpContentPages);
-        notifyDataSetChanged();
+    public ArrayList<Integer> getFavCatTempList() {
+        if(mFavCatTempList == null) return new ArrayList<>();
+        return mFavCatTempList;
+    }
+
+    public ArrayList<String> getFavStoreLikeLinkList() {
+        if(mFavStoreLikeLinkList == null) return new ArrayList<String>();
+        return mFavStoreLikeLinkList;
+    }
+
+
+    public void createItems(){
+        if(mItems == null) mItems = new ArrayList<>();
+        else mItems.clear();
+
+        removeDuplicateFromOtherStores();
+
+        int sizeOfRecommendedStores = mKcpPlacesRecommendedList == null ? 0 : mKcpPlacesRecommendedList.size();
+        int sizeOfOtherStores = mKcpPlacesOthersList.size();
+
+        boolean recommendedStoresExist =  sizeOfRecommendedStores > 0 ? true : false;
+        boolean otherStoresExist = sizeOfOtherStores > 0 ? true : false;
+
+        if(recommendedStoresExist) {
+            mItems.add(KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_STORES);
+            mItems.addAll(mKcpPlacesRecommendedList);
+        }
+
+        if(otherStoresExist){
+            mItems.add(KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_STORES);
+            mItems.addAll(mKcpPlacesOthersList);
+        }
+    }
+
+    private void removeDuplicateFromOtherStores(){
+        if(mKcpPlacesOthersList.size() != 0 && mKcpPlacesRecommendedList.size() != 0){
+            for(KcpPlaces kcpRecommendedPlace : mKcpPlacesRecommendedList){
+                if(mKcpPlacesOthersList.contains(kcpRecommendedPlace)) mKcpPlacesOthersList.remove(kcpRecommendedPlace);
+            }
+        }
     }
 
     public class InterestedCategoryHolder extends RecyclerView.ViewHolder {
@@ -72,16 +115,6 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
             tvIntrstd = (TextView)  v.findViewById(R.id.tvIntrstd);
             cvIntrst = (CardView)  v.findViewById(R.id.cvIntrst);
         }
-    }
-
-    public ArrayList<Integer> getFavCatTempList() {
-        if(mFavCatTempList == null) return new ArrayList<>();
-        return mFavCatTempList;
-    }
-
-    public ArrayList<String> getFavStoreLikeLinkList() {
-        if(mFavStoreLikeLinkList == null) return new ArrayList<String>();
-        return mFavStoreLikeLinkList;
     }
 
     public class InterestedStoreHolder extends RecyclerView.ViewHolder {
@@ -98,6 +131,17 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
             ivIntrstd = (ImageView)  v.findViewById(R.id.ivIntrstd);
             ivFav = (ImageView)  v.findViewById(R.id.ivFav);
             cvIntrst = (CardView)  v.findViewById(R.id.cvIntrst);
+        }
+    }
+
+    public class InterestedStoreSectionHolder extends RecyclerView.ViewHolder {
+        public View mView;
+        public TextView  tvIntrstdCatDesc;
+
+        public InterestedStoreSectionHolder(View v) {
+            super(v);
+            mView = v;
+            tvIntrstdCatDesc = (TextView)  v.findViewById(R.id.tvIntrstdCatDesc);
         }
     }
 
@@ -119,9 +163,25 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_interested_category,
                                 parent,
                                 false));
-            case KcpContentTypeFactory.PREF_ITEM_TYPE_STORE:
+            case KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE:
                 return new InterestedStoreHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_interested_store,
+                                parent,
+                                false));
+            case KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_CATEGORY:
+                return new InterestedStoreSectionHolder(
+                        LayoutInflater.from(mContext).inflate(R.layout.list_item_recommended_store_section_header,
+                                parent,
+                                false));
+
+            case KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_STORES:
+                return new InterestedStoreSectionHolder(
+                        LayoutInflater.from(mContext).inflate(R.layout.list_item_recommended_store_section_header,
+                                parent,
+                                false));
+            case KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_STORES:
+                return new InterestedStoreSectionHolder(
+                        LayoutInflater.from(mContext).inflate(R.layout.list_item_recommended_store_section_header,
                                 parent,
                                 false));
         }
@@ -132,9 +192,11 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
         if(selected){
             cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.themeColor));
             textView.setTextColor(mContext.getResources().getColor(R.color.white));
+            textView.setTypeface(null, Typeface.BOLD);
         } else {
             cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.intrstd_card_bg));
             textView.setTextColor(mContext.getResources().getColor(R.color.intrstd_txt));
+            textView.setTypeface(null, Typeface.NORMAL);
         }
     }
 
@@ -150,34 +212,34 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == KcpContentTypeFactory.PREF_ITEM_TYPE_CAT) {
-            final InterestedCategoryHolder interestedCategoryHolder = (InterestedCategoryHolder) holder;
-            final KcpCategories kcpCategories = mKcpCategoriesList.get(position);
+                final InterestedCategoryHolder interestedCategoryHolder = (InterestedCategoryHolder) holder;
+                final KcpCategories kcpCategories = mKcpCategoriesList.get(position);
 
-            setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, mFavCatTempList.contains(kcpCategories.getCategoryId()));
-            interestedCategoryHolder.tvIntrstd.setText(kcpCategories.getCategoryName());
-            interestedCategoryHolder.cvIntrst.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mFavCatTempList.contains(kcpCategories.getCategoryId())) {
-                        mFavCatTempList.remove(Integer.valueOf(kcpCategories.getCategoryId()));
-                        setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, false);
-                    } else {
-                        mFavCatTempList.add(kcpCategories.getCategoryId());
-                        setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, true);
+                setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, mFavCatTempList.contains(kcpCategories.getCategoryId()));
+                interestedCategoryHolder.tvIntrstd.setText(kcpCategories.getCategoryName());
+                interestedCategoryHolder.cvIntrst.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mFavCatTempList.contains(kcpCategories.getCategoryId())) {
+                            mFavCatTempList.remove(Integer.valueOf(kcpCategories.getCategoryId()));
+                            setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, false);
+                        } else {
+                            mFavCatTempList.add(kcpCategories.getCategoryId());
+                            setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, true);
+                        }
                     }
-                }
-            });
+                });
 
-            if(mGridLayoutItemArrayList.size() > position ){
-                RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) interestedCategoryHolder.cvIntrst.getLayoutParams();
-                int relativeLayotRule = mGridLayoutItemArrayList.get(position).relativeLayotRule;
-                param.addRule(relativeLayotRule);
-                interestedCategoryHolder.cvIntrst.setLayoutParams(param);
-            }
-        } else if (holder.getItemViewType() == KcpContentTypeFactory.PREF_ITEM_TYPE_STORE) {
+//                if(mGridLayoutItemArrayList.size() > position ){
+                    RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) interestedCategoryHolder.cvIntrst.getLayoutParams();
+                    int relativeLayotRule = mGridLayoutItemArrayList.get(position).relativeLayoutRule;
+                    param.addRule(relativeLayotRule);
+                    interestedCategoryHolder.cvIntrst.setLayoutParams(param);
+//                }
+        } else if (holder.getItemViewType() == KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE) {
             final InterestedStoreHolder interestedStoreHolder = (InterestedStoreHolder) holder;
-            final KcpPlaces kcpPlaces = mKcpPlacesList.get(position);
 
+            final KcpPlaces kcpPlaces = (KcpPlaces) mItems.get(position);
             String imageUrl = kcpPlaces.getImageUrl();
             Glide.with(mContext)
                     .load(imageUrl)
@@ -198,7 +260,6 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                     .placeholder(R.drawable.placeholder_rectangle)
                     .into(interestedStoreHolder.ivIntrstd);
 
-
             setSelectedStore(interestedStoreHolder.cvIntrst, interestedStoreHolder.ivFav, mFavStoreLikeLinkList.contains(kcpPlaces.getLikeLink()));
             interestedStoreHolder.cvIntrst.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -212,20 +273,35 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
+        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_STORES){
+            final InterestedStoreSectionHolder interestedStoreSectionHolder = (InterestedStoreSectionHolder) holder;
+            interestedStoreSectionHolder.tvIntrstdCatDesc.setText(mContext.getResources().getString(R.string.intrstd_cat_recommended_section_header));
+        }  else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_STORES){
+            final InterestedStoreSectionHolder interestedStoreSectionHolder = (InterestedStoreSectionHolder) holder;
+            interestedStoreSectionHolder.tvIntrstdCatDesc.setText(mContext.getResources().getString(R.string.intrstd_cat_other_section_header));
         }
     }
 
     @Override
     public int getItemCount() {
         if(mInterestType.equals(InterestType.CATEGORY)) return mKcpCategoriesList == null ? 0 : mKcpCategoriesList.size();
-        else if(mInterestType.equals(InterestType.STORE)) return mKcpPlacesList == null ? 0 : mKcpPlacesList.size();
+        else if(mInterestType.equals(InterestType.STORE)) return mItems == null ? 0 : mItems.size();
         else return 0;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(mInterestType.equals(InterestType.CATEGORY)) return KcpContentTypeFactory.PREF_ITEM_TYPE_CAT;
-        else if(mInterestType.equals(InterestType.STORE)) return KcpContentTypeFactory.PREF_ITEM_TYPE_STORE;
+        if(mInterestType.equals(InterestType.CATEGORY)) {
+            return KcpContentTypeFactory.PREF_ITEM_TYPE_CAT;
+        }
+        else if(mInterestType.equals(InterestType.STORE)) {
+            Object item =  mItems.get(position);
+            if (item instanceof Integer) {
+                return (Integer) item;
+            } else {
+                return KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE;
+            }
+        }
         else return 0;
     }
 

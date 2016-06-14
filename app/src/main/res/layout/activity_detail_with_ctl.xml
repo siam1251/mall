@@ -44,6 +44,7 @@
                     xmlns:textAlpha="http://schemas.android.com/apk/res-auto"
                     android:gravity="center"
                     android:textColor="@color/expiry_date_text"
+                    android:textStyle="bold"
                     android:id="@+id/tvExpiryDate"
                     android:layout_alignBottom="@+id/ivDetailImage"
                     android:layout_width="match_parent"
@@ -67,6 +68,7 @@
         android:id="@+id/contact_detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/detail_social_sharing_bg"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
         <include

@@ -11,24 +11,24 @@ import com.kineticcafe.kcpmall.R;
 /**
  * Created by Kay on 2016-05-02.
  */
-public class ThemedImageView extends ImageView implements View.OnClickListener{
+public class ThemeColorImageView extends ImageView implements View.OnClickListener{
 
     private int mFilterColor;
     private int mSelectedFilterColor;
-    public ThemedImageView(Context context) {
+    public ThemeColorImageView(Context context) {
         this(context, null);
     }
 
-    public ThemedImageView(Context context, AttributeSet attrs) {
+    public ThemeColorImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ThemedImageView);
-        mFilterColor = a.getColor(R.styleable.ThemedImageView_filterColor, context.getResources().getColor(R.color.themeColor));
-        mSelectedFilterColor = a.getColor(R.styleable.ThemedImageView_filterColorUnselected, context.getResources().getColor(R.color.transparent));
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ThemeColorImageView);
+        mFilterColor = a.getColor(R.styleable.ThemeColorImageView_filterColor, context.getResources().getColor(R.color.themeColor));
+        mSelectedFilterColor = a.getColor(R.styleable.ThemeColorImageView_filterColorUnselected, context.getResources().getColor(R.color.transparent));
         setColorFilter(mFilterColor);
         this.setOnClickListener(this);
     }
 
-    public ThemedImageView(Context context, AttributeSet attrs, int defStyle) {
+    public ThemeColorImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
