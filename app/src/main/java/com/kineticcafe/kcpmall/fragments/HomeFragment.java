@@ -61,9 +61,9 @@ public class HomeFragment extends BaseFragment {
         TabLayout tablayout = (TabLayout) view.findViewById(R.id.tlHome);
         tablayout.setupWithViewPager(vpHome);
 
-        updateAdapter(Constants.EXTERNAL_CODE_FEED);
-        updateAdapter(Constants.EXTERNAL_CODE_DEAL);
-        updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
+//        updateAdapter(Constants.EXTERNAL_CODE_FEED);
+//        updateAdapter(Constants.EXTERNAL_CODE_DEAL);
+//        updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
 
         if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
                 mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null ) mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);
@@ -226,20 +226,17 @@ public class HomeFragment extends BaseFragment {
         try {
             KcpNavigationPage kcpNavigationPage = KcpNavigationRoot.getInstance().getNavigationpage(mode);
             if(kcpNavigationPage != null && kcpNavigationPage.getKcpContentPageList(true) != null){
-                if(mode.equals(Constants.EXTERNAL_CODE_FEED)) updateNewsAdapter(kcpNavigationPage.getKcpContentPageList(true));
-                else if(mode.equals(Constants.EXTERNAL_CODE_DEAL)) updateOtherDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
-                else if(mode.equals(Constants.EXTERNAL_CODE_RECOMMENDED)) updateRecommendedDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
+                if(mode.equals(Constants.EXTERNAL_CODE_FEED)) {
+                    updateNewsAdapter(kcpNavigationPage.getKcpContentPageList(true));
+                } else if(mode.equals(Constants.EXTERNAL_CODE_DEAL)) {
+                    updateOtherDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
+                } else if(mode.equals(Constants.EXTERNAL_CODE_RECOMMENDED)) {
+                    updateRecommendedDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
+                }
             }
         } catch (Exception e) {
             logger.error(e);
         }
-    }
-
-
-    private void removeDuplicates(){
-
-
-
     }
 
     private void updateNewsAdapter(ArrayList<KcpContentPage> kcpContentPages){

@@ -1,26 +1,20 @@
 package com.kineticcafe.kcpmall.activities;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
@@ -148,7 +142,13 @@ public class InterestedStoreActivity extends AppCompatActivity {
         ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();
         if(!Utility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
             AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
-            alertDialogForInterest.getAlertDialog(this, dialogAnsweredListener).show();
+            alertDialogForInterest.getAlertDialog(
+                    this,
+                    R.string.title_unsaved_changes,
+                    R.string.warning_exit_interest,
+                    R.string.action_exit,
+                    R.string.action_cancel,
+                    dialogAnsweredListener).show();
         } else {
             dialogAnsweredListener.okClicked();
         }

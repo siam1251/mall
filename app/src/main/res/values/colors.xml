@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <!--% to HEX
+    87% - dd/de/df
+
+    -->
+
+
+
     <!--default colors-->
     <color name="themeColor">#13bed0</color>
     <color name="warningColor">#13bed0</color> <!--#CFff4444-->
@@ -77,11 +85,16 @@
     <color name="category_txt">#444444</color>
     <!--sub category-->
     <color name="sub_category_txt">#de000000</color>
+
     <!--PLACE-->
     <color name="place_txt">#dd000000</color>
     <color name="place_category_txt">#84000000</color>
+
     <!--SECTION-->
     <color name="section_place_txt">#de000000</color>
     <color name="empty_state_msg_text">#894a4a4a</color>
+
+    <!--TOOLBAR-->
+    <color name="toolbar_text">#de000000</color>
 
 </resources>

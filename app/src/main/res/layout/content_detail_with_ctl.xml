@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvDetailTitle"
             android:textColor="@color/detail_title_text"
-            android:layout_marginBottom="23dp"
+            android:layout_marginBottom="28dp"
             />
         android:text="DETAIL TITLE"
 
@@ -85,7 +85,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/detail_body_text"
-            android:layout_marginBottom="25dp"
+            android:text="Enjoy up to 60% off all selected"
+            android:layout_marginBottom="28dp"
             android:textColor="@color/detail_body_text"
             />
         android:text="@string/lorem"
@@ -110,47 +111,10 @@
             android:orientation="vertical" />
 
         <include
-            android:id="@+id/layoutLocation"
-            layout="@layout/layout_detail_button"/>
-
-        <include
-            android:id="@+id/layoutParking"
-            layout="@layout/layout_detail_button"/>
-
-        <include
-            android:id="@+id/layoutHours"
-            layout="@layout/layout_detail_button"/>
-
-        <include
-            android:id="@+id/layoutStoreInfo"
-            layout="@layout/layout_detail_button"/>
-
-        <include
-            android:id="@+id/layoutPhone"
-            layout="@layout/layout_detail_button"/>
-
-        <include
             android:visibility="gone"
             android:id="@+id/layoutDisclaimer"
             layout="@layout/layout_disclaimer"/>
 
         <!--SOCIAL SHARING-->
-
-        <include
-            android:id="@+id/layoutSocialSharing"
-            layout="@layout/layout_detail_social_sharing_text"/>
-
-        <include
-            android:id="@+id/layoutFacebook"
-            layout="@layout/layout_detail_social_button"/>
-
-        <include
-            android:id="@+id/layoutInstagram"
-            layout="@layout/layout_detail_social_button"/>
-
-        <include
-            android:id="@+id/layoutWebsite"
-            layout="@layout/layout_detail_social_button"/>
-
     </LinearLayout>
 </ScrollView>

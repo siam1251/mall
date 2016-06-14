@@ -115,50 +115,30 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
                     storeViewHolder.ivFav.setSelected(!storeViewHolder.ivFav .isSelected());
                 }
             });
-
-            storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    KcpContentPage kcpContentPage = new KcpContentPage();
-                    kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
-
-                    Intent intent = new Intent(mContext, DetailActivity.class);
-                    intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
-
-                    String transitionNameLogo = mContext.getResources().getString(R.string.transition_news_logo);
-                    String transitionNameFav = mContext.getResources().getString(R.string.transition_fav);
-
-                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            (Activity)mContext,
-                            Pair.create((View)storeViewHolder.ivDealLogo, transitionNameLogo),
-                            Pair.create((View)storeViewHolder.ivFav, transitionNameFav));
-
-                    ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                }
-            });
         } else if (getItemViewType(position) == KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE) {
-
-            storeViewHolder.mView.setTag(position);
-            storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    KcpContentPage kcpContentPage = new KcpContentPage();
-                    kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
-
-                    Intent intent = new Intent(mContext, DetailActivity.class);
-                    intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
-
-                    String transitionNameLogo = mContext.getResources().getString(R.string.transition_news_logo);
-                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            (Activity)mContext,
-                            Pair.create((View)storeViewHolder.ivDealLogo, transitionNameLogo));
-
-                    ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                }
-            });
         }
+
+        storeViewHolder.mView.setTag(position);
+        storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KcpContentPage kcpContentPage = new KcpContentPage();
+                kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
+
+                Intent intent = new Intent(mContext, DetailActivity.class);
+                intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
+                intent.putExtra(Constants.ARG_DETAIL_PAGE_ORIGIN, Constants.VALUE_DETAIL_PAGE_ORIGIN_MAIN);
+
+                String transitionNameLogo = mContext.getResources().getString(R.string.transition_news_logo);
+
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        (Activity)mContext,
+                        Pair.create((View)storeViewHolder.ivDealLogo, transitionNameLogo));
+
+                ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
+                ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+        });
     }
 
     @Override

@@ -87,7 +87,6 @@
 
                 <ImageView
                     android:id="@+id/ivFav"
-                    android:transitionName="@string/transition_fav"
                     android:layout_width="@dimen/deal_fav_width"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

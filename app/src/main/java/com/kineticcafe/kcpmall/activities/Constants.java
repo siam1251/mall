@@ -69,12 +69,16 @@ public class Constants {
 
 	//ARG_KEY
 	public final static String ARG_CONTENT_PAGE = 			"arg_content_page";
+	public final static String ARG_DETAIL_PAGE_ORIGIN = 	"arg_detail_page_origin";
 	public final static String ARG_IMAGE_URL = 				"arg_image_url";
 	public final static String ARG_IMAGE_BITMAP = 			"arg_image_bitmap";
 	public static final String ARG_EXTERNAL_CODE = 			"external_code";
 	public static final String ARG_CAT_NAME = 				"cat_name";
 	public static final String ARG_CATEGORY_ACTIVITY_TYPE = "cat_activity_type";
 	public enum CategoryActivityType { SUBCATEGORY, STORE }
+
+	//ARG_VALUE
+	public final static String VALUE_DETAIL_PAGE_ORIGIN_MAIN = 			"MainActivity";
 
 	//SHARED PREFERNCE DATABASE
 //	public final static String PREFS_KEY_INTRSTD_CATEGORY = 	"prefs_key_intrstd_category";

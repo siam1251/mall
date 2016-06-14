@@ -290,24 +290,22 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
+                    intent.putExtra(Constants.ARG_DETAIL_PAGE_ORIGIN, Constants.VALUE_DETAIL_PAGE_ORIGIN_MAIN);
 
                     String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
                     String transitionNameExpiry = mContext.getResources().getString(R.string.transition_news_expiry_date);
-                    String transitionNameFav = mContext.getResources().getString(R.string.transition_fav);
 
                     ActivityOptionsCompat options;
 
                     if(daysLeft.equals("")) {
                         options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                                 (Activity)mContext,
-                                Pair.create((View)dealHolder.ivDealLogo, transitionNameImage),
-                                Pair.create((View)dealHolder.ivFav, transitionNameFav));
+                                Pair.create((View)dealHolder.ivDealLogo, transitionNameImage));
                     } else {
                         options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                                 (Activity)mContext,
                                 Pair.create((View)dealHolder.ivDealLogo, transitionNameImage),
-                                Pair.create((View)dealHolder.tvExpiryDate, transitionNameExpiry),
-                                Pair.create((View)dealHolder.ivFav, transitionNameFav));
+                                Pair.create((View)dealHolder.tvExpiryDate, transitionNameExpiry));
                     }
 
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());

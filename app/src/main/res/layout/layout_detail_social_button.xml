@@ -3,7 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:foreground="?android:attr/selectableItemBackground"
     android:background="@color/detail_social_sharing_bg"
-    android:visibility="gone"
     android:layout_height="@dimen/detail_button_height">
 
     <com.kineticcafe.kcpmall.views.ThemeColorImageView
@@ -16,15 +15,23 @@
         android:adjustViewBounds="true"
         />
 
+
+
     <TextView
-        android:textColor="@color/detail_title_text"
         android:layout_marginLeft="@dimen/detail_button_text_left_margin"
         android:layout_toRightOf="@+id/ivDetailBtnImage"
+        android:textColor="@color/detail_title_text"
         android:gravity="center_vertical"
         android:text="Ground Level (GL)"
         android:id="@+id/tvDetailBtnTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        />
+
+
+    <ProgressBar
+        android:id="@+id/pb"
+        style="@style/progressBarSmall"
         />
 
     <View android:layout_marginLeft="@dimen/activity_horizontal_margin"

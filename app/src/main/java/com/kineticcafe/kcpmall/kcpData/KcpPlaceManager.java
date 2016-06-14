@@ -71,6 +71,26 @@ public class KcpPlaceManager {
         });
     }
 
+    public void downloadPlace(int placeId){
+        Call<KcpPlaces> call = getKcpService().getPlaceWithId(placeId);
+        call.enqueue(new Callback<KcpPlaces>() {
+            @Override
+            public void onResponse(Call<KcpPlaces> call, Response<KcpPlaces> response) {
+                if(response.isSuccessful()){
+                    KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
+                    KcpPlaces kcpPlace = response.body();
+                    kcpPlacesRoot.setPlace(kcpPlace);
+                    handleState(DOWNLOAD_COMPLETE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<KcpPlaces> call, Throwable t) {
+                handleState(DOWNLOAD_FAILED);
+            }
+        });
+    }
+
     private void handleState(int state){
         handleState(state, null);
     }

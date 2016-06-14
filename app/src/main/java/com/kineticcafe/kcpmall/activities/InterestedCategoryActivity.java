@@ -232,7 +232,13 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         ArrayList<Integer> newFavCatList = mInterestRecyclerViewAdapter.getFavCatTempList();
         if(!Utility.isTwoIntegerListsEqual(savedFavCatList, newFavCatList)){
             AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
-            alertDialogForInterest.getAlertDialog(this, dialogAnsweredListener).show();
+            alertDialogForInterest.getAlertDialog(
+                    this,
+                    R.string.title_unsaved_changes,
+                    R.string.warning_exit_interest,
+                    R.string.action_exit,
+                    R.string.action_cancel,
+                    dialogAnsweredListener).show();
         } else {
             dialogAnsweredListener.okClicked();
         }

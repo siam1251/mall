@@ -225,14 +225,13 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
+                    intent.putExtra(Constants.ARG_DETAIL_PAGE_ORIGIN, Constants.VALUE_DETAIL_PAGE_ORIGIN_MAIN);
 
                     String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
-                    String transitionNameFav = mContext.getResources().getString(R.string.transition_fav);
 
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             (Activity)mContext,
-                            Pair.create((View)ancmtHolder.ivAnnouncementLogo, transitionNameImage),
-                            Pair.create((View)ancmtHolder.ivFav, transitionNameFav));
+                            Pair.create((View)ancmtHolder.ivAnnouncementLogo, transitionNameImage));
 
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

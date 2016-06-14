@@ -19,7 +19,6 @@
             app:contentScrim="@color/themeColor"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
-            app:layout_scrollFlags="scroll|exitUntilCollapsed" <!--toolbar moves up-->
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" <!--toolbar fixed-->
 
 
