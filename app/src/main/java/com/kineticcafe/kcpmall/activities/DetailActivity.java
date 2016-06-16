@@ -17,6 +17,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.MenuItem;
@@ -29,16 +31,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.Util;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
+import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
+import com.kineticcafe.kcpandroidsdk.managers.KcpPlaceManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
+import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
-import com.kineticcafe.kcpmall.kcpData.KcpCategoryManager;
-import com.kineticcafe.kcpmall.kcpData.KcpPlaceManager;
+import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
+import com.kineticcafe.kcpmall.views.DealRecyclerItemDecoration;
+import com.kineticcafe.kcpmall.views.SpacesItemDecoration;
 import com.kineticcafe.kcpmall.views.ThemeColorImageView;
 
 import java.util.ArrayList;
@@ -53,13 +61,11 @@ public class DetailActivity extends AppCompatActivity {
     private ImageView ivDetailImage; //transition image
     private ImageView ivDetailLogo; //transition logo
 
-    private String mDetailPageSource;
     private int mContentPageType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDetailPageSource = getIntent().getStringExtra(Constants.ARG_DETAIL_PAGE_ORIGIN);
         init();
         KcpContentPage kcpContentPage = (KcpContentPage) getIntent().getSerializableExtra(Constants.ARG_CONTENT_PAGE);
 
@@ -70,11 +76,17 @@ public class DetailActivity extends AppCompatActivity {
             if(kcpPlace != null){
                 kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
             }
+
+            ArrayList<KcpContentPage> kcpContentPages = kcpPlacesRoot.getContentPagesById(kcpContentPage.getStoreId());
+            if(kcpContentPages != null){
+                kcpContentPage.setContentPageList(kcpContentPages);
+            }
         }
 
         downloadIfNecessary(kcpContentPage);
         showContentsWithCTL(kcpContentPage);
         setUpCTA(kcpContentPage);
+        setUpDealsAndEvents(kcpContentPage);
     }
 
     public void init(){
@@ -112,6 +124,10 @@ public class DetailActivity extends AppCompatActivity {
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
             if(kcpContentPage.getStoreNumber().equals("")){
                 downloadPlace(kcpContentPage.getStoreId());
+            }
+
+            if(kcpContentPage.getContentPageList(true) == null){
+                downloadContentList(kcpContentPage.getStoreId());
             }
         }
     }
@@ -152,23 +168,14 @@ public class DetailActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!kcpContentPage.getStoreNumber().equals("")){
-                            AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
-                            alertDialogForInterest.getAlertDialog(
-                                    DetailActivity.this,
-                                    R.string.title_make_calls,
-                                    R.string.warning_make_call,
-                                    R.string.action_ok,
-                                    R.string.action_cancel,
-                                    new AlertDialogForInterest.DialogAnsweredListener() {
-                                        @Override
-                                        public void okClicked() {
-                                            Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                            callIntent.setData(Uri.parse("tel:"+ kcpContentPage.getStoreNumber()));
-                                            startActivity(callIntent);
-                                        }
-                                    }).show();
-                        }
+                        Utility.makeCallWithAlertDialog(
+                                DetailActivity.this,
+                                R.string.title_make_calls,
+                                R.string.warning_make_call,
+                                R.string.action_ok,
+                                R.string.action_cancel,
+                                kcpContentPage.getStoreNumber()
+                                );
                     }
                 }, false);
 
@@ -180,16 +187,14 @@ public class DetailActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(mDetailPageSource.equals(KcpContentTypeFactory.ITEM_TYPE_STORE)) onBackPressed();
                         KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
                         if(kcpPlace != null) {
                             KcpContentPage kcpContentPage = new KcpContentPage();
                             kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
                             Intent intent = new Intent(DetailActivity.this, DetailActivity.class);
                             intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
-                            intent.putExtra(Constants.ARG_DETAIL_PAGE_ORIGIN, KcpContentTypeFactory.getContentType(kcpContentPage));
 
-                            String imageUrl = kcpContentPage.getImageUrl();
+                            String imageUrl = kcpContentPage.getHighestResImageUrl();
                             String logoUrl = kcpContentPage.getStoreLogo();
 
                             ActivityOptionsCompat options = null;
@@ -208,9 +213,7 @@ public class DetailActivity extends AppCompatActivity {
                             ActivityCompat.startActivity(DetailActivity.this, intent, options.toBundle());
                             DetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         } else {
-
-                            //download it
-
+                            downloadIfNecessary(kcpContentPage);
                         }
                     }
                 }, false);
@@ -254,50 +257,73 @@ public class DetailActivity extends AppCompatActivity {
 
             CTA facebook = new CTA(
                     R.layout.layout_detail_social_button,
-                    R.drawable.icn_instagram,
-                    kcpContentPage.getStoreName(),
+                    R.drawable.icn_facebook,
+                    getResources().getString(R.string.social_facebook),
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                            Utility.openWebPage(DetailActivity.this, kcpPlace.getFacebookLink());
                         }
                     }, false);
 
             CTA twiter = new CTA(
                     R.layout.layout_detail_social_button,
                     R.drawable.icn_twitter,
-                    kcpContentPage.getStoreName(),
+                    getResources().getString(R.string.social_twitter),
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                            Utility.openWebPage(DetailActivity.this, kcpPlace.getTwitterLink());
+                        }
+                    }, false);
+
+            CTA instagram = new CTA(
+                    R.layout.layout_detail_social_button,
+                    R.drawable.icn_instagram,
+                    getResources().getString(R.string.social_instagram),
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                            Utility.openWebPage(DetailActivity.this, kcpPlace.getInstagramLink());
                         }
                     }, false);
 
             CTA webpage = new CTA(
                     R.layout.layout_detail_social_button,
-                    R.drawable.icn_menu_mall_info,
-                    kcpContentPage.getStoreName(),
+                    R.drawable.icn_web,
+                    getResources().getString(R.string.social_instagram),
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                            Utility.openWebPage(DetailActivity.this, kcpPlace.getMainWebsiteLink());
                         }
                     }, false);
 
 
             //SOCIAL SHARING
-            LinearLayout llSharing = (LinearLayout) findViewById(R.id.llSharing);
-            RelativeLayout layoutSocialSharing = (RelativeLayout) findViewById(R.id.layoutSocialSharing);
-            TextView tvDetailSocialSharingBtnHeader = (TextView) layoutSocialSharing.findViewById(R.id.tvDetailSocialSharingBtnHeader);
-            tvDetailSocialSharingBtnHeader.setText("Follow " + kcpContentPage.getStoreName() + " on...");
-            llSharing.setVisibility(View.VISIBLE);
-            layoutSocialSharing.setVisibility(View.VISIBLE);
 
-            ((ViewGroup) llSharing).removeAllViews();
-            ((ViewGroup) llSharing).addView(facebook.getView());
-            ((ViewGroup) llSharing).addView(twiter.getView());
-            ((ViewGroup) llSharing).addView(webpage.getView());
+            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+            if(kcpPlace.getFacebookLink() != null || kcpPlace.getTwitterLink() != null || kcpPlace.getInstagramLink() != null || kcpPlace.getMainWebsiteLink() != null){
+                LinearLayout llSharing = (LinearLayout) findViewById(R.id.llSharing);
+                llSharing.setVisibility(View.VISIBLE);
+
+                RelativeLayout layoutSocialSharing = (RelativeLayout) findViewById(R.id.layoutSocialSharing); //FOLLOW ON
+                layoutSocialSharing.setVisibility(View.VISIBLE);
+
+                TextView tvDetailSocialSharingBtnHeader = (TextView) layoutSocialSharing.findViewById(R.id.tvDetailSocialSharingBtnHeader);
+                tvDetailSocialSharingBtnHeader.setText("Follow " + kcpContentPage.getStoreName() + " on...");
+
+                ((ViewGroup) llSharing).removeAllViews();
+
+                if(kcpPlace.getFacebookLink() != null) ((ViewGroup) llSharing).addView(facebook.getView());
+                if(kcpPlace.getTwitterLink() != null) ((ViewGroup) llSharing).addView(twiter.getView());
+                if(kcpPlace.getInstagramLink() != null) ((ViewGroup) llSharing).addView(instagram.getView());
+                if(kcpPlace.getMainWebsiteLink() != null) ((ViewGroup) llSharing).addView(webpage.getView());
+            }
         }
 
         View llCTA = findViewById(R.id.llCTA);
@@ -309,7 +335,7 @@ public class DetailActivity extends AppCompatActivity {
 
 
     public void downloadPlace(final int placeId){
-        KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(DetailActivity.this, new Handler(Looper.getMainLooper()) {
+        KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(DetailActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
                 switch (inputMessage.arg1) {
@@ -329,6 +355,29 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
         kcpPlaceManager.downloadPlace(placeId);
+    }
+
+    public void downloadContentList(final int placeId){
+        KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(DetailActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                        KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
+                        KcpContentPage kcpContentPage = new KcpContentPage();
+
+                        ArrayList<KcpContentPage> kcpContentPages = kcpPlacesRoot.getContentPagesById(placeId);
+                        kcpContentPage.setContentPageList(kcpContentPages);
+                        setUpDealsAndEvents(kcpContentPage);
+                        break;
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        kcpPlaceManager.downloadContents(placeId);
     }
 
     public class CTA {
@@ -403,7 +452,7 @@ public class DetailActivity extends AppCompatActivity {
             final String toolbarTitle = KcpContentTypeFactory.getContentTypeTitle(kcpContentPage);
 
 
-            final String imageUrl = kcpContentPage.getImageUrl();
+            final String imageUrl = kcpContentPage.getHighestResImageUrl();
             if(imageUrl.equals("")){
                 //TODO: if it's necessary to have toolbar in white, change the theme here (now it's in themeColor)
                 if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
@@ -479,10 +528,12 @@ public class DetailActivity extends AppCompatActivity {
 
             } else {
                 tvDetailLogoText.setVisibility(View.GONE);
-                new GlideFactory().glideWithDefaultRatio(
+
+                new GlideFactory().glideWithNoDefaultRatio(
                         ivDetailLogo.getContext(),
                         logoUrl,
                         ivDetailLogo);
+
             }
 
             TextView tvDetailTitle = (TextView) findViewById(R.id.tvDetailTitle);
@@ -514,10 +565,52 @@ public class DetailActivity extends AppCompatActivity {
             if(body.equals("")) tvDetailBody.setVisibility(View.GONE);
             else tvDetailBody.setText(Html.fromHtml(body)); //sometimes adds extra space in between
 
-
         } catch (Exception e) {
             logger.error(e);
         }
+    }
+
+    private void setUpDealsAndEvents(final KcpContentPage kcpContentPage){
+
+        ArrayList<KcpContentPage> kcpContentPages = kcpContentPage.getContentPageList(true);
+        if(kcpContentPages != null && mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
+            ArrayList<KcpContentPage> dealContentpages = new ArrayList<KcpContentPage>();
+            ArrayList<KcpContentPage> eventContentpages = new ArrayList<KcpContentPage>();
+
+            //Separating the content page list into Deal / Event
+            for(KcpContentPage dealEventContentPage : kcpContentPages){
+                if(KcpContentTypeFactory.getContentType(dealEventContentPage) == KcpContentTypeFactory.ITEM_TYPE_DEAL){
+                    dealContentpages.add(dealEventContentPage);
+                } else if(KcpContentTypeFactory.getContentType(dealEventContentPage) == KcpContentTypeFactory.ITEM_TYPE_EVENT){
+                    eventContentpages.add(dealEventContentPage);
+                }
+            }
+
+            //Set up RecyclerView for DEAL
+            LinearLayout llStoreDeals = (LinearLayout) findViewById(R.id.llStoreDeals);
+            RecyclerView rvStoreDeals = (RecyclerView) findViewById(R.id.rvStoreDeals);
+            setUpRecyclerView(llStoreDeals, rvStoreDeals, dealContentpages);
+
+            //Set up RecyclerView for EVENT
+            LinearLayout llStoreEvents = (LinearLayout) findViewById(R.id.llStoreEvents);
+            RecyclerView rvStoreEvents = (RecyclerView) findViewById(R.id.rvStoreEvents);
+            setUpRecyclerView(llStoreEvents, rvStoreEvents, eventContentpages);
+        }
+    }
+
+    private void setUpRecyclerView(LinearLayout rvLinearLayout, RecyclerView rv, ArrayList<KcpContentPage> rvItems){
+        if(rvItems.size() > 0 ) rvLinearLayout.setVisibility(View.VISIBLE);
+        LinearLayoutManager staggeredGridLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rv.setLayoutManager(staggeredGridLayoutManager);
+        DealsRecyclerViewAdapter dealsRecyclerViewAdapter = new DealsRecyclerViewAdapter(
+                this,
+                false,
+                R.layout.list_item_store_detail_deals,
+                rvItems,
+                new ArrayList<KcpContentPage>());
+        rv.setAdapter(dealsRecyclerViewAdapter);
+        SpacesItemDecoration itemDecoration = new SpacesItemDecoration(this, R.dimen.card_horizontal_margin);
+        rv.addItemDecoration(itemDecoration);
     }
 
     @Override

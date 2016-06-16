@@ -11,6 +11,7 @@
 
     <!--default colors-->
     <color name="themeColor">#13bed0</color>
+    <color name="themeColorTransparent">#3013bed0</color>
     <color name="warningColor">#13bed0</color> <!--#CFff4444-->
     <color name="themeColorDark">#108E9C</color>
 

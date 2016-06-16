@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpandroidsdk.utils.Utility;
 
 /**
  * Created by Kay on 2016-05-04.

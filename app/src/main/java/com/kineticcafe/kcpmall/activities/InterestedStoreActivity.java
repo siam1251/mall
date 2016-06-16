@@ -17,13 +17,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
+import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.InterestRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
-import com.kineticcafe.kcpmall.kcpData.KcpCategoryManager;
-import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpandroidsdk.utils.Utility;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
                 final ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
                 pb.setVisibility(View.VISIBLE);
                 tvIntrstd.setVisibility(View.GONE);
-                KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(InterestedStoreActivity.this, new Handler(Looper.getMainLooper()) {
+                KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(InterestedStoreActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
                     @Override
                     public void handleMessage(Message inputMessage) {
                         tvIntrstd.setVisibility(View.VISIBLE);

@@ -9,7 +9,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpmall.R;
@@ -92,14 +90,14 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         final KcpPlaces kcpPlace = (KcpPlaces) mKcpPlacesList.get(position);
         final StoreViewHolder storeViewHolder = (StoreViewHolder) holder;
 
-        String imageUrl = kcpPlace.getImageUrl();
+        String imageUrl = kcpPlace.getHighestImageUrl();
         storeViewHolder.ivDealLogo.setImageResource(R.drawable.placeholder);
 
-        new GlideFactory().glideWithDefaultRatio(
+        new GlideFactory().glideWithNoDefaultRatio(
                 mContext,
                 imageUrl,
                 storeViewHolder.ivDealLogo,
-                R.drawable.placeholder);
+                R.drawable.placeholder_logo);
 
         String storename = kcpPlace.getPlaceName();
         storeViewHolder.tvDealStoreName.setText(storename);
@@ -127,7 +125,6 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
 
                 Intent intent = new Intent(mContext, DetailActivity.class);
                 intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
-                intent.putExtra(Constants.ARG_DETAIL_PAGE_ORIGIN, Constants.VALUE_DETAIL_PAGE_ORIGIN_MAIN);
 
                 String transitionNameLogo = mContext.getResources().getString(R.string.transition_news_logo);
 

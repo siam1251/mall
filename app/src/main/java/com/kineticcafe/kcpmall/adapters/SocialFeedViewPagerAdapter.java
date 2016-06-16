@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kineticcafe.kcpandroidsdk.instagram.model.InstagramFeed;
+import com.kineticcafe.kcpandroidsdk.twitter.model.TwitterTweet;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
-import com.kineticcafe.kcpmall.instagram.model.InstagramFeed;
-import com.kineticcafe.kcpmall.twitter.model.TwitterTweet;
 
 import java.util.ArrayList;
 import java.util.List;

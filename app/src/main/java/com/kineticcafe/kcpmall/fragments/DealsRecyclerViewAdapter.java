@@ -18,8 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
-import com.kineticcafe.kcpandroidsdk.models.KcpNavigationPage;
-import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
@@ -37,11 +35,25 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private ArrayList<KcpContentPage> mKcpContentPagesOtherDeals;
     private ArrayList<KcpContentPage> mKcpContentPagesRecommendedDeals;
+    private boolean mhasSectionHeaders = true;
+    private int mDealLayoutResource;
 
     private ArrayList<Object> mItems;
 
-    public DealsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> recommendedDeals, ArrayList<KcpContentPage> otherDeals) {
+    public DealsRecyclerViewAdapter(Context context, boolean hasSectionHeaders, ArrayList<KcpContentPage> recommendedDeals, ArrayList<KcpContentPage> otherDeals) {
         mContext = context;
+        mhasSectionHeaders = hasSectionHeaders;
+
+        mKcpContentPagesRecommendedDeals = recommendedDeals == null ? new ArrayList<KcpContentPage>() : new ArrayList<KcpContentPage>(recommendedDeals);
+        mKcpContentPagesOtherDeals = otherDeals == null ? new ArrayList<KcpContentPage>() : new ArrayList<KcpContentPage>(otherDeals);
+
+        createItems();
+    }
+
+    public DealsRecyclerViewAdapter(Context context, boolean hasSectionHeaders, int dealLayoutResource, ArrayList<KcpContentPage> recommendedDeals, ArrayList<KcpContentPage> otherDeals) {
+        mContext = context;
+        mhasSectionHeaders = hasSectionHeaders;
+        mDealLayoutResource = dealLayoutResource;
 
         mKcpContentPagesRecommendedDeals = recommendedDeals == null ? new ArrayList<KcpContentPage>() : new ArrayList<KcpContentPage>(recommendedDeals);
         mKcpContentPagesOtherDeals = otherDeals == null ? new ArrayList<KcpContentPage>() : new ArrayList<KcpContentPage>(otherDeals);
@@ -62,15 +74,15 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         boolean otherDealsExist = sizeOfOtherDeals > 0 ? true : false;
 
         if(recommendedDealsExist){
-            mItems.add(KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS);
+            if(mhasSectionHeaders) mItems.add(KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS);
             mItems.addAll(mKcpContentPagesRecommendedDeals);
-            mItems.add(KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST);
+            if(mhasSectionHeaders) mItems.add(KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST);
         } else {
             if(otherDealsExist) mItems.add(KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST); //meaning the entire lists are empty
         }
 
         if(otherDealsExist){
-            mItems.add(KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_DEALS);
+            if(mhasSectionHeaders) mItems.add(KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_DEALS);
             mItems.addAll(mKcpContentPagesOtherDeals);
         }
     }
@@ -178,7 +190,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             case KcpContentTypeFactory.ITEM_TYPE_LOADING:
                 return new LoadingViewHolder(LayoutInflater.from(mContext).inflate(R.layout.layout_loading_item, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_DEAL:
-                return new DealsViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_deal, parent, false));
+                if(mDealLayoutResource != 0) return new DealsViewHolder(LayoutInflater.from(mContext).inflate(mDealLayoutResource, parent, false));
+                else return new DealsViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_deal, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST:
                 return new SetMyInterestViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_interest, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST:
@@ -248,7 +261,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             final KcpContentPage kcpContentPage = (KcpContentPage) mItems.get(position);
             final DealsViewHolder dealHolder = (DealsViewHolder) holder;
 
-            String imageUrl = kcpContentPage.getImageUrl();
+            String imageUrl = kcpContentPage.getHighestResImageUrl();
             dealHolder.ivDealLogo.setImageResource(R.drawable.placeholder);
 
             new GlideFactory().glideWithDefaultRatio(
@@ -290,7 +303,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
-                    intent.putExtra(Constants.ARG_DETAIL_PAGE_ORIGIN, Constants.VALUE_DETAIL_PAGE_ORIGIN_MAIN);
 
                     String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
                     String transitionNameExpiry = mContext.getResources().getString(R.string.transition_news_expiry_date);

@@ -5,18 +5,13 @@
     android:id="@+id/cvAncmt"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="?android:attr/selectableItemBackground"
+    style="@style/SelectableItemForeground"
     card_view:cardCornerRadius="@dimen/card_corner_radius">
-    android:layout_marginTop="@dimen/card_vertical_margin"
-    android:layout_marginLeft="@dimen/card_vertical_margin"
-    android:layout_marginRight="@dimen/card_vertical_margin"
-    android:layout_marginBottom="@dimen/card_vertical_margin"
-
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical" android:layout_width="match_parent"
         android:background="@color/white"
-        android:foreground="?android:attr/selectableItemBackground"
+        style="@style/SelectableItemForeground"
         android:layout_height="@dimen/category_item_height">
 
         <com.kineticcafe.kcpmall.views.ThemeColorImageView
@@ -31,7 +26,6 @@
             android:adjustViewBounds="true"
             />
 
-        <!--<com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView-->
         <TextView
             android:textColor="@color/category_txt"
             android:layout_marginLeft="@dimen/category_txt_left_margin"

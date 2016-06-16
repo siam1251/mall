@@ -30,6 +30,13 @@
     <string name="menu_info">INFO</string>
 
 
+    <!--SOCIAL SHARING-->
+    <string name="social_facebook">Facebook</string>
+    <string name="social_twitter">Twitter</string>
+    <string name="social_instagram">Instagram</string>
+
+
+
     <!--interest card-->
     <string name="intrst_card_title">What Are Your Interests?</string>
     <string name="intrst_card_desc">Set your interests to get personalized deal recommendations just for you!</string>

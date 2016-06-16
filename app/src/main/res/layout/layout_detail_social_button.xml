@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:foreground="?android:attr/selectableItemBackground"
+    style="@style/SelectableItemForeground"
     android:background="@color/detail_social_sharing_bg"
     android:layout_height="@dimen/detail_button_height">
 
     <com.kineticcafe.kcpmall.views.ThemeColorImageView
         android:layout_marginLeft="@dimen/detail_button_image_left_margin"
         android:layout_centerVertical="true"
-        android:src="@drawable/icn_instagram"
+        android:src="@drawable/icn_facebook"
         android:id="@+id/ivDetailBtnImage"
         android:layout_width="@dimen/detail_button_image_width"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/detail_button_image_height"
         android:adjustViewBounds="true"
         />
-
+        android:layout_width="@dimen/detail_button_image_width"
 
 
     <TextView

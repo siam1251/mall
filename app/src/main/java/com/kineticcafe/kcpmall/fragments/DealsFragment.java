@@ -76,6 +76,7 @@ public class DealsFragment extends BaseFragment {
 
         mDealsRecyclerViewAdapter = new DealsRecyclerViewAdapter(
                 getActivity(),
+                true,
                 KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true),
                 KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED).getKcpContentPageList(true));
         recyclerView.setAdapter(mDealsRecyclerViewAdapter);

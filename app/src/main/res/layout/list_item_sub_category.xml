@@ -2,25 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="@color/white"
-    android:foreground="?android:attr/selectableItemBackground"
     android:layout_height="@dimen/sub_category_item_height">
 
-    <TextView
-        android:textColor="@color/sub_category_txt"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:textSize="@dimen/category_txt"
-        android:gravity="center_vertical"
-        android:text="Everyday Fashion"
-        android:id="@+id/tvCategory"
+    <!--NOTE - selectableItemBackground won't work on note 4 when background is set white with foreground -->
+    <RelativeLayout
+        style="@style/SelectableItemBackground"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:transitionName="@string/transition_category_name"
-        />
+        android:layout_height="match_parent">
+        android:background="?android:attr/selectableItemBackground"
+        <TextView
+            android:textColor="@color/sub_category_txt"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textSize="@dimen/category_txt"
+            android:gravity="center_vertical"
+            android:text="Everyday Fashion"
+            android:id="@+id/tvCategory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:transitionName="@string/transition_category_name"
+            />
 
-    <View
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        style="@style/separater"
-        />
+        <View
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            style="@style/separater"
+            />
+
+    </RelativeLayout>
 
 </RelativeLayout>

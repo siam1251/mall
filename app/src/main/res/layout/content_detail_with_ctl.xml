@@ -45,7 +45,8 @@
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"
                 android:transitionName="@string/transition_news_logo"
-                android:id="@+id/ivDetailLogo"/>
+                android:id="@+id/ivDetailLogo"
+                />
         </FrameLayout>
 
         <TextView
@@ -76,7 +77,6 @@
             android:layout_marginBottom="25dp"
             android:background="@drawable/btn_style_corner_radius"
             />
-        android:text="Thursday, May 12 - Wednesday, May 25"
 
         <TextView
             android:id="@+id/tvDetailBody"
@@ -89,16 +89,91 @@
             android:layout_marginBottom="28dp"
             android:textColor="@color/detail_body_text"
             />
-        android:text="@string/lorem"
 
-        <!--<View style="@style/separater" />-->
 
+        <!-- CTA -->
         <LinearLayout
             android:id="@+id/llCTA"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
 
+
+        <!-- STORE DEALS -->
+        <LinearLayout
+            android:visibility="gone"
+            android:background="@color/detail_social_sharing_bg"
+            android:id="@+id/llStoreDeals"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/detail_recyclerview_header_text"
+                android:text="Store Deals"
+                android:textColor="@color/detail_title_text"
+                android:layout_marginTop="@dimen/detail_recyclerview_header_top_margin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/detail_recyclerview_header_height" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvStoreDeals"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                />
+
+
+            <View
+                android:layout_marginTop="20dp"
+                style="@style/separater"
+                />
+
+        </LinearLayout>
+
+        <!--STORE EVENTS-->
+        <LinearLayout
+            android:visibility="gone"
+            android:background="@color/detail_social_sharing_bg"
+            android:id="@+id/llStoreEvents"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/detail_recyclerview_header_text"
+                android:text="Store Events"
+                android:textColor="@color/detail_title_text"
+                android:layout_marginTop="@dimen/detail_recyclerview_header_top_margin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/detail_recyclerview_header_height" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvStoreEvents"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                />
+
+            <View
+                android:layout_marginTop="20dp"
+                style="@style/separater"
+                />
+
+        </LinearLayout>
+
+
+
+
+        <!-- SOCIAL SHARING -->
         <include
             android:id="@+id/layoutSocialSharing"
             layout="@layout/layout_detail_social_sharing_text"/>
@@ -115,6 +190,6 @@
             android:id="@+id/layoutDisclaimer"
             layout="@layout/layout_disclaimer"/>
 
-        <!--SOCIAL SHARING-->
+        <!-- SOCIAL SHARING -->
     </LinearLayout>
 </ScrollView>
