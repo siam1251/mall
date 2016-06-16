@@ -31,7 +31,7 @@ import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpDataListener;
-import com.kineticcafe.kcpandroidsdk.utils.Utility;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.HomeBottomTapAdapter;
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initializeKcpData(){
-        if(!Utility.isNetworkAvailable(this)){
+        if(!KcpUtility.isNetworkAvailable(this)){
             ProgressBarWhileDownloading.showProgressDialog(this, R.layout.layout_loading_item, false);
             this.onDataDownloaded(); //TODO: error here when offline
             this.showSnackBar(R.string.warning_no_internet_connection, R.string.warning_retry, new View.OnClickListener() {

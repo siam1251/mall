@@ -20,11 +20,11 @@ import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.InterestRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
-import com.kineticcafe.kcpandroidsdk.utils.Utility;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
 
                                 break;
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                                Utility.saveGson(InterestedStoreActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
+                                KcpUtility.saveGson(InterestedStoreActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
                                 setResult(Activity.RESULT_OK, new Intent());
                                 finish();
                                 break;
@@ -139,9 +139,9 @@ public class InterestedStoreActivity extends AppCompatActivity {
     }
 
     public void checkIfNotSaved(final AlertDialogForInterest.DialogAnsweredListener dialogAnsweredListener){
-        ArrayList<String> savedStoreLikeList = Utility.loadGsonArrayListString(this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK);
+        ArrayList<String> savedStoreLikeList = KcpUtility.loadGsonArrayListString(this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK);
         ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();
-        if(!Utility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
+        if(!KcpUtility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
             AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
             alertDialogForInterest.getAlertDialog(
                     this,

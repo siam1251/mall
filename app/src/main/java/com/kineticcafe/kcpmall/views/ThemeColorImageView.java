@@ -11,7 +11,7 @@ import com.kineticcafe.kcpmall.R;
 /**
  * Created by Kay on 2016-05-02.
  */
-public class ThemeColorImageView extends ImageView implements View.OnClickListener{
+public class ThemeColorImageView extends ImageView {
 
     private int mFilterColor;
     private int mSelectedFilterColor;
@@ -22,10 +22,9 @@ public class ThemeColorImageView extends ImageView implements View.OnClickListen
     public ThemeColorImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ThemeColorImageView);
-        mFilterColor = a.getColor(R.styleable.ThemeColorImageView_filterColor, context.getResources().getColor(R.color.themeColor));
+        mFilterColor = a.getColor(R.styleable.ThemeColorImageView_filterColor, context.getResources().getColor(R.color.transparent));
         mSelectedFilterColor = a.getColor(R.styleable.ThemeColorImageView_filterColorUnselected, context.getResources().getColor(R.color.transparent));
         setColorFilter(mFilterColor);
-        this.setOnClickListener(this);
     }
 
     public ThemeColorImageView(Context context, AttributeSet attrs, int defStyle) {
@@ -33,7 +32,8 @@ public class ThemeColorImageView extends ImageView implements View.OnClickListen
     }
 
     @Override
-    public void onClick(View v) {
+    public void setSelected(boolean selected) {
+        super.setSelected(selected);
         if(isSelected()){
             setColorFilter(mSelectedFilterColor);
         } else {

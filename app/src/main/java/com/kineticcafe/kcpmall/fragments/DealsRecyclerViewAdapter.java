@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
@@ -277,12 +278,15 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             dealHolder.tvDealTitle.setText(title);
 
 
+            final String likeLink = kcpContentPage.getLikeLink();
+            dealHolder.ivFav.setSelected(KcpUtility.isLiked(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink));
             dealHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //TODO: implement fav functionality
                     Toast.makeText(mContext, "fav clicked", Toast.LENGTH_SHORT).show();
                     dealHolder.ivFav.setSelected(!dealHolder.ivFav .isSelected());
+                    KcpUtility.addOrRemoveLikeLink(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink);
                 }
             });
 

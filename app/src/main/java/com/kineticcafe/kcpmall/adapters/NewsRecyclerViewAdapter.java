@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.R;
@@ -30,7 +31,6 @@ import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
-import com.kineticcafe.kcpandroidsdk.utils.Utility;
 
 import java.util.ArrayList;
 
@@ -208,12 +208,15 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 ancmtHolder.rlAncmt.setLayoutParams(rlAncmtParam);
             }
 
+            final String likeLink = kcpContentPage.getLikeLink();
+            ancmtHolder.ivFav.setSelected(KcpUtility.isLiked(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink));
             ancmtHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //TODO: implement fav functionality
                     Toast.makeText(mContext, "fav clicked", Toast.LENGTH_SHORT).show();
                     ancmtHolder.ivFav.setSelected(!ancmtHolder.ivFav .isSelected());
+                    KcpUtility.addOrRemoveLikeLink(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink);
                 }
             });
 
@@ -231,7 +234,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
 
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
                 }
             });
 
@@ -242,8 +244,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     ((Activity)mContext).startActivityForResult(new Intent(mContext, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//                    ((Activity)mContext).overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
-//                    ((Activity)mContext).overridePendingTransition(R.anim.righttoleft, R.anim.stable);
                 }
             });
 
@@ -269,7 +269,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             }
 
             ViewGroup.LayoutParams vpTwParam = (ViewGroup.LayoutParams) viewHolder.vpTw.getLayoutParams();
-            vpTwParam.height =  (int) (Utility.getScreenWidth(mContext) / Utility.getFloat(mContext, R.dimen.ancmt_image_ratio));
+            vpTwParam.height =  (int) (KcpUtility.getScreenWidth(mContext) / KcpUtility.getFloat(mContext, R.dimen.ancmt_image_ratio));
             viewHolder.vpTw.setLayoutParams(vpTwParam);
             initializeSocialFeedViews(viewHolder, mSocialFeedViewPagerAdapter);
         }

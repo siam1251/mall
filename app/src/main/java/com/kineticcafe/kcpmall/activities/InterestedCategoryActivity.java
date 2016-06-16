@@ -22,7 +22,7 @@ import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
-import com.kineticcafe.kcpandroidsdk.utils.Utility;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.InterestRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
@@ -74,7 +74,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                             case KcpCategoryManager.DOWNLOAD_FAILED:
                                 break;
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                                Utility.saveGson(InterestedCategoryActivity.this, Constants.PREFS_KEY_CATEGORY, mInterestRecyclerViewAdapter.getFavCatTempList());
+                                KcpUtility.saveGson(InterestedCategoryActivity.this, Constants.PREFS_KEY_CATEGORY, mInterestRecyclerViewAdapter.getFavCatTempList());
                                 InterestedCategoryActivity.this.startActivityForResult(new Intent(InterestedCategoryActivity.this, InterestedStoreActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
 //                                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
 
@@ -111,7 +111,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         int secondSpanSize;
         int thirdSpanSize;
 
-        float compatPadding = Utility.dpToPx(this, 5);
+        float compatPadding = KcpUtility.dpToPx(this, 5);
         for(int position = 0 ; position < kcpCategoriesArrayList.size(); position++){
 
             if(position < gridLayoutItemArrayList.size()) continue;
@@ -177,12 +177,12 @@ public class InterestedCategoryActivity extends AppCompatActivity {
     public float getTextSize(String string){
         Paint p = new Paint();
 //        p.setTextSize(getResources().getDimension(R.dimen.intrstd_name));
-        p.setTextSize(Utility.dpToPx(this, 15));
+        p.setTextSize(KcpUtility.dpToPx(this, 15));
         return p.measureText(string);
     }
 
     public float getSpaceLeftFromOneSide(float size){
-        int screenWidth = Utility.getScreenWidth(this);
+        int screenWidth = KcpUtility.getScreenWidth(this);
         return (screenWidth - size) / 2f;
     }
 
@@ -229,9 +229,9 @@ public class InterestedCategoryActivity extends AppCompatActivity {
     }
 
     public void checkIfNotSaved(final AlertDialogForInterest.DialogAnsweredListener dialogAnsweredListener){
-        ArrayList<Integer> savedFavCatList = Utility.loadGsonArrayList(this, Constants.PREFS_KEY_CATEGORY);
+        ArrayList<Integer> savedFavCatList = KcpUtility.loadGsonArrayList(this, Constants.PREFS_KEY_CATEGORY);
         ArrayList<Integer> newFavCatList = mInterestRecyclerViewAdapter.getFavCatTempList();
-        if(!Utility.isTwoIntegerListsEqual(savedFavCatList, newFavCatList)){
+        if(!KcpUtility.isTwoIntegerListsEqual(savedFavCatList, newFavCatList)){
             AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
             alertDialogForInterest.getAlertDialog(
                     this,

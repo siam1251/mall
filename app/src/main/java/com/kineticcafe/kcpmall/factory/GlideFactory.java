@@ -6,11 +6,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpandroidsdk.utils.Utility;
 
 /**
  * Created by Kay on 2016-05-06.
@@ -21,7 +18,7 @@ public class GlideFactory {
         if(imageView == null) return;
         Glide.with(context)
                 .load(drawable)
-//                .override(Utility.getScreenWidth(context), (int) (Utility.getScreenWidth(context) / Utility.getFloat(context, R.dimen.ancmt_image_ratio)))
+//                .override(KcpUtility.getScreenWidth(context), (int) (KcpUtility.getScreenWidth(context) / KcpUtility.getFloat(context, R.dimen.ancmt_image_ratio)))
                 .crossFade() //TODO: necessary?
                 .into(imageView);
 
@@ -52,7 +49,7 @@ public class GlideFactory {
         Glide.with(context)
                 .load(url)
                 .crossFade()
-                .override(Utility.getScreenWidth(context), (int) (Utility.getScreenWidth(context) / ratio))
+                .override(KcpUtility.getScreenWidth(context), (int) (KcpUtility.getScreenWidth(context) / ratio))
                 .into(imageView);
     }
 
@@ -62,7 +59,7 @@ public class GlideFactory {
         Glide.with(context)
                 .load(url)
                 .crossFade()
-                .override(Utility.getScreenWidth(context), (int) (Utility.getScreenWidth(context) / ratio))
+                .override(KcpUtility.getScreenWidth(context), (int) (KcpUtility.getScreenWidth(context) / ratio))
                 .error(errorDrawable)
                 .placeholder(errorDrawable)
                 .into(imageView);
@@ -82,7 +79,7 @@ public class GlideFactory {
                 .load(url)
                 .crossFade()
                 .error(errorDrawable)
-                .override(Utility.getScreenWidth(context), (int) (Utility.getScreenWidth(context) / Utility.getFloat(context, R.dimen.ancmt_image_ratio)))
+                .override(KcpUtility.getScreenWidth(context), (int) (KcpUtility.getScreenWidth(context) / KcpUtility.getFloat(context, R.dimen.ancmt_image_ratio)))
                 .placeholder(errorDrawable)
                 .into(imageView);
     }
@@ -93,7 +90,7 @@ public class GlideFactory {
                 .load(url)
                 .crossFade()
                 .error(errorDrawable)
-                .override(Utility.getScreenWidth(context), (int) (width / Utility.getFloat(context, R.dimen.ancmt_image_ratio)))
+                .override(KcpUtility.getScreenWidth(context), (int) (width / KcpUtility.getFloat(context, R.dimen.ancmt_image_ratio)))
 //                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
 //                .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                .dontAnimate()

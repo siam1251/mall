@@ -1,25 +1,19 @@
 package com.kineticcafe.kcpmall.views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
-import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.activities.ZoomableImage;
-import com.kineticcafe.kcpandroidsdk.utils.Utility;
 
 /**
  * Created by Kay on 2016-05-05.
@@ -36,7 +30,7 @@ public class KCPSetRatioImageView extends ImageView implements ImageView.OnClick
         super(context, attrs);
         mContext = context;
         if (attrs != null) {
-            float imageRatio = Utility.getFloat(context, R.dimen.ancmt_image_ratio);
+            float imageRatio = KcpUtility.getFloat(context, R.dimen.ancmt_image_ratio);
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KCPSetRatioImageView);
             mImageRatio = a.getFloat(R.styleable.KCPSetRatioImageView_imageRatio, imageRatio);
             mZoomable = a.getBoolean(R.styleable.KCPSetRatioImageView_zoomable, false);
