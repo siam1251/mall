@@ -346,6 +346,8 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == Constants.REQUEST_CODE_CHANGE_INTEREST) {
             if (resultCode == Activity.RESULT_OK) {
                 HomeFragment.getInstance().downloadNewsAndDeal();
+            } else {
+
             }
         }
     }

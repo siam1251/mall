@@ -12,22 +12,9 @@ public class Constants {
 	public enum DetailType { DEAL, STORE }
 	public final static String KEY_BUNDLE_DEAL_TYPE = "key_bundle_deal_type";
 
-
-	//MALL SPECIFIC
-//	public final static String URL_BASE = 							"https://dit-kcp.kineticcafetech.com/";
-	public final static String URL_BASE = 							"https://staging-kcp.kineticcafetech.com/";
-	public final static String URL_NAVIGATION_ROOT = 				"core/navigation_roots";
-	public final static String URL_CATEGORIES = 					"core/categories/roots"; //TODO: which one is it?
-	public final static String URL_FINGERPRINTING_CATEGORIES = 		"core/categories"; //TODO: which one is it?
-	public final static String URL_PLACES = 						"core/places";
-	public final static String URL_POST_INTERESTED_STORES = 		"core/user/multi_like";
-	public final static String URL_VIEW_ALL_CONTENT =				"/view_all_content";
-	public final static String QUERY_PAGE = 						"1";
-	public final static String QUERY_PER_PAGE = 					"500";
-
 	//HEADER
-//	public final static String HEADER_VALUE_DATAHUB_CATALOG = 	"vaughan-mills";
-	public final static String HEADER_VALUE_DATAHUB_CATALOG = 	"metropolis-metrotown";
+	public final static String HEADER_VALUE_DATAHUB_CATALOG = 	"vaughan-mills";
+//	public final static String HEADER_VALUE_DATAHUB_CATALOG = 	"metropolis-metrotown";
 	public final static String HEADER_VALUE_DATAHUB_LOCALE = 	"en-CA";
 	public final static String HEADER_VALUE_CLIENT_TOKEN = 		"OGEyZDYyZTgtNzRmMS00ODNjLTg2YzMtYjQ0YWY1MDc5NWM1OjdjODhjZmY0ZTBjNDk5MTRiM2EzZTY3YjAzZGY1ZTE4ZDM5YTg0ZjM2YTE0ZjI0NWYzNDViN2JhNWY4YTE4YjJiMDUwMWIxOWRiYTExYzE1ZGIzNTJmNzhlM2EzYzI5MGM2MWQ4MmRlMGRjYTkyMzAzZTQ2NWRjZDU3NDJkNGRl";
 	public final static String HEADER_VALUE_CONTENT_TYPE = 		"application/json";

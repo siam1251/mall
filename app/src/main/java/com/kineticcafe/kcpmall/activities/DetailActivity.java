@@ -107,7 +107,7 @@ public class DetailActivity extends AppCompatActivity {
         ivFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DetailActivity.this, "fav clicked", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(DetailActivity.this, "fav clicked", Toast.LENGTH_SHORT).show();
                 ivFav.setSelected(!ivFav.isSelected());
                 KcpUtility.addOrRemoveLikeLink(DetailActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, mLikeLink);
             }
@@ -149,7 +149,7 @@ public class DetailActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
                     }
-                }, false);
+                }, true);
 
         //Store Parking
         CTA parking = new CTA(
@@ -174,10 +174,10 @@ public class DetailActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Utility.makeCallWithAlertDialog(
                                 DetailActivity.this,
-                                R.string.title_make_calls,
-                                R.string.warning_make_call,
-                                R.string.action_ok,
-                                R.string.action_cancel,
+                                getResources().getString(R.string.title_make_calls),
+                                getResources().getString(R.string.warning_make_call) + kcpContentPage.getStoreNumber() + "?",
+                                getResources().getString(R.string.action_call),
+                                getResources().getString(R.string.action_cancel),
                                 kcpContentPage.getStoreNumber()
                                 );
                     }
@@ -238,14 +238,18 @@ public class DetailActivity extends AppCompatActivity {
         if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_LOADING){
 
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
-            cTAList.add(location);
-            cTAList.add(parking);
-            cTAList.add(info);
+            if(kcpContentPage.getStore() != null) {
+                cTAList.add(location);
+                cTAList.add(parking);
+                cTAList.add(info);
+            }
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT){
-            cTAList.add(location);
-            cTAList.add(parking);
-            cTAList.add(info);
-            cTAList.add(phone);
+            if(kcpContentPage.getStore() != null) {
+                cTAList.add(location);
+                cTAList.add(parking);
+                cTAList.add(info);
+                cTAList.add(phone);
+            }
             cTAList.add(addToCalendar);
 
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_DEAL){
@@ -452,8 +456,9 @@ public class DetailActivity extends AppCompatActivity {
 
             final String toolbarTitle = KcpContentTypeFactory.getContentTypeTitle(kcpContentPage);
 
-
-            final String imageUrl = kcpContentPage.getHighestResImageUrl();
+            String imageUrlTemp = kcpContentPage.getHighestResImageUrl();
+            if(imageUrlTemp.equals("")) imageUrlTemp = kcpContentPage.getHighestResFallbackImageUrl();
+            final String imageUrl = imageUrlTemp;
             if(imageUrl.equals("")){
                 //TODO: if it's necessary to have toolbar in white, change the theme here (now it's in themeColor)
                 if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());

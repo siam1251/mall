@@ -258,6 +258,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+
         updateAdapter(Constants.EXTERNAL_CODE_FEED);
         updateAdapter(Constants.EXTERNAL_CODE_DEAL);
         updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);

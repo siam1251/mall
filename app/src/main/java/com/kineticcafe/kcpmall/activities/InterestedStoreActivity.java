@@ -71,8 +71,15 @@ public class InterestedStoreActivity extends AppCompatActivity {
 
                                 break;
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                                KcpUtility.saveGson(InterestedStoreActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
-                                setResult(Activity.RESULT_OK, new Intent());
+
+                                ArrayList<String> savedStoreLikeList = KcpUtility.loadGsonArrayListString(InterestedStoreActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK);
+                                ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();
+                                if(!KcpUtility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
+                                    KcpUtility.saveGson(InterestedStoreActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
+                                    setResult(Activity.RESULT_OK, new Intent());
+                                } else {
+                                    setResult(Activity.RESULT_CANCELED, new Intent());
+                                }
                                 finish();
                                 break;
                             default:
@@ -80,8 +87,8 @@ public class InterestedStoreActivity extends AppCompatActivity {
                         }
                     }
                 });
-                kcpCategoryManager.postInterestedStores(mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
 
+                kcpCategoryManager.postInterestedStores(mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
             }
         });
     }

@@ -76,7 +76,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
                                 KcpUtility.saveGson(InterestedCategoryActivity.this, Constants.PREFS_KEY_CATEGORY, mInterestRecyclerViewAdapter.getFavCatTempList());
                                 InterestedCategoryActivity.this.startActivityForResult(new Intent(InterestedCategoryActivity.this, InterestedStoreActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
-//                                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
 
                                 break;
                             default:
@@ -222,8 +221,9 @@ public class InterestedCategoryActivity extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK){
                 setResult(Activity.RESULT_OK, new Intent());
                 finish();
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                setResult(Activity.RESULT_CANCELED, new Intent());
+                finish();
             }
         }
     }

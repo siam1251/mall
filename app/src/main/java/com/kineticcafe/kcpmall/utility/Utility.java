@@ -69,6 +69,23 @@ public class Utility {
                 }).show();
     }
 
+    public static void makeCallWithAlertDialog(final Context context, final String title, final String msg, final String positiveBtn, final String negativebtn, final String number){
+        if(number == null || number.equals("")) return;
+        AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+        alertDialogForInterest.getAlertDialog(
+                context,
+                title,
+                msg,
+                positiveBtn,
+                negativebtn,
+                new AlertDialogForInterest.DialogAnsweredListener() {
+                    @Override
+                    public void okClicked() {
+                        makeCall(context, number);
+                    }
+                }).show();
+    }
+
     public static void openWebPage(Context context, String url){
         if(url == null || url.equals("")) return;
         if (!url.startsWith("http://") && !url.startsWith("https://"))
