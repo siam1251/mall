@@ -46,6 +46,8 @@ public class KcpContentTypeFactory {
     public static final String TYPE_SET_MY_INTEREST_TITLE = "Interest";
     public static final String TYPE_TWITTER_TITLE =         "Title";
     public static final String TYPE_INSTAGRAM_TITLE =       "Instagram";
+    public static final String TYPE_DEAL_TITLE =            "Deal";
+    public static final String TYPE_DEAL_STORE =            "Store";
 
 
     public static String getContentTypeTitle(KcpContentPage kcpContentPage){
@@ -61,6 +63,10 @@ public class KcpContentTypeFactory {
             return TYPE_TWITTER_TITLE;
         } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_INSTAGRAM)){
             return TYPE_INSTAGRAM_TITLE;
+        } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_DEAL)){
+            return TYPE_DEAL_TITLE;
+        } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_STORE)){
+            return TYPE_DEAL_STORE;
         } else {
             return TYPE_ANNOUNCEMENT_TITLE;
         }

@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
+import com.kineticcafe.kcpandroidsdk.managers.KcpPlaceManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
@@ -24,8 +26,7 @@ import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.SubCategoryActivity;
 import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
 import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
-import com.kineticcafe.kcpmall.kcpData.KcpCategoryManager;
-import com.kineticcafe.kcpmall.kcpData.KcpPlaceManager;
+import com.kineticcafe.kcpmall.factory.HeaderFactory;
 
 import java.util.ArrayList;
 
@@ -104,7 +105,7 @@ public class DirectoryFragment extends BaseFragment {
     }
 
     public void downloadCategories(){
-        KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), new Handler(Looper.getMainLooper()) {
+        KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
                 switch (inputMessage.arg1) {
@@ -147,7 +148,7 @@ public class DirectoryFragment extends BaseFragment {
     public void tryDownloadSubCategories(final Context context, final String externalCode, final String categoryName, String url, final int position, final View view) {
         //sub categories never downloaded - not likely happen as it should be done previously when categories were downloaded
         if(KcpCategoryRoot.getInstance().getSubcategories(externalCode) == null){
-            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), new Handler(Looper.getMainLooper()) {
+            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
                 @Override
                 public void handleMessage(Message inputMessage) {
                     switch (inputMessage.arg1) {
@@ -182,7 +183,7 @@ public class DirectoryFragment extends BaseFragment {
 
     public void tryDownloadPlacesForThisCategory(final Context context, final String categoryName, final String externalCode, String url, final View view){
         if(KcpCategoryRoot.getInstance().getPlaces(externalCode) == null){
-            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(context, new Handler(Looper.getMainLooper()) {
+            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(context, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
                 @Override
                 public void handleMessage(Message inputMessage) {
                     switch (inputMessage.arg1) {
@@ -215,13 +216,14 @@ public class DirectoryFragment extends BaseFragment {
                 Pair.create(view, ""));
 
 //        ActivityCompat.startActivity(((Activity)context), intent, options.toBundle());
-        getActivity().startActivity(intent);
+//        getActivity().startActivity(intent);
+        context.startActivity(intent);
         ((Activity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
 
     public void downloadPlaces(){
-        KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(getActivity(), new Handler(Looper.getMainLooper()) {
+        KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(getActivity(), R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
                 switch (inputMessage.arg1) {
@@ -239,7 +241,6 @@ public class DirectoryFragment extends BaseFragment {
         });
         kcpPlaceManager.downloadPlaces();
     }
-
 
     @Override
     public void onResume() {

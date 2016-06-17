@@ -1,35 +1,30 @@
 package com.kineticcafe.kcpmall.activities;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
+import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.InterestRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
-import com.kineticcafe.kcpmall.kcpData.KcpCategoryManager;
-import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpandroidsdk.utils.Utility;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
 import java.util.ArrayList;
@@ -64,7 +59,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
                 final ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
                 pb.setVisibility(View.VISIBLE);
                 tvIntrstd.setVisibility(View.GONE);
-                KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(InterestedStoreActivity.this, new Handler(Looper.getMainLooper()) {
+                KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(InterestedStoreActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
                     @Override
                     public void handleMessage(Message inputMessage) {
                         tvIntrstd.setVisibility(View.VISIBLE);
@@ -148,7 +143,13 @@ public class InterestedStoreActivity extends AppCompatActivity {
         ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();
         if(!Utility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
             AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
-            alertDialogForInterest.getAlertDialog(this, dialogAnsweredListener).show();
+            alertDialogForInterest.getAlertDialog(
+                    this,
+                    R.string.title_unsaved_changes,
+                    R.string.warning_exit_interest,
+                    R.string.action_exit,
+                    R.string.action_cancel,
+                    dialogAnsweredListener).show();
         } else {
             dialogAnsweredListener.okClicked();
         }

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -31,16 +30,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
+import com.kineticcafe.kcpandroidsdk.managers.KcpDataListener;
 import com.kineticcafe.kcpandroidsdk.utils.Utility;
+import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.HomeBottomTapAdapter;
 import com.kineticcafe.kcpmall.fragments.DirectoryFragment;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
-import com.kineticcafe.kcpmall.fragments.PlacesFragment;
 import com.kineticcafe.kcpmall.fragments.TestFragment;
-import com.kineticcafe.kcpmall.kcpData.KcpDataListener;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
-import com.kineticcafe.kcpmall.views.ProgressBarWhileDownloading;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,18 +113,18 @@ public class MainActivity extends AppCompatActivity
 
     private void initializeKcpData(){
         if(!Utility.isNetworkAvailable(this)){
-            ProgressBarWhileDownloading.showProgressDialog(this, false);
+            ProgressBarWhileDownloading.showProgressDialog(this, R.layout.layout_loading_item, false);
             this.onDataDownloaded(); //TODO: error here when offline
             this.showSnackBar(R.string.warning_no_internet_connection, R.string.warning_retry, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, true);
+                    ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
                     initializeKcpData();
                 }
             });
             return;
         } else {
-            ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, true);
+            ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
             HomeFragment.getInstance().initializeHomeData();
             DirectoryFragment.getInstance().initializeDirectoryData();
         }

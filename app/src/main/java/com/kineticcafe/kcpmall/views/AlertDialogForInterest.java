@@ -19,22 +19,32 @@ public class AlertDialogForInterest {
         void okClicked();
     }
 
-    public AlertDialog.Builder getAlertDialog (Context context, final DialogAnsweredListener dialogAnsweredListener){
+    public AlertDialog.Builder getAlertDialog (Context context, int title, int msg, int positiveBtn, int negativeBtn, final DialogAnsweredListener dialogAnsweredListener){
+        return getAlertDialog(
+                context,
+                context.getResources().getString(title),
+                context.getResources().getString(msg),
+                context.getResources().getString(positiveBtn),
+                context.getResources().getString(negativeBtn),
+                dialogAnsweredListener);
+    }
+
+    public AlertDialog.Builder getAlertDialog (Context context, String title, String msg, String positiveBtn, String negativeBtn, final DialogAnsweredListener dialogAnsweredListener){
 
         View v = ((Activity)context).getLayoutInflater().inflate(R.layout.alertdialog_interest, null);
         TextView tvAlertDialogInterest = (TextView) v.findViewById(R.id.tvAlertDialogInterest);
-        tvAlertDialogInterest.setText(context.getResources().getString(R.string.warning_exit_interest));
+        tvAlertDialogInterest.setText(msg);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(context.getResources().getString(R.string.action_unsaved_changes));
-        builder.setPositiveButton(context.getResources().getString(R.string.action_exit), new DialogInterface.OnClickListener() {
+        builder.setTitle(title);
+        builder.setPositiveButton(positiveBtn, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialogAnsweredListener.okClicked();
                 return;
             }
         });
-        builder.setNegativeButton(context.getResources().getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(negativeBtn, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 return;

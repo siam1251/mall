@@ -64,11 +64,23 @@
         <item name="android:layout_height">match_parent</item>
     </style>
 
-    ?android:attr/progressBarStyleInverse
     <style name="progressBarMedium" parent="Widget.AppCompat.ProgressBar">
         <item name="android:layout_width">30dp</item>
         <item name="android:layout_height">30dp</item>
     </style>
+
+
+    <style name="progressBarSmall" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:indeterminateTintMode">src_atop</item>
+        <item name="android:indeterminateTint">@color/themeColor</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_centerInParent">true</item>
+
+    </style>
+
 
 
     <style name="ProgressBarStyle" parent="Theme.AppCompat.Light.Dialog">
@@ -92,6 +104,21 @@
         <item name="android:fullDark">@color/transparent</item>
         <item name="android:topBright">@color/transparent</item>
         <item name="android:topDark">@color/transparent</item>
+    </style>
+
+
+    <style name="SelectableItemBackground">
+        <item name="android:theme">@style/SelectableItemTheme</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="SelectableItemForeground">
+        <item name="android:theme">@style/SelectableItemTheme</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="SelectableItemTheme">
+        <item name="colorControlHighlight">@color/themeColorTransparent</item>
     </style>
 
 </resources>

@@ -10,21 +10,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kineticcafe.kcpandroidsdk.instagram.model.InstagramFeed;
+import com.kineticcafe.kcpandroidsdk.instagram.model.Media;
+import com.kineticcafe.kcpandroidsdk.instagram.model.Recent;
+import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
+import com.kineticcafe.kcpandroidsdk.managers.KcpNavigationRootManager;
+import com.kineticcafe.kcpandroidsdk.managers.KcpSocialFeedManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
+import com.kineticcafe.kcpandroidsdk.twitter.model.TwitterTweet;
 import com.kineticcafe.kcpandroidsdk.utils.Utility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
-import com.kineticcafe.kcpmall.instagram.model.InstagramFeed;
-import com.kineticcafe.kcpmall.instagram.model.Media;
-import com.kineticcafe.kcpmall.instagram.model.Recent;
-import com.kineticcafe.kcpmall.kcpData.KcpCategoryManager;
-import com.kineticcafe.kcpmall.kcpData.KcpNavigationRootManager;
-import com.kineticcafe.kcpmall.kcpData.KcpSocialFeedManager;
-import com.kineticcafe.kcpmall.twitter.model.TwitterTweet;
-import com.kineticcafe.kcpmall.views.ProgressBarWhileDownloading;
+import com.kineticcafe.kcpmall.factory.HeaderFactory;
 
 import java.util.ArrayList;
 
@@ -61,9 +61,9 @@ public class HomeFragment extends BaseFragment {
         TabLayout tablayout = (TabLayout) view.findViewById(R.id.tlHome);
         tablayout.setupWithViewPager(vpHome);
 
-        updateAdapter(Constants.EXTERNAL_CODE_FEED);
-        updateAdapter(Constants.EXTERNAL_CODE_DEAL);
-        updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
+//        updateAdapter(Constants.EXTERNAL_CODE_FEED);
+//        updateAdapter(Constants.EXTERNAL_CODE_DEAL);
+//        updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
 
         if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
                 mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null ) mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);
@@ -97,7 +97,7 @@ public class HomeFragment extends BaseFragment {
             if(mDealsFragment != null) mDealsFragment.setEmptyState(null);
 
             if(mKcpNavigationRootManager == null) {
-                mKcpNavigationRootManager = new KcpNavigationRootManager(getActivity(), new Handler(Looper.getMainLooper()) {
+                mKcpNavigationRootManager = new KcpNavigationRootManager(getActivity(), R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
                     @Override
                     public void handleMessage(Message inputMessage) {
                         switch (inputMessage.arg1) {
@@ -176,7 +176,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void downloadFingerPrintingCategories(){
-        KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), new Handler(Looper.getMainLooper()) {
+        KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
                 switch (inputMessage.arg1) {
@@ -226,20 +226,17 @@ public class HomeFragment extends BaseFragment {
         try {
             KcpNavigationPage kcpNavigationPage = KcpNavigationRoot.getInstance().getNavigationpage(mode);
             if(kcpNavigationPage != null && kcpNavigationPage.getKcpContentPageList(true) != null){
-                if(mode.equals(Constants.EXTERNAL_CODE_FEED)) updateNewsAdapter(kcpNavigationPage.getKcpContentPageList(true));
-                else if(mode.equals(Constants.EXTERNAL_CODE_DEAL)) updateOtherDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
-                else if(mode.equals(Constants.EXTERNAL_CODE_RECOMMENDED)) updateRecommendedDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
+                if(mode.equals(Constants.EXTERNAL_CODE_FEED)) {
+                    updateNewsAdapter(kcpNavigationPage.getKcpContentPageList(true));
+                } else if(mode.equals(Constants.EXTERNAL_CODE_DEAL)) {
+                    updateOtherDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
+                } else if(mode.equals(Constants.EXTERNAL_CODE_RECOMMENDED)) {
+                    updateRecommendedDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
+                }
             }
         } catch (Exception e) {
             logger.error(e);
         }
-    }
-
-
-    private void removeDuplicates(){
-
-
-
     }
 
     private void updateNewsAdapter(ArrayList<KcpContentPage> kcpContentPages){

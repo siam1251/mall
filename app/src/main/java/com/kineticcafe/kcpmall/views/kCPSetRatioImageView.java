@@ -19,7 +19,7 @@ import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.activities.ZoomableImage;
-import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpandroidsdk.utils.Utility;
 
 /**
  * Created by Kay on 2016-05-05.

@@ -30,12 +30,9 @@ import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
-import com.kineticcafe.kcpmall.instagram.model.InstagramFeed;
-import com.kineticcafe.kcpmall.twitter.model.TwitterTweet;
-import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpandroidsdk.utils.Utility;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Kay on 2016-05-05.
@@ -189,7 +186,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             loadingViewHolder.progressBar.setIndeterminate(true);
         } else if (holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT || holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_EVENT) {
             final AnnouncementViewHolder ancmtHolder = (AnnouncementViewHolder) holder;
-            String imageUrl = kcpContentPage.getImageUrl();
+            String imageUrl = kcpContentPage.getHighestResImageUrl();
             new GlideFactory().glideWithDefaultRatio(
                     mContext,
                     imageUrl,
@@ -227,12 +224,10 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
 
                     String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
-                    String transitionNameFav = mContext.getResources().getString(R.string.transition_fav);
 
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             (Activity)mContext,
-                            Pair.create((View)ancmtHolder.ivAnnouncementLogo, transitionNameImage),
-                            Pair.create((View)ancmtHolder.ivFav, transitionNameFav));
+                            Pair.create((View)ancmtHolder.ivAnnouncementLogo, transitionNameImage));
 
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

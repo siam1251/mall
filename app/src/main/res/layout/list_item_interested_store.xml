@@ -5,7 +5,7 @@
     card_view:cardCornerRadius="@dimen/intrstd_card_corner_radius"
     card_view:cardUseCompatPadding="true"
     android:layout_centerHorizontal="true"
-    android:foreground="?android:attr/selectableItemBackground"
+    style="@style/SelectableItemForeground"
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
     android:background="@drawable/btn_intrstd_store"
@@ -34,7 +34,6 @@
 
         <ImageView
             android:id="@+id/ivFav"
-            android:transitionName="@string/transition_fav"
             android:layout_width="@dimen/intrstd_fav_width"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

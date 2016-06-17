@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:visibility="gone"
+    style="@style/SelectableItemForeground"
     android:layout_height="@dimen/detail_button_height">
 
     <com.kineticcafe.kcpmall.views.ThemeColorImageView
@@ -10,20 +9,28 @@
         android:layout_centerVertical="true"
         android:src="@drawable/icn_menu_map"
         android:id="@+id/ivDetailBtnImage"
-        android:layout_width="@dimen/detail_button_image_width"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="@dimen/detail_button_image_width"
         android:adjustViewBounds="true"
         />
+    detail_button_image_width
+
 
     <TextView
-        android:textColor="@color/black"
         android:layout_marginLeft="@dimen/detail_button_text_left_margin"
         android:layout_toRightOf="@+id/ivDetailBtnImage"
+        android:textColor="@color/black"
         android:gravity="center_vertical"
         android:text="Ground Level (GL)"
         android:id="@+id/tvDetailBtnTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        />
+
+    <ProgressBar
+        android:id="@+id/pb"
+        style="@style/progressBarSmall"
         />
 
     <View android:layout_marginLeft="@dimen/activity_horizontal_margin"

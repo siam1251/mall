@@ -113,6 +113,7 @@
     <dimen name="detail_title_text">16sp</dimen>
     <dimen name="detail_button_height">48dp</dimen>
     <dimen name="detail_button_image_width">14dp</dimen>
+    <dimen name="detail_button_image_height">18dp</dimen>
     <dimen name="detail_button_image_left_margin">21dp</dimen>
     <dimen name="detail_button_text_left_margin">36dp</dimen>
     <dimen name="detail_disclaimer_top_bottom_margin">30dp</dimen>
@@ -121,6 +122,9 @@
     <dimen name="detail_body_text">14sp</dimen>
     <!--<integer name="detail_expiry_date_alpha">204</integer>-->
     <integer name="detail_expiry_date_alpha">241</integer>
+    <dimen name="detail_recyclerview_header_height">35dp</dimen>
+    <dimen name="detail_recyclerview_header_top_margin">10dp</dimen>
+    <dimen name="detail_recyclerview_header_text">16sp</dimen>
 
 
     <!-- Default screen margins, per the Android Design guidelines. -->
@@ -163,9 +167,12 @@
 
     <!--etc-->
     <dimen name="button_corner_radius">2dp</dimen>
-    <dimen name="toolbar_elevation">2dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="shadow_inverted_height">4dp</dimen>
+
+    <!--TOOLBAR-->
+    <dimen name="toolbar_elevation">2dp</dimen>
+    <dimen name="toolbar_text">20sp</dimen>
 
 </resources>

@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,6 +13,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
@@ -28,6 +30,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -40,7 +44,39 @@ import java.util.List;
  */
 public class Utility {
 
-    public Drawable getDrawableWithColorChange(Context context, int drawableId){
+
+    public static void makeCall(Context context, String number){
+        if(number == null || number.equals("")) return;
+        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+        callIntent.setData(Uri.parse("tel:"+ number));
+        context.startActivity(callIntent);
+    }
+
+    public static void makeCallWithAlertDialog(final Context context, final int title, final int msg, final int positiveBtn, final int negativebtn, final String number){
+        if(number == null || number.equals("")) return;
+        AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+        alertDialogForInterest.getAlertDialog(
+                context,
+                title,
+                msg,
+                positiveBtn,
+                negativebtn,
+                new AlertDialogForInterest.DialogAnsweredListener() {
+                    @Override
+                    public void okClicked() {
+                        makeCall(context, number);
+                    }
+                }).show();
+    }
+
+    public static void openWebPage(Context context, String url){
+        if(url == null || url.equals("")) return;
+        if (!url.startsWith("http://") && !url.startsWith("https://"))
+            url = "http://" + url;
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        context.startActivity(browserIntent);
+    }
+    /*public Drawable getDrawableWithColorChange(Context context, int drawableId){
         Drawable drawable = context.getResources().getDrawable(drawableId);
         try {
             drawable.setColorFilter(new
@@ -55,7 +91,7 @@ public class Utility {
         return (a + ((b - a) * proportion));
     }
 
-    /** Returns an interpoloated color, between <code>a</code> and <code>b</code> */
+    *//** Returns an interpoloated color, between <code>a</code> and <code>b</code> *//*
     public static int interpolateColor(int a, int b, float proportion) {
         return (int) new ArgbEvaluator().evaluate(proportion, a, b);
     }
@@ -307,5 +343,5 @@ public class Utility {
         Collections.sort(two);
 
         return one.equals(two);
-    }
+    }*/
 }

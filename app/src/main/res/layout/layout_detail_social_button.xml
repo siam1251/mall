@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:foreground="?android:attr/selectableItemBackground"
+    style="@style/SelectableItemForeground"
     android:background="@color/detail_social_sharing_bg"
-    android:visibility="gone"
     android:layout_height="@dimen/detail_button_height">
 
     <com.kineticcafe.kcpmall.views.ThemeColorImageView
         android:layout_marginLeft="@dimen/detail_button_image_left_margin"
         android:layout_centerVertical="true"
-        android:src="@drawable/icn_instagram"
+        android:src="@drawable/icn_facebook"
         android:id="@+id/ivDetailBtnImage"
         android:layout_width="@dimen/detail_button_image_width"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/detail_button_image_height"
         android:adjustViewBounds="true"
         />
+        android:layout_width="@dimen/detail_button_image_width"
+
 
     <TextView
-        android:textColor="@color/detail_title_text"
         android:layout_marginLeft="@dimen/detail_button_text_left_margin"
         android:layout_toRightOf="@+id/ivDetailBtnImage"
+        android:textColor="@color/detail_title_text"
         android:gravity="center_vertical"
         android:text="Ground Level (GL)"
         android:id="@+id/tvDetailBtnTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        />
+
+
+    <ProgressBar
+        android:id="@+id/pb"
+        style="@style/progressBarSmall"
         />
 
     <View android:layout_marginLeft="@dimen/activity_horizontal_margin"
