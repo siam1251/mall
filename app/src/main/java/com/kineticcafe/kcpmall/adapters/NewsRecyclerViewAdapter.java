@@ -31,6 +31,7 @@ import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
+import com.kineticcafe.kcpmall.views.ActivityAnimation;
 
 import java.util.ArrayList;
 
@@ -233,7 +234,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                             Pair.create((View)ancmtHolder.ivAnnouncementLogo, transitionNameImage));
 
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    ActivityAnimation.startActivityAnimation(mContext);
                 }
             });
 
@@ -243,7 +244,8 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     ((Activity)mContext).startActivityForResult(new Intent(mContext, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    ActivityAnimation.startActivityAnimation(mContext);
+
                 }
             });
 

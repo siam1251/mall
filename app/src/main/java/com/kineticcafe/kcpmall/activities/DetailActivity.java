@@ -44,12 +44,12 @@ import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.SpacesItemDecoration;
-import com.kineticcafe.kcpmall.views.ThemeColorImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
+//public class DetailActivity extends SwipeBackActivity {
 
     protected final Logger logger = new Logger(getClass().getName());
     private Rect mRect = new Rect();

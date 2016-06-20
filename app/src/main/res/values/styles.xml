@@ -21,11 +21,12 @@
         <item name="android:windowBackground">@color/white</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="actionMenuTextColor">@color/themeColor</item>
+        <item name="android:textColorSecondary">@color/hamburger_menu</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
-        <item name="color">@android:color/darker_gray</item>
+        <item name="color">@color/hamburger_menu</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -40,6 +41,9 @@
         <item name="android:tabWidgetStyle">@android:style/Widget.TabWidget</item>
         <item name="android:windowBackground">@color/white</item>
     </style>
+
+
+
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
@@ -74,11 +78,10 @@
         <item name="android:layout_width">30dp</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:indeterminate">true</item>
-        <item name="android:indeterminateTintMode">src_atop</item>
-        <item name="android:indeterminateTint">@color/themeColor</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_centerInParent">true</item>
-
+        <item name="android:indeterminateTintMode">src_atop</item>
+        <item name="android:indeterminateTint">@color/themeColor</item>
     </style>
 
 
@@ -122,3 +125,5 @@
     </style>
 
 </resources>
+
+

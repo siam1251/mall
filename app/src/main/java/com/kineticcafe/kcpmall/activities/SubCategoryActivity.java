@@ -14,6 +14,7 @@ import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.CategoryRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.DealRecyclerItemDecoration;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
  * Created by Kay on 2016-06-08.
  */
 public class SubCategoryActivity extends AppCompatActivity {
+
     private final int COLUMN_COUNT = 2;
     public CategoryRecyclerViewAdapter mCategoryRecyclerViewAdapter;
     public CategoryStoreRecyclerViewAdapter mCategoryStoreRecyclerViewAdapter;
@@ -98,5 +100,11 @@ public class SubCategoryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(mCategoryStoreRecyclerViewAdapter != null) mCategoryStoreRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ActivityAnimation.exitActivityAnimation(this);
     }
 }

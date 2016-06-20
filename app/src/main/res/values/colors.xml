@@ -50,6 +50,12 @@
     <color name="black">#000000</color>
 
 
+    <!--NAVS-->
+    <color name="menu_text_unselected">#727272</color>
+    <color name="hamburger_menu">#212121</color>
+
+
+
     <!--card general-->
     <color name="card_bg">#f5f5f5</color>
 
@@ -97,5 +103,6 @@
 
     <!--TOOLBAR-->
     <color name="toolbar_text">#de000000</color>
+
 
 </resources>
