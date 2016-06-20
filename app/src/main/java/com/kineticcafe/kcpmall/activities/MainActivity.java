@@ -326,21 +326,6 @@ public class MainActivity extends AppCompatActivity
         void onRefresh(int msg);
     }
 
-   /* @Override
-    public void onCategorySelected(String exteranlCode, String categoryName) {
-        CategoryStoreFragment articleFrag = (CategoryStoreFragment)
-                getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.fragment_sub_categories));
-        if (articleFrag == null) {
-            articleFrag = CategoryStoreFragment.newInstance(exteranlCode, categoryName);
-        }
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.flContents, articleFrag, getResources().getString(R.string.fragment_sub_categories));
-        fragmentTransaction.addToBackStack(getResources().getString(R.string.fragment_sub_categories));
-        fragmentTransaction.commit();
-    }*/
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODE_CHANGE_INTEREST) {
@@ -354,7 +339,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
     }
 }
 
