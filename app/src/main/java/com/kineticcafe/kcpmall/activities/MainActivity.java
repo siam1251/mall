@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -95,7 +96,21 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        final AppBarLayout ablTopNav = (AppBarLayout)findViewById(R.id.ablTopNav);
         KcpAnimatedViewPager viewPager = (KcpAnimatedViewPager) findViewById(R.id.vpMain);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 3) ablTopNav.setExpanded(true); //TODO: change this hardcode
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tlBottom);
 
         List<Fragment> fragmentList = new ArrayList<>();
@@ -132,7 +147,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initializeToolbar(){
-        Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ivToolbar = (ImageView) toolbar.findViewById(R.id.ivToolbar);
         ivToolbar.setVisibility(View.VISIBLE);
 

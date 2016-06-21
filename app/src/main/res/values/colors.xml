@@ -104,5 +104,9 @@
     <!--TOOLBAR-->
     <color name="toolbar_text">#de000000</color>
 
+    <!--INFO-->
+    <color name="info_vertical_separator_color">#f0f0f2</color>
+    <color name="info_hours_bg_open">#66bb09</color>
+    <color name="info_hours_bg_closed">#f44336</color>
 
 </resources>

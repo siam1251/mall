@@ -24,6 +24,7 @@
     <!--<ImageView-->
     <com.kineticcafe.kcpmall.views.ThemeColorImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+        ThemedImageView:filterColor="@color/white"
         android:layout_marginRight="24dp"
         android:layout_gravity="right"
         android:id="@+id/ivFav"
@@ -32,7 +33,6 @@
         android:src="@drawable/btn_fav"
         android:adjustViewBounds="true"
         android:transitionName="@string/transition_fav"
-        ThemedImageView:filterColor="@color/white"
         />
 
 

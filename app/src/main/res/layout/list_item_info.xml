@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/SelectableItemForeground"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="@dimen/info_list_item">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        >
+
+        <TextView
+            android:textColor="@color/place_txt"
+            android:textSize="@dimen/place_txt"
+            android:text="ALDO Shoes"
+            android:id="@+id/tvInfoTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            />
+
+        <TextView
+            android:layout_marginTop="3dp"
+            android:textColor="@color/place_category_txt"
+            android:textSize="@dimen/place_category_txt"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="Footwear - Unisex"
+            android:id="@+id/tvInfoSubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/info_direction_height"
+            />
+
+    </LinearLayout>
+
+    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+        ThemedImageView:filterColor="@color/black_overlay"
+        android:padding="@dimen/info_direction_icon_padding"
+        android:layout_width="@dimen/info_direction_height"
+        android:layout_height="@dimen/info_direction_height"
+        android:src="@drawable/icn_arrow"/>
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        style="@style/separater"
+        />
+
+</RelativeLayout>
