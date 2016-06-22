@@ -1,6 +1,9 @@
 package com.kineticcafe.kcpmall.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,9 +16,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
+import com.kineticcafe.kcpandroidsdk.managers.KcpInfoManager;
+import com.kineticcafe.kcpandroidsdk.models.MallInfo.KcpMallInfoRoot;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.adapters.InfoRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.factory.HeaderFactory;
+import com.kineticcafe.kcpmall.utility.Utility;
 
 import java.util.ArrayList;
 
@@ -23,6 +32,14 @@ import java.util.ArrayList;
  * Created by Kay on 2016-06-20.
  */
 public class InfoFragment extends BaseFragment {
+    private static InfoFragment sInfoFragment;
+    public static InfoFragment getInstance(){
+        if(sInfoFragment == null) sInfoFragment = new InfoFragment();
+        return sInfoFragment;
+    }
+
+
+    private InfoRecyclerViewAdapter mInfoRecyclerViewAdapter;
     private boolean shouldScroll = false;
     private OnListFragmentInteractionListener mListener;
 
@@ -65,7 +82,9 @@ public class InfoFragment extends BaseFragment {
         rlDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT).show();
+                KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
+                if(kcpMallInfoRoot.getKcpMallInfo().getAddress() != null)
+                Utility.openGoogleMapWithAddress(getActivity(), kcpMallInfoRoot.getKcpMallInfo().getAddress());
             }
         });
 
@@ -77,19 +96,14 @@ public class InfoFragment extends BaseFragment {
             }
         });
 
-        ImageView ivWalk = (ImageView) view.findViewById(R.id.ivWalk);
-        ivWalk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         ImageView ivCar = (ImageView) view.findViewById(R.id.ivCar);
         ivCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT).show();
+                KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
+                if(kcpMallInfoRoot.getKcpMallInfo().getAddress() != null)
+                    Utility.openGoogleMapWithAddressWithDrivingMode(getActivity(), kcpMallInfoRoot.getKcpMallInfo().getAddress());
             }
         });
 
@@ -97,7 +111,19 @@ public class InfoFragment extends BaseFragment {
         ivSubway.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT).show();
+                KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
+                if(kcpMallInfoRoot.getKcpMallInfo().getAddress() != null)
+                    Utility.openGoogleMapWithAddressWithTransitMode(getActivity(), kcpMallInfoRoot.getKcpMallInfo().getAddress());
+            }
+        });
+
+        ImageView ivWalk = (ImageView) view.findViewById(R.id.ivWalk);
+        ivWalk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
+                if(kcpMallInfoRoot.getKcpMallInfo().getAddress() != null)
+                Utility.openGoogleMapWithAddressWithWalkingMode(getActivity(), kcpMallInfoRoot.getKcpMallInfo().getAddress());
             }
         });
 
@@ -136,6 +162,40 @@ public class InfoFragment extends BaseFragment {
         super.onResume();
     }
 
+
+    public void initializeMallInfoData(){
+        if(getActivity() == null){
+            setOnFragmentInteractionListener(new OnFragmentInteractionListener() {
+                @Override
+                public void onFragmentInteraction() {
+                    downloadMallInfo();
+                }
+            });
+        } else {
+            downloadMallInfo();
+        }
+    }
+
+    public void downloadMallInfo(){
+        KcpInfoManager kcpInfoManager = new KcpInfoManager(getActivity(), R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:http://www.cool-24.com/
+                        if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
+                        if(mInfoRecyclerViewAdapter != null) mInfoRecyclerViewAdapter.updateData(KcpMallInfoRoot.getInstance().getKcpMallInfo().getInfoList());
+                        break;
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        kcpInfoManager.downloadMallInfo(Constants.MALL_INFO_URL_BASE, Constants.MALL_INFO_URL);
+    }
+
     private void setupRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -147,18 +207,15 @@ public class InfoFragment extends BaseFragment {
             }
         };
 
-        ArrayList<InfoRecyclerViewAdapter.Info> infoList = new ArrayList<InfoRecyclerViewAdapter.Info>();
-        String[] infoTitle = getResources().getStringArray(R.array.infoTitles);
-        String[] infoSubTitle = getResources().getStringArray(R.array.infoSubTitles);
-        for (int i = 0; i < infoTitle.length; i++) {
-            infoList.add(new InfoRecyclerViewAdapter.Info(infoTitle[i], infoSubTitle[i]));
-        }
 
-        InfoRecyclerViewAdapter infoRecyclerViewAdapter = new InfoRecyclerViewAdapter(
+        KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
+        kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), Constants.MALL_INFO_OFFLINE_TEXT);
+
+        mInfoRecyclerViewAdapter = new InfoRecyclerViewAdapter(
                 getActivity(),
-                infoList,
+                kcpMallInfoRoot.getKcpMallInfo().getInfoList(),
                 mListener);
-        recyclerView.setAdapter(infoRecyclerViewAdapter);
+        recyclerView.setAdapter(mInfoRecyclerViewAdapter);
     }
 
     public interface OnListFragmentInteractionListener {

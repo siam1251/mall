@@ -15,21 +15,6 @@ public class CategoryIconFactory {
     private static final String[] mCategoryExclusion = {"Parking", "ANC", "Common Area", "Common Areas"};
 
     //metropolitan
-    /*private static final String EXTERNAL_CODE_BEAUTY_AND_HEALTH           = "7";
-    private static final String EXTERNAL_BOOKS_CARDS_AND_SPECIALTY        = "9";
-    private static final String EXTERNAL_CODE_DEPARTMENT_AND_VARIETY      = "11";
-    private static final String EXTERNAL_ELECTRONICS                      = "12";
-    private static final String EXTERNAL_ENTERTAINMENT                    = "13";
-    private static final String EXTERNAL_FOOD                             = "14";
-    private static final String EXTERNAL_CODE_HOME                        = "15";
-    private static final String EXTERNAL_CODE_JEWELERY_AND_ACCESSORIES    = "16";
-    private static final String EXTERNAL_CODE_KIDS_AND_BABY               = "17";
-    private static final String EXTERNAL_CODE_MENS_CLOTHING               = "18";
-    private static final String EXTERNAL_SERVICES                         = "19";
-    private static final String EXTERNAL_CODE_SHEOS_AND_BAGS              = "20";
-    private static final String EXTERNAL_CODE_SPORTS_AND_FITNESS          = "21";
-    private static final String EXTERNAL_CODE_WOMENS_CLOTHING             = "22";*/
-
     private static final String EXTERNAL_CODE_BEAUTY_AND_HEALTH           = "32";
     private static final String EXTERNAL_BOOKS_CARDS_AND_SPECIALTY        = "40";
     private static final String EXTERNAL_CODE_DEPARTMENT_AND_VARIETY      = "60";

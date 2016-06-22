@@ -102,28 +102,4 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="info_get_directions">Get Directions</string>
     <string name="info_save_my_parking_spot">Save My Parking Spot</string>
 
-
-    <string name="info_title_mall_hours">Mall Hours</string>
-    <string name="info_title_guest_service_kiosk">Guest Service Kiosk</string>
-    <string name="info_title_amenities">Amenities</string>
-    <string name="info_title_gift_card_balance">Gift Card Balance</string>
-    <string name="info_title_social_network">Social Network</string>
-    <string name="info_title_public_transportation">Public Transportation</string>
-    <string name="info_title_shopping_shuttle">Shopping Shuttle</string>
-    <string name="info_title_tourist_information">Tourist Information</string>
-    <string name="info_title_accessibility">Accessibility</string>
-    <string name="info_title_about_vaughan_mills">About Vaughan Mills</string>
-
-    <string name="info_subtitle_mall_hours">See upcoming holiday hours, special hours, etc.</string>
-    <string name="info_subtitle_guest_service_kiosk">Get in touch with our friendly guest service staff</string>
-    <string name="info_subtitle_amenities">Find the Washrooms, lockers, 24-hr security, ATM and etc</string>
-    <string name="info_subtitle_gift_card_balance">Check your Vaughan Mills Gift Card Balance</string>
-    <string name="info_subtitle_social_network">Get Social with Vaughan Mills</string>
-    <string name="info_subtitle_public_transportation">See public transportation information, etc</string>
-    <string name="info_subtitle_shopping_shuttle">Our exclusive 55 passenger shopping shuttle</string>
-    <string name="info_subtitle_tourist_information">Discover a place where fashion, outlets, dinning etc</string>
-    <string name="info_subtitle_accessibility">Vaughan Mills is commited to excellence in etc</string>
-    <string name="info_subtitle_about_vaughan_mills">Learn more about Vaughan Mills</string>
-
-
 </resources>

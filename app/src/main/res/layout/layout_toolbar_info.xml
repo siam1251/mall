@@ -68,8 +68,7 @@
 
                 <com.kineticcafe.kcpmall.views.ThemeColorImageView
                     style="@style/SelectableItemForeground"
-                    android:id="@+id/ivWalk"
-                    android:layout_alignParentRight="true"
+                    android:id="@+id/ivCar"
                     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                     ThemedImageView:filterColor="@color/themeColor"
                     android:padding="@dimen/info_direction_icon_padding"
@@ -83,7 +82,6 @@
 
                 <com.kineticcafe.kcpmall.views.ThemeColorImageView
                     style="@style/SelectableItemForeground"
-                    android:layout_toLeftOf="@+id/ivWalk"
                     android:id="@+id/ivSubway"
                     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                     ThemedImageView:filterColor="@color/themeColor"
@@ -98,7 +96,7 @@
 
                 <com.kineticcafe.kcpmall.views.ThemeColorImageView
                     style="@style/SelectableItemForeground"
-                    android:id="@+id/ivCar"
+                    android:id="@+id/ivWalk"
                     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                     ThemedImageView:filterColor="@color/themeColor"
                     android:padding="@dimen/info_direction_icon_padding"

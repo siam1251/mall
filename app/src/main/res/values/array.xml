@@ -16,32 +16,4 @@
         <item>@drawable/icn_menu_mall_info</item>
     </string-array>
 
-
-
-    <string-array name="infoTitles">
-        <item>@string/info_title_mall_hours</item>
-        <item>@string/info_title_guest_service_kiosk</item>
-        <item>@string/info_title_amenities</item>
-        <item>@string/info_title_gift_card_balance</item>
-        <item>@string/info_title_social_network</item>
-        <item>@string/info_title_public_transportation</item>
-        <item>@string/info_title_shopping_shuttle</item>
-        <item>@string/info_title_tourist_information</item>
-        <item>@string/info_title_accessibility</item>
-        <item>@string/info_title_about_vaughan_mills</item>
-    </string-array>
-
-    <string-array name="infoSubTitles">
-        <item>@string/info_subtitle_mall_hours</item>
-        <item>@string/info_subtitle_guest_service_kiosk</item>
-        <item>@string/info_subtitle_amenities</item>
-        <item>@string/info_subtitle_gift_card_balance</item>
-        <item>@string/info_subtitle_social_network</item>
-        <item>@string/info_subtitle_public_transportation</item>
-        <item>@string/info_subtitle_shopping_shuttle</item>
-        <item>@string/info_subtitle_tourist_information</item>
-        <item>@string/info_subtitle_accessibility</item>
-        <item>@string/info_subtitle_about_vaughan_mills</item>
-    </string-array>
-
 </resources>

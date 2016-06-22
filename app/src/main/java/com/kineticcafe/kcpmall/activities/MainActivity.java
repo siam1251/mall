@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity
             ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
             HomeFragment.getInstance().initializeHomeData();
             DirectoryFragment.getInstance().initializeDirectoryData();
+            InfoFragment.getInstance().initializeMallInfoData();
         }
     }
 
@@ -237,7 +238,7 @@ public class MainActivity extends AppCompatActivity
         fragmentList.add(HomeFragment.getInstance());
         fragmentList.add(DirectoryFragment.getInstance());
         fragmentList.add(new TestFragment());
-        fragmentList.add(new InfoFragment());
+        fragmentList.add(InfoFragment.getInstance());
     }
 
     /**

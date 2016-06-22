@@ -8,33 +8,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.kineticcafe.kcpandroidsdk.models.MallInfo.InfoList;
+import com.kineticcafe.kcpandroidsdk.models.MallInfo.KcpMallInfo;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.fragments.InfoFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Kay on 2016-05-05.
  */
 public class InfoRecyclerViewAdapter extends RecyclerView.Adapter {
     private Context mContext;
-    private ArrayList<Info> mInfoList;
+    private List<InfoList> mInfoList;
     private final InfoFragment.OnListFragmentInteractionListener mListener;
 
-    public static class Info {
-        public String title;
-        public String subTitle;
-
-        public Info(String title, String subTitle){
-            this.title = title;
-            this.subTitle = subTitle;
-        }
-    }
-
-    public InfoRecyclerViewAdapter(Context context, ArrayList<Info> infoList, InfoFragment.OnListFragmentInteractionListener listener) {
+    public InfoRecyclerViewAdapter(Context context, List<InfoList> infoList, InfoFragment.OnListFragmentInteractionListener listener) {
         mContext = context;
         mInfoList = infoList;
         mListener = listener;
+    }
+
+    public void updateData(List<InfoList> infoList){
+        mInfoList.clear();
+        mInfoList.addAll(infoList);
+        notifyDataSetChanged();
     }
 
     public class InfoViewHolder extends RecyclerView.ViewHolder {
@@ -61,11 +60,11 @@ public class InfoRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        final Info info = (Info) mInfoList.get(position);
+        final InfoList info = (InfoList) mInfoList.get(position);
         final InfoViewHolder infoViewHolder = (InfoViewHolder) holder;
 
-        infoViewHolder.tvInfoTitle.setText(info.title);
-        infoViewHolder.tvInfoSubTitle.setText(info.subTitle);
+        infoViewHolder.tvInfoTitle.setText(info.getTitle());
+        infoViewHolder.tvInfoSubTitle.setText(info.getSubtitle());
 
         infoViewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -20,7 +20,6 @@ public class Constants {
 	public final static String HEADER_VALUE_CONTENT_TYPE = 		"application/json";
 //	public final static String HEADER_VALUE_ACCEPT = 			"application/json, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.place+json; version=1.0";
 	public final static String HEADER_VALUE_ACCEPT = 			"application/json";
-//	public final static String HEADER_VALUE_ACCEPT = 			"application/vnd.kcp.user-likes+json; version=1.0.0";
 	public final static String HEADER_VALUE_AUTHROZATION = 		"Bearer 33cce977-6891-4ca5-9df9-6b1e7b9f0d84_YzU5YWM0ZjctODZiOS00ZGJiLTkzYjYtNjZkYzdkYjZkOTE1"; //TESTING
 
 	//DOWNLOAD TYPES
@@ -34,21 +33,6 @@ public class Constants {
 
 	//DATE FORMAT
  	public final static String DATE_FORMAT_EFFECTIVE = "EEEE, MMMM d";
-
-	//TWITTER
-	public final static int 	NUMB_OF_TWEETS = 		5; //how many twitter tweets it will show at a time
-	public final static String TWITTER_SCREEN_NAME = 	"Vaughan_Mills";
-	public final static String TWITTER_API_KEY = 		"bM8knFuF8iYVrYIULOZvyt2ew";
-	public final static String TWITTER_API_SECRET = 	"8KzSsk0u1yhYU5RUrnV5T2O75KeIUUXicbXXOD2eUxnRxvc4DB";
-
-	//INSTAGRAM
-	public final static int 	NUMB_OF_INSTA = 		5; //how many twitter tweets it will show at a time
-	public final static String INSTAGRAM_BASE_URL = 	"https://api.instagram.com/v1/";
-	public final static String INSTAGRAM_USER_NAME = 	"Vaughan_Mills";
-	public final static String INSTAGRAM_CLIENT_ID = 	"038e1210bc3441f780a8c3f3562b2b41"; //VAUGHAN MILLS
-	public final static String INSTAGRAM_ACCESS_TOKEN = "36271034.1677ed0.c9ee1d858c3b4ee6845fe5b3d4414eba"; //TODO: temp access token
-	public final static String INSTAGRAM_USER_ID = 		"249069342"; //VAUGHAN MILLS
-//	public final static String INSTAGRAM_USER_ID = 		"1048431023"; //yjw
 
 
 	//DETAIL
@@ -74,4 +58,12 @@ public class Constants {
 	public final static int RESULT_DONE_PRESSED_WITH_CHANGE = 0;
 	public final static int RESULT_DONE_PRESSED_WITHOUT_CHANGE = 1;
 	public final static int RESULT_EXIT = 2;
+
+
+	//MALL INFO
+	public final static String MALL_INFO_OFFLINE_TEXT = "mallinfo.json";
+	public final static String MALL_INFO_URL_BASE = "https://api.myjson.com/"; //metropolis
+//	public final static String MALL_INFO_URL = "bins/2zv9f"; //metropolis
+	public final static String MALL_INFO_URL = "bins/3ng0z"; //vaughan mills
+
 }

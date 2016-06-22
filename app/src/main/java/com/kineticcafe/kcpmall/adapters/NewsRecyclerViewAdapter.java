@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.activities.Constants;
@@ -169,12 +170,12 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 return new TwitterFeedViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_social_feed_pager, parent, false),
                         R.drawable.icn_twitter,
-                        "@" + Constants.TWITTER_SCREEN_NAME);
+                        "@" + KcpConstants.TWITTER_SCREEN_NAME);
             case KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM:
                 return new InstagramFeedViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_social_feed_pager, parent, false),
                         R.drawable.icn_instagram,
-                        "@" + Constants.INSTAGRAM_USER_NAME);
+                        "@" + KcpConstants.INSTAGRAM_USER_NAME);
         }
         return null;
     }
@@ -319,7 +320,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     /** circle page indicator*/
     private void setUiPageViewController(MainViewHolder holder) {
-        holder.dotsCount = Constants.NUMB_OF_INSTA; //viewpagerAdapter.getCount(); used for actual counting
+        holder.dotsCount = KcpConstants.NUMB_OF_INSTA; //viewpagerAdapter.getCount(); used for actual counting
         holder.dots = new ImageView[holder.dotsCount];
 
         holder.llViewPagerCountDots.removeAllViews(); //prevent from creating second indicator
