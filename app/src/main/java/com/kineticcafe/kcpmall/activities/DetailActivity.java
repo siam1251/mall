@@ -53,7 +53,6 @@ public class DetailActivity extends AppCompatActivity {
 
     protected final Logger logger = new Logger(getClass().getName());
     private Rect mRect = new Rect();
-    private final static String STORE_HOUR_FORMAT = "h:mm aa"; //10:00:00 EDT
     private ViewGroup mParentView;
     private ImageView ivDetailImage; //transition image
     private ImageView ivDetailLogo; //transition logo
@@ -555,7 +554,7 @@ public class DetailActivity extends AppCompatActivity {
             TextView tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
             String time = "";
             if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
-                time = kcpContentPage.getStoreHourForToday(STORE_HOUR_FORMAT);
+                time = kcpContentPage.getStoreHourForToday(null);
             } else {
                 time =
                         kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EFFECTIVE) +

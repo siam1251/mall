@@ -74,7 +74,7 @@
                     android:padding="@dimen/info_direction_icon_padding"
                     android:layout_width="@dimen/info_direction_height"
                     android:layout_height="@dimen/info_direction_height"
-                    android:src="@drawable/icn_directions"/>
+                    android:src="@drawable/icn_car"/>
 
                 <View
                     style="@style/verticalSeparater"
@@ -82,13 +82,13 @@
 
                 <com.kineticcafe.kcpmall.views.ThemeColorImageView
                     style="@style/SelectableItemForeground"
-                    android:id="@+id/ivSubway"
+                    android:id="@+id/ivTransit"
                     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                     ThemedImageView:filterColor="@color/themeColor"
                     android:padding="@dimen/info_direction_icon_padding"
                     android:layout_width="@dimen/info_direction_height"
                     android:layout_height="@dimen/info_direction_height"
-                    android:src="@drawable/icn_directions"/>
+                    android:src="@drawable/icn_transit"/>
 
                 <View
                     style="@style/verticalSeparater"
@@ -102,7 +102,7 @@
                     android:padding="@dimen/info_direction_icon_padding"
                     android:layout_width="@dimen/info_direction_height"
                     android:layout_height="@dimen/info_direction_height"
-                    android:src="@drawable/icn_directions"/>
+                    android:src="@drawable/icn_walk"/>
 
 
 
@@ -132,10 +132,10 @@
                     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                     android:layout_centerVertical="true"
                     ThemedImageView:filterColor="@color/themeColor"
-                    android:padding="@dimen/info_direction_icon_padding"
+                    android:padding="17dp"
                     android:layout_width="@dimen/info_direction_height"
                     android:layout_height="@dimen/info_direction_height"
-                    android:src="@drawable/icn_directions"/>
+                    android:src="@drawable/icn_parking"/>
 
                 <TextView
                     android:layout_toRightOf="@+id/ivPark"
