@@ -4,15 +4,15 @@
 
     <!--% to HEX
     87% - dd/de/df
-
     -->
+
 
 
 
     <!--default colors-->
     <color name="themeColor">#13bed0</color>
     <color name="themeColorTransparent">#3013bed0</color>
-    <color name="warningColor">#13bed0</color> <!--#CFff4444-->
+    <color name="warningColor">#13bed0</color>
     <color name="themeColorDark">#108E9C</color>
 
     <color name="colorPrimary">#FFFFFF</color>
@@ -48,6 +48,12 @@
     <color name="blue">#0000FF</color>
     <color name="navy">#000080</color>
     <color name="black">#000000</color>
+
+
+    <!--NAVS-->
+    <color name="menu_text_unselected">#727272</color>
+    <color name="hamburger_menu">#212121</color>
+
 
 
     <!--card general-->
@@ -97,5 +103,10 @@
 
     <!--TOOLBAR-->
     <color name="toolbar_text">#de000000</color>
+
+    <!--INFO-->
+    <color name="info_vertical_separator_color">#f0f0f2</color>
+    <color name="info_hours_bg_open">#66bb09</color>
+    <color name="info_hours_bg_closed">#f44336</color>
 
 </resources>

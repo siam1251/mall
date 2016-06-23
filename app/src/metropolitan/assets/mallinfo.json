@@ -1,0 +1,214 @@
+{
+    "hoursExceptions": [
+        "Bay (The)",
+        "Chapters",
+        "Coast Capital Savings",
+        "Cineplex SilverCity",
+        "Forever 21",
+        "Old Navy",
+        "Real Canadian Superstore",
+        "Sears",
+        "Shoppers Drugmart",
+        "Silvercity theatre",
+        "Sport Chek",
+        "T&T Supermarket",
+        "Toys R Us",
+        "Urban Behavior",
+        "Winners/HomeSense",
+        "Zara"
+    ],
+	"infoList": [
+		{
+			"title": "Mall Hours",
+			"subtitle": "See upcoming holiday hours, special hours, etc.",
+            "imageURLs": ["mallinfo-banner-mallhours"]
+		},
+		{
+			"title": "Customer Service",
+			"subtitle": "Get in touch with our friendly customer service staff",
+            "locations": [
+                {
+                    "name": "Upper Level Desk", 
+                    "locationID": "1402",
+                    "locationType": "amenity"
+                },
+                {
+                    "name": "Ground Level Desk",
+                    "locationID": "569",
+                    "locationType": "amenity"
+                }
+            ],
+            "hours": "Today",
+            "imageURLs": ["mallinfo-banner-customerservice"],
+	        "phoneNumber": "(604) 438-4715",
+            "phoneURL": "tel://+16044384715",
+            "details": "Need a hand? Our friendly customer service staff is located at two locations: Ground Level (near the Bank of Montreal) and Upper Level (near Claireâ€™s). Available services are listed below.",
+	        "additionalInfoTitle": "Available Services",
+            "additionalInfo": [
+                {
+                    "title": "Stroller Rentals",
+                    "details": "Kids don't need a driver's license to ride in our Kiddie Kruzzers - car-shaped strollers that they'll love. All you need to do is visit customer service and present valid government photo ID. Fee is $1/hour, cash only. Proceeds to charity."
+                },
+                {
+                    "title": "Wheelchair/Walker Loans",
+                    "details": "For those who have difficulty walking for long periods of time, we can provide free wheelchair and walker loans. All you need is to do is visit customer service and present valid government photo ID."
+                },
+                {
+                    "title": "Gift Wrap Service",
+                    "details": "Perfect, professional and inexpensive gift wrap service."
+                },
+                {
+                    "title": "Naviskaters",
+                    "details": "A great team of customer service staff on wheels who will help you with directions, carry parcels, or even offer gift ideas during the busy season ahead."
+                },
+                {
+                    "title": "Gift Cards",
+                    "details": "Metropolis at Metrotown gift cards take the guess work out of gift-giving. Come visit us at the customer service desks to get yours today!"
+                }
+            ]
+        },
+		{
+			"title": "Amenities",
+			"subtitle": "Find the Washrooms, Elevators, ATM, Taxi and other amenities",
+            "imageURLs": ["mallinfo-banner-GENERIC"],    
+            "details": "Looking for something else not listed? Metropolis at Metrotown offers various amenities and complimentary services. View them on the interactive mall map.\n\nCustomer Service\nRestrooms\nCommunity Room\nElevators\nStairs & Escalators\nFirst Aid & Security Office\nLockers\nATM Machines\nBus Loop & SkyTrain"
+		},
+		{
+            "menuTitle": "Cinema",
+			"title": "SilverCity Metropolis",
+			"subtitle": "View the movie showtimes at Cineplex SilverCity Metropolis",
+            "imageURLs": ["mallinfo-banner-cinema"],
+            "locations": [
+                {
+                    "name": "SilverCity",
+                    "locationType": "theater",
+                    "theaterID": "5645",
+                    "placeID": 313
+                }
+            ],
+	        "phoneNumber": "(604) 435-7474",
+            "phoneURL": "tel://+16044357474"
+		},
+		{
+			"title": "Gift Card Balance",
+			"subtitle": "Check your Metropolis at Metrotown Gift Card balance",
+			"imageURLs": ["mallinfo-banner-giftcard"],
+            "locations": [
+                {
+                    "name": "Upper Level Desk", 
+                    "locationID": "1402",
+                    "locationType": "amenity"
+                },
+                {
+                    "name": "Ground Level Desk",
+                    "locationID": "569",
+                    "locationType": "amenity"
+                }
+            ],
+	        "phoneNumber": "(604) 438-4715",
+            "phoneURL": "tel://+16044384715",
+	        "linkURL": "https://getmybalance.com/",
+	        "linkTitle": "Check Your Balance",
+            "details": "Give the gift of 400 stores! Offering the perfect gift has never been easier. The Metropolis at Metrotown gift card is welcomed by the mall's hundreds of participating retailers.",
+            "additionalInfoTitle": "Frequently Asked Questions",
+            "additionalInfo": [
+                {
+                    "title": "Check your gift card balance",
+                    "details": "Already have a gift card? Tap on the \"Check your balance\" button above to check your balance online."
+                },
+                {
+                    "title": "Where to buy a gift card?",
+                    "details": "Come visit us at the Customer service desks to get yours today!"
+                },
+                {
+                    "title": "Who accepts the gift card?",
+                    "details": "The Metropolis at Metrotown gift card is accepted by all retailers with the exception of those listed on the non-participating merchant list found <a href=\"http://metropolisatmetrotown.com/sites/default/files/u384/2015%20sign%20non%20participating.pdf\">here</a>."
+                },
+                {
+                    "title": "Terms & conditions",
+                    "details": "There is a $2.50 monthly card account maintenance fee, which is waived for the first 15 months from issue date of the card, except where prohibited by law. Gift cards cannot be redeemed for cash. Gratuities cannot be deducted from the gift card. The value of this card will not be replaced if the card is lost, stolen or destroyed unless the original receipt and proper ID are presented to Customer Service. With original receipt, the card's remaining balance will be reissued."
+                }
+            ]
+		},
+		{
+            "menuTitle": "Metropolis Express",
+			"title": "Metropolis Express Train",
+			"subtitle": "Ride the trackless train that runs through Metropolis",
+			"imageURLs": ["mallinfo-banner-metropolisexpress"],
+            "phoneNumber": "(604) 438-4715",
+            "phoneURL": "tel://+16044384715",
+            "details": "Take a ride on the trackless train that runs through Metropolis!\n\nPick up station in the The Bay Atrium under the Food Court on the Ground Level. The trainâ€™s disembarkation area is located at the Bus Loop. Adults ride the train for $1 and youth age 12 and under ride for free.\n\nAll proceeds go to local charities.\n\nClosed (Lunch Break): 2 pm to 3:15 pm."
+        },
+		{
+			"title": "Free EV Charging Stations",
+			"subtitle": "Recharge your vehicle at one of our 6 stations",
+			"imageURLs": ["mallinfo-banner-freeevcharging"],
+	 		"hours": "7 AM to 11 PM",
+	 		"phoneNumber": "(604) 438-4715",
+            "phoneURL": "tel://+16044384715",
+            "details": "Need a boost? Six Electric Vehicle (EV) charging stations are located in the P1 Parkade below Atrium Court and available free of charge from 7 AM to 11 PM, seven days a week."
+		},
+		{
+			"title": "Lockers",
+			"subtitle": "Free up your hands while you shop",
+			"imageURLs": ["mallinfo-banner-GENERIC"],
+	        "phoneNumber": "(604) 438-4715",
+            "phoneURL": "tel://+16044384715",
+            "details": "Need to free up your hands during your visit?\n\nThe lockers are located in these three locations:\nUpper Level, Food Court (near Burger King)\nUpper Level (near Old Navy)\nGround level (near Real Canadian Superstore)\n\nPlease note that lockers are cleaned out each evening as they are not meant to be used for long-term storage. Lockers are accessible during mall hours.\n\nCost: $1.00 / day."
+		},
+        {
+            "title": "Free WiFi Access",
+            "subtitle": "Surf the web with our free complementary WiFi",
+            "imageURLs": ["mallinfo-banner-freewifi"],
+            "phoneNumber": "(604) 438-4715",
+            "phoneURL": "tel://+16044384715",
+            "details": "Enjoy complimentary WiFi at one of the following locations:\n\nGrand Court\nAtrium Court\nFood Court\nCustomer Service areas\nUpper Level Seating area (near Zara)\n\nTo connect, log on to the network\n\"Metropolis at Metrotown\""
+        },
+        {
+            "title": "Bus and SkyTrain",
+            "subtitle": "See public transit information and schedules",
+            "imageURLs": ["mallinfo-banner-busskytrain"],
+            "locations": [
+                {
+                    "name": "SkyTrain Station, Upper Level", 
+                    "locationID": "948",
+                    "locationType": "amenity"
+                },
+                {
+                    "name": "Bus Loop, Ground Level",
+                    "locationID": "1033",
+                    "locationType": "amenity"
+                }
+            ],
+            "phoneNumber": "(604) 953-3333",
+            "phoneURL": "tel://+16049533333",
+            "linkURL": "http://www.translink.ca/",
+            "linkTitle": "View Transit Schedule",
+            "details": "Metropolis at Metrotown is easily accessible via public transit. Here's how:\n\nBY SKYTRAIN\nCatch the Skytrain at any Lower Mainland location. Get off at Metrotown Station.\n\nBY BUS\nMetrotown Station is a major bus loop with buses coming in from all over the Lower Mainland.\n\nTRANSLINK\nWant to catch the next Bus or Skytrain? Plan your trip? See transit schedules?\n\nMetropolis at Metrotown address: 4700 Kingsway, Burnaby, BC V5H 4N2"
+        },
+        {
+            "menuTitle": "Tourist Information",
+            "title": "Tourist Information Booth",
+            "subtitle": "Discover Metropolis at Metrotown and the city of Burnaby",
+            "imageURLs": ["mallinfo-banner-touristinfo"],
+            "linkURL": "http://metropolisatmetrotown.com/tourism",
+            "linkTitle": "View Tourist Information",
+            "details": "Need traveling tips? The Tourist Information Booth is in operation from May to September and is run by the City of Burnaby.  It's located beside the Food Court on the Upper Level."
+        },
+        {
+            "title": "About Metropolis at Metrotown",
+            "subtitle": "Learn more about Metropolis at Metrotown",
+            "imageURLs": ["mallinfo-banner-about"],
+            "locations": [
+                {
+                    "name": "4700 Kingsway, Burnaby, BC",
+                    "locationID": "https://maps.google.com/maps?q=@49.227417,-123.002056",
+                    "locationType": "external"
+                }
+            ],
+            "phoneNumber": "(604) 438-4715",
+            "phoneURL": "tel://+16044384715",
+            "details": "With nearly 400 stores and services, Metropolis at Metrotown is British Columbia's largest shopping centre. Millions of individual shoppers find what theyâ€™re looking for and have a great time doing it. It's a destination in itself with must-see attractions like one-of-a-kind events, world-class restaurants and theatres, not to mention great shopping.\n\nHundreds of shops, including clothing boutiques for men and women, electronics, jewellery, home furnishings, and specialty foods, are located on three sprawling levels. Youâ€™ll also find exciting things happening all around. Our Grand Court features unique events year round. Also, Famous Players SilverCity offers the latest box office hits on the big screen with big sound. For quick bites or sit-down meals, our international food court and our wide variety of restaurants cater to all tastes and diets.\n\nWith so much to see and do, our friendly customer service staff are always on hand at our two Customer Service Centres to help you out."
+        }
+	]
+}

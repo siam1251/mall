@@ -20,7 +20,6 @@ import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpandroidsdk.twitter.model.TwitterTweet;
-import com.kineticcafe.kcpandroidsdk.utils.Utility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
@@ -60,10 +59,6 @@ public class HomeFragment extends BaseFragment {
 
         TabLayout tablayout = (TabLayout) view.findViewById(R.id.tlHome);
         tablayout.setupWithViewPager(vpHome);
-
-//        updateAdapter(Constants.EXTERNAL_CODE_FEED);
-//        updateAdapter(Constants.EXTERNAL_CODE_DEAL);
-//        updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
 
         if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
                 mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null ) mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);
@@ -263,18 +258,11 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+
         updateAdapter(Constants.EXTERNAL_CODE_FEED);
         updateAdapter(Constants.EXTERNAL_CODE_DEAL);
         updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
     }
-
-    /*private RefreshListener mOnRefreshListener;
-    public void setOnRefreshListener(RefreshListener refreshListener){
-        mOnRefreshListener = refreshListener;
-    }
-    public interface RefreshListener {
-        void onRefresh(int msg);
-    }*/
 
     @Override
     public void onPause(){

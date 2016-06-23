@@ -18,12 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+import com.kineticcafe.kcpmall.views.ActivityAnimation;
 
 import java.util.ArrayList;
 
@@ -85,20 +87,20 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             if(mhasSectionHeaders) mItems.add(KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_DEALS);
             mItems.addAll(mKcpContentPagesOtherDeals);
         }
+
+        notifyDataSetChanged();
     }
 
     public void updateRecommendedDealData(ArrayList<KcpContentPage> recommendedDeals) {
         mKcpContentPagesRecommendedDeals.clear();
         mKcpContentPagesRecommendedDeals.addAll(recommendedDeals); //TESTING
         createItems();
-        notifyDataSetChanged();
     }
 
     public void updateOtherDealData(ArrayList<KcpContentPage> otherDeals) {
         mKcpContentPagesOtherDeals.clear();
         mKcpContentPagesOtherDeals.addAll(otherDeals);
         createItems();
-        notifyDataSetChanged();
     }
 
     private void removeDuplicateFromOtherDeals(){
@@ -214,15 +216,11 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST){
             SetMyInterestViewHolder setMyInterestViewHolder = (SetMyInterestViewHolder) holder;
             setMyInterestViewHolder.tvIntrstTitle.setText(mContext.getResources().getString(R.string.intrst_card_recommended_title));
-
             setMyInterestViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ((Activity)mContext).startActivityForResult(new Intent(mContext, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//                    ((Activity)mContext).overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
-//                    ((Activity)mContext).overridePendingTransition(R.anim.righttoleft, R.anim.stable);
-
+                    ActivityAnimation.startActivityAnimation(mContext);
                 }
             });
 
@@ -230,8 +228,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             StaggeredGridLayoutManager.LayoutParams param = (StaggeredGridLayoutManager.LayoutParams) setMyInterestViewHolder.mView.getLayoutParams();
             param.topMargin = (int) mContext.getResources().getDimension(R.dimen.card_vertical_margin);
             setMyInterestViewHolder.mView.setLayoutParams(param);
-
-
         } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST){
             SetMyInterestViewHolder setMyInterestViewHolder = (SetMyInterestViewHolder) holder;
             setMyInterestViewHolder.tvIntrstTitle.setText(mContext.getResources().getString(R.string.intrst_card_recommended_title));
@@ -242,11 +238,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     ((Activity)mContext).startActivityForResult(new Intent(mContext, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//                    ((Activity)mContext).overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
-//                    ((Activity)mContext).overridePendingTransition(R.anim.righttoleft, R.anim.stable);
-
-
+                    ActivityAnimation.startActivityAnimation(mContext);
                 }
             });
 
@@ -262,8 +254,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             final DealsViewHolder dealHolder = (DealsViewHolder) holder;
 
             String imageUrl = kcpContentPage.getHighestResImageUrl();
-            dealHolder.ivDealLogo.setImageResource(R.drawable.placeholder);
-
+            if(imageUrl.equals("")) imageUrl = kcpContentPage.getHighestResFallbackImageUrl();
             new GlideFactory().glideWithDefaultRatio(
                     mContext,
                     imageUrl,
@@ -277,12 +268,14 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             dealHolder.tvDealTitle.setText(title);
 
 
+            final String likeLink = kcpContentPage.getLikeLink();
+            dealHolder.ivFav.setSelected(KcpUtility.isLiked(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink));
             dealHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //TODO: implement fav functionality
-                    Toast.makeText(mContext, "fav clicked", Toast.LENGTH_SHORT).show();
                     dealHolder.ivFav.setSelected(!dealHolder.ivFav .isSelected());
+                    KcpUtility.addOrRemoveLikeLink(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink);
                 }
             });
 

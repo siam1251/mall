@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cvGetDirection"
+            android:layout_gravity="bottom"
+            android:layout_height="@dimen/info_direction_height"
+            card_view:cardCornerRadius="@dimen/intrstd_card_corner_radius"
+            android:layout_centerHorizontal="true"
+            style="@style/SelectableItemForeground"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="13dp"
+            android:background="@drawable/btn_intrstd_cat"
+            >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_weight="1"
+                    android:id="@+id/rlDirection"
+                    style="@style/SelectableItemForeground"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                        xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/ivDirection"
+                        android:layout_centerVertical="true"
+                        ThemedImageView:filterColor="@color/themeColor"
+                        android:padding="@dimen/info_direction_icon_padding"
+                        android:layout_width="@dimen/info_direction_height"
+                        android:layout_height="@dimen/info_direction_height"
+                        android:src="@drawable/icn_directions"/>
+
+                    <TextView
+                        android:layout_toRightOf="@+id/ivDirection"
+                        android:gravity="center"
+                        android:text="@string/info_get_directions"
+                        android:textSize="@dimen/info_direction_text"
+                        android:textColor="@color/intrstd_txt"
+                        android:layout_height="@dimen/intrstd_card_height"
+                        android:layout_width="wrap_content"
+                        />
+
+                </RelativeLayout>
+
+
+                <View
+                    style="@style/verticalSeparater"
+                    />
+
+                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                    style="@style/SelectableItemForeground"
+                    android:id="@+id/ivCar"
+                    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+                    ThemedImageView:filterColor="@color/themeColor"
+                    android:padding="@dimen/info_direction_icon_padding"
+                    android:layout_width="@dimen/info_direction_height"
+                    android:layout_height="@dimen/info_direction_height"
+                    android:src="@drawable/icn_directions"/>
+
+                <View
+                    style="@style/verticalSeparater"
+                    />
+
+                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                    style="@style/SelectableItemForeground"
+                    android:id="@+id/ivSubway"
+                    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+                    ThemedImageView:filterColor="@color/themeColor"
+                    android:padding="@dimen/info_direction_icon_padding"
+                    android:layout_width="@dimen/info_direction_height"
+                    android:layout_height="@dimen/info_direction_height"
+                    android:src="@drawable/icn_directions"/>
+
+                <View
+                    style="@style/verticalSeparater"
+                    />
+
+                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                    style="@style/SelectableItemForeground"
+                    android:id="@+id/ivWalk"
+                    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+                    ThemedImageView:filterColor="@color/themeColor"
+                    android:padding="@dimen/info_direction_icon_padding"
+                    android:layout_width="@dimen/info_direction_height"
+                    android:layout_height="@dimen/info_direction_height"
+                    android:src="@drawable/icn_directions"/>
+
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_below="@+id/cvGetDirection"
+            android:layout_gravity="bottom"
+            android:layout_height="@dimen/info_direction_height"
+            card_view:cardCornerRadius="@dimen/intrstd_card_corner_radius"
+            android:layout_centerHorizontal="true"
+            style="@style/SelectableItemForeground"
+            android:layout_width="match_parent"
+            android:background="@drawable/btn_intrstd_cat"
+            >
+
+            <RelativeLayout
+                android:id="@+id/rlSaveMyParkingSpot"
+                style="@style/SelectableItemForeground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                    android:id="@+id/ivPark"
+                    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+                    android:layout_centerVertical="true"
+                    ThemedImageView:filterColor="@color/themeColor"
+                    android:padding="@dimen/info_direction_icon_padding"
+                    android:layout_width="@dimen/info_direction_height"
+                    android:layout_height="@dimen/info_direction_height"
+                    android:src="@drawable/icn_directions"/>
+
+                <TextView
+                    android:layout_toRightOf="@+id/ivPark"
+                    android:gravity="center"
+                    android:text="@string/info_save_my_parking_spot"
+                    android:textSize="@dimen/info_direction_text"
+                    android:textColor="@color/intrstd_txt"
+                    android:layout_height="@dimen/intrstd_card_height"
+                    android:layout_width="wrap_content"
+                    />
+
+                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                    android:layout_alignParentRight="true"
+                    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+                    ThemedImageView:filterColor="@color/unselected"
+                    android:padding="@dimen/info_direction_icon_padding"
+                    android:layout_width="@dimen/info_direction_height"
+                    android:layout_height="@dimen/info_direction_height"
+                    android:src="@drawable/icn_arrow"/>
+
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+</android.support.v7.widget.Toolbar>

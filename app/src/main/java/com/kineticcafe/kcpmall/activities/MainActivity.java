@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -31,12 +32,13 @@ import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpDataListener;
-import com.kineticcafe.kcpandroidsdk.utils.Utility;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.HomeBottomTapAdapter;
 import com.kineticcafe.kcpmall.fragments.DirectoryFragment;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
+import com.kineticcafe.kcpmall.fragments.InfoFragment;
 import com.kineticcafe.kcpmall.fragments.TestFragment;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 
@@ -94,7 +96,21 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        final AppBarLayout ablTopNav = (AppBarLayout)findViewById(R.id.ablTopNav);
         KcpAnimatedViewPager viewPager = (KcpAnimatedViewPager) findViewById(R.id.vpMain);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 3) ablTopNav.setExpanded(true); //TODO: change this hardcode
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tlBottom);
 
         List<Fragment> fragmentList = new ArrayList<>();
@@ -112,7 +128,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initializeKcpData(){
-        if(!Utility.isNetworkAvailable(this)){
+        if(!KcpUtility.isNetworkAvailable(this)){
             ProgressBarWhileDownloading.showProgressDialog(this, R.layout.layout_loading_item, false);
             this.onDataDownloaded(); //TODO: error here when offline
             this.showSnackBar(R.string.warning_no_internet_connection, R.string.warning_retry, new View.OnClickListener() {
@@ -127,11 +143,12 @@ public class MainActivity extends AppCompatActivity
             ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
             HomeFragment.getInstance().initializeHomeData();
             DirectoryFragment.getInstance().initializeDirectoryData();
+            InfoFragment.getInstance().initializeMallInfoData();
         }
     }
 
     private void initializeToolbar(){
-        Toolbar toolbar= (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ivToolbar = (ImageView) toolbar.findViewById(R.id.ivToolbar);
         ivToolbar.setVisibility(View.VISIBLE);
 
@@ -221,7 +238,7 @@ public class MainActivity extends AppCompatActivity
         fragmentList.add(HomeFragment.getInstance());
         fragmentList.add(DirectoryFragment.getInstance());
         fragmentList.add(new TestFragment());
-        fragmentList.add(new TestFragment());
+        fragmentList.add(InfoFragment.getInstance());
     }
 
     /**
@@ -326,33 +343,19 @@ public class MainActivity extends AppCompatActivity
         void onRefresh(int msg);
     }
 
-   /* @Override
-    public void onCategorySelected(String exteranlCode, String categoryName) {
-        CategoryStoreFragment articleFrag = (CategoryStoreFragment)
-                getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.fragment_sub_categories));
-        if (articleFrag == null) {
-            articleFrag = CategoryStoreFragment.newInstance(exteranlCode, categoryName);
-        }
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.flContents, articleFrag, getResources().getString(R.string.fragment_sub_categories));
-        fragmentTransaction.addToBackStack(getResources().getString(R.string.fragment_sub_categories));
-        fragmentTransaction.commit();
-    }*/
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODE_CHANGE_INTEREST) {
             if (resultCode == Activity.RESULT_OK) {
                 HomeFragment.getInstance().downloadNewsAndDeal();
+            } else {
+
             }
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
     }
 }
 

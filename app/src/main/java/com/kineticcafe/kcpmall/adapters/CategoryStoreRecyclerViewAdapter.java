@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
@@ -102,15 +103,22 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         String storename = kcpPlace.getPlaceName();
         storeViewHolder.tvDealStoreName.setText(storename);
 
+
+        String category = kcpPlace.getCategoryLabelOverride();
         String display = kcpPlace.getFirstDisplay();
-        storeViewHolder.tvDealTitle.setText(display);
+        if(!display.equals("")) category = display;
+        storeViewHolder.tvDealTitle.setText(category);
 
         if (getItemViewType(position) == KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE) {
+
+            final String likeLink = kcpPlace.getLikeLink();
+            storeViewHolder.ivFav.setSelected(KcpUtility.isLiked(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink));
+
             storeViewHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "fav clicked", Toast.LENGTH_SHORT).show();
                     storeViewHolder.ivFav.setSelected(!storeViewHolder.ivFav .isSelected());
+                    KcpUtility.addOrRemoveLikeLink(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink);
                 }
             });
         } else if (getItemViewType(position) == KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE) {

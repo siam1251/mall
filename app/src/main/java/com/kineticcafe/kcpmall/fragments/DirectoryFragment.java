@@ -27,6 +27,7 @@ import com.kineticcafe.kcpmall.activities.SubCategoryActivity;
 import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
 import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
+import com.kineticcafe.kcpmall.views.ActivityAnimation;
 
 import java.util.ArrayList;
 
@@ -142,7 +143,7 @@ public class DirectoryFragment extends BaseFragment {
 
 //        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
         getActivity().startActivity(intent);
-        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        ActivityAnimation.startActivityAnimation(getActivity());
     }
 
     public void tryDownloadSubCategories(final Context context, final String externalCode, final String categoryName, String url, final int position, final View view) {
@@ -218,7 +219,7 @@ public class DirectoryFragment extends BaseFragment {
 //        ActivityCompat.startActivity(((Activity)context), intent, options.toBundle());
 //        getActivity().startActivity(intent);
         context.startActivity(intent);
-        ((Activity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        ActivityAnimation.startActivityAnimation(context);
     }
 
 

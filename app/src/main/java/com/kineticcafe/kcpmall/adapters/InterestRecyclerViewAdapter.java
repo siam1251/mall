@@ -13,18 +13,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
-import com.kineticcafe.kcpandroidsdk.utils.Utility;
 
 import java.util.ArrayList;
 
@@ -50,14 +49,14 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
         mInterestType = InterestType.CATEGORY;
         mKcpCategoriesList = new ArrayList<KcpCategories>(news);
         mGridLayoutItemArrayList = gridLayoutItemArrayList;
-        mFavCatTempList = Utility.loadGsonArrayList(context, Constants.PREFS_KEY_CATEGORY);
+        mFavCatTempList = KcpUtility.loadGsonArrayList(context, Constants.PREFS_KEY_CATEGORY);
     }
 
     public InterestRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces) {
         mInterestType = InterestType.STORE;
         mContext = context;
         mKcpPlacesRecommendedList = new ArrayList<>(kcpPlaces);
-        mFavStoreLikeLinkList = Utility.loadGsonArrayListString(context, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK);
+        mFavStoreLikeLinkList = KcpUtility.loadGsonArrayListString(context, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK);
         mKcpPlacesOthersList = new ArrayList<>(KcpPlacesRoot.getInstance().getPlacesList());
 
         createItems();

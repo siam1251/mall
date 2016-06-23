@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpandroidsdk.utils.Utility;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 
 /**
  * Created by Kay on 2016-05-04.
@@ -133,9 +133,9 @@ public class KcpAnimatedViewPager extends ViewPager /*implements ViewPager.OnPag
         TextView tvCurrentTab = (TextView) v.findViewById(R.id.tvTabTitle);
         ImageView ivCurrentTab = (ImageView) v.findViewById(R.id.ivTabIcon);
 
-        ivCurrentTab.setColorFilter(Utility.interpolateColor(
+        ivCurrentTab.setColorFilter(KcpUtility.interpolateColor(
                 colorFrom, colorTo, proportion));
-        tvCurrentTab.setTextColor(Utility.interpolateColor(
+        tvCurrentTab.setTextColor(KcpUtility.interpolateColor(
                 colorFrom, colorTo, proportion));
     }
 

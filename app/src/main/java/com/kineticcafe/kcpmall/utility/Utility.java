@@ -69,6 +69,23 @@ public class Utility {
                 }).show();
     }
 
+    public static void makeCallWithAlertDialog(final Context context, final String title, final String msg, final String positiveBtn, final String negativebtn, final String number){
+        if(number == null || number.equals("")) return;
+        AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+        alertDialogForInterest.getAlertDialog(
+                context,
+                title,
+                msg,
+                positiveBtn,
+                negativebtn,
+                new AlertDialogForInterest.DialogAnsweredListener() {
+                    @Override
+                    public void okClicked() {
+                        makeCall(context, number);
+                    }
+                }).show();
+    }
+
     public static void openWebPage(Context context, String url){
         if(url == null || url.equals("")) return;
         if (!url.startsWith("http://") && !url.startsWith("https://"))
@@ -76,6 +93,33 @@ public class Utility {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         context.startActivity(browserIntent);
     }
+
+
+    public static void openGoogleMap(Context context, String url){
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        context.startActivity(i);
+    }
+    public static void openGoogleMapWithAddress(Context context, String address){
+        String map = "https://maps.google.com/maps?q=" + address;
+        openGoogleMap(context, map);
+    }
+
+    public static void openGoogleMapWithAddressWithDrivingMode(Context context, String address){
+        String map = "https://maps.google.com?daddr=" + address + "&dirflg=d";
+        openGoogleMap(context, map);
+    }
+
+    public static void openGoogleMapWithAddressWithTransitMode(Context context, String address){
+        String map = "https://maps.google.com?daddr=" + address + "&dirflg=r";
+        openGoogleMap(context, map);
+    }
+
+    public static void openGoogleMapWithAddressWithWalkingMode(Context context, String address){
+        String map = "https://maps.google.com?daddr=" + address + "&dirflg=w";
+        openGoogleMap(context, map);
+    }
+
+
     /*public Drawable getDrawableWithColorChange(Context context, int drawableId){
         Drawable drawable = context.getResources().getDrawable(drawableId);
         try {

@@ -75,6 +75,7 @@
                     />
 
                 <ImageView
+                    android:transitionName="@string/transition_fav"
                     android:id="@+id/ivFav"
                     android:layout_width="@dimen/ancmt_fav_width"
                     android:layout_height="wrap_content"

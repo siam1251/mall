@@ -1,6 +1,5 @@
 package com.kineticcafe.kcpmall.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,11 +19,12 @@ import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.InterestRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
-import com.kineticcafe.kcpandroidsdk.utils.Utility;
+import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
 import java.util.ArrayList;
@@ -37,6 +37,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
     protected final Logger logger = new Logger(getClass().getName());
     private InterestRecyclerViewAdapter mInterestRecyclerViewAdapter;
     private RecyclerView rvIntrstCat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,17 +72,24 @@ public class InterestedStoreActivity extends AppCompatActivity {
 
                                 break;
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                                Utility.saveGson(InterestedStoreActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
-                                setResult(Activity.RESULT_OK, new Intent());
-                                finish();
+
+                                ArrayList<String> savedStoreLikeList = KcpUtility.loadGsonArrayListString(InterestedStoreActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK);
+                                ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();
+                                if(!KcpUtility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
+                                    KcpUtility.saveGson(InterestedStoreActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
+                                    setResult(Constants.RESULT_DONE_PRESSED_WITH_CHANGE, new Intent());
+                                } else {
+                                    setResult(Constants.RESULT_DONE_PRESSED_WITHOUT_CHANGE, new Intent());
+                                }
+                                onFinish();
                                 break;
                             default:
                                 super.handleMessage(inputMessage);
                         }
                     }
                 });
-                kcpCategoryManager.postInterestedStores(mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
 
+                kcpCategoryManager.postInterestedStores(mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
             }
         });
     }
@@ -132,16 +140,22 @@ public class InterestedStoreActivity extends AppCompatActivity {
         checkIfNotSaved(new AlertDialogForInterest.DialogAnsweredListener() {
             @Override
             public void okClicked() {
-                finish();
-//                overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
+                setResult(Constants.RESULT_EXIT, new Intent());
+                onFinish();
             }
         });
     }
 
+    public void onFinish(){
+        finish();
+        ActivityAnimation.exitActivityAnimation(this);
+    }
+
+
     public void checkIfNotSaved(final AlertDialogForInterest.DialogAnsweredListener dialogAnsweredListener){
-        ArrayList<String> savedStoreLikeList = Utility.loadGsonArrayListString(this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK);
+        ArrayList<String> savedStoreLikeList = KcpUtility.loadGsonArrayListString(this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK);
         ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();
-        if(!Utility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
+        if(!KcpUtility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
             AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
             alertDialogForInterest.getAlertDialog(
                     this,
@@ -159,4 +173,5 @@ public class InterestedStoreActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
     }
+
 }

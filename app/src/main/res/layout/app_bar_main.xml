@@ -28,7 +28,7 @@
             android:paddingBottom="@dimen/vpMain_padding_bottom"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:selectedColor="@color/themeColor"
-            app:unSelectedColor="@color/unselected"
+            app:unSelectedColor="@color/menu_text_unselected"
             />
 
     </android.support.design.widget.CoordinatorLayout>

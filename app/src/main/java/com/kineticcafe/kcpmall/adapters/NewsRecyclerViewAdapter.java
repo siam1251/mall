@@ -22,7 +22,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.R;
@@ -30,7 +32,7 @@ import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
-import com.kineticcafe.kcpandroidsdk.utils.Utility;
+import com.kineticcafe.kcpmall.views.ActivityAnimation;
 
 import java.util.ArrayList;
 
@@ -168,12 +170,12 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 return new TwitterFeedViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_social_feed_pager, parent, false),
                         R.drawable.icn_twitter,
-                        "@" + Constants.TWITTER_SCREEN_NAME);
+                        "@" + KcpConstants.TWITTER_SCREEN_NAME);
             case KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM:
                 return new InstagramFeedViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_social_feed_pager, parent, false),
                         R.drawable.icn_instagram,
-                        "@" + Constants.INSTAGRAM_USER_NAME);
+                        "@" + KcpConstants.INSTAGRAM_USER_NAME);
         }
         return null;
     }
@@ -208,12 +210,15 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 ancmtHolder.rlAncmt.setLayoutParams(rlAncmtParam);
             }
 
+            final String likeLink = kcpContentPage.getLikeLink();
+            ancmtHolder.ivFav.setSelected(KcpUtility.isLiked(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink));
             ancmtHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //TODO: implement fav functionality
-                    Toast.makeText(mContext, "fav clicked", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, "fav clicked", Toast.LENGTH_SHORT).show();
                     ancmtHolder.ivFav.setSelected(!ancmtHolder.ivFav .isSelected());
+                    KcpUtility.addOrRemoveLikeLink(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink);
                 }
             });
 
@@ -230,8 +235,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                             Pair.create((View)ancmtHolder.ivAnnouncementLogo, transitionNameImage));
 
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
+                    ActivityAnimation.startActivityAnimation(mContext);
                 }
             });
 
@@ -241,9 +245,8 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     ((Activity)mContext).startActivityForResult(new Intent(mContext, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//                    ((Activity)mContext).overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
-//                    ((Activity)mContext).overridePendingTransition(R.anim.righttoleft, R.anim.stable);
+                    ActivityAnimation.startActivityAnimation(mContext);
+
                 }
             });
 
@@ -269,7 +272,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             }
 
             ViewGroup.LayoutParams vpTwParam = (ViewGroup.LayoutParams) viewHolder.vpTw.getLayoutParams();
-            vpTwParam.height =  (int) (Utility.getScreenWidth(mContext) / Utility.getFloat(mContext, R.dimen.ancmt_image_ratio));
+            vpTwParam.height =  (int) (KcpUtility.getScreenWidth(mContext) / KcpUtility.getFloat(mContext, R.dimen.ancmt_image_ratio));
             viewHolder.vpTw.setLayoutParams(vpTwParam);
             initializeSocialFeedViews(viewHolder, mSocialFeedViewPagerAdapter);
         }
@@ -317,7 +320,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     /** circle page indicator*/
     private void setUiPageViewController(MainViewHolder holder) {
-        holder.dotsCount = Constants.NUMB_OF_INSTA; //viewpagerAdapter.getCount(); used for actual counting
+        holder.dotsCount = KcpConstants.NUMB_OF_INSTA; //viewpagerAdapter.getCount(); used for actual counting
         holder.dots = new ImageView[holder.dotsCount];
 
         holder.llViewPagerCountDots.removeAllViews(); //prevent from creating second indicator

@@ -14,7 +14,6 @@
         <item>@drawable/icn_menu_directory</item>
         <item>@drawable/icn_menu_map</item>
         <item>@drawable/icn_menu_mall_info</item>
-
     </string-array>
 
 </resources>
