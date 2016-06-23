@@ -54,18 +54,52 @@
                 android:layout_height="@dimen/info_collapsed_height"
                 layout="@layout/layout_toolbar_info" />
 
-            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            <LinearLayout
+                android:id="@+id/llInfoHours"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/info_hours_height"
+                android:layout_gravity="bottom"
+                android:background="@color/info_hours_bg_open"
+                android:gravity="center_horizontal"
+                >
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:layout_gravity="bottom"
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/info_hours_height"
+                    android:id="@+id/tvInfoHoursBold"
+                    android:textSize="@dimen/category_txt"
+                    android:text="Open now"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    />
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/info_hours_height"
+                    android:id="@+id/tvInfoHoursLight"
+                    android:textSize="@dimen/category_txt"
+                    android:text=" until 00:00 PM"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    />
+            </LinearLayout>
+
+            <!--<com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
                 android:layout_gravity="bottom"
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/info_hours_height"
                 android:id="@+id/tvInfoHours"
                 android:textSize="@dimen/category_txt"
-                android:text="Open now until 9:00 PM"
+                android:text="Open now until 00:00 PM"
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:background="@color/info_hours_bg_open"
-                />
+                />-->
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

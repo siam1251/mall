@@ -95,7 +95,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        ArrayList<KcpPlaces> kcpPlacesArrayList = KcpCategoryRoot.getInstance().getPlacesList();
+        ArrayList<KcpPlaces> kcpPlacesArrayList = KcpCategoryRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, MAX_SPAN);
         recyclerView.setLayoutManager(gridLayoutManager);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {

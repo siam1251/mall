@@ -74,7 +74,7 @@ public class PlacesFragment extends BaseFragment {
         rvNews.setLayoutManager(linearLayoutManager);
         rvNews.setLayoutManager(linearLayoutManager);
 
-        ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList();
+        ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
         mPlaceRecyclerViewAdapter = new CategoryStoreRecyclerViewAdapter(
                 getActivity(),
                 kcpPlaces, KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE);

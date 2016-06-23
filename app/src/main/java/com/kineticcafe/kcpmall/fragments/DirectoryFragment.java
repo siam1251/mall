@@ -216,8 +216,6 @@ public class DirectoryFragment extends BaseFragment {
                 (Activity)context,
                 Pair.create(view, ""));
 
-//        ActivityCompat.startActivity(((Activity)context), intent, options.toBundle());
-//        getActivity().startActivity(intent);
         context.startActivity(intent);
         ActivityAnimation.startActivityAnimation(context);
     }

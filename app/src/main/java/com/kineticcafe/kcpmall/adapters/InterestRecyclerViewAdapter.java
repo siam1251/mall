@@ -57,7 +57,7 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
         mContext = context;
         mKcpPlacesRecommendedList = new ArrayList<>(kcpPlaces);
         mFavStoreLikeLinkList = KcpUtility.loadGsonArrayListString(context, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK);
-        mKcpPlacesOthersList = new ArrayList<>(KcpPlacesRoot.getInstance().getPlacesList());
+        mKcpPlacesOthersList = new ArrayList<>(KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE));
 
         createItems();
     }

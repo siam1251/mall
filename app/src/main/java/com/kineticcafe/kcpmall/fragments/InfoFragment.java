@@ -1,5 +1,6 @@
 package com.kineticcafe.kcpmall.fragments;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,11 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.managers.KcpInfoManager;
+import com.kineticcafe.kcpandroidsdk.managers.KcpPlaceManager;
+import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
+import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpandroidsdk.models.MallInfo.KcpMallInfoRoot;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
@@ -25,8 +31,6 @@ import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.adapters.InfoRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.utility.Utility;
-
-import java.util.ArrayList;
 
 /**
  * Created by Kay on 2016-06-20.
@@ -42,6 +46,9 @@ public class InfoFragment extends BaseFragment {
     private InfoRecyclerViewAdapter mInfoRecyclerViewAdapter;
     private boolean shouldScroll = false;
     private OnListFragmentInteractionListener mListener;
+    private TextView tvInfoHoursBold;
+    private TextView tvInfoHoursLight;
+    private LinearLayout llInfoHours;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,9 +89,7 @@ public class InfoFragment extends BaseFragment {
         rlDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
-                if(kcpMallInfoRoot.getKcpMallInfo().getAddress() != null)
-                Utility.openGoogleMapWithAddress(getActivity(), kcpMallInfoRoot.getKcpMallInfo().getAddress());
+                Utility.openGoogleMapWithAddress(getActivity(), getResources().getString(R.string.mall_name));
             }
         });
 
@@ -101,19 +106,15 @@ public class InfoFragment extends BaseFragment {
         ivCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
-                if(kcpMallInfoRoot.getKcpMallInfo().getAddress() != null)
-                    Utility.openGoogleMapWithAddressWithDrivingMode(getActivity(), kcpMallInfoRoot.getKcpMallInfo().getAddress());
+                Utility.openGoogleMapWithAddressWithDrivingMode(getActivity(), getResources().getString(R.string.mall_name));
             }
         });
 
-        ImageView ivSubway = (ImageView) view.findViewById(R.id.ivSubway);
+        ImageView ivSubway = (ImageView) view.findViewById(R.id.ivTransit);
         ivSubway.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
-                if(kcpMallInfoRoot.getKcpMallInfo().getAddress() != null)
-                    Utility.openGoogleMapWithAddressWithTransitMode(getActivity(), kcpMallInfoRoot.getKcpMallInfo().getAddress());
+                Utility.openGoogleMapWithAddressWithTransitMode(getActivity(), getResources().getString(R.string.mall_name));
             }
         });
 
@@ -121,9 +122,7 @@ public class InfoFragment extends BaseFragment {
         ivWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
-                if(kcpMallInfoRoot.getKcpMallInfo().getAddress() != null)
-                Utility.openGoogleMapWithAddressWithWalkingMode(getActivity(), kcpMallInfoRoot.getKcpMallInfo().getAddress());
+                Utility.openGoogleMapWithAddressWithWalkingMode(getActivity(), getResources().getString(R.string.mall_name));
             }
         });
 
@@ -148,6 +147,11 @@ public class InfoFragment extends BaseFragment {
             });
         }
 
+        llInfoHours = (LinearLayout) view.findViewById(R.id.llInfoHours);
+        tvInfoHoursBold = (TextView) view.findViewById(R.id.tvInfoHoursBold);
+        tvInfoHoursLight = (TextView) view.findViewById(R.id.tvInfoHoursLight);
+        getMallHour();
+
         return view;
     }
 
@@ -161,6 +165,59 @@ public class InfoFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
     }
+
+    public void getMallHour() {
+        KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
+        KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
+        if(kcpPlaces != null){
+            setUpMallOpenCloseStatus();
+        } else {
+            llInfoHours.setVisibility(View.GONE);
+            KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(getActivity(), 0, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
+                @Override
+                public void handleMessage(Message inputMessage) {
+                    switch (inputMessage.arg1) {
+                        case KcpCategoryManager.DOWNLOAD_FAILED:
+                            break;
+                        case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                            setUpMallOpenCloseStatus();
+                            break;
+                        default:
+                            super.handleMessage(inputMessage);
+                    }
+                }
+            });
+            kcpPlaceManager.downloadPlaces();
+
+        }
+    }
+
+    public void setUpMallOpenCloseStatus(){
+        try {
+            KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
+            KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
+            if(kcpPlaces != null){
+                llInfoHours.setVisibility(View.VISIBLE);
+                String[] timeArray = new String[2];
+                String time = kcpPlaces.getStoreHourForToday(timeArray);
+                if(time.equals("")) {
+                    llInfoHours.setVisibility(View.GONE);
+                }
+
+                tvInfoHoursBold.setText(timeArray[0]);
+                tvInfoHoursLight.setText(timeArray[1]);
+
+                if(time.startsWith("Open")){
+                    llInfoHours.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_open));
+                } else if (time.startsWith("Closed")){
+                    llInfoHours.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_closed));
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
+    }
+
 
 
     public void initializeMallInfoData(){
@@ -185,7 +242,7 @@ public class InfoFragment extends BaseFragment {
                         if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
                         break;
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:http://www.cool-24.com/
-                        if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
+                    if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
                         if(mInfoRecyclerViewAdapter != null) mInfoRecyclerViewAdapter.updateData(KcpMallInfoRoot.getInstance().getKcpMallInfo().getInfoList());
                         break;
                     default:
