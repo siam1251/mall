@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
 import com.kineticcafe.kcpandroidsdk.instagram.model.InstagramFeed;
 import com.kineticcafe.kcpandroidsdk.instagram.model.Media;
 import com.kineticcafe.kcpandroidsdk.instagram.model.Recent;
@@ -91,34 +92,32 @@ public class HomeFragment extends BaseFragment {
             if(mNewsFragment != null) mNewsFragment.setEmptyState(null);
             if(mDealsFragment != null) mDealsFragment.setEmptyState(null);
 
-            if(mKcpNavigationRootManager == null) {
-                mKcpNavigationRootManager = new KcpNavigationRootManager(getActivity(), R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
-                    @Override
-                    public void handleMessage(Message inputMessage) {
-                        switch (inputMessage.arg1) {
-                            case KcpNavigationRootManager.DOWNLOAD_STARTED:
-                                break;
-                            case KcpNavigationRootManager.DOWNLOAD_COMPLETE:
-                                if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
-                                String mode = (String) inputMessage.obj;
-                                updateAdapter(mode);
-                                break;
-                            case KcpNavigationRootManager.DATA_ADDED:
-                                mNewsFragment.mNewsRecyclerViewAdapter.addData(mKcpNavigationRootManager.getKcpContentPageList());
-                                mNewsFragment.mEndlessRecyclerViewScrollListener.onLoadDone();
-                                break;
-                            case KcpNavigationRootManager.TASK_COMPLETE:
-                                break;
-                            case KcpNavigationRootManager.DOWNLOAD_FAILED:
-                                mMainActivity.onDataDownloaded();
-                                if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
-                                break;
-                            default:
-                                super.handleMessage(inputMessage);
-                        }
+            mKcpNavigationRootManager = new KcpNavigationRootManager(getActivity(), R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
+                @Override
+                public void handleMessage(Message inputMessage) {
+                    switch (inputMessage.arg1) {
+                        case KcpNavigationRootManager.DOWNLOAD_STARTED:
+                            break;
+                        case KcpNavigationRootManager.DOWNLOAD_COMPLETE:
+                            if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
+                            String mode = (String) inputMessage.obj;
+                            updateAdapter(mode);
+                            break;
+                        case KcpNavigationRootManager.DATA_ADDED:
+                            mNewsFragment.mNewsRecyclerViewAdapter.addData(mKcpNavigationRootManager.getKcpContentPageList());
+                            mNewsFragment.mEndlessRecyclerViewScrollListener.onLoadDone();
+                            break;
+                        case KcpNavigationRootManager.TASK_COMPLETE:
+                            break;
+                        case KcpNavigationRootManager.DOWNLOAD_FAILED:
+                            mMainActivity.onDataDownloaded();
+                            if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
+                            break;
+                        default:
+                            super.handleMessage(inputMessage);
                     }
-                });
-            }
+                }
+            });
             mKcpNavigationRootManager.downloadNewsAndDeal();
         } catch (Exception e) {
             logger.error(e);
@@ -126,48 +125,47 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void downloadSocialFeeds(){
-        if(mKcpSocialFeedManager == null){
-            mKcpSocialFeedManager = new KcpSocialFeedManager(getActivity(), new Handler(Looper.getMainLooper()) {
-                @Override
-                public void handleMessage(Message inputMessage) {
-                    switch (inputMessage.arg1) {
-                        case KcpSocialFeedManager.DOWNLOAD_FAILED:
-                            break;
-                        case KcpSocialFeedManager.DOWNLOAD_TWITTER_COMPLETE:
-                            sTwitterFeedList.clear();
-                            sTwitterFeedList.addAll(mKcpSocialFeedManager.getTwitterTweets());
-                            if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
-                                    mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null ) {
-                                mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);
-                            } else {
-                            }
-                            break;
-                        case KcpSocialFeedManager.DOWNLOAD_INSTAGRAM_COMPLETE:
+        mKcpSocialFeedManager = new KcpSocialFeedManager(getActivity(), new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpSocialFeedManager.DOWNLOAD_FAILED:
+                        break;
+                    case KcpSocialFeedManager.DOWNLOAD_TWITTER_COMPLETE:
+                        sTwitterFeedList.clear();
+                        sTwitterFeedList.addAll(mKcpSocialFeedManager.getTwitterTweets());
+                        if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
+                                mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null ) {
+                            mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);
+                        } else {
+                        }
+                        break;
+                    case KcpSocialFeedManager.DOWNLOAD_INSTAGRAM_COMPLETE:
 
-                            Recent recent = mKcpSocialFeedManager.getRecent();
-                            int mediaSize = recent.getMediaList().size();
+                        Recent recent = mKcpSocialFeedManager.getRecent();
+                        int mediaSize = recent.getMediaList().size();
 
-                            sInstaFeedList.clear();
-                            for (int i = 0; i < mediaSize; i++) {
-                                Media media = recent.getMediaList().get(i);
-                                sInstaFeedList.add(new InstagramFeed(media.getImages().getStandardResolution().getUrl()));
-                            }
-                            if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
-                                    mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null) {
-                                mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateInstaData(sInstaFeedList);
-                            } else {
-                            }
+                        sInstaFeedList.clear();
+                        for (int i = 0; i < mediaSize; i++) {
+                            Media media = recent.getMediaList().get(i);
+                            sInstaFeedList.add(new InstagramFeed(media.getImages().getStandardResolution().getUrl()));
+                        }
+                        if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
+                                mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null) {
+                            mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateInstaData(sInstaFeedList);
+                        } else {
+                        }
 
-                            break;
+                        break;
 
-                        default:
-                            super.handleMessage(inputMessage);
-                    }
+                    default:
+                        super.handleMessage(inputMessage);
                 }
-            });
-        }
-        mKcpSocialFeedManager.downloadTwitterTweets();
-        mKcpSocialFeedManager.downloadInstagram();
+            }
+        });
+
+        mKcpSocialFeedManager.downloadTwitterTweets(Constants.TWITTER_SCREEN_NAME, Constants.NUMB_OF_TWEETS, Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
+        mKcpSocialFeedManager.downloadInstagram(Constants.INSTAGRAM_USER_NAME, Constants.INSTAGRAM_USER_ID, Constants.INSTAGRAM_ACCESS_TOKEN, Constants.INSTAGRAM_BASE_URL, Constants.NUMB_OF_INSTA);
     }
 
     private void downloadFingerPrintingCategories(){

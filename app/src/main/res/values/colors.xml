@@ -108,5 +108,7 @@
     <color name="info_vertical_separator_color">#f0f0f2</color>
     <color name="info_hours_bg_open">#66bb09</color>
     <color name="info_hours_bg_closed">#f44336</color>
+    <color name="info_txt">#36373c</color>
+    <color name="info_save_my_parking_spot_arrow">#A3A3A3</color>
 
 </resources>
