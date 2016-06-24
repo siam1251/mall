@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.managers.KcpPlaceManager;
@@ -510,7 +511,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 TextView tvExpiryDate = (TextView) findViewById(R.id.tvExpiryDate);
                 //TODO: daysLeft shows 1 less date (ex) 2016-05-27T00:00:00.000+00:00 shows date as 26 EST see if this is right
-                int daysLeftUntilEffectiveDate = kcpContentPage.getDaysLeftUntilEffectiveEndDate(kcpContentPage.effectiveEndTime);
+                int daysLeftUntilEffectiveDate = KcpUtility.getDaysLeftUntil(kcpContentPage.effectiveEndTime, KcpConstants.EFFECTIVE_DATE_FORMAT);
                 String daysLeft = kcpContentPage.getDaysLeftText(daysLeftUntilEffectiveDate, Constants.DAYS_LEFT_TO_SHOW_IN_EXPIRY_DATE);
 
                 if(daysLeft.equals("")){
