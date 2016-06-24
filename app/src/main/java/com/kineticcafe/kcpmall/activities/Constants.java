@@ -18,8 +18,8 @@ public class Constants {
 	public final static String HEADER_VALUE_DATAHUB_LOCALE = 	"en-CA";
 	public final static String HEADER_VALUE_CLIENT_TOKEN = 		"OGEyZDYyZTgtNzRmMS00ODNjLTg2YzMtYjQ0YWY1MDc5NWM1OjdjODhjZmY0ZTBjNDk5MTRiM2EzZTY3YjAzZGY1ZTE4ZDM5YTg0ZjM2YTE0ZjI0NWYzNDViN2JhNWY4YTE4YjJiMDUwMWIxOWRiYTExYzE1ZGIzNTJmNzhlM2EzYzI5MGM2MWQ4MmRlMGRjYTkyMzAzZTQ2NWRjZDU3NDJkNGRl";
 	public final static String HEADER_VALUE_CONTENT_TYPE = 		"application/json";
-//	public final static String HEADER_VALUE_ACCEPT = 			"application/json, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.place+json; version=1.0";
-	public final static String HEADER_VALUE_ACCEPT = 			"application/json";
+	public final static String HEADER_VALUE_ACCEPT = 			"application/json, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.place+json; version=1.0";
+//	public final static String HEADER_VALUE_ACCEPT = 			"application/json";
 	public final static String HEADER_VALUE_AUTHROZATION = 		"Bearer 33cce977-6891-4ca5-9df9-6b1e7b9f0d84_YzU5YWM0ZjctODZiOS00ZGJiLTkzYjYtNjZkYzdkYjZkOTE1"; //TESTING
 
 	//DOWNLOAD TYPES
@@ -62,7 +62,7 @@ public class Constants {
 
 	//MALL INFO
 	public final static String MALL_INFO_OFFLINE_TEXT = "mallinfo.json";
-	public final static String MALL_INFO_URL_BASE = "https://api.myjson.com/"; //metropolis
+	public final static String MALL_INFO_URL_BASE = "https://api.myjson.com/";
 //	public final static String MALL_INFO_URL = "bins/2zv9f"; //metropolis
 	public final static String MALL_INFO_URL = "bins/3ng0z"; //vaughan mills
 
