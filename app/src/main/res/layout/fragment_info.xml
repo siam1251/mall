@@ -29,10 +29,10 @@
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
                 android:src="@drawable/img_mallinfo_main"
-                app:layout_collapseParallaxMultiplier="0.9"
+                app:layout_collapseParallaxMultiplier="0.8"
                 app:layout_collapseMode="parallax"
                 />
-                app:layout_collapseMode="parallax"
+            app:layout_collapseMode="parallax"
 
             <com.kineticcafe.kcpmall.views.ThemeColorImageView
                 xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:src="@drawable/logo_vaughan_mills"
-                app:layout_collapseParallaxMultiplier="0.2"
+                app:layout_collapseParallaxMultiplier="0.5"
                 app:layout_collapseMode="parallax"
                 />
 
@@ -52,55 +52,49 @@
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/info_collapsed_height"
-                layout="@layout/layout_toolbar_info" />
+                layout="@layout/layout_toolbar_info"
+                />
 
-            <LinearLayout
-                android:id="@+id/llInfoHours"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/info_hours_height"
+            <android.support.v7.widget.Toolbar
                 android:layout_gravity="bottom"
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
                 android:background="@color/info_hours_bg_open"
-                android:gravity="center_horizontal"
+                android:layout_height="@dimen/info_hours_height"
                 >
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-                    android:layout_gravity="bottom"
-                    app:fontFamily="@string/fontFamily_roboto_medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/info_hours_height"
-                    android:id="@+id/tvInfoHoursBold"
-                    android:textSize="@dimen/category_txt"
-                    android:text="Open now"
-                    android:textColor="@color/white"
+                <LinearLayout
+                    android:id="@+id/llInfoHours"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    />
+                    >
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-                    app:fontFamily="@string/fontFamily_roboto_light"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/info_hours_height"
-                    android:id="@+id/tvInfoHoursLight"
-                    android:textSize="@dimen/category_txt"
-                    android:text=" until 00:00 PM"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    />
-            </LinearLayout>
+                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                        app:fontFamily="@string/fontFamily_roboto_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/tvInfoHoursBold"
+                        android:textSize="@dimen/category_txt"
+                        android:text="Open now"
+                        android:textColor="@color/white"
+                        android:gravity="center_vertical"
+                        />
 
-            <!--<com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-                android:layout_gravity="bottom"
-                app:fontFamily="@string/fontFamily_roboto_medium"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/info_hours_height"
-                android:id="@+id/tvInfoHours"
-                android:textSize="@dimen/category_txt"
-                android:text="Open now until 00:00 PM"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@color/info_hours_bg_open"
-                />-->
+                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                        app:fontFamily="@string/fontFamily_roboto_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/tvInfoHoursLight"
+                        android:textSize="@dimen/category_txt"
+                        android:text=" until 00:00 PM"
+                        android:textColor="@color/white"
+                        android:gravity="center_vertical"
 
+                        />
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
@@ -111,8 +105,8 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_height="wrap_content"
         />
-        android:paddingBottom="@dimen/vpMain_padding_bottom"
-        android:layout_height="wrap_content"
-        android:paddingBottom="188dp"
+    android:paddingBottom="@dimen/vpMain_padding_bottom"
+    android:layout_height="wrap_content"
+    android:paddingBottom="188dp"
 
 </android.support.design.widget.CoordinatorLayout>

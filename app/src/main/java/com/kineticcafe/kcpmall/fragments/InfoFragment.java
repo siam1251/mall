@@ -89,7 +89,7 @@ public class InfoFragment extends BaseFragment {
         rlDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utility.openGoogleMapWithAddress(getActivity(), getResources().getString(R.string.mall_name));
+                Utility.openGoogleMapWithAddress(getActivity(), HeaderFactory.MALL_NAME);
             }
         });
 
@@ -106,7 +106,7 @@ public class InfoFragment extends BaseFragment {
         ivCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utility.openGoogleMapWithAddressWithDrivingMode(getActivity(), getResources().getString(R.string.mall_name));
+                Utility.openGoogleMapWithAddressWithDrivingMode(getActivity(), HeaderFactory.MALL_NAME);
             }
         });
 
@@ -114,7 +114,7 @@ public class InfoFragment extends BaseFragment {
         ivSubway.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utility.openGoogleMapWithAddressWithTransitMode(getActivity(), getResources().getString(R.string.mall_name));
+                Utility.openGoogleMapWithAddressWithTransitMode(getActivity(), HeaderFactory.MALL_NAME);
             }
         });
 
@@ -122,7 +122,7 @@ public class InfoFragment extends BaseFragment {
         ivWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utility.openGoogleMapWithAddressWithWalkingMode(getActivity(), getResources().getString(R.string.mall_name));
+                Utility.openGoogleMapWithAddressWithWalkingMode(getActivity(), HeaderFactory.MALL_NAME);
             }
         });
 
@@ -139,7 +139,7 @@ public class InfoFragment extends BaseFragment {
                     lp.height = (int) (KcpUtility.getScreenHeight(getActivity())
                             - KcpUtility.getStatusBarHeight(getActivity())
                             - getActivity().getResources().getDimension(R.dimen.abc_action_bar_default_height_material)
-                            - getResources().getDimension(R.dimen.info_collapsed_height)
+//                            - getResources().getDimension(R.dimen.info_collapsed_height)
                             - getResources().getDimension(R.dimen.info_hours_height)
                             - getResources().getDimension(R.dimen.vpMain_padding_bottom));
                     rvInfo.setLayoutParams(lp);
@@ -250,7 +250,7 @@ public class InfoFragment extends BaseFragment {
                 }
             }
         });
-        kcpInfoManager.downloadMallInfo(Constants.MALL_INFO_URL_BASE, Constants.MALL_INFO_URL);
+        kcpInfoManager.downloadMallInfo(HeaderFactory.MALL_INFO_URL_BASE, HeaderFactory.MALL_INFO_URL);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
@@ -266,7 +266,7 @@ public class InfoFragment extends BaseFragment {
 
 
         KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
-        kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), Constants.MALL_INFO_OFFLINE_TEXT);
+        kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), HeaderFactory.MALL_INFO_OFFLINE_TEXT);
 
         mInfoRecyclerViewAdapter = new InfoRecyclerViewAdapter(
                 getActivity(),

@@ -105,17 +105,17 @@ public class Utility {
     }
 
     public static void openGoogleMapWithAddressWithDrivingMode(Context context, String address){
-        String map = "https://maps.google.com?daddr=" + address + "&dirflg=d";
+        String map = "https://maps.google.com/maps?daddr=" + address + "&dirflg=d";
         openGoogleMap(context, map);
     }
 
     public static void openGoogleMapWithAddressWithTransitMode(Context context, String address){
-        String map = "https://maps.google.com?daddr=" + address + "&dirflg=r";
+        String map = "https://maps.google.com/maps?daddr=" + address + "&dirflg=r";
         openGoogleMap(context, map);
     }
 
     public static void openGoogleMapWithAddressWithWalkingMode(Context context, String address){
-        String map = "https://maps.google.com?daddr=" + address + "&dirflg=w";
+        String map = "https://maps.google.com/maps?daddr=" + address + "&dirflg=w";
         openGoogleMap(context, map);
     }
 
