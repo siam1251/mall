@@ -62,9 +62,12 @@ Ut nec euismod augue. Mauris laoreet, lacus blandit maximus placerat, ante risus
 
 Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales orci ligula nec mi. Quisque maximus tristique ante et tristique. Mauris quis sem ut libero cursus fringilla. Fusce dictum mattis ligula ut interdum. Nunc massa justo, vulputate tristique rutrum eget, lacinia a ipsum. Nulla et tincidunt velit. Proin tincidunt in purus nec elementum. Nulla id leo non eros tempor fringilla quis eget urna. Nunc congue urna vel diam congue, ac mattis massa ultrices. Duis sit amet risus ac magna sagittis luctus et eget velit. Mauris dictum molestie dictum.</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_mall_hours">Mall Hours</string>
+    <string name="title_mall_information">Mall Information</string>
 
 
     <string name="test_disclaimer">* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non ante dictum, tempor orci nec, ultricies urna. Donec a consequat leo. Aliquam commodo venenatis nisi tempor lacinia. </string>
+    <string name="mall_info_disclaimer_title">Hours of operation may vary at the following stores: </string>
     <string name="title_activity_test">Test</string>
 
     <!--warning-->
@@ -102,5 +105,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <!--INFO-->
     <string name="info_get_directions">Get Directions</string>
     <string name="info_save_my_parking_spot">Save My Parking Spot</string>
+
+    <!--HOUR-->
 
 </resources>

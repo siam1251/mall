@@ -53,6 +53,11 @@ public class Constants {
 
 	//DATE FORMAT
  	public final static String DATE_FORMAT_EFFECTIVE = "EEEE, MMMM d";
+ 	public final static String DATE_FORMAT_HOLIDAY_DATE = "MMMM d";
+ 	public final static String DATE_FORMAT_HOLIDAY_HOUR = "MMMM d";
+ 	public final static String DATE_FORMAT_MALL_HOUR_DATE = "EEE. MMM d";
+ 	public final static String DATE_FORMAT_HOLIDAY = "EEEE MMMM d";
+ 	public final static String DATE_FORMAT_DAY = "EEEE";
 
 
 	//DETAIL

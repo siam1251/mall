@@ -19,6 +19,7 @@ import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -117,6 +118,17 @@ public class Utility {
     public static void openGoogleMapWithAddressWithWalkingMode(Context context, String address){
         String map = "https://maps.google.com/maps?daddr=" + address + "&dirflg=w";
         openGoogleMap(context, map);
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @SuppressWarnings("deprecation")
+    public static void setToolbarBackground(Toolbar toolbar, @Nullable Drawable drawable){
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            toolbar.setBackgroundDrawable(drawable);
+        } else {
+            toolbar.setBackground(drawable);
+        }
     }
 
 

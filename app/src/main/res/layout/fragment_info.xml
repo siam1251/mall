@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
-            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
 
             <ImageView
                 android:id="@+id/ivInfo"
@@ -52,7 +52,7 @@
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/info_collapsed_height"
-                layout="@layout/layout_toolbar_info"
+                layout="@layout/layout_info_cta"
                 />
 
             <android.support.v7.widget.Toolbar
