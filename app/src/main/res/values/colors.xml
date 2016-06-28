@@ -117,4 +117,9 @@
     <!--HOUR-->
     <color name="mall_hour_selected_bg">#989898</color>
 
+
+    <!--OTHERS-->
+    <color name="html_link_text_color">#0e8f9d</color>
+
+
 </resources>

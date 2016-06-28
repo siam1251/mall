@@ -23,6 +23,8 @@ import com.kineticcafe.kcpandroidsdk.utils.KcpTimeConverter;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpmall.views.ActivityAnimation;
+import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
 import java.util.Calendar;
 import java.util.List;
@@ -241,4 +243,9 @@ public class MallHourActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        ActivityAnimation.exitActivityAnimation(this);
+    }
 }

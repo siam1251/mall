@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:id="@+id/svDetail"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MallHourActivity"
+    tools:showIn="@layout/activity_mall_info_detail"
+    android:background="@color/white">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:id="@+id/tvMallInfoDetailTitle"
+            android:gravity="center"
+            android:textSize="@dimen/info_detail_title_txt"
+            android:text="Mall Info Title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/info_detail_title_height"
+            android:textColor="@color/toolbar_text"
+            />
+
+
+        <com.kineticcafe.kcpmall.views.ExpandableTextView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/etvMallInfoDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:orientation="vertical">
+
+            <TextView
+                android:lineSpacingMultiplier="1.1"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/intrstd_cat_desc"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:id="@id/expandable_text"
+                />
+                android:gravity="center"
+            android:text="@string/lorem"
+            android:id="@+id/tvMallInfoDetailDesc"
+
+            <TextView
+                android:id="@id/expand_collapse"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="VIEW MORE"
+                android:textColor="@color/themeColor"
+                />
+        </com.kineticcafe.kcpmall.views.ExpandableTextView>
+
+        <!-- CTA -->
+        <LinearLayout
+            android:id="@+id/llCTA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/llAdditionalInfo"
+            android:paddingTop="25dp"
+            android:paddingBottom="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/detail_disclaimer_bg"
+            >
+
+            <TextView
+                android:id="@+id/tvAdditionalInfoHeader"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:textColor="@color/detail_title_text"
+                android:textSize="16sp"
+                android:layout_marginBottom="23dp"
+                android:text="@string/mall_info_disclaimer_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/llAdditionalInfoField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+
+
+
+        <!-- SOCIAL SHARING -->
+    </LinearLayout>
+</ScrollView>

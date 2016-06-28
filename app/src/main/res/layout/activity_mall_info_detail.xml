@@ -28,7 +28,8 @@
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/img_mallinfo_hours"
+                android:id="@+id/ivMallInfoBanner"
+                android:src="@drawable/img_mallinfo_amenities"
                 android:transitionName="@string/transition_news_image"
                 />
 
@@ -45,10 +46,9 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
-        android:background="@color/detail_social_sharing_bg"
 
         <include
-            layout="@layout/content_mall_hour" />
+            layout="@layout/content_mall_info_detail" />
 
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

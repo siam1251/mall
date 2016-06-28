@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -28,6 +29,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -118,6 +120,49 @@ public class Utility {
     public static void openGoogleMapWithAddressWithWalkingMode(Context context, String address){
         String map = "https://maps.google.com/maps?daddr=" + address + "&dirflg=w";
         openGoogleMap(context, map);
+    }
+
+    public static void sendEmail(Context context, String emailAddress, String subject){
+
+        String version = null;
+        String sOSVersion = null;
+        String sManufacturer = null;
+        String sModel = null;
+        try {
+            PackageInfo pInfo;
+            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            version = pInfo.versionName;
+            sOSVersion = Build.VERSION.RELEASE;
+            sManufacturer = Build.MANUFACTURER;
+            sModel = Build.MODEL;
+        } catch (Exception e) {
+        }
+
+        String message = "";
+        if(version != null && !version.equals("")) {
+            message = "App Version : " + version + "\n";
+        }
+        if(sOSVersion != null && !sOSVersion.equals("")) {
+            message += "OS Version : " + sOSVersion + "\n";
+        }
+        if((sManufacturer != null && !sManufacturer.equals("")) || (sModel != null && !sModel.equals(""))) {
+            message += "Device : " + sManufacturer + " " + sModel + "\n";
+        }
+        message += "\n";
+
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{emailAddress});
+        i.putExtra(Intent.EXTRA_SUBJECT, subject);
+        i.putExtra(Intent.EXTRA_TEXT   , message + "\n");
+
+        try {
+            context.startActivity(Intent.createChooser(i, "Send Feedback"));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(context, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

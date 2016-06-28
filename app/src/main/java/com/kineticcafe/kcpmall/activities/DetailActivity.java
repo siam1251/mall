@@ -2,6 +2,7 @@ package com.kineticcafe.kcpmall.activities;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -44,6 +45,8 @@ import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpmall.views.CTA;
+import com.kineticcafe.kcpmall.views.HtmlTextView;
 import com.kineticcafe.kcpmall.views.SpacesItemDecoration;
 
 import java.util.ArrayList;
@@ -137,207 +140,231 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void setUpCTA(final KcpContentPage kcpContentPage){
-        List<CTA> cTAList = new ArrayList<>();
+        try {
+            List<CTA> cTAList = new ArrayList<>();
 
-        //Store Location
-        CTA location = new CTA(
-                R.layout.layout_detail_button,
-                R.drawable.icn_menu_map,
-                kcpContentPage.getStoreLevel(),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
-                    }
-                }, true);
-
-        //Store Parking
-        CTA parking = new CTA(
-                R.layout.layout_detail_button,
-                R.drawable.icn_parking,
-                kcpContentPage.getStoreParking(),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(DetailActivity.this, "clicked ", Toast.LENGTH_SHORT).show();
-                    }
-                }, true);
-
-
-        //Store Phone number
-        CTA phone = new CTA(
-                R.layout.layout_detail_button,
-                R.drawable.icn_phone,
-                kcpContentPage.getStoreNumber(),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Utility.makeCallWithAlertDialog(
-                                DetailActivity.this,
-                                getResources().getString(R.string.title_make_calls),
-                                getResources().getString(R.string.warning_make_call) + kcpContentPage.getStoreNumber() + "?",
-                                getResources().getString(R.string.action_call),
-                                getResources().getString(R.string.action_cancel),
-                                kcpContentPage.getStoreNumber()
-                                );
-                    }
-                }, false);
-
-        //Store Info
-        CTA info = new CTA(
-                R.layout.layout_detail_button,
-                R.drawable.icn_storeinfo,
-                "Store Information",
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                        if(kcpPlace != null) {
-                            KcpContentPage kcpContentPage = new KcpContentPage();
-                            kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
-                            Intent intent = new Intent(DetailActivity.this, DetailActivity.class);
-                            intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
-
-                            String imageUrl = kcpContentPage.getHighestResImageUrl();
-                            String logoUrl = kcpContentPage.getStoreLogo();
-
-                            ActivityOptionsCompat options = null;
-                            if(ivDetailImage != null && !imageUrl.equals("")){
-                                String transitionNameImage = DetailActivity.this.getResources().getString(R.string.transition_news_image);
-                                options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                        DetailActivity.this,
-                                        Pair.create((View)ivDetailImage, transitionNameImage));
-                            } else if(ivDetailLogo.getVisibility() == View.VISIBLE && !logoUrl.equals("")){
-                                String transitionNameLogo = DetailActivity.this.getResources().getString(R.string.transition_news_logo);
-                                options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                        DetailActivity.this,
-                                        Pair.create((View)ivDetailLogo, transitionNameLogo));
-                            }
-
-                            ActivityCompat.startActivity(DetailActivity.this, intent, options.toBundle());
-                            DetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        } else {
-                            downloadIfNecessary(kcpContentPage);
+            //Store Location
+            CTA location = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_menu_map,
+                    kcpContentPage.getStoreLevel(),
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                }, false);
+                    }, true);
 
-        //Add to Calendar
-        CTA addToCalendar = new CTA(
-                R.layout.layout_detail_button,
-                R.drawable.icn_addcal,
-                "Add to Calendar",
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
-                    }
-                }, false);
+            //Store Parking
+            CTA parking = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_parking,
+                    kcpContentPage.getStoreParking(),
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(DetailActivity.this, "clicked ", Toast.LENGTH_SHORT).show();
+                        }
+                    }, true);
 
 
-        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_LOADING){
+            //Store Phone number
+            CTA phone = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_phone,
+                    kcpContentPage.getStoreNumber(),
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Utility.makeCallWithAlertDialog(
+                                    DetailActivity.this,
+                                    getResources().getString(R.string.title_make_calls),
+                                    getResources().getString(R.string.warning_make_call) + kcpContentPage.getStoreNumber() + "?",
+                                    getResources().getString(R.string.action_call),
+                                    getResources().getString(R.string.action_cancel),
+                                    kcpContentPage.getStoreNumber()
+                                    );
+                        }
+                    }, false);
 
-        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
-            if(kcpContentPage.getStore() != null) {
-                cTAList.add(location);
-                cTAList.add(parking);
-                cTAList.add(info);
-            }
-        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT){
-            if(kcpContentPage.getStore() != null) {
+            //Store Info
+            CTA info = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_storeinfo,
+                    "Store Information",
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                            if(kcpPlace != null) {
+                                KcpContentPage kcpContentPage = new KcpContentPage();
+                                kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
+                                Intent intent = new Intent(DetailActivity.this, DetailActivity.class);
+                                intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
+
+                                String imageUrl = kcpContentPage.getHighestResImageUrl();
+                                String logoUrl = kcpContentPage.getStoreLogo();
+
+                                ActivityOptionsCompat options = null;
+                                if(ivDetailImage != null && !imageUrl.equals("")){
+                                    String transitionNameImage = DetailActivity.this.getResources().getString(R.string.transition_news_image);
+                                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                            DetailActivity.this,
+                                            Pair.create((View)ivDetailImage, transitionNameImage));
+                                } else if(ivDetailLogo.getVisibility() == View.VISIBLE && !logoUrl.equals("")){
+                                    String transitionNameLogo = DetailActivity.this.getResources().getString(R.string.transition_news_logo);
+                                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                            DetailActivity.this,
+                                            Pair.create((View)ivDetailLogo, transitionNameLogo));
+                                }
+
+                                ActivityCompat.startActivity(DetailActivity.this, intent, options.toBundle());
+                                DetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                            } else {
+                                downloadIfNecessary(kcpContentPage);
+                            }
+                        }
+                    }, false);
+
+            //Add to Calendar
+            CTA addToCalendar = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_addcal,
+                    "Add to Calendar",
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                        }
+                    }, false);
+
+
+            if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_LOADING){
+
+            } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
+                if(kcpContentPage.getStore() != null) {
+                    cTAList.add(location);
+                    cTAList.add(parking);
+                    cTAList.add(info);
+                }
+            } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT){
+                if(kcpContentPage.getStore() != null) {
+                    cTAList.add(location);
+                    cTAList.add(parking);
+                    cTAList.add(info);
+                    cTAList.add(phone);
+                }
+                cTAList.add(addToCalendar);
+
+            } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_DEAL){
                 cTAList.add(location);
                 cTAList.add(parking);
                 cTAList.add(info);
                 cTAList.add(phone);
+
+            } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
+                cTAList.add(location);
+                cTAList.add(parking);
+                cTAList.add(phone);
+
+                CTA facebook = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_facebook,
+                        getResources().getString(R.string.social_facebook),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                                Utility.openWebPage(DetailActivity.this, kcpPlace.getFacebookLink());
+                            }
+                        }, false);
+
+                CTA twiter = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_twitter,
+                        getResources().getString(R.string.social_twitter),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                                Utility.openWebPage(DetailActivity.this, kcpPlace.getTwitterLink());
+                            }
+                        }, false);
+
+                CTA instagram = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_instagram,
+                        getResources().getString(R.string.social_instagram),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                                Utility.openWebPage(DetailActivity.this, kcpPlace.getInstagramLink());
+                            }
+                        }, false);
+
+                CTA webpage = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_web,
+                        getResources().getString(R.string.social_instagram),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                                Utility.openWebPage(DetailActivity.this, kcpPlace.getMainWebsiteLink());
+                            }
+                        }, false);
+
+
+                //SOCIAL SHARING
+
+                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                if(kcpPlace != null && kcpPlace.getFacebookLink() != null || kcpPlace.getTwitterLink() != null || kcpPlace.getInstagramLink() != null || kcpPlace.getMainWebsiteLink() != null){
+                    LinearLayout llSharing = (LinearLayout) findViewById(R.id.llSharing);
+                    llSharing.setVisibility(View.VISIBLE);
+
+                    RelativeLayout layoutSocialSharing = (RelativeLayout) findViewById(R.id.layoutSocialSharing); //FOLLOW ON
+                    layoutSocialSharing.setVisibility(View.VISIBLE);
+
+                    TextView tvDetailSocialSharingBtnHeader = (TextView) layoutSocialSharing.findViewById(R.id.tvDetailSocialSharingBtnHeader);
+                    tvDetailSocialSharingBtnHeader.setText("Follow " + kcpContentPage.getStoreName() + " on...");
+
+                    ((ViewGroup) llSharing).removeAllViews();
+
+                    if(kcpPlace.getFacebookLink() != null) ((ViewGroup) llSharing).addView(facebook.getView());
+                    if(kcpPlace.getTwitterLink() != null) ((ViewGroup) llSharing).addView(twiter.getView());
+                    if(kcpPlace.getInstagramLink() != null) ((ViewGroup) llSharing).addView(instagram.getView());
+                    if(kcpPlace.getMainWebsiteLink() != null) ((ViewGroup) llSharing).addView(webpage.getView());
+                }
             }
-            cTAList.add(addToCalendar);
 
-        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_DEAL){
-            cTAList.add(location);
-            cTAList.add(parking);
-            cTAList.add(info);
-            cTAList.add(phone);
-
-        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
-            cTAList.add(location);
-            cTAList.add(parking);
-            cTAList.add(phone);
-
-            CTA facebook = new CTA(
-                    R.layout.layout_detail_social_button,
-                    R.drawable.icn_facebook,
-                    getResources().getString(R.string.social_facebook),
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                            Utility.openWebPage(DetailActivity.this, kcpPlace.getFacebookLink());
-                        }
-                    }, false);
-
-            CTA twiter = new CTA(
-                    R.layout.layout_detail_social_button,
-                    R.drawable.icn_twitter,
-                    getResources().getString(R.string.social_twitter),
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                            Utility.openWebPage(DetailActivity.this, kcpPlace.getTwitterLink());
-                        }
-                    }, false);
-
-            CTA instagram = new CTA(
-                    R.layout.layout_detail_social_button,
-                    R.drawable.icn_instagram,
-                    getResources().getString(R.string.social_instagram),
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                            Utility.openWebPage(DetailActivity.this, kcpPlace.getInstagramLink());
-                        }
-                    }, false);
-
-            CTA webpage = new CTA(
-                    R.layout.layout_detail_social_button,
-                    R.drawable.icn_web,
-                    getResources().getString(R.string.social_instagram),
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                            Utility.openWebPage(DetailActivity.this, kcpPlace.getMainWebsiteLink());
-                        }
-                    }, false);
-
-
-            //SOCIAL SHARING
-
-            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-            if(kcpPlace != null && kcpPlace.getFacebookLink() != null || kcpPlace.getTwitterLink() != null || kcpPlace.getInstagramLink() != null || kcpPlace.getMainWebsiteLink() != null){
-                LinearLayout llSharing = (LinearLayout) findViewById(R.id.llSharing);
-                llSharing.setVisibility(View.VISIBLE);
-
-                RelativeLayout layoutSocialSharing = (RelativeLayout) findViewById(R.id.layoutSocialSharing); //FOLLOW ON
-                layoutSocialSharing.setVisibility(View.VISIBLE);
-
-                TextView tvDetailSocialSharingBtnHeader = (TextView) layoutSocialSharing.findViewById(R.id.tvDetailSocialSharingBtnHeader);
-                tvDetailSocialSharingBtnHeader.setText("Follow " + kcpContentPage.getStoreName() + " on...");
-
-                ((ViewGroup) llSharing).removeAllViews();
-
-                if(kcpPlace.getFacebookLink() != null) ((ViewGroup) llSharing).addView(facebook.getView());
-                if(kcpPlace.getTwitterLink() != null) ((ViewGroup) llSharing).addView(twiter.getView());
-                if(kcpPlace.getInstagramLink() != null) ((ViewGroup) llSharing).addView(instagram.getView());
-                if(kcpPlace.getMainWebsiteLink() != null) ((ViewGroup) llSharing).addView(webpage.getView());
+            View llCTA = findViewById(R.id.llCTA);
+            ((ViewGroup) llCTA).removeAllViews();
+            for(int i = 0; i < cTAList.size(); i++){
+                ((ViewGroup) llCTA).addView(cTAList.get(i).getView());
             }
-        }
-
-        View llCTA = findViewById(R.id.llCTA);
-        ((ViewGroup) llCTA).removeAllViews();
-        for(int i = 0; i < cTAList.size(); i++){
-            ((ViewGroup) llCTA).addView(cTAList.get(i).getView());
+        } catch (Resources.NotFoundException e) {
+            logger.error(e);
+        } catch (Exception e){
+            logger.error(e);
         }
     }
 
@@ -382,57 +409,6 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
         kcpPlaceManager.downloadContents(kcpContentPage.getStoreId());
-    }
-
-    public class CTA {
-        private View mView;
-        private ProgressBar pb;
-        private View.OnClickListener mOnClickListener;
-        public String title;
-        private TextView tvDetailBtnTitle;
-        private ImageView ivDetailBtnImage;
-
-        public CTA(int layout, int drawable, String title, View.OnClickListener onClickListener, boolean hideIfEmpty) {
-            mView = DetailActivity.this.getLayoutInflater().inflate(
-                    layout,
-                    mParentView,
-                    false);
-            this.title = title;
-            pb = (ProgressBar) mView.findViewById(R.id.pb);
-            tvDetailBtnTitle= (TextView) mView.findViewById(R.id.tvDetailBtnTitle);
-            ivDetailBtnImage= (ImageView) mView.findViewById(R.id.ivDetailBtnImage);
-
-            if(hideIfEmpty){
-                mView.setVisibility(View.GONE);
-            } else {
-                if(title.equals("")) {
-                    tvDetailBtnTitle.setVisibility(View.GONE);
-                    ivDetailBtnImage.setVisibility(View.GONE);
-                    pb.setVisibility(View.VISIBLE);
-                } else {
-                    tvDetailBtnTitle.setVisibility(View.VISIBLE);
-                    ivDetailBtnImage.setVisibility(View.VISIBLE);
-                    pb.setVisibility(View.GONE);
-                }
-            }
-
-            ivDetailBtnImage.setImageResource(drawable);
-            tvDetailBtnTitle.setText(title);
-            mOnClickListener = onClickListener;
-            mView.setOnClickListener(mOnClickListener);
-        }
-
-        public void setTitle(String title){
-            if(!title.equals("")){
-                tvDetailBtnTitle.setText(title);
-                tvDetailBtnTitle.setVisibility(View.VISIBLE);
-                ivDetailBtnImage.setVisibility(View.VISIBLE);
-                pb.setVisibility(View.GONE);
-            }
-        }
-        public View getView(){
-            return mView;
-        }
     }
 
     public void showContentsWithCTL(final KcpContentPage kcpContentPage){
@@ -557,7 +533,7 @@ public class DetailActivity extends AppCompatActivity {
             TextView tvDetailBody = (TextView) findViewById(R.id.tvDetailBody);
             String body = kcpContentPage.getBody();
             if(body.equals("")) tvDetailBody.setVisibility(View.GONE);
-            else tvDetailBody.setText(Html.fromHtml(body)); //sometimes adds extra space in between
+            else HtmlTextView.setHtmlTextView(this, tvDetailBody, body, R.color.html_link_text_color);
 
         } catch (Exception e) {
             logger.error(e);

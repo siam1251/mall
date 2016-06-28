@@ -118,6 +118,7 @@
     <dimen name="detail_button_image_left_margin">21dp</dimen>
     <dimen name="detail_button_text_left_margin">36dp</dimen>
     <dimen name="detail_disclaimer_top_bottom_margin">30dp</dimen>
+    <dimen name="detail_disclaimer_text">12sp</dimen>
     <dimen name="detail_logo_text">24sp</dimen>
     <dimen name="detail_logo_text_bot_margin">34dp</dimen>
     <dimen name="detail_body_text">14sp</dimen>

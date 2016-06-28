@@ -59,6 +59,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
+            android:name="com.kineticcafe.kcpmall.activities.MallInfoDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
+        <activity
             android:name="com.kineticcafe.kcpmall.activities.MallHourActivity"
             android:parentActivityName="com.kineticcafe.kcpmall.activities.MainActivity"
             android:screenOrientation="portrait"
