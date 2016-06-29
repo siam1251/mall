@@ -170,6 +170,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
     }
 
     public void setText(String text) {
+        if(text == null) return;
         mRelayout = true;
         if (mTv == null) {
             findViews();

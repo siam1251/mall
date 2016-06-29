@@ -22,7 +22,7 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_alignParentRight="true"
         android:gravity="right|center_vertical"
-        android:id="@+id/tvMallHour"
+        android:id="@+id/tvHour"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:textSize="16sp"

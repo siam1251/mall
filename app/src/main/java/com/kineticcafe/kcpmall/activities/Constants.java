@@ -84,4 +84,6 @@ public class Constants {
 	public final static int RESULT_DONE_PRESSED_WITHOUT_CHANGE = 1;
 	public final static int RESULT_EXIT = 2;
 
+	//OTHERS
+	public final static int NUMB_OF_DAYS = 7;
 }

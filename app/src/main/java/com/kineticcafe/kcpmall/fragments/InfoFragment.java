@@ -205,7 +205,7 @@ public class InfoFragment extends BaseFragment {
             KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
             toolbar.setVisibility(View.VISIBLE);
             String[] timeArray = new String[2];
-            String time = kcpPlaces.getStoreHourForToday(timeArray);
+            String time = kcpPlaces.getStoreHourForToday(timeArray, kcpPlacesRoot.getMallContinuousOverrides());
             if(time.equals("")) {
                 toolbar.setVisibility(View.GONE);
             }

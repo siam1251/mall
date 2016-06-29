@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_centerInParent="true"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content">
+
+        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:textSize="14sp"
+            android:textColor="@color/detail_title_text"
+            android:gravity="center_vertical"
+            android:text="Fri. Dec 3"
+            />
+
+        <TextView
+            android:layout_alignParentRight="true"
+            android:gravity="right|center_vertical"
+            android:id="@+id/tvHour"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:textSize="14sp"
+            android:textColor="@color/detail_title_text"
+            android:text="10:00 AM - 11:00 PM"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

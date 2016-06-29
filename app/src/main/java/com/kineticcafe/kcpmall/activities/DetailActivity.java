@@ -1,16 +1,13 @@
 package com.kineticcafe.kcpmall.activities;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
@@ -20,13 +17,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,8 +31,10 @@ import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.managers.KcpPlaceManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpOverrides;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
+import com.kineticcafe.kcpandroidsdk.utils.KcpTimeConverter;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
@@ -50,6 +47,7 @@ import com.kineticcafe.kcpmall.views.HtmlTextView;
 import com.kineticcafe.kcpmall.views.SpacesItemDecoration;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
@@ -61,6 +59,7 @@ public class DetailActivity extends AppCompatActivity {
     private ImageView ivDetailImage; //transition image
     private ImageView ivDetailLogo; //transition logo
     private String mLikeLink = "";
+    private View mLayoutStoreHours;
 
     private int mContentPageType;
 
@@ -70,15 +69,15 @@ public class DetailActivity extends AppCompatActivity {
         KcpContentPage kcpContentPage = (KcpContentPage) getIntent().getSerializableExtra(Constants.ARG_CONTENT_PAGE);
 
         mContentPageType = KcpContentTypeFactory.getContentType(kcpContentPage);
-        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
+        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE || kcpContentPage.getStoreId() != 0){
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
             KcpPlaces kcpPlace = kcpPlacesRoot.getPlaceById(kcpContentPage.getStoreId());
-            if(kcpPlace != null){
+            if(kcpPlace != null) { //there's a store detail already downloaded
                 kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
             }
 
             ArrayList<KcpContentPage> kcpContentPages = kcpPlacesRoot.getContentPagesById(kcpContentPage.getStoreId());
-            if(kcpContentPages != null){
+            if(kcpContentPages != null) { //there's a store content pages (events/deals/ancmt) already downloaded
                 kcpContentPage.setContentPageList(kcpContentPages);
             }
         }
@@ -249,6 +248,50 @@ public class DetailActivity extends AppCompatActivity {
                     }, false);
 
 
+            String todaysHour = null;
+            try {
+                KcpPlaces kcpPlaces = kcpContentPage.getStore();
+                todaysHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+                List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(Constants.NUMB_OF_DAYS);
+                if(comingHolidays == null || comingHolidays.size() == 0) comingHolidays = KcpPlacesRoot.getInstance().getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL).getHolidaysWithin(7);
+                String overrideHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, Calendar.getInstance());
+                if(!overrideHour.equals("")) todaysHour = overrideHour;
+
+                mLayoutStoreHours = DetailActivity.this.getLayoutInflater().inflate(
+                        R.layout.layout_store_hours,
+                        mParentView,
+                        false);
+
+                LinearLayout llMallHour = (LinearLayout) mLayoutStoreHours.findViewById(R.id.llMallHour);
+                ((ViewGroup) llMallHour).removeAllViews();
+                for(int i = 0; i < Constants.NUMB_OF_DAYS; i++){
+                    ((ViewGroup) llMallHour).addView(getMallHourListItem(i, comingHolidays));
+                }
+            } catch (Exception e) {
+                logger.error(e);
+            }
+
+
+            //Store hours
+            CTA storeHours = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_hours,
+                    todaysHour,
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(mLayoutStoreHours == null) return;
+                            LinearLayout llSubCTA = (LinearLayout) v.findViewById(R.id.llSubCTA);
+                            if(llSubCTA.getVisibility() == View.VISIBLE) llSubCTA.setVisibility(View.GONE);
+                            else llSubCTA.setVisibility(View.VISIBLE);
+                            llSubCTA.removeAllViews();
+                            llSubCTA.addView(mLayoutStoreHours);
+                        }
+                    }, false);
+
+
             if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_LOADING){
 
             } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
@@ -275,6 +318,7 @@ public class DetailActivity extends AppCompatActivity {
             } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
                 cTAList.add(location);
                 cTAList.add(parking);
+                cTAList.add(storeHours);
                 cTAList.add(phone);
 
                 CTA facebook = new CTA(
@@ -367,6 +411,54 @@ public class DetailActivity extends AppCompatActivity {
             logger.error(e);
         }
     }
+
+
+    public View getMallHourListItem(int daysPastToday, List<KcpOverrides.ContinuousOverride> comingHolidays){
+        View v = getLayoutInflater().inflate(R.layout.list_item_store_hour, null, false);
+        try {
+            TextView tvDate = (TextView) v.findViewById(R.id.tvDate);
+            TextView tvMallHour = (TextView) v.findViewById(R.id.tvHour);
+
+            Calendar today = Calendar.getInstance();
+            long todayInMillisPlusDays = daysPastToday * 24 * 60 * 60 * 1000 + today.getTimeInMillis();
+            today.setTimeInMillis(todayInMillisPlusDays);
+
+            KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
+            KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
+
+            String openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(today.get(Calendar.DAY_OF_WEEK));
+            tvMallHour.setText(openAndClosingHour);
+
+            if(daysPastToday == 0) {
+                tvDate.setText("Today");
+                v.setBackgroundColor(getResources().getColor(R.color.store_hour_selected_bg));
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
+                tvDate.setTypeface(face);
+                tvMallHour.setTypeface(face);
+
+            } else {
+                String mallHourDate = KcpTimeConverter.convertDateFormat(today.getTime(), Constants.DATE_FORMAT_MALL_HOUR_DATE);
+                tvDate.setText(mallHourDate);
+            }
+
+            //overriding holidays
+            openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, today);
+            if(!openAndClosingHour.equals("")){
+                tvDate.setTextColor(getResources().getColor(R.color.info_mall_hour_holiday_stroke));
+                tvMallHour.setText(openAndClosingHour);
+            }
+
+        } catch (Exception e) {
+            logger.error(e);
+        }
+
+        return v;
+    }
+
+
+
+
+
 
     public void downloadPlace(final KcpContentPage kcpContentPage){
         KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(DetailActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
@@ -519,7 +611,13 @@ public class DetailActivity extends AppCompatActivity {
             TextView tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
             String time = "";
             if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
-                time = kcpContentPage.getStoreHourForToday(null);
+                String[] timeArray = new String[2];
+                time = kcpContentPage.getStoreHourForToday(timeArray, KcpPlacesRoot.getInstance().getMallContinuousOverrides());
+                time = timeArray[0].toUpperCase() + " " + timeArray[1];
+                if(time.toLowerCase().contains("closed")) {
+                    tvDetailDate.setBackgroundResource(R.drawable.btn_style_corner_radius_gray);
+                    tvDetailDate.setTextColor(getResources().getColor(R.color.white));
+                }
             } else {
                 time =
                         kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EFFECTIVE) +

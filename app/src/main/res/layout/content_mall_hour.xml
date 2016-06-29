@@ -65,7 +65,7 @@
                 android:id="@+id/tvHolidayhoursDescription"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:lineSpacingMultiplier="1.2"
+                android:lineSpacingMultiplier="@dimen/detail_line_spacing_multiplier"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"

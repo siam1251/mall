@@ -19,7 +19,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:lineSpacingMultiplier="1.1"
+        android:lineSpacingMultiplier="@dimen/detail_line_spacing_multiplier"
         android:id="@+id/tvAdditionalInfoDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

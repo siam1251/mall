@@ -117,5 +117,6 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="cta_find_on_map">Find on Map</string>
     <string name="cta_check_your_balance">Check Your Balance</string>
     <string name="cta_check_your_balance_url">https://getmybalance.com/</string>
+    <string name="hours_of_operation">Hours of Operation</string>
 
 </resources>
