@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:id="@+id/svDetail"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MallHourActivity"
+    tools:showIn="@layout/activity_mall_hour"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:gravity="center"
+            android:textSize="@dimen/info_detail_title_txt"
+            android:text="Mall Hours"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/info_detail_title_height"
+            android:textColor="@color/toolbar_text"
+            />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/llHolidayHours"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="21dp"
+            android:paddingBottom="21dp"
+            android:layout_marginBottom="23dp"
+            android:paddingLeft="26dp"
+            android:paddingRight="26dp"
+            android:background="@drawable/rectangle_mall_hour_holiday"
+            android:layout_height="wrap_content">
+
+            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                android:id="@+id/tvHolidayName"
+                app:fontFamily="@string/fontFamily_roboto_medium"
+                android:gravity="center_horizontal"
+                android:textSize="16sp"
+                android:text="Holiday Hours"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:textColor="@color/info_mall_hour_holiday_stroke"
+                />
+
+            <TextView
+                android:id="@+id/tvHolidayHoursPeriod"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/intrstd_cat_desc"
+                android:text="December 1 - January 6"
+                />
+
+            <TextView
+                android:id="@+id/tvHolidayhoursDescription"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:lineSpacingMultiplier="1.2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="Extended Holiday Hours from 10 AM to 11 PM, and from 10 AM to 8 PM on weekends."
+                />
+        </LinearLayout>
+
+        <!-- MALL HOUR -->
+
+        <LinearLayout
+            android:id="@+id/llMallHour"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <include
+            android:visibility="gone"
+            android:id="@+id/layoutDisclaimer"
+            layout="@layout/layout_disclaimer_mall_hour"/>
+
+
+
+        <!-- SOCIAL SHARING -->
+    </LinearLayout>
+</ScrollView>

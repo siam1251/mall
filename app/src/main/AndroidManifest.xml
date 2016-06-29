@@ -58,6 +58,15 @@
             android:name="com.kineticcafe.kcpmall.activities.SubCategoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
+        <activity
+            android:name="com.kineticcafe.kcpmall.activities.MallHourActivity"
+            android:parentActivityName="com.kineticcafe.kcpmall.activities.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kineticcafe.kcpmall.activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

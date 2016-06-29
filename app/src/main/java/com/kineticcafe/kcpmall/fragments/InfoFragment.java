@@ -1,5 +1,6 @@
 package com.kineticcafe.kcpmall.fragments;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +26,18 @@ import com.kineticcafe.kcpandroidsdk.managers.KcpInfoManager;
 import com.kineticcafe.kcpandroidsdk.managers.KcpPlaceManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
+import com.kineticcafe.kcpandroidsdk.models.MallInfo.InfoList;
 import com.kineticcafe.kcpandroidsdk.models.MallInfo.KcpMallInfoRoot;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.activities.MallHourActivity;
 import com.kineticcafe.kcpmall.adapters.InfoRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpmall.views.ActivityAnimation;
+
+import java.util.List;
 
 /**
  * Created by Kay on 2016-06-20.
@@ -48,7 +55,8 @@ public class InfoFragment extends BaseFragment {
     private OnListFragmentInteractionListener mListener;
     private TextView tvInfoHoursBold;
     private TextView tvInfoHoursLight;
-    private LinearLayout llInfoHours;
+//    private LinearLayout llInfoHours;
+    private Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -139,7 +147,7 @@ public class InfoFragment extends BaseFragment {
                     lp.height = (int) (KcpUtility.getScreenHeight(getActivity())
                             - KcpUtility.getStatusBarHeight(getActivity())
                             - getActivity().getResources().getDimension(R.dimen.abc_action_bar_default_height_material)
-//                            - getResources().getDimension(R.dimen.info_collapsed_height)
+//                            - getResources().getDimension(R.dimen.info_collapsed_height) //decided to leave only hours section at top when scrolled down
                             - getResources().getDimension(R.dimen.info_hours_height)
                             - getResources().getDimension(R.dimen.vpMain_padding_bottom));
                     rvInfo.setLayoutParams(lp);
@@ -147,7 +155,8 @@ public class InfoFragment extends BaseFragment {
             });
         }
 
-        llInfoHours = (LinearLayout) view.findViewById(R.id.llInfoHours);
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+//        llInfoHours = (LinearLayout) view.findViewById(R.id.llInfoHours);
         tvInfoHoursBold = (TextView) view.findViewById(R.id.tvInfoHoursBold);
         tvInfoHoursLight = (TextView) view.findViewById(R.id.tvInfoHoursLight);
         getMallHour();
@@ -172,7 +181,7 @@ public class InfoFragment extends BaseFragment {
         if(kcpPlaces != null){
             setUpMallOpenCloseStatus();
         } else {
-            llInfoHours.setVisibility(View.GONE);
+            toolbar.setVisibility(View.GONE);
             KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(getActivity(), 0, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
                 @Override
                 public void handleMessage(Message inputMessage) {
@@ -188,7 +197,6 @@ public class InfoFragment extends BaseFragment {
                 }
             });
             kcpPlaceManager.downloadPlaces();
-
         }
     }
 
@@ -196,22 +204,24 @@ public class InfoFragment extends BaseFragment {
         try {
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
             KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
-            if(kcpPlaces != null){
-                llInfoHours.setVisibility(View.VISIBLE);
-                String[] timeArray = new String[2];
-                String time = kcpPlaces.getStoreHourForToday(timeArray);
-                if(time.equals("")) {
-                    llInfoHours.setVisibility(View.GONE);
-                }
+//            llInfoHours.setVisibility(View.VISIBLE);
+            toolbar.setVisibility(View.VISIBLE);
+            String[] timeArray = new String[2];
+            String time = kcpPlaces.getStoreHourForToday(timeArray);
+            if(time.equals("")) {
+//                llInfoHours.setVisibility(View.GONE);
+                toolbar.setVisibility(View.GONE);
+            }
 
-                tvInfoHoursBold.setText(timeArray[0]);
-                tvInfoHoursLight.setText(timeArray[1]);
+            tvInfoHoursBold.setText(timeArray[0]);
+            tvInfoHoursLight.setText(timeArray[1]);
 
-                if(time.startsWith("Open")){
-                    llInfoHours.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_open));
-                } else if (time.startsWith("Closed")){
-                    llInfoHours.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_closed));
-                }
+            if(time.startsWith("Open")){
+//                llInfoHours.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_open));
+                toolbar.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_open));
+            } else if (time.startsWith("Closed")){
+//                llInfoHours.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_closed));
+                toolbar.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_closed));
             }
         } catch (Exception e) {
             logger.error(e);
@@ -244,6 +254,7 @@ public class InfoFragment extends BaseFragment {
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:http://www.cool-24.com/
                     if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
                         if(mInfoRecyclerViewAdapter != null) mInfoRecyclerViewAdapter.updateData(KcpMallInfoRoot.getInstance().getKcpMallInfo().getInfoList());
+                        getMallHour();
                         break;
                     default:
                         super.handleMessage(inputMessage);
@@ -260,7 +271,12 @@ public class InfoFragment extends BaseFragment {
         mListener =  new OnListFragmentInteractionListener() {
             @Override
             public void onListFragmentInteraction(int position) {
-                Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT).show();
+                KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
+                List<InfoList> infoLists = kcpMallInfoRoot.getKcpMallInfo().getInfoList();
+                if(infoLists.get(position).getTitle().contains("Mall Hours")){
+                    getActivity().startActivity(new Intent(getActivity(), MallHourActivity.class));
+                    ActivityAnimation.startActivityAnimation(getActivity());
+                }
             }
         };
 

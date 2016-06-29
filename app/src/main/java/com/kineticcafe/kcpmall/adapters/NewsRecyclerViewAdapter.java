@@ -216,7 +216,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     //TODO: implement fav functionality
-//                    Toast.makeText(mContext, "fav clicked", Toast.LENGTH_SHORT).show();
                     ancmtHolder.ivFav.setSelected(!ancmtHolder.ivFav .isSelected());
                     KcpUtility.addOrRemoveLikeLink(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink);
                 }

@@ -341,7 +341,6 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-
     public void downloadPlace(final KcpContentPage kcpContentPage){
         KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(DetailActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
             @Override
@@ -436,17 +435,6 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    @SuppressWarnings("deprecation")
-    public void setToolbarBackground(Toolbar toolbar, @Nullable Drawable drawable){
-        int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            toolbar.setBackgroundDrawable(drawable);
-        } else {
-            toolbar.setBackground(drawable);
-        }
-    }
-
     public void showContentsWithCTL(final KcpContentPage kcpContentPage){
         try {
             final CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.ctlDetail);
@@ -463,7 +451,7 @@ public class DetailActivity extends AppCompatActivity {
                 //TODO: if it's necessary to have toolbar in white, change the theme here (now it's in themeColor)
                 if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
                 else tvToolbar.setText(toolbarTitle);
-                setToolbarBackground(toolbar, null);
+                Utility.setToolbarBackground(toolbar, null);
 
                 RelativeLayout rlDetailImage = (RelativeLayout) findViewById(R.id.rlDetailImage);
                 rlDetailImage.setVisibility(View.GONE);
@@ -482,11 +470,11 @@ public class DetailActivity extends AppCompatActivity {
                         if (scrollRange + verticalOffset == 0) {
                             if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
                             else tvToolbar.setText(toolbarTitle);
-                            setToolbarBackground(toolbar, null);
+                            Utility.setToolbarBackground(toolbar, null);
                             isShow = true;
                         } else if(isShow) {
                             tvToolbar.setText("");
-                            setToolbarBackground(toolbar, getResources().getDrawable(R.drawable.view_shadow));
+                            Utility.setToolbarBackground(toolbar, getResources().getDrawable(R.drawable.view_shadow));
                             isShow = false;
                         }
                     }
