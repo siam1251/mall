@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -91,6 +92,7 @@ public class MallHourActivity extends AppCompatActivity {
             TextView tvHolidayName = (TextView) findViewById(R.id.tvHolidayName);
             TextView tvHolidayHoursPeriod = (TextView) findViewById(R.id.tvHolidayHoursPeriod);
             TextView tvHolidayhoursDescription = (TextView) findViewById(R.id.tvHolidayhoursDescription);
+            TextView tvHolidayhoursList = (TextView) findViewById(R.id.tvHolidayhoursList);
 
             List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(Constants.NUMB_OF_DAYS);
 
@@ -103,7 +105,8 @@ public class MallHourActivity extends AppCompatActivity {
                 for(int i = 0; i < comingHolidays.size(); i++) {
 
                     holidayNames = holidayNames + comingHolidays.get(i).getName();
-                    if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + "\n";
+//                    if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + "\n";
+                    if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + " • ";
 
                     String holidayStartDate = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getStartDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.DATE_FORMAT_HOLIDAY_DATE);
                     String holidayEndDate = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.DATE_FORMAT_HOLIDAY_DATE);
@@ -128,11 +131,10 @@ public class MallHourActivity extends AppCompatActivity {
                 tvHolidayName.setText(holidayNames);
                 tvHolidayHoursPeriod.setText(holidayPeriod);
 
-                String holidayHour = "This is a reminder that " + HeaderFactory.MALL_NAME + " will have adjusted hours on " + "\n"
-                                    + holidayDay;
-
+                String holidayHour = "This is a reminder that " + HeaderFactory.MALL_NAME + " will have adjusted hours on:";
 
                 tvHolidayhoursDescription.setText(holidayHour);
+                tvHolidayhoursList.setText(holidayDay);
             }
 
 
@@ -166,6 +168,7 @@ public class MallHourActivity extends AppCompatActivity {
         try {
             TextView tvDate = (TextView) v.findViewById(R.id.tvDate);
             TextView tvMallHour = (TextView) v.findViewById(R.id.tvHour);
+            ImageView ivHolidayIndicator = (ImageView) v.findViewById(R.id.ivHolidayIndicator);
             View separator = (View) v.findViewById(R.id.separator);
 
             Calendar today = Calendar.getInstance();
@@ -198,8 +201,9 @@ public class MallHourActivity extends AppCompatActivity {
             //overriding holidays
             openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, today);
             if(!openAndClosingHour.equals("")){
-                tvDate.setTextColor(getResources().getColor(R.color.info_mall_hour_holiday_stroke));
+//                tvDate.setTextColor(getResources().getColor(R.color.info_mall_hour_holiday_stroke));
                 tvMallHour.setText(openAndClosingHour);
+                ivHolidayIndicator.setVisibility(View.VISIBLE);
             }
 
         } catch (Exception e) {

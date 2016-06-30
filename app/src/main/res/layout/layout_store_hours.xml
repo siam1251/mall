@@ -3,7 +3,9 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/detail_sub_CTA_bg"
     android:orientation="vertical">
+    android:background="@color/detail_separator_color"
 
     <View
         style="@style/separater"

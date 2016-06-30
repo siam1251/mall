@@ -175,8 +175,12 @@ public class InfoFragment extends BaseFragment {
     }
 
     public void getMallHour() {
+        logger.debug("entered getMallHour");
         KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
         KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
+
+        logger.debug("mall name is : " + kcpPlaces.getPlaceName());
+
         if(kcpPlaces != null){
             setUpMallOpenCloseStatus();
         } else {
@@ -214,8 +218,10 @@ public class InfoFragment extends BaseFragment {
             tvInfoHoursLight.setText(timeArray[1]);
 
             if(time.startsWith("Open")){
+                logger.debug("mall is OPEN");
                 toolbar.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_open));
             } else if (time.startsWith("Closed")){
+                logger.debug("mall is CLOSED");
                 toolbar.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_closed));
             }
         } catch (Exception e) {
@@ -246,16 +252,16 @@ public class InfoFragment extends BaseFragment {
                     case KcpCategoryManager.DOWNLOAD_FAILED:
                         if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
                         break;
-                    case KcpCategoryManager.DOWNLOAD_COMPLETE:http://www.cool-24.com/
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
                     if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
                         if(mInfoRecyclerViewAdapter != null) mInfoRecyclerViewAdapter.updateData(KcpMallInfoRoot.getInstance().getKcpMallInfo().getInfoList());
-                        getMallHour();
                         break;
                     default:
                         super.handleMessage(inputMessage);
                 }
             }
         });
+        logger.debug("URL is " + HeaderFactory.MALL_INFO_URL);
         kcpInfoManager.downloadMallInfo(HeaderFactory.MALL_INFO_URL_BASE, HeaderFactory.MALL_INFO_URL);
     }
 

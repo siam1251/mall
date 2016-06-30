@@ -36,5 +36,16 @@
         style="@style/separater"
         />
 
+    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+        xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+        ThemedImageView:filterColor="@color/info_mall_hour_holiday_stroke"
+        android:visibility="gone"
+        android:id="@+id/ivHolidayIndicator"
+        android:layout_width="@dimen/hour_holiday_indicator_width"
+        android:layout_height="@dimen/hour_holiday_indicator_width"
+        android:src="@drawable/icn_holidayflag"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"/>
+
 
 </RelativeLayout>

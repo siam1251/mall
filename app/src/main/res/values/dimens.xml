@@ -195,4 +195,5 @@
 
     <!--HOUR-->
     <dimen name="hour_disclaimer_top_bottom_margin">24dp</dimen>
+    <dimen name="hour_holiday_indicator_width">12dp</dimen>
 </resources>

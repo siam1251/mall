@@ -17,9 +17,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -43,6 +45,7 @@ import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.CTA;
+import com.kineticcafe.kcpmall.views.CustomAnimation;
 import com.kineticcafe.kcpmall.views.HtmlTextView;
 import com.kineticcafe.kcpmall.views.SpacesItemDecoration;
 
@@ -283,13 +286,30 @@ public class DetailActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             if(mLayoutStoreHours == null) return;
-                            LinearLayout llSubCTA = (LinearLayout) v.findViewById(R.id.llSubCTA);
-                            if(llSubCTA.getVisibility() == View.VISIBLE) llSubCTA.setVisibility(View.GONE);
-                            else llSubCTA.setVisibility(View.VISIBLE);
-                            llSubCTA.removeAllViews();
-                            llSubCTA.addView(mLayoutStoreHours);
+                            Animation animation;
+
+                            Display display = getWindowManager().getDefaultDisplay();
+                            mLayoutStoreHours.measure(display.getWidth(), display.getHeight());
+
+                            if(v.getHeight() == (int) getResources().getDimension(R.dimen.detail_button_height)){
+                                animation = new CustomAnimation.ExpandCollapseAnimation(v, (int) getResources().getDimension(R.dimen.detail_button_height), mLayoutStoreHours.getMeasuredHeight() + (int) getResources().getDimension(R.dimen.detail_button_height));
+                            } else {
+                                animation = new CustomAnimation.ExpandCollapseAnimation(v, mLayoutStoreHours.getMeasuredHeight(), (int) getResources().getDimension(R.dimen.detail_button_height));
+                            }
+
+                            animation.setDuration(300);
+                            v.clearAnimation();
+                            v.startAnimation(animation);
                         }
                     }, false);
+
+            if(mLayoutStoreHours != null) {
+                LinearLayout llSubCTA = (LinearLayout) storeHours.getView().findViewById(R.id.llSubCTA);
+                llSubCTA.removeAllViews();
+                llSubCTA.addView(mLayoutStoreHours);
+                storeHours.getView().getLayoutParams().height = (int) getResources().getDimension(R.dimen.detail_button_height);
+            }
+
 
 
             if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_LOADING){
@@ -418,6 +438,7 @@ public class DetailActivity extends AppCompatActivity {
         try {
             TextView tvDate = (TextView) v.findViewById(R.id.tvDate);
             TextView tvMallHour = (TextView) v.findViewById(R.id.tvHour);
+            ImageView ivHolidayIndicator = (ImageView) v.findViewById(R.id.ivHolidayIndicator);
 
             Calendar today = Calendar.getInstance();
             long todayInMillisPlusDays = daysPastToday * 24 * 60 * 60 * 1000 + today.getTimeInMillis();
@@ -444,8 +465,9 @@ public class DetailActivity extends AppCompatActivity {
             //overriding holidays
             openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, today);
             if(!openAndClosingHour.equals("")){
-                tvDate.setTextColor(getResources().getColor(R.color.info_mall_hour_holiday_stroke));
                 tvMallHour.setText(openAndClosingHour);
+                ivHolidayIndicator.setVisibility(View.VISIBLE);
+//                tvDate.setTextColor(getResources().getColor(R.color.info_mall_hour_holiday_stroke));
             }
 
         } catch (Exception e) {

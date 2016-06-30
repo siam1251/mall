@@ -17,12 +17,12 @@
             android:layout_marginLeft="@dimen/detail_button_image_left_margin"
             android:src="@drawable/icn_menu_map"
             android:id="@+id/ivDetailBtnImage"
-            android:layout_width="wrap_content"
-            android:minWidth="@dimen/detail_button_image_width"
             android:adjustViewBounds="true"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_centerVertical="true"
             />
+
 
 
         <TextView
@@ -51,8 +51,6 @@
     <LinearLayout
         android:layout_below="@+id/rlCTA"
         android:orientation="vertical"
-        android:visibility="gone"
-        android:background="@color/detail_sub_CTA_bg"
         android:id="@+id/llSubCTA"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

@@ -16,16 +16,16 @@
 
         <com.kineticcafe.kcpmall.views.ThemeColorImageView
             xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+            ThemedImageView:filterColor="@color/themeColor"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_centerVertical="true"
             android:src="@drawable/icn_menu_map"
             android:id="@+id/ivCategory"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingTop="17.5dp"
-            android:paddingBottom="17.5dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:adjustViewBounds="true"
-            ThemedImageView:filterColor="@color/themeColor"
             />
 
         <TextView
