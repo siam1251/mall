@@ -9,12 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
-import com.kineticcafe.kcpandroidsdk.models.KcpOperatingHour;
 import com.kineticcafe.kcpandroidsdk.models.KcpOverrides;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
@@ -23,6 +23,7 @@ import com.kineticcafe.kcpandroidsdk.utils.KcpTimeConverter;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpmall.views.ActivityAnimation;
 
 import java.util.Calendar;
 import java.util.List;
@@ -34,7 +35,6 @@ public class MallHourActivity extends AppCompatActivity {
 
 
     protected final Logger logger = new Logger(getClass().getName());
-    private final int NUMB_OF_DAYS = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +92,9 @@ public class MallHourActivity extends AppCompatActivity {
             TextView tvHolidayName = (TextView) findViewById(R.id.tvHolidayName);
             TextView tvHolidayHoursPeriod = (TextView) findViewById(R.id.tvHolidayHoursPeriod);
             TextView tvHolidayhoursDescription = (TextView) findViewById(R.id.tvHolidayhoursDescription);
+            TextView tvHolidayhoursList = (TextView) findViewById(R.id.tvHolidayhoursList);
 
-            List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(NUMB_OF_DAYS);
+            List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(Constants.NUMB_OF_DAYS);
 
             if(comingHolidays.size() != 0){
                 llHolidayHours.setVisibility(View.VISIBLE);
@@ -104,7 +105,8 @@ public class MallHourActivity extends AppCompatActivity {
                 for(int i = 0; i < comingHolidays.size(); i++) {
 
                     holidayNames = holidayNames + comingHolidays.get(i).getName();
-                    if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + "\n";
+//                    if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + "\n";
+                    if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + " • ";
 
                     String holidayStartDate = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getStartDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.DATE_FORMAT_HOLIDAY_DATE);
                     String holidayEndDate = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.DATE_FORMAT_HOLIDAY_DATE);
@@ -129,18 +131,17 @@ public class MallHourActivity extends AppCompatActivity {
                 tvHolidayName.setText(holidayNames);
                 tvHolidayHoursPeriod.setText(holidayPeriod);
 
-                String holidayHour = "This is a reminder that " + HeaderFactory.MALL_NAME + " will have adjusted hours on " + "\n"
-                                    + holidayDay;
-
+                String holidayHour = "This is a reminder that " + HeaderFactory.MALL_NAME + " will have adjusted hours on:";
 
                 tvHolidayhoursDescription.setText(holidayHour);
+                tvHolidayhoursList.setText(holidayDay);
             }
 
 
             //MALL HOURS
             LinearLayout llMallHour = (LinearLayout) findViewById(R.id.llMallHour);
             ((ViewGroup) llMallHour).removeAllViews();
-            for(int i = 0; i < NUMB_OF_DAYS; i++){
+            for(int i = 0; i < Constants.NUMB_OF_DAYS; i++){
                 ((ViewGroup) llMallHour).addView(getMallHourListItem(i, comingHolidays));
             }
 
@@ -166,7 +167,8 @@ public class MallHourActivity extends AppCompatActivity {
         View v = getLayoutInflater().inflate(R.layout.list_item_mall_hour, null, false);
         try {
             TextView tvDate = (TextView) v.findViewById(R.id.tvDate);
-            TextView tvMallHour = (TextView) v.findViewById(R.id.tvMallHour);
+            TextView tvMallHour = (TextView) v.findViewById(R.id.tvHour);
+            ImageView ivHolidayIndicator = (ImageView) v.findViewById(R.id.ivHolidayIndicator);
             View separator = (View) v.findViewById(R.id.separator);
 
             Calendar today = Calendar.getInstance();
@@ -176,11 +178,8 @@ public class MallHourActivity extends AppCompatActivity {
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
             KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
 
-            KcpOperatingHour.KcpDay kcpDay = kcpPlaces.operatingHour.getDayMap().get(today.get(Calendar.DAY_OF_WEEK));
-            String openTime = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(kcpDay.startTime, KcpOperatingHour.HOUR_FORMAT, KcpPlaces.STORE_HOUR_FORMAT);
-            String endTime = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(kcpDay.endTime, KcpOperatingHour.HOUR_FORMAT, KcpPlaces.STORE_HOUR_FORMAT);
-
-            tvMallHour.setText(openTime + " - " + endTime);
+            String openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(today.get(Calendar.DAY_OF_WEEK));
+            tvMallHour.setText(openAndClosingHour);
 
             if(daysPastToday == 0) {
                 tvDate.setText("Today");
@@ -196,20 +195,15 @@ public class MallHourActivity extends AppCompatActivity {
             } else {
                 String mallHourDate = KcpTimeConverter.convertDateFormat(today.getTime(), Constants.DATE_FORMAT_MALL_HOUR_DATE);
                 tvDate.setText(mallHourDate);
-                if(daysPastToday == NUMB_OF_DAYS - 1) separator.setVisibility(View.GONE);
+                if(daysPastToday == Constants.NUMB_OF_DAYS - 1) separator.setVisibility(View.GONE);
             }
 
-            for(int i = 0; i < comingHolidays.size(); i++){
-                KcpOverrides.ContinuousOverride comingHoliday = comingHolidays.get(i);
-                if(comingHoliday != null && KcpTimeConverter.isTwoDateSame(comingHoliday.getStartDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, today)){
-                    tvDate.setTextColor(getResources().getColor(R.color.info_mall_hour_holiday_stroke));
-                    String holidayStartTime = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHoliday.getStartDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, KcpPlaces.STORE_HOUR_FORMAT);
-                    String holidayEndTime = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHoliday.getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, KcpPlaces.STORE_HOUR_FORMAT);
-
-                    boolean isOpen = comingHoliday.getStatus().equals("open") ? true : false;
-                    if(isOpen) tvMallHour.setText(holidayStartTime + " - " + holidayEndTime);
-                    else tvMallHour.setText("CLOSED");
-                }
+            //overriding holidays
+            openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, today);
+            if(!openAndClosingHour.equals("")){
+//                tvDate.setTextColor(getResources().getColor(R.color.info_mall_hour_holiday_stroke));
+                tvMallHour.setText(openAndClosingHour);
+                ivHolidayIndicator.setVisibility(View.VISIBLE);
             }
 
         } catch (Exception e) {
@@ -241,4 +235,9 @@ public class MallHourActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        ActivityAnimation.exitActivityAnimation(this);
+    }
 }

@@ -232,6 +232,7 @@ public class DirectoryFragment extends BaseFragment {
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:
                         if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
                         updatePlacesAdapter();
+                        InfoFragment.getInstance().getMallHour();
                         break;
                     default:
                         super.handleMessage(inputMessage);

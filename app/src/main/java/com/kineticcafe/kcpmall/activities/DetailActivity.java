@@ -1,15 +1,13 @@
 package com.kineticcafe.kcpmall.activities;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
@@ -19,13 +17,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,8 +33,10 @@ import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.managers.KcpPlaceManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpOverrides;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
+import com.kineticcafe.kcpandroidsdk.utils.KcpTimeConverter;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
@@ -44,9 +44,13 @@ import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpmall.views.CTA;
+import com.kineticcafe.kcpmall.views.CustomAnimation;
+import com.kineticcafe.kcpmall.views.HtmlTextView;
 import com.kineticcafe.kcpmall.views.SpacesItemDecoration;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
@@ -58,6 +62,7 @@ public class DetailActivity extends AppCompatActivity {
     private ImageView ivDetailImage; //transition image
     private ImageView ivDetailLogo; //transition logo
     private String mLikeLink = "";
+    private View mLayoutStoreHours;
 
     private int mContentPageType;
 
@@ -67,15 +72,15 @@ public class DetailActivity extends AppCompatActivity {
         KcpContentPage kcpContentPage = (KcpContentPage) getIntent().getSerializableExtra(Constants.ARG_CONTENT_PAGE);
 
         mContentPageType = KcpContentTypeFactory.getContentType(kcpContentPage);
-        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
+        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE || kcpContentPage.getStoreId() != 0){
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
             KcpPlaces kcpPlace = kcpPlacesRoot.getPlaceById(kcpContentPage.getStoreId());
-            if(kcpPlace != null){
+            if(kcpPlace != null) { //there's a store detail already downloaded
                 kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
             }
 
             ArrayList<KcpContentPage> kcpContentPages = kcpPlacesRoot.getContentPagesById(kcpContentPage.getStoreId());
-            if(kcpContentPages != null){
+            if(kcpContentPages != null) { //there's a store content pages (events/deals/ancmt) already downloaded
                 kcpContentPage.setContentPageList(kcpContentPages);
             }
         }
@@ -137,209 +142,345 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void setUpCTA(final KcpContentPage kcpContentPage){
-        List<CTA> cTAList = new ArrayList<>();
+        try {
+            List<CTA> cTAList = new ArrayList<>();
 
-        //Store Location
-        CTA location = new CTA(
-                R.layout.layout_detail_button,
-                R.drawable.icn_menu_map,
-                kcpContentPage.getStoreLevel(),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
-                    }
-                }, true);
+            //Store Location
+            CTA location = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_menu_map,
+                    kcpContentPage.getStoreLevel(),
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                        }
+                    }, true);
 
-        //Store Parking
-        CTA parking = new CTA(
-                R.layout.layout_detail_button,
-                R.drawable.icn_parking,
-                kcpContentPage.getStoreParking(),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(DetailActivity.this, "clicked ", Toast.LENGTH_SHORT).show();
-                    }
-                }, true);
+            //Store Parking
+            CTA parking = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_parking,
+                    kcpContentPage.getStoreParking(),
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(DetailActivity.this, "clicked ", Toast.LENGTH_SHORT).show();
+                        }
+                    }, true);
 
 
-        //Store Phone number
-        CTA phone = new CTA(
-                R.layout.layout_detail_button,
-                R.drawable.icn_phone,
-                kcpContentPage.getStoreNumber(),
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Utility.makeCallWithAlertDialog(
-                                DetailActivity.this,
-                                getResources().getString(R.string.title_make_calls),
-                                getResources().getString(R.string.warning_make_call) + kcpContentPage.getStoreNumber() + "?",
-                                getResources().getString(R.string.action_call),
-                                getResources().getString(R.string.action_cancel),
-                                kcpContentPage.getStoreNumber()
-                                );
-                    }
-                }, false);
+            //Store Phone number
+            CTA phone = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_phone,
+                    kcpContentPage.getStoreNumber(),
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Utility.makeCallWithAlertDialog(
+                                    DetailActivity.this,
+                                    getResources().getString(R.string.title_make_calls),
+                                    getResources().getString(R.string.warning_make_call) + kcpContentPage.getStoreNumber() + "?",
+                                    getResources().getString(R.string.action_call),
+                                    getResources().getString(R.string.action_cancel),
+                                    kcpContentPage.getStoreNumber()
+                                    );
+                        }
+                    }, false);
 
-        //Store Info
-        CTA info = new CTA(
-                R.layout.layout_detail_button,
-                R.drawable.icn_storeinfo,
-                "Store Information",
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                        if(kcpPlace != null) {
-                            KcpContentPage kcpContentPage = new KcpContentPage();
-                            kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
-                            Intent intent = new Intent(DetailActivity.this, DetailActivity.class);
-                            intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
+            //Store Info
+            CTA info = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_storeinfo,
+                    "Store Information",
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                            if(kcpPlace != null) {
+                                KcpContentPage kcpContentPage = new KcpContentPage();
+                                kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
+                                Intent intent = new Intent(DetailActivity.this, DetailActivity.class);
+                                intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
 
-                            String imageUrl = kcpContentPage.getHighestResImageUrl();
-                            String logoUrl = kcpContentPage.getStoreLogo();
+                                String imageUrl = kcpContentPage.getHighestResImageUrl();
+                                String logoUrl = kcpContentPage.getStoreLogo();
 
-                            ActivityOptionsCompat options = null;
-                            if(ivDetailImage != null && !imageUrl.equals("")){
-                                String transitionNameImage = DetailActivity.this.getResources().getString(R.string.transition_news_image);
-                                options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                        DetailActivity.this,
-                                        Pair.create((View)ivDetailImage, transitionNameImage));
-                            } else if(ivDetailLogo.getVisibility() == View.VISIBLE && !logoUrl.equals("")){
-                                String transitionNameLogo = DetailActivity.this.getResources().getString(R.string.transition_news_logo);
-                                options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                        DetailActivity.this,
-                                        Pair.create((View)ivDetailLogo, transitionNameLogo));
+                                ActivityOptionsCompat options = null;
+                                if(ivDetailImage != null && !imageUrl.equals("")){
+                                    String transitionNameImage = DetailActivity.this.getResources().getString(R.string.transition_news_image);
+                                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                            DetailActivity.this,
+                                            Pair.create((View)ivDetailImage, transitionNameImage));
+                                } else if(ivDetailLogo.getVisibility() == View.VISIBLE && !logoUrl.equals("")){
+                                    String transitionNameLogo = DetailActivity.this.getResources().getString(R.string.transition_news_logo);
+                                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                            DetailActivity.this,
+                                            Pair.create((View)ivDetailLogo, transitionNameLogo));
+                                }
+
+                                ActivityCompat.startActivity(DetailActivity.this, intent, options.toBundle());
+                                DetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                            } else {
+                                downloadIfNecessary(kcpContentPage);
+                            }
+                        }
+                    }, false);
+
+            //Add to Calendar
+            CTA addToCalendar = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_addcal,
+                    "Add to Calendar",
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                        }
+                    }, false);
+
+
+            String todaysHour = null;
+            try {
+                KcpPlaces kcpPlaces = kcpContentPage.getStore();
+                todaysHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+                List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(Constants.NUMB_OF_DAYS);
+                if(comingHolidays == null || comingHolidays.size() == 0) comingHolidays = KcpPlacesRoot.getInstance().getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL).getHolidaysWithin(7);
+                String overrideHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, Calendar.getInstance());
+                if(!overrideHour.equals("")) todaysHour = overrideHour;
+
+                mLayoutStoreHours = DetailActivity.this.getLayoutInflater().inflate(
+                        R.layout.layout_store_hours,
+                        mParentView,
+                        false);
+
+                LinearLayout llMallHour = (LinearLayout) mLayoutStoreHours.findViewById(R.id.llMallHour);
+                ((ViewGroup) llMallHour).removeAllViews();
+                for(int i = 0; i < Constants.NUMB_OF_DAYS; i++){
+                    ((ViewGroup) llMallHour).addView(getMallHourListItem(i, comingHolidays));
+                }
+            } catch (Exception e) {
+                logger.error(e);
+            }
+
+
+            //Store hours
+            CTA storeHours = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_hours,
+                    todaysHour,
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(mLayoutStoreHours == null) return;
+                            Animation animation;
+
+                            Display display = getWindowManager().getDefaultDisplay();
+                            mLayoutStoreHours.measure(display.getWidth(), display.getHeight());
+
+                            if(v.getHeight() == (int) getResources().getDimension(R.dimen.detail_button_height)){
+                                animation = new CustomAnimation.ExpandCollapseAnimation(v, (int) getResources().getDimension(R.dimen.detail_button_height), mLayoutStoreHours.getMeasuredHeight() + (int) getResources().getDimension(R.dimen.detail_button_height));
+                            } else {
+                                animation = new CustomAnimation.ExpandCollapseAnimation(v, mLayoutStoreHours.getMeasuredHeight(), (int) getResources().getDimension(R.dimen.detail_button_height));
                             }
 
-                            ActivityCompat.startActivity(DetailActivity.this, intent, options.toBundle());
-                            DetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        } else {
-                            downloadIfNecessary(kcpContentPage);
+                            animation.setDuration(300);
+                            v.clearAnimation();
+                            v.startAnimation(animation);
                         }
-                    }
-                }, false);
+                    }, false);
 
-        //Add to Calendar
-        CTA addToCalendar = new CTA(
-                R.layout.layout_detail_button,
-                R.drawable.icn_addcal,
-                "Add to Calendar",
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
-                    }
-                }, false);
-
-
-        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_LOADING){
-
-        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
-            if(kcpContentPage.getStore() != null) {
-                cTAList.add(location);
-                cTAList.add(parking);
-                cTAList.add(info);
+            if(mLayoutStoreHours != null) {
+                LinearLayout llSubCTA = (LinearLayout) storeHours.getView().findViewById(R.id.llSubCTA);
+                llSubCTA.removeAllViews();
+                llSubCTA.addView(mLayoutStoreHours);
+                storeHours.getView().getLayoutParams().height = (int) getResources().getDimension(R.dimen.detail_button_height);
             }
-        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT){
-            if(kcpContentPage.getStore() != null) {
+
+
+
+            if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_LOADING){
+
+            } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
+                if(kcpContentPage.getStore() != null) {
+                    cTAList.add(location);
+                    cTAList.add(parking);
+                    cTAList.add(info);
+                }
+            } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT){
+                if(kcpContentPage.getStore() != null) {
+                    cTAList.add(location);
+                    cTAList.add(parking);
+                    cTAList.add(info);
+                    cTAList.add(phone);
+                }
+                cTAList.add(addToCalendar);
+
+            } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_DEAL){
                 cTAList.add(location);
                 cTAList.add(parking);
                 cTAList.add(info);
                 cTAList.add(phone);
+
+            } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
+                cTAList.add(location);
+                cTAList.add(parking);
+                cTAList.add(storeHours);
+                cTAList.add(phone);
+
+                CTA facebook = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_facebook,
+                        getResources().getString(R.string.social_facebook),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                                Utility.openWebPage(DetailActivity.this, kcpPlace.getFacebookLink());
+                            }
+                        }, false);
+
+                CTA twiter = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_twitter,
+                        getResources().getString(R.string.social_twitter),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                                Utility.openWebPage(DetailActivity.this, kcpPlace.getTwitterLink());
+                            }
+                        }, false);
+
+                CTA instagram = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_instagram,
+                        getResources().getString(R.string.social_instagram),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                                Utility.openWebPage(DetailActivity.this, kcpPlace.getInstagramLink());
+                            }
+                        }, false);
+
+                CTA webpage = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_web,
+                        getResources().getString(R.string.social_instagram),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                                Utility.openWebPage(DetailActivity.this, kcpPlace.getMainWebsiteLink());
+                            }
+                        }, false);
+
+
+                //SOCIAL SHARING
+
+                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                if(kcpPlace != null && kcpPlace.getFacebookLink() != null || kcpPlace.getTwitterLink() != null || kcpPlace.getInstagramLink() != null || kcpPlace.getMainWebsiteLink() != null){
+                    LinearLayout llSharing = (LinearLayout) findViewById(R.id.llSharing);
+                    llSharing.setVisibility(View.VISIBLE);
+
+                    RelativeLayout layoutSocialSharing = (RelativeLayout) findViewById(R.id.layoutSocialSharing); //FOLLOW ON
+                    layoutSocialSharing.setVisibility(View.VISIBLE);
+
+                    TextView tvDetailSocialSharingBtnHeader = (TextView) layoutSocialSharing.findViewById(R.id.tvDetailSocialSharingBtnHeader);
+                    tvDetailSocialSharingBtnHeader.setText("Follow " + kcpContentPage.getStoreName() + " on...");
+
+                    ((ViewGroup) llSharing).removeAllViews();
+
+                    if(kcpPlace.getFacebookLink() != null) ((ViewGroup) llSharing).addView(facebook.getView());
+                    if(kcpPlace.getTwitterLink() != null) ((ViewGroup) llSharing).addView(twiter.getView());
+                    if(kcpPlace.getInstagramLink() != null) ((ViewGroup) llSharing).addView(instagram.getView());
+                    if(kcpPlace.getMainWebsiteLink() != null) ((ViewGroup) llSharing).addView(webpage.getView());
+                }
             }
-            cTAList.add(addToCalendar);
 
-        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_DEAL){
-            cTAList.add(location);
-            cTAList.add(parking);
-            cTAList.add(info);
-            cTAList.add(phone);
-
-        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
-            cTAList.add(location);
-            cTAList.add(parking);
-            cTAList.add(phone);
-
-            CTA facebook = new CTA(
-                    R.layout.layout_detail_social_button,
-                    R.drawable.icn_facebook,
-                    getResources().getString(R.string.social_facebook),
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                            Utility.openWebPage(DetailActivity.this, kcpPlace.getFacebookLink());
-                        }
-                    }, false);
-
-            CTA twiter = new CTA(
-                    R.layout.layout_detail_social_button,
-                    R.drawable.icn_twitter,
-                    getResources().getString(R.string.social_twitter),
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                            Utility.openWebPage(DetailActivity.this, kcpPlace.getTwitterLink());
-                        }
-                    }, false);
-
-            CTA instagram = new CTA(
-                    R.layout.layout_detail_social_button,
-                    R.drawable.icn_instagram,
-                    getResources().getString(R.string.social_instagram),
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                            Utility.openWebPage(DetailActivity.this, kcpPlace.getInstagramLink());
-                        }
-                    }, false);
-
-            CTA webpage = new CTA(
-                    R.layout.layout_detail_social_button,
-                    R.drawable.icn_web,
-                    getResources().getString(R.string.social_instagram),
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                            Utility.openWebPage(DetailActivity.this, kcpPlace.getMainWebsiteLink());
-                        }
-                    }, false);
-
-
-            //SOCIAL SHARING
-
-            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-            if(kcpPlace != null && kcpPlace.getFacebookLink() != null || kcpPlace.getTwitterLink() != null || kcpPlace.getInstagramLink() != null || kcpPlace.getMainWebsiteLink() != null){
-                LinearLayout llSharing = (LinearLayout) findViewById(R.id.llSharing);
-                llSharing.setVisibility(View.VISIBLE);
-
-                RelativeLayout layoutSocialSharing = (RelativeLayout) findViewById(R.id.layoutSocialSharing); //FOLLOW ON
-                layoutSocialSharing.setVisibility(View.VISIBLE);
-
-                TextView tvDetailSocialSharingBtnHeader = (TextView) layoutSocialSharing.findViewById(R.id.tvDetailSocialSharingBtnHeader);
-                tvDetailSocialSharingBtnHeader.setText("Follow " + kcpContentPage.getStoreName() + " on...");
-
-                ((ViewGroup) llSharing).removeAllViews();
-
-                if(kcpPlace.getFacebookLink() != null) ((ViewGroup) llSharing).addView(facebook.getView());
-                if(kcpPlace.getTwitterLink() != null) ((ViewGroup) llSharing).addView(twiter.getView());
-                if(kcpPlace.getInstagramLink() != null) ((ViewGroup) llSharing).addView(instagram.getView());
-                if(kcpPlace.getMainWebsiteLink() != null) ((ViewGroup) llSharing).addView(webpage.getView());
+            View llCTA = findViewById(R.id.llCTA);
+            ((ViewGroup) llCTA).removeAllViews();
+            for(int i = 0; i < cTAList.size(); i++){
+                ((ViewGroup) llCTA).addView(cTAList.get(i).getView());
             }
-        }
-
-        View llCTA = findViewById(R.id.llCTA);
-        ((ViewGroup) llCTA).removeAllViews();
-        for(int i = 0; i < cTAList.size(); i++){
-            ((ViewGroup) llCTA).addView(cTAList.get(i).getView());
+        } catch (Resources.NotFoundException e) {
+            logger.error(e);
+        } catch (Exception e){
+            logger.error(e);
         }
     }
+
+
+    public View getMallHourListItem(int daysPastToday, List<KcpOverrides.ContinuousOverride> comingHolidays){
+        View v = getLayoutInflater().inflate(R.layout.list_item_store_hour, null, false);
+        try {
+            TextView tvDate = (TextView) v.findViewById(R.id.tvDate);
+            TextView tvMallHour = (TextView) v.findViewById(R.id.tvHour);
+            ImageView ivHolidayIndicator = (ImageView) v.findViewById(R.id.ivHolidayIndicator);
+
+            Calendar today = Calendar.getInstance();
+            long todayInMillisPlusDays = daysPastToday * 24 * 60 * 60 * 1000 + today.getTimeInMillis();
+            today.setTimeInMillis(todayInMillisPlusDays);
+
+            KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
+            KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
+
+            String openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(today.get(Calendar.DAY_OF_WEEK));
+            tvMallHour.setText(openAndClosingHour);
+
+            if(daysPastToday == 0) {
+                tvDate.setText("Today");
+                v.setBackgroundColor(getResources().getColor(R.color.store_hour_selected_bg));
+                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
+                tvDate.setTypeface(face);
+                tvMallHour.setTypeface(face);
+
+            } else {
+                String mallHourDate = KcpTimeConverter.convertDateFormat(today.getTime(), Constants.DATE_FORMAT_MALL_HOUR_DATE);
+                tvDate.setText(mallHourDate);
+            }
+
+            //overriding holidays
+            openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, today);
+            if(!openAndClosingHour.equals("")){
+                tvMallHour.setText(openAndClosingHour);
+                ivHolidayIndicator.setVisibility(View.VISIBLE);
+//                tvDate.setTextColor(getResources().getColor(R.color.info_mall_hour_holiday_stroke));
+            }
+
+        } catch (Exception e) {
+            logger.error(e);
+        }
+
+        return v;
+    }
+
+
+
+
+
 
     public void downloadPlace(final KcpContentPage kcpContentPage){
         KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(DetailActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
@@ -382,57 +523,6 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
         kcpPlaceManager.downloadContents(kcpContentPage.getStoreId());
-    }
-
-    public class CTA {
-        private View mView;
-        private ProgressBar pb;
-        private View.OnClickListener mOnClickListener;
-        public String title;
-        private TextView tvDetailBtnTitle;
-        private ImageView ivDetailBtnImage;
-
-        public CTA(int layout, int drawable, String title, View.OnClickListener onClickListener, boolean hideIfEmpty) {
-            mView = DetailActivity.this.getLayoutInflater().inflate(
-                    layout,
-                    mParentView,
-                    false);
-            this.title = title;
-            pb = (ProgressBar) mView.findViewById(R.id.pb);
-            tvDetailBtnTitle= (TextView) mView.findViewById(R.id.tvDetailBtnTitle);
-            ivDetailBtnImage= (ImageView) mView.findViewById(R.id.ivDetailBtnImage);
-
-            if(hideIfEmpty){
-                mView.setVisibility(View.GONE);
-            } else {
-                if(title.equals("")) {
-                    tvDetailBtnTitle.setVisibility(View.GONE);
-                    ivDetailBtnImage.setVisibility(View.GONE);
-                    pb.setVisibility(View.VISIBLE);
-                } else {
-                    tvDetailBtnTitle.setVisibility(View.VISIBLE);
-                    ivDetailBtnImage.setVisibility(View.VISIBLE);
-                    pb.setVisibility(View.GONE);
-                }
-            }
-
-            ivDetailBtnImage.setImageResource(drawable);
-            tvDetailBtnTitle.setText(title);
-            mOnClickListener = onClickListener;
-            mView.setOnClickListener(mOnClickListener);
-        }
-
-        public void setTitle(String title){
-            if(!title.equals("")){
-                tvDetailBtnTitle.setText(title);
-                tvDetailBtnTitle.setVisibility(View.VISIBLE);
-                ivDetailBtnImage.setVisibility(View.VISIBLE);
-                pb.setVisibility(View.GONE);
-            }
-        }
-        public View getView(){
-            return mView;
-        }
     }
 
     public void showContentsWithCTL(final KcpContentPage kcpContentPage){
@@ -543,7 +633,13 @@ public class DetailActivity extends AppCompatActivity {
             TextView tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
             String time = "";
             if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
-                time = kcpContentPage.getStoreHourForToday(null);
+                String[] timeArray = new String[2];
+                time = kcpContentPage.getStoreHourForToday(timeArray, KcpPlacesRoot.getInstance().getMallContinuousOverrides());
+                time = timeArray[0].toUpperCase() + " " + timeArray[1];
+                if(time.toLowerCase().contains("closed")) {
+                    tvDetailDate.setBackgroundResource(R.drawable.btn_style_corner_radius_gray);
+                    tvDetailDate.setTextColor(getResources().getColor(R.color.white));
+                }
             } else {
                 time =
                         kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EFFECTIVE) +
@@ -557,7 +653,7 @@ public class DetailActivity extends AppCompatActivity {
             TextView tvDetailBody = (TextView) findViewById(R.id.tvDetailBody);
             String body = kcpContentPage.getBody();
             if(body.equals("")) tvDetailBody.setVisibility(View.GONE);
-            else tvDetailBody.setText(Html.fromHtml(body)); //sometimes adds extra space in between
+            else HtmlTextView.setHtmlTextView(this, tvDetailBody, body, R.color.html_link_text_color);
 
         } catch (Exception e) {
             logger.error(e);

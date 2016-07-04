@@ -1,32 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     style="@style/SelectableItemForeground"
-    android:layout_height="@dimen/detail_button_height">
+    android:layout_height="wrap_content"
+    >
 
-    <com.kineticcafe.kcpmall.views.ThemeColorImageView
-        android:layout_marginLeft="@dimen/detail_button_image_left_margin"
-        android:layout_centerVertical="true"
-        android:src="@drawable/icn_menu_map"
-        android:id="@+id/ivDetailBtnImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="@dimen/detail_button_image_width"
-        android:adjustViewBounds="true"
-        />
-    detail_button_image_width
-
-
-    <TextView
-        android:layout_marginLeft="@dimen/detail_button_text_left_margin"
-        android:layout_toRightOf="@+id/ivDetailBtnImage"
-        android:textColor="@color/black"
-        android:gravity="center_vertical"
-        android:text="Ground Level (GL)"
-        android:id="@+id/tvDetailBtnTitle"
+    <RelativeLayout
+        android:id="@+id/rlCTA"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="@dimen/detail_button_height">
+
+        <com.kineticcafe.kcpmall.views.ThemeColorImageView
+            xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+            ThemedImageView:filterColor="@color/themeColor"
+            android:layout_marginLeft="@dimen/detail_button_image_left_margin"
+            android:src="@drawable/icn_menu_map"
+            android:id="@+id/ivDetailBtnImage"
+            android:adjustViewBounds="true"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            />
+
+
+
+        <TextView
+            android:layout_marginLeft="@dimen/detail_button_text_left_margin"
+            android:layout_toRightOf="@+id/ivDetailBtnImage"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="Ground Level (GL)"
+            android:id="@+id/tvDetailBtnTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/pb"
@@ -36,5 +47,12 @@
     <View android:layout_marginLeft="@dimen/activity_horizontal_margin"
         style="@style/separater"
         />
+
+    <LinearLayout
+        android:layout_below="@+id/rlCTA"
+        android:orientation="vertical"
+        android:id="@+id/llSubCTA"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

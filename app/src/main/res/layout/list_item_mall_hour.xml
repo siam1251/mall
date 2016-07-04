@@ -3,10 +3,10 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:layout_height="wrap_content">
 
     <TextView
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_alignParentLeft="true"
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
@@ -19,9 +19,10 @@
 
 
     <TextView
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_alignParentRight="true"
         android:gravity="right|center_vertical"
-        android:id="@+id/tvMallHour"
+        android:id="@+id/tvHour"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:textSize="16sp"
@@ -34,6 +35,17 @@
         android:layout_alignParentBottom="true"
         style="@style/separater"
         />
+
+    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+        xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+        ThemedImageView:filterColor="@color/info_mall_hour_holiday_stroke"
+        android:visibility="gone"
+        android:id="@+id/ivHolidayIndicator"
+        android:layout_width="@dimen/hour_holiday_indicator_width"
+        android:layout_height="@dimen/hour_holiday_indicator_width"
+        android:src="@drawable/icn_holidayflag"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"/>
 
 
 </RelativeLayout>

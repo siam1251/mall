@@ -10,10 +10,12 @@
         android:id="@+id/tvHolidayException"
         android:layout_width="match_parent"
         android:layout_height="31dp"
-        android:textSize="13sp"
-        android:textColor="@color/detail_title_text"
         android:gravity="center_vertical"
         android:text="Christmas"
+        android:textColor="@color/detail_disclaimer_text"
+        android:textSize="@dimen/detail_disclaimer_text"
         />
+        android:textSize="13sp"
+        android:textColor="@color/detail_title_text"
 
 </LinearLayout>

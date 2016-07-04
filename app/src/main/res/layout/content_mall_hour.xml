@@ -39,8 +39,8 @@
             android:layout_height="wrap_content">
 
             <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-                android:id="@+id/tvHolidayName"
                 app:fontFamily="@string/fontFamily_roboto_medium"
+                android:id="@+id/tvHolidayName"
                 android:gravity="center_horizontal"
                 android:textSize="16sp"
                 android:text="Holiday Hours"
@@ -54,7 +54,7 @@
                 android:id="@+id/tvHolidayHoursPeriod"
                 android:gravity="center_horizontal"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="18dp"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/intrstd_cat_desc"
@@ -65,12 +65,27 @@
                 android:id="@+id/tvHolidayhoursDescription"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:lineSpacingMultiplier="1.2"
+                android:lineSpacingMultiplier="@dimen/detail_line_spacing_multiplier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                android:text="Extended Holiday Hours from 10 AM to 11 PM, and from 10 AM to 8 PM on weekends."
+                />
+
+            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                app:fontFamily="@string/fontFamily_roboto_bold"
+                android:id="@+id/tvHolidayhoursList"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:lineSpacingMultiplier="@dimen/detail_line_spacing_multiplier"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:text="Extended Holiday Hours from 10 AM to 11 PM, and from 10 AM to 8 PM on weekends."
                 />
+
+
         </LinearLayout>
 
         <!-- MALL HOUR -->

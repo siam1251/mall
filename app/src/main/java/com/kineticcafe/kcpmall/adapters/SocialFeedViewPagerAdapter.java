@@ -12,6 +12,7 @@ import com.kineticcafe.kcpandroidsdk.instagram.model.InstagramFeed;
 import com.kineticcafe.kcpandroidsdk.twitter.model.TwitterTweet;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
+import com.kineticcafe.kcpmall.views.HtmlTextView;
 
 import java.util.ArrayList;
 import java.util.List;

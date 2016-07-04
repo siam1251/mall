@@ -143,6 +143,7 @@ public class HomeFragment extends BaseFragment {
                     case KcpSocialFeedManager.DOWNLOAD_INSTAGRAM_COMPLETE:
 
                         Recent recent = mKcpSocialFeedManager.getRecent();
+                        if(recent == null) break;
                         int mediaSize = recent.getMediaList().size();
 
                         sInstaFeedList.clear();

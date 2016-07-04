@@ -8,16 +8,14 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:id="@+id/tvDisclaimer"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:textColor="@color/black"
+        android:textColor="@color/ancmt_title_color"
         android:textSize="@dimen/info_detail_disclaimer_title_text"
-        android:layout_marginBottom="5dp"
         android:text="@string/mall_info_disclaimer_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
-
-    <!-- HOURS VARYING STORE -->
     <LinearLayout
         android:id="@+id/llHoursVaryingStore"
         android:layout_width="fill_parent"

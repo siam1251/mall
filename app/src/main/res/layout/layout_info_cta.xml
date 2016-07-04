@@ -46,9 +46,9 @@
                 android:layout_height="match_parent">
                 <com.kineticcafe.kcpmall.views.ThemeColorImageView
                     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+                    ThemedImageView:filterColor="@color/themeColor"
                     android:id="@+id/ivDirection"
                     android:layout_centerVertical="true"
-                    ThemedImageView:filterColor="@color/themeColor"
                     android:padding="@dimen/info_direction_icon_padding"
                     android:layout_width="@dimen/info_direction_height"
                     android:layout_height="@dimen/info_direction_height"

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:paddingBottom="33dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:layout_height="wrap_content">
+
+    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        app:fontFamily="@string/fontFamily_roboto_bold"
+        android:id="@+id/tvAdditionalInfoTitle"
+        android:textColor="@color/intrstd_cat_desc"
+        android:layout_marginBottom="9dp"
+        android:textSize="@dimen/info_detail_disclaimer_title_text"
+        android:text="@string/mall_info_disclaimer_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:lineSpacingMultiplier="@dimen/detail_line_spacing_multiplier"
+        android:id="@+id/tvAdditionalInfoDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="Christmas"
+        android:textColor="@color/detail_disclaimer_text"
+        android:textSize="@dimen/detail_disclaimer_text"
+        />
+        android:textSize="13sp"
+        android:textColor="@color/detail_title_text"
+
+</LinearLayout>
