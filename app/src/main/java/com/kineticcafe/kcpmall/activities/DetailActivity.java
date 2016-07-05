@@ -43,6 +43,7 @@ import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.CTA;
 import com.kineticcafe.kcpmall.views.CustomAnimation;
@@ -76,7 +77,8 @@ public class DetailActivity extends AppCompatActivity {
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
             KcpPlaces kcpPlace = kcpPlacesRoot.getPlaceById(kcpContentPage.getStoreId());
             if(kcpPlace != null) { //there's a store detail already downloaded
-                kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
+//                kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
+                kcpContentPage.setPlaceList(null, kcpPlace);
             }
 
             ArrayList<KcpContentPage> kcpContentPages = kcpPlacesRoot.getContentPagesById(kcpContentPage.getStoreId());
@@ -108,13 +110,12 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         final ImageView ivFav = (ImageView) toolbar.findViewById(R.id.ivFav);
-        ivFav.setSelected(KcpUtility.isLiked(DetailActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, mLikeLink));
+        ivFav.setSelected(FavouriteManager.getInstance(DetailActivity.this).isLiked(DetailActivity.this, mLikeLink, kcpContentPage));
         ivFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(DetailActivity.this, "fav clicked", Toast.LENGTH_SHORT).show();
                 ivFav.setSelected(!ivFav.isSelected());
-                KcpUtility.addOrRemoveLikeLink(DetailActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, mLikeLink);
+                FavouriteManager.getInstance(DetailActivity.this).addOrRemoveFavContent(DetailActivity.this, mLikeLink, kcpContentPage);
             }
         });
     }
@@ -191,7 +192,7 @@ public class DetailActivity extends AppCompatActivity {
                                     getResources().getString(R.string.action_call),
                                     getResources().getString(R.string.action_cancel),
                                     kcpContentPage.getStoreNumber()
-                                    );
+                            );
                         }
                     }, false);
 
@@ -254,21 +255,37 @@ public class DetailActivity extends AppCompatActivity {
             String todaysHour = null;
             try {
                 KcpPlaces kcpPlaces = kcpContentPage.getStore();
-                todaysHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
-                List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(Constants.NUMB_OF_DAYS);
-                if(comingHolidays == null || comingHolidays.size() == 0) comingHolidays = KcpPlacesRoot.getInstance().getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL).getHolidaysWithin(7);
-                String overrideHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, Calendar.getInstance());
-                if(!overrideHour.equals("")) todaysHour = overrideHour;
+                if(kcpPlaces != null){
+                    todaysHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+                    List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(Constants.NUMB_OF_DAYS);
+                    if(comingHolidays == null || comingHolidays.size() == 0) comingHolidays = KcpPlacesRoot.getInstance().getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL).getHolidaysWithin(7);
+                    String overrideHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, Calendar.getInstance());
+                    if(!overrideHour.equals("")) todaysHour = overrideHour;
+                    todaysHour = todaysHour.replace("-", "to");
+                    mLayoutStoreHours = DetailActivity.this.getLayoutInflater().inflate(
+                            R.layout.layout_store_hours,
+                            mParentView,
+                            false);
 
-                mLayoutStoreHours = DetailActivity.this.getLayoutInflater().inflate(
-                        R.layout.layout_store_hours,
-                        mParentView,
-                        false);
+                    LinearLayout llHolidays = (LinearLayout) mLayoutStoreHours.findViewById(R.id.llHolidays);
 
-                LinearLayout llMallHour = (LinearLayout) mLayoutStoreHours.findViewById(R.id.llMallHour);
-                ((ViewGroup) llMallHour).removeAllViews();
-                for(int i = 0; i < Constants.NUMB_OF_DAYS; i++){
-                    ((ViewGroup) llMallHour).addView(getMallHourListItem(i, comingHolidays));
+                    if(comingHolidays.size() != 0){
+                        llHolidays.setVisibility(View.VISIBLE);
+                        TextView tvHolidayName = (TextView) mLayoutStoreHours.findViewById(R.id.tvHolidayName);
+
+                        String holidayNames = "";
+                        for(int i = 0; i < comingHolidays.size(); i++) {
+                            holidayNames = holidayNames + comingHolidays.get(i).getName() + " " + KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.DATE_FORMAT_HOLIDAY_STORE);
+                            if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + "\n";
+                        }
+                        tvHolidayName.setText(holidayNames);
+                    }
+
+                    LinearLayout llMallHour = (LinearLayout) mLayoutStoreHours.findViewById(R.id.llMallHour);
+                    ((ViewGroup) llMallHour).removeAllViews();
+                    for(int i = 0; i < Constants.NUMB_OF_DAYS; i++){
+                        ((ViewGroup) llMallHour).addView(getMallHourListItem(i, comingHolidays));
+                    }
                 }
             } catch (Exception e) {
                 logger.error(e);
@@ -448,26 +465,21 @@ public class DetailActivity extends AppCompatActivity {
             KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
 
             String openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(today.get(Calendar.DAY_OF_WEEK));
+            openAndClosingHour = openAndClosingHour.replace("-", "to").replace("AM", "am").replace("PM","pm");
             tvMallHour.setText(openAndClosingHour);
 
             if(daysPastToday == 0) {
-                tvDate.setText("Today");
                 v.setBackgroundColor(getResources().getColor(R.color.store_hour_selected_bg));
-                Typeface face= Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
-                tvDate.setTypeface(face);
-                tvMallHour.setTypeface(face);
-
-            } else {
-                String mallHourDate = KcpTimeConverter.convertDateFormat(today.getTime(), Constants.DATE_FORMAT_MALL_HOUR_DATE);
-                tvDate.setText(mallHourDate);
             }
+            String mallHourDate = KcpTimeConverter.convertDateFormat(today.getTime(), Constants.DATE_FORMAT_DAY);
+            tvDate.setText(mallHourDate.toUpperCase());
 
             //overriding holidays
             openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, today);
             if(!openAndClosingHour.equals("")){
+                openAndClosingHour = openAndClosingHour.replace("-", "to").replace("AM", "am").replace("PM","pm");
                 tvMallHour.setText(openAndClosingHour);
                 ivHolidayIndicator.setVisibility(View.VISIBLE);
-//                tvDate.setTextColor(getResources().getColor(R.color.info_mall_hour_holiday_stroke));
             }
 
         } catch (Exception e) {
@@ -492,7 +504,8 @@ public class DetailActivity extends AppCompatActivity {
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:
                         KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
                         KcpPlaces kcpPlace = kcpPlacesRoot.getPlaceById(kcpContentPage.getStoreId());
-                        kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
+//                        kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
+                        kcpContentPage.setPlaceList(null, kcpPlace);
                         setUpCTA(kcpContentPage);
 
                         break;

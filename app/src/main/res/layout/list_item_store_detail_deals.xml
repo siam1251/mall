@@ -87,7 +87,7 @@
                     />
                     android:gravity="center_vertical"
 
-                <ImageView
+                <!--<ImageView
                     android:id="@+id/ivFav"
                     android:layout_width="@dimen/deal_fav_width"
                     android:layout_height="wrap_content"
@@ -95,8 +95,19 @@
                     android:adjustViewBounds="true"
                     android:src="@drawable/btn_fav"
                     android:layout_alignParentBottom="true"
-                    />
+                    />-->
             </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/ivFav"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:adjustViewBounds="true"
+                android:src="@drawable/btn_fav"
+                android:layout_width="45dp"
+                android:padding="13dp"
+                />
 
         </RelativeLayout>
 

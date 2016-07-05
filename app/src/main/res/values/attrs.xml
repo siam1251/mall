@@ -28,6 +28,11 @@
         <!--<attr name="finalYPosition" format="dimension"/>-->
     </declare-styleable>
 
+    <declare-styleable name="BadgeView">
+        <attr name="badgeBgColor" format="color"/>
+        <!--<attr name="finalYPosition" format="dimension"/>-->
+    </declare-styleable>
+
     <declare-styleable name="AlphaTextView">
         <attr name="alpha" format="integer"/>
     </declare-styleable>

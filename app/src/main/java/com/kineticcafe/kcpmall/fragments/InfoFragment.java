@@ -175,36 +175,41 @@ public class InfoFragment extends BaseFragment {
     }
 
     public void getMallHour() {
-        logger.debug("entered getMallHour");
-        KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
-        KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
+        try {
+            logger.debug("entered getMallHour");
+            KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
+            KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
 
-        logger.debug("mall name is : " + kcpPlaces.getPlaceName());
+            logger.debug("mall name is : " + kcpPlaces.getPlaceName());
 
-        if(kcpPlaces != null){
-            setUpMallOpenCloseStatus();
-        } else {
-            toolbar.setVisibility(View.GONE);
-            KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(getActivity(), 0, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
-                @Override
-                public void handleMessage(Message inputMessage) {
-                    switch (inputMessage.arg1) {
-                        case KcpCategoryManager.DOWNLOAD_FAILED:
-                            break;
-                        case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                            setUpMallOpenCloseStatus();
-                            break;
-                        default:
-                            super.handleMessage(inputMessage);
+            if(kcpPlaces != null){
+                setUpMallOpenCloseStatus();
+            } else {
+                if(toolbar != null) toolbar.setVisibility(View.GONE);
+                KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(getActivity(), 0, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
+                    @Override
+                    public void handleMessage(Message inputMessage) {
+                        switch (inputMessage.arg1) {
+                            case KcpCategoryManager.DOWNLOAD_FAILED:
+                                break;
+                            case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                                setUpMallOpenCloseStatus();
+                                break;
+                            default:
+                                super.handleMessage(inputMessage);
+                        }
                     }
-                }
-            });
-            kcpPlaceManager.downloadPlaces();
+                });
+                kcpPlaceManager.downloadPlaces();
+            }
+        } catch (Exception e) {
+            logger.error(e);
         }
     }
 
     public void setUpMallOpenCloseStatus(){
         try {
+            if(toolbar == null) return;
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
             KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
             toolbar.setVisibility(View.VISIBLE);
