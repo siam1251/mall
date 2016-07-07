@@ -57,7 +57,8 @@ public class Constants {
  	public final static String DATE_FORMAT_HOLIDAY_HOUR = "MMMM d";
  	public final static String DATE_FORMAT_MALL_HOUR_DATE = "EEE. MMM d";
  	public final static String DATE_FORMAT_HOLIDAY = "EEEE MMMM d";
- 	public final static String DATE_FORMAT_DAY = "EEEE";
+ 	public final static String DATE_FORMAT_HOLIDAY_STORE = "EEE MMMM d";
+ 	public final static String DATE_FORMAT_DAY = "EEE";
 
 
 	//DETAIL
@@ -72,11 +73,6 @@ public class Constants {
 	public static final String ARG_CATEGORY_ACTIVITY_TYPE = "cat_activity_type";
 	public enum CategoryActivityType { SUBCATEGORY, STORE }
 
-	//SHARED PREFERNCE DATABASE
-//	public final static String PREFS_KEY_INTRSTD_CATEGORY = 	"prefs_key_intrstd_category";
-	public final static String PREFS_KEY_CATEGORY = 			"prefs_key_category";
-//	public final static String PREFS_KEY_STORE = 				"prefs_key_store";
-	public final static String PREFS_KEY_FAV_STORE_LIKE_LINK = 	"prefs_key_store_like_link";
 
 	//REQUEST CODE
 	public final static int REQUEST_CODE_CHANGE_INTEREST = 101;

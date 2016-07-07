@@ -25,6 +25,8 @@ import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+import com.kineticcafe.kcpmall.managers.FavouriteManager;
+import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 
 import java.util.ArrayList;
@@ -269,13 +271,17 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
 
 
             final String likeLink = kcpContentPage.getLikeLink();
-            dealHolder.ivFav.setSelected(KcpUtility.isLiked(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink));
+            dealHolder.ivFav.setSelected(FavouriteManager.getInstance(mContext).isLiked(likeLink, kcpContentPage));
             dealHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO: implement fav functionality
-                    dealHolder.ivFav.setSelected(!dealHolder.ivFav .isSelected());
-                    KcpUtility.addOrRemoveLikeLink(mContext, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, likeLink);
+                    Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
+                        @Override
+                        public void OnSqueezeAnimationDone() {
+                            dealHolder.ivFav.setSelected(!dealHolder.ivFav .isSelected());
+                            FavouriteManager.getInstance(mContext).addOrRemoveFavContent(likeLink, kcpContentPage);
+                        }
+                    }, (Activity) mContext, dealHolder.ivFav);
                 }
             });
 

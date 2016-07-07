@@ -17,7 +17,7 @@
             >
 
             <include
-                layout="@layout/layout_toolbar_intrstd_category" />
+                layout="@layout/layout_toolbar_intrstd_category_in_white" />
 
         </android.support.design.widget.AppBarLayout>
 

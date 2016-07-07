@@ -18,7 +18,7 @@ public class HeaderFactory {
     private static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_VM;
     public final static String MALL_INFO_OFFLINE_TEXT = "mallinfo.json";
     public final static String MALL_INFO_URL_BASE = "https://api.myjson.com/";
-    public final static String MALL_INFO_URL_VM = "bins/3ng0z"; //vaughan mills
+    public final static String MALL_INFO_URL_VM = "bins/1ouit"; //vaughan mills
     public final static String MALL_INFO_URL_MP = "bins/2zv9f"; //metropolis
     public static String MALL_INFO_URL = MALL_INFO_URL_VM; //metropolis
 

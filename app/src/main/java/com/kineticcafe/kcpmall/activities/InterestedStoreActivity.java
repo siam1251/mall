@@ -24,6 +24,7 @@ import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.InterestRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
@@ -73,10 +74,10 @@ public class InterestedStoreActivity extends AppCompatActivity {
                                 break;
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
 
-                                ArrayList<String> savedStoreLikeList = KcpUtility.loadGsonArrayListString(InterestedStoreActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK);
+                                ArrayList<String> savedStoreLikeList = FavouriteManager.getInstance(InterestedStoreActivity.this).getInterestedStoreList();
                                 ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();
                                 if(!KcpUtility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
-                                    KcpUtility.saveGson(InterestedStoreActivity.this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK, mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
+                                    FavouriteManager.getInstance(InterestedStoreActivity.this).cacheInterestedStoreList(mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
                                     setResult(Constants.RESULT_DONE_PRESSED_WITH_CHANGE, new Intent());
                                 } else {
                                     setResult(Constants.RESULT_DONE_PRESSED_WITHOUT_CHANGE, new Intent());
@@ -153,7 +154,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
 
 
     public void checkIfNotSaved(final AlertDialogForInterest.DialogAnsweredListener dialogAnsweredListener){
-        ArrayList<String> savedStoreLikeList = KcpUtility.loadGsonArrayListString(this, Constants.PREFS_KEY_FAV_STORE_LIKE_LINK);
+        ArrayList<String> savedStoreLikeList = FavouriteManager.getInstance(this).getInterestedStoreList();
         ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();
         if(!KcpUtility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
             AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();

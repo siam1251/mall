@@ -12,8 +12,10 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -27,8 +29,11 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpDataListener;
@@ -41,6 +46,10 @@ import com.kineticcafe.kcpmall.fragments.DirectoryFragment;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
 import com.kineticcafe.kcpmall.fragments.InfoFragment;
 import com.kineticcafe.kcpmall.fragments.TestFragment;
+import com.kineticcafe.kcpmall.managers.FavouriteManager;
+import com.kineticcafe.kcpmall.managers.SidePanelManagers;
+import com.kineticcafe.kcpmall.views.ActivityAnimation;
+import com.kineticcafe.kcpmall.views.BadgeView;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 
 import java.util.ArrayList;
@@ -94,8 +103,11 @@ public class MainActivity extends AppCompatActivity
         mSplashThread.start();
 
         initializeToolbar();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
+
+        //disabling the default navigation drawer
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
 
 
         final AppBarLayout ablTopNav = (AppBarLayout)findViewById(R.id.ablTopNav);
@@ -126,6 +138,7 @@ public class MainActivity extends AppCompatActivity
         viewPager.setTabLayout(tabLayout);
 
         initializeKcpData();
+        setUpSidePanel();
     }
 
     private void initializeKcpData(){
@@ -169,6 +182,118 @@ public class MainActivity extends AppCompatActivity
 
         mDrawer.addDrawerListener(mToggle);
         mToggle.syncState();
+    }
+
+
+    private void setUpSidePanel(){
+        //ACCOUNT
+        TextView tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
+        tvDetailDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ImageView ivDrawerLayoutUser = (ImageView) findViewById(R.id.ivDrawerLayoutUser);
+        ivDrawerLayoutUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "User Image clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        TextView tvDrawerLayoutAccount = (TextView) findViewById(R.id.tvDrawerLayoutAccount);
+        tvDrawerLayoutAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Account clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ImageView ivDrawerlayoutSetting = (ImageView) findViewById(R.id.ivDrawerlayoutSetting);
+        ivDrawerlayoutSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Setting clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //BADGES
+        FrameLayout flDeals = (FrameLayout) findViewById(R.id.flDeals);
+        BadgeView badgeDeals = (BadgeView) findViewById(R.id.badgeDeals);
+        flDeals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getDealFavSize(), getResources().getString(R.string.my_page_deals));
+            }
+        });
+
+        FrameLayout flEvents = (FrameLayout) findViewById(R.id.flEvents);
+        BadgeView badgeEvents = (BadgeView) findViewById(R.id.badgeEvents);
+        flEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getEventAnnouncementFavSize(), getResources().getString(R.string.my_page_events));
+            }
+        });
+
+        FrameLayout flStores = (FrameLayout) findViewById(R.id.flStores);
+        BadgeView badgeStores = (BadgeView) findViewById(R.id.badgeStores);
+        flStores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getStoreFavSize(), getResources().getString(R.string.my_page_stores));
+            }
+        });
+
+        FrameLayout flInterests = (FrameLayout) findViewById(R.id.flInterests);
+        flInterests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getInterestFavSize(), getResources().getString(R.string.my_page_interests));
+            }
+        });
+
+        BadgeView badgeInterests = (BadgeView) findViewById(R.id.badgeInterests);
+
+
+        //GC
+        FrameLayout flAddGC = (FrameLayout) findViewById(R.id.flAddGC);
+        flAddGC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Add a gift card", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
+    }
+
+    public void startMyPageActivity(int listSize, final String myPageType){
+        if(listSize == 0) return;
+        mDrawer.closeDrawers();
+
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(200);
+                    }
+                } catch (InterruptedException ex) {
+                }
+                if(myPageType.equals(getResources().getString(R.string.my_page_interests))){
+                    startActivityForResult(new Intent(MainActivity.this, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
+                    ActivityAnimation.startActivityAnimation(MainActivity.this);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, MyPagesActivity.class);
+                    intent.putExtra(Constants.ARG_CAT_NAME, myPageType);
+                    MainActivity.this.startActivity(intent);
+                    ActivityAnimation.startActivityAnimation(MainActivity.this);
+                }
+            }
+        }.start();
     }
 
 

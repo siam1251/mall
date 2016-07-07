@@ -36,7 +36,8 @@
             android:name=".activities.DetailActivity"
             android:parentActivityName="com.kineticcafe.kcpmall.activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base" >
+            android:theme="@style/AppTheme.Base"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kineticcafe.kcpmall.activities.MainActivity" />
@@ -71,6 +72,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kineticcafe.kcpmall.activities.MainActivity" />
         </activity>
+
+        <activity
+            android:name="com.kineticcafe.kcpmall.activities.ProfileInformationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
+
+        <activity
+            android:name="com.kineticcafe.kcpmall.activities.MyPagesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
     </application>
 
 </manifest>

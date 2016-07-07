@@ -1,6 +1,8 @@
 package com.kineticcafe.kcpmall.activities;
 
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -177,7 +179,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Utility.openGoogleMap(MallInfoDetailActivity.this, info.getLocations().get(0).getLocationID());
+                            Utility.openGoogleMapWithAddress(MallInfoDetailActivity.this, HeaderFactory.MALL_NAME);
                         }
                     }, false);
 

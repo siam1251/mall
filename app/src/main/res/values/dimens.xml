@@ -168,7 +168,7 @@
     <dimen name="section_place_text">14sp</dimen>
 
     <!--etc-->
-    <dimen name="button_corner_radius">2dp</dimen>
+    <dimen name="button_corner_radius">3dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="shadow_inverted_height">4dp</dimen>
@@ -196,4 +196,15 @@
     <!--HOUR-->
     <dimen name="hour_disclaimer_top_bottom_margin">24dp</dimen>
     <dimen name="hour_holiday_indicator_width">12dp</dimen>
+    <dimen name="store_hour_list_width">192dp</dimen>
+
+    <!--DRAWER-->
+    <dimen name="drawer_width">304dp</dimen>
+
+    <!--OTHER-->
+    <item name="squeeze_anim_scale_fav" format="float" type="dimen">0.78</item>
+    <item name="squeeze_anim_scale_cat" format="float" type="dimen">0.95</item>
+
+    <integer name="squeeze_anim_duration_fav">78</integer>
+    <integer name="squeeze_anim_duration_cat">90</integer>
 </resources>

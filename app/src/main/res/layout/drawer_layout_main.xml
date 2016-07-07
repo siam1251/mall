@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:background="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <ImageView
+            android:id="@+id/ivDrawerLayoutBg"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="147dp"
+            android:src="@drawable/img_profile_bg"
+            />
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="74dp"
+            android:background="@drawable/view_shadow_inverted_drawer_layout"
+            android:layout_alignBottom="@+id/ivDrawerLayoutBg"
+            />
+
+
+
+        <com.kineticcafe.kcpmall.views.CircleImageView
+            android:id="@+id/ivDrawerLayoutUser"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/test_profile"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_alignBottom="@+id/ivDrawerLayoutBg"
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+
+            <TextView
+                android:visibility="gone"
+                style="@style/SelectableItemBackground"
+                android:id="@+id/tvDrawerLayoutAccount"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="Andrew Cherwenka"/>
+
+            <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                android:visibility="gone"
+                android:layout_weight="0"
+                xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+                ThemedImageView:filterColor="@color/white"
+                android:id="@+id/ivDrawerlayoutSetting"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:padding="13dp"
+                android:layout_marginLeft="10dp"
+                style="@style/SelectableItemBackground"
+                android:src="@drawable/icn_profilesettings"/>
+
+            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                app:fontFamily="@string/fontFamily_roboto_medium"
+                android:id="@+id/tvDetailDate"
+                android:layout_margin="@dimen/card_horizontal_margin"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_style_corner_radius_with_selected_state"
+                android:gravity="center"
+                android:text="@string/drawer_sign_in"
+                android:textSize="14sp"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingTop="@dimen/activity_horizontal_margin"
+            android:layout_below="@+id/ivDrawerLayoutBg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:id="@+id/tvMyFav"
+                android:gravity="center_vertical"
+                app:fontFamily="@string/fontFamily_roboto_light"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:textSize="16sp"
+                android:textColor="@color/place_txt"
+                android:text="@string/drawer_my_favourites"
+                />
+
+            <FrameLayout
+                android:id="@+id/flDeals"
+                style="@style/DrawerLayoutFavouriteItemsFrameLayout">
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:id="@+id/tvDeals"
+                    style="@style/DrawerLayoutFavouriteItemsTextView"
+                    android:text="@string/drawer_deals"
+                    />
+
+                <com.kineticcafe.kcpmall.views.BadgeView
+                    xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
+                    BadgeView:badgeBgColor="@color/themeColor"
+                    style="@style/DrawerLayoutFavouriteItemsBadge"
+                    android:id="@+id/badgeDeals"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flEvents"
+                style="@style/DrawerLayoutFavouriteItemsFrameLayout"
+                >
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvEvents"
+                    style="@style/DrawerLayoutFavouriteItemsTextView"
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:text="@string/drawer_events"
+                    />
+
+                <com.kineticcafe.kcpmall.views.BadgeView
+                    xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
+                    BadgeView:badgeBgColor="@color/themeColor"
+                    style="@style/DrawerLayoutFavouriteItemsBadge"
+                    android:id="@+id/badgeEvents"/>
+
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flStores"
+                style="@style/DrawerLayoutFavouriteItemsFrameLayout"
+                >
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvStores"
+                    style="@style/DrawerLayoutFavouriteItemsTextView"
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:text="@string/drawer_stores"
+                    />
+
+                <com.kineticcafe.kcpmall.views.BadgeView
+                    xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
+                    BadgeView:badgeBgColor="@color/themeColor"
+                    style="@style/DrawerLayoutFavouriteItemsBadge"
+                    android:id="@+id/badgeStores"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flInterests"
+                style="@style/DrawerLayoutFavouriteItemsFrameLayout"
+                >
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvInterests"
+                    style="@style/DrawerLayoutFavouriteItemsTextView"
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:text="@string/drawer_interests"
+                    />
+
+                <com.kineticcafe.kcpmall.views.BadgeView
+                    xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
+                    BadgeView:badgeBgColor="@color/themeColor"
+                    style="@style/DrawerLayoutFavouriteItemsBadge"
+                    android:id="@+id/badgeInterests"/>
+
+            </FrameLayout>
+
+
+            <View
+                android:id="@+id/separator"
+                android:layout_alignParentBottom="true"
+                style="@style/separater"
+                />
+
+
+            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:id="@+id/tvMyGC"
+                android:gravity="center_vertical"
+                app:fontFamily="@string/fontFamily_roboto_light"
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:textSize="16sp"
+                android:textColor="@color/place_txt"
+                android:text="@string/drawer_my_gift_card"
+                />
+
+            <FrameLayout
+                android:id="@+id/flGC"
+                style="@style/DrawerLayoutFavouriteItemsFrameLayout"
+                >
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvGCNumber"
+                    style="@style/DrawerLayoutFavouriteItemsTextView"
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:text="2956-3845-2839-6018"
+                    />
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvGCBalance"
+                    style="@style/DrawerLayoutFavouriteItemsTextView"
+                    android:layout_gravity="right"
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:text="$100.00"
+                    />
+
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flAddGC"
+                style="@style/DrawerLayoutFavouriteItemsFrameLayout"
+                >
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvAddGC"
+                    style="@style/DrawerLayoutFavouriteItemsTextView"
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:text="@string/drawer_add_gc"
+                    />
+
+            </FrameLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

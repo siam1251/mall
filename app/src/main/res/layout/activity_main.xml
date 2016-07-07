@@ -21,15 +21,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <android.support.design.widget.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+        <include
+            layout="@layout/drawer_layout_main"
             android:layout_gravity="start"
-            app:headerLayout="@layout/nav_header_main"
-            android:fitsSystemWindows="true"
-            app:menu="@menu/activity_main_drawer" />
-            app:itemTextColor="?android:textColorPrimary"
+            android:layout_width="@dimen/drawer_width"
+            android:layout_height="match_parent" />
 
     </android.support.v4.widget.DrawerLayout>
 
@@ -40,6 +36,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/bg_splash"
+        android:visibility="gone"
         />
 
 </FrameLayout>

@@ -27,6 +27,7 @@ import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.InterestRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
+import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
@@ -75,7 +76,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                             case KcpCategoryManager.DOWNLOAD_FAILED:
                                 break;
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                                KcpUtility.saveGson(InterestedCategoryActivity.this, Constants.PREFS_KEY_CATEGORY, mInterestRecyclerViewAdapter.getFavCatTempList());
+                                FavouriteManager.getInstance(InterestedCategoryActivity.this).cacheInterestedCategoryList(mInterestRecyclerViewAdapter.getFavCatTempList());
                                 InterestedCategoryActivity.this.startActivityForResult(new Intent(InterestedCategoryActivity.this, InterestedStoreActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
                                 ActivityAnimation.startActivityAnimation(InterestedCategoryActivity.this);
                                 break;
@@ -236,7 +237,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
     }
 
     public void checkIfNotSaved(final AlertDialogForInterest.DialogAnsweredListener dialogAnsweredListener){
-        ArrayList<Integer> savedFavCatList = KcpUtility.loadGsonArrayList(this, Constants.PREFS_KEY_CATEGORY);
+        ArrayList<Integer> savedFavCatList = FavouriteManager.getInstance(InterestedCategoryActivity.this).getInterestedCategoryList();
         ArrayList<Integer> newFavCatList = mInterestRecyclerViewAdapter.getFavCatTempList();
         if(!KcpUtility.isTwoIntegerListsEqual(savedFavCatList, newFavCatList)){
             AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();

@@ -14,6 +14,7 @@ public class KcpContentTypeFactory {
     public static final String CONTENT_TYPE_TWITTER = "twitter";
     public static final String CONTENT_TYPE_INSTAGRAM = "instagram";
     public static final String CONTENT_TYPE_STORE = "store";
+    public static final String CONTENT_TYPE_CATEGORY = "category";
 
     //NEWS & DEAL ADAPTER ITEM TYPE
     public static final int ITEM_TYPE_LOADING =                             0;

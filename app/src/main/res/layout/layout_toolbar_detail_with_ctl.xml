@@ -2,13 +2,16 @@
 <android.support.v7.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     app:layout_collapseMode="pin"
     android:background="@drawable/view_shadow"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     >
+
+    app:theme="@style/ThemeOverlay.AppCompat"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
 
 
     <TextView
@@ -16,13 +19,13 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
+        android:textColor="@color/white"
         android:maxLines="1"
         android:ellipsize="end"
         android:layout_marginRight="42dp"
         android:textSize="@dimen/toolbar_text"/>
 
-    <!--<ImageView-->
-    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+    <!--<com.kineticcafe.kcpmall.views.ThemeColorImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
         ThemedImageView:filterColor="@color/white"
         android:layout_marginRight="24dp"
@@ -33,6 +36,20 @@
         android:src="@drawable/btn_fav"
         android:adjustViewBounds="true"
         android:transitionName="@string/transition_fav"
+        />-->
+
+    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+        xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+        android:layout_marginRight="9dp"
+        ThemedImageView:filterColor="@color/white"
+        android:layout_gravity="right"
+        android:id="@+id/ivFav"
+        android:layout_height="wrap_content"
+        android:src="@drawable/btn_fav"
+        android:adjustViewBounds="true"
+        android:transitionName="@string/transition_fav"
+        android:layout_width="45dp"
+        android:padding="13dp"
         />
 
 
