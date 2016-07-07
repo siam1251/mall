@@ -25,6 +25,7 @@ import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
+import com.kineticcafe.kcpmall.utility.Utility;
 
 import java.util.ArrayList;
 
@@ -117,13 +118,18 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
             final KcpContentPage kcpContentPage = new KcpContentPage();
             kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
 
-            storeViewHolder.ivFav.setSelected(FavouriteManager.getInstance(mContext).isLiked(mContext, likeLink, kcpContentPage));
+            storeViewHolder.ivFav.setSelected(FavouriteManager.getInstance(mContext).isLiked(likeLink, kcpContentPage));
 
             storeViewHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    storeViewHolder.ivFav.setSelected(!storeViewHolder.ivFav .isSelected());
-                    FavouriteManager.getInstance(mContext).addOrRemoveFavContent(mContext, likeLink, kcpContentPage);
+                    Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
+                        @Override
+                        public void OnSqueezeAnimationDone() {
+                            storeViewHolder.ivFav.setSelected(!storeViewHolder.ivFav .isSelected());
+                            FavouriteManager.getInstance(mContext).addOrRemoveFavContent(likeLink, kcpContentPage);
+                        }
+                    }, (Activity) mContext, storeViewHolder.ivFav);
                 }
             });
         } else if (getItemViewType(position) == KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE) {

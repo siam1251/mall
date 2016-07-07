@@ -129,6 +129,24 @@
         <item name="colorControlHighlight">@color/themeColorTransparent</item>
     </style>
 
+    <style name="SelectableItemForegroundOpaque">
+        <item name="android:theme">@style/SelectableItemThemeOpaque</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="SelectableItemThemeOpaque">
+        <item name="colorControlHighlight">@color/themeColor</item>
+    </style>
+
+    <style name="SelectableItemForegroundWhite">
+        <item name="android:theme">@style/SelectableItemWhite</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="SelectableItemWhite">
+        <item name="colorControlHighlight">@color/white</item>
+    </style>
+
 
     <style name="DrawerLayoutFavouriteItemsTextView">
         <item name="android:textSize">14sp</item>

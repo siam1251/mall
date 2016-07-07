@@ -64,7 +64,7 @@ public class MyPagesActivity extends AppCompatActivity {
             DealsRecyclerViewAdapter dealsRecyclerViewAdapter = new DealsRecyclerViewAdapter(
                     this,
                     false,
-                    FavouriteManager.getInstance(this).getFavDealContentPages(this),
+                    FavouriteManager.getInstance(this).getFavDealContentPages(),
                     null);
             rvNews.setAdapter(dealsRecyclerViewAdapter);
 
@@ -77,7 +77,7 @@ public class MyPagesActivity extends AppCompatActivity {
             rvNews.setLayoutManager(linearLayoutManager);
             NewsRecyclerViewAdapter newsRecyclerViewAdapter = new NewsRecyclerViewAdapter(
                     this,
-                    FavouriteManager.getInstance(this).getFavEventContentPages(this));
+                    FavouriteManager.getInstance(this).getFavEventContentPages());
             rvNews.setAdapter(newsRecyclerViewAdapter);
 
             NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(this, R.dimen.card_vertical_margin);
@@ -88,7 +88,7 @@ public class MyPagesActivity extends AppCompatActivity {
             staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
             rvNews.setLayoutManager(staggeredGridLayoutManager);
 
-            ArrayList<KcpContentPage> kcpContentPages = FavouriteManager.getInstance(this).getFavStoreContentPages(this);
+            ArrayList<KcpContentPage> kcpContentPages = FavouriteManager.getInstance(this).getFavStoreContentPages();
             ArrayList<KcpPlaces> kcpPlaces = new ArrayList<>();
             for(int i = 0; i < kcpContentPages.size(); i++){
                 kcpPlaces.add(kcpContentPages.get(i).getStore());

@@ -33,6 +33,7 @@ import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
+import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 
 import java.util.ArrayList;
@@ -212,13 +213,17 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             }
 
             final String likeLink = kcpContentPage.getLikeLink();
-            ancmtHolder.ivFav.setSelected(FavouriteManager.getInstance(mContext).isLiked(mContext, likeLink, kcpContentPage));
+            ancmtHolder.ivFav.setSelected(FavouriteManager.getInstance(mContext).isLiked(likeLink, kcpContentPage));
             ancmtHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO: implement fav functionality
-                    ancmtHolder.ivFav.setSelected(!ancmtHolder.ivFav .isSelected());
-                    FavouriteManager.getInstance(mContext).addOrRemoveFavContent(mContext, likeLink, kcpContentPage);
+                    Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
+                        @Override
+                        public void OnSqueezeAnimationDone() {
+                            ancmtHolder.ivFav.setSelected(!ancmtHolder.ivFav.isSelected());
+                            FavouriteManager.getInstance(mContext).addOrRemoveFavContent(likeLink, kcpContentPage);
+                        }
+                    }, (Activity) mContext, ancmtHolder.ivFav);
                 }
             });
 

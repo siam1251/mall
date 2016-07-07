@@ -1,5 +1,6 @@
 package com.kineticcafe.kcpmall.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -110,12 +111,17 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         final ImageView ivFav = (ImageView) toolbar.findViewById(R.id.ivFav);
-        ivFav.setSelected(FavouriteManager.getInstance(DetailActivity.this).isLiked(DetailActivity.this, mLikeLink, kcpContentPage));
+        ivFav.setSelected(FavouriteManager.getInstance(DetailActivity.this).isLiked(mLikeLink, kcpContentPage));
         ivFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivFav.setSelected(!ivFav.isSelected());
-                FavouriteManager.getInstance(DetailActivity.this).addOrRemoveFavContent(DetailActivity.this, mLikeLink, kcpContentPage);
+                Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
+                    @Override
+                    public void OnSqueezeAnimationDone() {
+                        ivFav.setSelected(!ivFav.isSelected());
+                        FavouriteManager.getInstance(DetailActivity.this).addOrRemoveFavContent(mLikeLink, kcpContentPage);
+                    }
+                }, DetailActivity.this, ivFav);
             }
         });
     }

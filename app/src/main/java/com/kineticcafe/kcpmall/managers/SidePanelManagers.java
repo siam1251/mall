@@ -10,12 +10,6 @@ import com.kineticcafe.kcpmall.views.BadgeView;
  */
 public class SidePanelManagers {
 
-//    private static SidePanelManagers sSidePanelManager = new SidePanelManagers();
-//    public static SidePanelManagers getInstance() {
-//        return sSidePanelManager;
-//    }
-
-
     private BadgeView badgeDeals;
     private BadgeView badgeEvents;
     private BadgeView badgeStores;
@@ -40,10 +34,10 @@ public class SidePanelManagers {
         ((Activity)context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                SidePanelManagers.this.badgeDeals.setBadgeText(FavouriteManager.getInstance(context).getDealFavSize(context));
-                SidePanelManagers.this.badgeEvents.setBadgeText(FavouriteManager.getInstance(context).getEventAnnouncementFavSize(context));
-                SidePanelManagers.this.badgeStores.setBadgeText(FavouriteManager.getInstance(context).getStoreFavSize(context));
-                SidePanelManagers.this.badgeInterests.setBadgeText(FavouriteManager.getInstance(context).getInterestFavSize(context));
+                SidePanelManagers.this.badgeDeals.setBadgeText(FavouriteManager.getInstance(context).getDealFavSize());
+                SidePanelManagers.this.badgeEvents.setBadgeText(FavouriteManager.getInstance(context).getEventAnnouncementFavSize());
+                SidePanelManagers.this.badgeStores.setBadgeText(FavouriteManager.getInstance(context).getStoreFavSize());
+                SidePanelManagers.this.badgeInterests.setBadgeText(FavouriteManager.getInstance(context).getInterestFavSize());
             }
         });
     }

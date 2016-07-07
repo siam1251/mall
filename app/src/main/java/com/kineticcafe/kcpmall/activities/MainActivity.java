@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity
         flDeals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getDealFavSize(MainActivity.this), getResources().getString(R.string.my_page_deals));
+                startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getDealFavSize(), getResources().getString(R.string.my_page_deals));
             }
         });
 
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity
         flEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getEventAnnouncementFavSize(MainActivity.this), getResources().getString(R.string.my_page_events));
+                startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getEventAnnouncementFavSize(), getResources().getString(R.string.my_page_events));
             }
         });
 
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity
         flStores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getStoreFavSize(MainActivity.this), getResources().getString(R.string.my_page_stores));
+                startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getStoreFavSize(), getResources().getString(R.string.my_page_stores));
             }
         });
 
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity
         flInterests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getInterestFavSize(MainActivity.this), getResources().getString(R.string.my_page_interests));
+                startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getInterestFavSize(), getResources().getString(R.string.my_page_interests));
             }
         });
 
@@ -270,14 +270,30 @@ public class MainActivity extends AppCompatActivity
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
     }
 
-    public void startMyPageActivity(int listSize, String myPageType){
+    public void startMyPageActivity(int listSize, final String myPageType){
         if(listSize == 0) return;
+        mDrawer.closeDrawers();
 
-        Intent intent = new Intent(MainActivity.this, MyPagesActivity.class);
-        intent.putExtra(Constants.ARG_CAT_NAME, myPageType);
-
-        MainActivity.this.startActivity(intent);
-        ActivityAnimation.startActivityAnimation(MainActivity.this);
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    synchronized (this) {
+                        wait(200);
+                    }
+                } catch (InterruptedException ex) {
+                }
+                if(myPageType.equals(getResources().getString(R.string.my_page_interests))){
+                    startActivityForResult(new Intent(MainActivity.this, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
+                    ActivityAnimation.startActivityAnimation(MainActivity.this);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, MyPagesActivity.class);
+                    intent.putExtra(Constants.ARG_CAT_NAME, myPageType);
+                    MainActivity.this.startActivity(intent);
+                    ActivityAnimation.startActivityAnimation(MainActivity.this);
+                }
+            }
+        }.start();
     }
 
 

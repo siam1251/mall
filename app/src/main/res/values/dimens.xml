@@ -200,4 +200,11 @@
 
     <!--DRAWER-->
     <dimen name="drawer_width">304dp</dimen>
+
+    <!--OTHER-->
+    <item name="squeeze_anim_scale_fav" format="float" type="dimen">0.78</item>
+    <item name="squeeze_anim_scale_cat" format="float" type="dimen">0.95</item>
+
+    <integer name="squeeze_anim_duration_fav">78</integer>
+    <integer name="squeeze_anim_duration_cat">90</integer>
 </resources>
