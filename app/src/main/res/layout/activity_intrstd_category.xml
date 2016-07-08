@@ -43,7 +43,6 @@
             style="@style/progressBarMedium"
             android:visibility="gone"
             />
-
             android:indeterminateDrawable="@drawable/pb_indeterminate_theme_color"
 
         <TextView

@@ -36,7 +36,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/bg_splash"
-        android:visibility="gone"
         />
+        android:visibility="gone"
 
 </FrameLayout>

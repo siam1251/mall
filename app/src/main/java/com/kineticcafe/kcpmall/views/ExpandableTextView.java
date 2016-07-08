@@ -125,9 +125,10 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
             });
 
             mCollapsedHeight = getMeasuredHeight();
-            mTextShader = new LinearGradient(0, 0, 0, mCollapsedHeight,
-                    new int[]{mTv.getCurrentTextColor(), Color.TRANSPARENT},
-                    new float[]{0, 1}, TileMode.CLAMP);
+            mTextShader = new LinearGradient(0, mCollapsedHeight/3, 0, mCollapsedHeight,
+                    new int[]{Color.BLACK, Color.TRANSPARENT},
+//                    new float[]{0, 1f}, TileMode.CLAMP);
+                    null, TileMode.CLAMP);
             mTv.getPaint().setShader(mTextShader);
         }
     }

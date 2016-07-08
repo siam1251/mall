@@ -258,7 +258,7 @@ public class InfoFragment extends BaseFragment {
                         if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
                         break;
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                    if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
+                        if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
                         if(mInfoRecyclerViewAdapter != null) mInfoRecyclerViewAdapter.updateData(KcpMallInfoRoot.getInstance().getKcpMallInfo().getInfoList());
                         break;
                     default:
@@ -281,12 +281,12 @@ public class InfoFragment extends BaseFragment {
                 List<InfoList> infoLists = kcpMallInfoRoot.getKcpMallInfo().getInfoList();
                 if(infoLists.get(position).getTitle().contains(getResources().getString(R.string.mall_info_mall_hours))){
                     getActivity().startActivity(new Intent(getActivity(), MallHourActivity.class));
-                    ActivityAnimation.startActivityAnimation(getActivity());
                 } else {
                     Intent intent = new Intent(getActivity(), MallInfoDetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, infoList);
                     getActivity().startActivity(intent);
                 }
+                ActivityAnimation.startActivityAnimation(getActivity());
             }
         };
 

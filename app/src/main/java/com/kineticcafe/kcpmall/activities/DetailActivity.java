@@ -3,21 +3,28 @@ package com.kineticcafe.kcpmall.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.renderscript.RSRuntimeException;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +36,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
@@ -46,6 +59,9 @@ import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpmall.views.Blur.FastBlur;
+import com.kineticcafe.kcpmall.views.Blur.RSBlur;
+import com.kineticcafe.kcpmall.views.BlurTransformation;
 import com.kineticcafe.kcpmall.views.CTA;
 import com.kineticcafe.kcpmall.views.CustomAnimation;
 import com.kineticcafe.kcpmall.views.HtmlTextView;
@@ -67,6 +83,7 @@ public class DetailActivity extends AppCompatActivity {
     private View mLayoutStoreHours;
 
     private int mContentPageType;
+    private float alpha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +141,9 @@ public class DetailActivity extends AppCompatActivity {
                 }, DetailActivity.this, ivFav);
             }
         });
+
+
+        NestedScrollView nsvDetail = (NestedScrollView) findViewById(R.id.nsvDetail);
     }
 
     public void downloadIfNecessary(KcpContentPage kcpContentPage) {
@@ -546,7 +566,6 @@ public class DetailActivity extends AppCompatActivity {
 
     public void showContentsWithCTL(final KcpContentPage kcpContentPage){
         try {
-            final CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.ctlDetail);
             final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             final TextView tvToolbar = (TextView) toolbar.findViewById(R.id.tvToolbar);
             getSupportActionBar().setTitle("");
@@ -565,6 +584,8 @@ public class DetailActivity extends AppCompatActivity {
                 RelativeLayout rlDetailImage = (RelativeLayout) findViewById(R.id.rlDetailImage);
                 rlDetailImage.setVisibility(View.GONE);
             } else {
+
+                final ImageView ivBlurred = (ImageView) findViewById(R.id.ivBlurred);
                 //to show toolbar title only when collapsed
                 AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.ablDetail);
                 appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -573,9 +594,19 @@ public class DetailActivity extends AppCompatActivity {
 
                     @Override
                     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+
                         if (scrollRange == -1) {
                             scrollRange = appBarLayout.getTotalScrollRange();
                         }
+
+                        //BLURRED
+                        /*float alpha = (float) Math.abs((float) verticalOffset / scrollRange);
+                        Log.d("DetailActivity", "scrollRange : " + scrollRange);
+                        Log.d("DetailActivity", "verticalOffset : " + verticalOffset);
+                        Log.d("DetailActivity", "alpha : " + alpha);
+                        ivBlurred.setAlpha(alpha);*/
+
                         if (scrollRange + verticalOffset == 0) {
                             if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
                             else tvToolbar.setText(toolbarTitle);
@@ -599,12 +630,34 @@ public class DetailActivity extends AppCompatActivity {
                         DetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     }
                 });
+
+
                 new GlideFactory().glideWithDefaultRatio(
                         ivDetailImage.getContext(),
                         imageUrl,
                         ivDetailImage,
                         R.drawable.placeholder);
 
+
+                //BLURRED TOP BAR
+                /*int width = KcpUtility.getScreenWidth(ivDetailImage.getContext());
+                int height = (int) (KcpUtility.getScreenWidth(ivDetailImage.getContext()) / KcpUtility.getFloat(ivDetailImage.getContext(), R.dimen.ancmt_image_ratio));
+
+                Glide.with(ivDetailImage.getContext())
+                        .load(imageUrl)
+                        .crossFade()
+                        .error(R.drawable.placeholder)
+                        .override(width, height)
+                        .placeholder(R.drawable.placeholder)
+                        .into(ivDetailImage);
+
+                Glide.with(this).
+                        load(imageUrl)
+                        .crossFade()
+                        .override(width, height)
+                        .centerCrop()
+                        .bitmapTransform(new BlurTransformation(ivDetailImage.getContext()))
+                        .into((ImageView) findViewById(R.id.ivBlurred));*/
 
                 TextView tvExpiryDate = (TextView) findViewById(R.id.tvExpiryDate);
                 //TODO: daysLeft shows 1 less date (ex) 2016-05-27T00:00:00.000+00:00 shows date as 26 EST see if this is right

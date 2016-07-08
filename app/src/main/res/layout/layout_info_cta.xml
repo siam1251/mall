@@ -48,10 +48,11 @@
                     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                     ThemedImageView:filterColor="@color/themeColor"
                     android:id="@+id/ivDirection"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:layout_centerVertical="true"
-                    android:padding="@dimen/info_direction_icon_padding"
-                    android:layout_width="@dimen/info_direction_height"
-                    android:layout_height="@dimen/info_direction_height"
                     android:src="@drawable/icn_directions"/>
 
                 <TextView
@@ -78,7 +79,7 @@
                 ThemedImageView:filterColor="@color/themeColor"
                 android:padding="@dimen/info_direction_icon_padding"
                 android:layout_width="@dimen/info_direction_height"
-                android:layout_height="@dimen/info_direction_height"
+                android:layout_height="match_parent"
                 android:src="@drawable/icn_car"/>
 
             <View
@@ -92,7 +93,7 @@
                 ThemedImageView:filterColor="@color/themeColor"
                 android:padding="@dimen/info_direction_icon_padding"
                 android:layout_width="@dimen/info_direction_height"
-                android:layout_height="@dimen/info_direction_height"
+                android:layout_height="match_parent"
                 android:src="@drawable/icn_transit"/>
 
             <View
@@ -106,7 +107,7 @@
                 ThemedImageView:filterColor="@color/themeColor"
                 android:padding="@dimen/info_direction_icon_padding"
                 android:layout_width="@dimen/info_direction_height"
-                android:layout_height="@dimen/info_direction_height"
+                android:layout_height="match_parent"
                 android:src="@drawable/icn_walk"/>
 
 
@@ -137,10 +138,16 @@
                 xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                 android:layout_centerVertical="true"
                 ThemedImageView:filterColor="@color/themeColor"
+                android:src="@drawable/icn_parking"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="8dp"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:adjustViewBounds="true"
+                />
                 android:padding="17dp"
                 android:layout_width="@dimen/info_direction_height"
                 android:layout_height="@dimen/info_direction_height"
-                android:src="@drawable/icn_parking"/>
 
             <TextView
                 android:layout_toRightOf="@+id/ivPark"

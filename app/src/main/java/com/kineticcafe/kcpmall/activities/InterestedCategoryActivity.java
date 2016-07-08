@@ -52,7 +52,9 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.activity_title_interested_category));
+
+        if(FavouriteManager.getInstance(this).getInterestFavSize() > 0) getSupportActionBar().setTitle(getResources().getString(R.string.activity_title_interested_category_update));
+        else getSupportActionBar().setTitle(getResources().getString(R.string.activity_title_interested_category));
 
         rvIntrstCat = (RecyclerView) findViewById(R.id.rvIntrstCat);
         rvIntrstCat.setNestedScrollingEnabled(false); //set false for smooth scroll when nesting recyclerview inside nestedscrollview

@@ -29,6 +29,7 @@ import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.CTA;
 import com.kineticcafe.kcpmall.views.ExpandableTextView;
 import com.kineticcafe.kcpmall.views.HtmlTextView;
+import com.kineticcafe.kcpmall.views.MyTagHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,8 +104,8 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_amenities);
             }
 
-            TextView tvMallInfoDetailTitle = (TextView) findViewById(R.id.tvMallInfoDetailTitle);
-            tvMallInfoDetailTitle.setText(info.getTitle());
+//            tvDetailBody.setText(Html.fromHtml(body, null, new MyTagHandler()));
+
 
             ExpandableTextView etvMallInfoDetail = (ExpandableTextView) findViewById(R.id.etvMallInfoDetail);
             etvMallInfoDetail.setText(info.getDetails());

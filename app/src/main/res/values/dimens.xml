@@ -181,7 +181,7 @@
     <dimen name="info_direction_height">50dp</dimen>
     <dimen name="info_direction_left_margin">15dp</dimen>
     <dimen name="info_direction_icon_width">16dp</dimen>
-    <dimen name="info_direction_icon_padding">15dp</dimen>
+    <dimen name="info_direction_icon_padding">14dp</dimen>
     <dimen name="info_direction_text">16sp</dimen>
     <dimen name="info_list_item">74dp</dimen>
     <dimen name="info_collapsed_height">140dp</dimen>

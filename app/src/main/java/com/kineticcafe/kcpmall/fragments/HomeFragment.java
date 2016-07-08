@@ -1,5 +1,6 @@
 package com.kineticcafe.kcpmall.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -235,9 +236,9 @@ public class HomeFragment extends BaseFragment {
 
     private void updateNewsAdapter(ArrayList<KcpContentPage> kcpContentPages){
         if(mNewsFragment.mNewsRecyclerViewAdapter == null) return;
-        mMainActivity.onDataDownloaded();
         if(kcpContentPages.size() == 0) mNewsFragment.setEmptyState(getActivity().getResources().getString(R.string.warning_empty_news));
         mNewsFragment.mNewsRecyclerViewAdapter.updateData(kcpContentPages);
+        mMainActivity.onDataDownloaded();
         if (mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null) {
             mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);
             mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateInstaData(sInstaFeedList);
