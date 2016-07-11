@@ -33,6 +33,15 @@
                 android:transitionName="@string/transition_news_image"
                 />
 
+            <com.kineticcafe.kcpmall.views.KCPSetRatioImageView
+                android:scaleType="centerCrop"
+                android:id="@+id/ivMallInfoBannerBackdrop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/themeColor"
+                android:src="@drawable/placeholder_rectangle"
+                />
+
             <include
                 layout="@layout/layout_toolbar_mall_hour" />
 

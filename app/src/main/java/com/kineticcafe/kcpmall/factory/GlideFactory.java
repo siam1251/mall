@@ -29,7 +29,7 @@ public class GlideFactory {
         Glide.with(context)
                 .load(url)
                 .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(imageView);
     }
 
@@ -40,7 +40,7 @@ public class GlideFactory {
                 .crossFade()
                 .placeholder(errorDrawable)
                 .error(errorDrawable)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(imageView);
     }
 
@@ -80,6 +80,7 @@ public class GlideFactory {
                 .crossFade()
                 .error(errorDrawable)
                 .override(KcpUtility.getScreenWidth(context), (int) (KcpUtility.getScreenWidth(context) / KcpUtility.getFloat(context, R.dimen.ancmt_image_ratio)))
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .placeholder(errorDrawable)
                 .into(imageView);
     }

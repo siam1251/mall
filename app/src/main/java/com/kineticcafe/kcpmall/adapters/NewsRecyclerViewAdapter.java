@@ -263,7 +263,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 mSocialFeedViewPagerAdapter.getTwitterViewPagerAdapter(mContext, HomeFragment.sTwitterFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
-                        Toast.makeText(mContext, "TWITTER CLICKED", Toast.LENGTH_SHORT).show();
                     }
                 });
             } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM){
@@ -271,7 +270,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 mSocialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext, HomeFragment.sInstaFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
-                        Toast.makeText(mContext, "INSTAGRAM CLICKED", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -32,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -85,14 +87,6 @@ public class DetailActivity extends AppCompatActivity {
     private View mLayoutStoreHours;
 
     private int mContentPageType;
-    private float alpha;
-    public enum State {
-        EXPANDED,
-        COLLAPSED,
-    }
-
-    private State mCurrentState = State.EXPANDED;
-    private Boolean toolbarIsTransparent = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -537,11 +531,6 @@ public class DetailActivity extends AppCompatActivity {
         return v;
     }
 
-
-
-
-
-
     public void downloadPlace(final KcpContentPage kcpContentPage){
         KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(DetailActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
             @Override
@@ -605,70 +594,9 @@ public class DetailActivity extends AppCompatActivity {
 
                 RelativeLayout rlDetailImage = (RelativeLayout) findViewById(R.id.rlDetailImage);
                 rlDetailImage.setVisibility(View.GONE);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.themeColor));
             } else {
-
-
-                TypedValue tv = new TypedValue();
-                int actionBarHeight = 0;
-                if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-                    actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-                }
-
-
-                //to show toolbar title only when collapsed
-                AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.ablDetail);
-                final CollapsingToolbarLayout ctlDetail = (CollapsingToolbarLayout) findViewById(R.id.ctlDetail);
-                final int finalActionBarHeight = actionBarHeight;
-                appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-                    boolean isShow = false;
-                    int scrollRange = -1;
-
-                    @Override
-                    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-
-
-                        /*if (verticalOffset == 0) {
-                            mCurrentState = State.EXPANDED;
-                        } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
-                            mCurrentState = State.COLLAPSED;
-                        }
-                        if ((ctlDetail.getHeight() + verticalOffset <= finalActionBarHeight) && mCurrentState.equals(State.COLLAPSED)) {
-
-                            if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
-                            else tvToolbar.setText(toolbarTitle);
-
-                            toolbarIsTransparent = false;
-                        } else if (!toolbarIsTransparent) {
-
-                            tvToolbar.setText("");
-                            Utility.setToolbarBackground(toolbar, getResources().getDrawable(R.drawable.view_shadow));
-
-                            mCurrentState = State.EXPANDED;
-                            toolbarIsTransparent = true;
-                        }*/
-
-
-                        Log.d("DetailActivity", "scrollRange : " + scrollRange);
-                        Log.d("DetailActivity", "verticalOffset : " + verticalOffset);
-                        //BLURRED
-                        /*float alpha = (float) Math.abs((float) verticalOffset / scrollRange);
-                        ivBlurred.setAlpha(alpha);*/
-
-                        if (scrollRange == -1) {
-                            scrollRange = appBarLayout.getTotalScrollRange();
-                        }
-                        if (scrollRange + verticalOffset == 0) { //Collapsed completely
-                            if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
-                            else tvToolbar.setText(toolbarTitle);
-                            Utility.setToolbarBackground(toolbar, null);
-                            isShow = true;
-                        } else if(isShow) {
-                            tvToolbar.setText("");
-                            Utility.setToolbarBackground(toolbar, getResources().getDrawable(R.drawable.view_shadow));
-                            isShow = false;
-                        }
-                    }
-                });
+                final ImageView ivDetailImageBackdrop = (ImageView) findViewById(R.id.ivDetailImageBackdrop);
 
                 ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
                 ivDetailImage.setOnClickListener(new View.OnClickListener() {
@@ -681,13 +609,34 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 });
 
-
                 new GlideFactory().glideWithDefaultRatio(
                         ivDetailImage.getContext(),
                         imageUrl,
                         ivDetailImage,
                         R.drawable.placeholder);
 
+
+                if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
+                else tvToolbar.setText(toolbarTitle);
+
+
+                //to show toolbar title only when collapsed
+                AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.ablDetail);
+                appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+                    private int mToolBarHeight;
+                    private int mAppBarHeight;
+                    @Override
+                    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                        if(mToolBarHeight == 0) mToolBarHeight = toolbar.getMeasuredHeight();
+                        if(mAppBarHeight == 0) mAppBarHeight = appBarLayout.getMeasuredHeight();
+
+                        Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
+                        int alpha = 255 - Math.round(f);
+                        ivDetailImageBackdrop.getBackground().setAlpha(alpha);
+                        tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
+                        toolbar.getBackground().setAlpha(255 - alpha);
+                    }
+                });
 
                 //BLURRED TOP BAR
                 /*int width = KcpUtility.getScreenWidth(ivDetailImage.getContext());
@@ -710,6 +659,9 @@ public class DetailActivity extends AppCompatActivity {
                         .into((ImageView) findViewById(R.id.ivBlurred));*/
 
                 TextView tvExpiryDate = (TextView) findViewById(R.id.tvExpiryDate);
+                tvExpiryDate.setBackgroundColor(getResources().getColor(R.color.themeColor));
+                tvExpiryDate.getBackground().setAlpha(241);
+
                 //TODO: daysLeft shows 1 less date (ex) 2016-05-27T00:00:00.000+00:00 shows date as 26 EST see if this is right
                 int daysLeftUntilEffectiveDate = KcpUtility.getDaysLeftUntil(kcpContentPage.effectiveEndTime, KcpConstants.EFFECTIVE_DATE_FORMAT);
                 String daysLeft = kcpContentPage.getDaysLeftText(daysLeftUntilEffectiveDate, Constants.DAYS_LEFT_TO_SHOW_IN_EXPIRY_DATE);

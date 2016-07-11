@@ -60,7 +60,7 @@ public class CircleImageView extends ImageView {
         int w = getWidth(), h = getHeight();
 
         Bitmap roundBitmap = getCroppedBitmap(bitmap, w);
-        roundBitmap = getCircularBitmapWithWhiteBorder(roundBitmap, KcpUtility.dpToPx((Activity) mContext, 1));
+        roundBitmap = getCircularBitmapWithWhiteBorder(roundBitmap, KcpUtility.dpToPx((Activity) mContext, 2));
         canvas.drawBitmap(roundBitmap, 0, 0, null);
 
     }
@@ -71,8 +71,11 @@ public class CircleImageView extends ImageView {
             return null;
         }
 
-        final int width = bitmap.getWidth() + borderWidth;
-        final int height = bitmap.getHeight() + borderWidth;
+        /*final int width = bitmap.getWidth() + borderWidth / 4;
+        final int height = bitmap.getHeight() + borderWidth / 4;*/
+
+        final int width = bitmap.getWidth();
+        final int height = bitmap.getHeight();
 
         Bitmap canvasBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);

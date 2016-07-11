@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
-    android:layout_gravity="center"
-    android:orientation="vertical" >
+    android:layout_gravity="center">
+
+
+
+    <ImageView
+        android:layout_centerInParent="true"
+        android:background="@drawable/circle_imageview_background"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:elevation="2.5dp"
+        />
 
     <ProgressBar
         android:layout_margin="@dimen/activity_vertical_margin"
         style="?android:attr/progressBarStyleSmallInverse"
         android:id="@+id/pbNewsAdapter"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
         android:indeterminate="true"
         android:indeterminateTintMode="src_atop"
         android:indeterminateTint="@color/themeColor"
+        android:elevation="2.5dp"
         />
-        style="@android:style/Widget.ProgressBar"
-
-</LinearLayout>
+</RelativeLayout>
