@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         ImageView ivDrawerLayoutUser = (ImageView) findViewById(R.id.ivDrawerLayoutUser);
+//        ivDrawerLayoutUser.setImageResource(R.drawable.test_profile);
         ivDrawerLayoutUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -17,7 +17,7 @@
             android:layout_height="147dp"
             android:src="@drawable/img_profile_bg"
             />
-        
+
         <View
             android:layout_width="match_parent"
             android:layout_height="74dp"
@@ -26,26 +26,13 @@
             />
 
 
-
-        <RelativeLayout
+        <com.kineticcafe.kcpmall.views.CircleImageView
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lay_rel_img"
-            android:layout_gravity="center"
-            android:padding="1dp"
-            android:background="@drawable/circle_imageview_background">
-
-            <com.kineticcafe.kcpmall.views.CircleImageView
-                android:id="@+id/ivDrawerLayoutUser"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/test_profile"/>
-
-        </RelativeLayout>
-
-
+            android:id="@+id/ivDrawerLayoutUser"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/img_profile_default"/>
 
 
         <LinearLayout

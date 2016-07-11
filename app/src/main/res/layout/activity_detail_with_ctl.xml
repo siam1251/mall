@@ -17,9 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="@color/themeColor"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
 
             <!--TODO: find a way to get 0.7 from xml-->
             <RelativeLayout
