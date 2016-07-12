@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
@@ -21,6 +22,7 @@ import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpandroidsdk.models.MallInfo.KcpMallInfoRoot;
 import com.kineticcafe.kcpandroidsdk.utils.KcpTimeConverter;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.utility.Utility;
@@ -59,10 +61,14 @@ public class MallHourActivity extends AppCompatActivity {
             final TextView tvToolbar = (TextView) toolbar.findViewById(R.id.tvToolbar);
             getSupportActionBar().setTitle("");
 
+            final View backdrop = (View) findViewById(R.id.backdrop);
+            int height = (int) (KcpUtility.getScreenWidth(this) / KcpUtility.getFloat(this, R.dimen.ancmt_image_ratio));
+            CollapsingToolbarLayout.LayoutParams lp = (CollapsingToolbarLayout.LayoutParams) backdrop.getLayoutParams();
+            lp.height = height;
+            backdrop.setLayoutParams(lp);
+
             final String toolbarTitle = getResources().getString(R.string.title_mall_information);
             tvToolbar.setText(toolbarTitle);
-            final ImageView ivBackdrop = (ImageView) findViewById(R.id.ivBackdrop);
-
 
             AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.ablDetail);
             appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -76,7 +82,7 @@ public class MallHourActivity extends AppCompatActivity {
 
                     Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
                     int alpha = 255 - Math.round(f);
-                    ivBackdrop.getBackground().setAlpha(alpha);
+                    backdrop.getBackground().setAlpha(alpha);
                     tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
                     toolbar.getBackground().setAlpha(255 - alpha);
                 }

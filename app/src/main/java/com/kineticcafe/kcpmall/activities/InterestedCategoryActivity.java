@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,6 +56,9 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
         if(FavouriteManager.getInstance(this).getInterestFavSize() > 0) getSupportActionBar().setTitle(getResources().getString(R.string.activity_title_interested_category_update));
         else getSupportActionBar().setTitle(getResources().getString(R.string.activity_title_interested_category));
+
+        FrameLayout flIntrstdBot = (FrameLayout) findViewById(R.id.flIntrstdBot);
+//        flIntrstdBot.setBackgroundColor(getResources().getColor(R.color.themeColor));
 
         rvIntrstCat = (RecyclerView) findViewById(R.id.rvIntrstCat);
         rvIntrstCat.setNestedScrollingEnabled(false); //set false for smooth scroll when nesting recyclerview inside nestedscrollview

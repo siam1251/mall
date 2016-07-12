@@ -50,19 +50,35 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     public NewsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> news) {
         mContext = context;
         mKcpContentPagesNews = news == null ? new ArrayList<KcpContentPage>() : news;
+        removeInterestIfNeeded();
     }
 
     public void updateData(ArrayList<KcpContentPage> kcpContentPages) {
         mKcpContentPagesNews.clear();
         mKcpContentPagesNews.addAll(kcpContentPages);
+        removeInterestIfNeeded();
         notifyDataSetChanged();
     }
 
     public void addData(ArrayList<KcpContentPage> kcpContentPages){
         removeLoadingImage();
         mKcpContentPagesNews.addAll(kcpContentPages);
+        removeInterestIfNeeded();
         int curSize = getItemCount();
         notifyItemRangeInserted(curSize, kcpContentPages.size() - 1);
+    }
+
+    private void removeInterestIfNeeded(){
+        //if you have set interest previously, do not display interest card
+        if(FavouriteManager.getInstance(mContext).getInterestFavSize() > 0){
+            for(int i = 0; i < mKcpContentPagesNews.size(); i++){
+                KcpContentPage kcpContentPage = mKcpContentPagesNews.get(i);
+                if(KcpContentTypeFactory.getContentType(kcpContentPage) == KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST) {
+                    mKcpContentPagesNews.remove(i);
+                    break;
+                }
+            }
+        }
     }
 
     public void prepareLoadingImage(){

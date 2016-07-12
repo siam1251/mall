@@ -19,10 +19,7 @@
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
-            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
-            app:contentScrim="@color/themeColor"
 
-            <!--TODO: find a way to get 0.7 from xml-->
             <RelativeLayout
                 android:fitsSystemWindows="true"
                 app:layout_collapseParallaxMultiplier="0.7"
@@ -30,8 +27,6 @@
                 android:id="@+id/rlDetailImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-
 
                 <com.kineticcafe.kcpmall.views.KCPSetRatioImageView
                     android:scaleType="centerCrop"
@@ -41,14 +36,11 @@
                     android:transitionName="@string/transition_news_image"
                     />
 
-                <com.kineticcafe.kcpmall.views.KCPSetRatioImageView
-                    android:scaleType="centerCrop"
-                    android:id="@+id/ivDetailImageBackdrop"
+                <View
+                    android:id="@+id/backdrop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/themeColor"
-                    android:src="@drawable/placeholder_rectangle"
-                    />
+                    android:background="@drawable/placeholder_rectangle_theme"/>
 
                 <com.kineticcafe.kcpmall.views.AlphaTextView
                     android:visibility="gone"

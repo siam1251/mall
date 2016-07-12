@@ -54,6 +54,9 @@ import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener /*, DirectoryFragment.OnCategoryClickListener*/ {
@@ -160,6 +163,9 @@ public class MainActivity extends AppCompatActivity
             InfoFragment.getInstance().initializeMallInfoData();
         }
     }
+
+
+
 
     private void initializeToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -273,17 +279,17 @@ public class MainActivity extends AppCompatActivity
 
     public void startMyPageActivity(int listSize, final String myPageType){
         if(listSize == 0) return;
-        mDrawer.closeDrawers();
-
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    synchronized (this) {
-                        wait(200);
-                    }
-                } catch (InterruptedException ex) {
-                }
+        //enable below if you want to closed drawer menu after you select an item from menu
+//        mDrawer.closeDrawers();
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    synchronized (this) {
+//                        wait(200);
+//                    }
+//                } catch (InterruptedException ex) {
+//                }
                 if(myPageType.equals(getResources().getString(R.string.my_page_interests))){
                     startActivityForResult(new Intent(MainActivity.this, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
                     ActivityAnimation.startActivityAnimation(MainActivity.this);
@@ -293,8 +299,8 @@ public class MainActivity extends AppCompatActivity
                     MainActivity.this.startActivity(intent);
                     ActivityAnimation.startActivityAnimation(MainActivity.this);
                 }
-            }
-        }.start();
+//            }
+//        }.start();
     }
 
 
@@ -306,7 +312,7 @@ public class MainActivity extends AppCompatActivity
      * @param onClickListener
      */
     public void showSnackBar(int msg, int action, @Nullable View.OnClickListener onClickListener) {
-        if (mOfflineSnackbar != null && mOfflineSnackbar.isShownOrQueued() && onClickListener == null)
+        if (mOfflineSnackbar != null && (mOfflineSnackbar.isShownOrQueued() || onClickListener == null))
             return;
         final CoordinatorLayout clMain = (CoordinatorLayout) findViewById(R.id.clMain);
         if (onClickListener == null) {

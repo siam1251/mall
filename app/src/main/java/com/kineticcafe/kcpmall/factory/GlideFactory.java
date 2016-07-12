@@ -81,7 +81,6 @@ public class GlideFactory {
                 .error(errorDrawable)
                 .override(KcpUtility.getScreenWidth(context), (int) (KcpUtility.getScreenWidth(context) / KcpUtility.getFloat(context, R.dimen.ancmt_image_ratio)))
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(errorDrawable)
                 .into(imageView);
     }
@@ -94,8 +93,6 @@ public class GlideFactory {
                 .error(errorDrawable)
                 .override(KcpUtility.getScreenWidth(context), (int) (width / KcpUtility.getFloat(context, R.dimen.ancmt_image_ratio)))
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .dontAnimate()
                 .placeholder(errorDrawable)
                 .into(imageView);
     }

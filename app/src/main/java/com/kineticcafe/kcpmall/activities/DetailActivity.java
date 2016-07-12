@@ -596,7 +596,11 @@ public class DetailActivity extends AppCompatActivity {
                 rlDetailImage.setVisibility(View.GONE);
                 toolbar.setBackgroundColor(getResources().getColor(R.color.themeColor));
             } else {
-                final ImageView ivDetailImageBackdrop = (ImageView) findViewById(R.id.ivDetailImageBackdrop);
+                final View backdrop = (View) findViewById(R.id.backdrop);
+                int height = (int) (KcpUtility.getScreenWidth(this) / KcpUtility.getFloat(this, R.dimen.ancmt_image_ratio));
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) backdrop.getLayoutParams();
+                lp.height = height;
+                backdrop.setLayoutParams(lp);
 
                 ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
                 ivDetailImage.setOnClickListener(new View.OnClickListener() {
@@ -632,7 +636,7 @@ public class DetailActivity extends AppCompatActivity {
 
                         Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
                         int alpha = 255 - Math.round(f);
-                        ivDetailImageBackdrop.getBackground().setAlpha(alpha);
+                        backdrop.getBackground().setAlpha(alpha);
                         tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
                         toolbar.getBackground().setAlpha(255 - alpha);
                     }
