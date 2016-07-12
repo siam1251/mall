@@ -25,6 +25,7 @@ import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+import com.kineticcafe.kcpmall.views.RecyclerViewFooter;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
@@ -113,6 +114,21 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 }
             }
         }
+    }
+
+
+    private int mFooterLayout;
+    private boolean mFooterExist = false;
+    private String mFooterText;
+    private View.OnClickListener mOnClickListener;
+
+    public void addFooter(String footerText, int footerLayout, View.OnClickListener onClickListener){
+        mFooterExist = true;
+        mFooterText = footerText;
+        mFooterLayout = footerLayout;
+        mOnClickListener = onClickListener;
+        mItems.add("FOOTER");
+        notifyDataSetChanged();
     }
 
 
@@ -206,6 +222,9 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             case KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_OTHER_DEALS:
                 return new SectionHeaderViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_section_header, parent, false));
+            case KcpContentTypeFactory.ITEM_TYPE_FOOTER:
+                return new RecyclerViewFooter.FooterViewHolder(
+                        LayoutInflater.from(mContext).inflate(mFooterLayout, parent, false));
         }
         return null;
     }
@@ -323,6 +342,10 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             });
+        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_FOOTER){
+            RecyclerViewFooter.FooterViewHolder footerViewHolder = (RecyclerViewFooter.FooterViewHolder) holder;
+            footerViewHolder.mView.setOnClickListener(mOnClickListener);
+            footerViewHolder.tvFooter.setText(mFooterText);
         }
     }
 
@@ -334,6 +357,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         Object item =  mItems.get(position);
+        if(mFooterExist && position == mItems.size() - 1) return KcpContentTypeFactory.ITEM_TYPE_FOOTER;
         if(item == null){
             return KcpContentTypeFactory.ITEM_TYPE_LOADING;
         } else if (item instanceof Integer) {
