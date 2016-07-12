@@ -108,7 +108,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         final int maxSpanCount = 100;
-//        ArrayList<KcpCategories> kcpCategoriesArrayList = KcpCategoryRoot.getInstance().getFingerPrintCategoriesList();
         ArrayList<KcpCategories> kcpCategoriesArrayList = CategoryIconFactory.getFilteredKcpCategoryList(KcpCategoryRoot.getInstance().getFingerPrintCategoriesList());
 
         final ArrayList<GridLayoutItem> gridLayoutItemArrayList = new ArrayList<GridLayoutItem>();
@@ -120,8 +119,10 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
         float compatPadding = KcpUtility.dpToPx(this, 5);
         for(int position = 0 ; position < kcpCategoriesArrayList.size(); position++){
-
             if(position < gridLayoutItemArrayList.size()) continue;
+
+
+//            if(kcpCategoriesArrayList.get(position).getCategoryName().equals("Fashion Jewel"))
 
             String firstItemName = kcpCategoriesArrayList.get(position).getCategoryName();
             float firstItemWidth = getTextSize(firstItemName) + txtMar * 2;
@@ -134,11 +135,11 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 String secondItemName = kcpCategoriesArrayList.get(position + 1).getCategoryName();
                 float secondItemWidth = getTextSize(secondItemName) + txtMar * 2;
 
-                spaceLeft = getSpaceLeftFromOneSide(firstItemWidth + secondItemWidth);
+                spaceLeft = getSpaceLeftFromOneSide(firstItemWidth + compatPadding + secondItemWidth);
 
                 if(spaceLeft > 0) {
                     totalSize = spaceLeft + firstItemWidth + compatPadding + secondItemWidth + spaceLeft;
-                    firstSpanSize = (int) ((float) (spaceLeft + firstItemWidth + compatPadding/2) / totalSize * maxSpanCount);
+                    firstSpanSize = (int) ((float) (spaceLeft + firstItemWidth + compatPadding / 2) / totalSize * maxSpanCount);
                     secondSpanSize = maxSpanCount - firstSpanSize;
                     replaceIfExist(gridLayoutItemArrayList, position, new GridLayoutItem(firstSpanSize, RelativeLayout.ALIGN_PARENT_RIGHT));
                     replaceIfExist(gridLayoutItemArrayList, position + 1, new GridLayoutItem(secondSpanSize, RelativeLayout.ALIGN_PARENT_LEFT));
@@ -146,7 +147,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                     if( position + 2 < kcpCategoriesArrayList.size() ){
                         String thirdItemName = kcpCategoriesArrayList.get(position + 2).getCategoryName();
                         float thirdItemWidth = getTextSize(thirdItemName) + txtMar * 2;
-                        spaceLeft = getSpaceLeftFromOneSide(firstItemWidth + secondItemWidth + thirdItemWidth);
+                        spaceLeft = getSpaceLeftFromOneSide(firstItemWidth + compatPadding + secondItemWidth + compatPadding + thirdItemWidth);
 
                         if(spaceLeft > 0) { //meaning we can fit in 3 items
                             totalSize = spaceLeft + firstItemWidth + compatPadding + secondItemWidth + compatPadding + thirdItemWidth + spaceLeft;
@@ -184,7 +185,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
     public float getTextSize(String string){
         Paint p = new Paint();
 //        p.setTextSize(getResources().getDimension(R.dimen.intrstd_name));
-        p.setTextSize(KcpUtility.dpToPx(this, 15));
+        p.setTextSize(KcpUtility.dpToPx(this, 17f));
         return p.measureText(string);
     }
 

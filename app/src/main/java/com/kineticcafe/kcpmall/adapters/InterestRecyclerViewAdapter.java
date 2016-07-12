@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -239,9 +240,17 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                 }
             });
 
+            if(kcpCategories.getCategoryName().equals("Men's everyday fashion")){
+                String a= "ejwffe";
+            }
 //                if(mGridLayoutItemArrayList.size() > position ){
             RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) interestedCategoryHolder.cvIntrst.getLayoutParams();
             int relativeLayotRule = mGridLayoutItemArrayList.get(position).relativeLayoutRule;
+            if(relativeLayotRule == RelativeLayout.CENTER_HORIZONTAL) {
+//                ((RelativeLayout) interestedCategoryHolder.mView).setGravity(Gravity.CENTER);
+//                param.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+//                param.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            }
             param.addRule(relativeLayotRule);
             interestedCategoryHolder.cvIntrst.setLayoutParams(param);
 //                }

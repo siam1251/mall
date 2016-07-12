@@ -164,9 +164,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-
-
     private void initializeToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ivToolbar = (ImageView) toolbar.findViewById(R.id.ivToolbar);
