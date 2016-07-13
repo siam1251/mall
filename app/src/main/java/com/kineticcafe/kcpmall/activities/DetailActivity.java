@@ -3,32 +3,49 @@ package com.kineticcafe.kcpmall.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.renderscript.RSRuntimeException;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
@@ -46,6 +63,9 @@ import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpmall.views.Blur.FastBlur;
+import com.kineticcafe.kcpmall.views.Blur.RSBlur;
+import com.kineticcafe.kcpmall.views.BlurTransformation;
 import com.kineticcafe.kcpmall.views.CTA;
 import com.kineticcafe.kcpmall.views.CustomAnimation;
 import com.kineticcafe.kcpmall.views.HtmlTextView;
@@ -122,6 +142,22 @@ public class DetailActivity extends AppCompatActivity {
                         FavouriteManager.getInstance(DetailActivity.this).addOrRemoveFavContent(mLikeLink, kcpContentPage);
                     }
                 }, DetailActivity.this, ivFav);
+            }
+        });
+
+
+        NestedScrollView nsvDetail = (NestedScrollView) findViewById(R.id.nsvDetail);
+        nsvDetail.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+            }
+        });
+
+        nsvDetail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
             }
         });
     }
@@ -495,11 +531,6 @@ public class DetailActivity extends AppCompatActivity {
         return v;
     }
 
-
-
-
-
-
     public void downloadPlace(final KcpContentPage kcpContentPage){
         KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(DetailActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
             @Override
@@ -546,7 +577,6 @@ public class DetailActivity extends AppCompatActivity {
 
     public void showContentsWithCTL(final KcpContentPage kcpContentPage){
         try {
-            final CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.ctlDetail);
             final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             final TextView tvToolbar = (TextView) toolbar.findViewById(R.id.tvToolbar);
             getSupportActionBar().setTitle("");
@@ -564,30 +594,13 @@ public class DetailActivity extends AppCompatActivity {
 
                 RelativeLayout rlDetailImage = (RelativeLayout) findViewById(R.id.rlDetailImage);
                 rlDetailImage.setVisibility(View.GONE);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.themeColor));
             } else {
-                //to show toolbar title only when collapsed
-                AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.ablDetail);
-                appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-                    boolean isShow = false;
-                    int scrollRange = -1;
-
-                    @Override
-                    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                        if (scrollRange == -1) {
-                            scrollRange = appBarLayout.getTotalScrollRange();
-                        }
-                        if (scrollRange + verticalOffset == 0) {
-                            if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
-                            else tvToolbar.setText(toolbarTitle);
-                            Utility.setToolbarBackground(toolbar, null);
-                            isShow = true;
-                        } else if(isShow) {
-                            tvToolbar.setText("");
-                            Utility.setToolbarBackground(toolbar, getResources().getDrawable(R.drawable.view_shadow));
-                            isShow = false;
-                        }
-                    }
-                });
+                final View backdrop = (View) findViewById(R.id.backdrop);
+                int height = (int) (KcpUtility.getScreenWidth(this) / KcpUtility.getFloat(this, R.dimen.ancmt_image_ratio));
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) backdrop.getLayoutParams();
+                lp.height = height;
+                backdrop.setLayoutParams(lp);
 
                 ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
                 ivDetailImage.setOnClickListener(new View.OnClickListener() {
@@ -599,6 +612,7 @@ public class DetailActivity extends AppCompatActivity {
                         DetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     }
                 });
+
                 new GlideFactory().glideWithDefaultRatio(
                         ivDetailImage.getContext(),
                         imageUrl,
@@ -606,7 +620,52 @@ public class DetailActivity extends AppCompatActivity {
                         R.drawable.placeholder);
 
 
+                if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
+                else tvToolbar.setText(toolbarTitle);
+
+
+                //to show toolbar title only when collapsed
+                AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.ablDetail);
+                appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+                    private int mToolBarHeight;
+                    private int mAppBarHeight;
+                    @Override
+                    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                        if(mToolBarHeight == 0) mToolBarHeight = toolbar.getMeasuredHeight();
+                        if(mAppBarHeight == 0) mAppBarHeight = appBarLayout.getMeasuredHeight();
+
+                        Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
+                        int alpha = 255 - Math.round(f);
+                        backdrop.getBackground().setAlpha(alpha);
+                        tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
+                        toolbar.getBackground().setAlpha(255 - alpha);
+                    }
+                });
+
+                //BLURRED TOP BAR
+                /*int width = KcpUtility.getScreenWidth(ivDetailImage.getContext());
+                int height = (int) (KcpUtility.getScreenWidth(ivDetailImage.getContext()) / KcpUtility.getFloat(ivDetailImage.getContext(), R.dimen.ancmt_image_ratio));
+
+                Glide.with(ivDetailImage.getContext())
+                        .load(imageUrl)
+                        .crossFade()
+                        .error(R.drawable.placeholder)
+                        .override(width, height)
+                        .placeholder(R.drawable.placeholder)
+                        .into(ivDetailImage);
+
+                Glide.with(this).
+                        load(imageUrl)
+                        .crossFade()
+                        .override(width, height)
+                        .centerCrop()
+                        .bitmapTransform(new BlurTransformation(ivDetailImage.getContext()))
+                        .into((ImageView) findViewById(R.id.ivBlurred));*/
+
                 TextView tvExpiryDate = (TextView) findViewById(R.id.tvExpiryDate);
+                tvExpiryDate.setBackgroundColor(getResources().getColor(R.color.themeColor));
+                tvExpiryDate.getBackground().setAlpha(241);
+
                 //TODO: daysLeft shows 1 less date (ex) 2016-05-27T00:00:00.000+00:00 shows date as 26 EST see if this is right
                 int daysLeftUntilEffectiveDate = KcpUtility.getDaysLeftUntil(kcpContentPage.effectiveEndTime, KcpConstants.EFFECTIVE_DATE_FORMAT);
                 String daysLeft = kcpContentPage.getDaysLeftText(daysLeftUntilEffectiveDate, Constants.DAYS_LEFT_TO_SHOW_IN_EXPIRY_DATE);

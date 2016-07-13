@@ -145,6 +145,9 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
+
+    private int mWidth;
+    private int mHeight;
     public class DealsViewHolder extends MainViewHolder {
         public RelativeLayout rlDeal;
         public ImageView ivDealLogo;
@@ -161,6 +164,13 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             tvDealTitle = (TextView)  v.findViewById(R.id.tvDealTitle);
             tvExpiryDate = (TextView)  v.findViewById(R.id.tvExpiryDate);
             ivFav         = (ImageView)  v.findViewById(R.id.ivFav);
+
+            /*StaggeredGridLayoutManager.LayoutParams rlp = (StaggeredGridLayoutManager.LayoutParams)mView.getLayoutParams();
+            if(mWidth == 0) mWidth = KcpUtility.getScreenWidth(mContext) / 2;
+            if(mHeight == 0) mHeight = (int) (KcpUtility.getScreenWidth(mContext) / KcpUtility.getFloat(mContext, R.dimen.ancmt_image_ratio));
+            rlp.width = mWidth;
+            rlp.height = mHeight;
+            mView.setLayoutParams(rlp);*/
         }
     }
 

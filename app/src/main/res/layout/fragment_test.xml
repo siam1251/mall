@@ -2,12 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.kineticcafe.kcpmall.fragments.TestFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/tvEmptyState"
+        style="@style/emptyStateMsg"
+        android:visibility="visible"
+        android:text="MAP PLACEHOLDER"
+        app:fontFamily="@string/fontFamily_roboto_light"
+        android:paddingBottom="@dimen/vpMain_padding_bottom"
+        />
 
 </FrameLayout>

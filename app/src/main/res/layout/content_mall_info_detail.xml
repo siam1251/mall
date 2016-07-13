@@ -24,9 +24,17 @@
             />
 
 
+        <!--<TextView
+            android:id="@+id/tvDetailBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"/>-->
+
         <com.kineticcafe.kcpmall.views.ExpandableTextView
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+            expandableTextView:maxCollapsedLines="15"
             android:id="@+id/etvMallInfoDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,9 +52,6 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:id="@id/expandable_text"
                 />
-                android:gravity="center"
-            android:text="@string/lorem"
-            android:id="@+id/tvMallInfoDetailDesc"
 
             <TextView
                 android:id="@id/expand_collapse"

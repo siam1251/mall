@@ -3,17 +3,20 @@ package com.kineticcafe.kcpmall.views;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 
 /**
@@ -21,16 +24,22 @@ import com.kineticcafe.kcpmall.R;
  */
 public class CircleImageView extends ImageView {
 
+    private Context mContext;
+
     public CircleImageView(Context context) {
         super(context);
+        mContext = context;
     }
 
     public CircleImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
+
     }
 
     public CircleImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mContext = context;
     }
 
     @Override
@@ -51,8 +60,38 @@ public class CircleImageView extends ImageView {
         int w = getWidth(), h = getHeight();
 
         Bitmap roundBitmap = getCroppedBitmap(bitmap, w);
+        roundBitmap = getCircularBitmapWithWhiteBorder(roundBitmap, KcpUtility.dpToPx((Activity) mContext, 2));
         canvas.drawBitmap(roundBitmap, 0, 0, null);
 
+    }
+
+    public static Bitmap getCircularBitmapWithWhiteBorder(Bitmap bitmap,
+                                                          int borderWidth) {
+        if (bitmap == null || bitmap.isRecycled()) {
+            return null;
+        }
+
+        /*final int width = bitmap.getWidth() + borderWidth / 4;
+        final int height = bitmap.getHeight() + borderWidth / 4;*/
+
+        final int width = bitmap.getWidth();
+        final int height = bitmap.getHeight();
+
+        Bitmap canvasBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setShader(shader);
+
+        Canvas canvas = new Canvas(canvasBitmap);
+        float radius = width > height ? ((float) height) / 2f : ((float) width) / 2f;
+        canvas.drawCircle(width / 2, height / 2, radius, paint);
+        paint.setShader(null);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.WHITE);
+        paint.setStrokeWidth(borderWidth);
+        canvas.drawCircle(width / 2, height / 2, radius - borderWidth / 2, paint);
+        return canvasBitmap;
     }
 
     public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
@@ -83,6 +122,10 @@ public class CircleImageView extends ImageView {
                 radius / 2 + 0.7f, radius / 2 + 0.1f, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(sbmp, rect, rect, paint);
+
+
+
+
 
         return output;
     }

@@ -16,7 +16,6 @@
             android:id="@+id/ctlDetail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="@color/themeColor"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
 
@@ -31,6 +30,12 @@
                 android:src="@drawable/img_mallinfo_hours"
                 android:transitionName="@string/transition_news_image"
                 />
+
+            <View
+                android:id="@+id/backdrop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/placeholder_rectangle_theme"/>
 
             <include
                 layout="@layout/layout_toolbar_mall_hour" />

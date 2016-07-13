@@ -31,9 +31,15 @@ public class CustomFontTextView extends TextView {
 		if (attrs != null) {
 			TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomFontTextView);
 			mFontFamily = a.getString(R.styleable.CustomFontTextView_fontFamily);
+			if(mFontFamily == null) mFontFamily = context.getResources().getString(R.string.fontFamily_roboto_regular);
 			Typeface tf = Typeface.createFromAsset(context.getAssets(), mFontFamily);
 			this.setTypeface(tf);
 		}
+	}
+
+	public void setFont(Context context, String font){
+		Typeface tf = Typeface.createFromAsset(context.getAssets(), font);
+		this.setTypeface(tf);
 	}
 
 	protected void onDraw (Canvas canvas) {
