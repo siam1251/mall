@@ -16,11 +16,8 @@
             android:id="@+id/ctlDetail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="@color/themeColor"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
-
-            <!--TODO: find a way to get 0.7 from xml-->
 
             <com.kineticcafe.kcpmall.views.KCPSetRatioImageView
                 app:layout_collapseParallaxMultiplier="0.7"
@@ -32,6 +29,14 @@
                 android:src="@drawable/img_mallinfo_amenities"
                 android:transitionName="@string/transition_news_image"
                 />
+
+            <View
+                android:id="@+id/backdrop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/placeholder_rectangle_theme"/>
+            <!--BUG : if you set background as color @color/themeColor and set the alpha from code,
+                the themecolor from then seems like it permanently has that alpha in other places (like in toolbar in other activity)-->
 
             <include
                 layout="@layout/layout_toolbar_mall_hour" />

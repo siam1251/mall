@@ -22,6 +22,7 @@
     <color name="black_overlay">#66000000</color>
 
     <color name="unselected">#C0C0C0</color>
+    <color name="shadow">#C0C0C0</color>
 
 
     <color name="holo_red_light_transparent">#CFff4444</color>

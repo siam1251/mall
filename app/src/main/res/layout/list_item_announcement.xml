@@ -40,6 +40,7 @@
                 android:transitionName="@string/transition_news_image"
                 />
 
+
             <RelativeLayout
                 android:id="@+id/rlAncmt"
                 android:paddingLeft="@dimen/card_desc_horizontal_padding"

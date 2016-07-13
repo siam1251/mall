@@ -90,13 +90,13 @@
 
             <ImageView
                 android:id="@+id/ivFav"
-                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:adjustViewBounds="true"
                 android:src="@drawable/btn_fav"
-                android:layout_width="45dp"
                 android:padding="13dp"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
                 />
 
         </RelativeLayout>

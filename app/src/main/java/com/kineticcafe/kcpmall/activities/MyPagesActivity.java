@@ -68,8 +68,8 @@ public class MyPagesActivity extends AppCompatActivity {
                     null);
             rvNews.setAdapter(dealsRecyclerViewAdapter);
 
-            DealRecyclerItemDecoration itemDecoration = new DealRecyclerItemDecoration(this, R.dimen.card_vertical_margin, dealsRecyclerViewAdapter);
-            rvNews.addItemDecoration(itemDecoration);
+    //            DealRecyclerItemDecoration itemDecoration = new DealRecyclerItemDecoration(this, R.dimen.card_vertical_margin, dealsRecyclerViewAdapter);
+    //            rvNews.addItemDecoration(itemDecoration);
 
         } else if(mPageTitle.equals(getResources().getString(R.string.my_page_events))) {
 
@@ -80,8 +80,8 @@ public class MyPagesActivity extends AppCompatActivity {
                     FavouriteManager.getInstance(this).getFavEventContentPages());
             rvNews.setAdapter(newsRecyclerViewAdapter);
 
-            NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(this, R.dimen.card_vertical_margin);
-            rvNews.addItemDecoration(itemDecoration);
+//            NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(this, R.dimen.card_vertical_margin);
+//            rvNews.addItemDecoration(itemDecoration);
         } else if(mPageTitle.equals(getResources().getString(R.string.my_page_stores))) {
 
             StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(COLUMN_COUNT, StaggeredGridLayoutManager.VERTICAL);
@@ -99,8 +99,8 @@ public class MyPagesActivity extends AppCompatActivity {
                     kcpPlaces, KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE);
             rvNews.setAdapter(categoryStoreRecyclerViewAdapter);
 
-            DealRecyclerItemDecoration itemDecoration = new DealRecyclerItemDecoration(this, R.dimen.card_vertical_margin, categoryStoreRecyclerViewAdapter);
-            rvNews.addItemDecoration(itemDecoration);
+//            DealRecyclerItemDecoration itemDecoration = new DealRecyclerItemDecoration(this, R.dimen.card_vertical_margin, categoryStoreRecyclerViewAdapter);
+//            rvNews.addItemDecoration(itemDecoration);
 
         }
     }

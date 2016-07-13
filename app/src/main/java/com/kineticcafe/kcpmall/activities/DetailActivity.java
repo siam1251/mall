@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -18,6 +19,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -25,11 +27,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -83,7 +87,6 @@ public class DetailActivity extends AppCompatActivity {
     private View mLayoutStoreHours;
 
     private int mContentPageType;
-    private float alpha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +147,19 @@ public class DetailActivity extends AppCompatActivity {
 
 
         NestedScrollView nsvDetail = (NestedScrollView) findViewById(R.id.nsvDetail);
+        nsvDetail.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+            }
+        });
+
+        nsvDetail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+            }
+        });
     }
 
     public void downloadIfNecessary(KcpContentPage kcpContentPage) {
@@ -515,11 +531,6 @@ public class DetailActivity extends AppCompatActivity {
         return v;
     }
 
-
-
-
-
-
     public void downloadPlace(final KcpContentPage kcpContentPage){
         KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(DetailActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
             @Override
@@ -583,42 +594,13 @@ public class DetailActivity extends AppCompatActivity {
 
                 RelativeLayout rlDetailImage = (RelativeLayout) findViewById(R.id.rlDetailImage);
                 rlDetailImage.setVisibility(View.GONE);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.themeColor));
             } else {
-
-                final ImageView ivBlurred = (ImageView) findViewById(R.id.ivBlurred);
-                //to show toolbar title only when collapsed
-                AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.ablDetail);
-                appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-                    boolean isShow = false;
-                    int scrollRange = -1;
-
-                    @Override
-                    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-
-
-                        if (scrollRange == -1) {
-                            scrollRange = appBarLayout.getTotalScrollRange();
-                        }
-
-                        //BLURRED
-                        /*float alpha = (float) Math.abs((float) verticalOffset / scrollRange);
-                        Log.d("DetailActivity", "scrollRange : " + scrollRange);
-                        Log.d("DetailActivity", "verticalOffset : " + verticalOffset);
-                        Log.d("DetailActivity", "alpha : " + alpha);
-                        ivBlurred.setAlpha(alpha);*/
-
-                        if (scrollRange + verticalOffset == 0) {
-                            if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
-                            else tvToolbar.setText(toolbarTitle);
-                            Utility.setToolbarBackground(toolbar, null);
-                            isShow = true;
-                        } else if(isShow) {
-                            tvToolbar.setText("");
-                            Utility.setToolbarBackground(toolbar, getResources().getDrawable(R.drawable.view_shadow));
-                            isShow = false;
-                        }
-                    }
-                });
+                final View backdrop = (View) findViewById(R.id.backdrop);
+                int height = (int) (KcpUtility.getScreenWidth(this) / KcpUtility.getFloat(this, R.dimen.ancmt_image_ratio));
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) backdrop.getLayoutParams();
+                lp.height = height;
+                backdrop.setLayoutParams(lp);
 
                 ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
                 ivDetailImage.setOnClickListener(new View.OnClickListener() {
@@ -631,13 +613,34 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 });
 
-
                 new GlideFactory().glideWithDefaultRatio(
                         ivDetailImage.getContext(),
                         imageUrl,
                         ivDetailImage,
                         R.drawable.placeholder);
 
+
+                if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
+                else tvToolbar.setText(toolbarTitle);
+
+
+                //to show toolbar title only when collapsed
+                AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.ablDetail);
+                appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+                    private int mToolBarHeight;
+                    private int mAppBarHeight;
+                    @Override
+                    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                        if(mToolBarHeight == 0) mToolBarHeight = toolbar.getMeasuredHeight();
+                        if(mAppBarHeight == 0) mAppBarHeight = appBarLayout.getMeasuredHeight();
+
+                        Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
+                        int alpha = 255 - Math.round(f);
+                        backdrop.getBackground().setAlpha(alpha);
+                        tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
+                        toolbar.getBackground().setAlpha(255 - alpha);
+                    }
+                });
 
                 //BLURRED TOP BAR
                 /*int width = KcpUtility.getScreenWidth(ivDetailImage.getContext());
@@ -660,6 +663,9 @@ public class DetailActivity extends AppCompatActivity {
                         .into((ImageView) findViewById(R.id.ivBlurred));*/
 
                 TextView tvExpiryDate = (TextView) findViewById(R.id.tvExpiryDate);
+                tvExpiryDate.setBackgroundColor(getResources().getColor(R.color.themeColor));
+                tvExpiryDate.getBackground().setAlpha(241);
+
                 //TODO: daysLeft shows 1 less date (ex) 2016-05-27T00:00:00.000+00:00 shows date as 26 EST see if this is right
                 int daysLeftUntilEffectiveDate = KcpUtility.getDaysLeftUntil(kcpContentPage.effectiveEndTime, KcpConstants.EFFECTIVE_DATE_FORMAT);
                 String daysLeft = kcpContentPage.getDaysLeftText(daysLeftUntilEffectiveDate, Constants.DAYS_LEFT_TO_SHOW_IN_EXPIRY_DATE);

@@ -2,6 +2,7 @@ package com.kineticcafe.kcpmall.activities;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -16,12 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.models.MallInfo.AdditionalInfo;
 import com.kineticcafe.kcpandroidsdk.models.MallInfo.InfoList;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.utility.Utility;
@@ -70,26 +73,30 @@ public class MallInfoDetailActivity extends AppCompatActivity{
             final TextView tvToolbar = (TextView) toolbar.findViewById(R.id.tvToolbar);
             getSupportActionBar().setTitle("");
 
+            final View backdrop = (View) findViewById(R.id.backdrop);
+            int height = (int) (KcpUtility.getScreenWidth(this) / KcpUtility.getFloat(this, R.dimen.ancmt_image_ratio));
+            CollapsingToolbarLayout.LayoutParams lp = (CollapsingToolbarLayout.LayoutParams) backdrop.getLayoutParams();
+            lp.height = height;
+            backdrop.setLayoutParams(lp);
+
             final String toolbarTitle = getResources().getString(R.string.title_mall_information);
+            tvToolbar.setText(toolbarTitle);
+
             AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.ablDetail);
             appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-                boolean isShow = false;
-                int scrollRange = -1;
+                private int mToolBarHeight;
+                private int mAppBarHeight;
 
                 @Override
                 public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                    if (scrollRange == -1) {
-                        scrollRange = appBarLayout.getTotalScrollRange();
-                    }
-                    if (scrollRange + verticalOffset == 0) {
-                        tvToolbar.setText(toolbarTitle);
-                        Utility.setToolbarBackground(toolbar, null);
-                        isShow = true;
-                    } else if(isShow) {
-                        tvToolbar.setText("");
-                        Utility.setToolbarBackground(toolbar, getResources().getDrawable(R.drawable.view_shadow));
-                        isShow = false;
-                    }
+                    if(mToolBarHeight == 0) mToolBarHeight = toolbar.getMeasuredHeight();
+                    if(mAppBarHeight == 0) mAppBarHeight = appBarLayout.getMeasuredHeight();
+
+                    Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
+                    int alpha = 255 - Math.round(f);
+                    backdrop.getBackground().setAlpha(alpha);
+                    tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
+                    toolbar.getBackground().setAlpha(255 - alpha);
                 }
             });
 
@@ -103,9 +110,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_amenities))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_amenities);
             }
-
-//            tvDetailBody.setText(Html.fromHtml(body, null, new MyTagHandler()));
-
 
             ExpandableTextView etvMallInfoDetail = (ExpandableTextView) findViewById(R.id.etvMallInfoDetail);
             etvMallInfoDetail.setText(info.getDetails());

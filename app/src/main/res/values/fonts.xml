@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="fontFamily_roboto_light">fonts/Roboto-Light.ttf</string>
-    <!--<string name="fontFamily_roboto_regular">fonts/Roboto-Regular.ttf</string> --> <!--normal text-->
+    <string name="fontFamily_roboto_regular">fonts/Roboto-Regular.ttf</string>
     <string name="fontFamily_roboto_thin">fonts/Roboto-Thin.ttf</string>
     <string name="fontFamily_roboto_medium">fonts/Roboto-Medium.ttf</string>
     <string name="fontFamily_roboto_bold">fonts/Roboto-Bold.ttf</string>

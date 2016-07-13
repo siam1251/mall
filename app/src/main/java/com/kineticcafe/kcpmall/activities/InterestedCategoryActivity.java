@@ -1,6 +1,7 @@
 package com.kineticcafe.kcpmall.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -11,9 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,6 +47,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
     protected final Logger logger = new Logger(getClass().getName());
     private InterestRecyclerViewAdapter mInterestRecyclerViewAdapter;
     private RecyclerView rvIntrstCat;
+    private boolean mSpanSizeSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,9 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
         if(FavouriteManager.getInstance(this).getInterestFavSize() > 0) getSupportActionBar().setTitle(getResources().getString(R.string.activity_title_interested_category_update));
         else getSupportActionBar().setTitle(getResources().getString(R.string.activity_title_interested_category));
+
+        FrameLayout flIntrstdBot = (FrameLayout) findViewById(R.id.flIntrstdBot);
+//        flIntrstdBot.setBackgroundColor(getResources().getColor(R.color.themeColor));
 
         rvIntrstCat = (RecyclerView) findViewById(R.id.rvIntrstCat);
         rvIntrstCat.setNestedScrollingEnabled(false); //set false for smooth scroll when nesting recyclerview inside nestedscrollview
@@ -103,24 +112,23 @@ public class InterestedCategoryActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        final int maxSpanCount = 100;
-//        ArrayList<KcpCategories> kcpCategoriesArrayList = KcpCategoryRoot.getInstance().getFingerPrintCategoriesList();
+        final int maxSpanCount = KcpUtility.getScreenWidth(this);
         ArrayList<KcpCategories> kcpCategoriesArrayList = CategoryIconFactory.getFilteredKcpCategoryList(KcpCategoryRoot.getInstance().getFingerPrintCategoriesList());
 
         final ArrayList<GridLayoutItem> gridLayoutItemArrayList = new ArrayList<GridLayoutItem>();
 
-        float txtMar = getResources().getDimension(R.dimen.intrst_card_txt_horizontal_margin);
         int firstSpanSize;
         int secondSpanSize;
         int thirdSpanSize;
 
-        float compatPadding = KcpUtility.dpToPx(this, 5);
-        for(int position = 0 ; position < kcpCategoriesArrayList.size(); position++){
+//        float compatPadding = - KcpUtility.dpToPx(this, 5);
+        float compatPadding = 0;
 
+        for(int position = 0 ; position < kcpCategoriesArrayList.size(); position++) {
             if(position < gridLayoutItemArrayList.size()) continue;
 
             String firstItemName = kcpCategoriesArrayList.get(position).getCategoryName();
-            float firstItemWidth = getTextSize(firstItemName) + txtMar * 2;
+            float firstItemWidth = getTextSize(firstItemName);
             float spaceLeft = getSpaceLeftFromOneSide(firstItemWidth);
             float totalSize = firstItemWidth  + spaceLeft + spaceLeft;
 
@@ -128,27 +136,32 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
             if( position + 1 < kcpCategoriesArrayList.size() ){
                 String secondItemName = kcpCategoriesArrayList.get(position + 1).getCategoryName();
-                float secondItemWidth = getTextSize(secondItemName) + txtMar * 2;
+                float secondItemWidth = getTextSize(secondItemName);
 
-                spaceLeft = getSpaceLeftFromOneSide(firstItemWidth + secondItemWidth);
+                spaceLeft = getSpaceLeftFromOneSide(firstItemWidth + compatPadding + secondItemWidth);
 
                 if(spaceLeft > 0) {
+//                    spaceLeft = 0;
                     totalSize = spaceLeft + firstItemWidth + compatPadding + secondItemWidth + spaceLeft;
-                    firstSpanSize = (int) ((float) (spaceLeft + firstItemWidth + compatPadding/2) / totalSize * maxSpanCount);
+                    firstSpanSize = (int) ((float) (spaceLeft + firstItemWidth + compatPadding / 2) / totalSize * maxSpanCount);
                     secondSpanSize = maxSpanCount - firstSpanSize;
+
                     replaceIfExist(gridLayoutItemArrayList, position, new GridLayoutItem(firstSpanSize, RelativeLayout.ALIGN_PARENT_RIGHT));
                     replaceIfExist(gridLayoutItemArrayList, position + 1, new GridLayoutItem(secondSpanSize, RelativeLayout.ALIGN_PARENT_LEFT));
 
                     if( position + 2 < kcpCategoriesArrayList.size() ){
                         String thirdItemName = kcpCategoriesArrayList.get(position + 2).getCategoryName();
-                        float thirdItemWidth = getTextSize(thirdItemName) + txtMar * 2;
-                        spaceLeft = getSpaceLeftFromOneSide(firstItemWidth + secondItemWidth + thirdItemWidth);
+                        float thirdItemWidth = getTextSize(thirdItemName);
+                        spaceLeft = getSpaceLeftFromOneSide(firstItemWidth + compatPadding + secondItemWidth + compatPadding + thirdItemWidth);
 
                         if(spaceLeft > 0) { //meaning we can fit in 3 items
+//                            spaceLeft = 0;
                             totalSize = spaceLeft + firstItemWidth + compatPadding + secondItemWidth + compatPadding + thirdItemWidth + spaceLeft;
+
                             firstSpanSize = (int) ((float) (spaceLeft + firstItemWidth + compatPadding / 2) / totalSize * maxSpanCount);
                             secondSpanSize = (int) ((float) ( secondItemWidth + compatPadding )/ totalSize * maxSpanCount);
                             thirdSpanSize = maxSpanCount - firstSpanSize - secondSpanSize;
+
                             replaceIfExist(gridLayoutItemArrayList, position, new GridLayoutItem(firstSpanSize, RelativeLayout.ALIGN_PARENT_RIGHT));
                             replaceIfExist(gridLayoutItemArrayList, position + 1, new GridLayoutItem(secondSpanSize, RelativeLayout.CENTER_HORIZONTAL));
                             replaceIfExist(gridLayoutItemArrayList, position + 2, new GridLayoutItem(thirdSpanSize, RelativeLayout.ALIGN_PARENT_LEFT));
@@ -165,6 +178,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 return gridLayoutItemArrayList.get(position).spanCount;
             }
         });
+
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
 
@@ -177,11 +191,47 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         else list.add(position, gridLayoutItem);
     }
 
-    public float getTextSize(String string){
+    /*public float getTextSize(String string){
         Paint p = new Paint();
-//        p.setTextSize(getResources().getDimension(R.dimen.intrstd_name));
-        p.setTextSize(KcpUtility.dpToPx(this, 15));
+        p.setTextSize(getResources().getDimension(R.dimen.intrstd_name));
+//        p.setTextSize(KcpUtility.dpToPx(this, 19f));
+//        p.setTextSize(KcpUtility.dpToPx(this, 18f));
         return p.measureText(string);
+    }*/
+
+    private static View mInterestedCategoryLayout;
+    public int getTextSize(String text) {
+
+        if(mInterestedCategoryLayout == null){
+            LayoutInflater inflater = (LayoutInflater)getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mInterestedCategoryLayout = inflater.inflate(R.layout.list_item_interested_category, null);
+        }
+
+        TextView tvIntrstd = (TextView) mInterestedCategoryLayout.findViewById(R.id.tvIntrstd);
+        tvIntrstd.setText(text);
+        mInterestedCategoryLayout.measure(KcpUtility.getScreenWidth(this), KcpUtility.getScreenHeight(this));
+
+        return mInterestedCategoryLayout.getMeasuredWidth();
+
+
+
+        /*TextView textView = new TextView(this);
+        textView.setPadding(0,0,0,0);
+        textView.setText(text);
+//        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.intrstd_name));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, KcpUtility.dpToPx(this, 15.8f));
+//        textView.setTextSize(getResources().getDimension(R.dimen.intrstd_name));
+
+        *//*int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(KcpUtility.getScreenWidth(this), View.MeasureSpec.AT_MOST);
+        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+
+        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) getResources().getDimension(R.dimen.intrstd_card_height), View.MeasureSpec.AT_MOST);
+        textView.measure(widthMeasureSpec, heightMeasureSpec);*//*
+
+        textView.measure(0, 0);
+
+        return textView.getMeasuredWidth();*/
     }
 
     public float getSpaceLeftFromOneSide(float size){
