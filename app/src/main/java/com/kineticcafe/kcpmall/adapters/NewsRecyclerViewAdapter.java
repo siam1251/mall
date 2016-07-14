@@ -35,6 +35,7 @@ import com.kineticcafe.kcpmall.fragments.HomeFragment;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
+import com.kineticcafe.kcpmall.views.RecyclerViewFooter;
 
 import java.util.ArrayList;
 
@@ -80,6 +81,25 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             }
         }
     }
+
+
+    private int mFooterLayout;
+    private boolean mFooterExist = false;
+    private String mFooterText;
+    private View.OnClickListener mOnClickListener;
+
+    public void addFooter(String footerText, int footerLayout, View.OnClickListener onClickListener){
+        mFooterExist = true;
+        mFooterText = footerText;
+        mFooterLayout = footerLayout;
+        mOnClickListener = onClickListener;
+        KcpContentPage fakeKcpContentPageForFooter = new KcpContentPage();
+        fakeKcpContentPageForFooter.setContentType("footer");
+        mKcpContentPagesNews.add(fakeKcpContentPageForFooter);
+        notifyDataSetChanged();
+    }
+
+
 
     public void prepareLoadingImage(){
         mKcpContentPagesNews.add(null);
@@ -194,6 +214,9 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_social_feed_pager, parent, false),
                         R.drawable.icn_instagram,
                         "@" + Constants.INSTAGRAM_USER_NAME);
+            case KcpContentTypeFactory.ITEM_TYPE_FOOTER:
+                return new RecyclerViewFooter.FooterViewHolder(
+                        LayoutInflater.from(mContext).inflate(mFooterLayout, parent, false));
         }
         return null;
     }
@@ -294,6 +317,10 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             vpTwParam.height =  (int) (KcpUtility.getScreenWidth(mContext) / KcpUtility.getFloat(mContext, R.dimen.ancmt_image_ratio));
             viewHolder.vpTw.setLayoutParams(vpTwParam);
             initializeSocialFeedViews(viewHolder, mSocialFeedViewPagerAdapter);
+        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_FOOTER){
+            RecyclerViewFooter.FooterViewHolder footerViewHolder = (RecyclerViewFooter.FooterViewHolder) holder;
+            footerViewHolder.mView.setOnClickListener(mOnClickListener);
+            footerViewHolder.tvFooter.setText(mFooterText);
         }
     }
 

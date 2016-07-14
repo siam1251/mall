@@ -221,10 +221,10 @@
                     />
 
                 <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_medium"
                     android:id="@+id/tvGCBalance"
                     style="@style/DrawerLayoutFavouriteItemsTextView"
                     android:layout_gravity="right"
-                    app:fontFamily="@string/fontFamily_roboto_medium"
                     android:text="$100.00"
                     />
 

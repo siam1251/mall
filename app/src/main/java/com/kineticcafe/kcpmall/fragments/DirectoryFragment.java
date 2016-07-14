@@ -35,6 +35,7 @@ public class DirectoryFragment extends BaseFragment {
 
     private CategoriesFragment mCategoriesFragment;
     private PlacesFragment mPlacesFragment;
+    private ViewPager mViewPager;
 
     private static DirectoryFragment sDirectoryFragment;
     public static DirectoryFragment getInstance(){
@@ -52,11 +53,11 @@ public class DirectoryFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        ViewPager vpHome = (ViewPager) view.findViewById(R.id.vpHome);
-        setupViewPager(vpHome);
+        mViewPager = (ViewPager) view.findViewById(R.id.vpHome);
+        setupViewPager(mViewPager);
 
         TabLayout tablayout = (TabLayout) view.findViewById(R.id.tlHome);
-        tablayout.setupWithViewPager(vpHome);
+        tablayout.setupWithViewPager(mViewPager);
 
         updateCategoryAdapter();
 
@@ -240,6 +241,10 @@ public class DirectoryFragment extends BaseFragment {
             }
         });
         kcpPlaceManager.downloadPlaces();
+    }
+
+    public void selectPage(int pageIndex){
+        mViewPager.setCurrentItem(pageIndex);
     }
 
     @Override

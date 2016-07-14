@@ -36,7 +36,7 @@ public class DealRecyclerItemDecoration extends RecyclerView.ItemDecoration {
 //            outRect.top = mItemOffset;
         }
 
-        if(type == KcpContentTypeFactory.ITEM_TYPE_DEAL){
+        if(type == KcpContentTypeFactory.ITEM_TYPE_DEAL || type == KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE){
             if(spanIndex == 0){
                 outRect.left = mItemOffset;
             } else {

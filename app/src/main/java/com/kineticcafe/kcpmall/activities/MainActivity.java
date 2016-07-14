@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle mToggle;
     private Snackbar mOfflineSnackbar;
     private ImageView ivToolbar;
+    private KcpAnimatedViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +115,8 @@ public class MainActivity extends AppCompatActivity
 
 
         final AppBarLayout ablTopNav = (AppBarLayout)findViewById(R.id.ablTopNav);
-        KcpAnimatedViewPager viewPager = (KcpAnimatedViewPager) findViewById(R.id.vpMain);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mViewPager = (KcpAnimatedViewPager) findViewById(R.id.vpMain);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
@@ -134,11 +135,11 @@ public class MainActivity extends AppCompatActivity
         List<Integer> fragmentIconList = new ArrayList<>();
 
         prepareTabContents(fragmentList, fragmentTitleList, fragmentIconList);
-        setupViewPager(viewPager, fragmentList, fragmentTitleList, fragmentIconList);
+        setupViewPager(fragmentList, fragmentTitleList, fragmentIconList);
 
-        tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons(viewPager, tabLayout, fragmentTitleList, fragmentIconList);
-        viewPager.setTabLayout(tabLayout);
+        tabLayout.setupWithViewPager(mViewPager);
+        setupTabIcons(tabLayout, fragmentTitleList, fragmentIconList);
+        mViewPager.setTabLayout(tabLayout);
 
         initializeKcpData();
         setUpSidePanel();
@@ -293,7 +294,7 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     Intent intent = new Intent(MainActivity.this, MyPagesActivity.class);
                     intent.putExtra(Constants.ARG_CAT_NAME, myPageType);
-                    MainActivity.this.startActivity(intent);
+                    MainActivity.this.startActivityForResult(intent, Constants.REQUEST_CODE_MY_PAGE_TYPE);
                     ActivityAnimation.startActivityAnimation(MainActivity.this);
                 }
 //            }
@@ -374,10 +375,10 @@ public class MainActivity extends AppCompatActivity
     /**
      * set custom layout to each tab
      */
-    private void setupTabIcons(KcpAnimatedViewPager viewPager, TabLayout tabLayout, List<String> fragmentTitleList, List<Integer> fragmentIconList) {
+    private void setupTabIcons(TabLayout tabLayout, List<String> fragmentTitleList, List<Integer> fragmentIconList) {
         for (int i = 0; i < fragmentTitleList.size(); i++) {
             View singleTablayout = LayoutInflater.from(this).inflate(R.layout.tab_img_layout, null);
-            viewPager.changeTabStateWhenSelected(singleTablayout, false);
+            mViewPager.changeTabStateWhenSelected(singleTablayout, false);
             TextView tabTitle = (TextView) singleTablayout.findViewById(R.id.tvTabTitle);
             ImageView tabImage = (ImageView) singleTablayout.findViewById(R.id.ivTabIcon);
             tabTitle.setText(fragmentTitleList.get(i));
@@ -390,9 +391,9 @@ public class MainActivity extends AppCompatActivity
     /**
      * set up view pager
      */
-    private void setupViewPager(ViewPager viewPager, List<Fragment> fragmentList, List<String> fragmentTitleList, List<Integer> fragmentIconList) {
+    private void setupViewPager(List<Fragment> fragmentList, List<String> fragmentTitleList, List<Integer> fragmentIconList) {
         HomeBottomTapAdapter adapter = new HomeBottomTapAdapter(this, fragmentList, fragmentTitleList, fragmentIconList);
-        viewPager.setAdapter(adapter);
+        mViewPager.setAdapter(adapter);
     }
 
     public void setDrawerIndicatorEnabled(boolean enabled, String toolbarTitle){
@@ -460,6 +461,12 @@ public class MainActivity extends AppCompatActivity
         } else tvEmptyState.setVisibility(View.GONE);
     }
 
+    private void selectPage(int pageIndex){
+//        tabLayout.setScrollPosition(pageIndex, 0f, true);
+        mDrawer.closeDrawers();
+        mViewPager.setCurrentItem(pageIndex);
+    }
+
     @Override
     public void onDataDownloaded() {
         synchronized (mSplashThread) {
@@ -484,6 +491,17 @@ public class MainActivity extends AppCompatActivity
                 HomeFragment.getInstance().downloadNewsAndDeal();
             } else {
 
+            }
+        } else if (requestCode == Constants.REQUEST_CODE_MY_PAGE_TYPE) {
+            if (resultCode == Constants.RESULT_DEALS) {
+                selectPage(0);
+                HomeFragment.getInstance().selectPage(1);
+            } else if (resultCode == Constants.RESULT_EVENTS) {
+                selectPage(0);
+                HomeFragment.getInstance().selectPage(0);
+            } else if (resultCode == Constants.RESULT_STORES) {
+                selectPage(1);
+                DirectoryFragment.getInstance().selectPage(1);
             }
         }
     }

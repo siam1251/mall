@@ -26,6 +26,7 @@ import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpmall.views.RecyclerViewFooter;
 
 import java.util.ArrayList;
 
@@ -83,12 +84,38 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
             case KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE: //A to Z store list
                 return new StoreViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_place, parent, false));
+            case KcpContentTypeFactory.ITEM_TYPE_FOOTER:
+                return new RecyclerViewFooter.FooterViewHolder(
+                        LayoutInflater.from(mContext).inflate(mFooterLayout, parent, false));
         }
         return null;
     }
 
+    private int mFooterLayout;
+    private boolean mFooterExist = false;
+    private String mFooterText;
+    private View.OnClickListener mOnClickListener;
+
+    public void addFooter(String footerText, int footerLayout, View.OnClickListener onClickListener){
+        mFooterExist = true;
+        mFooterText = footerText;
+        mFooterLayout = footerLayout;
+        mOnClickListener = onClickListener;
+        KcpPlaces fakeKcpPlaces = new KcpPlaces();
+        mKcpPlacesList.add(fakeKcpPlaces);
+        notifyDataSetChanged();
+    }
+
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+
+        if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_FOOTER){
+            RecyclerViewFooter.FooterViewHolder footerViewHolder = (RecyclerViewFooter.FooterViewHolder) holder;
+            footerViewHolder.mView.setOnClickListener(mOnClickListener);
+            footerViewHolder.tvFooter.setText(mFooterText);
+            return;
+        }
 
         final KcpPlaces kcpPlace = (KcpPlaces) mKcpPlacesList.get(position);
         final StoreViewHolder storeViewHolder = (StoreViewHolder) holder;
@@ -164,6 +191,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
+        if(mFooterExist && position == mKcpPlacesList.size() - 1) return KcpContentTypeFactory.ITEM_TYPE_FOOTER;
         return mContentType;
     }
 }

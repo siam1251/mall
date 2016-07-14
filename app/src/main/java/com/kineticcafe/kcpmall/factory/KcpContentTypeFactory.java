@@ -15,6 +15,7 @@ public class KcpContentTypeFactory {
     public static final String CONTENT_TYPE_INSTAGRAM = "instagram";
     public static final String CONTENT_TYPE_STORE = "store";
     public static final String CONTENT_TYPE_CATEGORY = "category";
+    public static final String CONTENT_TYPE_FOOTER = "footer";
 
     //NEWS & DEAL ADAPTER ITEM TYPE
     public static final int ITEM_TYPE_LOADING =                             0;
@@ -28,6 +29,7 @@ public class KcpContentTypeFactory {
     public static final int ITEM_TYPE_SECTION_HEADER_OTHER_DEALS =          8;
     public static final int ITEM_TYPE_ADJUST_MY_INTEREST =                  9;
     public static final int ITEM_TYPE_DEAL =                                10;
+    public static final int ITEM_TYPE_FOOTER =                              100;
 
     public static final int ITEM_TYPE_SECTION_HEADER_CATEGORY =   11;
     public static final int ITEM_TYPE_SECTION_HEADER_RECOMMENDED_STORES =   12;
@@ -76,9 +78,7 @@ public class KcpContentTypeFactory {
     public static int getContentType(KcpContentPage kcpContentPage){
         if(kcpContentPage == null){
             return ITEM_TYPE_LOADING;
-        }/* else if(kcpContentPage.content_type == null){
-            return ITEM_TYPE_STORE;
-        }*/else if(kcpContentPage.content_type.contains(CONTENT_TYPE_ANNOUNCEMENT)){
+        } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_ANNOUNCEMENT)){
             return ITEM_TYPE_ANNOUNCEMENT;
         } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_EVENT)){
             return ITEM_TYPE_EVENT;
@@ -90,9 +90,10 @@ public class KcpContentTypeFactory {
             return ITEM_TYPE_INSTAGRAM;
         } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_STORE)){
             return ITEM_TYPE_STORE;
-        }  else if(kcpContentPage.content_type.contains(CONTENT_TYPE_DEAL)){
-//            return ITEM_TYPE_OTHER_DEAL;
+        } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_DEAL)){
             return ITEM_TYPE_DEAL;
+        } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_FOOTER)){
+            return ITEM_TYPE_FOOTER;
         } else {
             return ITEM_TYPE_ANNOUNCEMENT;
         }

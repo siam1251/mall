@@ -1,5 +1,7 @@
 package com.kineticcafe.kcpmall.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,10 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
-import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
@@ -21,7 +24,6 @@ import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.DealRecyclerItemDecoration;
 import com.kineticcafe.kcpmall.views.NewsRecyclerItemDecoration;
-import com.kineticcafe.kcpmall.widget.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 
@@ -33,7 +35,8 @@ public class MyPagesActivity extends AppCompatActivity {
 
     private final int COLUMN_COUNT = 2;
     private String mPageTitle;
-    private RecyclerView rvNews;
+    private RecyclerView rv;
+    private RecyclerView.Adapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +52,10 @@ public class MyPagesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setTitle(mPageTitle);
 
-        rvNews = (RecyclerView) findViewById(R.id.rv);
-        rvNews.setNestedScrollingEnabled(true);
+        rv = (RecyclerView) findViewById(R.id.rv);
+        rv.setNestedScrollingEnabled(true);
+
+        setUpRecyclerView();
     }
 
 
@@ -59,34 +64,50 @@ public class MyPagesActivity extends AppCompatActivity {
 
             StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(COLUMN_COUNT, StaggeredGridLayoutManager.VERTICAL);
             staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
-            rvNews.setLayoutManager(staggeredGridLayoutManager);
+            rv.setLayoutManager(staggeredGridLayoutManager);
 
-            DealsRecyclerViewAdapter dealsRecyclerViewAdapter = new DealsRecyclerViewAdapter(
+            DealsRecyclerViewAdapter dealsRecyclerViewAdapter = new DealsRecyclerViewAdapter (
                     this,
                     false,
                     FavouriteManager.getInstance(this).getFavDealContentPages(),
                     null);
-            rvNews.setAdapter(dealsRecyclerViewAdapter);
+            rv.setAdapter(dealsRecyclerViewAdapter);
+            dealsRecyclerViewAdapter.addFooter(getString(R.string.explore_more_deals), R.layout.list_item_my_page_footer, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onFinish(Constants.RESULT_DEALS);
+                }
+            });
 
-    //            DealRecyclerItemDecoration itemDecoration = new DealRecyclerItemDecoration(this, R.dimen.card_vertical_margin, dealsRecyclerViewAdapter);
-    //            rvNews.addItemDecoration(itemDecoration);
+            DealRecyclerItemDecoration itemDecoration = new DealRecyclerItemDecoration(this, R.dimen.card_vertical_margin, dealsRecyclerViewAdapter);
+            rv.addItemDecoration(itemDecoration);
+
+            mAdapter = dealsRecyclerViewAdapter;
 
         } else if(mPageTitle.equals(getResources().getString(R.string.my_page_events))) {
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-            rvNews.setLayoutManager(linearLayoutManager);
-            NewsRecyclerViewAdapter newsRecyclerViewAdapter = new NewsRecyclerViewAdapter(
+            rv.setLayoutManager(linearLayoutManager);
+            NewsRecyclerViewAdapter newsRecyclerViewAdapter = new NewsRecyclerViewAdapter (
                     this,
                     FavouriteManager.getInstance(this).getFavEventContentPages());
-            rvNews.setAdapter(newsRecyclerViewAdapter);
+            rv.setAdapter(newsRecyclerViewAdapter);
+            newsRecyclerViewAdapter.addFooter(getString(R.string.explore_more_events), R.layout.list_item_my_page_footer, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onFinish(Constants.RESULT_EVENTS);
+                }
+            });
 
-//            NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(this, R.dimen.card_vertical_margin);
-//            rvNews.addItemDecoration(itemDecoration);
+            NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(this, R.dimen.card_vertical_margin);
+            rv.addItemDecoration(itemDecoration);
+
+            mAdapter = newsRecyclerViewAdapter;
         } else if(mPageTitle.equals(getResources().getString(R.string.my_page_stores))) {
 
             StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(COLUMN_COUNT, StaggeredGridLayoutManager.VERTICAL);
             staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
-            rvNews.setLayoutManager(staggeredGridLayoutManager);
+            rv.setLayoutManager(staggeredGridLayoutManager);
 
             ArrayList<KcpContentPage> kcpContentPages = FavouriteManager.getInstance(this).getFavStoreContentPages();
             ArrayList<KcpPlaces> kcpPlaces = new ArrayList<>();
@@ -97,11 +118,18 @@ public class MyPagesActivity extends AppCompatActivity {
             CategoryStoreRecyclerViewAdapter categoryStoreRecyclerViewAdapter = new CategoryStoreRecyclerViewAdapter(
                     this,
                     kcpPlaces, KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE);
-            rvNews.setAdapter(categoryStoreRecyclerViewAdapter);
+            rv.setAdapter(categoryStoreRecyclerViewAdapter);
+            categoryStoreRecyclerViewAdapter.addFooter(getString(R.string.explore_more_stores), R.layout.list_item_my_page_footer, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onFinish(Constants.RESULT_STORES);
+                }
+            });
 
-//            DealRecyclerItemDecoration itemDecoration = new DealRecyclerItemDecoration(this, R.dimen.card_vertical_margin, categoryStoreRecyclerViewAdapter);
-//            rvNews.addItemDecoration(itemDecoration);
+            DealRecyclerItemDecoration itemDecoration = new DealRecyclerItemDecoration(this, R.dimen.card_vertical_margin, categoryStoreRecyclerViewAdapter);
+            rv.addItemDecoration(itemDecoration);
 
+            mAdapter = categoryStoreRecyclerViewAdapter;
         }
     }
 
@@ -118,8 +146,14 @@ public class MyPagesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setUpRecyclerView();
+        mAdapter.notifyDataSetChanged();
     }
+
+    public void onFinish(int resultCode){
+        setResult(resultCode, new Intent());
+        onBackPressed();
+    }
+
 
     @Override
     public void onBackPressed() {

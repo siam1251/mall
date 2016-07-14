@@ -77,9 +77,14 @@ public class Constants {
 
 	//REQUEST CODE
 	public final static int REQUEST_CODE_CHANGE_INTEREST = 101;
+	public final static int REQUEST_CODE_MY_PAGE_TYPE = 102;
 	public final static int RESULT_DONE_PRESSED_WITH_CHANGE = 0;
 	public final static int RESULT_DONE_PRESSED_WITHOUT_CHANGE = 1;
 	public final static int RESULT_EXIT = 2;
+
+	public final static int RESULT_DEALS = 1;
+	public final static int RESULT_EVENTS = 2;
+	public final static int RESULT_STORES = 3;
 
 	//OTHERS
 	public final static int NUMB_OF_DAYS = 7;
