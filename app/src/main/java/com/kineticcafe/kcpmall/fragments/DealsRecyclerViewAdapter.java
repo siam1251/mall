@@ -180,13 +180,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             tvDealTitle = (TextView)  v.findViewById(R.id.tvDealTitle);
             tvExpiryDate = (TextView)  v.findViewById(R.id.tvExpiryDate);
             ivFav         = (ImageView)  v.findViewById(R.id.ivFav);
-
-            /*StaggeredGridLayoutManager.LayoutParams rlp = (StaggeredGridLayoutManager.LayoutParams)mView.getLayoutParams();
-            if(mWidth == 0) mWidth = KcpUtility.getScreenWidth(mContext) / 2;
-            if(mHeight == 0) mHeight = (int) (KcpUtility.getScreenWidth(mContext) / KcpUtility.getFloat(mContext, R.dimen.ancmt_image_ratio));
-            rlp.width = mWidth;
-            rlp.height = mHeight;
-            mView.setLayoutParams(rlp);*/
         }
     }
 
@@ -220,8 +213,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             case KcpContentTypeFactory.ITEM_TYPE_LOADING:
                 return new LoadingViewHolder(LayoutInflater.from(mContext).inflate(R.layout.layout_loading_item, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_DEAL:
-                if(mDealLayoutResource != 0) return new DealsViewHolder(LayoutInflater.from(mContext).inflate(mDealLayoutResource, parent, false));
-                else return new DealsViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_deal, parent, false));
+                if(mDealLayoutResource != 0) return new DealsViewHolder(LayoutInflater.from(mContext).inflate(mDealLayoutResource, parent, false)); //showing the horizontal deals list inside store details
+                else return new DealsViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_deal, parent, false)); //normal deals list
             case KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST:
                 return new SetMyInterestViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_interest, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST:

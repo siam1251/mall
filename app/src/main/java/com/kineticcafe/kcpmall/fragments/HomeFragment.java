@@ -29,6 +29,7 @@ import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
+import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -41,6 +42,7 @@ public class HomeFragment extends BaseFragment {
     private DealsFragment mDealsFragment;
     private KcpNavigationRootManager mKcpNavigationRootManager;
     private KcpSocialFeedManager mKcpSocialFeedManager;
+    private ViewPager mViewPager;
 
     public static ArrayList<TwitterTweet> sTwitterFeedList = new ArrayList<>();
     public static ArrayList<InstagramFeed> sInstaFeedList = new ArrayList<>();
@@ -62,11 +64,11 @@ public class HomeFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        ViewPager vpHome = (ViewPager) view.findViewById(R.id.vpHome);
-        setupViewPager(vpHome);
+        mViewPager = (ViewPager) view.findViewById(R.id.vpHome);
+        setupViewPager(mViewPager);
 
         TabLayout tablayout = (TabLayout) view.findViewById(R.id.tlHome);
-        tablayout.setupWithViewPager(vpHome);
+        tablayout.setupWithViewPager(mViewPager);
 
         if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
                 mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null ) mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);
@@ -262,6 +264,11 @@ public class HomeFragment extends BaseFragment {
         if(mDealsFragment.mDealsRecyclerViewAdapter == null) return;
         mDealsFragment.mDealsRecyclerViewAdapter.updateRecommendedDealData(kcpContentPages);
     }
+
+    public void selectPage(int pageIndex){
+        mViewPager.setCurrentItem(pageIndex);
+    }
+
 
     @Override
     public void onResume() {

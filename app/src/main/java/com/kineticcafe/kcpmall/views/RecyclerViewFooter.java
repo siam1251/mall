@@ -26,8 +26,10 @@ public class RecyclerViewFooter {
             mView = v;
             tvFooter = (TextView)  v.findViewById(R.id.tvFooter);
 
-            StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) v.getLayoutParams();
-            p.setFullSpan(true);
+            if(v.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams){
+                StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) v.getLayoutParams();
+                p.setFullSpan(true);
+            }
         }
     }
 }

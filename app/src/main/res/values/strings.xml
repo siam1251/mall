@@ -137,5 +137,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="my_page_events">My Events</string>
     <string name="my_page_stores">My Stores</string>
     <string name="my_page_interests">My Interests</string>
+    <string name="explore_more_deals">Explore More Deals</string>
+    <string name="explore_more_events">Explore More Events</string>
+    <string name="explore_more_stores">Explore More Stores</string>
 
 </resources>
