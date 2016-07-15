@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
+import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
+import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpandroidsdk.models.MallInfo.AdditionalInfo;
 import com.kineticcafe.kcpandroidsdk.models.MallInfo.InfoList;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
@@ -109,6 +111,10 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_guest);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_amenities))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_amenities);
+            } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_shuttles))){
+                ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_shuttle);
+            } else if(mMallInfoType.contains(getResources().getString(R.string.mall_info_social))){
+                ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_social);
             }
 
             ExpandableTextView etvMallInfoDetail = (ExpandableTextView) findViewById(R.id.etvMallInfoDetail);
@@ -201,6 +207,19 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                         }
                     }, false);
 
+            CTA webpage = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_web,
+                    info.getEmail() == null ? null : info.getLinkTitle(),
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                             Utility.openWebPage(MallInfoDetailActivity.this, info.getLinkURL());
+                        }
+                    }, false);
+
             if(mMallInfoType.equals(getResources().getString(R.string.mall_info_gift_card))){
                 cTAList.add(location);
                 cTAList.add(phone);
@@ -214,6 +233,102 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 cTAList.add(phone);
                 cTAList.add(email);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_amenities))){
+
+            } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_shuttles))){
+
+                cTAList.add(googleMap);
+                cTAList.add(phone);
+
+                webpage = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_button,
+                        R.drawable.icn_web,
+                        info.getLinkTitle(),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Utility.openWebPage(MallInfoDetailActivity.this, info.getLinkURL());
+                            }
+                        }, false);
+
+                cTAList.add(webpage);
+
+            } else if(mMallInfoType.contains(getResources().getString(R.string.mall_info_social))){
+
+
+                CTA facebook = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_facebook,
+                        info.getFacebook().getTitle(),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Utility.openWebPage(MallInfoDetailActivity.this, info.getFacebook().getUrl());
+                            }
+                        }, false);
+
+                CTA instagram = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_instagram,
+                        info.getInstagram().getTitle(),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Utility.openWebPage(MallInfoDetailActivity.this, info.getInstagram().getUrl());
+                            }
+                        }, false);
+
+                CTA twiter = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_twitter,
+                        info.getTwitter().getTitle(),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Utility.openWebPage(MallInfoDetailActivity.this, info.getTwitter().getUrl());
+                            }
+                        }, false);
+
+                CTA youtube = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_youtube,
+                        info.getYoutube().getTitle(),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Utility.openWebPage(MallInfoDetailActivity.this, info.getYoutube().getUrl());
+                            }
+                        }, false);
+
+                CTA pinterest = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_social_button,
+                        R.drawable.icn_pinterest,
+                        info.getPinterest().getTitle(),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Utility.openWebPage(MallInfoDetailActivity.this, info.getPinterest().getUrl());
+                            }
+                        }, false);
+
+
+                cTAList.add(facebook);
+                cTAList.add(instagram);
+                cTAList.add(twiter);
+                cTAList.add(youtube);
+                cTAList.add(pinterest);
+
 
             }
 

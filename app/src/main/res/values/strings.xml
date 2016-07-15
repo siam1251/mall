@@ -115,6 +115,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="mall_info_about">About</string>
     <string name="mall_info_guest_service">Guest Service</string>
     <string name="mall_info_amenities">Amenities</string>
+    <string name="mall_info_shuttles">Shopping Shuttle</string>
+    <string name="mall_info_social">Social Network</string>
 
     <!--CTA-->
     <string name="cta_find_on_map">Find on Map</string>

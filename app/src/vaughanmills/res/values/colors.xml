@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="themeColor">#33b5e5</color>-->
+    <color name="themeColor">#aa66cc</color>
+    <color name="themeColorTransparent">#30aa66cc</color>
+    <color name="warningColor">#aa66cc</color> <!--#CFff4444-->
+    <color name="themeColorDark">#7A4A91</color>
+
+</resources>

@@ -1,0 +1,229 @@
+{
+    "hoursExceptions": [
+    ],
+	"infoList": [
+		{
+			"title": "Mall Hours",
+			"subtitle": "See upcoming holiday hours, special hours, etc.",
+            "imageURLs": ["mallinfo-banner-mallhours"]
+		},
+		{
+			"menuTitle": "Guest Service Kiosk",
+            "title": "Guest Service",
+			"subtitle": "Get in touch with our friendly guest service staff",
+            "locations": [
+                {
+                    "name": "Guest Service Kiosk",
+                    "locationID": "56ec218092eb3329db000004",
+                    "locationType": "amenity"
+                }
+            ],
+            "hours": "Today",
+            "imageURLs": ["mallinfo-banner-customerservice"],
+	        "phoneNumber": "(905) 879-2110",
+            "phoneURL": "tel://+19058792110",
+            "email": {
+                "title": "info@vaughanmills.com",
+                "url": "mailto:info@vaughanmills.com"
+            },
+            "details": "Need a hand? Our friendly guest service staff is located between Entry 4 & 5. Available services are listed below.",
+	        "additionalInfoTitle": "Available Services",
+            "additionalInfo": [
+                {
+                    "title": "Wheelchairs & Motorized Scooters",
+                    "details": "Complimentary wheelchairs and motorized scooters are available on a first-come, first-served basis. Photo Identification and valid credit card are required. Please note that scooters with a battery life of two green bars or less will not be rented out within two hours of the mall closing."
+                },
+                {
+                    "title": "Lost & Found",
+                    "details": "Lost or found an item during your visit? Be sure to contact our Security Control Centre at (905) 879-2111.\n\nFound items are transferred to the Security Office where they are kept for a minimum period of 30 days."
+                },
+                {
+                    "title": "First Aid",
+                    "details": "A first aid kit is available at the kiosk for our guests."
+                },
+                {
+                    "title": "TTY Telephone",
+                    "details": "A TTY unit is available for our guests with impaired hearing."
+                }
+            ]
+        },
+		{
+			"title": "Amenities",
+			"subtitle": "Find the Washrooms, lockers, 24-hour security, ATM and other amenities",
+            "imageURLs": ["mallinfo-banner-amenities"],
+            "details": "Looking for something else not listed? Vaughan Mills offers various amenities and complimentary services. View them on the interactive mall map.\n\nGuest Service\nWashrooms\nLockers\nATM\nPublic telephones\nShopping Shuttle\n\n<b>Other Available Services:</b>\n24-hour security\nWi-Fi\nFamily conveniences\nUniversal washrooms + nursing lounges\nStroller rentals\nFamily parking\nEmergency diaper change kits\n\nFor more information please visit the website: <a href=\"https://www.vaughanmills.com/info/centre-amenities/\">https://www.vaughanmills.com/info/centre-amenities/</a>"
+		},
+		{
+			"title": "Gift Card Balance",
+			"subtitle": "Check your Vaughan Mills Gift Card balance",
+			"imageURLs": ["mallinfo-banner-giftcard"],
+            "locations": [
+                {
+                    "name": "Guest Service Kiosk", 
+                    "locationType": "amenity"
+                }
+            ],
+	        "phoneNumber": "1 (800) 755-8608",
+            "phoneURL": "tel://+18007558608",
+	        "linkURL": "tab/profile_giftcards",
+	        "linkTitle": "Check Your Balance",
+            "linkType": "internal",
+            "details": "The Vaughan Mills Gift Card is accepted at our 250 fashion, outlet, dining, and entertainment options. Available at our Guest Services kiosk located between Entry 4 & 5.",
+            "additionalInfoTitle": "Frequently Asked Questions",
+            "additionalInfo": [
+                {
+                    "title": "Check your gift card balance",
+                    "details": "Already have a gift card? Tap on the \"Check your balance\" button above to check your balance online."
+                },
+                {
+                    "title": "Where to buy a gift card?",
+                    "details": "Come visit us at the Guest Service kiosk to get yours today!"
+                },
+                {
+                    "title": "Who accepts the gift card?",
+                    "details": "The Vaughan Mills gift card is accepted by all retailers with the exception of those listed on the non-participating merchant list found <a href=\"https://www.vaughanmills.com/info/gift-card\">here</a>."
+                },
+                {
+                    "title": "Further notice",
+                    "details": "Please note that purchases $1,000 and over must be approved by Management and all purchases $5,000 and over can only be made Monday to Friday from 9 AM - 5 PM."
+                }
+            ]
+		},
+		{
+			"menuTitle": "Social Network",
+            "title": "Vaughan Mills Social Network",
+			"subtitle": "Get social with Vaughan Mills",
+            "imageURLs": ["mallinfo-banner-social"],
+			"details": "Follow Vaughan Mills on all the following social networks!",
+		    "facebook": {
+                "title": "VaughanMills",
+                "url": "https://www.facebook.com/VaughanMills"
+            },
+            "twitter": {
+                "title": "Vaughan_Mills",
+                "url": "https://twitter.com/Vaughan_Mills"
+            },
+            "instagram": {
+                "title": "Vaughan_mills",
+                "url": "https://www.instagram.com/Vaughan_mills/"
+            },
+            "youtube": {
+                "title": "vaughanmillsmall",
+                "url": "https://www.youtube.com/user/vaughanmillsmall"
+            },
+            "pinterest": {
+                "title": "vaughanmills",
+                "url": "https://www.pinterest.com/vaughanmills/"
+            }
+        },
+        {
+            "title": "Public Transportation",
+            "subtitle": "See public transportation information and schedules",
+            "details": "View TTC Schedule:\n<a href=\"https://www.ttc.ca/Routes/index.jsp\">https://www.ttc.ca/Routes/index.jsp</a>\n\nView YRT Schedule:\n<a href=\"http://www.yrt.ca/en/schedulesmaps/schedulesmaps.asp\">http://www.yrt.ca/en/schedulesmaps/schedulesmaps.asp</a>",
+            "imageURLs": ["mallinfo-banner-transportation"],
+            "additionalInfoTitle": "Directions via Public Transit",
+            "additionalInfo": [
+                {
+                    "title": "From Toronto",
+                    "details": "Take TTC Line 1 to Yorkdale Station. At the bus stop on Yorkdale Rd., near the Holt Renfrew entrance, board YRT Route 360 - Vaughan Express* to Vaughan Mills.\n\n(*NOTE: This service is only available during rush hour on weekdays.)"
+                },
+                {
+                    "title": "From Finch Station",
+                    "details": "Take VIVA Blue NORTH and get off at Yonge and 16th-Carrville Road. From here, transfer to YRT Route 85 or 85C WEST to Vaughan Mills terminal."
+                },
+                {
+                    "title": "From Downsview Station",
+                    "details": "(NOTE: An extra fare is required to travel north of Steeles Ave.)\n\nTake TTC Route 105 or 105B NORTH to the Rutherford GO Station. From here, transfer to YRT Route 85, 85C, or 87 WEST to Vaughan Mills terminal.\n\nAlternate route (Weekdays only): Take TTC Route 107B North to the Rutherford GO Station. From the GO Station take YRT Route 85, 85C or 87 WEST to Vaughan Mills terminal.\n\nFor additional information on the TTC or YRT/Viva, including routes, fares and schedules, please visit: <a href=\"http://www.ttc.ca\">www.ttc.ca</a> or <a href=\"http://www.yorkregiontransit.com\">www.yorkregiontransit.com</a>."
+                },
+                {
+                    "title": "Vaughan Mills YRT Transit Terminal connects to:",
+                    "details": "Platform 1: 26 Maple Local\nPlatform 2: 12 Pine Valley and 87 Autumn Hill\nPlatform 3: 85 Rutherford - Westbound\nPlatform 4: 20/20A Jane - Southbound\nPlatform 5: 21 Vellore Local, 760 Vaughan Mills/Wonderland (Seasonal Service)\nPlatform 6: 20/20A Jane - Northbound\nPlatform 7: 85/85C Rutherford - Eastbound\nPlatform 8: 4 Major Mackenzie, 360 Vaughan Express\n\nNeed help planning your route? Visit the YRT Trip Planner."
+                }
+            ]
+        },
+        {
+            "title": "Shopping Shuttle",
+            "subtitle": "Our seasonal shuttle provides free roundtrip transportation from Toronto",
+            "imageURLs": ["mallinfo-banner-shuttle"],
+            "phoneNumber": "(905) 879-2110",
+            "phoneURL": "tel://+19058792110",
+            "linkTitle": "Shopping Shuttle",
+            "linkURL": "https://www.vaughanmills.com/tourism/shopping-shuttle/",
+            "locations": [
+                {
+                    "name": "Map Directions", 
+                    "locationType": "amenity"
+                }
+            ],
+            "details": "<b>IMPORTANT: The Shopping Shuttle operates between June 1 to September 30 and returns November 25 - December 26 for convenient Holiday shopping!</b>\n\nThe Shopping Shuttle provides free seasonal round-trip transportation from Toronto's Union Station to Vaughan Mills twice a day.\n\nPlease remember that you must depart from Vaughan Mills for your return trip back to Union Station based on the service schedule.\n\nTo register for the Vaughan Mills Shopping Shuttle, simply locate the City Tours Attractions Representatives at Union Station. Identification bracelets to ride the shuttle are distributed on a day-of, first-come, first-served basis. Please arrive well before the scheduled departure time to avoid disappointment. Shuttle boards on Front Street, between York St and Simcoe St, and drops off near Entry 6 upon arrival at Vaughan Mills.\n",
+            "additionalInfoTitle": "Service Schedule",
+            "additionalInfo": [
+                {
+                    "title": "Morning Service",
+                    "details": "Departs Union Station at 10 AM and returns from Vaughan Mills at 3 PM."
+                },
+                {
+                    "title": "Afternoon Service",
+                    "details": "Departs Union Station at 1 PM and returns from Vaughan Mills at 6 PM."
+                }
+            ]
+        },
+        {
+            "menuTitle": "Tourist Information",
+            "subtitle": "Discover a place where fashion, outlets, dining and entertainment meet",
+            "title": "Tourist Information",
+            "imageURLs": ["mallinfo-banner-touristinfo"],
+            "details": "We're please to offer you the following tourism programs:\n\nHotel Packages\n<a href=\"https://www.vaughanmills.com/tourism/hotel-packages/\">https://www.vaughanmills.com/tourism/hotel-packages/</a>\n\nGroup Tours\n<a href=\"https://www.vaughanmills.com/tourism/group-visits/\">https://www.vaughanmills.com/tourism/group-visits/</a>\n\nGift with Purchase Program\n<a href=\"https://www.vaughanmills.com/tourism/tourism-incentives/\">https://www.vaughanmills.com/tourism/tourism-incentives/</a>\n\nFirst Class Savings Booklet\n<a href=\"https://www.vaughanmills.com/tourism/tourism-incentives/\">https://www.vaughanmills.com/tourism/tourism-incentives/</a>\n\nVaughan Mill Shopping Shuttle\n<a href=\"https://www.vaughanmills.com/tourism/shopping-shuttle/\">https://www.vaughanmills.com/tourism/shopping-shuttle/</a>\n\nFor more information on any of our tourism programs, contact <a href=\"mailto:tourism@vaughanmills.com\">tourism@vaughanmills.com</a>.",
+            "additionalInfoTitle": "Hotel Packages",
+            "additionalInfo": [
+                {
+                    "title": "Aloft Vaughan Mills",
+                    "details": "151 Bass Pro Mills Dr, Vaughan, ON | <a href=\"tel://+19056950500\">905-695-0500</a>\n<a href=\"http://www.aloftvaughanmills.com/vaughan-mills-hotels\">http://www.aloftvaughanmills.com/vaughan-mills-hotels</a>"
+                },
+                {
+                    "title": "Best Western North York",
+                    "details": "50 Norfinch Dr, Toronto, ON | <a href=\"tel://+14166639500\">416-663-9500</a>\n<a href=\"http://www.bwtorontonorth.com\">http://www.bwtorontonorth.com</a>"
+                },
+                {
+                    "title": "Holiday Inn Express North York",
+                    "details": "30 Norfinch Dr, North York, ON | <a href=\"tel://+14166653500\">416-665-3500</a>\n<a href=\"http://www.ihg.com/holidayinnexpress/hotels/us/en/north-york/yyzny/hoteldetail/hotel-packages\">http://www.ihg.com/holidayinnexpress/hotels/us/en/north-york/yyzny/hoteldetail/hotel-packages</a>"
+                },
+                {
+                    "title": "Novotel Toronto Vaughan Centre",
+                    "details": "200 Bass Pro Mills Dr, Vaughan, ON | <a href=\"tel://+19056600212\">905-660-0212</a>\n<a href=\"http://www.novotel.com/gb/promotions-offers/special-offers/owm002157-001-novotel-toronto-vaughan-shopping.shtml\">http://www.novotel.com/gb/promotions-offers/special-offers/owm002157-001-novotel-toronto-vaughan-shopping.shtml</a>"
+                },
+                {
+                    "title": "SpringHill Suites",
+                    "details": "612 Applewood Cresecent, Vaughan, ON | <a href=\"tel://+19057609960\">905-760-9960</a>\n<a href=\"http://www.marriott.com/hotels/hotel-deals/yyzsv-springhill-suites-toronto-vaughan/\">http://www.marriott.com/hotels/hotel-deals/yyzsv-springhill-suites-toronto-vaughan/</a>"
+                }
+            ]
+        },
+        {
+            "title": "Accessibility",
+            "subtitle": "Vaughan Mills is committed to excellence in serving all customers",
+            "imageURLs": ["mallinfo-banner-accessibility"],
+            "details": "Vaughan Mills is committed to excellence in serving all customers and is an easily-accessible, one level shopping centre with:\n\nA Simple-to-Navigate Racetrack Design\nAutomatic Sliding Doors\nEasily Accessible Washrooms\n76 Prime Designated Accessible Parking Spaces\nComplimentary Wheelchairs and Scooters\nA Telecommunication Teletypewriter (TTY) (available at the Guest Services kiosk)\n\nComplimentary wheelchairs and motorized scooters are available on a first-come, first-served basis. Photo Identification and valid credit card are required. Please note that scooters with a battery life of two green bars or less will not be rented out within two hours of the mall closing.",
+            "phoneNumber": "(905) 879-2110",
+            "phoneURL": "tel://+19058792110",
+            "email": {
+                "title": "info@vaughanmills.com",
+                "url": "mailto:info@vaughanmills.com"
+            } 
+        },
+        {
+            "title": "About Vaughan Mills",
+            "subtitle": "Learn more at Vaughan Mills",
+            "imageURLs": ["mallinfo-banner-about"],
+            "details": "Welcome to a place where fashion, plus outlets, dining and entertainment equals a destination you have to experience to believe. One of the most unique collections found anywhere in Canada presents an unrivalled luxury outlet shopping experience for savvy shoppers from all over the globe.\n\nThe world's leading fashion and lifestyle brands await you including: Saks Fifth Avenue OFF Fifth, hr2 Holt Renfrew, Calvin Klein Outlet, Victoria's Secret, Victoria's Secret PINK, A|X Armani Exchange Outlet, Hugo Boss Factory Store, Banana Republic Factory Store, Michael Kors Outlet, The Outlet by Harry Rosen, TUMI, Brooks Brothers, MAC Cosmetics, Cole Haan, Vince Camuto, Tommy Hilfiger Outlet and so many more.\n\nVaughan Mills also includes world-class entertainment attractions, such as Pro Hockey Life, Bass Pro Shops Outdoor World and LEGOLAND Discovery Centre. Coming soon Sephora.\n",
+            "phoneNumber": "(905) 879-2110",
+            "phoneURL": "tel://+19058792110",
+            "locations": [
+                {
+                    "name": "1 Bass Pro Mills Dr, Vaughan, Ontario", 
+                    "locationID": "https://maps.google.com/maps?q=@43.8254765,-79.53859999999997",
+                    "locationType": "external"
+                }
+            ]
+        }
+	]
+}
