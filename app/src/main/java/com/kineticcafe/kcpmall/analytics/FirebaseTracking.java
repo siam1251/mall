@@ -74,7 +74,7 @@ public class FirebaseTracking {
         mFirebaseAnalytics.logEvent(Event.APP_LAUNCH, getUserProfileWithFormattedTimeStamp());
     }
     public void logAppPutBackground() {
-        mFirebaseAnalytics.logEvent(Event.APP_PUT_FOREGROUND, getUserProfileWithFormattedTimeStamp());
+        mFirebaseAnalytics.logEvent(Event.APP_PUT_BACKGROUND, getUserProfileWithFormattedTimeStamp());
     }
 
     public void logAppPutForeground() {
