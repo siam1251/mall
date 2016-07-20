@@ -14,9 +14,6 @@ public class KcpApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
-
-//        FirebaseTracking firebaseTracking = new FirebaseTracking(getApplicationContext());
-//        firebaseTracking.logAppLaunch();
+//        Fabric.with(this, new Crashlytics()); //ENABLE FOR PRODUCTION
     }
 }

@@ -25,6 +25,7 @@ import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+import com.kineticcafe.kcpmall.interfaces.FavouriteInterface;
 import com.kineticcafe.kcpmall.views.RecyclerViewFooter;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
@@ -42,6 +43,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
     private ArrayList<KcpContentPage> mKcpContentPagesRecommendedDeals;
     private boolean mhasSectionHeaders = true;
     private int mDealLayoutResource;
+    private FavouriteInterface mFavouriteInterface;
 
     private ArrayList<Object> mItems;
 
@@ -64,6 +66,10 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         mKcpContentPagesOtherDeals = otherDeals == null ? new ArrayList<KcpContentPage>() : new ArrayList<KcpContentPage>(otherDeals);
 
         createItems();
+    }
+
+    public void setFavouriteListener(FavouriteInterface favouriteInterface){
+        mFavouriteInterface = favouriteInterface;
     }
 
     public void createItems(){
@@ -301,7 +307,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                         @Override
                         public void OnSqueezeAnimationDone() {
                             dealHolder.ivFav.setSelected(!dealHolder.ivFav .isSelected());
-                            FavouriteManager.getInstance(mContext).addOrRemoveFavContent(likeLink, kcpContentPage);
+                            FavouriteManager.getInstance(mContext).addOrRemoveFavContent(likeLink, kcpContentPage, mFavouriteInterface);
                         }
                     }, (Activity) mContext, dealHolder.ivFav);
                 }

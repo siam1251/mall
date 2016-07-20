@@ -32,6 +32,7 @@ import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
+import com.kineticcafe.kcpmall.interfaces.FavouriteInterface;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
@@ -47,6 +48,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private ArrayList<KcpContentPage> mKcpContentPagesNews;
     private SocialFeedViewPagerAdapter mSocialFeedViewPagerAdapter;
+    private FavouriteInterface mFavouriteInterface;
 
     public NewsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> news) {
         mContext = context;
@@ -59,6 +61,10 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         mKcpContentPagesNews.addAll(kcpContentPages);
         removeInterestIfNeeded();
         notifyDataSetChanged();
+    }
+
+    public void setFavouriteListener(FavouriteInterface favouriteInterface){
+        mFavouriteInterface = favouriteInterface;
     }
 
     public void addData(ArrayList<KcpContentPage> kcpContentPages){
@@ -260,7 +266,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                         @Override
                         public void OnSqueezeAnimationDone() {
                             ancmtHolder.ivFav.setSelected(!ancmtHolder.ivFav.isSelected());
-                            FavouriteManager.getInstance(mContext).addOrRemoveFavContent(likeLink, kcpContentPage);
+                            FavouriteManager.getInstance(mContext).addOrRemoveFavContent(likeLink, kcpContentPage, mFavouriteInterface);
                         }
                     }, (Activity) mContext, ancmtHolder.ivFav);
                 }

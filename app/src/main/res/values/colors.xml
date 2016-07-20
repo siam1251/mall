@@ -124,6 +124,8 @@
     <!--OTHERS-->
     <color name="html_link_text_color">#0e8f9d</color>
     <color name="store_hours_box_bg_closed">#9b9b9b</color>
+    <color name="empty_placeholder_title_text">#888888</color>
+    <color name="empty_placeholder_desc_text">#a6a6a6</color>
 
 
 </resources>

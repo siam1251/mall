@@ -11,6 +11,7 @@ import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.interfaces.FavouriteInterface;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class FavouriteManager {
     private static HashMap<String, KcpContentPage> mStoreFavs;
     private static ArrayList<Integer> mInterestedCategoryList;
     private static ArrayList<String> mInterestedStoreList;
+    private FavouriteInterface mFavouriteInterface;
 
 
     private static FavouriteManager sFavouriteManager;
@@ -75,6 +77,11 @@ public class FavouriteManager {
         return new ArrayList<String>(mInterestedStoreList);
     }
 
+
+    public boolean addOrRemoveFavContent(final String likeLink, final KcpContentPage kcpContentPage, FavouriteInterface favouriteInterface){
+        mFavouriteInterface = favouriteInterface;
+        return addOrRemoveFavContent(likeLink, kcpContentPage);
+    }
 
     public boolean addOrRemoveFavContent(final String likeLink, final KcpContentPage kcpContentPage){
         if(kcpContentPage == null) return false;
@@ -107,6 +114,7 @@ public class FavouriteManager {
                 KcpUtility.saveGson(mContext, mGsonFavKey, favHashMap);
                 if(mFavouriteListener != null) mFavouriteListener.onFavouriteChanged();
                 mGsonFavKey = "";
+                if(mFavouriteInterface != null) mFavouriteInterface.didChangeFavourite();
             }
         });
 

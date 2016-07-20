@@ -24,6 +24,7 @@ import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+import com.kineticcafe.kcpmall.interfaces.FavouriteInterface;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.RecyclerViewFooter;
@@ -38,6 +39,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private ArrayList<KcpPlaces> mKcpPlacesList;
     private int mContentType;
+    private FavouriteInterface mFavouriteInterface;
 
     public CategoryStoreRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces, int contentType) {
         mContext = context;
@@ -73,6 +75,10 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
             ivFav         = (ImageView)  v.findViewById(R.id.ivFav);
             v.setTag(this);
         }
+    }
+
+    public void setFavouriteListener(FavouriteInterface favouriteInterface){
+        mFavouriteInterface = favouriteInterface;
     }
 
     @Override
@@ -154,7 +160,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
                         @Override
                         public void OnSqueezeAnimationDone() {
                             storeViewHolder.ivFav.setSelected(!storeViewHolder.ivFav .isSelected());
-                            FavouriteManager.getInstance(mContext).addOrRemoveFavContent(likeLink, kcpContentPage);
+                            FavouriteManager.getInstance(mContext).addOrRemoveFavContent(likeLink, kcpContentPage, mFavouriteInterface);
                         }
                     }, (Activity) mContext, storeViewHolder.ivFav);
                 }
