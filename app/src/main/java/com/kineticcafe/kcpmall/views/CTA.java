@@ -22,6 +22,17 @@ public class CTA {
     private TextView tvDetailBtnTitle;
     private ImageView ivDetailBtnImage;
 
+
+    /**
+     *
+     * @param activity
+     * @param parentView
+     * @param layout
+     * @param drawable
+     * @param title
+     * @param onClickListener
+     * @param hideIfEmpty for the ones that are available to download - set false to show progressbar
+     */
     public CTA(Activity activity, ViewGroup parentView, int layout, int drawable, String title, View.OnClickListener onClickListener, boolean hideIfEmpty) {
         mView = activity.getLayoutInflater().inflate(
                 layout,
@@ -32,7 +43,7 @@ public class CTA {
         tvDetailBtnTitle= (TextView) mView.findViewById(R.id.tvDetailBtnTitle);
         ivDetailBtnImage= (ImageView) mView.findViewById(R.id.ivDetailBtnImage);
 
-        if(hideIfEmpty){
+        if(hideIfEmpty && (title == null || title.equals(""))){
             mView.setVisibility(View.GONE);
         } else {
             if(title == null || title.equals("")) {

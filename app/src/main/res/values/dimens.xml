@@ -116,7 +116,9 @@
     <dimen name="detail_logo_width">200dp</dimen>
     <dimen name="detail_title_text">16sp</dimen>
     <dimen name="detail_button_height">48dp</dimen>
-    <dimen name="detail_button_image_width">14dp</dimen>
+    <!--<dimen name="detail_button_image_width">14dp</dimen>
+    <dimen name="detail_button_image_height">18dp</dimen>-->
+    <dimen name="detail_button_image_width">18dp</dimen>
     <dimen name="detail_button_image_height">18dp</dimen>
     <dimen name="detail_button_image_left_margin">21dp</dimen>
     <dimen name="detail_button_text_left_margin">36dp</dimen>

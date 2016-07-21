@@ -35,12 +35,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpDataListener;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.HomeBottomTapAdapter;
+import com.kineticcafe.kcpmall.analytics.FirebaseTracking;
+import com.kineticcafe.kcpmall.analytics.FirebaseUtility;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.fragments.DirectoryFragment;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
@@ -58,7 +61,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity
+//public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener /*, DirectoryFragment.OnCategoryClickListener*/ {
 
     protected final Logger logger = new Logger(getClass().getName());
@@ -73,6 +77,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FirebaseTracking.getInstance(this).logAppLaunch();
+
         final ImageView splashImage = (ImageView) MainActivity.this.findViewById(R.id.ivSplash);
         splashImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +114,6 @@ public class MainActivity extends AppCompatActivity
         mSplashThread.start();
 
         initializeToolbar();
-
 
         //disabling the default navigation drawer
 //        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -444,6 +450,12 @@ public class MainActivity extends AppCompatActivity
         } else if (id == android.R.id.home){
             onBackPressed();
         }
+
+        else if (id == R.id.action_test) {
+            throw new RuntimeException("This is a crash");
+        }
+
+
         return super.onOptionsItemSelected(item);
     }
 

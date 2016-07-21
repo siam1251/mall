@@ -74,6 +74,9 @@ import com.kineticcafe.kcpmall.views.SpacesItemDecoration;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class DetailActivity extends AppCompatActivity {
 //public class DetailActivity extends SwipeBackActivity {
@@ -109,10 +112,10 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         init(kcpContentPage);
-        downloadIfNecessary(kcpContentPage);
         showContentsWithCTL(kcpContentPage);
         setUpCTA(kcpContentPage);
         setUpDealsAndEvents(kcpContentPage);
+        downloadIfNecessary(kcpContentPage);
     }
 
     public void init(final KcpContentPage kcpContentPage){
@@ -162,31 +165,36 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
-    public void downloadIfNecessary(KcpContentPage kcpContentPage) {
-        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_LOADING){
-        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
-        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT){
-            if(kcpContentPage.getStoreNumber().equals("")){
-                downloadPlace(kcpContentPage);
-            }
-        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_DEAL){
-            if(kcpContentPage.getStoreNumber().equals("")){
-                downloadPlace(kcpContentPage);
-            }
-        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
-            if(kcpContentPage.getStoreNumber().equals("")){
-                downloadPlace(kcpContentPage);
-            }
+    public void downloadIfNecessary(final KcpContentPage kcpContentPage) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_LOADING){
+                } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
+                } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT){
+                    if(kcpContentPage.getStoreNumber().equals("")){
+                        downloadPlace(kcpContentPage);
+                    }
+                } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_DEAL){
+                    if(kcpContentPage.getStoreNumber().equals("")){
+                        downloadPlace(kcpContentPage);
+                    }
+                } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
+                    if(kcpContentPage.getStoreNumber().equals("")){
+                        downloadPlace(kcpContentPage);
+                    }
 
-            if(kcpContentPage.getContentPageList(true) == null){
-                downloadContentList(kcpContentPage);
+                    if(kcpContentPage.getContentPageList(true) == null){
+                        downloadContentList(kcpContentPage);
+                    }
+                }
             }
-        }
+        }).start();
     }
 
     public void setUpCTA(final KcpContentPage kcpContentPage){
         try {
-            List<CTA> cTAList = new ArrayList<>();
+            final List<CTA> cTAList = new ArrayList<>();
 
             //Store Location
             CTA location = new CTA(
@@ -541,8 +549,8 @@ public class DetailActivity extends AppCompatActivity {
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:
                         KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
                         KcpPlaces kcpPlace = kcpPlacesRoot.getPlaceById(kcpContentPage.getStoreId());
-//                        kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
                         kcpContentPage.setPlaceList(null, kcpPlace);
+
                         setUpCTA(kcpContentPage);
 
                         break;
@@ -565,7 +573,9 @@ public class DetailActivity extends AppCompatActivity {
                         KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
                         ArrayList<KcpContentPage> kcpContentPages = kcpPlacesRoot.getContentPagesById(kcpContentPage.getStoreId());
                         kcpContentPage.setContentPageList(kcpContentPages);
+
                         setUpDealsAndEvents(kcpContentPage);
+
                         break;
                     default:
                         super.handleMessage(inputMessage);
