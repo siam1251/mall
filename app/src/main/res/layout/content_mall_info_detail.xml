@@ -14,6 +14,8 @@
         >
 
         <TextView
+            android:lines="1"
+            android:ellipsize="end"
             android:id="@+id/tvMallInfoDetailTitle"
             android:gravity="center"
             android:textSize="@dimen/info_detail_title_txt"
@@ -22,14 +24,6 @@
             android:layout_height="@dimen/info_detail_title_height"
             android:textColor="@color/toolbar_text"
             />
-
-
-        <!--<TextView
-            android:id="@+id/tvDetailBody"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"/>-->
 
         <com.kineticcafe.kcpmall.views.ExpandableTextView
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -100,8 +94,6 @@
                 android:orientation="vertical" />
 
         </LinearLayout>
-
-
 
         <!-- SOCIAL SHARING -->
     </LinearLayout>

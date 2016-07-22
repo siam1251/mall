@@ -123,6 +123,10 @@ public class MallInfoDetailActivity extends AppCompatActivity{
             TextView expandable_text = (TextView) findViewById(R.id.expandable_text);
             HtmlTextView.setHtmlTextView(this, expandable_text, info.getDetails(), R.color.html_link_text_color);
 
+            TextView tvMallInfoDetailTitle = (TextView) findViewById(R.id.tvMallInfoDetailTitle);
+            tvMallInfoDetailTitle.setText(mMallInfoType);
+
+
         } catch (Exception e) {
             logger.error(e);
         }
@@ -260,7 +264,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 CTA facebook = new CTA(
                         this,
                         mParentView,
-                        R.layout.layout_detail_social_button,
+                        R.layout.layout_detail_social_button_mall_info,
                         R.drawable.icn_facebook,
                         info.getFacebook().getTitle(),
                         new View.OnClickListener() {
@@ -273,7 +277,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 CTA instagram = new CTA(
                         this,
                         mParentView,
-                        R.layout.layout_detail_social_button,
+                        R.layout.layout_detail_social_button_mall_info,
                         R.drawable.icn_instagram,
                         info.getInstagram().getTitle(),
                         new View.OnClickListener() {
@@ -286,7 +290,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 CTA twiter = new CTA(
                         this,
                         mParentView,
-                        R.layout.layout_detail_social_button,
+                        R.layout.layout_detail_social_button_mall_info,
                         R.drawable.icn_twitter,
                         info.getTwitter().getTitle(),
                         new View.OnClickListener() {
@@ -299,7 +303,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 CTA youtube = new CTA(
                         this,
                         mParentView,
-                        R.layout.layout_detail_social_button,
+                        R.layout.layout_detail_social_button_mall_info,
                         R.drawable.icn_youtube,
                         info.getYoutube().getTitle(),
                         new View.OnClickListener() {
@@ -312,7 +316,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 CTA pinterest = new CTA(
                         this,
                         mParentView,
-                        R.layout.layout_detail_social_button,
+                        R.layout.layout_detail_social_button_mall_info,
                         R.drawable.icn_pinterest,
                         info.getPinterest().getTitle(),
                         new View.OnClickListener() {

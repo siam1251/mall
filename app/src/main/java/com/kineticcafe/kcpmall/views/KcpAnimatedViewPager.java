@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -33,6 +34,7 @@ public class KcpAnimatedViewPager extends ViewPager /*implements ViewPager.OnPag
 
     private int mSelectedColor;
     private int mUnselectedColor;
+    private boolean enabled = true;
 
     public KcpAnimatedViewPager(Context context) {
         super(context);
@@ -107,6 +109,10 @@ public class KcpAnimatedViewPager extends ViewPager /*implements ViewPager.OnPag
         });
     }
 
+    public void setPagingEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public void setTabLayout(TabLayout tapLayout){
         mTabLayout = tapLayout;
         changeTabStateWhenSelected(mTabLayout.getTabAt(0).getCustomView(), true);
@@ -172,4 +178,25 @@ public class KcpAnimatedViewPager extends ViewPager /*implements ViewPager.OnPag
             tvTabTitle.startAnimation(faceOutAnim);
         }
     }
+
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (this.enabled) {
+            return super.onInterceptTouchEvent(event);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (this.enabled) {
+            return super.onTouchEvent(event);
+        }
+
+        return false;
+    }
+
+
 }

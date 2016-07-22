@@ -20,8 +20,8 @@ public class KcpApplication extends Application {
         super.onCreate();
         TwitterAuthConfig authConfig =  new TwitterAuthConfig(Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
 //        Fabric.with(this, new Crashlytics()); //ENABLE FOR PRODUCTION
-        Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
-//        Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
+//        Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
+        Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
 
     }
 }

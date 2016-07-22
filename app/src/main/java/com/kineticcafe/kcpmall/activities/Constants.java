@@ -36,6 +36,7 @@ public class Constants {
 	public final static int 	NUMB_OF_INSTA = 		10; //how many twitter tweets it will show at a time
 	public final static String INSTAGRAM_BASE_URL = 	"https://api.instagram.com/v1/";
 	public final static String INSTAGRAM_USER_NAME = 		"Vaughan_Mills";
+	public final static String INSTAGRAM_PACKAGE_NAME = 		"com.instagram.android"; //to see if app is installed
 //    public final static String INSTAGRAM_ACCESS_TOKEN = "1327329361.faee812.fd4d8c7df4be4407b535d4d11a264ce3"; //METROPOLIS
 //    public final static String INSTAGRAM_USER_ID = 		"231349563"; //METROPOLIS
 

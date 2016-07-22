@@ -11,11 +11,15 @@
     <string name="action_call">Call</string>
     <string name="action_exit">Exit</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_no_thanks">No, Thanks</string>
 
     <!--ALERT DIALOG TITLE-->
     <string name="title_unsaved_changes">Unsaved Changes</string>
     <string name="title_make_calls">Call Number</string>
     <string name="title_testing">INSERT MSG</string>
+    <string name="title_open_instagram_app">Open in Instagram App</string>
+    <string name="title_open_instagram_website">Open in Instagram Website</string>
+
 
     <!--FRAGMENT TITLE-->
     <string name="fragment_news">NEWS</string>
@@ -81,6 +85,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="warning_make_call">Do you want to call the number\n</string>
     <string name="warning_fav_added">Added a favourite!</string>
     <string name="warning_fav_removed">Favourite removed</string>
+    <string name="warning_open_instagram_app">Would you like to view this in the Instagram App?</string>
+    <string name="warning_open_instagram_website">Would you like to view this in the Instagram website?</string>
 
     <!--section header-->
     <string name="section_header_recommended_deals">Recommended Deals</string>
@@ -144,7 +150,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="explore_more_stores">Explore More Stores</string>
     <string name="empty_placeholder_title">You have no favourites!</string>
     <string name="empty_placeholder_desc_deal">This is where all your favourited deals will appear. Heart a deal to get started.</string>
-    <string name="empty_placeholder_desc_event">This is where all your favourited events will appear. Heart a deal to get started.</string>
-    <string name="empty_placeholder_desc_store">This is where all your favourited stores will appear. Heart a deal to get started.</string>
+    <string name="empty_placeholder_desc_event">This is where all your favourited events will appear. Heart an event to get started.</string>
+    <string name="empty_placeholder_desc_store">This is where all your favourited stores will appear. Heart a store to get started.</string>
+
 
 </resources>

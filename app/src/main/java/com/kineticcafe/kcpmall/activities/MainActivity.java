@@ -12,15 +12,12 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,11 +28,9 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpDataListener;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
@@ -43,7 +38,6 @@ import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.HomeBottomTapAdapter;
 import com.kineticcafe.kcpmall.analytics.FirebaseTracking;
-import com.kineticcafe.kcpmall.analytics.FirebaseUtility;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.fragments.DirectoryFragment;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
@@ -57,9 +51,6 @@ import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
@@ -128,7 +119,9 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onPageSelected(int position) {
-                if(position == 3) ablTopNav.setExpanded(true); //TODO: change this hardcode
+                if(position == 2 || position == 3) ablTopNav.setExpanded(true); //TODO: change this hardcode
+                if(position == 2) mViewPager.setPagingEnabled(false);
+                else mViewPager.setPagingEnabled(true);
             }
 
             @Override
@@ -374,6 +367,8 @@ public class MainActivity extends BaseActivity
 
         fragmentList.add(HomeFragment.getInstance());
         fragmentList.add(DirectoryFragment.getInstance());
+//        fragmentList.add(MapFragment.getInstance());
+//        fragmentList.add(new MapFragment());
         fragmentList.add(new TestFragment());
         fragmentList.add(InfoFragment.getInstance());
     }
