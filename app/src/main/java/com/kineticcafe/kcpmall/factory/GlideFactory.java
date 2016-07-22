@@ -44,27 +44,6 @@ public class GlideFactory {
                 .into(imageView);
     }
 
-    public void glideWithRatio(Context context, String url, ImageView imageView, float ratio){
-        if(imageView == null) return;
-        Glide.with(context)
-                .load(url)
-                .crossFade()
-                .override(KcpUtility.getScreenWidth(context), (int) (KcpUtility.getScreenWidth(context) / ratio))
-                .into(imageView);
-    }
-
-
-    public void glideWithRatio(Context context, String url, ImageView imageView, float ratio, final int errorDrawable){
-        if(imageView == null) return;
-        Glide.with(context)
-                .load(url)
-                .crossFade()
-                .override(KcpUtility.getScreenWidth(context), (int) (KcpUtility.getScreenWidth(context) / ratio))
-                .error(errorDrawable)
-                .placeholder(errorDrawable)
-                .into(imageView);
-    }
-
     /**
      * This will first check whether the image is available at the url. if not, it will just set the errorDrawable. The reason for not using .error(errorDrawable)
      * is because it takes longer for glide to figure whether the image is available and decide to use the errorDrawable.

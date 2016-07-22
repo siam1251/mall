@@ -84,6 +84,16 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
 
+        <activity
+            android:name="com.kineticcafe.kcpmall.activities.SocialDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
+
+        <activity
+            android:name="com.kineticcafe.kcpmall.activities.TwitterListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
+
         <!--FABRIC CRASHLYTICS-->
 
         <meta-data

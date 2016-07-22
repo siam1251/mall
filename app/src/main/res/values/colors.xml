@@ -126,6 +126,9 @@
     <color name="store_hours_box_bg_closed">#9b9b9b</color>
     <color name="empty_placeholder_title_text">#888888</color>
     <color name="empty_placeholder_desc_text">#a6a6a6</color>
+    <color name="twitter_theme_color">#50ABF1</color>
+    <color name="insta_date_color">#adadad</color>
+    <color name="insta_desc_color">#767676</color>
 
 
 </resources>

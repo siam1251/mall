@@ -33,7 +33,7 @@ public class Constants {
 	public final static String TWITTER_API_SECRET = 	"8KzSsk0u1yhYU5RUrnV5T2O75KeIUUXicbXXOD2eUxnRxvc4DB";
 
 	//INSTAGRAM
-	public final static int 	NUMB_OF_INSTA = 		5; //how many twitter tweets it will show at a time
+	public final static int 	NUMB_OF_INSTA = 		10; //how many twitter tweets it will show at a time
 	public final static String INSTAGRAM_BASE_URL = 	"https://api.instagram.com/v1/";
 	public final static String INSTAGRAM_USER_NAME = 		"Vaughan_Mills";
 //    public final static String INSTAGRAM_ACCESS_TOKEN = "1327329361.faee812.fd4d8c7df4be4407b535d4d11a264ce3"; //METROPOLIS
@@ -72,6 +72,7 @@ public class Constants {
 	public static final String ARG_EXTERNAL_CODE = 			"external_code";
 	public static final String ARG_CAT_NAME = 				"cat_name";
 	public static final String ARG_CATEGORY_ACTIVITY_TYPE = "cat_activity_type";
+	public static final String ARG_ACTIVITY_TYPE = "activity_type";
 	public enum CategoryActivityType { SUBCATEGORY, STORE }
 
 

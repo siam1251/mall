@@ -26,7 +26,8 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
 
     private static final String TAG = ExpandableTextView.class.getSimpleName();
 
-    private static final int MAX_COLLAPSED_LINES = 8;
+//    private static final int MAX_COLLAPSED_LINES = 8;
+    private static final int MAX_COLLAPSED_LINES = 3;
     private static final int DEFAULT_ANIM_DURATION = 300;
     private static final float DEFAULT_ANIM_ALPHA_START = 0.7f;
     protected TextView mTv;
@@ -42,6 +43,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
     private int mAnimationDuration;
     private float mAnimAlphaStart;
     private Shader mTextShader;
+    private int mTextColor;
 
     public ExpandableTextView(Context context) {
         super(context);
@@ -124,12 +126,14 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
                 }
             });
 
+
             mCollapsedHeight = getMeasuredHeight();
-            mTextShader = new LinearGradient(0, mCollapsedHeight/3, 0, mCollapsedHeight,
-                    new int[]{Color.BLACK, Color.TRANSPARENT},
-//                    new float[]{0, 1f}, TileMode.CLAMP);
+            mTextShader = new LinearGradient(0, 0, 0, mCollapsedHeight,
+                    new int[]{mTextColor, Color.TRANSPARENT},
                     null, TileMode.CLAMP);
             mTv.getPaint().setShader(mTextShader);
+
+
         }
     }
 
@@ -138,6 +142,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         mMaxCollapsedLines = typedArray.getInt(R.styleable.ExpandableTextView_maxCollapsedLines, MAX_COLLAPSED_LINES);
         mAnimationDuration = typedArray.getInt(R.styleable.ExpandableTextView_animDuration, DEFAULT_ANIM_DURATION);
         mAnimAlphaStart = typedArray.getFloat(R.styleable.ExpandableTextView_animAlphaStart, DEFAULT_ANIM_ALPHA_START);
+        mTextColor = typedArray.getColor(R.styleable.ExpandableTextView_textColor, Color.BLACK);
 
         mExpandString = "VIEW MORE";
         mCollapseString = "VIEW LESS";
