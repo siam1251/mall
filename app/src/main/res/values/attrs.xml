@@ -47,6 +47,7 @@
         <attr name="animAlphaStart" format="float"/>
         <attr name="expandDrawable" format="reference"/>
         <attr name="collapseDrawable" format="reference"/>
+        <attr name="textColor" format="color"/>
     </declare-styleable>
 </resources>
 

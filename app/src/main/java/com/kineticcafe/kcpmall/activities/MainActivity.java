@@ -282,7 +282,7 @@ public class MainActivity extends BaseActivity
     }
 
     public void startMyPageActivity(int listSize, final String myPageType){
-        if(listSize == 0) return;
+//        if(listSize == 0) return;
         //enable below if you want to closed drawer menu after you select an item from menu
 //        mDrawer.closeDrawers();
 //        new Thread() {

@@ -18,8 +18,8 @@
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <include
-                    layout="@layout/layout_toolbar_intrstd_category" />
+            <include
+                layout="@layout/layout_toolbar_intrstd_category" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -30,6 +30,56 @@
             android:gravity="center_horizontal"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             />
+
+        <ListView
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:visibility="gone"
+            android:id="@+id/lvTwitter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#e1e8ed"
+            android:dividerHeight="1dp"
+            android:drawSelectorOnTop="false"/>
+
+
+        <LinearLayout
+            android:visibility="invisible"
+            android:id="@+id/llPlaceholder"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ivPlaceholder"
+                android:src="@drawable/icn_empty_stores"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                />
+
+            <TextView
+                android:textSize="22sp"
+                android:textColor="@color/empty_placeholder_title_text"
+                android:gravity="center"
+                android:text="@string/empty_placeholder_title"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:lineSpacingMultiplier="1.1"
+                android:id="@+id/tvPlaceholderDesc"
+                android:textSize="16sp"
+                android:textColor="@color/empty_placeholder_desc_text"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="26dp"
+                android:gravity="center"
+                android:text="@string/empty_placeholder_desc_store"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 

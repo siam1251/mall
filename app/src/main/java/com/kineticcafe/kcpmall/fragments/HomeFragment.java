@@ -154,11 +154,10 @@ public class HomeFragment extends BaseFragment {
                         Recent recent = mKcpSocialFeedManager.getRecent();
                         if(recent == null) break;
                         int mediaSize = recent.getMediaList().size();
-
                         sInstaFeedList.clear();
                         for (int i = 0; i < mediaSize; i++) {
                             Media media = recent.getMediaList().get(i);
-                            sInstaFeedList.add(new InstagramFeed(media.getImages().getStandardResolution().getUrl()));
+                            sInstaFeedList.add(new InstagramFeed(media.getImages().getStandardResolution().getUrl(), media.getCaption().getCreatedTime(), media.getCaption().getText()));
                         }
                         if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
                                 mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null) {

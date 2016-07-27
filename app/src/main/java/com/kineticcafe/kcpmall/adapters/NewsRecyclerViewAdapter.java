@@ -4,7 +4,6 @@ package com.kineticcafe.kcpmall.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -20,18 +19,18 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
+import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
-import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
+import com.kineticcafe.kcpmall.activities.SocialDetailActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
+import com.kineticcafe.kcpmall.interfaces.FavouriteInterface;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
@@ -47,6 +46,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private ArrayList<KcpContentPage> mKcpContentPagesNews;
     private SocialFeedViewPagerAdapter mSocialFeedViewPagerAdapter;
+    private FavouriteInterface mFavouriteInterface;
 
     public NewsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> news) {
         mContext = context;
@@ -59,6 +59,10 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         mKcpContentPagesNews.addAll(kcpContentPages);
         removeInterestIfNeeded();
         notifyDataSetChanged();
+    }
+
+    public void setFavouriteListener(FavouriteInterface favouriteInterface){
+        mFavouriteInterface = favouriteInterface;
     }
 
     public void addData(ArrayList<KcpContentPage> kcpContentPages){
@@ -260,7 +264,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                         @Override
                         public void OnSqueezeAnimationDone() {
                             ancmtHolder.ivFav.setSelected(!ancmtHolder.ivFav.isSelected());
-                            FavouriteManager.getInstance(mContext).addOrRemoveFavContent(likeLink, kcpContentPage);
+                            FavouriteManager.getInstance(mContext).addOrRemoveFavContent(likeLink, kcpContentPage, mFavouriteInterface);
                         }
                     }, (Activity) mContext, ancmtHolder.ivFav);
                 }
@@ -302,6 +306,10 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 mSocialFeedViewPagerAdapter.getTwitterViewPagerAdapter(mContext, HomeFragment.sTwitterFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
+                        Intent intent = new Intent(mContext, SocialDetailActivity.class);
+                        intent.putExtra(Constants.ARG_ACTIVITY_TYPE, KcpContentTypeFactory.ITEM_TYPE_TWITTER);
+                        mContext.startActivity(intent);
+                        ActivityAnimation.startActivityAnimation(mContext);
                     }
                 });
             } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM){
@@ -309,6 +317,10 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 mSocialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext, HomeFragment.sInstaFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
+                        Intent intent = new Intent(mContext, SocialDetailActivity.class);
+                        intent.putExtra(Constants.ARG_ACTIVITY_TYPE, KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM);
+                        mContext.startActivity(intent);
+                        ActivityAnimation.startActivityAnimation(mContext);
                     }
                 });
             }
@@ -366,7 +378,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     /** circle page indicator*/
     private void setUiPageViewController(MainViewHolder holder) {
-        holder.dotsCount = Constants.NUMB_OF_INSTA; //viewpagerAdapter.getCount(); used for actual counting
+        holder.dotsCount = 5; //viewpagerAdapter.getCount(); used for actual counting
         holder.dots = new ImageView[holder.dotsCount];
 
         holder.llViewPagerCountDots.removeAllViews(); //prevent from creating second indicator

@@ -39,7 +39,8 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
 
     public SocialFeedViewPagerAdapter getTwitterViewPagerAdapter(Context context, List<TwitterTweet> twitterFeedList, OnSocialFeedClickListener onSocialFeedClickListener) {
         init(context);
-        mTwitterFeedList.addAll(twitterFeedList);
+        if(twitterFeedList.size() > 4) mTwitterFeedList.addAll(twitterFeedList.subList(0, 5));
+        else mTwitterFeedList.addAll(twitterFeedList);
         mSocialFeedType = SocialFeedType.TWITTER;
         mActualTitleListSize = mTwitterFeedList.size();
         mSocialFeedClickListener = onSocialFeedClickListener;
@@ -49,7 +50,8 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
 
     public SocialFeedViewPagerAdapter getInstaViewPagerAdapter(Context context, List<InstagramFeed> instaFeedList, OnSocialFeedClickListener onSocialFeedClickListener) {
         init(context);
-        mInstaFeedList.addAll(instaFeedList);
+        if(instaFeedList.size() > 4) mInstaFeedList.addAll(instaFeedList.subList(0, 5));
+        else mInstaFeedList.addAll(instaFeedList);
         mSocialFeedType = SocialFeedType.INSTA;
         mActualTitleListSize = mInstaFeedList.size();
         mSocialFeedClickListener = onSocialFeedClickListener;
@@ -66,15 +68,17 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
     //TODO: see if you need to update social adapter through news adapter or if notifyDatasetchanged needs to be called from news adapter afterwards
     public void updateTwitterData(ArrayList<TwitterTweet> twitterTweets) {
         mTwitterFeedList.clear();
-        mTwitterFeedList.addAll(twitterTweets);
+        if(twitterTweets.size() > 4) mTwitterFeedList.addAll(twitterTweets.subList(0, 5));
+        else mTwitterFeedList.addAll(twitterTweets);
         mActualTitleListSize = mTwitterFeedList.size();
         notifyDataSetChanged();
     }
 
     public void updateInstaData(ArrayList<InstagramFeed> instagramFeeds) {
         mInstaFeedList.clear();
-        mInstaFeedList.addAll(instagramFeeds);
-        mActualTitleListSize = mTwitterFeedList.size();
+        if(instagramFeeds.size() > 4) mInstaFeedList.addAll(instagramFeeds.subList(0, 5));
+        else mInstaFeedList.addAll(instagramFeeds);
+        mActualTitleListSize = mInstaFeedList.size();
         notifyDataSetChanged();
     }
 
@@ -117,7 +121,7 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
                     mContext,
                     mInstaFeedList.get(position).instaPicUrl,
                     ivInsta,
-                    R.drawable.view_shadow
+                    R.drawable.placeholder
             );
 
             collection.addView(itemView);

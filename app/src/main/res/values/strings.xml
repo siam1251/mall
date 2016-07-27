@@ -142,5 +142,9 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="explore_more_deals">Explore More Deals</string>
     <string name="explore_more_events">Explore More Events</string>
     <string name="explore_more_stores">Explore More Stores</string>
+    <string name="empty_placeholder_title">You have no favourites!</string>
+    <string name="empty_placeholder_desc_deal">This is where all your favourited deals will appear. Heart a deal to get started.</string>
+    <string name="empty_placeholder_desc_event">This is where all your favourited events will appear. Heart a deal to get started.</string>
+    <string name="empty_placeholder_desc_store">This is where all your favourited stores will appear. Heart a deal to get started.</string>
 
 </resources>

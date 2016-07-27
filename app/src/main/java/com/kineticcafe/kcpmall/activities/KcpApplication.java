@@ -4,6 +4,10 @@ import android.app.Application;
 
 import com.kineticcafe.kcpmall.analytics.FirebaseTracking;
 import com.crashlytics.android.Crashlytics;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.tweetui.TweetUi;
+
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -14,9 +18,10 @@ public class KcpApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+        TwitterAuthConfig authConfig =  new TwitterAuthConfig(Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
+//        Fabric.with(this, new Crashlytics()); //ENABLE FOR PRODUCTION
+        Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
+//        Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
 
-//        FirebaseTracking firebaseTracking = new FirebaseTracking(getApplicationContext());
-//        firebaseTracking.logAppLaunch();
     }
 }
