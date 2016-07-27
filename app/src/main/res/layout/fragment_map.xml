@@ -1,28 +1,172 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    android:background="@color/card_bg">
 
-    <fragment
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:name="com.mappedin.sdk.MapView"
-        android:id="@+id/mapFragment"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true" />
+    <RelativeLayout
+        android:id="@+id/rlBlurredView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/shadow_inverted_height"
+            android:src="@drawable/view_shadow"/>
+
+        <FrameLayout
+            android:id="@+id/flMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            />
+
+        <!--<fragment
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:name="com.mappedin.sdk.MapView"
+            android:id="@+id/mapFragment"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true" />-->
+
+        <ProgressBar
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:id="@+id/pb"
+            style="@style/progressBarMedium"
+            />
 
 
-    <ProgressBar
-        android:layout_centerInParent="true"
-        android:id="@+id/pb"
-        style="@style/progressBarMedium"
+        <Button
+            android:paddingBottom="50dp"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Go!"
+            android:id="@+id/goButton"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:background="@color/themeColorTransparent"
+            android:visibility="invisible"
+            />
+
+
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show Locations"
+            android:id="@+id/showLocationButton"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:visibility="invisible"
+            />
+
+
+
+        <RelativeLayout
+            android:id="@+id/rlDirection"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="109dp"
+            android:visibility="invisible"
+            >
+
+            <!--height = height of llDirection + 1/2 height of imageView-->
+
+
+            <LinearLayout
+                android:id="@+id/llDirection"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="82dp"
+                android:paddingLeft="17dp"
+                android:background="#cb272626"
+                >
+
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvStoreName"
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="#ddffffff"
+                    android:layout_marginBottom="2dp"
+                    android:text="Holt Renfrew"/>
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:layout_marginTop="2dp"
+                    android:layout_below="@id/tvStoreName"
+                    android:id="@+id/tvCategoryName"
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="#89ffffff"
+                    android:text="Department Store"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_above="@+id/llDirection"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/shadow_inverted_height"
+                android:src="@drawable/view_shadow_inverted"/>
+
+            <RelativeLayout
+                android:layout_marginRight="14dp"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <View
+                    android:id="@+id/viewRoute"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:background="@drawable/view_circle_theme"
+                    />
+
+                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                    android:layout_centerInParent="true"
+                    ThemedImageView:filterColor="@color/white"
+                    android:id="@+id/ivDirection"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/icn_routes"/>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <com.kineticcafe.kcpmall.adapters.adapterHelper.IndexableRecylerView
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rv"
+        android:gravity="center_horizontal"
         />
+
+
 
 
 </RelativeLayout>

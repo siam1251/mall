@@ -17,7 +17,14 @@
             app:elevation="0dp"
             >
 
-            <include layout="@layout/layout_toolbar" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include layout="@layout/layout_toolbar" />
+                <include layout="@layout/layout_destination_editor" />
+
+            </RelativeLayout>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -25,10 +32,10 @@
             android:id="@+id/vpMain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/vpMain_padding_bottom"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:selectedColor="@color/themeColor"
             app:unSelectedColor="@color/menu_text_unselected"
+            android:paddingBottom="@dimen/main_app_bar_layout_height"
             />
 
     </android.support.design.widget.CoordinatorLayout>
@@ -40,9 +47,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/main_app_bar_layout_height"
         android:layout_alignParentBottom="true"
-        android:elevation="2dp"
         app:layout_collapseMode="pin"
         app:tabIndicatorHeight="0dp"/>
+        android:elevation="2dp"
 
     <ImageView
         android:layout_above="@+id/tlBottom"

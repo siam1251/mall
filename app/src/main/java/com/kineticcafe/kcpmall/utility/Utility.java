@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpmall.R;
@@ -276,6 +277,13 @@ public class Utility {
     }
 
 
+    public static void closeKeybaord(Activity activity){
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
     public static Bitmap getBlurredImage(Context context, Bitmap sentBitmap, int radius){
 
         if (Build.VERSION.SDK_INT > 16) {

@@ -1,17 +1,39 @@
 package com.kineticcafe.kcpmall.fragments;
 
-import android.content.Context;
+import android.app.Fragment;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.UiThread;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SearchView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
+import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.adapters.adapterHelper.IndexableRecylerView;
+import com.kineticcafe.kcpmall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.mappedin.CustomLocation;
+import com.kineticcafe.kcpmall.utility.BlurBuilder;
 import com.mappedin.jpct.Logger;
 import com.mappedin.sdk.Coordinate;
 import com.mappedin.sdk.Directions;
@@ -29,6 +51,8 @@ import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.RawData;
 import com.mappedin.sdk.Venue;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -45,53 +69,226 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
         return sMapFragment;
     }
 
-    private Toolbar toolbar;
+    enum SearchMode { STORE, ROUTE_START, ROUTE_DESTINATION }
+    public SearchMode mSearchMode = SearchMode.STORE;
+
+    private ProgressBar pb;
+    private View view;
+    private SearchView mSearchView;
+    private IndexableRecylerView rv;
+    private RelativeLayout rlDirection;
+//    private SearchView svDirection;
+    private TextView tvStoreName;
+    private TextView tvCategoryName;
+    private View viewRoute;
+//    private ImageView ivRoute;
+    private String mSearchString = "";
+    private MenuItem mSearchItem;
+    private MenuItem mFilterItem;
+    public CategoryStoreRecyclerViewAdapter mPlaceRecyclerViewAdapter;
+
+
+
+
 
     //MAPPED IN
     private boolean accessibleDirections = false;
     private MapViewDelegate delegate = this;
+
     private MappedIn mappedIn = null;
     private MapView mapView = null;
+    private Map[] maps = null;
+
+//    private Spinner mapSpinner = null;
+//    private TextView titleLabel = null;
+//    private TextView descriptionLabel = null;
+//    private ImageView logoImageView = null;
+//    private TextView selectOriginTextView = null;
+    private Button goButton = null;
+    private Button showLocationsButton = null;
+
     private HashMap<Polygon, Integer> originalColors = new HashMap<Polygon, Integer>();
     private HashMap<Overlay, LocationLabelClicker> overlays = new HashMap<Overlay, LocationLabelClicker>();
     private Venue activeVenue = null;
-    private Context context;
     private boolean navigationMode = false;
     private Path path;
     private Polygon destinationPolygon = null;
-    private ProgressBar pb;
-    private View view;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.fragment_map, container, false);
-
         pb = (ProgressBar) view.findViewById(R.id.pb);
-        mappedIn = new MappedIn(getActivity());
-        mappedIn.getVenues(new GetVenuesCallback());
+        rv = (IndexableRecylerView) view.findViewById(R.id.rv);
+        rlDirection = (RelativeLayout) view.findViewById(R.id.rlDirection);
+        tvStoreName = (TextView) view.findViewById(R.id.tvStoreName);
+        tvCategoryName = (TextView) view.findViewById(R.id.tvCategoryName);
+        viewRoute = (View) view.findViewById(R.id.viewRoute);
+        viewRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+//                rlDirection.setVisibility(View.GONE);
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+
+                    final RelativeLayout rlBlurredView = (RelativeLayout) view.findViewById(R.id.rlBlurredView);
+//                    final View content = rlBlurredView.getRootView();
+                    if (rlBlurredView.getWidth() > 0) {
+                        Bitmap image = BlurBuilder.blur(rlBlurredView);
+//                        rlBlurredView.setBackgroundDrawable(new BitmapDrawable(getActivity().getResources(), image));
+                        rv.setBackgroundDrawable(new BitmapDrawable(getActivity().getResources(), image));
+                    } else {
+                        rlBlurredView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                            @Override
+                            public void onGlobalLayout() {
+                                Bitmap image = BlurBuilder.blur(rlBlurredView);
+                                rv.setBackgroundDrawable(new BitmapDrawable(getActivity().getResources(), image));
+                            }
+                        });
+                    }
+                }
+
+
+                showDirectionEditor(tvStoreName.getText().toString(), "");
+            }
+        });
+
+
+
+        mapView = new MapView();
+//        mapView = (MapView) getActivity().getFragmentManager().findFragmentById(R.id.mapFragment); //another way of adding fragment
+        mappedIn = new MappedIn(getActivity());
+
+        //UI handling from sample
+//        mapSpinner = (Spinner) view.findViewById(R.id.mapSpinner);
+//        logoImageView = (ImageView) view.findViewById(R.id.logoImageView);
+//        titleLabel = (TextView) view.findViewById(R.id.titleLabel);
+//        descriptionLabel = (TextView) view.findViewById(R.id.descriptionLabel);
+//        selectOriginTextView = (TextView) view.findViewById(R.id.selectOriginTextView);
+        goButton = (Button) view.findViewById(R.id.goButton);
+        goButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startNavigation();
+            }
+        });
+
+        showLocationsButton = (Button) view.findViewById(R.id.showLocationButton);
+        showLocationsButton.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { showLocations();}});
+
+//        pb.setVisibility(View.VISIBLE);
+//        mappedIn.getVenues(new GetVenuesCallback()); //load map
+
+        setHasOptionsMenu(true);
+        setupRecyclerView();
         return view;
     }
 
+    public interface OnStoreClickListener {
+        public void onStoreClick(String storeName, String categoryName);
+    }
+
+
+    public void setupRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        rv.setLayoutManager(linearLayoutManager);
+        rv.setLayoutManager(linearLayoutManager);
+
+        ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
+        ArrayList<KcpPlaces> kcpPlacesFiltered;
+        if(mSearchString.equals("")) kcpPlacesFiltered = new ArrayList<>(kcpPlaces);
+        else {
+            kcpPlacesFiltered = new ArrayList<>();
+            for(int i = 0; i < kcpPlaces.size(); i++){
+
+                if(kcpPlaces.get(i).getPlaceName().toLowerCase().contains(mSearchString.toLowerCase())) {
+                    kcpPlacesFiltered.add(kcpPlaces.get(i));
+                }
+            }
+        }
+
+        mPlaceRecyclerViewAdapter = new CategoryStoreRecyclerViewAdapter(
+                getActivity(),
+                kcpPlacesFiltered, KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE, new OnStoreClickListener() {
+            @Override
+            public void onStoreClick(String storeName, String categoryName) {
+                if(mSearchMode.equals(SearchMode.STORE)){
+                    showDirectionCard(storeName, categoryName);
+                } else if(mSearchMode.equals(SearchMode.ROUTE_START)){
+                    mMainActivity.setDestionationNames(storeName, null);
+                    if(mMainActivity.getStartStoreText() != null && mMainActivity.getDestStoreText() != null) {
+                        //TODO: START ROUTING HERE
+//                        rv.setVisibility(View.INVISIBLE);
+                        mMainActivity.toggleDestinationEditor(true, null, null, null, null);
+                    }
+                } else if(mSearchMode.equals(SearchMode.ROUTE_DESTINATION)){
+                    mMainActivity.setDestionationNames(null, storeName);
+
+                    if(mMainActivity.getStartStoreText() != null && mMainActivity.getDestStoreText() != null) {
+                    //TODO: START ROUTING HERE
+//                        rv.setVisibility(View.INVISIBLE);
+                        mMainActivity.toggleDestinationEditor(true, null, null, null, null);
+                    }
+                }
+                mSearchString = "";
+                setupRecyclerView();
+            }
+        });
+
+
+
+        List<SectionedLinearRecyclerViewAdapter.Section> sections =
+                new ArrayList<SectionedLinearRecyclerViewAdapter.Section>();
+        List<String> sectionName = new ArrayList<String>();
+        List<Integer> sectionPosition = new ArrayList<Integer>();
+        String startLetter = null;
+        for(int i = 0; i < kcpPlacesFiltered.size(); i++){
+            String currentStoreNameStartLetter = String.valueOf(kcpPlacesFiltered.get(i).getPlaceName().toUpperCase().charAt(0));
+            if(startLetter == null || !startLetter.equals(currentStoreNameStartLetter)) {
+                startLetter = currentStoreNameStartLetter;
+                sections.add(new SectionedLinearRecyclerViewAdapter.Section(i, startLetter));
+                sectionName.add(startLetter);
+                sectionPosition.add(i + sections.size());
+            }
+        }
+
+        rv.setFastScrollEnabled(true);
+        rv.setIndexAdapter(sectionName, sectionPosition);
+
+        SectionedLinearRecyclerViewAdapter.Section[] dummy = new SectionedLinearRecyclerViewAdapter.Section[sections.size()];
+        SectionedLinearRecyclerViewAdapter mSectionedAdapter = new SectionedLinearRecyclerViewAdapter(
+                getActivity(),
+                R.layout.list_section_place,
+                R.id.section_text,
+                rv,
+                mPlaceRecyclerViewAdapter);
+        mSectionedAdapter.setSections(sections.toArray(dummy));
+        rv.setAdapter(mSectionedAdapter);
+    }
+
+
+    // Get the basic info for all Venues we have access to
     private class GetVenuesCallback implements MappedinCallback<Venue[]> {
         @Override
         public void onCompleted(final Venue[] venues) {
-            Logger.log("++++++ GetVenuesCallback");
             if (venues.length == 0 ) {
                 Logger.log("No venues available! Are you using the right credentials? Talk to your mappedin representative.");
                 return;
             }
-//            activeVenue = venues[0]; // Grab the first venue, which is likely all you have
-            activeVenue = venues[1]; // Grab the first venue, which is likely all you have
-            showLocations();
-            mapView = (MapView) getActivity().getFragmentManager().findFragmentById(R.id.mapFragment);
 
+            activeVenue = venues[1];
 
+            if(!mapView.isAdded()){
+                android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+                transaction.add(R.id.flMap, mapView);
+                transaction.commit();
+            }
+
+//            mapView = (MapView) getActivity().getFragmentManager().findFragmentById(R.id.mapFragment);
             mapView.setDelegate(delegate);
             mappedIn.getVenue(activeVenue, accessibleDirections, new CustomLocationGenerator(), new GetVenueCallback());
         }
@@ -119,6 +316,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
                 }
             });
             mapView.setMap(maps[0]);
+            if(pb != null) pb.setVisibility(View.GONE);
             //mapSpinner.setAdapter(new ArrayAdapter<Map>());
         }
 
@@ -136,44 +334,49 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
         }
     }
 
-    @Override
-    public void didTapPolygon(final Polygon polygon) {
+    public void didTapPolygon(Polygon polygon) {
+        if (navigationMode) {
+            if (path != null) {
+                didTapNothing();
+                return;
+            }
+            if (polygon.getLocations().size() == 0) {
+                return;
+            }
+
+            Directions directions = destinationPolygon.directionsFrom(activeVenue, polygon, destinationPolygon.getLocations().get(0).getName(), polygon.getLocations().get(0).getName());
+            if (directions != null) {
+                path = new Path(directions.getPath(), 0.05f, 0.05f, 0x4ca1fc);
+                mapView.addPath(path);
+                mapView.getCamera().focusOn(directions.getPath());
+            }
+
+            highlightPolygon(polygon, 0x007afb);
+            highlightPolygon(destinationPolygon, 0xff834c);
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+//                    selectOriginTextView.setVisibility(View.INVISIBLE);
+                }
+            });
+            return;
+        }
+        clearHighlightedColours();
+        if (polygon.getLocations().size() == 0) {
+            return;
+        }
+        destinationPolygon = polygon;
+        highlightPolygon(polygon, 0x4ca1fc);
         getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (navigationMode) {
-                    if (path != null) {
-                        didTapNothing();
-                        return;
-                    }
-                    if (polygon.getLocations().size() == 0) {
-                        return;
-                    }
-
-                    Directions directions = destinationPolygon.directionsFrom(activeVenue, polygon, destinationPolygon.getLocations().get(0).getName(), polygon.getLocations().get(0).getName());
-                    if (directions != null) {
-                        path = new Path(directions.getPath(), 5f, 5f, 0x4ca1fc);
-                        mapView.addPath(path);
-                        mapView.getCamera().focusOn(directions.getPath());
-                    }
-
-                    highlightPolygon(polygon, 0x007afb);
-                    highlightPolygon(destinationPolygon, 0xff834c);
-
-                    return;
-                }
-                clearHighlightedColours();
-                if (polygon.getLocations().size() == 0) {
-                    return;
-                }
-                destinationPolygon = polygon;
-                highlightPolygon(polygon, 0x4ca1fc);
-//                showLocationDetails((CustomLocation) polygon.getLocations().get(0));
+            public void run () {
+                showLocationDetails((CustomLocation) destinationPolygon.getLocations().get(0));
             }
         });
     }
 
-    @Override
+    public void didTapMarker() {
+
+    }
+
     public void didTapOverlay(Overlay overlay) {
         LocationLabelClicker clicker = overlays.get(overlay);
         if (clicker != null) {
@@ -183,12 +386,12 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
         }
     }
 
-    @Override
     public void didTapNothing() {
         clearHighlightedColours();
         clearLocationDetails();
         stopNavigation();
         clearMarkers();
+
     }
 
     private void highlightPolygon(Polygon polygon, int color) {
@@ -197,41 +400,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
         }
         polygon.setColor(color);
     }
-
-    private void clearLocationDetails() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
-    }
-
-    private void clearMarkers() {
-        mapView.removeAllMarkers();
-    }
-
-    private void startNavigation() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                stopNavigation();
-                navigationMode = true;
-            }
-        });
-    }
-
-    private void stopNavigation() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mapView.removeAllPaths();
-                navigationMode = false;
-                path = null;
-            }
-        });
-    }
-
 
     private void clearHighlightedColours() {
         Set<java.util.Map.Entry<Polygon, Integer>> colours = originalColors.entrySet();
@@ -242,51 +410,238 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
         originalColors.clear();
     }
 
-    private class LocationLabelClicker {
-        public Location location = null;
-        public void click() {
-            didTapNothing();
-            Coordinate start = activeVenue.getLocations()[5].getNavigatableCoordinates().get(0);
-            Directions directions = location.directionsFrom(activeVenue, start, null, null);
-            if (directions != null) {
-                path = new Path(directions.getPath(), 5f, 5f, 0x4ca1fc);
-                mapView.addPath(path);
-                mapView.getCamera().focusOn(directions.getPath());
+    private void showLocationDetails(CustomLocation location) {
+        clearLocationDetails();
+//        titleLabel.setText(location.getName());
+//        descriptionLabel.setText(location.description);
+        goButton.setVisibility(View.VISIBLE);
+
+        // This sample is using the Ion framework for easy image loading/cacheing. You can use what you like
+        // https://github.com/koush/ion
+        /*if (location.logo != null) {
+            String url = location.logo.get(logoImageView.getWidth(), getActivity()).toString();
+            if (url != null) {
+                //TODO: switch Ion to Glide
+                Ion.with(logoImageView)
+                        //.placeholder(R.drawable.placeholder_image)
+                        //.error(R.drawable.error_image)
+                        //.animateLoad(Animation)
+                        .load(location.logo.get(logoImageView.getWidth(), getActivity()).toString());
+                *//*Glide.with(getActivity())
+                        .load(location.logo.get(logoImageView.getWidth(), getActivity()).toString())
+                        .into(logoImageView);*//*
             }
-        };
+        }*/
     }
 
-    private void showLocations() {
-        if(overlays.size() > 0) {
-            pb.setVisibility(View.GONE);
-            return;
-        }
-
+    private void clearLocationDetails() {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                for (Location location : activeVenue.getLocations()) {
-                    List<Coordinate> coords = location.getNavigatableCoordinates();
-                    if (coords.size() > 0) {
-                        Overlay2DLabel label = new Overlay2DLabel(location.getName(), 36, Typeface.DEFAULT);
-                        label.setPosition(coords.get(0));
-                        LocationLabelClicker clicker = new LocationLabelClicker();
-                        clicker.location = location;
-                        overlays.put(label, clicker);
-                        mapView.addMarker(label);
-                    }
-                }
-                pb.setVisibility(View.GONE);
-
+        //        titleLabel.setText("");
+        //        descriptionLabel.setText("");
+        //        logoImageView.setImageDrawable(null);
+                goButton.setVisibility(View.INVISIBLE);
             }
         });
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        }).start();
     }
 
+    private void clearMarkers() {
+        mapView.removeAllMarkers();
+    }
+
+    private void startNavigation() {
+        stopNavigation();
+        navigationMode = true;
+//        selectOriginTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void stopNavigation() {
+//        selectOriginTextView.setVisibility(View.INVISIBLE);
+        mapView.removeAllPaths();
+        navigationMode = false;
+        path = null;
+    }
+
+    private void showLocations() {
+        for (Location location : activeVenue.getLocations()) {
+
+            List<Coordinate> coords = location.getNavigatableCoordinates();
+            if (coords.size() > 0) {
+                Overlay2DLabel label = new Overlay2DLabel(location.getName(), 36, Typeface.DEFAULT);
+                label.setPosition(coords.get(0));
+                LocationLabelClicker clicker = new LocationLabelClicker();
+                clicker.location = (CustomLocation) location;
+                overlays.put(label, clicker);
+                mapView.addMarker(label);
+            }
+        }
+    }
+
+    private class LocationLabelClicker {
+        public CustomLocation location = null;
+        public void click() {
+            getActivity().runOnUiThread(new Runnable() {
+                public void run () {
+                    didTapNothing();
+                    showLocationDetails(location);
+                }
+            });
+        };
+    }
+
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+
+        menu.findItem(R.id.action_backend_vm).setVisible(false);
+        menu.findItem(R.id.action_backend_mp).setVisible(false);
+        menu.findItem(R.id.action_test).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.menu_map, menu);
+
+        mSearchItem = menu.findItem(R.id.action_search);
+        mFilterItem = menu.findItem(R.id.action_filter);
+        mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
+        mSearchView.setOnQueryTextListener(new QueryTextListener());
+        mSearchView.setQueryHint(getString(R.string.hint_search_store));
+        mSearchItem.setShowAsAction(MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
+                        | MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        MenuItemCompat.setOnActionExpandListener(mSearchItem,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        rv.setVisibility(View.INVISIBLE);
+                        mFilterItem.setVisible(true);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        mSearchMode = SearchMode.STORE;
+                        rlDirection.setVisibility(View.GONE);
+                        mFilterItem.setVisible(false);
+                        rv.setVisibility(View.VISIBLE);
+                        return true;
+                    }
+                });
+    }
+
+    public class EditTextTextChangeListener implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            onTextChange(s.toString());
+        }
+    }
+
+    public class FocusListener implements View.OnFocusChangeListener{
+
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus) {
+                rv.setVisibility(View.VISIBLE);
+                if(v.getId() == R.id.etDestStore) mSearchMode = SearchMode.ROUTE_DESTINATION;
+                else if(v.getId() == R.id.etStartStore) mSearchMode = SearchMode.ROUTE_START;
+            } else {
+                rv.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+
+    public class QueryTextListener implements SearchView.OnQueryTextListener {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            onTextChange(s);
+            return false;
+        }
+    }
+
+    public void onTextChange(String s) {
+        mSearchString = s.toString();
+        setupRecyclerView();
+    }
+
+    public void showDirectionCard(String storeName, String categoryName){
+        mMainActivity.expandTopNav();
+        mSearchItem.collapseActionView();
+
+        tvStoreName.setText(storeName);
+        tvCategoryName.setText(categoryName);
+
+        rlDirection.setVisibility(View.VISIBLE);
+        Animation slideUpAnimation = AnimationUtils.loadAnimation(getActivity(),
+                R.anim.anim_slide_up);
+        slideUpAnimation.reset();
+        rlDirection.startAnimation(slideUpAnimation);
+    }
+
+    public void showDirectionEditor(String start, String dest){
+        mMainActivity.toggleDestinationEditor(false, start, dest, new EditTextTextChangeListener(), new FocusListener());
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_filter) {
+            mMainActivity.openRightDrawerLayout();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        try {
+            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(mapView, null);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        try {
+            mMainActivity.toggleDestinationEditor(true, null, null, null, null);
+            android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+            transaction.remove(mapView);
+            transaction.commit();
+        } catch (Exception e) {
+        }
+    }
 
 }

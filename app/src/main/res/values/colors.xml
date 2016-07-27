@@ -5,6 +5,8 @@
     <!--% to HEX
     87% - dd/de/df
     54% - 89
+    80% - cb
+    30% - 4c
     -->
 
 
@@ -129,6 +131,9 @@
     <color name="twitter_theme_color">#50ABF1</color>
     <color name="insta_date_color">#adadad</color>
     <color name="insta_desc_color">#767676</color>
+
+    <!--MAP FILTER-->
+    <color name="filter_off_color">#787878</color>
 
 
 </resources>

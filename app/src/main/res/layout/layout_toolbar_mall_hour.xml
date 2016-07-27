@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     app:layout_collapseMode="pin"
-    android:background="@drawable/view_shadow"
+    android:background="@drawable/view_toolbar_shadow"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     >
 
