@@ -1,11 +1,13 @@
 package com.kineticcafe.kcpmall.activities;
 
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -60,6 +62,7 @@ import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.managers.SidePanelManagers;
 import com.kineticcafe.kcpmall.mappedin.Amenities;
 import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
+import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.BadgeView;
 import com.kineticcafe.kcpmall.views.CTA;
@@ -73,10 +76,10 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener /*, DirectoryFragment.OnCategoryClickListener*/ {
 
 
-    private final int VIEWPAGER_PAGE_HOME = 0;
-    private final int VIEWPAGER_PAGE_DIRECTORY = 1;
-    private final int VIEWPAGER_PAGE_MAP = 2;
-    private final int VIEWPAGER_PAGE_INFO = 3;
+    public final static int VIEWPAGER_PAGE_HOME = 0;
+    public final static int VIEWPAGER_PAGE_DIRECTORY = 1;
+    public final static int VIEWPAGER_PAGE_MAP = 2;
+    public final static int VIEWPAGER_PAGE_INFO = 3;
 
     protected final Logger logger = new Logger(getClass().getName());
     private DrawerLayout mDrawer;
@@ -163,9 +166,11 @@ public class MainActivity extends BaseActivity
                 if(position == VIEWPAGER_PAGE_MAP) {
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
+                    setToolbarElevation(true);
                     showMapToolbar(true); //enable map's toolbar
                 } else {
                     mViewPager.setPagingEnabled(true);
+                    setToolbarElevation(false);
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
                     showMapToolbar(false);
                 }
@@ -260,33 +265,30 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    public void toggleDestinationEditor(boolean forceHide, String start, String dest, MapFragment.EditTextTextChangeListener editTextTextChangeListener, MapFragment.FocusListener focusListener){
-        InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+    public void toggleDestinationEditor(final boolean forceHide, final String start, final String dest, final MapFragment.EditTextTextChangeListener editTextTextChangeListener, final MapFragment.FocusListener focusListener){
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
         if(rlDestinationEditor.getVisibility() == View.VISIBLE || forceHide) {
-            Animation slideDownAnimation = AnimationUtils.loadAnimation(this,
+
+            imm.hideSoftInputFromWindow(etStartStore.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(etDestStore.getWindowToken(), 0);
+
+
+            Animation slideDownAnimation = AnimationUtils.loadAnimation(MainActivity.this,
                     R.anim.anim_slide_up_out_of_screen);
             slideDownAnimation.reset();
             rlDestinationEditor.startAnimation(slideDownAnimation);
             slideDownAnimation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
+                public void onAnimationStart(Animation animation) {}
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     rlDestinationEditor.setVisibility(View.GONE);
                     mToolbar.setVisibility(View.VISIBLE);
                 }
-
                 @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
+                public void onAnimationRepeat(Animation animation) {}
             });
-
-            imm.hideSoftInputFromWindow(etStartStore.getWindowToken(), 0);
-            imm.hideSoftInputFromWindow(etDestStore.getWindowToken(), 0);
         }
         else {
             etStartStore.addTextChangedListener(editTextTextChangeListener);
@@ -295,9 +297,10 @@ public class MainActivity extends BaseActivity
             etStartStore.setOnFocusChangeListener(focusListener);
             etDestStore.setOnFocusChangeListener(focusListener);
 
-            mToolbar.setVisibility(View.GONE);
+            mToolbar.setVisibility(View.INVISIBLE); //SHOUDLN'T SET TO GONE - it changes the layout height resulting in map re-rendering and slows down process
             rlDestinationEditor.setVisibility(View.VISIBLE);
-            Animation slideDownAnimation = AnimationUtils.loadAnimation(this,
+
+            Animation slideDownAnimation = AnimationUtils.loadAnimation(MainActivity.this,
                     R.anim.anim_slide_down);
             slideDownAnimation.reset();
             rlDestinationEditor.startAnimation(slideDownAnimation);
@@ -308,6 +311,7 @@ public class MainActivity extends BaseActivity
 
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
+
     }
 
     public void setDestionationNames(String start, String dest){
@@ -317,14 +321,21 @@ public class MainActivity extends BaseActivity
         if(start == null && dest != null) etStartStore.requestFocus();
     }
 
-    public String getStartStoreText(){
-        return etStartStore.getText().toString();
+    public boolean isEditTextsEmpty(){
+        if(etStartStore.getText().toString() != null && !etStartStore.getText().toString().equals("") &&
+                etDestStore.getText().toString() != null && !etDestStore.getText().toString().equals("") ) return false;
+        return true;
     }
 
-    public String getDestStoreText(){
-        return etDestStore.getText().toString();
-    }
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void setToolbarElevation(boolean setElevation){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if(setElevation) ablTopNav.setElevation(getResources().getDimension(R.dimen.toolbar_elevation));
+            else ablTopNav.setElevation(0);
 
+        }
+
+    }
 
     // ------------------------------------- END OF MAP FRAGMENT -------------------------------------
 
@@ -443,32 +454,51 @@ public class MainActivity extends BaseActivity
     }
 
     private void setUpRightSidePanel() {
-        RelativeLayout rlSeeDeal = (RelativeLayout) findViewById(R.id.rlSeeDeal);
+        final RelativeLayout rlSeeDeal = (RelativeLayout) findViewById(R.id.rlSeeDeal);
         final ImageView ivFilterDeal = (ImageView) findViewById(R.id.ivFilterDeal);
         final TextView tvFilterDeal = (TextView) findViewById(R.id.tvFilterDeal);
         rlSeeDeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
+                    @Override
+                    public void OnSqueezeAnimationDone() {
+                    }
+                }, MainActivity.this, rlSeeDeal);
+
                 if(ivFilterDeal.isSelected()){
+                    rlSeeDeal.setBackgroundColor(getResources().getColor(R.color.white));
                     ivFilterDeal.setSelected(false);
                     tvFilterDeal.setText(getResources().getString(R.string.map_filter_hide_deal));
                 } else {
+                    rlSeeDeal.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
                     ivFilterDeal.setSelected(true);
                     tvFilterDeal.setText(getResources().getString(R.string.map_filter_see_deal));
                 }
             }
         });
-        RelativeLayout rlSeeParking = (RelativeLayout) findViewById(R.id.rlSeeParking);
+
+        final RelativeLayout rlSeeParking = (RelativeLayout) findViewById(R.id.rlSeeParking);
         final ImageView ivFilterParking= (ImageView) findViewById(R.id.ivFilterParking);
         final TextView tvFilterParking = (TextView) findViewById(R.id.tvFilterParking);
         rlSeeParking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
+                    @Override
+                    public void OnSqueezeAnimationDone() {
+                    }
+                }, MainActivity.this, rlSeeParking);
+
                 if(ivFilterParking.isSelected()){
+                    rlSeeParking.setBackgroundColor(getResources().getColor(R.color.white));
+                    ivFilterParking.setSelected(false);
                     tvFilterParking.setText(getResources().getString(R.string.map_filter_hide_parking));
-                   ivFilterParking.setSelected(false);
                 } else {
-                   ivFilterParking.setSelected(true);
+                    rlSeeParking.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
+                    ivFilterParking.setSelected(true);
                     tvFilterParking.setText(getResources().getString(R.string.map_filter_see_parking));
                 }
             }
@@ -682,7 +712,7 @@ public class MainActivity extends BaseActivity
         } else tvEmptyState.setVisibility(View.GONE);
     }
 
-    private void selectPage(int pageIndex){
+    public void selectPage(int pageIndex){
 //        tabLayout.setScrollPosition(pageIndex, 0f, true);
         mDrawer.closeDrawers();
         mViewPager.setCurrentItem(pageIndex);

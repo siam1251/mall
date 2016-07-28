@@ -40,7 +40,7 @@
                         ThemedImageView:filterColorUnselected="@color/filter_off_color"
                         android:id="@+id/ivFilterDeal"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icn_empty_deals"
+                        android:src="@drawable/icn_deals"
                         android:layout_width="20dp"
                         />
 

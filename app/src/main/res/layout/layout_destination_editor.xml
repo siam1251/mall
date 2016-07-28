@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/rlDestinationEditor"
+<RelativeLayout
+    android:id="@+id/rlDestinationEditor"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:layout_width="match_parent"
     android:layout_height="95dp"
-    android:orientation="vertical"
-    android:gravity="center_vertical"
     android:background="@color/themeColor"
-    android:visibility="gone"
+    android:gravity="center_vertical"
+    android:elevation="@dimen/toolbar_elevation"
     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    android:visibility="gone"
     >
 
     <com.kineticcafe.kcpmall.views.ThemeColorImageView
+        android:layout_gravity="center"
         style="@style/SelectableItemForegroundWhite"
+        android:layout_marginLeft="2dp"
         android:id="@+id/ivBack"
         ThemedImageView:filterColor="@color/white"
         ThemedImageView:filterColorUnselected="@color/filter_off_color"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="2dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:padding="10dp"
+        android:layout_marginTop="-8dp"
         android:src="@drawable/icn_back"
         />
 
+
     <EditText
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:hint="@string/hint_search_start"
         android:paddingLeft="@dimen/activity_margin_small"
         android:paddingRight="@dimen/activity_margin_small"
@@ -40,6 +44,7 @@
         android:layout_height="28dp" />
 
     <EditText
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:hint="@string/hint_search_destination"

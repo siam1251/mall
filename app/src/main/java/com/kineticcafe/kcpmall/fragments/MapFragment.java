@@ -1,39 +1,43 @@
 package com.kineticcafe.kcpmall.fragments;
 
 import android.app.Fragment;
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.activities.DetailActivity;
+import com.kineticcafe.kcpmall.activities.MainActivity;
 import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.adapters.adapterHelper.IndexableRecylerView;
 import com.kineticcafe.kcpmall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.mappedin.CustomLocation;
-import com.kineticcafe.kcpmall.utility.BlurBuilder;
 import com.mappedin.jpct.Logger;
 import com.mappedin.sdk.Coordinate;
 import com.mappedin.sdk.Directions;
@@ -77,11 +81,17 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
     private SearchView mSearchView;
     private IndexableRecylerView rv;
     private RelativeLayout rlDirection;
-//    private SearchView svDirection;
     private TextView tvStoreName;
     private TextView tvCategoryName;
+    private Button btnShowMap;
+
+    private LinearLayout llDeals;
+    private LinearLayout llDirection;
+    private TextView tvDealName;
+    private TextView tvNumbOfDeals;
+
     private View viewRoute;
-//    private ImageView ivRoute;
+    //    private ImageView ivRoute;
     private String mSearchString = "";
     private MenuItem mSearchItem;
     private MenuItem mFilterItem;
@@ -99,7 +109,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
     private MapView mapView = null;
     private Map[] maps = null;
 
-//    private Spinner mapSpinner = null;
+    //    private Spinner mapSpinner = null;
 //    private TextView titleLabel = null;
 //    private TextView descriptionLabel = null;
 //    private ImageView logoImageView = null;
@@ -128,37 +138,17 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
         rlDirection = (RelativeLayout) view.findViewById(R.id.rlDirection);
         tvStoreName = (TextView) view.findViewById(R.id.tvStoreName);
         tvCategoryName = (TextView) view.findViewById(R.id.tvCategoryName);
+        llDirection = (LinearLayout) view.findViewById(R.id.llDirection);
+        llDeals = (LinearLayout) view.findViewById(R.id.llDeals);
+        tvDealName = (TextView) view.findViewById(R.id.tvDealName);
+        tvNumbOfDeals = (TextView) view.findViewById(R.id.tvNumbOfDeals);
         viewRoute = (View) view.findViewById(R.id.viewRoute);
         viewRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                rlDirection.setVisibility(View.GONE);
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-
-                    final RelativeLayout rlBlurredView = (RelativeLayout) view.findViewById(R.id.rlBlurredView);
-//                    final View content = rlBlurredView.getRootView();
-                    if (rlBlurredView.getWidth() > 0) {
-                        Bitmap image = BlurBuilder.blur(rlBlurredView);
-//                        rlBlurredView.setBackgroundDrawable(new BitmapDrawable(getActivity().getResources(), image));
-                        rv.setBackgroundDrawable(new BitmapDrawable(getActivity().getResources(), image));
-                    } else {
-                        rlBlurredView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                            @Override
-                            public void onGlobalLayout() {
-                                Bitmap image = BlurBuilder.blur(rlBlurredView);
-                                rv.setBackgroundDrawable(new BitmapDrawable(getActivity().getResources(), image));
-                            }
-                        });
-                    }
-                }
-
-
                 showDirectionEditor(tvStoreName.getText().toString(), "");
             }
         });
-
-
 
         mapView = new MapView();
 //        mapView = (MapView) getActivity().getFragmentManager().findFragmentById(R.id.mapFragment); //another way of adding fragment
@@ -180,8 +170,20 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
         showLocationsButton = (Button) view.findViewById(R.id.showLocationButton);
         showLocationsButton.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { showLocations();}});
 
-//        pb.setVisibility(View.VISIBLE);
-//        mappedIn.getVenues(new GetVenuesCallback()); //load map
+        btnShowMap = (Button) view.findViewById(R.id.btnShowMap);
+        btnShowMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnShowMap.setVisibility(View.GONE);
+                btnShowMap = null;
+                pb.setVisibility(View.VISIBLE);
+
+                Log.d("TEST", "startTime time passed : " + (System.currentTimeMillis()));
+                startTime = System.currentTimeMillis();
+                mappedIn.getVenues(new GetVenuesCallback());
+
+            }
+        });
 
         setHasOptionsMenu(true);
         setupRecyclerView();
@@ -189,9 +191,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
     }
 
     public interface OnStoreClickListener {
-        public void onStoreClick(String storeName, String categoryName);
+        public void onStoreClick(int storeId, String storeName, String categoryName);
     }
-
 
     public void setupRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -215,22 +216,21 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
                 getActivity(),
                 kcpPlacesFiltered, KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE, new OnStoreClickListener() {
             @Override
-            public void onStoreClick(String storeName, String categoryName) {
+            public void onStoreClick(int storeId, String storeName, String categoryName) {
                 if(mSearchMode.equals(SearchMode.STORE)){
-                    showDirectionCard(storeName, categoryName);
+                    showDirectionCard(storeId, storeName, categoryName);
+
                 } else if(mSearchMode.equals(SearchMode.ROUTE_START)){
                     mMainActivity.setDestionationNames(storeName, null);
-                    if(mMainActivity.getStartStoreText() != null && mMainActivity.getDestStoreText() != null) {
+                    if(!mMainActivity.isEditTextsEmpty()) {
                         //TODO: START ROUTING HERE
-//                        rv.setVisibility(View.INVISIBLE);
                         mMainActivity.toggleDestinationEditor(true, null, null, null, null);
                     }
                 } else if(mSearchMode.equals(SearchMode.ROUTE_DESTINATION)){
                     mMainActivity.setDestionationNames(null, storeName);
 
-                    if(mMainActivity.getStartStoreText() != null && mMainActivity.getDestStoreText() != null) {
-                    //TODO: START ROUTING HERE
-//                        rv.setVisibility(View.INVISIBLE);
+                    if(!mMainActivity.isEditTextsEmpty()) {
+                        //TODO: START ROUTING HERE
                         mMainActivity.toggleDestinationEditor(true, null, null, null, null);
                     }
                 }
@@ -238,7 +238,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
                 setupRecyclerView();
             }
         });
-
 
 
         List<SectionedLinearRecyclerViewAdapter.Section> sections =
@@ -299,25 +298,41 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
         }
     }
 
+    long startTime;
     // Get the full details on a single Venue
     private class GetVenueCallback implements MappedinCallback<Venue> {
         @Override
         public void onCompleted(final Venue venue) {
-            Map[] maps = venue.getMaps();
-            if (maps.length == 0) {
-                Logger.log("No maps! Make sure your venue is set up correctly!");
-                return;
-            }
 
-            Arrays.sort(maps, new Comparator<Map>() {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
-                public int compare(Map a, Map b) {
-                    return (int) (a.getElevation() - b.getElevation());
+                public void run() {
+
+                    Log.d("TEST", "GetVenueCallback time passed : " + (System.currentTimeMillis() - startTime));
+
+                    Map[] maps = venue.getMaps();
+                    if (maps.length == 0) {
+                        Logger.log("No maps! Make sure your venue is set up correctly!");
+                        return;
+                    }
+
+                    Arrays.sort(maps, new Comparator<Map>() {
+                        @Override
+                        public int compare(Map a, Map b) {
+                            return (int) (a.getElevation() - b.getElevation());
+                        }
+                    });
+
+                    Log.d("TEST", "Arrays.sort time passed : " + (System.currentTimeMillis() - startTime));
+
+
+                    mapView.setMap(maps[0]);
+
+                    Log.d("TEST", "mapView.setMap time passed : " + (System.currentTimeMillis() - startTime));
+                    if(pb != null) pb.setVisibility(View.GONE);
+                    //mapSpinner.setAdapter(new ArrayAdapter<Map>());
                 }
             });
-            mapView.setMap(maps[0]);
-            if(pb != null) pb.setVisibility(View.GONE);
-            //mapSpinner.setAdapter(new ArrayAdapter<Map>());
         }
 
         @Override
@@ -438,9 +453,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-        //        titleLabel.setText("");
-        //        descriptionLabel.setText("");
-        //        logoImageView.setImageDrawable(null);
+                //        titleLabel.setText("");
+                //        descriptionLabel.setText("");
+                //        logoImageView.setImageDrawable(null);
                 goButton.setVisibility(View.INVISIBLE);
             }
         });
@@ -511,13 +526,14 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
         mSearchView.setOnQueryTextListener(new QueryTextListener());
         mSearchView.setQueryHint(getString(R.string.hint_search_store));
         mSearchItem.setShowAsAction(MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
-                        | MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+                | MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
         MenuItemCompat.setOnActionExpandListener(mSearchItem,
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         rv.setVisibility(View.INVISIBLE);
+                        if(btnShowMap != null) btnShowMap.setVisibility(View.VISIBLE);
                         mFilterItem.setVisible(true);
                         return true;
                     }
@@ -528,22 +544,17 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
                         rlDirection.setVisibility(View.GONE);
                         mFilterItem.setVisible(false);
                         rv.setVisibility(View.VISIBLE);
+                        if(btnShowMap != null) btnShowMap.setVisibility(View.GONE);
                         return true;
                     }
                 });
     }
 
     public class EditTextTextChangeListener implements TextWatcher {
-
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
         @Override
         public void afterTextChanged(Editable s) {
             onTextChange(s.toString());
@@ -551,15 +562,19 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
     }
 
     public class FocusListener implements View.OnFocusChangeListener{
-
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
             if (hasFocus) {
+                int topMargin = (int) (KcpUtility.dpToPx(getActivity(), 95) - (KcpUtility.dpToPx(getActivity(), 55))); //directionEditor height - actionbar height
+                rv.setPadding(0, topMargin, 0, 0);
                 rv.setVisibility(View.VISIBLE);
+                if(btnShowMap != null) btnShowMap.setVisibility(View.GONE);
                 if(v.getId() == R.id.etDestStore) mSearchMode = SearchMode.ROUTE_DESTINATION;
                 else if(v.getId() == R.id.etStartStore) mSearchMode = SearchMode.ROUTE_START;
             } else {
+                rv.setPadding(0, 0, 0, 0);
                 rv.setVisibility(View.INVISIBLE);
+                if(btnShowMap != null) btnShowMap.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -583,7 +598,53 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
         setupRecyclerView();
     }
 
-    public void showDirectionCard(String storeName, String categoryName){
+    public void showDirectionCard(final int storeId, String storeName, String categoryName){
+        //check if deal exists for this store
+        ArrayList<KcpContentPage> dealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true);
+        final ArrayList<KcpContentPage> dealsForThisStore = new ArrayList<KcpContentPage>();
+
+        if(dealsList != null){
+            for(int i = 0 ; i < dealsList.size(); i++){
+                if(dealsList.get(i).getStore().getPlaceId() == storeId){
+                    dealsForThisStore.add(dealsList.get(i));
+                }
+            }
+        }
+
+        RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
+        if(dealsForThisStore.size() > 0){
+            /*if deal exists, change the height of rlDirection from 109dp to 157dp and set deal layout's visibility to visible*/
+            llDeals.setVisibility(View.VISIBLE);
+            tvDealName.setText(dealsForThisStore.get(0).getTitle());
+            param.height = KcpUtility.dpToPx(getActivity(), 157);
+
+            if(dealsForThisStore.size() > 1){
+                int moreDeals = dealsForThisStore.size() - 1;
+                String textEnd = moreDeals == 1 ? " More Deal" : " More Deals";
+                tvNumbOfDeals.setText("+" + moreDeals + textEnd);
+                tvNumbOfDeals.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_HOME);
+                        HomeFragment.getInstance().selectPage(1);
+                    }
+                });
+            } else tvNumbOfDeals.setText("");
+            llDeals.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+                    intent.putExtra(Constants.ARG_CONTENT_PAGE, dealsForThisStore.get(0));
+                    getActivity().startActivity(intent);
+                    getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
+            });
+
+        } else {
+            llDeals.setVisibility(View.GONE);
+            param.height = KcpUtility.dpToPx(getActivity(), 109);
+        }
+        rlDirection.setLayoutParams(param);
         mMainActivity.expandTopNav();
         mSearchItem.collapseActionView();
 
@@ -595,6 +656,21 @@ public class MapFragment extends BaseFragment implements MapViewDelegate {
                 R.anim.anim_slide_up);
         slideUpAnimation.reset();
         rlDirection.startAnimation(slideUpAnimation);
+
+        llDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(storeId);
+                if(kcpPlace != null) {
+                    KcpContentPage kcpContentPage = new KcpContentPage();
+                    kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
+                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+                    intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
+                    getActivity().startActivity(intent);
+                    getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
+            }
+        });
     }
 
     public void showDirectionEditor(String start, String dest){
