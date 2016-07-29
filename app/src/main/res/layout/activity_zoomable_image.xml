@@ -17,7 +17,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/view_shadow"
+        android:background="@drawable/view_toolbar_shadow"
         />
 </FrameLayout>
 

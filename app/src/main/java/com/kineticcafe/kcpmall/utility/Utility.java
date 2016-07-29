@@ -2,9 +2,12 @@ package com.kineticcafe.kcpmall.utility;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -21,9 +24,11 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
 /**
@@ -79,6 +84,44 @@ public class Utility {
             url = "http://" + url;
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         context.startActivity(browserIntent);
+    }
+
+    public static void openInstagramWithDialog(final Context context, final String title, final String msg, final String positiveBtn, final String negativebtn, final String userName){
+        AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+        alertDialogForInterest.getAlertDialog(
+                context,
+                title,
+                msg,
+                positiveBtn,
+                negativebtn,
+                new AlertDialogForInterest.DialogAnsweredListener() {
+                    @Override
+                    public void okClicked() {
+                        openInstagram(context, userName);
+                    }
+                }).show();
+    }
+
+    public static void openInstagram(Context context, String userName){
+        Uri uri = Uri.parse("http://instagram.com/_u/" + userName);
+        Intent likeIng = new Intent(Intent.ACTION_VIEW, uri);
+        likeIng.setPackage("com.instagram.android");
+        try {
+            context.startActivity(likeIng);
+        } catch (ActivityNotFoundException e) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://instagram.com/" + userName)));
+        }
+    }
+
+    public static boolean isAppInstalled(Context context, String packageName){
+        try{
+            ApplicationInfo info = context.getPackageManager().
+                    getApplicationInfo(packageName, 0 );
+            return true;
+        } catch( PackageManager.NameNotFoundException e ){
+            return false;
+        }
     }
 
 
@@ -234,6 +277,13 @@ public class Utility {
     }
 
 
+    public static void closeKeybaord(Activity activity){
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
     public static Bitmap getBlurredImage(Context context, Bitmap sentBitmap, int radius){
 
         if (Build.VERSION.SDK_INT > 16) {

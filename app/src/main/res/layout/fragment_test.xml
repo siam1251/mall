@@ -13,7 +13,8 @@
         android:visibility="visible"
         android:text="MAP PLACEHOLDER"
         app:fontFamily="@string/fontFamily_roboto_light"
-        android:paddingBottom="@dimen/vpMain_padding_bottom"
+        android:paddingBottom="@dimen/main_app_bar_layout_height"
         />
+        android:paddingBottom="@dimen/vpMain_padding_bottom"
 
 </FrameLayout>

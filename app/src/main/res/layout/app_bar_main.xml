@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
+
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/clMain"
         android:layout_width="match_parent"
@@ -17,21 +20,29 @@
             app:elevation="0dp"
             >
 
-            <include layout="@layout/layout_toolbar" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include layout="@layout/layout_toolbar" />
+
+
+            </RelativeLayout>
 
         </android.support.design.widget.AppBarLayout>
-
         <com.kineticcafe.kcpmall.views.KcpAnimatedViewPager
             android:id="@+id/vpMain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/vpMain_padding_bottom"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:selectedColor="@color/themeColor"
             app:unSelectedColor="@color/menu_text_unselected"
+            android:paddingBottom="@dimen/main_app_bar_layout_height"
             />
 
     </android.support.design.widget.CoordinatorLayout>
+
+    <include layout="@layout/layout_destination_editor" />
 
 
     <android.support.design.widget.TabLayout
@@ -40,9 +51,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/main_app_bar_layout_height"
         android:layout_alignParentBottom="true"
-        android:elevation="2dp"
         app:layout_collapseMode="pin"
         app:tabIndicatorHeight="0dp"/>
+        android:elevation="2dp"
 
     <ImageView
         android:layout_above="@+id/tlBottom"

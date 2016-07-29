@@ -24,6 +24,7 @@ import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+import com.kineticcafe.kcpmall.fragments.MapFragment;
 import com.kineticcafe.kcpmall.interfaces.FavouriteInterface;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
@@ -40,11 +41,19 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
     private ArrayList<KcpPlaces> mKcpPlacesList;
     private int mContentType;
     private FavouriteInterface mFavouriteInterface;
+    private MapFragment.OnStoreClickListener mStoreClickListener;
 
     public CategoryStoreRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces, int contentType) {
         mContext = context;
         mKcpPlacesList = kcpPlaces;
         mContentType = contentType;
+    }
+
+    public CategoryStoreRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces, int contentType, MapFragment.OnStoreClickListener onClickListener) {
+        mContext = context;
+        mKcpPlacesList = kcpPlaces;
+        mContentType = contentType;
+        mStoreClickListener = onClickListener;
     }
 
     public class StoreViewHolder extends RecyclerView.ViewHolder {
@@ -135,14 +144,14 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
                 storeViewHolder.ivDealLogo,
                 R.drawable.placeholder_logo);
 
-        String storename = kcpPlace.getPlaceName();
+        final String storename = kcpPlace.getPlaceName();
         storeViewHolder.tvDealStoreName.setText(storename);
 
 
-        String category = kcpPlace.getCategoryLabelOverride();
+        final String category = kcpPlace.getCategoryLabelOverride();
         String display = kcpPlace.getFirstDisplay();
-        if(!display.equals("")) category = display;
-        storeViewHolder.tvDealTitle.setText(category);
+        if(!display.equals("")) storeViewHolder.tvDealTitle.setText(display);
+        else storeViewHolder.tvDealTitle.setText(category);
 
         if (getItemViewType(position) == KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE) {
 
@@ -172,22 +181,27 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KcpContentPage kcpContentPage = new KcpContentPage();
-                kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
+                if(mStoreClickListener != null) mStoreClickListener.onStoreClick(kcpPlace.getPlaceId(), storename, category);
+                else {
+                    KcpContentPage kcpContentPage = new KcpContentPage();
+                    kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
 
-                Intent intent = new Intent(mContext, DetailActivity.class);
-                intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
+                    Intent intent = new Intent(mContext, DetailActivity.class);
+                    intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
 
-                String transitionNameLogo = mContext.getResources().getString(R.string.transition_news_logo);
+                    String transitionNameLogo = mContext.getResources().getString(R.string.transition_news_logo);
 
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        (Activity)mContext,
-                        Pair.create((View)storeViewHolder.ivDealLogo, transitionNameLogo));
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            (Activity)mContext,
+                            Pair.create((View)storeViewHolder.ivDealLogo, transitionNameLogo));
 
-                ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
-                ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
+                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
+
             }
         });
+
     }
 
     @Override

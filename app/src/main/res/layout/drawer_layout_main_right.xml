@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:background="@color/detail_social_sharing_bg"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scRightDrawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cvFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/SelectableItemForeground"
+            android:elevation="7dp"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:id="@+id/rlSeeDeal"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="74dp"
+                    >
+
+                    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                        android:layout_centerVertical="true"
+                        ThemedImageView:filterColor="@color/themeColor"
+                        ThemedImageView:filterColorUnselected="@color/filter_off_color"
+                        android:id="@+id/ivFilterDeal"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icn_deals"
+                        android:layout_width="20dp"
+                        />
+
+                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                        app:fontFamily="@string/fontFamily_roboto_regular"
+                        android:id="@+id/tvFilterDeal"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="35dp"
+                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/place_txt"
+                        android:textSize="16sp"
+                        android:text="@string/map_filter_see_deal"/>
+
+                    <View
+                        android:layout_alignParentBottom="true"
+                        style="@style/separater"
+                        />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_below="@+id/rlSeeDeal"
+                    android:id="@+id/rlSeeParking"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="74dp"
+                    >
+
+                    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                        android:layout_centerVertical="true"
+                        ThemedImageView:filterColor="@color/themeColor"
+                        ThemedImageView:filterColorUnselected="@color/filter_off_color"
+                        android:id="@+id/ivFilterParking"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icn_car"
+                        android:layout_width="20dp"
+                        />
+
+                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                        app:fontFamily="@string/fontFamily_roboto_regular"
+                        android:id="@+id/tvFilterParking"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="35dp"
+                        android:layout_height="match_parent"
+                        android:textSize="16sp"
+                        android:textColor="@color/place_txt"
+                        android:layout_width="wrap_content"
+                        android:text="@string/map_filter_see_deal"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/cvFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/SelectableItemForeground"
+            android:elevation="7dp"
+            >
+
+            <LinearLayout
+                android:id="@+id/llAmenitySwitchParent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:id="@+id/tvHolidayName"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:text="@string/map_view_amenities_on_map"
+                    android:textColor="@color/place_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="47dp"
+                    />
+
+                <View
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    style="@style/separater"
+                    />
+
+
+                <LinearLayout
+                    android:id="@+id/llAmenitySwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+
+
+
+
+
+    </RelativeLayout>
+</ScrollView>

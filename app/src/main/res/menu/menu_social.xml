@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_backend_vm"
+        android:orderInCategory="100"
+        android:title="Download Vaughan Mills"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_backend_mp"
+        android:orderInCategory="100"
+        android:title="Download Metropolis"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_test"
+        android:orderInCategory="100"
+        android:title="Test Button!"
+        app:showAsAction="never" />
+</menu>

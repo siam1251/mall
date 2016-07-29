@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/rlDestinationEditor"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="95dp"
+    android:background="@color/themeColor"
+    android:gravity="center_vertical"
+    android:elevation="@dimen/toolbar_elevation"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    android:visibility="gone"
+    >
+
+    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+        android:layout_gravity="center"
+        style="@style/SelectableItemForegroundWhite"
+        android:layout_marginLeft="2dp"
+        android:id="@+id/ivBack"
+        ThemedImageView:filterColor="@color/white"
+        ThemedImageView:filterColorUnselected="@color/filter_off_color"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:padding="10dp"
+        android:layout_marginTop="-8dp"
+        android:src="@drawable/icn_back"
+        />
+
+
+    <EditText
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:hint="@string/hint_search_start"
+        android:paddingLeft="@dimen/activity_margin_small"
+        android:paddingRight="@dimen/activity_margin_small"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:id="@+id/etStartStore"
+        android:layout_marginLeft="70dp"
+        android:lines="1"
+        android:ellipsize="end"
+        android:background="#4cffffff"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="5dp"
+        android:textSize="13sp"
+        android:layout_height="28dp" />
+
+    <EditText
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:hint="@string/hint_search_destination"
+        android:paddingLeft="@dimen/activity_margin_small"
+        android:paddingRight="@dimen/activity_margin_small"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/etStartStore"
+        android:id="@+id/etDestStore"
+        android:layout_marginLeft="70dp"
+        android:lines="1"
+        android:ellipsize="end"
+        android:background="#4cffffff"
+        android:layout_width="match_parent"
+        android:textSize="13sp"
+        android:layout_height="28dp" />
+
+</RelativeLayout>

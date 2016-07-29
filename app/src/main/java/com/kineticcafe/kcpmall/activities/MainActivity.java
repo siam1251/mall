@@ -1,77 +1,100 @@
 package com.kineticcafe.kcpmall.activities;
 
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.Gson;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
+import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.managers.KcpDataListener;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.HomeBottomTapAdapter;
 import com.kineticcafe.kcpmall.analytics.FirebaseTracking;
-import com.kineticcafe.kcpmall.analytics.FirebaseUtility;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.fragments.DirectoryFragment;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
 import com.kineticcafe.kcpmall.fragments.InfoFragment;
-import com.kineticcafe.kcpmall.fragments.TestFragment;
+import com.kineticcafe.kcpmall.fragments.MapFragment;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.managers.SidePanelManagers;
+import com.kineticcafe.kcpmall.mappedin.Amenities;
+import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
+import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.BadgeView;
+import com.kineticcafe.kcpmall.views.CTA;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener /*, DirectoryFragment.OnCategoryClickListener*/ {
 
+
+    public final static int VIEWPAGER_PAGE_HOME = 0;
+    public final static int VIEWPAGER_PAGE_DIRECTORY = 1;
+    public final static int VIEWPAGER_PAGE_MAP = 2;
+    public final static int VIEWPAGER_PAGE_INFO = 3;
+
     protected final Logger logger = new Logger(getClass().getName());
     private DrawerLayout mDrawer;
+    private DrawerLayout mDrawerRight;
     private Thread mSplashThread;
     private ActionBarDrawerToggle mToggle;
     private Snackbar mOfflineSnackbar;
     private ImageView ivToolbar;
     private KcpAnimatedViewPager mViewPager;
+    private View scRightDrawerLayout;
+    private AppBarLayout ablTopNav;
+    private Toolbar mToolbar;
+    private RelativeLayout rlDestinationEditor;
+    private EditText etStartStore;
+    private EditText etDestStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +135,6 @@ public class MainActivity extends BaseActivity
             }
         };
         mSplashThread.start();
-
         initializeToolbar();
 
         //disabling the default navigation drawer
@@ -120,7 +142,18 @@ public class MainActivity extends BaseActivity
 //        navigationView.setNavigationItemSelectedListener(this);
 
 
-        final AppBarLayout ablTopNav = (AppBarLayout)findViewById(R.id.ablTopNav);
+        ablTopNav = (AppBarLayout)findViewById(R.id.ablTopNav);
+        rlDestinationEditor = (RelativeLayout) findViewById(R.id.rlDestinationEditor);
+        ImageView ivBack = (ImageView) findViewById(R.id.ivBack);
+        etStartStore = (EditText) findViewById(R.id.etStartStore);
+        etDestStore = (EditText) findViewById(R.id.etDestStore);
+
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleDestinationEditor(true, null, null, null, null);
+            }
+        });
         mViewPager = (KcpAnimatedViewPager) findViewById(R.id.vpMain);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -128,7 +161,19 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onPageSelected(int position) {
-                if(position == 3) ablTopNav.setExpanded(true); //TODO: change this hardcode
+                if(position == VIEWPAGER_PAGE_MAP || position == VIEWPAGER_PAGE_INFO ) expandTopNav(); //TODO: change this hardcode
+
+                if(position == VIEWPAGER_PAGE_MAP) {
+                    mViewPager.setPagingEnabled(false); //disable swiping between pagers
+                    mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
+                    setToolbarElevation(true);
+                    showMapToolbar(true); //enable map's toolbar
+                } else {
+                    mViewPager.setPagingEnabled(true);
+                    setToolbarElevation(false);
+                    mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
+                    showMapToolbar(false);
+                }
             }
 
             @Override
@@ -148,7 +193,19 @@ public class MainActivity extends BaseActivity
         mViewPager.setTabLayout(tabLayout);
 
         initializeKcpData();
-        setUpSidePanel();
+        setUpLeftSidePanel();
+        setUpRightSidePanel();
+
+        scRightDrawerLayout = (View) findViewById(R.id.scRightDrawerLayout);
+        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
+    }
+
+    public void expandTopNav() {
+        ablTopNav.setExpanded(true);
+    }
+
+    public void openRightDrawerLayout(){
+        mDrawer.openDrawer(scRightDrawerLayout);
     }
 
     private void initializeKcpData(){
@@ -168,20 +225,21 @@ public class MainActivity extends BaseActivity
             HomeFragment.getInstance().initializeHomeData();
             DirectoryFragment.getInstance().initializeDirectoryData();
             InfoFragment.getInstance().initializeMallInfoData();
+            initializeMapData();
         }
     }
 
     private void initializeToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ivToolbar = (ImageView) toolbar.findViewById(R.id.ivToolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        ivToolbar = (ImageView) mToolbar.findViewById(R.id.ivToolbar);
         ivToolbar.setVisibility(View.VISIBLE);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         mToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +253,121 @@ public class MainActivity extends BaseActivity
     }
 
 
-    private void setUpSidePanel(){
+    // ------------------------------------- START OF MAP FRAGMENT -------------------------------------
+    public void showMapToolbar(boolean enableMapToolbar){
+        if(enableMapToolbar){
+            ivToolbar.setVisibility(View.GONE);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setTitle(getResources().getString(R.string.menu_map));
+        } else {
+            ivToolbar.setVisibility(View.VISIBLE);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+    }
+
+    public void toggleDestinationEditor(final boolean forceHide, final String start, final String dest, final MapFragment.EditTextTextChangeListener editTextTextChangeListener, final MapFragment.FocusListener focusListener){
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
+        if(rlDestinationEditor.getVisibility() == View.VISIBLE || forceHide) {
+
+            imm.hideSoftInputFromWindow(etStartStore.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(etDestStore.getWindowToken(), 0);
+
+
+            Animation slideDownAnimation = AnimationUtils.loadAnimation(MainActivity.this,
+                    R.anim.anim_slide_up_out_of_screen);
+            slideDownAnimation.reset();
+            rlDestinationEditor.startAnimation(slideDownAnimation);
+            slideDownAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {}
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    rlDestinationEditor.setVisibility(View.GONE);
+                    mToolbar.setVisibility(View.VISIBLE);
+                }
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+            });
+        }
+        else {
+            etStartStore.addTextChangedListener(editTextTextChangeListener);
+            etDestStore.addTextChangedListener(editTextTextChangeListener);
+
+            etStartStore.setOnFocusChangeListener(focusListener);
+            etDestStore.setOnFocusChangeListener(focusListener);
+
+            mToolbar.setVisibility(View.INVISIBLE); //SHOUDLN'T SET TO GONE - it changes the layout height resulting in map re-rendering and slows down process
+            rlDestinationEditor.setVisibility(View.VISIBLE);
+
+            Animation slideDownAnimation = AnimationUtils.loadAnimation(MainActivity.this,
+                    R.anim.anim_slide_down);
+            slideDownAnimation.reset();
+            rlDestinationEditor.startAnimation(slideDownAnimation);
+
+            setDestionationNames(start, dest); //set destination names - ex) start : A&W , destionation : Club Monaco
+            if(start != null) etDestStore.requestFocus(); //if start name is empty, request focus to destination
+            else etStartStore.requestFocus();
+
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+
+    }
+
+    public void setDestionationNames(String start, String dest){
+        if(start != null) etStartStore.setText(start);
+        if(dest != null) etDestStore.setText(dest);
+        if(start != null && dest == null) etDestStore.requestFocus();
+        if(start == null && dest != null) etStartStore.requestFocus();
+    }
+
+    public boolean isEditTextsEmpty(){
+        if(etStartStore.getText().toString() != null && !etStartStore.getText().toString().equals("") &&
+                etDestStore.getText().toString() != null && !etDestStore.getText().toString().equals("") ) return false;
+        return true;
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void setToolbarElevation(boolean setElevation){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if(setElevation) ablTopNav.setElevation(getResources().getDimension(R.dimen.toolbar_elevation));
+            else ablTopNav.setElevation(0);
+
+        }
+
+    }
+
+    // ------------------------------------- END OF MAP FRAGMENT -------------------------------------
+
+    private void initializeMapData(){
+
+        String data = "";
+        try {
+            data = KcpUtility.convertStreamToString(getAssets().open(HeaderFactory.AMENITIES_OFFLINE_TEXT));
+            Gson gson = new Gson();
+            AmenitiesManager.sAmenities = gson.fromJson(data, Amenities.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        AmenitiesManager amenitiesManager = new AmenitiesManager(this, R.layout.layout_loading_item, new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                        break;
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        amenitiesManager.downloadAmenities();
+    }
+
+
+    private void setUpLeftSidePanel(){
         //ACCOUNT
         TextView tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
         tvDetailDate.setOnClickListener(new View.OnClickListener() {
@@ -281,32 +453,97 @@ public class MainActivity extends BaseActivity
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
     }
 
-    public void startMyPageActivity(int listSize, final String myPageType){
-//        if(listSize == 0) return;
-        //enable below if you want to closed drawer menu after you select an item from menu
-//        mDrawer.closeDrawers();
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                try {
-//                    synchronized (this) {
-//                        wait(200);
-//                    }
-//                } catch (InterruptedException ex) {
-//                }
-                if(myPageType.equals(getResources().getString(R.string.my_page_interests))){
-                    startActivityForResult(new Intent(MainActivity.this, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
-                    ActivityAnimation.startActivityAnimation(MainActivity.this);
+    private void setUpRightSidePanel() {
+        final RelativeLayout rlSeeDeal = (RelativeLayout) findViewById(R.id.rlSeeDeal);
+        final ImageView ivFilterDeal = (ImageView) findViewById(R.id.ivFilterDeal);
+        final TextView tvFilterDeal = (TextView) findViewById(R.id.tvFilterDeal);
+        rlSeeDeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
+                    @Override
+                    public void OnSqueezeAnimationDone() {
+                    }
+                }, MainActivity.this, rlSeeDeal);
+
+                if(ivFilterDeal.isSelected()){
+                    rlSeeDeal.setBackgroundColor(getResources().getColor(R.color.white));
+                    ivFilterDeal.setSelected(false);
+                    tvFilterDeal.setText(getResources().getString(R.string.map_filter_hide_deal));
                 } else {
-                    Intent intent = new Intent(MainActivity.this, MyPagesActivity.class);
-                    intent.putExtra(Constants.ARG_CAT_NAME, myPageType);
-                    MainActivity.this.startActivityForResult(intent, Constants.REQUEST_CODE_MY_PAGE_TYPE);
-                    ActivityAnimation.startActivityAnimation(MainActivity.this);
+                    rlSeeDeal.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
+                    ivFilterDeal.setSelected(true);
+                    tvFilterDeal.setText(getResources().getString(R.string.map_filter_see_deal));
                 }
-//            }
-//        }.start();
+            }
+        });
+
+        final RelativeLayout rlSeeParking = (RelativeLayout) findViewById(R.id.rlSeeParking);
+        final ImageView ivFilterParking= (ImageView) findViewById(R.id.ivFilterParking);
+        final TextView tvFilterParking = (TextView) findViewById(R.id.tvFilterParking);
+        rlSeeParking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
+                    @Override
+                    public void OnSqueezeAnimationDone() {
+                    }
+                }, MainActivity.this, rlSeeParking);
+
+                if(ivFilterParking.isSelected()){
+                    rlSeeParking.setBackgroundColor(getResources().getColor(R.color.white));
+                    ivFilterParking.setSelected(false);
+                    tvFilterParking.setText(getResources().getString(R.string.map_filter_hide_parking));
+                } else {
+                    rlSeeParking.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
+                    ivFilterParking.setSelected(true);
+                    tvFilterParking.setText(getResources().getString(R.string.map_filter_see_parking));
+                }
+            }
+        });
+
+        View llAmenitySwitch = findViewById(R.id.llAmenitySwitch);
+        List<Amenities.AmenityLayout> amenityList = new ArrayList<>();
+
+        for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
+
+            Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
+            if(amenity.isEnabled()) {
+                amenityList.add(new Amenities.AmenityLayout(
+                                MainActivity.this,
+                                (ViewGroup) llAmenitySwitch,
+                                R.layout.layout_amenities,
+                                amenity.getTitle(),
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                        )
+                );
+            }
+        }
+
+        ((ViewGroup)llAmenitySwitch).removeAllViews();
+        for(int i = 0; i < amenityList.size(); i++){
+            ((ViewGroup) llAmenitySwitch).addView(amenityList.get(i).getView());
+        }
     }
 
+    public void startMyPageActivity(int listSize, final String myPageType){
+        if(myPageType.equals(getResources().getString(R.string.my_page_interests))){
+            startActivityForResult(new Intent(MainActivity.this, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
+            ActivityAnimation.startActivityAnimation(MainActivity.this);
+        } else {
+            Intent intent = new Intent(MainActivity.this, MyPagesActivity.class);
+            intent.putExtra(Constants.ARG_CAT_NAME, myPageType);
+            MainActivity.this.startActivityForResult(intent, Constants.REQUEST_CODE_MY_PAGE_TYPE);
+            ActivityAnimation.startActivityAnimation(MainActivity.this);
+        }
+    }
 
     /**
      * If there's snackbar showing, it simply returns unless onClickListener is set.
@@ -374,7 +611,9 @@ public class MainActivity extends BaseActivity
 
         fragmentList.add(HomeFragment.getInstance());
         fragmentList.add(DirectoryFragment.getInstance());
-        fragmentList.add(new TestFragment());
+//        fragmentList.add(MapFragment.getInstance());
+        fragmentList.add(new MapFragment());
+//        fragmentList.add(new TestFragment());
         fragmentList.add(InfoFragment.getInstance());
     }
 
@@ -454,10 +693,10 @@ public class MainActivity extends BaseActivity
         else if (id == R.id.action_test) {
             throw new RuntimeException("This is a crash");
         }
-
-
         return super.onOptionsItemSelected(item);
     }
+
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -473,7 +712,7 @@ public class MainActivity extends BaseActivity
         } else tvEmptyState.setVisibility(View.GONE);
     }
 
-    private void selectPage(int pageIndex){
+    public void selectPage(int pageIndex){
 //        tabLayout.setScrollPosition(pageIndex, 0f, true);
         mDrawer.closeDrawers();
         mViewPager.setCurrentItem(pageIndex);
@@ -523,4 +762,3 @@ public class MainActivity extends BaseActivity
     }
 }
 
- 

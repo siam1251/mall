@@ -17,9 +17,10 @@ public class Constants {
 
 	//HEADER
 	public final static String HEADER_VALUE_DATAHUB_CATALOG_VM = 	"vaughan-mills";
-	public final static String HEADER_VALUE_DATAHUB_CATALOG_MP = 	"metropolis-metrotown";
+	public final static String HEADER_VALUE_DATAHUB_CATALOG_MP = 	"metropolis-at-metrotown";
 	public final static String HEADER_VALUE_DATAHUB_LOCALE = 	"en-CA";
-	public final static String HEADER_VALUE_CLIENT_TOKEN = 		"OGEyZDYyZTgtNzRmMS00ODNjLTg2YzMtYjQ0YWY1MDc5NWM1OjdjODhjZmY0ZTBjNDk5MTRiM2EzZTY3YjAzZGY1ZTE4ZDM5YTg0ZjM2YTE0ZjI0NWYzNDViN2JhNWY4YTE4YjJiMDUwMWIxOWRiYTExYzE1ZGIzNTJmNzhlM2EzYzI5MGM2MWQ4MmRlMGRjYTkyMzAzZTQ2NWRjZDU3NDJkNGRl";
+	public final static String HEADER_VALUE_CLIENT_TOKEN = 		"YmRkYWVjMmQtYjJiOS00YzdhLTllZDktMDg1NmI2M2E1NjA1OjM1ODg4M2M0OTk3YWM5ZTY3Y2EwNDMwMTE4M2RjODIzOTBlNWVhMmEyYTBkODIwOTFiZTY0MDE1NjZkYWY4YmQ0MTQzMzg4MzQ4Yzg0YzhjNzMwM2EzNzQ3YWEzOTJiNDYwYmJjMGIyMWYzZWM5OTIwNjIyODYyMDBmZDM5NjRm"; //PRODUCTION
+//public final static String HEADER_VALUE_CLIENT_TOKEN = 		"OGEyZDYyZTgtNzRmMS00ODNjLTg2YzMtYjQ0YWY1MDc5NWM1OjdjODhjZmY0ZTBjNDk5MTRiM2EzZTY3YjAzZGY1ZTE4ZDM5YTg0ZjM2YTE0ZjI0NWYzNDViN2JhNWY4YTE4YjJiMDUwMWIxOWRiYTExYzE1ZGIzNTJmNzhlM2EzYzI5MGM2MWQ4MmRlMGRjYTkyMzAzZTQ2NWRjZDU3NDJkNGRl"; //STAGING
 	public final static String HEADER_VALUE_CONTENT_TYPE = 		"application/json";
 	public final static String HEADER_VALUE_ACCEPT = 			"application/json, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.place+json; version=1.0";
 //	public final static String HEADER_VALUE_ACCEPT = 			"application/json";
@@ -36,6 +37,7 @@ public class Constants {
 	public final static int 	NUMB_OF_INSTA = 		10; //how many twitter tweets it will show at a time
 	public final static String INSTAGRAM_BASE_URL = 	"https://api.instagram.com/v1/";
 	public final static String INSTAGRAM_USER_NAME = 		"Vaughan_Mills";
+	public final static String INSTAGRAM_PACKAGE_NAME = 		"com.instagram.android"; //to see if app is installed
 //    public final static String INSTAGRAM_ACCESS_TOKEN = "1327329361.faee812.fd4d8c7df4be4407b535d4d11a264ce3"; //METROPOLIS
 //    public final static String INSTAGRAM_USER_ID = 		"231349563"; //METROPOLIS
 

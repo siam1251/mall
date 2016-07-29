@@ -749,7 +749,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void setUpDealsAndEvents(final KcpContentPage kcpContentPage){
-
         ArrayList<KcpContentPage> kcpContentPages = kcpContentPage.getContentPageList(true);
         if(kcpContentPages != null && mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
             ArrayList<KcpContentPage> dealContentpages = new ArrayList<KcpContentPage>();

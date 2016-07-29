@@ -105,8 +105,5 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_height="wrap_content"
         />
-    android:paddingBottom="@dimen/vpMain_padding_bottom"
-    android:layout_height="wrap_content"
-    android:paddingBottom="188dp"
 
 </android.support.design.widget.CoordinatorLayout>

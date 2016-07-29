@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    android:background="@color/card_bg">
+
+    <FrameLayout
+        android:id="@+id/flMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        />
+
+    <!--<fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="com.mappedin.sdk.MapView"
+        android:id="@+id/mapFragment"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true" />-->
+
+    <ProgressBar
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:id="@+id/pb"
+        style="@style/progressBarMedium"
+        />
+
+
+    <Button
+        android:paddingBottom="50dp"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go!"
+        android:id="@+id/goButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/themeColorTransparent"
+        android:visibility="invisible"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Map"
+        android:id="@+id/btnShowMap"
+        android:layout_centerInParent="true"
+        />
+
+
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Locations"
+        android:id="@+id/showLocationButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="invisible"
+        />
+
+
+        android:visibility="gone"
+        <!--TODO: this compass should rotate as the map rotates-->
+    <ImageView
+        android:layout_margin="14dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/icn_compass"
+        />
+
+
+
+    <RelativeLayout
+        android:visibility="invisible"
+        android:id="@+id/rlDirection"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="109dp"
+        >
+        android:layout_height="157dp"
+
+        <!--height = height of llDirection + 1/2 height of imageView + height of llDeals (if exist)-->
+        <!--82 + 54 / 2 + 48 = 157-->
+        <!--or in case deal layout's missing, height = 157 - height of deal layout (48)-->
+
+
+        <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:id="@+id/llDetailContainer"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                style="@style/SelectableItemForeground"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/llDirection"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="82dp"
+                android:paddingLeft="17dp"
+                android:background="#cb272626"
+                >
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    android:id="@+id/tvStoreName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="#ddffffff"
+                    android:layout_marginBottom="2dp"
+                    android:text="Holt Renfrew"/>
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:layout_marginTop="2dp"
+                    android:layout_below="@id/tvStoreName"
+                    android:id="@+id/tvCategoryName"
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="#89ffffff"
+                    android:text="Department Store"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:background="#272626"
+                android:id="@+id/llDeals"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="17dp"
+                android:paddingRight="17dp"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                    android:layout_weight="0"
+                    ThemedImageView:filterColor="@color/white"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:src="@drawable/icn_deals"/>
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:gravity="center_vertical"
+                    android:layout_weight="1"
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/tvDealName"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="14sp"
+                    android:textColor="#ffffff"
+                    android:text="Save Now, Wear Now"/>
+
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    style="@style/SelectableItemForeground"
+                    android:gravity="center_vertical"
+                    android:layout_weight="0"
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    android:id="@+id/tvNumbOfDeals"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="14sp"
+                    android:textColor="#a8a8a8"
+                    android:text="+2 More Deals"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <ImageView
+            android:layout_above="@+id/llDetailContainer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/shadow_inverted_height"
+            android:src="@drawable/view_shadow_inverted"/>
+
+        <RelativeLayout
+            android:layout_marginRight="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <View
+                android:id="@+id/viewRoute"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:background="@drawable/view_circle_theme"
+                />
+
+            <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                ThemedImageView:filterColor="@color/white"
+                android:layout_centerInParent="true"
+                android:id="@+id/ivDirection"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/icn_routes"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+
+    <com.kineticcafe.kcpmall.adapters.adapterHelper.IndexableRecylerView
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rv"
+        android:gravity="center_horizontal"
+        android:background="@color/white"
+        />
+        android:background="@color/card_bg_transparent"
+
+
+
+
+</RelativeLayout>

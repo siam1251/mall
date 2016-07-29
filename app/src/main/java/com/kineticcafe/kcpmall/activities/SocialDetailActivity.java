@@ -1,7 +1,9 @@
 package com.kineticcafe.kcpmall.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -10,13 +12,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.games.social.Social;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
@@ -29,7 +34,9 @@ import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
 import com.kineticcafe.kcpmall.interfaces.FavouriteInterface;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
+import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
+import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 import com.kineticcafe.kcpmall.views.DealRecyclerItemDecoration;
 import com.kineticcafe.kcpmall.views.NewsRecyclerItemDecoration;
 import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
@@ -60,6 +67,28 @@ public class SocialDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         String pageTitle = "";
         if (mItemType == KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM){
+            ImageView icn_share = (ImageView) toolbar.findViewById(R.id.icn_share);
+            icn_share.setVisibility(View.VISIBLE);
+            icn_share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(Utility.isAppInstalled(SocialDetailActivity.this, Constants.INSTAGRAM_PACKAGE_NAME)){
+                        Utility.openInstagramWithDialog(SocialDetailActivity.this,
+                                getResources().getString(R.string.title_open_instagram_app),
+                                getResources().getString(R.string.warning_open_instagram_app),
+                                getResources().getString(R.string.action_ok),
+                                getResources().getString(R.string.action_no_thanks),
+                                Constants.INSTAGRAM_USER_NAME);
+                    } else {
+                        Utility.openInstagramWithDialog(SocialDetailActivity.this,
+                                getResources().getString(R.string.title_open_instagram_website),
+                                getResources().getString(R.string.warning_open_instagram_website),
+                                getResources().getString(R.string.action_ok),
+                                getResources().getString(R.string.action_no_thanks),
+                                Constants.INSTAGRAM_USER_NAME);
+                    }
+                }
+            });
             pageTitle = "@" + Constants.INSTAGRAM_USER_NAME;
         } else if(mItemType == KcpContentTypeFactory.ITEM_TYPE_TWITTER) {
             pageTitle = "@" + Constants.TWITTER_SCREEN_NAME;
