@@ -89,7 +89,7 @@
                         android:textSize="16sp"
                         android:textColor="@color/place_txt"
                         android:layout_width="wrap_content"
-                        android:text="@string/map_filter_see_deal"/>
+                        android:text="@string/map_filter_see_parking"/>
 
                 </RelativeLayout>
             </LinearLayout>

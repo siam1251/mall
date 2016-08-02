@@ -25,10 +25,15 @@
         <item name="android:textColorSecondary">@color/hamburger_menu</item>
 
 
-        <item name="colorControlActivated">@color/themeColor</item>
+        <!--<item name="colorControlActivated">@color/themeColor</item>-->
         <!-- Inactive thumb color -->
         <!--<item name="colorSwitchThumbNormal">@color/themeColorDark</item>-->
         <!-- Inactive track color(30% transparency) -->
+        <!--<item name="android:colorForeground">@color/ancmt_title_color</item>-->
+    </style>
+
+    <style name="switchStype">
+        <item name="colorControlActivated">@color/themeColor</item>
         <item name="android:colorForeground">@color/ancmt_title_color</item>
     </style>
 

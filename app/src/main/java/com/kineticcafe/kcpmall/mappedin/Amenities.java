@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.gson.annotations.SerializedName;
@@ -59,12 +61,11 @@ public class Amenities {
 
     public static class AmenityLayout {
         private View mView;
-        private View.OnClickListener mOnClickListener;
         private SwitchCompat swAmenity;
         public String title;
         private TextView tvAmenity;
 
-        public AmenityLayout(Activity activity, ViewGroup parentView, int layout, String title, View.OnClickListener onClickListener) {
+        public AmenityLayout(Activity activity, ViewGroup parentView, int layout, String title, CompoundButton.OnCheckedChangeListener onCheckedChangeListener) {
             mView = activity.getLayoutInflater().inflate(
                     layout,
                     parentView,
@@ -73,20 +74,35 @@ public class Amenities {
             tvAmenity = (TextView) mView.findViewById(R.id.tvAmenity);
             swAmenity = (SwitchCompat) mView.findViewById(R.id.swAmenity);
             tvAmenity.setText(title);
-            mOnClickListener = onClickListener;
-            swAmenity.setOnClickListener(mOnClickListener);
             mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     swAmenity.performClick();
                 }
             });
+            swAmenity.setOnCheckedChangeListener(onCheckedChangeListener);
         }
 
         public View getView(){
             return mView;
         }
+        public SwitchCompat getSwitch() {return swAmenity;}
     }
+
+    public interface OnAmenityClickListener {
+        public void onAmenityClick(boolean enabled, String externalCode);
+    }
+
+    public interface OnDealsClickListener {
+        public void onDealsClick(boolean enabled);
+    }
+
+    public interface OnParkingClickListener {
+        public void onParkingClick(boolean enabled);
+    }
+
+
+
 
 
 }

@@ -8,8 +8,8 @@
     android:gravity="center_vertical"
     android:elevation="@dimen/toolbar_elevation"
     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
-    android:visibility="gone"
     >
+    android:visibility="gone"
 
     <com.kineticcafe.kcpmall.views.ThemeColorImageView
         android:layout_gravity="center"
@@ -26,7 +26,10 @@
         />
 
 
-    <EditText
+    android:paddingLeft="40dp"
+    <!--<EditText-->
+    <com.kineticcafe.kcpmall.utility.ClearableEditText
+        android:longClickable="false"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:hint="@string/hint_search_start"
         android:paddingLeft="@dimen/activity_margin_small"
@@ -38,12 +41,32 @@
         android:lines="1"
         android:ellipsize="end"
         android:background="#4cffffff"
+        android:inputType="textVisiblePassword"
         android:layout_width="match_parent"
         android:layout_marginBottom="5dp"
-        android:textSize="13sp"
+        android:textSize="16sp"
+        android:layout_height="28dp" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tvStartStore"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_margin_small"
+        android:paddingRight="@dimen/activity_margin_small"
+        android:textColorHint="@color/white"
+        android:textColor="#ddffffff"
+        android:text="from"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="70dp"
+        android:lines="1"
+        android:ellipsize="end"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="5dp"
+        android:textSize="14sp"
         android:layout_height="28dp" />
 
     <EditText
+        android:longClickable="false"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -56,11 +79,32 @@
         android:layout_below="@+id/etStartStore"
         android:id="@+id/etDestStore"
         android:layout_marginLeft="70dp"
+        android:inputType="textVisiblePassword"
         android:lines="1"
         android:ellipsize="end"
         android:background="#4cffffff"
         android:layout_width="match_parent"
-        android:textSize="13sp"
+        android:textSize="16sp"
+        android:layout_height="28dp" />
+
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tvDestStore"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_margin_small"
+        android:paddingRight="@dimen/activity_margin_small"
+        android:textColorHint="@color/white"
+        android:textColor="#ddffffff"
+        android:text="to"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="70dp"
+        android:layout_below="@+id/etStartStore"
+        android:lines="1"
+        android:ellipsize="end"
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
+        android:textSize="14sp"
         android:layout_height="28dp" />
 
 </RelativeLayout>

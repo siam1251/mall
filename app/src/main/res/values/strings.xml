@@ -19,6 +19,7 @@
     <string name="title_testing">INSERT MSG</string>
     <string name="title_open_instagram_app">Open in Instagram App</string>
     <string name="title_open_instagram_website">View on Instagram Website</string>
+    <string name="title_map">Map</string>
 
 
     <!--FRAGMENT TITLE-->
@@ -32,7 +33,7 @@
     <!--menu-->
     <string name="menu_home">HOME</string>
     <string name="menu_directory">DIRECTORY</string>
-    <string name="menu_map">MAP</string>
+    <string name="menu_map">Map</string>
     <string name="menu_info">INFO</string>
 
 

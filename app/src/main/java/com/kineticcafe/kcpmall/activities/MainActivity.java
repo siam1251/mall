@@ -36,6 +36,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -155,6 +156,7 @@ public class MainActivity extends BaseActivity
             }
         });
         mViewPager = (KcpAnimatedViewPager) findViewById(R.id.vpMain);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
@@ -258,7 +260,7 @@ public class MainActivity extends BaseActivity
         if(enableMapToolbar){
             ivToolbar.setVisibility(View.GONE);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
-            getSupportActionBar().setTitle(getResources().getString(R.string.menu_map));
+            getSupportActionBar().setTitle(getResources().getString(R.string.title_map));
         } else {
             ivToolbar.setVisibility(View.VISIBLE);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -266,6 +268,56 @@ public class MainActivity extends BaseActivity
     }
 
     public void toggleDestinationEditor(final boolean forceHide, final String start, final String dest, final MapFragment.EditTextTextChangeListener editTextTextChangeListener, final MapFragment.FocusListener focusListener){
+
+        final TextView tvStartStore = (TextView) findViewById(R.id.tvStartStore);
+        final TextView tvDestStore = (TextView) findViewById(R.id.tvDestStore);
+        final int leftPaddingWithoutPrefix = (int) getResources().getDimension(R.dimen.activity_margin_small);
+
+        etStartStore.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().equals("")) {
+                    tvStartStore.setVisibility(View.GONE);
+                    etStartStore.setPadding(leftPaddingWithoutPrefix, 0, leftPaddingWithoutPrefix, 0);
+                } else {
+                    tvStartStore.setVisibility(View.VISIBLE);
+                    etStartStore.setPadding(KcpUtility.dpToPx(MainActivity.this, 42), 0, leftPaddingWithoutPrefix, 0);
+                }
+            }
+        });
+        etDestStore.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().equals("")) {
+                    tvDestStore.setVisibility(View.GONE);
+                    etDestStore.setPadding(leftPaddingWithoutPrefix, 0, leftPaddingWithoutPrefix, 0);
+                } else {
+                    tvDestStore.setVisibility(View.VISIBLE);
+                    etDestStore.setPadding(KcpUtility.dpToPx(MainActivity.this, 25), 0, leftPaddingWithoutPrefix, 0);
+                }
+            }
+        });
+
 
         InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
         if(rlDestinationEditor.getVisibility() == View.VISIBLE || forceHide) {
@@ -311,7 +363,6 @@ public class MainActivity extends BaseActivity
 
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
-
     }
 
     public void setDestionationNames(String start, String dest){
@@ -460,7 +511,6 @@ public class MainActivity extends BaseActivity
         rlSeeDeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
                     @Override
                     public void OnSqueezeAnimationDone() {
@@ -468,10 +518,12 @@ public class MainActivity extends BaseActivity
                 }, MainActivity.this, rlSeeDeal);
 
                 if(ivFilterDeal.isSelected()){
+                    if(mOnDealsClickListener != null) mOnDealsClickListener.onDealsClick(true);
                     rlSeeDeal.setBackgroundColor(getResources().getColor(R.color.white));
                     ivFilterDeal.setSelected(false);
                     tvFilterDeal.setText(getResources().getString(R.string.map_filter_hide_deal));
                 } else {
+                    if(mOnDealsClickListener != null) mOnDealsClickListener.onDealsClick(false);
                     rlSeeDeal.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
                     ivFilterDeal.setSelected(true);
                     tvFilterDeal.setText(getResources().getString(R.string.map_filter_see_deal));
@@ -493,10 +545,12 @@ public class MainActivity extends BaseActivity
                 }, MainActivity.this, rlSeeParking);
 
                 if(ivFilterParking.isSelected()){
+                    if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(true);
                     rlSeeParking.setBackgroundColor(getResources().getColor(R.color.white));
                     ivFilterParking.setSelected(false);
                     tvFilterParking.setText(getResources().getString(R.string.map_filter_hide_parking));
                 } else {
+                    if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(false);
                     rlSeeParking.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
                     ivFilterParking.setSelected(true);
                     tvFilterParking.setText(getResources().getString(R.string.map_filter_see_parking));
@@ -509,17 +563,18 @@ public class MainActivity extends BaseActivity
 
         for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
 
-            Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
+            final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
             if(amenity.isEnabled()) {
                 amenityList.add(new Amenities.AmenityLayout(
                                 MainActivity.this,
                                 (ViewGroup) llAmenitySwitch,
                                 R.layout.layout_amenities,
                                 amenity.getTitle(),
-                                new View.OnClickListener() {
+                                new CompoundButton.OnCheckedChangeListener() {
                                     @Override
-                                    public void onClick(View v) {
-                                        Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                        if(amenity.getExternalIds() == null || amenity.getExternalIds().length == 0) return;
+                                        if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(isChecked, amenity.getExternalIds()[0]);
                                     }
                                 }
                         )
@@ -532,6 +587,22 @@ public class MainActivity extends BaseActivity
             ((ViewGroup) llAmenitySwitch).addView(amenityList.get(i).getView());
         }
     }
+
+    public static Amenities.OnAmenityClickListener mOnAmenityClickListener;
+    public void setOnAmenityClickListener(Amenities.OnAmenityClickListener amenityClickListener) {
+        mOnAmenityClickListener = amenityClickListener;
+    }
+
+    public static Amenities.OnDealsClickListener mOnDealsClickListener;
+    public void setOnDealsClickListener(Amenities.OnDealsClickListener onDealsClickListener) {
+        mOnDealsClickListener = onDealsClickListener;
+    }
+
+    public static Amenities.OnParkingClickListener mOnParkingClickListener;
+    public void setOnParkingClickListener(Amenities.OnParkingClickListener onParkingClickListener) {
+        mOnParkingClickListener = onParkingClickListener;
+    }
+
 
     public void startMyPageActivity(int listSize, final String myPageType){
         if(myPageType.equals(getResources().getString(R.string.my_page_interests))){
