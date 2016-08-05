@@ -3,7 +3,6 @@ package com.kineticcafe.kcpmall.activities;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -40,7 +39,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +47,8 @@ import com.google.gson.Gson;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.managers.KcpDataListener;
+import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
@@ -66,7 +66,6 @@ import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.BadgeView;
-import com.kineticcafe.kcpmall.views.CTA;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 
 import java.util.ArrayList;
@@ -96,6 +95,7 @@ public class MainActivity extends BaseActivity
     private RelativeLayout rlDestinationEditor;
     private EditText etStartStore;
     private EditText etDestStore;
+    private int mCurrentViewPagerTapPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +152,7 @@ public class MainActivity extends BaseActivity
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleDestinationEditor(true, null, null, null, null);
+                toggleDestinationEditor(true, null, null, null);
             }
         });
         mViewPager = (KcpAnimatedViewPager) findViewById(R.id.vpMain);
@@ -163,9 +163,11 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onPageSelected(int position) {
+                mCurrentViewPagerTapPosition = position;
                 if(position == VIEWPAGER_PAGE_MAP || position == VIEWPAGER_PAGE_INFO ) expandTopNav(); //TODO: change this hardcode
 
                 if(position == VIEWPAGER_PAGE_MAP) {
+                    MapFragment.getInstance().loadMapFragment();
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
                     setToolbarElevation(true);
@@ -200,6 +202,10 @@ public class MainActivity extends BaseActivity
 
         scRightDrawerLayout = (View) findViewById(R.id.scRightDrawerLayout);
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
+    }
+
+    public int getViewerPosition(){
+        return mCurrentViewPagerTapPosition;
     }
 
     public void expandTopNav() {
@@ -267,64 +273,70 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    public void toggleDestinationEditor(final boolean forceHide, final String start, final String dest, final MapFragment.EditTextTextChangeListener editTextTextChangeListener, final MapFragment.FocusListener focusListener){
+
+    private TextWatcher mTextWatcherForStartStore;
+    private TextWatcher mTextWatcherForDestStore;
+
+    public void toggleDestinationEditor(final boolean forceHide, final String start, final String dest, final MapFragment.FocusListener focusListener){
 
         final TextView tvStartStore = (TextView) findViewById(R.id.tvStartStore);
         final TextView tvDestStore = (TextView) findViewById(R.id.tvDestStore);
         final int leftPaddingWithoutPrefix = (int) getResources().getDimension(R.dimen.activity_margin_small);
 
-        etStartStore.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
+        if(mTextWatcherForStartStore == null) {
+            mTextWatcherForStartStore = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().equals("")) {
-                    tvStartStore.setVisibility(View.GONE);
-                    etStartStore.setPadding(leftPaddingWithoutPrefix, 0, leftPaddingWithoutPrefix, 0);
-                } else {
-                    tvStartStore.setVisibility(View.VISIBLE);
-                    etStartStore.setPadding(KcpUtility.dpToPx(MainActivity.this, 42), 0, leftPaddingWithoutPrefix, 0);
+                @Override
+                public void afterTextChanged(Editable s) {
+                    MapFragment.getInstance().onTextChange(s.toString());
+                    if(s.toString().equals("")) {
+                        tvStartStore.setText(getResources().getString(R.string.hint_search_start));
+                        etStartStore.setPadding(leftPaddingWithoutPrefix, 0, leftPaddingWithoutPrefix, 0);
+                    } else {
+                        tvStartStore.setText(getResources().getString(R.string.hint_search_start_when_not_empty));
+                        etStartStore.setPadding(KcpUtility.dpToPx(MainActivity.this, 42), 0, leftPaddingWithoutPrefix, 0);
+                    }
                 }
-            }
-        });
-        etDestStore.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            };
+            etStartStore.addTextChangedListener(mTextWatcherForStartStore);
+        }
 
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if(mTextWatcherForDestStore == null) {
+            mTextWatcherForDestStore = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-            }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().equals("")) {
-                    tvDestStore.setVisibility(View.GONE);
-                    etDestStore.setPadding(leftPaddingWithoutPrefix, 0, leftPaddingWithoutPrefix, 0);
-                } else {
-                    tvDestStore.setVisibility(View.VISIBLE);
-                    etDestStore.setPadding(KcpUtility.dpToPx(MainActivity.this, 25), 0, leftPaddingWithoutPrefix, 0);
+                @Override
+                public void afterTextChanged(Editable s) {
+                    MapFragment.getInstance().onTextChange(s.toString());
+                    if(s.toString().equals("")) {
+                        tvDestStore.setText(getResources().getString(R.string.hint_search_destination));
+                        etDestStore.setPadding(leftPaddingWithoutPrefix, 0, leftPaddingWithoutPrefix, 0);
+                    } else {
+                        tvDestStore.setText(getResources().getString(R.string.hint_search_destination_when_not_empty));
+                        etDestStore.setPadding(KcpUtility.dpToPx(MainActivity.this, 25), 0, leftPaddingWithoutPrefix, 0);
+                    }
                 }
-            }
-        });
+            };
+            etDestStore.addTextChangedListener(mTextWatcherForDestStore);
+        }
 
 
         InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
         if(rlDestinationEditor.getVisibility() == View.VISIBLE || forceHide) {
-
-            imm.hideSoftInputFromWindow(etStartStore.getWindowToken(), 0);
-            imm.hideSoftInputFromWindow(etDestStore.getWindowToken(), 0);
-
+            /*imm.hideSoftInputFromWindow(etStartStore.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(etDestStore.getWindowToken(), 0);*/
+            Utility.closeKeybaord(this);
 
             Animation slideDownAnimation = AnimationUtils.loadAnimation(MainActivity.this,
                     R.anim.anim_slide_up_out_of_screen);
@@ -341,11 +353,10 @@ public class MainActivity extends BaseActivity
                 @Override
                 public void onAnimationRepeat(Animation animation) {}
             });
+
+            MapFragment.getInstance().showDirectionCard(false, null, 0, null, null);
         }
         else {
-            etStartStore.addTextChangedListener(editTextTextChangeListener);
-            etDestStore.addTextChangedListener(editTextTextChangeListener);
-
             etStartStore.setOnFocusChangeListener(focusListener);
             etDestStore.setOnFocusChangeListener(focusListener);
 
@@ -358,23 +369,37 @@ public class MainActivity extends BaseActivity
             rlDestinationEditor.startAnimation(slideDownAnimation);
 
             setDestionationNames(start, dest); //set destination names - ex) start : A&W , destionation : Club Monaco
-            if(start != null) etDestStore.requestFocus(); //if start name is empty, request focus to destination
-            else etStartStore.requestFocus();
 
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+//            if(start == null || start.equals("")) etStartStore.requestFocus(); //if start name is empty, request focus to destination
+//            else etDestStore.requestFocus();
+//            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
     }
 
     public void setDestionationNames(String start, String dest){
-        if(start != null) etStartStore.setText(start);
         if(dest != null) etDestStore.setText(dest);
-        if(start != null && dest == null) etDestStore.requestFocus();
-        if(start == null && dest != null) etStartStore.requestFocus();
+        if(start != null) etStartStore.setText(start);
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
+        if(etDestStore.getText() == null || etDestStore.getText().toString().equals("")) {
+            etDestStore.requestFocus();
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+        if(etStartStore.getText() == null || etStartStore.getText().toString().equals("")) {
+            etStartStore.requestFocus();
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
     }
 
     public boolean isEditTextsEmpty(){
         if(etStartStore.getText().toString() != null && !etStartStore.getText().toString().equals("") &&
-                etDestStore.getText().toString() != null && !etDestStore.getText().toString().equals("") ) return false;
+                etDestStore.getText().toString() != null && !etDestStore.getText().toString().equals("") ) {
+
+            etStartStore.clearFocus();
+            etDestStore.clearFocus();
+            rlDestinationEditor.requestFocus();
+            return false;
+        }
         return true;
     }
 
@@ -504,10 +529,24 @@ public class MainActivity extends BaseActivity
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
     }
 
+    private void setDealParkingStatus(boolean isOn, RelativeLayout rl, TextView tv, ImageView iv, String onText, String offText){
+        if(isOn){
+            rl.setBackgroundColor(getResources().getColor(R.color.white));
+            tv.setText(onText);
+        } else {
+            rl.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
+            tv.setText(offText);
+        }
+
+        iv.setSelected(!isOn);
+    }
+
     private void setUpRightSidePanel() {
         final RelativeLayout rlSeeDeal = (RelativeLayout) findViewById(R.id.rlSeeDeal);
         final ImageView ivFilterDeal = (ImageView) findViewById(R.id.ivFilterDeal);
         final TextView tvFilterDeal = (TextView) findViewById(R.id.tvFilterDeal);
+
+        setDealParkingStatus(Amenities.isToggled(this, Amenities.GSON_KEY_DEAL), rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
         rlSeeDeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -517,16 +556,19 @@ public class MainActivity extends BaseActivity
                     }
                 }, MainActivity.this, rlSeeDeal);
 
-                if(ivFilterDeal.isSelected()){
-                    if(mOnDealsClickListener != null) mOnDealsClickListener.onDealsClick(true);
-                    rlSeeDeal.setBackgroundColor(getResources().getColor(R.color.white));
-                    ivFilterDeal.setSelected(false);
-                    tvFilterDeal.setText(getResources().getString(R.string.map_filter_hide_deal));
-                } else {
-                    if(mOnDealsClickListener != null) mOnDealsClickListener.onDealsClick(false);
-                    rlSeeDeal.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
-                    ivFilterDeal.setSelected(true);
-                    tvFilterDeal.setText(getResources().getString(R.string.map_filter_see_deal));
+                setDealParkingStatus(ivFilterDeal.isSelected(), rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
+
+                if(mOnDealsClickListener != null) {
+                    //            ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true); //ALL DEALS
+                    ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS
+                    if(dealContentPages == null || dealContentPages.size() == 0) {
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.warning_no_recommended_deals), Toast.LENGTH_LONG).show();
+                        setDealParkingStatus(false, rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
+                        return;
+                    } else {
+                        mOnDealsClickListener.onDealsClick(!ivFilterDeal.isSelected());
+                    }
+                    Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_DEAL, !ivFilterDeal.isSelected());
                 }
             }
         });
@@ -534,27 +576,18 @@ public class MainActivity extends BaseActivity
         final RelativeLayout rlSeeParking = (RelativeLayout) findViewById(R.id.rlSeeParking);
         final ImageView ivFilterParking= (ImageView) findViewById(R.id.ivFilterParking);
         final TextView tvFilterParking = (TextView) findViewById(R.id.tvFilterParking);
+        setDealParkingStatus(Amenities.isToggled(this, Amenities.GSON_KEY_PARKING), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_retrieve_parking), getResources().getString(R.string.map_filter_save_parking));
         rlSeeParking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
                     @Override
                     public void OnSqueezeAnimationDone() {
                     }
                 }, MainActivity.this, rlSeeParking);
-
-                if(ivFilterParking.isSelected()){
-                    if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(true);
-                    rlSeeParking.setBackgroundColor(getResources().getColor(R.color.white));
-                    ivFilterParking.setSelected(false);
-                    tvFilterParking.setText(getResources().getString(R.string.map_filter_hide_parking));
-                } else {
-                    if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(false);
-                    rlSeeParking.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
-                    ivFilterParking.setSelected(true);
-                    tvFilterParking.setText(getResources().getString(R.string.map_filter_see_parking));
-                }
+                setDealParkingStatus(ivFilterParking.isSelected(), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_retrieve_parking), getResources().getString(R.string.map_filter_save_parking));
+                Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, !ivFilterParking.isSelected());
+                if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(!ivFilterParking.isSelected());
             }
         });
 
@@ -570,9 +603,11 @@ public class MainActivity extends BaseActivity
                                 (ViewGroup) llAmenitySwitch,
                                 R.layout.layout_amenities,
                                 amenity.getTitle(),
+                                Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_AMENITY + amenity.getTitle()),
                                 new CompoundButton.OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                        Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_AMENITY + amenity.getTitle(), isChecked);
                                         if(amenity.getExternalIds() == null || amenity.getExternalIds().length == 0) return;
                                         if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(isChecked, amenity.getExternalIds()[0]);
                                     }
@@ -682,8 +717,8 @@ public class MainActivity extends BaseActivity
 
         fragmentList.add(HomeFragment.getInstance());
         fragmentList.add(DirectoryFragment.getInstance());
-//        fragmentList.add(MapFragment.getInstance());
-        fragmentList.add(new MapFragment());
+        fragmentList.add(MapFragment.getInstance());
+//        fragmentList.add(new MapFragment());
 //        fragmentList.add(new TestFragment());
         fragmentList.add(InfoFragment.getInstance());
     }
@@ -724,7 +759,9 @@ public class MainActivity extends BaseActivity
     public void onBackPressed() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if(mDrawer.isDrawerOpen(GravityCompat.END)){
+            mDrawer.closeDrawer(GravityCompat.END);
+        }else {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.executePendingTransactions();
             if (fragmentManager.getBackStackEntryCount() < 1){

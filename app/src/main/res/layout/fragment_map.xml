@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
+        android:background="@color/card_bg"
         />
 
     <!--<fragment
@@ -32,20 +33,6 @@
         style="@style/progressBarMedium"
         />
 
-
-    <Button
-        android:paddingBottom="50dp"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go!"
-        android:id="@+id/goButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:background="@color/themeColorTransparent"
-        android:visibility="invisible"
-        />
 
     <Button
         android:layout_width="wrap_content"
@@ -70,9 +57,9 @@
         />
 
 
-        android:visibility="gone"
         <!--TODO: this compass should rotate as the map rotates-->
     <ImageView
+        android:id="@+id/ivCompass"
         android:layout_margin="14dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
@@ -81,6 +68,45 @@
         android:src="@drawable/icn_compass"
         />
 
+
+    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+        android:visibility="gone"
+        ThemedImageView:filterColor="@color/themeColorTransparent"
+        ThemedImageView:filterColorUnselected="@color/themeColor"
+        style="@style/SelectableItemForeground"
+        android:id="@+id/ivUpper"
+        android:layout_marginTop="14dp"
+        android:layout_marginLeft="14dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@android:drawable/arrow_up_float"
+        />
+
+    <TextView
+        android:id="@+id/tvLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivUpper"
+        android:layout_alignParentLeft="true"
+        android:textColor="@color/themeColor"
+
+        />
+
+    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+        android:visibility="gone"
+        ThemedImageView:filterColor="@color/themeColorTransparent"
+        ThemedImageView:filterColorUnselected="@color/themeColor"
+        style="@style/SelectableItemForeground"
+        android:id="@+id/ivLower"
+        android:layout_marginLeft="14dp"
+        android:layout_below="@+id/tvLevel"
+        android:layout_alignParentLeft="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@android:drawable/arrow_down_float"
+        />
 
 
     <RelativeLayout
@@ -122,6 +148,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
+                    android:layout_marginRight="60dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+
                     android:textColor="#ddffffff"
                     android:layout_marginBottom="2dp"
                     android:text="Holt Renfrew"/>
@@ -153,8 +183,8 @@
                 android:orientation="horizontal">
 
                 <com.kineticcafe.kcpmall.views.ThemeColorImageView
-                    android:layout_weight="0"
                     ThemedImageView:filterColor="@color/white"
+                    android:layout_weight="0"
                     android:layout_width="17dp"
                     android:layout_height="17dp"
                     android:src="@drawable/icn_deals"/>

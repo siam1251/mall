@@ -23,6 +23,8 @@ public class CustomLocation extends Location {
     private final String TYPE = "type";
     private final String TYPE_EXTERNAL_ID = "externalId";
 
+    public static final String TYPE_AMENITY_PARKING = "parking";
+
     private static HashMap<String, ArrayList<CustomLocation>> amenityHashmap = new HashMap<>();
     private static HashMap<String, CustomLocation> locationHashmap = new HashMap<>();
 

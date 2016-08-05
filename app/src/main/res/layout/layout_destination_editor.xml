@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rlDestinationEditor"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -7,9 +8,10 @@
     android:background="@color/themeColor"
     android:gravity="center_vertical"
     android:elevation="@dimen/toolbar_elevation"
-    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
-    >
     android:visibility="gone"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    >
 
     <com.kineticcafe.kcpmall.views.ThemeColorImageView
         android:layout_gravity="center"
@@ -31,24 +33,22 @@
     <com.kineticcafe.kcpmall.utility.ClearableEditText
         android:longClickable="false"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:hint="@string/hint_search_start"
         android:paddingLeft="@dimen/activity_margin_small"
         android:paddingRight="@dimen/activity_margin_small"
         android:textColorHint="@color/white"
         android:textColor="@color/white"
         android:id="@+id/etStartStore"
         android:layout_marginLeft="70dp"
-        android:lines="1"
-        android:ellipsize="end"
+        android:singleLine="true"
         android:background="#4cffffff"
-        android:inputType="textVisiblePassword"
         android:layout_width="match_parent"
         android:layout_marginBottom="5dp"
         android:textSize="16sp"
-        android:layout_height="28dp" />
+        android:layout_height="28dp"
+        />
+        android:inputType="textVisiblePassword"
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tvStartStore"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:paddingLeft="@dimen/activity_margin_small"
@@ -65,12 +65,11 @@
         android:textSize="14sp"
         android:layout_height="28dp" />
 
-    <EditText
+    <com.kineticcafe.kcpmall.utility.ClearableEditText
         android:longClickable="false"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:hint="@string/hint_search_destination"
         android:paddingLeft="@dimen/activity_margin_small"
         android:paddingRight="@dimen/activity_margin_small"
         android:textColorHint="@color/white"
@@ -79,22 +78,22 @@
         android:layout_below="@+id/etStartStore"
         android:id="@+id/etDestStore"
         android:layout_marginLeft="70dp"
-        android:inputType="textVisiblePassword"
         android:lines="1"
         android:ellipsize="end"
         android:background="#4cffffff"
         android:layout_width="match_parent"
         android:textSize="16sp"
         android:layout_height="28dp" />
+        android:inputType="textVisiblePassword"
 
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tvDestStore"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:paddingLeft="@dimen/activity_margin_small"
         android:paddingRight="@dimen/activity_margin_small"
         android:textColorHint="@color/white"
+        android:singleLine="true"
         android:textColor="#ddffffff"
         android:text="to"
         android:gravity="center_vertical"

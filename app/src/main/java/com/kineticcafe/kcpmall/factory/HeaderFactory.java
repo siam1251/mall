@@ -15,8 +15,8 @@ public class HeaderFactory {
     private static final String HEADER_KEY_ACCEPT           = "Accept";
     private static final String HEADER_KEY_AUTHORIZATION    = "Authorization";
 
-//    private static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_VM; //CHANGE THE END POINT to VM
-    private static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_MP; //CHANGE THE END POINT to MP
+    private static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_VM; //CHANGE THE END POINT to VM
+//    private static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_MP; //CHANGE THE END POINT to MP
     public final static String MALL_INFO_OFFLINE_TEXT = "mallinfo.json";
     public final static String MALL_INFO_URL_BASE = "https://api.myjson.com/";
     public final static String MALL_INFO_URL_VM = "bins/1ouit"; //vaughan mills
@@ -32,9 +32,10 @@ public class HeaderFactory {
     public static String AMENITIES_URL = AMENITIES_URL_VM;
 
 
-//    public static String MALL_NAME = "Vaughan Mills";
-    public static String MALL_NAME = "Metropolis Metrotown"; //should go with HEADER_VALUE_DATAHUB_CATALOG initially
-    public static String MAP_VENUE_NAME = "Metropolis";
+    public static String MALL_NAME = "Vaughan Mills";
+    public static String MAP_VENUE_NAME = "Vaughan Mills";
+//    public static String MALL_NAME = "Metropolis Metrotown"; //should go with HEADER_VALUE_DATAHUB_CATALOG initially
+//    public static String MAP_VENUE_NAME = "Metropolis";
 
     private static HashMap<String, String> mHeaders;
     public static HashMap<String, String> getHeaders(){
