@@ -25,7 +25,7 @@
         <item name="android:textColorSecondary">@color/hamburger_menu</item>
 
 
-        <!--<item name="colorControlActivated">@color/themeColor</item>-->
+        <!--<item name="colorControlActivated">@color/black</item>-->
         <!-- Inactive thumb color -->
         <!--<item name="colorSwitchThumbNormal">@color/themeColorDark</item>-->
         <!-- Inactive track color(30% transparency) -->
@@ -100,6 +100,9 @@
         <item name="android:indeterminateTint">@color/themeColor</item>
     </style>
 
+    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorAccent">@color/black</item>
+    </style>
 
 
     <style name="ProgressBarStyle" parent="Theme.AppCompat.Light.Dialog">

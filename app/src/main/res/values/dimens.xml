@@ -176,7 +176,7 @@
     <dimen name="button_corner_radius">3dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="shadow_inverted_height">2.5dp</dimen>
+    <dimen name="shadow_inverted_height">4dp</dimen>
 
     <!--TOOLBAR-->
     <dimen name="toolbar_elevation">3dp</dimen>

@@ -180,10 +180,9 @@ public class InfoFragment extends BaseFragment {
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
             KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
 
-            logger.debug("mall name is : " + kcpPlaces.getPlaceName());
-
             if(kcpPlaces != null){
                 setUpMallOpenCloseStatus();
+                logger.debug("mall name is : " + kcpPlaces.getPlaceName());
             } else {
                 if(toolbar != null) toolbar.setVisibility(View.GONE);
                 KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(getActivity(), 0, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {

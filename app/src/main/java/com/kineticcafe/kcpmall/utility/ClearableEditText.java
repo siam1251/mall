@@ -23,6 +23,7 @@ import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.widget.EditText;
 
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 
 
@@ -59,9 +60,6 @@ public class ClearableEditText extends EditText implements OnTouchListener,
     }
 
     public void setFont(Context context){
-//		Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/perpetuaStd-italic.otf");
-//        Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/times-italic.ttf");
-//        this.setTypeface(tf);
         this.setIncludeFontPadding(false);
         this.setHintTextColor(Color.WHITE);
     }
@@ -74,25 +72,14 @@ public class ClearableEditText extends EditText implements OnTouchListener,
         }
 
         xD.setBounds(0, 0, xD.getIntrinsicWidth(), xD.getIntrinsicHeight());
-//        ColorFilter filter = new LightingColorFilter( Color.TRANSPARENT, Color.WHITE);
         ColorFilter filter = new LightingColorFilter( Color.WHITE, Color.TRANSPARENT);
         xD.setColorFilter(filter);
-//        xD.setColorFilter(0xFFFFFFFF, PorterDuff.Mode.MULTIPLY);
-
-//        xD.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-//        DrawableCompat.setTint(xD, Color.WHITE);
-
         setClearIconVisible(false);
         super.setOnTouchListener(this);
         super.setOnFocusChangeListener(this);
         addTextChangedListener(new TextWatcherAdapter(this, this));
 
-//        SpannableString span = new SpannableString(getHint().toString());
-//		span.setSpan(new RelativeSizeSpan(1.35f), 0, getHint().toString().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        span.setSpan(new RelativeSizeSpan(1.15f), 0, getHint().toString().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        this.setHint(span);
-
-//        this.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.icon_search), null, null, null);
+        setPadding(0, 0, 200, 0);
     }
 
     @Override
@@ -157,7 +144,6 @@ public class ClearableEditText extends EditText implements OnTouchListener,
 
     protected void setClearIconVisible(boolean visible) {
         Drawable x = visible ? xD : null;
-//        if(x != null) x.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
         setCompoundDrawables(getCompoundDrawables()[0],
                 getCompoundDrawables()[1], x, getCompoundDrawables()[3]);
     }

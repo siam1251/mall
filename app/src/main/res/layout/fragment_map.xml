@@ -110,19 +110,17 @@
 
 
     <RelativeLayout
-        android:visibility="invisible"
         android:id="@+id/rlDirection"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="109dp"
+        android:visibility="invisible"
         >
         android:layout_height="157dp"
 
         <!--height = height of llDirection + 1/2 height of imageView + height of llDeals (if exist)-->
         <!--82 + 54 / 2 + 48 = 157-->
         <!--or in case deal layout's missing, height = 157 - height of deal layout (48)-->
-
-
         <LinearLayout
             android:layout_alignParentBottom="true"
             android:id="@+id/llDetailContainer"
@@ -130,44 +128,67 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
             <LinearLayout
-                style="@style/SelectableItemForeground"
                 android:layout_alignParentBottom="true"
-                android:id="@+id/llDirection"
-                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:layout_height="82dp"
-                android:paddingLeft="17dp"
+                android:layout_height="match_parent"
                 android:background="#cb272626"
-                >
+                android:orientation="horizontal">
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-                    app:fontFamily="@string/fontFamily_roboto_regular"
-                    android:id="@+id/tvStoreName"
+                <ImageView
+                    android:visibility="gone"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:id="@+id/ivAmenity"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp" />
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    style="@style/SelectableItemForeground"
+                    android:layout_alignParentBottom="true"
+                    android:id="@+id/llDirection"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:layout_marginRight="60dp"
-                    android:maxLines="1"
-                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_height="82dp"
+                    android:paddingLeft="17dp"
+                    >
+                    android:background="#cb272626"
 
-                    android:textColor="#ddffffff"
-                    android:layout_marginBottom="2dp"
-                    android:text="Holt Renfrew"/>
+                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                        app:fontFamily="@string/fontFamily_roboto_regular"
+                        android:id="@+id/tvStoreName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:layout_marginRight="60dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-                    android:layout_marginTop="2dp"
-                    android:layout_below="@id/tvStoreName"
-                    android:id="@+id/tvCategoryName"
-                    app:fontFamily="@string/fontFamily_roboto_regular"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="#89ffffff"
-                    android:text="Department Store"/>
+                        android:textColor="#ddffffff"
+                        android:layout_marginBottom="2dp"
+                        android:text="Holt Renfrew"/>
+
+                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                        android:layout_marginTop="2dp"
+                        android:layout_below="@id/tvStoreName"
+                        android:id="@+id/tvCategoryName"
+                        app:fontFamily="@string/fontFamily_roboto_regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="#89ffffff"
+                        android:text="Department Store"/>
+
+                </LinearLayout>
 
             </LinearLayout>
+
+
 
 
             <LinearLayout

@@ -5,9 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
-
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/clMain"
         android:layout_width="match_parent"
@@ -25,7 +22,6 @@
                 android:layout_height="wrap_content">
 
                 <include layout="@layout/layout_toolbar" />
-
 
             </RelativeLayout>
 
@@ -47,18 +43,18 @@
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tlBottom"
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="@dimen/main_app_bar_layout_height"
         android:layout_alignParentBottom="true"
         app:layout_collapseMode="pin"
+        android:background="@color/white"
         app:tabIndicatorHeight="0dp"/>
-        android:elevation="2dp"
 
     <ImageView
         android:layout_above="@+id/tlBottom"
         android:layout_width="match_parent"
         android:layout_height="@dimen/shadow_inverted_height"
-        android:src="@drawable/view_shadow_inverted"/>
+        android:src="@drawable/view_shadow_inverted"
+        />
 
 </RelativeLayout>
