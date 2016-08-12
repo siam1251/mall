@@ -3,8 +3,9 @@ package com.kineticcafe.kcpmall.activities;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -27,6 +29,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,18 +39,31 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.managers.KcpDataListener;
+import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
@@ -58,6 +74,8 @@ import com.kineticcafe.kcpmall.fragments.DirectoryFragment;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
 import com.kineticcafe.kcpmall.fragments.InfoFragment;
 import com.kineticcafe.kcpmall.fragments.MapFragment;
+import com.kineticcafe.kcpmall.geofence.GeofenceErrorMessages;
+import com.kineticcafe.kcpmall.geofence.GeofenceTransitionsIntentService;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.managers.SidePanelManagers;
 import com.kineticcafe.kcpmall.mappedin.Amenities;
@@ -65,16 +83,18 @@ import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.BadgeView;
-import com.kineticcafe.kcpmall.views.CTA;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener /*, DirectoryFragment.OnCategoryClickListener*/ {
+        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener,
+        ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status>/*, DirectoryFragment.OnCategoryClickListener*/ {
 
+    protected static final String TAG = "MainActivity";
 
     public final static int VIEWPAGER_PAGE_HOME = 0;
     public final static int VIEWPAGER_PAGE_DIRECTORY = 1;
@@ -95,6 +115,15 @@ public class MainActivity extends BaseActivity
     private RelativeLayout rlDestinationEditor;
     private EditText etStartStore;
     private EditText etDestStore;
+    private int mCurrentViewPagerTapPosition = 0;
+
+    //GEOFENCE
+    protected GoogleApiClient mGoogleApiClient;
+    protected ArrayList<Geofence> mGeofenceList;
+    private boolean mGeofencesAdded;
+    private PendingIntent mGeofencePendingIntent;
+    private SharedPreferences mSharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,19 +180,22 @@ public class MainActivity extends BaseActivity
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleDestinationEditor(true, null, null, null, null);
+                MapFragment.getInstance().didTapNothing();
             }
         });
         mViewPager = (KcpAnimatedViewPager) findViewById(R.id.vpMain);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
+                mCurrentViewPagerTapPosition = position;
                 if(position == VIEWPAGER_PAGE_MAP || position == VIEWPAGER_PAGE_INFO ) expandTopNav(); //TODO: change this hardcode
 
                 if(position == VIEWPAGER_PAGE_MAP) {
+                    MapFragment.getInstance().loadMapFragment();
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
                     setToolbarElevation(true);
@@ -198,6 +230,21 @@ public class MainActivity extends BaseActivity
 
         scRightDrawerLayout = (View) findViewById(R.id.scRightDrawerLayout);
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
+
+
+        //geofence
+        /*mGeofenceList = new ArrayList<Geofence>();
+        mGeofencePendingIntent = null;
+        mSharedPreferences = getSharedPreferences(com.kineticcafe.kcpmall.geofence.Constants.SHARED_PREFERENCES_NAME,
+                MODE_PRIVATE);
+
+        mGeofencesAdded = mSharedPreferences.getBoolean(com.kineticcafe.kcpmall.geofence.Constants.GEOFENCES_ADDED_KEY, false);
+        populateGeofenceList();
+        buildGoogleApiClient();*/
+    }
+
+    public int getViewerPosition(){
+        return mCurrentViewPagerTapPosition;
     }
 
     public void expandTopNav() {
@@ -258,42 +305,96 @@ public class MainActivity extends BaseActivity
         if(enableMapToolbar){
             ivToolbar.setVisibility(View.GONE);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
-            getSupportActionBar().setTitle(getResources().getString(R.string.menu_map));
+            getSupportActionBar().setTitle(getResources().getString(R.string.title_map));
         } else {
             ivToolbar.setVisibility(View.VISIBLE);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
     }
 
-    public void toggleDestinationEditor(final boolean forceHide, final String start, final String dest, final MapFragment.EditTextTextChangeListener editTextTextChangeListener, final MapFragment.FocusListener focusListener){
+
+    private TextWatcher mTextWatcherForStartStore;
+    private TextWatcher mTextWatcherForDestStore;
+
+    public void toggleDestinationEditor(final boolean hide, final String start, final String dest, final MapFragment.FocusListener focusListener){
+
+        final TextView tvStartStore = (TextView) findViewById(R.id.tvStartStore);
+        final TextView tvDestStore = (TextView) findViewById(R.id.tvDestStore);
+        final int leftPaddingWithoutPrefix = (int) getResources().getDimension(R.dimen.activity_margin_small);
+
+
+        if(mTextWatcherForStartStore == null) {
+            mTextWatcherForStartStore = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    MapFragment.getInstance().onTextChange(s.toString());
+                    if(s.toString().equals("")) {
+                        tvStartStore.setText(getResources().getString(R.string.hint_search_start));
+                        etStartStore.setPadding(leftPaddingWithoutPrefix, 0, leftPaddingWithoutPrefix, 0);
+                    } else {
+                        tvStartStore.setText(getResources().getString(R.string.hint_search_start_when_not_empty));
+                        etStartStore.setPadding(KcpUtility.dpToPx(MainActivity.this, 42), 0, leftPaddingWithoutPrefix, 0);
+                    }
+                }
+            };
+            etStartStore.addTextChangedListener(mTextWatcherForStartStore);
+        }
+
+
+        if(mTextWatcherForDestStore == null) {
+            mTextWatcherForDestStore = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    MapFragment.getInstance().onTextChange(s.toString());
+                    if(s.toString().equals("")) {
+                        tvDestStore.setText(getResources().getString(R.string.hint_search_destination));
+                        etDestStore.setPadding(leftPaddingWithoutPrefix, 0, leftPaddingWithoutPrefix, 0);
+                    } else {
+                        tvDestStore.setText(getResources().getString(R.string.hint_search_destination_when_not_empty));
+                        etDestStore.setPadding(KcpUtility.dpToPx(MainActivity.this, 25), 0, leftPaddingWithoutPrefix, 0);
+                    }
+                }
+            };
+            etDestStore.addTextChangedListener(mTextWatcherForDestStore);
+        }
+
 
         InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
-        if(rlDestinationEditor.getVisibility() == View.VISIBLE || forceHide) {
+        if(hide) {
+            Utility.closeKeybaord(this);
 
-            imm.hideSoftInputFromWindow(etStartStore.getWindowToken(), 0);
-            imm.hideSoftInputFromWindow(etDestStore.getWindowToken(), 0);
+            if(isDestinationEditorVisible()){
+                Animation slideDownAnimation = AnimationUtils.loadAnimation(MainActivity.this,
+                        R.anim.anim_slide_up_out_of_screen);
+                slideDownAnimation.reset();
+                rlDestinationEditor.startAnimation(slideDownAnimation);
+                slideDownAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {}
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        rlDestinationEditor.setVisibility(View.GONE);
+                        mToolbar.setVisibility(View.VISIBLE);
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {}
+                });
+            }
 
-
-            Animation slideDownAnimation = AnimationUtils.loadAnimation(MainActivity.this,
-                    R.anim.anim_slide_up_out_of_screen);
-            slideDownAnimation.reset();
-            rlDestinationEditor.startAnimation(slideDownAnimation);
-            slideDownAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {}
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    rlDestinationEditor.setVisibility(View.GONE);
-                    mToolbar.setVisibility(View.VISIBLE);
-                }
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
-        }
-        else {
-            etStartStore.addTextChangedListener(editTextTextChangeListener);
-            etDestStore.addTextChangedListener(editTextTextChangeListener);
-
+            MapFragment.getInstance().showDirectionCard(false, null, 0, null, null);
+        } else {
             etStartStore.setOnFocusChangeListener(focusListener);
             etDestStore.setOnFocusChangeListener(focusListener);
 
@@ -306,25 +407,45 @@ public class MainActivity extends BaseActivity
             rlDestinationEditor.startAnimation(slideDownAnimation);
 
             setDestionationNames(start, dest); //set destination names - ex) start : A&W , destionation : Club Monaco
-            if(start != null) etDestStore.requestFocus(); //if start name is empty, request focus to destination
-            else etStartStore.requestFocus();
+            moveFocusToNextEditText();
 
+//            if(start == null || start.equals("")) etStartStore.requestFocus(); //if start name is empty, request focus to destination
+//            else etDestStore.requestFocus();
+//            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+    }
+
+    public void setDestionationNames(String start, String dest){
+        if(dest != null) etDestStore.setText(dest);
+        if(start != null) etStartStore.setText(start);
+    }
+
+    public void moveFocusToNextEditText(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
+        if(etStartStore.getText() == null || etStartStore.getText().toString().equals("")) {
+            etStartStore.requestFocus();
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        } else if(etDestStore.getText() == null || etDestStore.getText().toString().equals("")) {
+            etDestStore.requestFocus();
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
 
     }
 
-    public void setDestionationNames(String start, String dest){
-        if(start != null) etStartStore.setText(start);
-        if(dest != null) etDestStore.setText(dest);
-        if(start != null && dest == null) etDestStore.requestFocus();
-        if(start == null && dest != null) etStartStore.requestFocus();
-    }
-
     public boolean isEditTextsEmpty(){
         if(etStartStore.getText().toString() != null && !etStartStore.getText().toString().equals("") &&
-                etDestStore.getText().toString() != null && !etDestStore.getText().toString().equals("") ) return false;
+                etDestStore.getText().toString() != null && !etDestStore.getText().toString().equals("") ) {
+
+            etStartStore.clearFocus();
+            etDestStore.clearFocus();
+            rlDestinationEditor.requestFocus();
+            return false;
+        }
         return true;
+    }
+
+    public boolean isDestinationEditorVisible(){
+        return rlDestinationEditor.getVisibility() == View.VISIBLE;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -453,28 +574,46 @@ public class MainActivity extends BaseActivity
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
     }
 
+    private void setDealParkingStatus(boolean isOn, RelativeLayout rl, TextView tv, ImageView iv, String onText, String offText){
+        if(isOn){
+            rl.setBackgroundColor(getResources().getColor(R.color.white));
+            tv.setText(onText);
+        } else {
+            rl.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
+            tv.setText(offText);
+        }
+
+        iv.setSelected(!isOn);
+    }
+
     private void setUpRightSidePanel() {
         final RelativeLayout rlSeeDeal = (RelativeLayout) findViewById(R.id.rlSeeDeal);
         final ImageView ivFilterDeal = (ImageView) findViewById(R.id.ivFilterDeal);
         final TextView tvFilterDeal = (TextView) findViewById(R.id.tvFilterDeal);
+
+        setDealParkingStatus(Amenities.isToggled(this, Amenities.GSON_KEY_DEAL), rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
         rlSeeDeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
                     @Override
                     public void OnSqueezeAnimationDone() {
                     }
                 }, MainActivity.this, rlSeeDeal);
 
-                if(ivFilterDeal.isSelected()){
-                    rlSeeDeal.setBackgroundColor(getResources().getColor(R.color.white));
-                    ivFilterDeal.setSelected(false);
-                    tvFilterDeal.setText(getResources().getString(R.string.map_filter_hide_deal));
-                } else {
-                    rlSeeDeal.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
-                    ivFilterDeal.setSelected(true);
-                    tvFilterDeal.setText(getResources().getString(R.string.map_filter_see_deal));
+                setDealParkingStatus(ivFilterDeal.isSelected(), rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
+
+                if(mOnDealsClickListener != null) {
+                    //            ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true); //ALL DEALS
+                    ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS
+                    if(dealContentPages == null || dealContentPages.size() == 0) {
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.warning_no_recommended_deals), Toast.LENGTH_LONG).show();
+                        setDealParkingStatus(false, rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
+                        return;
+                    } else {
+                        mOnDealsClickListener.onDealsClick(!ivFilterDeal.isSelected());
+                    }
+                    Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_DEAL, !ivFilterDeal.isSelected());
                 }
             }
         });
@@ -482,25 +621,18 @@ public class MainActivity extends BaseActivity
         final RelativeLayout rlSeeParking = (RelativeLayout) findViewById(R.id.rlSeeParking);
         final ImageView ivFilterParking= (ImageView) findViewById(R.id.ivFilterParking);
         final TextView tvFilterParking = (TextView) findViewById(R.id.tvFilterParking);
+        setDealParkingStatus(Amenities.isToggled(this, Amenities.GSON_KEY_PARKING), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_retrieve_parking), getResources().getString(R.string.map_filter_save_parking));
         rlSeeParking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
                     @Override
                     public void OnSqueezeAnimationDone() {
                     }
                 }, MainActivity.this, rlSeeParking);
-
-                if(ivFilterParking.isSelected()){
-                    rlSeeParking.setBackgroundColor(getResources().getColor(R.color.white));
-                    ivFilterParking.setSelected(false);
-                    tvFilterParking.setText(getResources().getString(R.string.map_filter_hide_parking));
-                } else {
-                    rlSeeParking.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
-                    ivFilterParking.setSelected(true);
-                    tvFilterParking.setText(getResources().getString(R.string.map_filter_see_parking));
-                }
+                setDealParkingStatus(ivFilterParking.isSelected(), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_retrieve_parking), getResources().getString(R.string.map_filter_save_parking));
+                Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, !ivFilterParking.isSelected());
+                if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(!ivFilterParking.isSelected());
             }
         });
 
@@ -509,17 +641,20 @@ public class MainActivity extends BaseActivity
 
         for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
 
-            Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
+            final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
             if(amenity.isEnabled()) {
                 amenityList.add(new Amenities.AmenityLayout(
                                 MainActivity.this,
                                 (ViewGroup) llAmenitySwitch,
                                 R.layout.layout_amenities,
                                 amenity.getTitle(),
-                                new View.OnClickListener() {
+                                Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_AMENITY + amenity.getTitle()),
+                                new CompoundButton.OnCheckedChangeListener() {
                                     @Override
-                                    public void onClick(View v) {
-                                        Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                        Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_AMENITY + amenity.getTitle(), isChecked);
+                                        if(amenity.getExternalIds() == null || amenity.getExternalIds().length == 0) return;
+                                        if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(isChecked, amenity.getExternalIds()[0]);
                                     }
                                 }
                         )
@@ -532,6 +667,22 @@ public class MainActivity extends BaseActivity
             ((ViewGroup) llAmenitySwitch).addView(amenityList.get(i).getView());
         }
     }
+
+    public static Amenities.OnAmenityClickListener mOnAmenityClickListener;
+    public void setOnAmenityClickListener(Amenities.OnAmenityClickListener amenityClickListener) {
+        mOnAmenityClickListener = amenityClickListener;
+    }
+
+    public static Amenities.OnDealsClickListener mOnDealsClickListener;
+    public void setOnDealsClickListener(Amenities.OnDealsClickListener onDealsClickListener) {
+        mOnDealsClickListener = onDealsClickListener;
+    }
+
+    public static Amenities.OnParkingClickListener mOnParkingClickListener;
+    public void setOnParkingClickListener(Amenities.OnParkingClickListener onParkingClickListener) {
+        mOnParkingClickListener = onParkingClickListener;
+    }
+
 
     public void startMyPageActivity(int listSize, final String myPageType){
         if(myPageType.equals(getResources().getString(R.string.my_page_interests))){
@@ -611,8 +762,8 @@ public class MainActivity extends BaseActivity
 
         fragmentList.add(HomeFragment.getInstance());
         fragmentList.add(DirectoryFragment.getInstance());
-//        fragmentList.add(MapFragment.getInstance());
-        fragmentList.add(new MapFragment());
+        fragmentList.add(MapFragment.getInstance());
+//        fragmentList.add(new MapFragment());
 //        fragmentList.add(new TestFragment());
         fragmentList.add(InfoFragment.getInstance());
     }
@@ -653,7 +804,17 @@ public class MainActivity extends BaseActivity
     public void onBackPressed() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
+        } else if(mDrawer.isDrawerOpen(GravityCompat.END)){
+            mDrawer.closeDrawer(GravityCompat.END);
         } else {
+            //hide direction card
+            if(mCurrentViewPagerTapPosition == VIEWPAGER_PAGE_MAP) {
+                if(MapFragment.getInstance().isDirectionCardVisible() || isDestinationEditorVisible()){
+                    MapFragment.getInstance().didTapNothing();
+                    return;
+                }
+            }
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.executePendingTransactions();
             if (fragmentManager.getBackStackEntryCount() < 1){
@@ -760,5 +921,136 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     }
+
+
+    //GEOFENCE
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mGoogleApiClient != null) mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mGoogleApiClient != null) mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        Log.i(TAG, "Connected to GoogleApiClient");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        Log.i(TAG, "Connection suspended");
+    }
+
+    private GeofencingRequest getGeofencingRequest() {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.addGeofences(mGeofenceList);
+        return builder.build();
+    }
+
+    public void addGeofencesButtonHandler(View view) {
+        if (!mGoogleApiClient.isConnected()) {
+            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            LocationServices.GeofencingApi.addGeofences(
+                    mGoogleApiClient,
+                    getGeofencingRequest(),
+                    getGeofencePendingIntent()
+            ).setResultCallback(this); // Result processed in onResult().
+        } catch (SecurityException securityException) {
+            logSecurityException(securityException);
+        }
+    }
+
+    public void removeGeofencesButtonHandler(View view) {
+        if (!mGoogleApiClient.isConnected()) {
+            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            LocationServices.GeofencingApi.removeGeofences(
+                    mGoogleApiClient,
+                    getGeofencePendingIntent()
+            ).setResultCallback(this); // Result processed in onResult().
+        } catch (SecurityException securityException) {
+            logSecurityException(securityException);
+        }
+    }
+
+    private void logSecurityException(SecurityException securityException) {
+        Log.e(TAG, "Invalid location permission. " +
+                "You need to use ACCESS_FINE_LOCATION with geofences", securityException);
+    }
+
+    public void onResult(Status status) {
+        if (status.isSuccess()) {
+            mGeofencesAdded = !mGeofencesAdded;
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
+            editor.putBoolean(com.kineticcafe.kcpmall.geofence.Constants.GEOFENCES_ADDED_KEY, mGeofencesAdded);
+            editor.apply();
+
+            Toast.makeText(
+                    this,
+                    getString(mGeofencesAdded ? R.string.geofences_added :
+                            R.string.geofences_removed),
+                    Toast.LENGTH_SHORT
+            ).show();
+        } else {
+            String errorMessage = GeofenceErrorMessages.getErrorString(this,
+                    status.getStatusCode());
+            Log.e(TAG, errorMessage);
+        }
+    }
+
+    private PendingIntent getGeofencePendingIntent() {
+        if (mGeofencePendingIntent != null) {
+            return mGeofencePendingIntent;
+        }
+        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public void populateGeofenceList() {
+        for (Map.Entry<String, LatLng> entry : com.kineticcafe.kcpmall.geofence.Constants.BAY_AREA_LANDMARKS.entrySet()) {
+
+            mGeofenceList.add(new Geofence.Builder()
+                    .setRequestId(entry.getKey())
+                    .setCircularRegion(
+                            entry.getValue().latitude,
+                            entry.getValue().longitude,
+                            com.kineticcafe.kcpmall.geofence.Constants.GEOFENCE_RADIUS_IN_METERS
+                    )
+
+                    .setExpirationDuration(com.kineticcafe.kcpmall.geofence.Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                            Geofence.GEOFENCE_TRANSITION_EXIT)
+
+                    .build());
+        }
+    }
+
+
 }
 

@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -27,6 +28,7 @@ import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
+import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.InterestRecyclerViewAdapter;
@@ -37,12 +39,13 @@ import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Kay on 2016-05-31.
  */
 public class InterestedCategoryActivity extends AppCompatActivity {
-//public class InterestedCategoryActivity extends SwipeBackActivity {
 
     protected final Logger logger = new Logger(getClass().getName());
     private InterestRecyclerViewAdapter mInterestRecyclerViewAdapter;
@@ -111,9 +114,23 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         }
     }
 
+
+    public static class nameComparator implements Comparator<KcpCategories> {
+        @Override
+        public int compare(KcpCategories o1, KcpCategories o2) {
+            try {
+                return (o1.getCategoryName().toString().toLowerCase()).compareTo(o2.getCategoryName().toString().toLowerCase());
+            } catch (Exception e) {
+                return 0;
+            }
+        }
+    }
+
+
     private void setupRecyclerView(RecyclerView recyclerView) {
         final int maxSpanCount = KcpUtility.getScreenWidth(this);
         ArrayList<KcpCategories> kcpCategoriesArrayList = CategoryIconFactory.getFilteredKcpCategoryList(KcpCategoryRoot.getInstance().getFingerPrintCategoriesList());
+        Collections.sort(kcpCategoriesArrayList, new nameComparator());
 
         final ArrayList<GridLayoutItem> gridLayoutItemArrayList = new ArrayList<GridLayoutItem>();
 
@@ -199,7 +216,8 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         return p.measureText(string);
     }*/
 
-    private static View mInterestedCategoryLayout;
+//    private static View mInterestedCategoryLayout;
+    private View mInterestedCategoryLayout;
     public int getTextSize(String text) {
 
         if(mInterestedCategoryLayout == null){
@@ -209,6 +227,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
         TextView tvIntrstd = (TextView) mInterestedCategoryLayout.findViewById(R.id.tvIntrstd);
         tvIntrstd.setText(text);
+        mInterestedCategoryLayout.setLayoutParams(new ViewGroup.LayoutParams(0,0));
         mInterestedCategoryLayout.measure(KcpUtility.getScreenWidth(this), KcpUtility.getScreenHeight(this));
 
         return mInterestedCategoryLayout.getMeasuredWidth();

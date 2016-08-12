@@ -19,6 +19,7 @@
     <string name="title_testing">INSERT MSG</string>
     <string name="title_open_instagram_app">Open in Instagram App</string>
     <string name="title_open_instagram_website">View on Instagram Website</string>
+    <string name="title_map">Map</string>
 
 
     <!--FRAGMENT TITLE-->
@@ -32,7 +33,7 @@
     <!--menu-->
     <string name="menu_home">HOME</string>
     <string name="menu_directory">DIRECTORY</string>
-    <string name="menu_map">MAP</string>
+    <string name="menu_map">Map</string>
     <string name="menu_info">INFO</string>
 
 
@@ -87,6 +88,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="warning_fav_removed">Favourite removed</string>
     <string name="warning_open_instagram_app">Would you like to view this in the Instagram App?</string>
     <string name="warning_open_instagram_website">Would you like to view this on the Instagram website?</string>
+    <string name="warning_no_recommended_deals">There are no matches for Recommended Deals at this time.</string>
 
     <!--section header-->
     <string name="section_header_recommended_deals">Recommended Deals</string>
@@ -156,11 +158,44 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <!--MAP-->
     <string name="map_filter_see_deal">See Recommended Deals</string>
     <string name="map_filter_hide_deal">Hide Recommended Deals</string>
-    <string name="map_filter_see_parking">See My Parking Lot</string>
-    <string name="map_filter_hide_parking">Hide My Parking Lot</string>
+    <string name="map_filter_save_parking">Save My Parking Spot</string>
+    <string name="map_filter_retrieve_parking">Retrieve My Parking Spot</string>
     <string name="map_view_amenities_on_map">View Amenities on Map</string>
     <string name="hint_search_store">Search a Store</string>
-    <string name="hint_search_start">Directions from..</string>
-    <string name="hint_search_destination">Directions to..</string>
+    <string name="hint_search_start">Directions from...</string>
+    <string name="hint_search_destination">Directions to...</string>
+
+    <string name="hint_search_start_when_not_empty">from</string>
+    <string name="hint_search_destination_when_not_empty">to</string>
+
+
+    <!--GEOFENCE-->
+    <!-- Buttons strings -->
+    <string name="add_geofences">Add geofences</string>
+    <string name="remove_geofences">Remove geofences</string>
+
+    <string name="geofences_added">Geofences added</string>
+    <string name="geofences_removed">Geofences removed</string>
+
+    <!-- Error strings -->
+    <string name="not_connected">GoogleApiClient no yet connected. Try again.</string>
+    <string name="geofence_not_available">Geofence service is not available now</string>
+    <string name="geofence_too_many_geofences">Your app has registered too many geofences</string>
+    <string name="geofence_too_many_pending_intents">
+        You have provided too many PendingIntents to the addGeofences() call
+    </string>
+    <string name="unknown_geofence_error">
+        Unknown error: the Geofence service is not available now
+    </string>
+    <string name="geofence_transition_invalid_type">
+        Geofence transition error: invalid transition type %1$d
+    </string>
+
+    <!-- Transition type strings -->
+    <string name="geofence_transition_entered">Entered</string>
+    <string name="geofence_transition_exited">Exited</string>
+    <string name="unknown_geofence_transition">Unknown Transition</string>
+
+    <string name="geofence_transition_notification_text">Click notification to return to app</string>
 
 </resources>

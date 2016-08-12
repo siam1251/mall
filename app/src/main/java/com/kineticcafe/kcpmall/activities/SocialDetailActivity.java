@@ -1,48 +1,27 @@
 package com.kineticcafe.kcpmall.activities;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.games.social.Social;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
-import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
-import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
-import com.kineticcafe.kcpmall.adapters.NewsRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.adapters.SocialFeedDetailRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
-import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
-import com.kineticcafe.kcpmall.interfaces.FavouriteInterface;
-import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
-import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
-import com.kineticcafe.kcpmall.views.DealRecyclerItemDecoration;
-import com.kineticcafe.kcpmall.views.NewsRecyclerItemDecoration;
 import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
 import com.twitter.sdk.android.tweetui.UserTimeline;
-
-import java.util.ArrayList;
 
 /**
  * Created by Kay on 2016-07-05.

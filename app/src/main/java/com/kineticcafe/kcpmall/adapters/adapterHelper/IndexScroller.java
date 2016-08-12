@@ -4,11 +4,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
@@ -79,12 +81,40 @@ public class IndexScroller {
                 previewTextPaint.setAntiAlias(true);
                 previewTextPaint.setTextSize(50 * mScaledDensity);
 
+
+
+                Rect r = new Rect();
+                recyclerView.getWindowVisibleDisplayFrame(r);
+                int screenHeight = recyclerView.getRootView().getHeight();
+
+                // r.bottom is the position above soft keypad or device button.
+                // if keypad is shown, the r.bottom is smaller than that before.
+                int keypadHeight = screenHeight - r.bottom;
+
+                Log.d("IndexScroller", "keypadHeight = " + keypadHeight);
+
+
+                int extraBotPaddingWhenKeyboardAppears;
+                if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+                    String a = "wef";
+                    // keyboard is opened
+                    extraBotPaddingWhenKeyboardAppears = (mListViewHeight - keypadHeight);
+                }
+                else {
+                    String a = "wef";
+                    // keyboard is closed
+                    extraBotPaddingWhenKeyboardAppears = 0;
+                }
+
+
+
+
                 float previewTextWidth = previewTextPaint.measureText(mSections.get(mCurrentSection));
                 float previewSize = 2 * mPreviewPadding + previewTextPaint.descent() - previewTextPaint.ascent();
                 RectF previewRect = new RectF((mListViewWidth - previewSize) / 2
-                        , (mListViewHeight - previewSize) / 2
+                        , (mListViewHeight - previewSize - extraBotPaddingWhenKeyboardAppears) / 2
                         , (mListViewWidth - previewSize) / 2 + previewSize
-                        , (mListViewHeight - previewSize) / 2 + previewSize);
+                        , (mListViewHeight - previewSize - extraBotPaddingWhenKeyboardAppears) / 2 + previewSize);
 
                 canvas.drawRoundRect(previewRect, 5 * mDensity, 5 * mDensity, previewPaint);
                 canvas.drawText(mSections.get(mCurrentSection), previewRect.left + (previewSize - previewTextWidth) / 2 - 1
