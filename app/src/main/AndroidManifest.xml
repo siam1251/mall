@@ -94,6 +94,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
 
+        <activity
+            android:name="com.kineticcafe.kcpmall.activities.ParkingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
+
         <!--MAPPED IN-->
         <meta-data android:name="com.mappedin.sdk.Username" android:value="56f151b2c753ca4c0d000000"/>
         <meta-data android:name="com.mappedin.sdk.Password" android:value="0a11271a19b109e9211bbcc256f2e35d"/>

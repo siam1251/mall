@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:background="@color/white"
+<ScrollView
+    android:id="@+id/scLeftPanel"
+    android:background="@color/white"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -58,9 +60,9 @@
                 android:text="Andrew Cherwenka"/>
 
             <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                 android:visibility="gone"
                 android:layout_weight="0"
-                xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                 ThemedImageView:filterColor="@color/white"
                 android:id="@+id/ivDrawerlayoutSetting"
                 android:layout_width="45dp"
@@ -82,7 +84,6 @@
                 android:text="@string/drawer_sign_in"
                 android:textSize="14sp"
                 />
-
 
         </LinearLayout>
 

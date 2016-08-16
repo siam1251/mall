@@ -1,0 +1,285 @@
+
+ {"parkings":[
+      {
+          "parkingId": "",
+          "name": "Entry 1",
+          "childParkings": [
+               {
+                   "parkingId": "5703fdc6d0facd60a600000d",
+                   "name": "Pillar 1A",
+                   "childParkings": []
+               },
+                            
+                {
+                    "parkingId": "5703fdced0facd60a600000e",
+                    "name": "Pillar 1B",
+                    "childParkings": []
+                },
+                            
+                {
+                    "parkingId": "5703f922d0facd1371000047",
+                    "name": "Pillar 1C",
+                    "childParkings": []
+                },
+                            
+                {
+                    "parkingId": "5703f92ad0facd1371000048",
+                    "name": "Pillar 1D",
+                    "childParkings": []
+                },
+                  
+                {
+                    "parkingId": "5703f984d0facd1371000049",
+                    "name": "Pillar 1E",
+                    "childParkings": []
+                },
+                    
+                {
+                    "parkingId": "5703fddbd0facd60a600000f",
+                    "name": "Pillar 1F",
+                    "childParkings": []
+                },
+                    
+                {
+                    "parkingId": "5703f98ed0facd137100004a",
+                    "name": "Pillar 1G",
+                    "childParkings": []
+                },
+                           
+               {
+                   "parkingId": "5703f99bd0facd137100004b",
+                   "name": "Pillar 1H",
+                   "childParkings": []
+               }
+           ]
+      },
+      
+      {
+          "parkingId": "",
+          "name": "Entry 2",
+          "childParkings": [
+                {
+                    "parkingId": "5703f9f7d0facd137100004d",
+                    "name": "Pillar 2A",
+                    "childParkings": []
+                },
+                            
+               {
+                   "parkingId": "5703f9abd0facd137100004c",
+                   "name": "Pillar 2B",
+                   "childParkings": []
+               },
+                            
+                {
+                    "parkingId": "5703fa02d0facd137100004e",
+                    "name": "Pillar 2C",
+                    "childParkings": []
+                },
+                            
+                {
+                    "parkingId": "5703fa56d0facd137100004f",
+                    "name": "Pillar 2D",
+                    "childParkings": []
+                },
+                            
+                {
+                    "parkingId": "5703fb08d0facd1371000050",
+                    "name": "Pillar 2E",
+                    "childParkings": []
+                }
+           ]
+      },
+      
+      {
+          "parkingId": "",
+          "name": "Entry 3",
+          "childParkings": [
+               {
+                   "parkingId": "5703fb11d0facd1371000051",
+                   "name": "Pillar 3A",
+                   "childParkings": []
+               },
+                    
+                {
+                    "parkingId": "5703fb1dd0facd1371000052",
+                    "name": "Pillar 3B",
+                    "childParkings": []
+                },
+                            
+                {
+                    "parkingId": "5703fb31d0facd1371000054",
+                    "name": "Pillar 3C",
+                    "childParkings": []
+                },
+                            
+                {
+                    "parkingId": "5703fb27d0facd1371000053",
+                    "name": "Pillar 3D",
+                    "childParkings": []
+                },
+                            
+                {
+                    "parkingId": "5703fb42d0facd1371000055",
+                    "name": "Pillar 3E",
+                    "childParkings": []
+                },
+                  
+                {
+                    "parkingId": "5703fb71d0facd1371000056",
+                    "name": "Pillar 3F",
+                    "childParkings": []
+                },
+                  
+                {
+                    "parkingId": "5703fb79d0facd1371000057",
+                    "name": "Pillar 3H",
+                    "childParkings": []
+                }
+           ]
+      },
+      
+      {
+          "parkingId": "",
+          "name": "Entry 4",
+          "childParkings": [
+               {
+                   "parkingId": "5703fb8ed0facd1371000059",
+                   "name": "Pillar 4B",
+                   "childParkings": []
+               },
+                            
+               {
+                   "parkingId": "5703fb98d0facd137100005a",
+                   "name": "Pillar 4C",
+                   "childParkings": []
+               },
+                            
+                {
+                    "parkingId": "5703fba4d0facd137100005b",
+                    "name": "Pillar 4E",
+                    "childParkings": []
+                },
+                            
+                {
+                    "parkingId": "5703fbaed0facd137100005c",
+                    "name": "Pillar 4F",
+                    "childParkings": []
+                }
+           ]
+      },
+  
+      {
+          "parkingId": "",
+          "name": "Entry 4A",
+          "childParkings": [
+               {
+                   "parkingId": "5703fb81d0facd1371000058",
+                   "name": "Pillar 4A",
+                   "childParkings": []
+               }
+           ]
+      },
+  
+      {
+          "parkingId": "",
+          "name": "Entry 5",
+          "childParkings": [
+                {
+                    "parkingId": "5703fc57d0facd137100005d",
+                    "name": "Pillar 5A",
+                    "childParkings": []
+                },
+                    
+                {
+                    "parkingId": "5703fd1fd0facd60a6000000",
+                    "name": "Pillar 5B",
+                    "childParkings": []
+                },
+                    
+                {
+                    "parkingId": "5703fd28d0facd60a6000001",
+                    "name": "Pillar 5C",
+                    "childParkings": []
+                },
+                    
+                {
+                    "parkingId": "5703fd44d0facd60a6000002",
+                    "name": "Pillar 5D",
+                    "childParkings": []
+                }
+            ]
+      },
+  
+      {
+          "parkingId": "",
+          "name": "Entry 6",
+          "childParkings": [
+                {
+                    "parkingId": "5703fd4ed0facd60a6000003",
+                    "name": "Pillar 6A",
+                    "childParkings": []
+                },
+                    
+                {
+                    "parkingId": "5703fd57d0facd60a6000004",
+                    "name": "Pillar 6B",
+                    "childParkings": []
+                },
+                    
+                {
+                    "parkingId": "5703fd61d0facd60a6000005",
+                    "name": "Pillar 6C",
+                    "childParkings": []
+                },
+                    
+                {
+                    "parkingId": "5703fd74d0facd60a6000006",
+                    "name": "Pillar 6D",
+                    "childParkings": []
+                },
+                    
+               {
+                   "parkingId": "5703fd80d0facd60a6000007",
+                   "name": "Pillar 6E",
+                   "childParkings": []
+               },
+                            
+               {
+                   "parkingId": "5703fd8bd0facd60a6000008",
+                   "name": "Pillar 6F",
+                   "childParkings": []
+               },
+                            
+                {
+                    "parkingId": "5703fd97d0facd60a6000009",
+                    "name": "Pillar 6G",
+                    "childParkings": []
+                },
+                    
+                {
+                    "parkingId": "5703fdacd0facd60a600000b",
+                    "name": "Pillar 6H",
+                    "childParkings": []
+                },
+                    
+                {
+                    "parkingId": "5703fda1d0facd60a600000a",
+                    "name": "Pillar 6I",
+                    "childParkings": []
+                },
+                    
+                {
+                    "parkingId": "57066e1ad0facd652a000002",
+                    "name": "Pillar 6J",
+                    "childParkings": []
+                },
+                    
+                {
+                    "parkingId": "5703fdb9d0facd60a600000c",
+                    "name": "Pillar 6K",
+                    "childParkings": []
+                }
+           ]
+      }
+  ]
+  }

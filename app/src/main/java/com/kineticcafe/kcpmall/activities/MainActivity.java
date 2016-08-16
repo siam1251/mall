@@ -45,6 +45,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,6 +81,9 @@ import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.managers.SidePanelManagers;
 import com.kineticcafe.kcpmall.mappedin.Amenities;
 import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
+import com.kineticcafe.kcpmall.parking.Parking;
+import com.kineticcafe.kcpmall.parking.ParkingManager;
+import com.kineticcafe.kcpmall.parking.Parkings;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.BadgeView;
@@ -273,6 +277,7 @@ public class MainActivity extends BaseActivity
             DirectoryFragment.getInstance().initializeDirectoryData();
             InfoFragment.getInstance().initializeMallInfoData();
             initializeMapData();
+            initializeParkingData();
         }
     }
 
@@ -423,9 +428,11 @@ public class MainActivity extends BaseActivity
     public void moveFocusToNextEditText(){
         InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
         if(etStartStore.getText() == null || etStartStore.getText().toString().equals("")) {
+            etDestStore.clearFocus();
             etStartStore.requestFocus();
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         } else if(etDestStore.getText() == null || etDestStore.getText().toString().equals("")) {
+            etStartStore.clearFocus();
             etDestStore.requestFocus();
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
@@ -485,6 +492,34 @@ public class MainActivity extends BaseActivity
             }
         });
         amenitiesManager.downloadAmenities();
+    }
+
+
+    private void initializeParkingData(){
+
+        String data = "";
+        try {
+            data = KcpUtility.convertStreamToString(getAssets().open(HeaderFactory.PARKING_OFFLINE_TEXT));
+            Gson gson = new Gson();
+            ParkingManager.sParkings = gson.fromJson(data, Parkings.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ParkingManager parkingManager = new ParkingManager(this, R.layout.layout_loading_item, new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                        break;
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        parkingManager.downloadParkings();
     }
 
 
@@ -572,6 +607,21 @@ public class MainActivity extends BaseActivity
         });
 
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
+
+
+//        setActiveMall(true);
+    }
+
+    private void setActiveMall(boolean activeMallEnabled){
+
+        ScrollView scLeftPanel = (ScrollView) findViewById(R.id.scLeftPanel);
+
+        if(activeMallEnabled) {
+            scLeftPanel.setBackgroundColor(getResources().getColor(R.color.active_mall_bg));
+        } else {
+            scLeftPanel.setBackgroundColor(Color.WHITE);
+        }
+
     }
 
     private void setDealParkingStatus(boolean isOn, RelativeLayout rl, TextView tv, ImageView iv, String onText, String offText){
@@ -600,9 +650,7 @@ public class MainActivity extends BaseActivity
                     public void OnSqueezeAnimationDone() {
                     }
                 }, MainActivity.this, rlSeeDeal);
-
                 setDealParkingStatus(ivFilterDeal.isSelected(), rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
-
                 if(mOnDealsClickListener != null) {
                     //            ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true); //ALL DEALS
                     ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS
@@ -611,7 +659,7 @@ public class MainActivity extends BaseActivity
                         setDealParkingStatus(false, rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
                         return;
                     } else {
-                        mOnDealsClickListener.onDealsClick(!ivFilterDeal.isSelected());
+                        mOnDealsClickListener.onDealsClick(true);
                     }
                     Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_DEAL, !ivFilterDeal.isSelected());
                 }
@@ -621,7 +669,7 @@ public class MainActivity extends BaseActivity
         final RelativeLayout rlSeeParking = (RelativeLayout) findViewById(R.id.rlSeeParking);
         final ImageView ivFilterParking= (ImageView) findViewById(R.id.ivFilterParking);
         final TextView tvFilterParking = (TextView) findViewById(R.id.tvFilterParking);
-        setDealParkingStatus(Amenities.isToggled(this, Amenities.GSON_KEY_PARKING), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_retrieve_parking), getResources().getString(R.string.map_filter_save_parking));
+        setDealParkingStatus(ParkingManager.isParkingLotSaved(this), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_retrieve_parking), getResources().getString(R.string.map_filter_save_parking));
         rlSeeParking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -630,8 +678,7 @@ public class MainActivity extends BaseActivity
                     public void OnSqueezeAnimationDone() {
                     }
                 }, MainActivity.this, rlSeeParking);
-                setDealParkingStatus(ivFilterParking.isSelected(), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_retrieve_parking), getResources().getString(R.string.map_filter_save_parking));
-                Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, !ivFilterParking.isSelected());
+//                Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, !ivFilterParking.isSelected());
                 if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(!ivFilterParking.isSelected());
             }
         });
@@ -639,6 +686,7 @@ public class MainActivity extends BaseActivity
         View llAmenitySwitch = findViewById(R.id.llAmenitySwitch);
         List<Amenities.AmenityLayout> amenityList = new ArrayList<>();
 
+        if(AmenitiesManager.sAmenities == null) return;
         for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
 
             final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
@@ -914,6 +962,10 @@ public class MainActivity extends BaseActivity
             } else if (resultCode == Constants.RESULT_STORES) {
                 selectPage(1);
                 DirectoryFragment.getInstance().selectPage(1);
+            }
+        } else if(requestCode == Constants.REQUEST_CODE_SAVE_PARKING_SPOT) {
+            if (resultCode == Activity.RESULT_OK) {
+                setUpRightSidePanel();
             }
         }
     }

@@ -37,6 +37,7 @@ public class Amenities {
     private List<Amenity> amenityList = new ArrayList<Amenity>();
 
     public List<Amenity> getAmenityList (){
+        if(amenityList == null) return new ArrayList<Amenity>();
         return amenityList;
     }
 

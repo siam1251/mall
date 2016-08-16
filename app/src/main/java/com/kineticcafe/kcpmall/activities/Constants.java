@@ -81,6 +81,7 @@ public final static String HEADER_VALUE_CLIENT_TOKEN = 		"OGEyZDYyZTgtNzRmMS00OD
 	//REQUEST CODE
 	public final static int REQUEST_CODE_CHANGE_INTEREST = 101;
 	public final static int REQUEST_CODE_MY_PAGE_TYPE = 102;
+	public final static int REQUEST_CODE_SAVE_PARKING_SPOT = 103;
 	public final static int RESULT_DONE_PRESSED_WITH_CHANGE = 0;
 	public final static int RESULT_DONE_PRESSED_WITHOUT_CHANGE = 1;
 	public final static int RESULT_EXIT = 2;

@@ -19,4 +19,6 @@ public class ActivityAnimation {
 //        ((Activity)context).overridePendingTransition(R.anim.splash_fake, R.anim.anim_slide_out_left); //shifts out to the left, remaining one stays
         ((Activity)context).overridePendingTransition(R.anim.splash_fake, R.anim.anim_slide_out_right); //shifts out to the left, remaining one stays
     }
+
+
 }

@@ -28,8 +28,14 @@ public class HeaderFactory {
     public final static String AMENITIES_URL_MP = "bins/1to8f";
 
 
+    public final static String PARKING_OFFLINE_TEXT = "parking.json";
+    public final static String PARKING_URL_VM = "bins/1c8ul";
+    public final static String PARKING_URL_MP = "bins/1c8ul";
+
+
     public static String MALL_INFO_URL = MALL_INFO_URL_VM;
     public static String AMENITIES_URL = AMENITIES_URL_VM;
+    public static String PARKING_URL = PARKING_URL_VM;
 
 
     public static String MALL_NAME = "Vaughan Mills";
@@ -52,11 +58,13 @@ public class HeaderFactory {
             MALL_NAME = "Vaughan Mills";
             MALL_INFO_URL = MALL_INFO_URL_VM;
             AMENITIES_URL = AMENITIES_URL_VM;
+            PARKING_URL = PARKING_URL_VM;
             MAP_VENUE_NAME = "Vaughan Mills";
         } else if(catalog.equals(Constants.HEADER_VALUE_DATAHUB_CATALOG_MP)) {
             MALL_NAME = "Metropolis Metrotown";
             MALL_INFO_URL = MALL_INFO_URL_MP;
             AMENITIES_URL = AMENITIES_URL_MP;
+            PARKING_URL = PARKING_URL_MP;
             MAP_VENUE_NAME = "Metropolis";
         }
 
