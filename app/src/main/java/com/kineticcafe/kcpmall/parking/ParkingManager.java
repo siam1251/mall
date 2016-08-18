@@ -45,7 +45,7 @@ public class ParkingManager {
     protected ParkingService mParkingService;
     protected int mLoadingLayout;
 
-    public static Parkings sParkings;
+    public static Parkings sParkings = new Parkings();
 
     public ParkingService getKcpService(){
         ServiceFactory serviceFactory = new ServiceFactory();
@@ -110,7 +110,7 @@ public class ParkingManager {
     }
 
 
-    public static void saveParkingNotes(final Context context, String note){
+    protected static void saveParkingNotes(final Context context, String note){
         KcpUtility.cacheToPreferences(context, KEY_PARKING_NOTES, note);
     }
 
@@ -118,9 +118,11 @@ public class ParkingManager {
         return KcpUtility.loadFromCache(context, KEY_PARKING_NOTES, "");
     }
 
-    public static void saveParkingSpotAndEntrance(final Context context, int parkingLotPosition, int entrancePosition){
+    public static void saveParkingSpotAndEntrance(final Context context, String note, int parkingLotPosition, int entrancePosition){
         KcpUtility.cacheToPreferences(context, KEY_PARKING_LOT_POSITION, parkingLotPosition);
         KcpUtility.cacheToPreferences(context, KEY_ENTRANCE_POSITION, entrancePosition);
+        saveParkingNotes(context, note);
+        Amenities.saveToggle(context, Amenities.GSON_KEY_PARKING, true);
     }
 
     public static int getSavedParkingLotPosition(final Context context){
@@ -144,6 +146,12 @@ public class ParkingManager {
     public static ChildParking getMyEntrance(final Context context){
         int entrancePosition = ParkingManager.getSavedEntrancePosition(context);
         return getMyParkingLot(context).getChildParkings().get(entrancePosition);
+    }
+
+    public static void removeParkingLot(final Context context){
+        KcpUtility.cacheToPreferences(context, KEY_PARKING_LOT_POSITION, -1);
+        KcpUtility.cacheToPreferences(context, KEY_ENTRANCE_POSITION, -1);
+        saveParkingNotes(context, "");
     }
 
 }

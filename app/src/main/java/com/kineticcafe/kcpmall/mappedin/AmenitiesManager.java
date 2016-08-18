@@ -51,7 +51,7 @@ public class AmenitiesManager  {
     protected AmenityService mAmenityService;
     protected int mLoadingLayout;
 
-    public static Amenities sAmenities;
+    public static Amenities sAmenities = new Amenities();
 
     public AmenityService getKcpService(){
         ServiceFactory serviceFactory = new ServiceFactory();

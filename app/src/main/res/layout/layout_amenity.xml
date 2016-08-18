@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.kineticcafe.kcpmall.views.ThemeColorImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ivAmenity"
+    android:layout_centerInParent="true"
+    ThemedImageView:filterColor="@color/white"
+    android:src="@drawable/icn_car"
+    android:background="@drawable/circle_imageview_background_theme"
+    android:padding="15dp"
+    android:layout_width="50dp"
+    android:layout_height="50dp"/>
+    <!--android:background="@drawable/circle_imageview_background_black"-->

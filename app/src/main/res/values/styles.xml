@@ -136,6 +136,11 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
+    <style name="SelectableItemBackgroundOpaque">
+        <item name="android:theme">@style/SelectableItemThemeOpaque</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
 
     <style name="SelectableItemForegroundNormal">
         <item name="android:foreground">?attr/selectableItemBackground</item>

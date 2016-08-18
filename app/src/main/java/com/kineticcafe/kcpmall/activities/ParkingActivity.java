@@ -1,11 +1,13 @@
 package com.kineticcafe.kcpmall.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.mappedin.Amenities;
 import com.kineticcafe.kcpmall.parking.ChildParking;
 import com.kineticcafe.kcpmall.parking.Parking;
 import com.kineticcafe.kcpmall.parking.ParkingManager;
@@ -82,10 +85,9 @@ public class ParkingActivity extends AppCompatActivity {
         tvSaveParkingLot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParkingManager.saveParkingNotes(ParkingActivity.this, mParkingNote);
-                ParkingManager.saveParkingSpotAndEntrance(ParkingActivity.this, mParkingLotSelectedPosition, mEntranceSelectedPosition);
+                ParkingManager.saveParkingSpotAndEntrance(ParkingActivity.this, mParkingNote, mParkingLotSelectedPosition, mEntranceSelectedPosition);
                 Toast.makeText(ParkingActivity.this, "Parking Lot Saved", Toast.LENGTH_SHORT).show();
-                setResult(Constants.RESULT_EXIT, new Intent());
+                setResult(Activity.RESULT_OK, new Intent());
                 onFinish();
             }
         });
@@ -98,7 +100,7 @@ public class ParkingActivity extends AppCompatActivity {
                 AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
                 alertDialogForInterest.getEditTextAlertDialog(
                         ParkingActivity.this,
-                        ParkingManager.getParkingNotes(ParkingActivity.this),
+                        mParkingNote,
                         getResources().getString(R.string.title_add_notes),
                         getResources().getString(R.string.action_save),
                         getResources().getString(R.string.action_cancel),
@@ -148,6 +150,8 @@ public class ParkingActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mParkingNote = ParkingManager.getParkingNotes(ParkingActivity.this);
     }
 
     private void setParkingNoteBtn(String note){
@@ -216,6 +220,21 @@ public class ParkingActivity extends AppCompatActivity {
         rvParking.setHasFixedSize(true);
         ParkingRecyclerViewAdapter parkingRecyclerViewAdapter = new ParkingRecyclerViewAdapter(this, ParkingManager.sParkings.getParkings(), null);
         rvParking.setAdapter(parkingRecyclerViewAdapter);
+
+
+        try {
+            //select previously saved parking lot
+            if(ParkingManager.isParkingLotSaved(this) && ParkingManager.getSavedParkingLotPosition(this) != -1) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        rvParking.findViewHolderForAdapterPosition(ParkingManager.getSavedParkingLotPosition(ParkingActivity.this)).itemView.performClick();
+                    }
+                },1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupChildRecyclerView() {

@@ -101,7 +101,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:background="@drawable/circle_imageview_background"
+                android:background="@drawable/circle_imageview_background_white"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 />
@@ -167,14 +167,16 @@
                 />
 
             <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-                android:layout_marginLeft="3dp"
+                android:layout_marginTop="3dp"
                 android:id="@+id/tvNote"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/ivPenceil"
+                android:textAlignment="center"
                 app:fontFamily="@string/fontFamily_roboto_light"
+                android:maxWidth="200dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/parking_add_note"
+                android:text="awpoeijfa;skdjfa;soiefja;sld kjfa;sof jas;ldkfja;lsdfkjas;ldfkj"
                 android:textColor="@color/white"
                 android:textSize="14sp"/>
 

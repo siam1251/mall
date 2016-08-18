@@ -38,6 +38,8 @@ public class CustomLocation extends Location {
         try {
             description = rawData.string("description");
             logo = rawData.imageCollection("logo");
+
+            //todo: disabled for testing
             if(rawData.string(TYPE_EXTERNAL_ID) != null) {
                 externalID = rawData.stringForce(TYPE_EXTERNAL_ID);
                 locationHashmapByExternalId.put(externalID, this);

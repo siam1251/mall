@@ -165,7 +165,11 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="map_filter_see_deal">See Recommended Deals</string>
     <string name="map_filter_hide_deal">Hide Recommended Deals</string>
     <string name="map_filter_save_parking">Save My Parking Spot</string>
-    <string name="map_filter_retrieve_parking">Retrieve My Parking Spot</string>
+
+    <string name="map_filter_see_parking">See My Parking Spot</string>
+    <string name="map_filter_hide_parking">Hide My Parking Spot</string>
+
+
     <string name="map_view_amenities_on_map">View Amenities on Map</string>
     <string name="hint_search_store">Search a Store</string>
     <string name="hint_search_start">Directions from...</string>
