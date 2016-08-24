@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
+import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
@@ -68,9 +69,8 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
             @Override
             public void run() {
                 if(mPageTitle.equals(getResources().getString(R.string.my_page_deals))) {
-
                     if(FavouriteManager.getInstance(MyPagesActivity.this).getFavDealContentPages().size() == 0) {
-                        setUpEmptyPlaceHolder(R.drawable.icn_empty_deals, getResources().getString(R.string.empty_placeholder_desc_deal));
+                        setUpEmptyPlaceHolder(R.drawable.icn_empty_deals, getResources().getString(R.string.empty_placeholder_desc_deal), true);
                         return;
                     }
                     StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(COLUMN_COUNT, StaggeredGridLayoutManager.VERTICAL);
@@ -99,9 +99,8 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                     mAdapter = dealsRecyclerViewAdapter;
 
                 } else if(mPageTitle.equals(getResources().getString(R.string.my_page_events))) {
-
                     if(FavouriteManager.getInstance(MyPagesActivity.this).getFavEventContentPages().size() == 0) {
-                        setUpEmptyPlaceHolder(R.drawable.icn_empty_events, getResources().getString(R.string.empty_placeholder_desc_event));
+                        setUpEmptyPlaceHolder(R.drawable.icn_empty_events, getResources().getString(R.string.empty_placeholder_desc_event), true);
                         return;
                     }
 
@@ -126,9 +125,6 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
 
                     mAdapter = newsRecyclerViewAdapter;
                 } else if(mPageTitle.equals(getResources().getString(R.string.my_page_stores))) {
-
-
-
                     StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(COLUMN_COUNT, StaggeredGridLayoutManager.VERTICAL);
                     staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
 
@@ -139,7 +135,7 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                     }
 
                     if(kcpPlaces.size() == 0) {
-                        setUpEmptyPlaceHolder(R.drawable.icn_empty_stores, getResources().getString(R.string.empty_placeholder_desc_store));
+                        setUpEmptyPlaceHolder(R.drawable.icn_empty_stores, getResources().getString(R.string.empty_placeholder_desc_store), true);
                         return;
                     }
 
@@ -163,6 +159,71 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
 
 
                     mAdapter = categoryStoreRecyclerViewAdapter;
+                } else if(mPageTitle.equals(getResources().getString(R.string.my_page_deals_for_today))) {
+
+                    ArrayList<KcpContentPage> todaysDealList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageListForToday(true);
+
+                    if(todaysDealList == null || todaysDealList.size() == 0) {
+                        setUpEmptyPlaceHolder(R.drawable.icn_empty_deals, getResources().getString(R.string.warning_empty_deals), false);
+                        return;
+                    }
+
+                    StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(COLUMN_COUNT, StaggeredGridLayoutManager.VERTICAL);
+                    staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+                    rv.setLayoutManager(staggeredGridLayoutManager);
+
+                    DealsRecyclerViewAdapter dealsRecyclerViewAdapter = new DealsRecyclerViewAdapter (
+                            MyPagesActivity.this,
+                            false,
+                            todaysDealList,
+                            null);
+
+//                    dealsRecyclerViewAdapter.setFavouriteListener(MyPagesActivity.this);
+                    rv.setAdapter(dealsRecyclerViewAdapter);
+                    dealsRecyclerViewAdapter.addFooter(getString(R.string.explore_more_deals), R.layout.list_item_my_page_footer, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            onFinish(Constants.RESULT_DEALS);
+                        }
+                    });
+
+                    if(!mIsDecorationAdded){
+                        DealRecyclerItemDecoration itemDecoration = new DealRecyclerItemDecoration(MyPagesActivity.this, R.dimen.card_vertical_margin, dealsRecyclerViewAdapter);
+                        rv.addItemDecoration(itemDecoration);
+                    }
+
+                    mAdapter = dealsRecyclerViewAdapter;
+                } else if(mPageTitle.equals(getResources().getString(R.string.my_page_events_for_today))){
+
+                    ArrayList<KcpContentPage> todaysEventList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED).getKcpContentPageListForToday(true);
+
+
+                    if(todaysEventList == null || todaysEventList.size() == 0) {
+                        setUpEmptyPlaceHolder(R.drawable.icn_empty_events, getResources().getString(R.string.warning_empty_news), false);
+                        return;
+                    }
+
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MyPagesActivity.this);
+                    rv.setLayoutManager(linearLayoutManager);
+                    NewsRecyclerViewAdapter newsRecyclerViewAdapter = new NewsRecyclerViewAdapter (
+                            MyPagesActivity.this,
+                            todaysEventList);
+
+//                    newsRecyclerViewAdapter.setFavouriteListener(MyPagesActivity.this);
+                    rv.setAdapter(newsRecyclerViewAdapter);
+                    newsRecyclerViewAdapter.addFooter(getString(R.string.explore_more_events), R.layout.list_item_my_page_footer, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            onFinish(Constants.RESULT_EVENTS);
+                        }
+                    });
+
+                    if(!mIsDecorationAdded){
+                        NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(MyPagesActivity.this, R.dimen.card_vertical_margin);
+                        rv.addItemDecoration(itemDecoration);
+                    }
+
+                    mAdapter = newsRecyclerViewAdapter;
                 }
 
                 if(!mIsDecorationAdded) mIsDecorationAdded = true;
@@ -171,7 +232,7 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
 
     }
 
-    private void setUpEmptyPlaceHolder(final int drawable, final String text){
+    private void setUpEmptyPlaceHolder(final int drawable, final String text, final boolean showTitle){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -183,6 +244,8 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                 LinearLayout llPlaceholder = (LinearLayout) findViewById(R.id.llPlaceholder);
                 ImageView ivPlaceholder = (ImageView) findViewById(R.id.ivPlaceholder);
                 TextView tvPlaceholderDesc = (TextView) findViewById(R.id.tvPlaceholderDesc);
+                TextView tvPlaceHolderTitle = (TextView) findViewById(R.id.tvPlaceHolderTitle);
+                if(!showTitle) tvPlaceHolderTitle.setVisibility(View.GONE);
                 llPlaceholder.setVisibility(View.VISIBLE);
                 ivPlaceholder.setImageResource(drawable);
                 tvPlaceholderDesc.setText(text);

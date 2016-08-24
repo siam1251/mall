@@ -8,7 +8,6 @@
     <EditText
         android:lineSpacingMultiplier="1.2"
         android:gravity="left"
-        android:cursorVisible="false"
         android:id="@+id/etAlertDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +15,7 @@
         android:textSize="14sp"
         android:maxLength="50"
         />
+        android:cursorVisible="false"
 
     <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
         android:id="@+id/tvCharacterLeft"

@@ -3,226 +3,212 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/parking_bg"
+    android:background="#b2202020"
     >
 
-
-
-    <com.kineticcafe.kcpmall.views.ThemeColorImageView
-        xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
-        ThemedImageView:filterColor="@color/white"
-        android:id="@+id/ivDismiss"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:padding="15dp"
-        android:layout_margin="5dp"
-        android:src="@drawable/icn_exit"
-        />
-
-
-
-
-
-
-    <android.support.v7.widget.RecyclerView
-        android:layout_alignParentBottom="true"
-        android:layout_above="@+id/tvFooter"
-        android:background="@color/white"
-        android:id="@+id/rvParking"
-        android:layout_width="match_parent"
-        android:layout_height="228dp"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"
-        android:layout_above="@+id/tvFooter"
-        android:background="@color/white"
-        android:id="@+id/rvParkingChild"
-        android:layout_width="match_parent"
-        android:layout_height="228dp"/>
-
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-        app:fontFamily="@string/fontFamily_roboto_medium"
-        android:visibility="gone"
-        android:id="@+id/tvFooter"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/parking_footer_height"
-        android:background="@color/themeColor"
-        style="@style/SelectableItemForeground"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:textSize="15sp"
-        android:text="@string/action_done"
-        android:layout_alignParentBottom="true"
-        />
-
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-        app:fontFamily="@string/fontFamily_roboto_regular"
-        android:layout_above="@+id/rvParking"
-        android:id="@+id/tvParkingLotQuestion"
-        android:layout_margin="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:text="@string/parking_which_parking_lot"/>
-
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-        app:fontFamily="@string/fontFamily_roboto_regular"
-        android:visibility="gone"
-        android:layout_above="@+id/rvParking"
-        android:id="@+id/tvEntranceQuestion"
-        android:layout_margin="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:text="@string/parking_which_entrance"/>
-
-
-
-    <!--<LinearLayout-->
-    <!--android:gravity="center"-->
-    <!--android:layout_marginTop="130dp"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="124dp">-->
-
     <RelativeLayout
+        android:id="@+id/rlParking"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/rvParking">
+        android:layout_height="match_parent">
+
+        <com.kineticcafe.kcpmall.views.ThemeColorImageView
+            xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+            ThemedImageView:filterColor="@color/white"
+            android:id="@+id/ivDismiss"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="15dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/icn_exit"
+            />
 
 
-        <RelativeLayout
-            android:layout_centerInParent="true"
-            android:id="@+id/rlParkingIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/tvFooter"
+            android:background="@color/white"
+            android:id="@+id/rvParking"
+            android:layout_width="match_parent"
+            android:layout_height="228dp"/>
 
-            <ImageView
-                android:background="@drawable/circle_imageview_background_white"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                />
-            <com.kineticcafe.kcpmall.views.ThemeColorImageView
-                xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
-                ThemedImageView:filterColor="@color/themeColor"
-                android:layout_centerInParent="true"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icn_car"
-                />
-        </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/tvFooter"
+            android:background="@color/white"
+            android:id="@+id/rvParkingChild"
+            android:layout_width="match_parent"
+            android:layout_height="228dp"/>
 
         <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-            android:visibility="gone"
-            android:layout_below="@+id/rlParkingIcon"
-            android:gravity="center"
-            android:text="P1 Underground"
-            android:id="@+id/tvParkingLotName"
             app:fontFamily="@string/fontFamily_roboto_medium"
+            android:visibility="gone"
+            android:id="@+id/tvFooter"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/parking_footer_height"
+            android:background="@color/themeColor"
+            style="@style/SelectableItemForeground"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:text="@string/action_done"
+            android:layout_alignParentBottom="true"
+            />
+
+        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_regular"
+            android:layout_above="@+id/rvParking"
+            android:id="@+id/tvParkingLotQuestion"
+            android:layout_margin="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/white"/>
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:text="@string/parking_which_parking_lot"/>
 
         <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_regular"
             android:visibility="gone"
-            android:layout_below="@+id/tvParkingLotName"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
-            android:text="Green Zone"
-            android:id="@+id/tvEntrancename"
+            android:layout_above="@+id/rvParking"
+            android:id="@+id/tvEntranceQuestion"
+            android:layout_margin="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/white"/>
-
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:text="@string/parking_which_entrance"/>
 
         <RelativeLayout
-            android:visibility="gone"
-            android:id="@+id/rlNote"
-            android:background="@drawable/btn_style_corener_radius_white_edge"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_marginTop="37dp"
-            android:layout_below="@+id/tvEntrancename"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/rvParking">
 
-            <com.kineticcafe.kcpmall.views.ThemeColorImageView
-                xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
-                ThemedImageView:filterColor="@color/white"
-                android:layout_centerVertical="true"
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icn_pencil"
-                android:id="@+id/ivPenceil"
-                android:layout_marginRight="3dp"
-                />
+            <RelativeLayout
+                android:layout_centerInParent="true"
+                android:id="@+id/rlParkingIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:background="@drawable/circle_imageview_background_white"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    />
+                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+                    ThemedImageView:filterColor="@color/themeColor"
+                    android:layout_centerInParent="true"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icn_car"
+                    />
+            </RelativeLayout>
 
             <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-                android:layout_marginTop="3dp"
-                android:id="@+id/tvNote"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/ivPenceil"
-                android:textAlignment="center"
-                app:fontFamily="@string/fontFamily_roboto_light"
-                android:maxWidth="200dp"
-                android:layout_width="wrap_content"
+                android:visibility="gone"
+                android:layout_below="@+id/rlParkingIcon"
+                android:gravity="center"
+                android:text="P1 Underground"
+                android:id="@+id/tvParkingLotName"
+                app:fontFamily="@string/fontFamily_roboto_medium"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="awpoeijfa;skdjfa;soiefja;sld kjfa;sof jas;ldkfja;lsdfkjas;ldfkj"
-                android:textColor="@color/white"
-                android:textSize="14sp"/>
+                android:textSize="16sp"
+                android:textColor="@color/white"/>
 
+            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                app:fontFamily="@string/fontFamily_roboto_regular"
+                android:visibility="gone"
+                android:layout_below="@+id/tvParkingLotName"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="Green Zone"
+                android:id="@+id/tvEntrancename"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/white"/>
+
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/rlNote"
+                android:background="@drawable/btn_style_corener_radius_white_edge"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_marginTop="37dp"
+                android:layout_below="@+id/tvEntrancename"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+                    ThemedImageView:filterColor="@color/white"
+                    android:layout_centerVertical="true"
+                    android:layout_width="25dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icn_pencil"
+                    android:id="@+id/ivPenceil"
+                    android:layout_marginRight="3dp"
+                    />
+
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:layout_marginTop="3dp"
+                    android:id="@+id/tvNote"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/ivPenceil"
+                    android:textAlignment="center"
+                    app:fontFamily="@string/fontFamily_roboto_light"
+                    android:maxWidth="200dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Notes"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"/>
+
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
+
+        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:id="@+id/tvSaveParkingLot"
+            android:layout_margin="@dimen/card_horizontal_margin"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/btn_style_corner_radius_with_selected_state"
+            android:gravity="center"
+            android:text="@string/parking_btn_save_parking_spot"
+            android:textSize="16sp"
+            style="@style/SelectableItemForegroundWhite"
+            android:elevation="1dp"
+            />
+
+        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            android:visibility="gone"
+            android:layout_above="@+id/tvSaveParkingLot"
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:elevation="1dp"
+            android:id="@+id/tvEditSelection"
+            android:layout_marginLeft="@dimen/card_horizontal_margin"
+            android:layout_marginRight="@dimen/card_horizontal_margin"
+            android:textColor="#b2202020"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@drawable/btn_style_corner_radius_white_with_selected_state"
+            style="@style/SelectableItemForeground"
+            android:gravity="center"
+            android:text="@string/parking_btn_edit_selection"
+            android:textSize="16sp"
+            />
     </RelativeLayout>
-    <!--</LinearLayout>-->
-
-
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"
-        app:fontFamily="@string/fontFamily_roboto_medium"
-        android:id="@+id/tvSaveParkingLot"
-        android:layout_margin="@dimen/card_horizontal_margin"
-        android:textColor="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:background="@drawable/btn_style_corner_radius_with_selected_state"
-        android:gravity="center"
-        android:text="@string/parking_btn_save_parking_spot"
-        android:textSize="16sp"
-        style="@style/SelectableItemForegroundWhite"
-        android:elevation="1dp"
-        />
-
-    android:layout_margin="@dimen/card_horizontal_margin"
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
-        android:visibility="gone"
-        android:layout_above="@+id/tvSaveParkingLot"
-        app:fontFamily="@string/fontFamily_roboto_medium"
-        android:elevation="1dp"
-        android:id="@+id/tvEditSelection"
-        android:layout_marginLeft="@dimen/card_horizontal_margin"
-        android:layout_marginRight="@dimen/card_horizontal_margin"
-        android:textColor="#b2202020"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:background="@drawable/btn_style_corner_radius_white_with_selected_state"
-        style="@style/SelectableItemForeground"
-        android:gravity="center"
-        android:text="@string/parking_btn_edit_selection"
-        android:textSize="16sp"
-        />
-
-
 
 </RelativeLayout>

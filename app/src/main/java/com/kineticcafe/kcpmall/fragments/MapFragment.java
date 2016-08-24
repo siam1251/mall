@@ -5,12 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.renderscript.RSRuntimeException;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -57,7 +61,10 @@ import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
 import com.kineticcafe.kcpmall.mappedin.CustomLocation;
 import com.kineticcafe.kcpmall.mappedin.Overlay2DBitmap;
 import com.kineticcafe.kcpmall.parking.ParkingManager;
+import com.kineticcafe.kcpmall.utility.BlurBuilder;
 import com.kineticcafe.kcpmall.utility.Utility;
+import com.kineticcafe.kcpmall.views.Blur.FastBlur;
+import com.kineticcafe.kcpmall.views.Blur.RSBlur;
 import com.kineticcafe.kcpmall.views.ThemeColorImageView;
 import com.mappedin.jpct.Logger;
 import com.mappedin.sdk.Coordinate;
@@ -78,6 +85,9 @@ import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.RawData;
 import com.mappedin.sdk.Venue;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -105,6 +115,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private View view;
     private SearchView mSearchView;
     private IndexableRecylerView rv;
+    private RelativeLayout rlMap;
     private RelativeLayout rlDirection;
     private TextView tvStoreName;
     private TextView tvCategoryName;
@@ -132,7 +143,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private Drawable mAmeityDrawable;
 
     //MAPPED IN
-    private final int PIN_IMAGE_SIZE_DP = 90;
+    private final int PIN_IMAGE_SIZE_DP = 95;
+    private final int CAMERA_ZOOM_LEVEL = 30; //BIGGER - farther, SMALLER - closer
+    private final int BLUR_RADIUS = 20;
     private boolean accessibleDirections = false;
     private MapViewDelegate delegate = this;
 
@@ -162,12 +175,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
         view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        setHasOptionsMenu(true);
-
         pb = (ProgressBar) view.findViewById(R.id.pb);
         pb.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.themeColor),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
         rv = (IndexableRecylerView) view.findViewById(R.id.rv);
+        rlMap = (RelativeLayout) view.findViewById(R.id.rlMap);
         rlDirection = (RelativeLayout) view.findViewById(R.id.rlDirection);
         tvStoreName = (TextView) view.findViewById(R.id.tvStoreName);
         tvCategoryName = (TextView) view.findViewById(R.id.tvCategoryName);
@@ -211,10 +223,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
         Log.d("TEST", "startTime time passed : " + (System.currentTimeMillis()));
         //enable below for auto map load
-        /*pb.setVisibility(View.VISIBLE);
+        pb.setVisibility(View.VISIBLE);
         btnShowMap.setVisibility(View.GONE);
         btnShowMap = null;
-        mappedIn.getVenues(new GetVenuesCallback());*/
+        mappedIn.getVenues(new GetVenuesCallback());
 
 
         //todo: disabled for testing
@@ -222,6 +234,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         mMainActivity.setOnDealsClickListener(MapFragment.this);
         mMainActivity.setOnParkingClickListener(MapFragment.this);
         setupRecyclerView();
+        setHasOptionsMenu(true);
+
         return view;
     }
 
@@ -358,9 +372,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private class GetVenueCallback implements MappedinCallback<Venue> {
         @Override
         public void onCompleted(final Venue venue) {
-//            getActivity().runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
             maps = venue.getMaps();
             if (maps.length == 0) {
                 Logger.log("No maps! Make sure your venue is set up correctly!");
@@ -381,8 +392,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 ivUpper.setVisibility(View.VISIBLE);
                 ivLower.setVisibility(View.VISIBLE);
             }
-//                }
-//            });
         }
 
         @Override
@@ -424,7 +433,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     }
 
     private void setMapLevel (int level, @Nullable String shortName){
-
         if(shortName != null){
             for(int i = 0; i < maps.length; i++){
                 Map map = maps[i];
@@ -448,10 +456,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             onAmenityClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_AMENITY + amenity.getTitle()), amenity.getExternalIds()[0]);
         }
 
-        if(ParkingManager.isParkingLotSaved(getActivity())) {
-            //if parking lot's saved, shouldn't show any parking spot
-            onParkingClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_PARKING));
-        }
+//        if(ParkingManager.isParkingLotSaved(getActivity())) {
+//            onParkingClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_PARKING));
+//        }
     }
 
     private class CustomLocationGenerator implements LocationGenerator {
@@ -504,7 +511,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
                 if (directions != null) {
                     //                path = new Path(directions.getPath(), 0.05f, 0.05f, getResources().getColor(R.color.themeColor));
-                    path = new Path(directions.getPath(), 0.1f, 0.1f, getResources().getColor(R.color.themeColor));
+//                    path = new Path(directions.getPath(), 0.2f, 0.2f, getResources().getColor(R.color.themeColor));
+                    path = new Path(directions.getPath(), 0.2f, 0.2f, getResources().getColor(R.color.themeColorDark));
                     mapView.addPath(path);
                     mapView.getCamera().focusOn(directions.getPath());
                 }
@@ -516,9 +524,18 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 if(destinationPolygon instanceof Polygon){
                     highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
                     mapView.getCamera().focusOn((Polygon) destinationPolygon);
-                    mapView.getCamera().setZoomTo(30);
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        public void run () {
+
+                    Log.d("MapFragment", "first : " + mapView.getCamera().getRotation().first + " second : " + mapView.getCamera().getRotation().second);
+                    Log.d("MapFragment", "BEFORE camera zoom level : " + mapView.getCamera().getZoom());
+
+                    if(mapView.getCamera().getZoom() <= CAMERA_ZOOM_LEVEL) {
+                        mapView.getCamera().setZoomTo(mapView.getCamera().getZoom());
+                    } else {
+                        mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL);
+                        Log.d("MapFragment", "AFTER camera zoom level : " + mapView.getCamera().getZoom());
+                    }
+
+
                     try {
                         if(destinationPolygon instanceof Polygon){
                             showLocationDetails( (CustomLocation) ((Polygon) destinationPolygon).getLocations().get(0));
@@ -529,18 +546,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-//                        }
-//                    });
                 }
-
-
             }
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void didTapMarker() {
@@ -627,7 +637,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 }
             });
 
-            ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_exit));
+            ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_remove_parking));
 
 
         } else {
@@ -807,7 +817,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     public Drawable getDrawableFromView(int drawable){
 //        View amientyView = View.inflate(getActivity(), R.layout.layout_amenity, (ViewGroup) view); //image gets stuck to parentview
-        View amientyView = getActivity().getLayoutInflater().inflate(R.layout.layout_amenity, null); //image is an overlay and not stuck anywhere
+//        View amientyView = getActivity().getLayoutInflater().inflate(R.layout.layout_amenity, null); //image is an overlay and not stuck anywhere
+        ImageView amientyView = (ImageView) getActivity().getLayoutInflater().inflate(R.layout.layout_amenity, null); //image is an overlay and not stuck anywhere
+        amientyView.setImageResource(drawable);
         amientyView.setDrawingCacheEnabled(true);
 
         amientyView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
@@ -825,7 +837,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     public void onParkingClick(boolean enabled) {
         try {
             if(!ParkingManager.isParkingLotSaved(getActivity())){
-                getActivity().startActivityForResult(new Intent(getActivity(), ParkingActivity.class), Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
+                final Intent intent = new Intent (getActivity(), ParkingActivity.class);
+                intent.putExtra("image", "bitmap.png");
+                getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
+
             } else {
                 HashMap<String, CustomLocation> parkingHashMap = CustomLocation.getParkingHashMap();
                 String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
@@ -857,25 +872,18 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         public Overlay2DImage label = null;
         public Coordinate coordinate = null;
         public void onClick() {
-//            getActivity().runOnUiThread(new Runnable() {
-//                public void run () {
             if(path != null) return; //map shouldn't be clicakble when the paths drawn
             if(location != null) {
+                if(destinationPolygon != null && destinationPolygon == location) {
+                    destinationPolygon = null;
+                    showDirectionCard(false, null, 0, null, null, null);
+                    return;
+                }
                 showAmenityDetail((CustomLocation) location, drawable);
                 destinationPolygon = location;
-
-                if(drawable != null) {
-//                            drawable.setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY);
-                }
-                if(label != null) {
-//                            drawable.setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY);
-//                            label = new Overlay2DImage(100, 100, drawable);
-//                            label.setPosition(coordinate);
-//                            mapView.addMarker(label, false);
-                }
+//                mapView.getCamera().focusOn(location.getNavigatableCoordinates().get(0));
+//                mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL);
             }
-//                }
-//            });
         };
     }
 
@@ -884,6 +892,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         menu.findItem(R.id.action_backend_vm).setVisible(false);
         menu.findItem(R.id.action_backend_mp).setVisible(false);
         menu.findItem(R.id.action_test).setVisible(false);
+        menu.findItem(R.id.action_geofence_test).setVisible(false);
+        menu.findItem(R.id.action_geofence_disconnect).setVisible(false);
         super.onPrepareOptionsMenu(menu);
     }
 
@@ -1017,6 +1027,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
 
         RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
+
         if(dealsForThisStore.size() > 0){
             /*if deal exists, change the height of rlDirection from 109dp to 157dp and set deal layout's visibility to visible*/
             ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_deals));
@@ -1132,7 +1143,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                             android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
                             transaction.detach(mapView);
                             transaction.commit();
-                            didTapNothing();
+//                            didTapNothing();
                         } catch (Exception e){
                             String a = "ewfsef";
                         }

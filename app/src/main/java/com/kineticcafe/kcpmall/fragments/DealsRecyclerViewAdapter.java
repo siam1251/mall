@@ -348,7 +348,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                     }
 
                     ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    ActivityAnimation.startActivityAnimation(mContext);
                 }
             });
         } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_FOOTER){

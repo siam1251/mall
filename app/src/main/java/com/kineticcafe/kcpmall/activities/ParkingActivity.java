@@ -5,7 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -34,6 +38,7 @@ import com.kineticcafe.kcpmall.parking.ParkingManager;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
+import java.io.FileInputStream;
 import java.util.List;
 
 /**
@@ -64,6 +69,23 @@ public class ParkingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parking);
+
+        RelativeLayout rlParking = (RelativeLayout) findViewById(R.id.rlParking);
+        Bitmap bitmap = null;
+        String filename = getIntent().getStringExtra("image");
+        /*if(filename != null) {
+            try {
+                FileInputStream is = this.openFileInput(filename);
+                bitmap = BitmapFactory.decodeStream(is);
+                is.close();
+                if(bitmap != null){
+                    rlParking.setBackground(new BitmapDrawable(bitmap));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }*/
+
         rvParking = (RecyclerView) findViewById(R.id.rvParking);
         rvParkingChild = (RecyclerView) findViewById(R.id.rvParkingChild);
         rlParkingIcon = (RelativeLayout) findViewById(R.id.rlParkingIcon);
@@ -137,21 +159,34 @@ public class ParkingActivity extends AppCompatActivity {
 
             }
         });
-        setupRecyclerView();
 
         tvFooter = (TextView) findViewById(R.id.tvFooter);
         tvFooter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(rvParkingChild.getVisibility() != View.VISIBLE) {
+
+                if (tvFooter.getText().toString().equals("NEXT")){
+                    setupChildRecyclerView();
+                } else if(tvFooter.getText().toString().equals("BACK")){
+                    setupChildRecyclerView();
+                }  else if (tvFooter.getText().toString().equals("DONE")){
+                    showSaveParkingSpotScreen(true);
+                }
+                /*if(rvParkingChild.getVisibility() == View.VISIBLE) {
+                    setupChildRecyclerView();
+                } else if(rvParkingChild.getVisibility() != View.VISIBLE) {
                     if(mParkingLotSelectedPosition != -1) setupChildRecyclerView();
                 } else {
                     showSaveParkingSpotScreen(true);
-                }
+                }*/
             }
         });
 
         mParkingNote = ParkingManager.getParkingNotes(ParkingActivity.this);
+        mParkingLotSelectedPosition = ParkingManager.getSavedParkingLotPosition(this);
+        mEntranceSelectedPosition = ParkingManager.getSavedEntrancePosition(this);
+
+        setupRecyclerView();
     }
 
     private void setParkingNoteBtn(String note){
@@ -161,54 +196,6 @@ public class ParkingActivity extends AppCompatActivity {
         } else {
             tvNote.setText(getResources().getString(R.string.parking_add_note));
             rlNote.setBackground(getResources().getDrawable(R.drawable.btn_style_corener_radius_white_edge));
-        }
-    }
-
-    private void showSaveParkingSpotScreen(boolean enable){
-        if(enable) {
-            tvParkingLotQuestion.setVisibility(View.GONE);
-            tvEntranceQuestion.setVisibility(View.GONE);
-
-            Animation slideDownAnimation = AnimationUtils.loadAnimation(ParkingActivity.this,
-                    R.anim.anim_slide_down_out_of_screen);
-            slideDownAnimation.reset();
-            slideDownAnimation.setFillAfter(true);
-
-            Animation fadeInAnim = AnimationUtils.loadAnimation(ParkingActivity.this,
-                    android.R.anim.fade_in);
-            fadeInAnim.reset();
-
-            tvEntrancename.setVisibility(View.VISIBLE);
-            tvEntrancename.setText(ParkingManager.sParkings.getParkings().get(mParkingLotSelectedPosition).getChildParkings().get(mEntranceSelectedPosition).getName());
-            tvEntrancename.startAnimation(fadeInAnim);
-
-            rvParking.startAnimation(slideDownAnimation);
-            rvParkingChild.startAnimation(slideDownAnimation);
-            showDoneBtn(true, rvParking);
-
-            tvEditSelection.setVisibility(View.VISIBLE);
-            tvSaveParkingLot.setVisibility(View.VISIBLE);
-            rlNote.setVisibility(View.VISIBLE);
-
-        } else {
-
-            tvParkingLotQuestion.setVisibility(View.GONE);
-            tvEntranceQuestion.setVisibility(View.VISIBLE);
-
-            Animation slideUpAnimation = AnimationUtils.loadAnimation(ParkingActivity.this,
-                    R.anim.anim_slide_up_from_out_of_screen);
-            slideUpAnimation.reset();
-            slideUpAnimation.setFillAfter(true);
-
-            tvEntrancename.setVisibility(View.GONE);
-
-            rvParking.startAnimation(slideUpAnimation);
-            rvParkingChild.startAnimation(slideUpAnimation);
-            showDoneBtn(false, rvParkingChild);
-
-            tvEditSelection.setVisibility(View.GONE);
-            tvSaveParkingLot.setVisibility(View.GONE);
-            rlNote.setVisibility(View.GONE);
         }
     }
 
@@ -224,13 +211,14 @@ public class ParkingActivity extends AppCompatActivity {
 
         try {
             //select previously saved parking lot
-            if(ParkingManager.isParkingLotSaved(this) && ParkingManager.getSavedParkingLotPosition(this) != -1) {
+            if(ParkingManager.isParkingLotSaved(this) && mParkingLotSelectedPosition != -1) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        rvParking.findViewHolderForAdapterPosition(ParkingManager.getSavedParkingLotPosition(ParkingActivity.this)).itemView.performClick();
+                        rvParking.findViewHolderForAdapterPosition(mParkingLotSelectedPosition).itemView.performClick();
+                        showDoneBtn(true, rvParking, "NEXT");
                     }
-                },1);
+                }, 1);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -266,19 +254,20 @@ public class ParkingActivity extends AppCompatActivity {
                     R.anim.anim_slide_up_from_its_position);
             slideUpAnimation.reset();
             slideUpAnimation.setFillAfter(true);
-
+            ;
             if(rvParkingChild.getVisibility() == View.VISIBLE) {
                 rvParkingChild.setVisibility(View.GONE);
 
                 tvParkingLotName.setVisibility(View.GONE);
-                tvParkingLotName.setText(ParkingManager.sParkings.getParkings().get(mParkingLotSelectedPosition).getName());
                 tvParkingLotName.startAnimation(fadeOutAnim);
 
                 rlParkingIcon.startAnimation(slideDownAnimation);
 
                 rvParkingChild.startAnimation(slideOutToRightAnimation);
-                mEntranceSelectedPosition = -1;
-                showDoneBtn(false, rvParking);
+//                mEntranceSelectedPosition = -1;
+//                showDoneBtn(false, rvParking);
+                if(mParkingLotSelectedPosition != - 1) showDoneBtn(true, rvParking, "NEXT");
+                else showDoneBtn(false, rvParking, "");
 
 
                 tvParkingLotQuestion.startAnimation(fadeInAnim);
@@ -290,10 +279,8 @@ public class ParkingActivity extends AppCompatActivity {
                 rlParkingIcon.startAnimation(slideUpAnimation);
 
                 tvParkingLotName.setVisibility(View.VISIBLE);
+                tvParkingLotName.setText(ParkingManager.sParkings.getParkings().get(mParkingLotSelectedPosition).getName());
                 tvParkingLotName.startAnimation(fadeInAnim);
-
-
-
 
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
                 linearLayoutManager.setAutoMeasureEnabled(false);
@@ -306,7 +293,25 @@ public class ParkingActivity extends AppCompatActivity {
                 rvParkingChild.setVisibility(View.VISIBLE);
                 rvParkingChild.startAnimation(slideInFromRightAnimation);
 
-                showDoneBtn(true, rvParkingChild);
+                try {
+                    //select previously saved parking lot
+                    /*if(mEntranceSelectedPosition != -1) {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                rvParkingChild.findViewHolderForAdapterPosition(mEntranceSelectedPosition).itemView.performClick();
+                            }
+                        },1);
+                    }*/
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+//                showDoneBtn(true, rvParkingChild);
+                if(mEntranceSelectedPosition != -1) showDoneBtn(true, rvParkingChild, "DONE");
+                else showDoneBtn(true, rvParkingChild, "BACK");
+
 
                 tvParkingLotQuestion.startAnimation(fadeOutAnim);
                 tvParkingLotQuestion.setVisibility(View.GONE);
@@ -318,7 +323,59 @@ public class ParkingActivity extends AppCompatActivity {
         }
     }
 
-    private void showDoneBtn(boolean forceHide, RecyclerView rv) {
+
+    private void showSaveParkingSpotScreen(boolean enable){
+        if(enable) {
+            tvParkingLotQuestion.setVisibility(View.GONE);
+            tvEntranceQuestion.setVisibility(View.GONE);
+
+            Animation slideDownAnimation = AnimationUtils.loadAnimation(ParkingActivity.this,
+                    R.anim.anim_slide_down_out_of_screen);
+            slideDownAnimation.reset();
+            slideDownAnimation.setFillAfter(true);
+
+            Animation fadeInAnim = AnimationUtils.loadAnimation(ParkingActivity.this,
+                    android.R.anim.fade_in);
+            fadeInAnim.reset();
+
+            tvEntrancename.setVisibility(View.VISIBLE);
+            tvEntrancename.setText(ParkingManager.sParkings.getParkings().get(mParkingLotSelectedPosition).getChildParkings().get(mEntranceSelectedPosition).getName());
+            tvEntrancename.startAnimation(fadeInAnim);
+
+            rvParking.startAnimation(slideDownAnimation);
+            rvParkingChild.startAnimation(slideDownAnimation);
+//            showDoneBtn(true, rvParking);
+            showDoneBtn(false, rvParking, "");
+
+            tvEditSelection.setVisibility(View.VISIBLE);
+            tvSaveParkingLot.setVisibility(View.VISIBLE);
+            rlNote.setVisibility(View.VISIBLE);
+
+        } else {
+
+            tvParkingLotQuestion.setVisibility(View.GONE);
+            tvEntranceQuestion.setVisibility(View.VISIBLE);
+
+            Animation slideUpAnimation = AnimationUtils.loadAnimation(ParkingActivity.this,
+                    R.anim.anim_slide_up_from_out_of_screen);
+            slideUpAnimation.reset();
+            slideUpAnimation.setFillAfter(true);
+
+            tvEntrancename.setVisibility(View.GONE);
+
+            rvParking.startAnimation(slideUpAnimation);
+            rvParkingChild.startAnimation(slideUpAnimation);
+//            showDoneBtn(false, rvParkingChild);
+            showDoneBtn(true, rvParkingChild, "NEXT");
+
+            tvEditSelection.setVisibility(View.GONE);
+            tvSaveParkingLot.setVisibility(View.GONE);
+            rlNote.setVisibility(View.GONE);
+        }
+    }
+
+
+    /*private void showDoneBtn(boolean forceHide, RecyclerView rv) {
         if(forceHide) {
             tvFooter.setVisibility(View.GONE);
             Animation slideUpAnimation = AnimationUtils.loadAnimation(this,
@@ -335,6 +392,27 @@ public class ParkingActivity extends AppCompatActivity {
                 tvFooter.startAnimation(slideUpAnimation);
                 rv.setPadding(0, 0, 0, (int) getResources().getDimension(R.dimen.parking_footer_height));
             }
+        }
+    }*/
+
+    private void showDoneBtn(boolean show, RecyclerView rv, String text) {
+        if(!show) {
+            tvFooter.setVisibility(View.GONE);
+            Animation slideUpAnimation = AnimationUtils.loadAnimation(this,
+                    R.anim.anim_slide_down_out_of_screen);
+            slideUpAnimation.reset();
+            tvFooter.startAnimation(slideUpAnimation);
+            rv.setPadding(0, 0, 0, 0);
+        } else {
+            tvFooter.setVisibility(View.VISIBLE);
+            tvFooter.setText(text);
+            if(tvFooter.getVisibility() != View.VISIBLE) {
+                Animation slideUpAnimation = AnimationUtils.loadAnimation(this,
+                        R.anim.anim_slide_up_from_out_of_screen);
+                slideUpAnimation.reset();
+                tvFooter.startAnimation(slideUpAnimation);
+            }
+            rv.setPadding(0, 0, 0, (int) getResources().getDimension(R.dimen.parking_footer_height));
         }
     }
 
@@ -407,7 +485,8 @@ public class ParkingActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         mParkingLotSelectedPosition = position;
                         notifyDataSetChanged();
-                        showDoneBtn(false, rvParking);
+//                        showDoneBtn(false, rvParking);
+                        showDoneBtn(true, rvParking, "NEXT");
                     }
                 });
             } else if(holder.getItemViewType() == ITEM_TYPE_ENTRANCE) {
@@ -420,7 +499,8 @@ public class ParkingActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         mEntranceSelectedPosition = position;
                         notifyDataSetChanged();
-                        showDoneBtn(false, rvParkingChild);
+//                        showDoneBtn(false, rvParkingChild);
+                        showDoneBtn(true, rvParkingChild, "DONE");
                     }
                 });
             }

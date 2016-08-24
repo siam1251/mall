@@ -131,14 +131,11 @@
     <color name="parking_bg">#b2202020</color>
 
 
-
-
-
-
-
-
-
-
+    <!--ACTIVE MALL-->
+    <color name="active_mall_text_color">#ddfafafa</color>
+    <color name="active_mall_badge_text_color">#021c1e</color>
+    <color name="active_mall_bg">#021c1e</color>
+    <color name="active_mall_empty_placeholder_text">#898989</color>
 
     <!--OTHERS-->
     <color name="html_link_text_color">#0e8f9d</color>
@@ -148,7 +145,6 @@
     <color name="twitter_theme_color">#50ABF1</color>
     <color name="insta_date_color">#adadad</color>
     <color name="insta_desc_color">#767676</color>
-    <color name="active_mall_bg">#021c1e</color>
     <color name="alert_dialog_desc_text">#80000000</color>
 
 

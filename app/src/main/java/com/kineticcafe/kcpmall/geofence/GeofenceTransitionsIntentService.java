@@ -33,13 +33,7 @@ import java.util.logging.Handler;
 public class GeofenceTransitionsIntentService extends IntentService {
 
     protected static final String TAG = "GeofenceTransitionsIS";
-
-    /**
-     * This constructor is required, and calls the super IntentService(String)
-     * constructor with the name for a worker thread.
-     */
     public GeofenceTransitionsIntentService() {
-        // Use the TAG to name the worker thread.
         super(TAG);
     }
 
@@ -48,11 +42,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
         super.onCreate();
     }
 
-    /**
-     * Handles incoming intents.
-     * @param intent sent by Location Services. This Intent is provided to Location
-     *               Services (inside a PendingIntent) when addGeofences() is called.
-     */
     @Override
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
@@ -63,28 +52,49 @@ public class GeofenceTransitionsIntentService extends IntentService {
             return;
         }
 
-        // Get the transition type.
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
 
-        // Test that the reported transition was of interest.
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-                geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-
-            // Get the geofences that were triggered. A single event can trigger multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
-
-            // Get the transition details as a String.
-            String geofenceTransitionDetails = getGeofenceTransitionDetails(
+            String geofenceTransitionDetails = getGeofenceTransitionDetails (
                     this,
                     geofenceTransition,
                     triggeringGeofences
             );
 
             // Send notification and log the transition details.
-            sendNotification(geofenceTransitionDetails);
+//            sendNotification(geofenceTransitionDetails);
             Log.i(TAG, geofenceTransitionDetails);
+
+
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction(GeofenceManager.MyWebRequestReceiver.PROCESS_RESPONSE);
+            broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IS_CONNECTED, true);
+            broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            sendBroadcast(broadcastIntent);
+
+
+
+        } else if(geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
+
+            List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+            String geofenceTransitionDetails = getGeofenceTransitionDetails (
+                    this,
+                    geofenceTransition,
+                    triggeringGeofences
+            );
+
+            // Send notification and log the transition details.
+//            sendNotification(geofenceTransitionDetails);
+            Log.i(TAG, geofenceTransitionDetails);
+
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction(GeofenceManager.MyWebRequestReceiver.PROCESS_RESPONSE);
+            broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IS_CONNECTED, false);
+            broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            sendBroadcast(broadcastIntent);
+
         } else {
-            // Log the error.
             Log.e(TAG, getString(R.string.geofence_transition_invalid_type, geofenceTransition));
         }
     }
@@ -132,8 +142,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
         stackBuilder.addNextIntent(notificationIntent);
 
         // Get a PendingIntent containing the entire back stack.
-        PendingIntent notificationPendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_NO_CREATE);
 
         // Get a notification builder that's compatible with platform versions >= 4
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
@@ -142,9 +152,9 @@ public class GeofenceTransitionsIntentService extends IntentService {
         builder.setSmallIcon(R.mipmap.ic_launcher)
                 // In a real app, you may want to use a library like Volley
                 // to decode the Bitmap.
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                        R.mipmap.ic_launcher))
-                .setColor(Color.RED)
+//                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+//                        R.mipmap.ic_launcher))
+//                .setColor(Color.RED)
                 .setContentTitle(notificationDetails)
                 .setContentText(getString(R.string.geofence_transition_notification_text))
                 .setContentIntent(notificationPendingIntent);

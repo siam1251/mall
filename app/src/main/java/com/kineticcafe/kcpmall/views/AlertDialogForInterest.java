@@ -8,11 +8,16 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
+import com.kineticcafe.kcpmall.activities.MainActivity;
+import com.kineticcafe.kcpmall.utility.Utility;
 
 /**
  * Created by Kay on 2016-06-03.
@@ -62,7 +67,7 @@ public class AlertDialogForInterest {
         return builder;
     }
 
-    public AlertDialog.Builder getEditTextAlertDialog (Context context, String preFillText, String title, String positiveBtn, String negativeBtn, final DialogEditTextLinstener dialogEditTextLinstener){
+    public AlertDialog.Builder getEditTextAlertDialog (final Context context, String preFillText, String title, String positiveBtn, String negativeBtn, final DialogEditTextLinstener dialogEditTextLinstener){
 
         View v = ((Activity)context).getLayoutInflater().inflate(R.layout.alertdialog_edittext, null);
         final EditText etAlertDialog = (EditText) v.findViewById(R.id.etAlertDialog);
@@ -75,12 +80,9 @@ public class AlertDialogForInterest {
         Typeface face= Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
         etAlertDialog.setTypeface(face);
 
-        etAlertDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((EditText)v).setCursorVisible(true);
-            }
-        });
+        final InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+        etAlertDialog.requestFocus();
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
         etAlertDialog.addTextChangedListener(new TextWatcher()
         {
@@ -102,12 +104,14 @@ public class AlertDialogForInterest {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialogEditTextLinstener.saveClicked(etAlertDialog.getText().toString());
+                imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
                 return;
             }
         });
         builder.setNegativeButton(negativeBtn, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
                 return;
             }
         });

@@ -30,6 +30,7 @@
 
     <declare-styleable name="BadgeView">
         <attr name="badgeBgColor" format="color"/>
+        <attr name="badgeTextColor" format="color"/>
         <!--<attr name="finalYPosition" format="dimension"/>-->
     </declare-styleable>
 

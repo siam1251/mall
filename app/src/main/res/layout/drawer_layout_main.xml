@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:id="@+id/scLeftPanel"
+<ScrollView android:id="@+id/scLeftPanel"
     android:background="@color/white"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="147dp"
-            android:src="@drawable/img_profile_bg"
+            android:src="@drawable/img_activemall_bg"
             />
 
         <View
@@ -87,10 +87,18 @@
 
         </LinearLayout>
 
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/layout_active_mall"
+            android:layout_below="@+id/ivDrawerLayoutBg"
+            />
+
         <LinearLayout
+            android:layout_below="@+id/llActiveMall"
             android:orientation="vertical"
             android:paddingTop="@dimen/activity_horizontal_margin"
-            android:layout_below="@+id/ivDrawerLayoutBg"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -190,6 +198,7 @@
 
 
             <View
+                android:visibility="gone"
                 android:id="@+id/separator"
                 android:layout_alignParentBottom="true"
                 style="@style/separater"
@@ -197,6 +206,7 @@
 
 
             <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                android:visibility="gone"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:id="@+id/tvMyGC"
                 android:gravity="center_vertical"
@@ -210,6 +220,7 @@
                 />
 
             <FrameLayout
+                android:visibility="gone"
                 android:id="@+id/flGC"
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout"
                 >
@@ -233,6 +244,7 @@
             </FrameLayout>
 
             <FrameLayout
+                android:visibility="gone"
                 android:id="@+id/flAddGC"
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout"
                 >
