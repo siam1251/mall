@@ -7,6 +7,7 @@ public class Constants {
 //	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				1000;
 	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				500;
 	public final static int DURATION_SPLASH_ANIMATION = 						5000;
+//	public final static int DURATION_SPLASH_ANIMATION = 						10000;
 	public final static long DURATION_MAIN_BOT_TAB_ICON_SLIDE_UP_ANIMATION = 	100;
 	public final static long DURATION_MAIN_BOT_TAB_TITLE_ALPHA_ANIMATION = 		100;
 	public final static long DURATION_DETAIL_EXPIRY_DATE_TEXT = 				800;
@@ -85,6 +86,7 @@ public class Constants {
 	public final static int RESULT_DONE_PRESSED_WITH_CHANGE = 0;
 	public final static int RESULT_DONE_PRESSED_WITHOUT_CHANGE = 1;
 	public final static int RESULT_EXIT = 2;
+	public final static int REQUEST_CODE_VIEW_STORE_ON_MAP = 543;
 
 	public final static int RESULT_DEALS = 1;
 	public final static int RESULT_EVENTS = 2;

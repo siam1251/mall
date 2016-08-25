@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -42,14 +43,14 @@ public class AlertDialogForInterest {
                 dialogAnsweredListener);
     }
 
-    public AlertDialog.Builder getAlertDialog (Context context, String title, String msg, String positiveBtn, String negativeBtn, final DialogAnsweredListener dialogAnsweredListener){
+    public AlertDialog.Builder getAlertDialog (Context context, @Nullable String title, String msg, String positiveBtn, @Nullable String negativeBtn, final DialogAnsweredListener dialogAnsweredListener){
 
         View v = ((Activity)context).getLayoutInflater().inflate(R.layout.alertdialog_interest, null);
         TextView tvAlertDialogInterest = (TextView) v.findViewById(R.id.tvAlertDialogInterest);
         tvAlertDialogInterest.setText(msg);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title);
+        if(title != null) builder.setTitle(title);
         builder.setPositiveButton(positiveBtn, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -57,7 +58,7 @@ public class AlertDialogForInterest {
                 return;
             }
         });
-        builder.setNegativeButton(negativeBtn, new DialogInterface.OnClickListener() {
+        if(negativeBtn != null) builder.setNegativeButton(negativeBtn, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 return;
@@ -66,6 +67,7 @@ public class AlertDialogForInterest {
         builder.setView(v);
         return builder;
     }
+
 
     public AlertDialog.Builder getEditTextAlertDialog (final Context context, String preFillText, String title, String positiveBtn, String negativeBtn, final DialogEditTextLinstener dialogEditTextLinstener){
 
@@ -94,7 +96,8 @@ public class AlertDialogForInterest {
 
             @Override
             public void afterTextChanged(Editable s) {
-                tvCharacterLeft.setText(50 - s.toString().length() + "/50");
+//                tvCharacterLeft.setText(50 - s.toString().length() + "/50");
+                tvCharacterLeft.setText(50 - s.toString().length() + "");
             }
         });
 

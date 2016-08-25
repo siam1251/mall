@@ -1,24 +1,32 @@
 package com.kineticcafe.kcpmall.activities;
 
+import android.Manifest;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -26,6 +34,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -78,6 +88,7 @@ import com.kineticcafe.kcpmall.parking.ParkingManager;
 import com.kineticcafe.kcpmall.parking.Parkings;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
+import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 import com.kineticcafe.kcpmall.views.BadgeView;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 
@@ -114,7 +125,7 @@ public class MainActivity extends BaseActivity
     private BadgeView badgeEvents;
     private BadgeView badgeStores;
     private BadgeView badgeInterests;
-    private boolean mActiveMall = false;
+    public boolean mActiveMall = false;
 
     //GEOFENCE
     private GeofenceManager mGeofenceManager;
@@ -227,7 +238,7 @@ public class MainActivity extends BaseActivity
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
 
         mGeofenceManager = new GeofenceManager(this);
-        setActiveMall(false);
+        setActiveMall(false, false);
 
     }
 
@@ -592,117 +603,139 @@ public class MainActivity extends BaseActivity
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
     }
 
-    public void setActiveMall(boolean activeMallEnabled){
-        mActiveMall = activeMallEnabled;
-        ScrollView scLeftPanel = (ScrollView) findViewById(R.id.scLeftPanel);
-        LinearLayout llActiveMall = (LinearLayout) findViewById(R.id.llActiveMall);
-        RecyclerView rvTodaysDeals = (RecyclerView) findViewById(R.id.rvTodaysDeals);
-        RecyclerView rvTodaysEvents = (RecyclerView) findViewById(R.id.rvTodaysEvents);
+    /**
+     *
+     * @param forceRefresh used when recreating the view's necessary ex. when data's downloaded
+     * @param activeMallEnabled if activeMall status's not changed when calling setActiveMall, return because there is no point calling this function again.
+     */
+    public void setActiveMall(boolean forceRefresh, boolean activeMallEnabled){
+        try {
+            if(!forceRefresh && mActiveMall == activeMallEnabled) return;
+            mActiveMall = activeMallEnabled;
+            ScrollView scLeftPanel = (ScrollView) findViewById(R.id.scLeftPanel);
+            LinearLayout llActiveMall = (LinearLayout) findViewById(R.id.llActiveMall);
+            RecyclerView rvTodaysDeals = (RecyclerView) findViewById(R.id.rvTodaysDeals);
+            RecyclerView rvTodaysEvents = (RecyclerView) findViewById(R.id.rvTodaysEvents);
 
-        TextView tvMyFav = (TextView) findViewById(R.id.tvMyFav);
-        TextView tvMyGC = (TextView) findViewById(R.id.tvMyGC);
+            TextView tvMyFav = (TextView) findViewById(R.id.tvMyFav);
+            TextView tvMyGC = (TextView) findViewById(R.id.tvMyGC);
 
-        TextView tvDeals = (TextView) findViewById(R.id.tvDeals);
-        TextView tvEvents = (TextView) findViewById(R.id.tvEvents);
-        TextView tvStores = (TextView) findViewById(R.id.tvStores);
-        TextView tvInterests = (TextView) findViewById(R.id.tvInterests);
+            TextView tvDeals = (TextView) findViewById(R.id.tvDeals);
+            TextView tvEvents = (TextView) findViewById(R.id.tvEvents);
+            TextView tvStores = (TextView) findViewById(R.id.tvStores);
+            TextView tvInterests = (TextView) findViewById(R.id.tvInterests);
 
-        TextView tvEmptyTodaysDeal = (TextView) findViewById(R.id.tvEmptyTodaysDeal);
-        TextView tvEmptyTodaysEvent = (TextView) findViewById(R.id.tvEmptyTodaysEvent);
+            TextView tvEmptyTodaysDeal = (TextView) findViewById(R.id.tvEmptyTodaysDeal);
+            TextView tvEmptyTodaysEvent = (TextView) findViewById(R.id.tvEmptyTodaysEvent);
 
-        BadgeView badgeTodaysDeals = (BadgeView) findViewById(R.id.badgeTodaysDeals);
-        BadgeView badgeTodaysEvents = (BadgeView) findViewById(R.id.badgeTodaysEvents);
+            BadgeView badgeTodaysDeals = (BadgeView) findViewById(R.id.badgeTodaysDeals);
+            BadgeView badgeTodaysEvents = (BadgeView) findViewById(R.id.badgeTodaysEvents);
 
-        FrameLayout flTodaysDeals = (FrameLayout) findViewById(R.id.flTodaysDeals);
-        FrameLayout flTodaysEvents = (FrameLayout) findViewById(R.id.flTodaysEvents);
+            FrameLayout flTodaysDeals = (FrameLayout) findViewById(R.id.flTodaysDeals);
+            FrameLayout flTodaysEvents = (FrameLayout) findViewById(R.id.flTodaysEvents);
 
-        int hamburgerMenuColor;
-        int panelBackgroundColor;
-        int generalTextColor;
-        int badgeTextColor;
+            ImageView ivDrawerLayoutBg = (ImageView) findViewById(R.id.ivDrawerLayoutBg);
 
-        if(activeMallEnabled) {
-            llActiveMall.setVisibility(View.VISIBLE);
-            panelBackgroundColor = getResources().getColor(R.color.active_mall_bg);
-            hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.themeColor)));
-            badgeTextColor = getResources().getColor(R.color.active_mall_badge_text_color);
-            generalTextColor = getResources().getColor(R.color.active_mall_text_color);
+            int hamburgerMenuColor;
+            int panelBackgroundColor;
+            int generalTextColor;
+            int badgeTextColor;
+            Drawable drawerLayoutBgDrawable;
 
-            LinearLayoutManager llManagerEvents = new LinearLayoutManager(this);
-            LinearLayoutManager llManagerDeals = new LinearLayoutManager(this);
+            if(activeMallEnabled) {
+                llActiveMall.setVisibility(View.VISIBLE);
+                panelBackgroundColor = getResources().getColor(R.color.active_mall_bg);
+                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.themeColor)));
+                badgeTextColor = getResources().getColor(R.color.active_mall_badge_text_color);
+                generalTextColor = getResources().getColor(R.color.active_mall_text_color);
+                drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_activemall_bg);
+
+                LinearLayoutManager llManagerEvents = new LinearLayoutManager(this);
+                LinearLayoutManager llManagerDeals = new LinearLayoutManager(this);
 
 
-            ArrayList<KcpContentPage> todaysEventList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED).getKcpContentPageListForToday(true);
-            if(todaysEventList == null || todaysEventList.size() == 0) tvEmptyTodaysEvent.setVisibility(View.VISIBLE);
-            else tvEmptyTodaysEvent.setVisibility(View.GONE);
-            ActiveMallRecyclerViewAdapter todaysEventAdapter = new ActiveMallRecyclerViewAdapter (
-                    this,
-                    todaysEventList,
-                    KcpContentTypeFactory.ITEM_TYPE_EVENT);
-            rvTodaysEvents.setAdapter(todaysEventAdapter);
-            rvTodaysEvents.setLayoutManager(llManagerEvents);
-            rvTodaysEvents.setNestedScrollingEnabled(false);
-            badgeTodaysEvents.setBadgeText(todaysEventList == null ? 0 : todaysEventList.size());
+                ArrayList<KcpContentPage> todaysEventList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED).getKcpContentPageListForToday(true);
+                if(todaysEventList == null || todaysEventList.size() == 0) tvEmptyTodaysEvent.setVisibility(View.VISIBLE);
+                else tvEmptyTodaysEvent.setVisibility(View.GONE);
+                ActiveMallRecyclerViewAdapter todaysEventAdapter = new ActiveMallRecyclerViewAdapter (
+                        this,
+                        todaysEventList,
+                        KcpContentTypeFactory.ITEM_TYPE_EVENT);
+                rvTodaysEvents.setAdapter(todaysEventAdapter);
+                rvTodaysEvents.setLayoutManager(llManagerEvents);
+                rvTodaysEvents.setNestedScrollingEnabled(false);
+                badgeTodaysEvents.setBadgeText(todaysEventList == null ? 0 : todaysEventList.size());
 
-            flTodaysEvents.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getEventAnnouncementFavSize(), getResources().getString(R.string.my_page_events_for_today));
+                flTodaysEvents.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getEventAnnouncementFavSize(), getResources().getString(R.string.my_page_events_for_today));
+                    }
+                });
+
+
+                ArrayList<KcpContentPage> todaysDealList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageListForToday(true);
+                if(todaysDealList == null || todaysDealList.size() == 0) tvEmptyTodaysDeal.setVisibility(View.VISIBLE);
+                else tvEmptyTodaysDeal.setVisibility(View.GONE);
+                ActiveMallRecyclerViewAdapter todaysDealAdapter = new ActiveMallRecyclerViewAdapter (
+                        this,
+                        todaysDealList,
+                        KcpContentTypeFactory.ITEM_TYPE_DEAL);
+                rvTodaysDeals.setAdapter(todaysDealAdapter);
+                rvTodaysDeals.setLayoutManager(llManagerDeals);
+                rvTodaysDeals.setNestedScrollingEnabled(false);
+                badgeTodaysDeals.setBadgeText(todaysDealList == null ? 0 : todaysDealList.size());
+
+                flTodaysDeals.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getDealFavSize(), getResources().getString(R.string.my_page_deals_for_today));
+                    }
+                });
+
+                showSnackBar(R.string.warning_active_mall_activated, R.string.action_ok, getResources().getColor(R.color.themeColor), null);
+
+                Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500);
+
+            } else {
+
+                llActiveMall.setVisibility(View.GONE);
+                panelBackgroundColor = Color.WHITE;
+                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.black)));
+                badgeTextColor = Color.WHITE;
+                generalTextColor = Color.BLACK;
+                drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_bg);
+
+                if (mOfflineSnackbar != null){
+                    mOfflineSnackbar.dismiss();
+                    mOfflineSnackbar = null;
                 }
-            });
 
-
-            ArrayList<KcpContentPage> todaysDealList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageListForToday(true);
-            if(todaysDealList == null || todaysDealList.size() == 0) tvEmptyTodaysDeal.setVisibility(View.VISIBLE);
-            else tvEmptyTodaysDeal.setVisibility(View.GONE);
-            ActiveMallRecyclerViewAdapter todaysDealAdapter = new ActiveMallRecyclerViewAdapter (
-                    this,
-                    todaysDealList,
-                    KcpContentTypeFactory.ITEM_TYPE_DEAL);
-            rvTodaysDeals.setAdapter(todaysDealAdapter);
-            rvTodaysDeals.setLayoutManager(llManagerDeals);
-            rvTodaysDeals.setNestedScrollingEnabled(false);
-            badgeTodaysDeals.setBadgeText(todaysDealList == null ? 0 : todaysDealList.size());
-
-            flTodaysDeals.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getDealFavSize(), getResources().getString(R.string.my_page_deals_for_today));
-                }
-            });
-
-            showSnackBar(R.string.warning_active_mall_activated, R.string.action_ok, null);
-
-        } else {
-            llActiveMall.setVisibility(View.GONE);
-            panelBackgroundColor = Color.WHITE;
-            hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.black)));
-            badgeTextColor = Color.WHITE;
-            generalTextColor = Color.BLACK;
-
-            if (mOfflineSnackbar != null){
-                mOfflineSnackbar.dismiss();
-                mOfflineSnackbar = null;
             }
 
+
+            scLeftPanel.setBackgroundColor(panelBackgroundColor);
+            setHamburgerMenuColor(hamburgerMenuColor);
+
+            badgeDeals.setBadgeTextColor(badgeTextColor);
+            badgeEvents.setBadgeTextColor(badgeTextColor);
+            badgeStores.setBadgeTextColor(badgeTextColor);
+            badgeInterests.setBadgeTextColor(badgeTextColor);
+
+
+            tvMyFav.setTextColor(generalTextColor);
+            tvMyGC.setTextColor(generalTextColor);
+            tvDeals.setTextColor(generalTextColor);
+            tvEvents.setTextColor(generalTextColor);
+            tvStores.setTextColor(generalTextColor);
+            tvInterests.setTextColor(generalTextColor);
+            ivDrawerLayoutBg.setImageDrawable(drawerLayoutBgDrawable);
+        } catch (Resources.NotFoundException e) {
+            logger.error(e);
+        } catch (Exception e){
+            logger.error(e);
         }
-
-
-        scLeftPanel.setBackgroundColor(panelBackgroundColor);
-        setHamburgerMenuColor(hamburgerMenuColor);
-
-        badgeDeals.setBadgeTextColor(badgeTextColor);
-        badgeEvents.setBadgeTextColor(badgeTextColor);
-        badgeStores.setBadgeTextColor(badgeTextColor);
-        badgeInterests.setBadgeTextColor(badgeTextColor);
-
-
-        tvMyFav.setTextColor(generalTextColor);
-        tvMyGC.setTextColor(generalTextColor);
-        tvDeals.setTextColor(generalTextColor);
-        tvEvents.setTextColor(generalTextColor);
-        tvStores.setTextColor(generalTextColor);
-        tvInterests.setTextColor(generalTextColor);
 
     }
 
@@ -849,15 +882,9 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    /**
-     * If there's snackbar showing, it simply returns unless onClickListener is set.
-     *
-     * @param msg
-     * @param action
-     * @param onClickListener
-     */
-    public void showSnackBar(int msg, int action, @Nullable View.OnClickListener onClickListener) {
-//        if (mOfflineSnackbar != null && (mOfflineSnackbar.isShownOrQueued() || onClickListener == null))
+
+    public void showSnackBar(int msg, int action, int textColor, @Nullable View.OnClickListener onClickListener) {
+        //        if (mOfflineSnackbar != null && (mOfflineSnackbar.isShownOrQueued() || onClickListener == null))
         if (mOfflineSnackbar != null && mOfflineSnackbar.isShownOrQueued())
             return;
         final CoordinatorLayout clMain = (CoordinatorLayout) findViewById(R.id.clMain);
@@ -879,12 +906,24 @@ public class MainActivity extends BaseActivity
         snackbarView.setBackgroundColor(Color.DKGRAY);
 
         TextView textView = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(getResources().getColor(R.color.white));
+        if(textColor == 0) textView.setTextColor(getResources().getColor(R.color.white));
+        else textView.setTextColor(textColor);
 
         TextView actionText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_action);
         actionText.setTextColor(getResources().getColor(R.color.warningColor));
 
         mOfflineSnackbar.show();
+
+    }
+    /**
+     * If there's snackbar showing, it simply returns unless onClickListener is set.
+     *
+     * @param msg
+     * @param action
+     * @param onClickListener
+     */
+    public void showSnackBar(int msg, int action, @Nullable View.OnClickListener onClickListener) {
+        showSnackBar(msg, action, 0, onClickListener);
     }
 
     private void animateHamburgerToArrow() {
@@ -1003,12 +1042,12 @@ public class MainActivity extends BaseActivity
             onBackPressed();
         } else if (id == R.id.action_test) {
 //            throw new RuntimeException("This is a crash");
-            setActiveMall(!mActiveMall);
+            setActiveMall(true, !mActiveMall);
         } else if (id == R.id.action_geofence_test) {
             mGeofenceManager.setGeofence(true);
         } else if (id == R.id.action_geofence_disconnect) {
             mGeofenceManager.setGeofence(false);
-            setActiveMall(!mActiveMall);
+            setActiveMall(false, false);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -1116,6 +1155,38 @@ public class MainActivity extends BaseActivity
                     mGeofenceManager.setGeofence(true);
                 } else {
 
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        for (int i = 0, len = permissions.length; i < len; i++) {
+                            String permission = permissions[i];
+                            if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                                boolean showRationale = shouldShowRequestPermissionRationale( permission );
+                                if (! showRationale) { // user denied flagging NEVER ASK AGAIN
+                                } else if (Manifest.permission.ACCESS_FINE_LOCATION.equals(permission)) {
+                                    View v = getLayoutInflater().inflate(R.layout.alertdialog_interest, null);
+                                    TextView tvAlertDialogInterest = (TextView) v.findViewById(R.id.tvAlertDialogInterest);
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                                    builder.setTitle(getString(R.string.title_permission_denied));
+                                    tvAlertDialogInterest.setText(getString(R.string.warning_require_location_permission));
+                                    builder.setPositiveButton(getString(R.string.action_sure), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            return;
+                                        }
+                                    });
+                                    builder.setNegativeButton(getString(R.string.action_retry), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            ActivityCompat.requestPermissions(MainActivity.this, GeofenceManager.INITIAL_PERMS, GeofenceManager.LOCATION_REQUEST);
+                                            return;
+                                        }
+                                    });
+                                    builder.setView(v);
+                                    builder.show();
+                                }
+                            }
+                        }
+                    }
                 }
                 break;
         }

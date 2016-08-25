@@ -29,6 +29,7 @@
 
 
         <com.kineticcafe.kcpmall.views.CircleImageView
+            android:visibility="gone"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:id="@+id/ivDrawerLayoutUser"
@@ -73,6 +74,7 @@
                 android:src="@drawable/icn_profilesettings"/>
 
             <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                android:visibility="gone"
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 android:id="@+id/tvDetailDate"
                 android:layout_margin="@dimen/card_horizontal_margin"

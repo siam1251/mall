@@ -213,21 +213,14 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         btnShowMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnShowMap.setVisibility(View.GONE);
-                btnShowMap = null;
-                pb.setVisibility(View.VISIBLE);
-                mappedIn.getVenues(new GetVenuesCallback());
+                initializeMap();
 
             }
         });
 
         Log.d("TEST", "startTime time passed : " + (System.currentTimeMillis()));
         //enable below for auto map load
-        pb.setVisibility(View.VISIBLE);
-        btnShowMap.setVisibility(View.GONE);
-        btnShowMap = null;
-        mappedIn.getVenues(new GetVenuesCallback());
-
+        initializeMap();
 
         //todo: disabled for testing
         mMainActivity.setOnAmenityClickListener(MapFragment.this);
@@ -239,6 +232,24 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         return view;
     }
 
+    public void initializeMap() {
+        btnShowMap.setVisibility(View.GONE);
+        btnShowMap = null;
+        pb.setVisibility(View.VISIBLE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mappedIn.getVenues(new GetVenuesCallback());
+                    }
+                });
+
+            }
+        }).start();
+    }
+
     public interface OnStoreClickListener {
         public void onStoreClick(int storeId, String externalId, String storeName, String categoryName);
     }
@@ -248,7 +259,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         rv.setLayoutManager(linearLayoutManager);
         rv.setLayoutManager(linearLayoutManager);
 
-        ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
+//        ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
+        ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_PARKING);
         ArrayList<KcpPlaces> kcpPlacesFiltered;
         if(mSearchString.equals("")) kcpPlacesFiltered = new ArrayList<>(kcpPlaces);
         else {
@@ -334,16 +346,14 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private class GetVenuesCallback implements MappedinCallback<Venue[]> {
         @Override
         public void onCompleted(final Venue[] venues) {
-
             //todo: disabled for testing
-            /*for(Venue venue : venues){
+            for(Venue venue : venues){
                 if(venue.getName().equals(HeaderFactory.MAP_VENUE_NAME)){
                     activeVenue = venue;
                 }
             }
-            if(activeVenue == null) return;*/
+            if(activeVenue == null) return;
 
-            activeVenue = venues[1];
             //TODO: choose fragment method
             android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
             if(!mapView.isAdded()){
@@ -359,6 +369,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 //            mapView = (MapView) getActivity().getFragmentManager().findFragmentById(R.id.mapFragment);
 
             mapView.setDelegate(delegate);
+
             mappedIn.getVenue(activeVenue, accessibleDirections, new CustomLocationGenerator(), new GetVenueCallback());
         }
 

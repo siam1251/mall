@@ -164,7 +164,7 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                     ArrayList<KcpContentPage> todaysDealList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageListForToday(true);
 
                     if(todaysDealList == null || todaysDealList.size() == 0) {
-                        setUpEmptyPlaceHolder(R.drawable.icn_empty_deals, getResources().getString(R.string.warning_empty_deals), false);
+                        setUpEmptyPlaceHolder(R.drawable.icn_empty_deals, getResources().getString(R.string.warning_no_deal_for_today), false);
                         return;
                     }
 
@@ -199,7 +199,7 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
 
 
                     if(todaysEventList == null || todaysEventList.size() == 0) {
-                        setUpEmptyPlaceHolder(R.drawable.icn_empty_events, getResources().getString(R.string.warning_empty_news), false);
+                        setUpEmptyPlaceHolder(R.drawable.icn_empty_events, getResources().getString(R.string.warning_no_event_for_today), false);
                         return;
                     }
 

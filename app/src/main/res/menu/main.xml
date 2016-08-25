@@ -16,18 +16,18 @@
     <item
         android:id="@+id/action_test"
         android:orderInCategory="100"
-        android:title="ACTIVE MALL TEST"
+        android:title="Toggle Active Mall Mode"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_geofence_test"
         android:orderInCategory="100"
-        android:title="GEOFENCE TEST"
+        android:title="Turn on Geofence"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_geofence_disconnect"
         android:orderInCategory="100"
-        android:title="GEOFENCE MANUALLY DISCONNECT"
+        android:title="Manually Turn off geofence"
         app:showAsAction="never" />
 </menu>

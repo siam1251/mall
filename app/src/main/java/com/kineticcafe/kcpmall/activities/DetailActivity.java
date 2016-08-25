@@ -202,11 +202,13 @@ public class DetailActivity extends AppCompatActivity {
                     mParentView,
                     R.layout.layout_detail_button,
                     R.drawable.icn_menu_map,
-                    kcpContentPage.getStoreLevel(),
+                    getString(R.string.cta_view_on_map),
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+
+
+
                         }
                     }, true);
 

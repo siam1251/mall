@@ -9,9 +9,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.MainActivity;
+import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -34,12 +37,11 @@ import java.util.Map;
  */
 public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
 
-    private static final String[] INITIAL_PERMS = {
+    public static final String[] INITIAL_PERMS = {
             Manifest.permission.ACCESS_FINE_LOCATION,
     };
 
-    public static final int INITIAL_REQUEST = 1337;
-    public static final int LOCATION_REQUEST = INITIAL_REQUEST+3;
+    public static final int LOCATION_REQUEST = 1337;
     public static final String GEOFENCE_IS_CONNECTED = "geofence_is_connected";
 
     private Context mContext;
@@ -71,11 +73,11 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     }
 
     public boolean canAccessLocation() {
-        return(hasPermission(Manifest.permission.ACCESS_FINE_LOCATION));
+        return (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION));
     }
 
     private boolean hasPermission(String perm) {
-        return(PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(mContext, perm));
+        return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(mContext, perm));
     }
 
 
@@ -110,7 +112,8 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     public void addGeofencesButtonHandler() {
 
         if (!canAccessLocation()) {
-            ActivityCompat.requestPermissions((Activity) mContext, INITIAL_PERMS, INITIAL_REQUEST);
+            ActivityCompat.requestPermissions((MainActivity) mContext, INITIAL_PERMS, LOCATION_REQUEST);
+            return;
         }
 
         if (!mGoogleApiClient.isConnected()) {
@@ -130,13 +133,11 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     }
 
     public void removeGeofencesButtonHandler() {
-
         if (!mGoogleApiClient.isConnected()) {
 //            Toast.makeText(mContext, mContext.getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
             return;
         }
         try {
-            unRegisterBroadcastReceiver();
             LocationServices.GeofencingApi.removeGeofences(
                     mGoogleApiClient,
                     getGeofencePendingIntent()
@@ -159,12 +160,6 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
             editor.putBoolean(GeofenceConstants.GEOFENCES_ADDED_KEY, mGeofencesAdded);
             editor.apply();
 
-            /*Toast.makeText(
-                    mContext,
-                    mContext.getString(mGeofencesAdded ? R.string.geofences_added :
-                            R.string.geofences_removed),
-                    Toast.LENGTH_SHORT
-            ).show();*/
         } else {
             String errorMessage = GeofenceErrorMessages.getErrorString(mContext,
                     status.getStatusCode());
@@ -215,20 +210,17 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(TAG, "Connected to GoogleApiClient");
-//        Toast.makeText(mContext, "Connected to GoogleApiClient", Toast.LENGTH_LONG).show();
         setGeofence(true);
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
-//        Toast.makeText(mContext, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onConnectionSuspended(int cause) {
         Log.i(TAG, "Connection suspended");
-//        Toast.makeText(mContext, "Connection suspended", Toast.LENGTH_LONG).show();
     }
 
     public class MyWebRequestReceiver extends BroadcastReceiver {
@@ -241,17 +233,11 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
             boolean response = intent.getBooleanExtra(GeofenceManager.GEOFENCE_IS_CONNECTED, false);
             if(mContext != null) {
                 if(response) {
-                    ((MainActivity) mContext).setActiveMall(true);
+                    ((MainActivity) mContext).setActiveMall(false, true);
                 } else {
-                    ((MainActivity) mContext).setActiveMall(false);
+                    ((MainActivity) mContext).setActiveMall(false, false);
                 }
             }
-
-//            String responseString = intent.getStringExtra(MyWebRequestService.RESPONSE_STRING);
-//            String reponseMessage = intent.getStringExtra(MyWebRequestService.RESPONSE_MESSAGE);
-
-
-
         }
     }
 
