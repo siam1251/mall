@@ -61,6 +61,7 @@ import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.fragments.HomeFragment;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.Blur.FastBlur;
@@ -206,9 +207,8 @@ public class DetailActivity extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
-
-
+                            setResult(Integer.valueOf(kcpContentPage.getExternalCode()), new Intent());
+                            onBackPressed();
                         }
                     }, true);
 
@@ -281,7 +281,7 @@ public class DetailActivity extends AppCompatActivity {
                                             Pair.create((View)ivDetailLogo, transitionNameLogo));
                                 }
 
-                                ActivityCompat.startActivity(DetailActivity.this, intent, options.toBundle());
+                                ActivityCompat.startActivityForResult(DetailActivity.this, intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP, options.toBundle());
                                 DetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                             } else {
                                 downloadIfNecessary(kcpContentPage);
@@ -801,5 +801,16 @@ public class DetailActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
+            if (resultCode != 0) {
+                setResult(resultCode, new Intent());
+                onBackPressed();
+            }
+        }
     }
 }

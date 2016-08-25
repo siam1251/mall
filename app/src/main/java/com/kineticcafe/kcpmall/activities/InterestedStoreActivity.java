@@ -1,5 +1,6 @@
 package com.kineticcafe.kcpmall.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -175,4 +176,13 @@ public class InterestedStoreActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
+            if (resultCode != 0) {
+                setResult(resultCode, new Intent());
+                onBackPressed();
+            }
+        }
+    }
 }

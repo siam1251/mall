@@ -303,6 +303,11 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 onFinish();
             } else if (resultCode == Constants.RESULT_EXIT){
 
+            } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
+                if (resultCode != 0) {
+                    setResult(resultCode, new Intent());
+                    onBackPressed();
+                }
             }
         }
     }

@@ -84,6 +84,7 @@ import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.managers.SidePanelManagers;
 import com.kineticcafe.kcpmall.mappedin.Amenities;
 import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
+import com.kineticcafe.kcpmall.mappedin.CustomLocation;
 import com.kineticcafe.kcpmall.parking.ParkingManager;
 import com.kineticcafe.kcpmall.parking.Parkings;
 import com.kineticcafe.kcpmall.utility.Utility;
@@ -91,7 +92,9 @@ import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 import com.kineticcafe.kcpmall.views.BadgeView;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
+import com.mappedin.sdk.Polygon;
 
+import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -712,6 +715,10 @@ public class MainActivity extends BaseActivity
                     mOfflineSnackbar = null;
                 }
 
+
+                Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500);
+                Toast.makeText(MainActivity.this, " TEST - Exited Geofence ", Toast.LENGTH_SHORT).show();
             }
 
 
@@ -794,7 +801,7 @@ public class MainActivity extends BaseActivity
                         setDealParkingStatus(false, rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
                         return;
                     } else {
-                        mOnDealsClickListener.onDealsClick(true);
+                        mOnDealsClickListener.onDealsClick(!ivFilterDeal.isSelected());
                     }
                     Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_DEAL, !ivFilterDeal.isSelected());
                 }
@@ -1008,13 +1015,14 @@ public class MainActivity extends BaseActivity
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.executePendingTransactions();
-            if (fragmentManager.getBackStackEntryCount() < 1){
+            if (fragmentManager.getBackStackEntryCount() < 1) {
                 super.onBackPressed();
             } else {
+//                fragmentManager.executePendingTransactions();
+//                fragmentManager.popBackStack();
+                fragmentManager.popBackStackImmediate();
                 fragmentManager.executePendingTransactions();
-                fragmentManager.popBackStack();
-                fragmentManager.executePendingTransactions();
-                if (fragmentManager.getBackStackEntryCount() < 1){
+                if (fragmentManager.getBackStackEntryCount() < 1) {
                     initializeToolbar(); //BUG: toolbar initialization has to be done - otherwise, the arrow button won't show up the secondtime fragment's created
                 }
             }
@@ -1115,6 +1123,17 @@ public class MainActivity extends BaseActivity
             if (resultCode == Activity.RESULT_OK) {
                 setUpRightSidePanel();
                 if(mOnParkingClickListener != null && Amenities.isToggled(this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true);
+            }
+        } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
+            if (resultCode != 0) {
+                selectPage(2);
+                String externalCode = String.valueOf(resultCode);
+                ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocation(externalCode);
+                if(polygons != null && polygons.size() > 0) {
+                    MapFragment.getInstance().didTapPolygon(polygons.get(0));
+                } else {
+                    MapFragment.getInstance().mPendingExternalCode = externalCode;
+                }
             }
         }
     }

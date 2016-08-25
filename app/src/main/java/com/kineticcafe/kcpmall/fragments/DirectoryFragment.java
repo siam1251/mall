@@ -143,7 +143,7 @@ public class DirectoryFragment extends BaseFragment {
                 Pair.create(view, ""));
 
 //        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
-        getActivity().startActivity(intent);
+        getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
         ActivityAnimation.startActivityAnimation(getActivity());
     }
 
@@ -217,7 +217,7 @@ public class DirectoryFragment extends BaseFragment {
                 (Activity)context,
                 Pair.create(view, ""));
 
-        context.startActivity(intent);
+        ((Activity) context).startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
         ActivityAnimation.startActivityAnimation(context);
     }
 

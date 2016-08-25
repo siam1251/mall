@@ -164,6 +164,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private int mCurrentMapLevel = 2;
     private CustomLocation mParkingLocation;
 
+    public String mPendingExternalCode;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -259,8 +261,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         rv.setLayoutManager(linearLayoutManager);
         rv.setLayoutManager(linearLayoutManager);
 
-//        ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
-        ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_PARKING);
+        ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
         ArrayList<KcpPlaces> kcpPlacesFiltered;
         if(mSearchString.equals("")) kcpPlacesFiltered = new ArrayList<>(kcpPlaces);
         else {
@@ -293,10 +294,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                         } else stopNavigation();
                     }
 
-                    if(CustomLocation.getLocationHashMap().containsKey(externalCode)){
+                    ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocation(externalCode);
+                    if(polygons != null && polygons.size() > 0) {
                         //TODO: loop through to highlight all the polygons found in getPolygons()
 //                        setMapLevel(0, CustomLocation.getLocationHashMap().get(externalCode).getPolygons().get(0).getMap().getShortName()); //for map with multi levels
-                        didTapPolygon(CustomLocation.getLocationHashMap().get(externalCode).getPolygons().get(0));
+                        didTapPolygon(CustomLocation.getPolygonsFromLocation(externalCode).get(0));
                     } else {
                         showDirectionCard(true, IdType.ID, storeId, storeName, categoryName, null);
                     }
@@ -443,6 +445,13 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
     }
 
+    /**
+     *
+     * @param level
+     * @param shortName
+     *
+     * drop amenities / deals / parking lots - do stuffs that need to be done on map load
+     */
     private void setMapLevel (int level, @Nullable String shortName){
         if(shortName != null){
             for(int i = 0; i < maps.length; i++){
@@ -467,6 +476,15 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             onAmenityClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_AMENITY + amenity.getTitle()), amenity.getExternalIds()[0]);
         }
 
+        //mark the store that's been
+        if(mPendingExternalCode != null) {
+            ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocation(mPendingExternalCode);
+            mPendingExternalCode = null;
+            if(polygons != null && polygons.size() > 0) {
+                didTapPolygon(polygons.get(0));
+            }
+        }
+
 //        if(ParkingManager.isParkingLotSaved(getActivity())) {
 //            onParkingClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_PARKING));
 //        }
@@ -481,7 +499,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     public void didTapPolygon(Polygon polygon) {
         try {
-            if(path != null) return; //map shouldn't be clicakble when the paths drawn
+            if(path != null || polygon == null) return; //map shouldn't be clicakble when the paths drawn
             if (polygon.getLocations().size() == 0) { //TODO: clearHighlightedColours() used to be above this line - polygon.getLocation().size() was sometimes 0 resulting in skipping highlightPolygon (it returned)
                 return;
             }
@@ -539,10 +557,12 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     Log.d("MapFragment", "first : " + mapView.getCamera().getRotation().first + " second : " + mapView.getCamera().getRotation().second);
                     Log.d("MapFragment", "BEFORE camera zoom level : " + mapView.getCamera().getZoom());
 
-                    if(mapView.getCamera().getZoom() <= CAMERA_ZOOM_LEVEL) {
+
+                    //allow the camera to zoom in if it's too far away or keep its current zoom if it's close enough
+                    if(mapView.getCamera().getZoom() <= CAMERA_ZOOM_LEVEL) { //already zoomed in - keep the same zoom
                         mapView.getCamera().setZoomTo(mapView.getCamera().getZoom());
                     } else {
-                        mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL);
+                        mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL); //camera's currently too zoomed out
                         Log.d("MapFragment", "AFTER camera zoom level : " + mapView.getCamera().getZoom());
                     }
 
@@ -809,7 +829,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
         if(enabled){
             for( String externalCode: mExternalCodeList ) {
-                Location location = CustomLocation.getLocationHashMap().get(externalCode);
+                Location location = CustomLocation.getLocation(externalCode);
                 if(location != null){
                     List<Coordinate> coords = location.getNavigatableCoordinates();
                     for(Coordinate coordinate : coords) {
@@ -820,8 +840,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             }
         } else {
             for( String externalCode: mExternalCodeList ) {
-                Location location = CustomLocation.getLocationHashMap().get(externalCode);
-                removePin(location);
+                Location location = CustomLocation.getLocation(externalCode);
+                if(location != null) removePin(location);
             }
         }
     }
@@ -1063,7 +1083,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, dealsForThisStore.get(0));
-                    getActivity().startActivity(intent);
+                    getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
                     getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             });
@@ -1074,7 +1094,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
         rlDirection.setLayoutParams(param);
         mMainActivity.expandTopNav();
-        mSearchItem.collapseActionView();
+        if(mSearchItem != null) mSearchItem.collapseActionView();
 
         tvStoreName.setText(storeName);
         tvCategoryName.setText(categoryName);
@@ -1098,7 +1118,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
                     Intent intent = new Intent(getActivity(), DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
-                    getActivity().startActivity(intent);
+                    getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
                     getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             }

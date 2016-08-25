@@ -15,7 +15,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_no_thanks">No, Thanks</string>
     <string name="action_done">DONE</string>
-    <string name="action_retry">RE-TRY</string>
+    <string name="action_retry">RETRY</string>
     <string name="action_sure">I\'M SURE</string>
 
     <!--ALERT DIALOG TITLE-->
@@ -27,7 +27,7 @@
     <string name="title_map">Map</string>
     <string name="title_do_not_save_parking">Don’t Save My Parking</string>
     <string name="title_add_notes">Add Notes</string>
-    <string name="title_permission_denied">Permission denied</string>
+    <string name="title_permission_denied">Location Access Denied</string>
 
 
     <!--FRAGMENT TITLE-->
@@ -102,7 +102,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="warning_no_deal_for_today">There are no deals happening today. Please check back later.</string>
     <string name="warning_no_event_for_today">There are no events happening today. Please check back later.</string>
     <!--<string name="warning_require_location_permission">The app needs device’s location to show deals and events happening around you today.</string>-->
-    <string name="warning_require_location_permission">Without this permission the app is unable to show deals and events happening around you today. Are you sure you want to deny this permission?</string>
+    <string name="warning_require_location_permission">The app requires your device’s location to access connected mall features. Are you sure you want to deny permissions?</string>
 
     <!--section header-->
     <string name="section_header_recommended_deals">Recommended Deals</string>

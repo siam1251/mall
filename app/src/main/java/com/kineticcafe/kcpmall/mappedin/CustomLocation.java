@@ -5,6 +5,7 @@ import android.util.Log;
 import com.mappedin.jpct.Logger;
 import com.mappedin.sdk.ImageCollection;
 import com.mappedin.sdk.Location;
+import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.RawData;
 
 import java.util.ArrayList;
@@ -81,8 +82,20 @@ public class CustomLocation extends Location {
         return amenityHashmap;
     }
 
-    public static HashMap<String, CustomLocation> getLocationHashMap() {
+    private static HashMap<String, CustomLocation> getLocationHashMap() {
         return locationHashmapByExternalId;
+    }
+
+
+    public static Location getLocation(String externalCode){
+        if(locationHashmapByExternalId != null && locationHashmapByExternalId.containsKey(externalCode)) return locationHashmapByExternalId.get(externalCode);
+        return null;
+    }
+
+    public static ArrayList<Polygon> getPolygonsFromLocation(String externalCode){
+        if(locationHashmapByExternalId != null && locationHashmapByExternalId.containsKey(externalCode)) return locationHashmapByExternalId.get(externalCode).getPolygons();
+        return null;
+
     }
 
     public static HashMap<String, CustomLocation> getParkingHashMap() {
