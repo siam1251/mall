@@ -3,16 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/rlMap"
     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
     android:background="@color/card_bg">
+
 
     <FrameLayout
         android:id="@+id/flMap"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:background="@color/card_bg"
         />
+    android:background="@color/card_bg"
 
     <!--<fragment
         android:layout_width="wrap_content"
@@ -24,8 +26,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true" />-->
-
+        android:layout_alignParentBottom="true" />
+-->
     <ProgressBar
         android:visibility="gone"
         android:layout_centerInParent="true"
@@ -57,7 +59,7 @@
         />
 
 
-        <!--TODO: this compass should rotate as the map rotates-->
+    <!--TODO: this compass should rotate as the map rotates-->
     <ImageView
         android:id="@+id/ivCompass"
         android:layout_margin="14dp"
@@ -85,6 +87,7 @@
         />
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tvLevel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -116,20 +119,22 @@
         android:layout_height="109dp"
         android:visibility="invisible"
         >
-        android:layout_height="157dp"
 
         <!--height = height of llDirection + 1/2 height of imageView + height of llDeals (if exist)-->
         <!--82 + 54 / 2 + 48 = 157-->
         <!--or in case deal layout's missing, height = 157 - height of deal layout (48)-->
+        style="@style/SelectableItemForegroundWhite"
         <LinearLayout
+            style="@style/SelectableItemBackgroundOpaque"
             android:layout_alignParentBottom="true"
-            android:id="@+id/llDetailContainer"
+            android:id="@+id/llDirection"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
             <LinearLayout
+
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
@@ -148,9 +153,7 @@
 
                 <LinearLayout
                     android:layout_weight="1"
-                    style="@style/SelectableItemForeground"
                     android:layout_alignParentBottom="true"
-                    android:id="@+id/llDirection"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:gravity="center_vertical"
@@ -174,15 +177,31 @@
                         android:text="Holt Renfrew"/>
 
                     <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                        app:fontFamily="@string/fontFamily_roboto_regular"
                         android:layout_marginTop="2dp"
                         android:layout_below="@id/tvStoreName"
                         android:id="@+id/tvCategoryName"
-                        app:fontFamily="@string/fontFamily_roboto_regular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:textColor="#89ffffff"
                         android:text="Department Store"/>
+
+                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                        android:visibility="gone"
+                        app:fontFamily="@string/fontFamily_roboto_lightitalic"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvCategoryName"
+                        android:id="@+id/tvParkingNote"
+                        android:textSize="14sp"
+                        android:textColor="#89ffffff"
+                        android:text="Pillar 15F near stairs"
+                        />
 
                 </LinearLayout>
 
@@ -205,6 +224,7 @@
 
                 <com.kineticcafe.kcpmall.views.ThemeColorImageView
                     ThemedImageView:filterColor="@color/white"
+                    android:id="@+id/ivDeal"
                     android:layout_weight="0"
                     android:layout_width="17dp"
                     android:layout_height="17dp"
@@ -244,7 +264,7 @@
 
 
         <ImageView
-            android:layout_above="@+id/llDetailContainer"
+            android:layout_above="@+id/llDirection"
             android:layout_width="match_parent"
             android:layout_height="@dimen/shadow_inverted_height"
             android:src="@drawable/view_shadow_inverted"/>
@@ -285,9 +305,5 @@
         android:gravity="center_horizontal"
         android:background="@color/white"
         />
-        android:background="@color/card_bg_transparent"
-
-
-
-
+    android:background="@color/card_bg_transparent"
 </RelativeLayout>

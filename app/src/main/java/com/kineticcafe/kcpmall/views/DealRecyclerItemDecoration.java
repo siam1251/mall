@@ -32,8 +32,8 @@ public class DealRecyclerItemDecoration extends RecyclerView.ItemDecoration {
         int spanIndex = ((StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams()).getSpanIndex();
         int type = mAdapter.getItemViewType(position);
 
-        if(position == 0){
-//            outRect.top = mItemOffset;
+        if(parent.getChildCount() > position && parent.getChildAt(position).getTop() == 0){ //adding the top margin to all the items in the first row
+            outRect.top = mItemOffset;
         }
 
         if(type == KcpContentTypeFactory.ITEM_TYPE_DEAL || type == KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE){

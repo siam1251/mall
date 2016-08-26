@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:background="@color/active_mall_bg"
+    android:layout_marginTop="@dimen/card_horizontal_margin"
+    android:layout_marginBottom="@dimen/card_horizontal_margin"
+    style="@style/SelectableItemForeground"
+    android:layout_height="wrap_content">
+    style="@style/SelectableItemForegroundWhite"
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:src="@drawable/placeholder_square"
+        android:id="@+id/ivActiveMall"
+        android:layout_width="102dp"
+        android:layout_height="58dp"
+        android:transitionName="@string/transition_news_image"
+        android:scaleType="centerCrop"
+        android:background="@color/white"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_toRightOf="@+id/ivActiveMall"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content">
+
+        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:textColor="@color/active_mall_text_color"
+            android:textSize="14sp"
+            android:text="ALDO Shoes"
+            android:id="@+id/tvActiveMallTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            />
+
+        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_light"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/active_mall_text_color"
+            android:textSize="12sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="20% OFF Select Training Shoes SHOES SHOES SHOES SHOES SHOES SHOES SHOES"
+            android:id="@+id/tvActiveMallDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

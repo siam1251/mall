@@ -64,7 +64,8 @@
                     android:textColor="@color/ancmt_title_color"
                     />
 
-                <TextView
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_regular"
                     android:gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/ancmt_date_height"

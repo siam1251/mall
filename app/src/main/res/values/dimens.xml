@@ -206,6 +206,9 @@
     <!--DRAWER-->
     <dimen name="drawer_width">304dp</dimen>
 
+    <!--PARKING-->
+    <dimen name="parking_footer_height">49dp</dimen>
+
     <!--OTHER-->
     <item name="squeeze_anim_scale_fav" format="float" type="dimen">0.78</item>
     <item name="squeeze_anim_scale_cat" format="float" type="dimen">0.95</item>

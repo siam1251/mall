@@ -58,6 +58,7 @@
                 />
 
             <TextView
+                android:id="@+id/tvPlaceHolderTitle"
                 android:textSize="22sp"
                 android:textColor="@color/empty_placeholder_title_text"
                 android:gravity="center"

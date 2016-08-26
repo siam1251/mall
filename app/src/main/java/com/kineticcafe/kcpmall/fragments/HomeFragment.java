@@ -111,6 +111,7 @@ public class HomeFragment extends BaseFragment {
                             if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
                             String mode = (String) inputMessage.obj;
                             updateAdapter(mode);
+                            mMainActivity.setActiveMall(true, mMainActivity.mActiveMall); //force refresh the active mall view
                             break;
                         case KcpNavigationRootManager.DATA_ADDED:
                             mNewsFragment.mNewsRecyclerViewAdapter.addData(mKcpNavigationRootManager.getKcpContentPageList());

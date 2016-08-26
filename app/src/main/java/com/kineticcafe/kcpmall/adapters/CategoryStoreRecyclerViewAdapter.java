@@ -195,7 +195,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
                             (Activity)mContext,
                             Pair.create((View)storeViewHolder.ivDealLogo, transitionNameLogo));
 
-                    ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
+                    ActivityCompat.startActivityForResult((Activity) mContext, intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP, options.toBundle());
                     ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
 

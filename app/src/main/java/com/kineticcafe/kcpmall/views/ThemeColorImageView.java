@@ -31,6 +31,17 @@ public class ThemeColorImageView extends ImageView {
         super(context, attrs, defStyle);
     }
 
+    /**
+     *
+     * @param filterColor normal state color
+     * @param selectedFilterColor selected color
+     */
+    public void setColor(int filterColor, int selectedFilterColor){
+        mFilterColor = filterColor;
+        mSelectedFilterColor = selectedFilterColor;
+        setColorFilter(mFilterColor);
+    }
+
     @Override
     public void setSelected(boolean selected) {
         super.setSelected(selected);

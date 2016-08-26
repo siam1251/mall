@@ -52,6 +52,7 @@ public class BadgeView extends TextView {
     private int badgeMarginH;
     private int badgeMarginV;
     private int badgeColor;
+    private int badgeTextColor;
 
     private boolean isShown;
 
@@ -97,13 +98,14 @@ public class BadgeView extends TextView {
         badgeMarginV = badgeMarginH;
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BadgeView);
         badgeColor = a.getColor(R.styleable.BadgeView_badgeBgColor, DEFAULT_BADGE_COLOR);
+        badgeTextColor = a.getColor(R.styleable.BadgeView_badgeTextColor, DEFAULT_TEXT_COLOR);
 
         setTypeface(Typeface.DEFAULT_BOLD);
         int paddingPixels = dipToPixels(DEFAULT_LR_PADDING_DIP);
 
         setPadding(paddingPixels, 0, paddingPixels, 0);
 
-        setTextColor(DEFAULT_TEXT_COLOR);
+        setTextColor(badgeTextColor);
 
         fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setInterpolator(new DecelerateInterpolator());
@@ -124,6 +126,10 @@ public class BadgeView extends TextView {
 
     public void setBadgeText(int text){
         setBadgeText(String.valueOf(text));
+    }
+
+    public void setBadgeTextColor(int color){
+        setTextColor(color);
     }
 
     public void setBadgeText(String text){

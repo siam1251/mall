@@ -14,6 +14,7 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.widget.ImageView;
 
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
@@ -44,7 +45,6 @@ public class CircleImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         Drawable drawable = getDrawable();
 
         if (drawable == null) {
@@ -60,9 +60,12 @@ public class CircleImageView extends ImageView {
         int w = getWidth(), h = getHeight();
 
         Bitmap roundBitmap = getCroppedBitmap(bitmap, w);
-        roundBitmap = getCircularBitmapWithWhiteBorder(roundBitmap, KcpUtility.dpToPx((Activity) mContext, 2));
+        roundBitmap = getCircularBitmapWithWhiteBorder(roundBitmap, dpToPx(mContext, 2));
         canvas.drawBitmap(roundBitmap, 0, 0, null);
+    }
 
+    public static int dpToPx(Context context, float dp){
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,(float) dp, context.getResources().getDisplayMetrics());
     }
 
     public static Bitmap getCircularBitmapWithWhiteBorder(Bitmap bitmap,

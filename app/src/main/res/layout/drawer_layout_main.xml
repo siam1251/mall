@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:background="@color/white"
+<ScrollView android:id="@+id/scLeftPanel"
+    android:background="@color/white"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,7 +17,7 @@
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="147dp"
-            android:src="@drawable/img_profile_bg"
+            android:src="@drawable/img_activemall_bg"
             />
 
         <View
@@ -27,6 +29,7 @@
 
 
         <com.kineticcafe.kcpmall.views.CircleImageView
+            android:visibility="gone"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:id="@+id/ivDrawerLayoutUser"
@@ -58,9 +61,9 @@
                 android:text="Andrew Cherwenka"/>
 
             <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                 android:visibility="gone"
                 android:layout_weight="0"
-                xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                 ThemedImageView:filterColor="@color/white"
                 android:id="@+id/ivDrawerlayoutSetting"
                 android:layout_width="45dp"
@@ -71,6 +74,7 @@
                 android:src="@drawable/icn_profilesettings"/>
 
             <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                android:visibility="gone"
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 android:id="@+id/tvDetailDate"
                 android:layout_margin="@dimen/card_horizontal_margin"
@@ -83,13 +87,20 @@
                 android:textSize="14sp"
                 />
 
-
         </LinearLayout>
 
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/layout_active_mall"
+            android:layout_below="@+id/ivDrawerLayoutBg"
+            />
+
         <LinearLayout
+            android:layout_below="@+id/llActiveMall"
             android:orientation="vertical"
             android:paddingTop="@dimen/activity_horizontal_margin"
-            android:layout_below="@+id/ivDrawerLayoutBg"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -189,6 +200,7 @@
 
 
             <View
+                android:visibility="gone"
                 android:id="@+id/separator"
                 android:layout_alignParentBottom="true"
                 style="@style/separater"
@@ -196,6 +208,7 @@
 
 
             <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                android:visibility="gone"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:id="@+id/tvMyGC"
                 android:gravity="center_vertical"
@@ -209,6 +222,7 @@
                 />
 
             <FrameLayout
+                android:visibility="gone"
                 android:id="@+id/flGC"
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout"
                 >
@@ -232,6 +246,7 @@
             </FrameLayout>
 
             <FrameLayout
+                android:visibility="gone"
                 android:id="@+id/flAddGC"
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout"
                 >

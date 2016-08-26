@@ -1,5 +1,7 @@
 package com.kineticcafe.kcpmall.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -106,5 +108,15 @@ public class SubCategoryActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         ActivityAnimation.exitActivityAnimation(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
+            if (resultCode != 0) {
+                setResult(resultCode, new Intent());
+                finish();
+            }
+        }
     }
 }

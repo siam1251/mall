@@ -7,9 +7,9 @@ import java.util.HashMap;
 /**
  * Created by Kay on 2016-08-11.
  */
-public final class Constants {
+public final class GeofenceConstants {
 
-    private Constants() {
+    private GeofenceConstants() {
     }
 
     public static final String PACKAGE_NAME = "com.google.android.gms.location.Geofence";
@@ -29,18 +29,21 @@ public final class Constants {
      */
     public static final long GEOFENCE_EXPIRATION_IN_MILLISECONDS =
             GEOFENCE_EXPIRATION_IN_HOURS * 60 * 60 * 1000;
-    public static final float GEOFENCE_RADIUS_IN_METERS = 1609; // 1 mile, 1.6 km
+
+//    public static final float GEOFENCE_RADIUS_IN_METERS = 500; // 500 m
+    public static final float GEOFENCE_RADIUS_IN_METERS = 100; // 500 m
 
     /**
      * Map for storing information about airports in the San Francisco bay area.
      */
-    public static final HashMap<String, LatLng> BAY_AREA_LANDMARKS = new HashMap<String, LatLng>();
+    public static final HashMap<String, LatLng> GEOFENCE_AREA_LAT_LONG = new HashMap<String, LatLng>();
     static {
         // San Francisco International Airport.
-        BAY_AREA_LANDMARKS.put("SFO", new LatLng(37.621313, -122.378955));
+        GEOFENCE_AREA_LAT_LONG.put("SFO", new LatLng(37.621313, -122.378955));
 
         // Googleplex.
-        BAY_AREA_LANDMARKS.put("GOOGLE", new LatLng(37.422611,-122.0840577));
-        BAY_AREA_LANDMARKS.put("Kinetic Cafe", new LatLng(43.6424067,-79.373231));
+        GEOFENCE_AREA_LAT_LONG.put("GOOGLE", new LatLng(37.422611,-122.0840577));
+//        GEOFENCE_AREA_LAT_LONG.put("Kinetic Cafe", new LatLng(43.6424077, -79.3745555));//kinetic cafe building
+        GEOFENCE_AREA_LAT_LONG.put("Kinetic Cafe", new LatLng(43.642848, -79.375370));//real location
     }
 }

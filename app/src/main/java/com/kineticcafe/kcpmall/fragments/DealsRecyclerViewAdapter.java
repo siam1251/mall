@@ -347,8 +347,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                                 Pair.create((View)dealHolder.tvExpiryDate, transitionNameExpiry));
                     }
 
-                    ActivityCompat.startActivity((Activity) mContext, intent, options.toBundle());
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    ActivityCompat.startActivityForResult((Activity) mContext, intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP, options.toBundle());
+                    ActivityAnimation.startActivityAnimation(mContext);
                 }
             });
         } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_FOOTER){

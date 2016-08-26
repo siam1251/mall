@@ -22,14 +22,21 @@
         <item name="android:windowBackground">@color/white</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="actionMenuTextColor">@color/themeColor</item>
+        <item name="android:textCursorDrawable">@null</item>
         <item name="android:textColorSecondary">@color/hamburger_menu</item>
+    </style>
 
-
-        <!--<item name="colorControlActivated">@color/black</item>-->
-        <!-- Inactive thumb color -->
-        <!--<item name="colorSwitchThumbNormal">@color/themeColorDark</item>-->
-        <!-- Inactive track color(30% transparency) -->
-        <!--<item name="android:colorForeground">@color/ancmt_title_color</item>-->
+    <style name="AppTheme.BaseActiveMall" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/themeColorDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyleActiveMall</item>
+        <item name="actionMenuTextColor">@color/themeColor</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:textColorSecondary">@color/hamburger_menu</item>
     </style>
 
     <style name="switchStype">
@@ -40,6 +47,11 @@
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
         <item name="color">@color/hamburger_menu</item>
+    </style>
+
+    <style name="DrawerArrowStyleActiveMall" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@color/themeColor</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -131,6 +143,11 @@
 
     <style name="SelectableItemBackground">
         <item name="android:theme">@style/SelectableItemTheme</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="SelectableItemBackgroundOpaque">
+        <item name="android:theme">@style/SelectableItemThemeOpaque</item>
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 

@@ -1,35 +1,46 @@
 package com.kineticcafe.kcpmall.activities;
 
+import android.Manifest;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.NonNull;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,25 +50,17 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
@@ -68,31 +71,36 @@ import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.HomeBottomTapAdapter;
+import com.kineticcafe.kcpmall.adapters.adapterHelper.ActiveMallRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.analytics.FirebaseTracking;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
+import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DirectoryFragment;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
 import com.kineticcafe.kcpmall.fragments.InfoFragment;
 import com.kineticcafe.kcpmall.fragments.MapFragment;
-import com.kineticcafe.kcpmall.geofence.GeofenceErrorMessages;
-import com.kineticcafe.kcpmall.geofence.GeofenceTransitionsIntentService;
+import com.kineticcafe.kcpmall.geofence.GeofenceManager;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.managers.SidePanelManagers;
 import com.kineticcafe.kcpmall.mappedin.Amenities;
 import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
+import com.kineticcafe.kcpmall.mappedin.CustomLocation;
+import com.kineticcafe.kcpmall.parking.ParkingManager;
+import com.kineticcafe.kcpmall.parking.Parkings;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
+import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 import com.kineticcafe.kcpmall.views.BadgeView;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
+import com.mappedin.sdk.Polygon;
 
+import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener,
-        ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status>/*, DirectoryFragment.OnCategoryClickListener*/ {
+        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener {
 
     protected static final String TAG = "MainActivity";
 
@@ -102,8 +110,7 @@ public class MainActivity extends BaseActivity
     public final static int VIEWPAGER_PAGE_INFO = 3;
 
     protected final Logger logger = new Logger(getClass().getName());
-    private DrawerLayout mDrawer;
-    private DrawerLayout mDrawerRight;
+    public DrawerLayout mDrawer;
     private Thread mSplashThread;
     private ActionBarDrawerToggle mToggle;
     private Snackbar mOfflineSnackbar;
@@ -117,12 +124,14 @@ public class MainActivity extends BaseActivity
     private EditText etDestStore;
     private int mCurrentViewPagerTapPosition = 0;
 
+    private BadgeView badgeDeals;
+    private BadgeView badgeEvents;
+    private BadgeView badgeStores;
+    private BadgeView badgeInterests;
+    public boolean mActiveMall = false;
+
     //GEOFENCE
-    protected GoogleApiClient mGoogleApiClient;
-    protected ArrayList<Geofence> mGeofenceList;
-    private boolean mGeofencesAdded;
-    private PendingIntent mGeofencePendingIntent;
-    private SharedPreferences mSharedPreferences;
+    private GeofenceManager mGeofenceManager;
 
 
     @Override
@@ -231,16 +240,9 @@ public class MainActivity extends BaseActivity
         scRightDrawerLayout = (View) findViewById(R.id.scRightDrawerLayout);
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
 
+        mGeofenceManager = new GeofenceManager(this);
+        setActiveMall(false, false);
 
-        //geofence
-        /*mGeofenceList = new ArrayList<Geofence>();
-        mGeofencePendingIntent = null;
-        mSharedPreferences = getSharedPreferences(com.kineticcafe.kcpmall.geofence.Constants.SHARED_PREFERENCES_NAME,
-                MODE_PRIVATE);
-
-        mGeofencesAdded = mSharedPreferences.getBoolean(com.kineticcafe.kcpmall.geofence.Constants.GEOFENCES_ADDED_KEY, false);
-        populateGeofenceList();
-        buildGoogleApiClient();*/
     }
 
     public int getViewerPosition(){
@@ -273,6 +275,7 @@ public class MainActivity extends BaseActivity
             DirectoryFragment.getInstance().initializeDirectoryData();
             InfoFragment.getInstance().initializeMallInfoData();
             initializeMapData();
+            initializeParkingData();
         }
     }
 
@@ -393,7 +396,7 @@ public class MainActivity extends BaseActivity
                 });
             }
 
-            MapFragment.getInstance().showDirectionCard(false, null, 0, null, null);
+            MapFragment.getInstance().showDirectionCard(false, null, 0, null, null, null);
         } else {
             etStartStore.setOnFocusChangeListener(focusListener);
             etDestStore.setOnFocusChangeListener(focusListener);
@@ -423,9 +426,11 @@ public class MainActivity extends BaseActivity
     public void moveFocusToNextEditText(){
         InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
         if(etStartStore.getText() == null || etStartStore.getText().toString().equals("")) {
+            etDestStore.clearFocus();
             etStartStore.requestFocus();
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         } else if(etDestStore.getText() == null || etDestStore.getText().toString().equals("")) {
+            etStartStore.clearFocus();
             etDestStore.requestFocus();
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
@@ -488,6 +493,34 @@ public class MainActivity extends BaseActivity
     }
 
 
+    private void initializeParkingData(){
+
+        String data = "";
+        try {
+            data = KcpUtility.convertStreamToString(getAssets().open(HeaderFactory.PARKING_OFFLINE_TEXT));
+            Gson gson = new Gson();
+            ParkingManager.sParkings = gson.fromJson(data, Parkings.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ParkingManager parkingManager = new ParkingManager(this, R.layout.layout_loading_item, new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                        break;
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        parkingManager.downloadParkings();
+    }
+
+
     private void setUpLeftSidePanel(){
         //ACCOUNT
         TextView tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
@@ -525,7 +558,7 @@ public class MainActivity extends BaseActivity
 
         //BADGES
         FrameLayout flDeals = (FrameLayout) findViewById(R.id.flDeals);
-        BadgeView badgeDeals = (BadgeView) findViewById(R.id.badgeDeals);
+        badgeDeals = (BadgeView) findViewById(R.id.badgeDeals);
         flDeals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -534,7 +567,7 @@ public class MainActivity extends BaseActivity
         });
 
         FrameLayout flEvents = (FrameLayout) findViewById(R.id.flEvents);
-        BadgeView badgeEvents = (BadgeView) findViewById(R.id.badgeEvents);
+        badgeEvents = (BadgeView) findViewById(R.id.badgeEvents);
         flEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -543,7 +576,7 @@ public class MainActivity extends BaseActivity
         });
 
         FrameLayout flStores = (FrameLayout) findViewById(R.id.flStores);
-        BadgeView badgeStores = (BadgeView) findViewById(R.id.badgeStores);
+        badgeStores = (BadgeView) findViewById(R.id.badgeStores);
         flStores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -552,14 +585,13 @@ public class MainActivity extends BaseActivity
         });
 
         FrameLayout flInterests = (FrameLayout) findViewById(R.id.flInterests);
+        badgeInterests = (BadgeView) findViewById(R.id.badgeInterests);
         flInterests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getInterestFavSize(), getResources().getString(R.string.my_page_interests));
             }
         });
-
-        BadgeView badgeInterests = (BadgeView) findViewById(R.id.badgeInterests);
 
 
         //GC
@@ -574,6 +606,157 @@ public class MainActivity extends BaseActivity
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
     }
 
+    /**
+     *
+     * @param forceRefresh used when recreating the view's necessary ex. when data's downloaded
+     * @param activeMallEnabled if activeMall status's not changed when calling setActiveMall, return because there is no point calling this function again.
+     */
+    public void setActiveMall(boolean forceRefresh, boolean activeMallEnabled){
+        try {
+            if(!forceRefresh && mActiveMall == activeMallEnabled) return;
+            mActiveMall = activeMallEnabled;
+            ScrollView scLeftPanel = (ScrollView) findViewById(R.id.scLeftPanel);
+            LinearLayout llActiveMall = (LinearLayout) findViewById(R.id.llActiveMall);
+            RecyclerView rvTodaysDeals = (RecyclerView) findViewById(R.id.rvTodaysDeals);
+            RecyclerView rvTodaysEvents = (RecyclerView) findViewById(R.id.rvTodaysEvents);
+
+            TextView tvMyFav = (TextView) findViewById(R.id.tvMyFav);
+            TextView tvMyGC = (TextView) findViewById(R.id.tvMyGC);
+
+            TextView tvDeals = (TextView) findViewById(R.id.tvDeals);
+            TextView tvEvents = (TextView) findViewById(R.id.tvEvents);
+            TextView tvStores = (TextView) findViewById(R.id.tvStores);
+            TextView tvInterests = (TextView) findViewById(R.id.tvInterests);
+
+            TextView tvEmptyTodaysDeal = (TextView) findViewById(R.id.tvEmptyTodaysDeal);
+            TextView tvEmptyTodaysEvent = (TextView) findViewById(R.id.tvEmptyTodaysEvent);
+
+            BadgeView badgeTodaysDeals = (BadgeView) findViewById(R.id.badgeTodaysDeals);
+            BadgeView badgeTodaysEvents = (BadgeView) findViewById(R.id.badgeTodaysEvents);
+
+            FrameLayout flTodaysDeals = (FrameLayout) findViewById(R.id.flTodaysDeals);
+            FrameLayout flTodaysEvents = (FrameLayout) findViewById(R.id.flTodaysEvents);
+
+            ImageView ivDrawerLayoutBg = (ImageView) findViewById(R.id.ivDrawerLayoutBg);
+
+            int hamburgerMenuColor;
+            int panelBackgroundColor;
+            int generalTextColor;
+            int badgeTextColor;
+            Drawable drawerLayoutBgDrawable;
+
+            if(activeMallEnabled) {
+                llActiveMall.setVisibility(View.VISIBLE);
+                panelBackgroundColor = getResources().getColor(R.color.active_mall_bg);
+                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.themeColor)));
+                badgeTextColor = getResources().getColor(R.color.active_mall_badge_text_color);
+                generalTextColor = getResources().getColor(R.color.active_mall_text_color);
+                drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_activemall_bg);
+
+                LinearLayoutManager llManagerEvents = new LinearLayoutManager(this);
+                LinearLayoutManager llManagerDeals = new LinearLayoutManager(this);
+
+
+                ArrayList<KcpContentPage> todaysEventList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED).getKcpContentPageListForToday(true);
+                if(todaysEventList == null || todaysEventList.size() == 0) tvEmptyTodaysEvent.setVisibility(View.VISIBLE);
+                else tvEmptyTodaysEvent.setVisibility(View.GONE);
+                ActiveMallRecyclerViewAdapter todaysEventAdapter = new ActiveMallRecyclerViewAdapter (
+                        this,
+                        todaysEventList,
+                        KcpContentTypeFactory.ITEM_TYPE_EVENT);
+                rvTodaysEvents.setAdapter(todaysEventAdapter);
+                rvTodaysEvents.setLayoutManager(llManagerEvents);
+                rvTodaysEvents.setNestedScrollingEnabled(false);
+                badgeTodaysEvents.setBadgeText(todaysEventList == null ? 0 : todaysEventList.size());
+
+                flTodaysEvents.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getEventAnnouncementFavSize(), getResources().getString(R.string.my_page_events_for_today));
+                    }
+                });
+
+
+                ArrayList<KcpContentPage> todaysDealList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageListForToday(true);
+                if(todaysDealList == null || todaysDealList.size() == 0) tvEmptyTodaysDeal.setVisibility(View.VISIBLE);
+                else tvEmptyTodaysDeal.setVisibility(View.GONE);
+                ActiveMallRecyclerViewAdapter todaysDealAdapter = new ActiveMallRecyclerViewAdapter (
+                        this,
+                        todaysDealList,
+                        KcpContentTypeFactory.ITEM_TYPE_DEAL);
+                rvTodaysDeals.setAdapter(todaysDealAdapter);
+                rvTodaysDeals.setLayoutManager(llManagerDeals);
+                rvTodaysDeals.setNestedScrollingEnabled(false);
+                badgeTodaysDeals.setBadgeText(todaysDealList == null ? 0 : todaysDealList.size());
+
+                flTodaysDeals.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startMyPageActivity(FavouriteManager.getInstance(MainActivity.this).getDealFavSize(), getResources().getString(R.string.my_page_deals_for_today));
+                    }
+                });
+
+                showSnackBar(R.string.warning_active_mall_activated, R.string.action_ok, getResources().getColor(R.color.themeColor), null);
+
+                Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500);
+
+            } else {
+
+                llActiveMall.setVisibility(View.GONE);
+                panelBackgroundColor = Color.WHITE;
+                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.black)));
+                badgeTextColor = Color.WHITE;
+                generalTextColor = Color.BLACK;
+                drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_bg);
+
+                if (mOfflineSnackbar != null){
+                    mOfflineSnackbar.dismiss();
+                    mOfflineSnackbar = null;
+                }
+
+
+                Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500);
+                Toast.makeText(MainActivity.this, " TEST - Exited Geofence ", Toast.LENGTH_SHORT).show();
+            }
+
+
+            scLeftPanel.setBackgroundColor(panelBackgroundColor);
+            setHamburgerMenuColor(hamburgerMenuColor);
+
+            badgeDeals.setBadgeTextColor(badgeTextColor);
+            badgeEvents.setBadgeTextColor(badgeTextColor);
+            badgeStores.setBadgeTextColor(badgeTextColor);
+            badgeInterests.setBadgeTextColor(badgeTextColor);
+
+
+            tvMyFav.setTextColor(generalTextColor);
+            tvMyGC.setTextColor(generalTextColor);
+            tvDeals.setTextColor(generalTextColor);
+            tvEvents.setTextColor(generalTextColor);
+            tvStores.setTextColor(generalTextColor);
+            tvInterests.setTextColor(generalTextColor);
+            ivDrawerLayoutBg.setImageDrawable(drawerLayoutBgDrawable);
+        } catch (Resources.NotFoundException e) {
+            logger.error(e);
+        } catch (Exception e){
+            logger.error(e);
+        }
+
+    }
+
+    private void setHamburgerMenuColor(int color){
+        final PorterDuffColorFilter colorFilter = new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        for (int i = 0; i < mToolbar.getChildCount(); i++) {
+            final View v = mToolbar.getChildAt(i);
+
+            if (v instanceof ImageButton) {
+                ((ImageButton) v).setColorFilter(colorFilter);
+            }
+        }
+    }
+
     private void setDealParkingStatus(boolean isOn, RelativeLayout rl, TextView tv, ImageView iv, String onText, String offText){
         if(isOn){
             rl.setBackgroundColor(getResources().getColor(R.color.white));
@@ -586,7 +769,17 @@ public class MainActivity extends BaseActivity
         iv.setSelected(!isOn);
     }
 
-    private void setUpRightSidePanel() {
+    private void setParkingStatus(boolean isOn, RelativeLayout rl, TextView tv, ImageView iv, String onText, String offText){
+        if(ParkingManager.isParkingLotSaved(this)) {
+            setDealParkingStatus(isOn, rl, tv, iv, onText, offText);
+        } else {
+            rl.setBackgroundColor(getResources().getColor(R.color.intrstd_card_bg_with_opacity));
+            tv.setText(getResources().getString(R.string.map_filter_save_parking));
+            iv.setSelected(true);
+        }
+    }
+
+    public void setUpRightSidePanel() {
         final RelativeLayout rlSeeDeal = (RelativeLayout) findViewById(R.id.rlSeeDeal);
         final ImageView ivFilterDeal = (ImageView) findViewById(R.id.ivFilterDeal);
         final TextView tvFilterDeal = (TextView) findViewById(R.id.tvFilterDeal);
@@ -600,12 +793,9 @@ public class MainActivity extends BaseActivity
                     public void OnSqueezeAnimationDone() {
                     }
                 }, MainActivity.this, rlSeeDeal);
-
                 setDealParkingStatus(ivFilterDeal.isSelected(), rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
-
                 if(mOnDealsClickListener != null) {
-                    //            ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true); //ALL DEALS
-                    ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS
+                    ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS - use EXTERNAL_CODE_DEAL for All Deal
                     if(dealContentPages == null || dealContentPages.size() == 0) {
                         Toast.makeText(MainActivity.this, getResources().getString(R.string.warning_no_recommended_deals), Toast.LENGTH_LONG).show();
                         setDealParkingStatus(false, rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
@@ -621,7 +811,8 @@ public class MainActivity extends BaseActivity
         final RelativeLayout rlSeeParking = (RelativeLayout) findViewById(R.id.rlSeeParking);
         final ImageView ivFilterParking= (ImageView) findViewById(R.id.ivFilterParking);
         final TextView tvFilterParking = (TextView) findViewById(R.id.tvFilterParking);
-        setDealParkingStatus(Amenities.isToggled(this, Amenities.GSON_KEY_PARKING), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_retrieve_parking), getResources().getString(R.string.map_filter_save_parking));
+
+        setParkingStatus(Amenities.isToggled(this, Amenities.GSON_KEY_PARKING), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_hide_parking), getResources().getString(R.string.map_filter_see_parking));
         rlSeeParking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -630,8 +821,8 @@ public class MainActivity extends BaseActivity
                     public void OnSqueezeAnimationDone() {
                     }
                 }, MainActivity.this, rlSeeParking);
-                setDealParkingStatus(ivFilterParking.isSelected(), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_retrieve_parking), getResources().getString(R.string.map_filter_save_parking));
-                Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, !ivFilterParking.isSelected());
+               if(ParkingManager.isParkingLotSaved(MainActivity.this)) Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, ivFilterParking.isSelected());
+                setParkingStatus(Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_hide_parking), getResources().getString(R.string.map_filter_see_parking));
                 if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(!ivFilterParking.isSelected());
             }
         });
@@ -639,6 +830,7 @@ public class MainActivity extends BaseActivity
         View llAmenitySwitch = findViewById(R.id.llAmenitySwitch);
         List<Amenities.AmenityLayout> amenityList = new ArrayList<>();
 
+        if(AmenitiesManager.sAmenities == null) return;
         for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
 
             final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
@@ -685,6 +877,7 @@ public class MainActivity extends BaseActivity
 
 
     public void startMyPageActivity(int listSize, final String myPageType){
+        mDrawer.closeDrawers();
         if(myPageType.equals(getResources().getString(R.string.my_page_interests))){
             startActivityForResult(new Intent(MainActivity.this, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
             ActivityAnimation.startActivityAnimation(MainActivity.this);
@@ -696,20 +889,15 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    /**
-     * If there's snackbar showing, it simply returns unless onClickListener is set.
-     *
-     * @param msg
-     * @param action
-     * @param onClickListener
-     */
-    public void showSnackBar(int msg, int action, @Nullable View.OnClickListener onClickListener) {
-        if (mOfflineSnackbar != null && (mOfflineSnackbar.isShownOrQueued() || onClickListener == null))
+
+    public void showSnackBar(int msg, int action, int textColor, @Nullable View.OnClickListener onClickListener) {
+        //        if (mOfflineSnackbar != null && (mOfflineSnackbar.isShownOrQueued() || onClickListener == null))
+        if (mOfflineSnackbar != null && mOfflineSnackbar.isShownOrQueued())
             return;
         final CoordinatorLayout clMain = (CoordinatorLayout) findViewById(R.id.clMain);
         if (onClickListener == null) {
             mOfflineSnackbar = Snackbar
-                    .make(clMain, getResources().getString(msg), Snackbar.LENGTH_SHORT);
+                    .make(clMain, getResources().getString(msg), Snackbar.LENGTH_LONG);
         } else {
             mOfflineSnackbar = Snackbar
                     .make(clMain, getResources().getString(msg), Snackbar.LENGTH_INDEFINITE)
@@ -722,16 +910,27 @@ public class MainActivity extends BaseActivity
         CoordinatorLayout.LayoutParams param = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
         param.bottomMargin = (int) getResources().getDimension(R.dimen.main_app_bar_layout_height);
         snackbarView.setLayoutParams(param);
-
         snackbarView.setBackgroundColor(Color.DKGRAY);
 
         TextView textView = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(getResources().getColor(R.color.white));
+        if(textColor == 0) textView.setTextColor(getResources().getColor(R.color.white));
+        else textView.setTextColor(textColor);
 
         TextView actionText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_action);
         actionText.setTextColor(getResources().getColor(R.color.warningColor));
 
         mOfflineSnackbar.show();
+
+    }
+    /**
+     * If there's snackbar showing, it simply returns unless onClickListener is set.
+     *
+     * @param msg
+     * @param action
+     * @param onClickListener
+     */
+    public void showSnackBar(int msg, int action, @Nullable View.OnClickListener onClickListener) {
+        showSnackBar(msg, action, 0, onClickListener);
     }
 
     private void animateHamburgerToArrow() {
@@ -763,9 +962,8 @@ public class MainActivity extends BaseActivity
         fragmentList.add(HomeFragment.getInstance());
         fragmentList.add(DirectoryFragment.getInstance());
         fragmentList.add(MapFragment.getInstance());
-//        fragmentList.add(new MapFragment());
-//        fragmentList.add(new TestFragment());
         fragmentList.add(InfoFragment.getInstance());
+
     }
 
     /**
@@ -817,13 +1015,14 @@ public class MainActivity extends BaseActivity
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.executePendingTransactions();
-            if (fragmentManager.getBackStackEntryCount() < 1){
+            if (fragmentManager.getBackStackEntryCount() < 1) {
                 super.onBackPressed();
             } else {
+//                fragmentManager.executePendingTransactions();
+//                fragmentManager.popBackStack();
+                fragmentManager.popBackStackImmediate();
                 fragmentManager.executePendingTransactions();
-                fragmentManager.popBackStack();
-                fragmentManager.executePendingTransactions();
-                if (fragmentManager.getBackStackEntryCount() < 1){
+                if (fragmentManager.getBackStackEntryCount() < 1) {
                     initializeToolbar(); //BUG: toolbar initialization has to be done - otherwise, the arrow button won't show up the secondtime fragment's created
                 }
             }
@@ -849,10 +1048,14 @@ public class MainActivity extends BaseActivity
             return true;
         } else if (id == android.R.id.home){
             onBackPressed();
-        }
-
-        else if (id == R.id.action_test) {
-            throw new RuntimeException("This is a crash");
+        } else if (id == R.id.action_test) {
+//            throw new RuntimeException("This is a crash");
+            setActiveMall(true, !mActiveMall);
+        } else if (id == R.id.action_geofence_test) {
+            mGeofenceManager.setGeofence(true);
+        } else if (id == R.id.action_geofence_disconnect) {
+            mGeofenceManager.setGeofence(false);
+            setActiveMall(false, false);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -915,6 +1118,23 @@ public class MainActivity extends BaseActivity
                 selectPage(1);
                 DirectoryFragment.getInstance().selectPage(1);
             }
+        } else if(requestCode == Constants.REQUEST_CODE_SAVE_PARKING_SPOT) {
+            mDrawer.closeDrawers();
+            if (resultCode == Activity.RESULT_OK) {
+                setUpRightSidePanel();
+                if(mOnParkingClickListener != null && Amenities.isToggled(this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true);
+            }
+        } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
+            if (resultCode != 0) {
+                selectPage(2);
+                String externalCode = String.valueOf(resultCode);
+                ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocation(externalCode);
+                if(polygons != null && polygons.size() > 0) {
+                    MapFragment.getInstance().didTapPolygon(polygons.get(0));
+                } else {
+                    MapFragment.getInstance().mPendingExternalCode = externalCode;
+                }
+            }
         }
     }
 
@@ -922,135 +1142,74 @@ public class MainActivity extends BaseActivity
     protected void onSaveInstanceState(Bundle outState) {
     }
 
-
-    //GEOFENCE
-
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
-        if(mGoogleApiClient != null) mGoogleApiClient.connect();
+        if(mGeofenceManager != null && mGeofenceManager.getGoogleApiClient() != null) {
+            mGeofenceManager.getGoogleApiClient().connect();
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(mGoogleApiClient != null) mGoogleApiClient.disconnect();
+        if(mGeofenceManager != null && mGeofenceManager.getGoogleApiClient() != null) {
+            mGeofenceManager.getGoogleApiClient().disconnect();
+        }
     }
 
     @Override
-    public void onConnected(Bundle connectionHint) {
-        Log.i(TAG, "Connected to GoogleApiClient");
+    public void onDestroy() {
+        if(mGeofenceManager != null) {
+            mGeofenceManager.unRegisterBroadcastReceiver();
+        }
+        super.onDestroy();
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
-    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch(requestCode) {
+            case GeofenceManager.LOCATION_REQUEST:
+                if (mGeofenceManager.canAccessLocation()) {
+                    mGeofenceManager.setGeofence(true);
+                } else {
 
-    @Override
-    public void onConnectionSuspended(int cause) {
-        Log.i(TAG, "Connection suspended");
-    }
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        for (int i = 0, len = permissions.length; i < len; i++) {
+                            String permission = permissions[i];
+                            if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                                boolean showRationale = shouldShowRequestPermissionRationale( permission );
+                                if (! showRationale) { // user denied flagging NEVER ASK AGAIN
+                                } else if (Manifest.permission.ACCESS_FINE_LOCATION.equals(permission)) {
+                                    View v = getLayoutInflater().inflate(R.layout.alertdialog_interest, null);
+                                    TextView tvAlertDialogInterest = (TextView) v.findViewById(R.id.tvAlertDialogInterest);
 
-    private GeofencingRequest getGeofencingRequest() {
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
-        builder.addGeofences(mGeofenceList);
-        return builder.build();
-    }
-
-    public void addGeofencesButtonHandler(View view) {
-        if (!mGoogleApiClient.isConnected()) {
-            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        try {
-            LocationServices.GeofencingApi.addGeofences(
-                    mGoogleApiClient,
-                    getGeofencingRequest(),
-                    getGeofencePendingIntent()
-            ).setResultCallback(this); // Result processed in onResult().
-        } catch (SecurityException securityException) {
-            logSecurityException(securityException);
-        }
-    }
-
-    public void removeGeofencesButtonHandler(View view) {
-        if (!mGoogleApiClient.isConnected()) {
-            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            LocationServices.GeofencingApi.removeGeofences(
-                    mGoogleApiClient,
-                    getGeofencePendingIntent()
-            ).setResultCallback(this); // Result processed in onResult().
-        } catch (SecurityException securityException) {
-            logSecurityException(securityException);
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                                    builder.setTitle(getString(R.string.title_permission_denied));
+                                    tvAlertDialogInterest.setText(getString(R.string.warning_require_location_permission));
+                                    builder.setPositiveButton(getString(R.string.action_sure), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            return;
+                                        }
+                                    });
+                                    builder.setNegativeButton(getString(R.string.action_retry), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            ActivityCompat.requestPermissions(MainActivity.this, GeofenceManager.INITIAL_PERMS, GeofenceManager.LOCATION_REQUEST);
+                                            return;
+                                        }
+                                    });
+                                    builder.setView(v);
+                                    builder.show();
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
         }
     }
-
-    private void logSecurityException(SecurityException securityException) {
-        Log.e(TAG, "Invalid location permission. " +
-                "You need to use ACCESS_FINE_LOCATION with geofences", securityException);
-    }
-
-    public void onResult(Status status) {
-        if (status.isSuccess()) {
-            mGeofencesAdded = !mGeofencesAdded;
-            SharedPreferences.Editor editor = mSharedPreferences.edit();
-            editor.putBoolean(com.kineticcafe.kcpmall.geofence.Constants.GEOFENCES_ADDED_KEY, mGeofencesAdded);
-            editor.apply();
-
-            Toast.makeText(
-                    this,
-                    getString(mGeofencesAdded ? R.string.geofences_added :
-                            R.string.geofences_removed),
-                    Toast.LENGTH_SHORT
-            ).show();
-        } else {
-            String errorMessage = GeofenceErrorMessages.getErrorString(this,
-                    status.getStatusCode());
-            Log.e(TAG, errorMessage);
-        }
-    }
-
-    private PendingIntent getGeofencePendingIntent() {
-        if (mGeofencePendingIntent != null) {
-            return mGeofencePendingIntent;
-        }
-        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    public void populateGeofenceList() {
-        for (Map.Entry<String, LatLng> entry : com.kineticcafe.kcpmall.geofence.Constants.BAY_AREA_LANDMARKS.entrySet()) {
-
-            mGeofenceList.add(new Geofence.Builder()
-                    .setRequestId(entry.getKey())
-                    .setCircularRegion(
-                            entry.getValue().latitude,
-                            entry.getValue().longitude,
-                            com.kineticcafe.kcpmall.geofence.Constants.GEOFENCE_RADIUS_IN_METERS
-                    )
-
-                    .setExpirationDuration(com.kineticcafe.kcpmall.geofence.Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                            Geofence.GEOFENCE_TRANSITION_EXIT)
-
-                    .build());
-        }
-    }
-
 
 }
 
