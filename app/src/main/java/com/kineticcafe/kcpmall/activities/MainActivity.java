@@ -210,6 +210,7 @@ public class MainActivity extends BaseActivity
                     setToolbarElevation(true);
                     showMapToolbar(true); //enable map's toolbar
                 } else {
+                    toggleDestinationEditor(true, null, null, null);
                     mViewPager.setPagingEnabled(true);
                     setToolbarElevation(false);
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
@@ -699,7 +700,7 @@ public class MainActivity extends BaseActivity
                 showSnackBar(R.string.warning_active_mall_activated, R.string.action_ok, getResources().getColor(R.color.themeColor), null);
 
                 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(500);
+//                v.vibrate(500);
 
             } else {
 
@@ -717,7 +718,7 @@ public class MainActivity extends BaseActivity
 
 
                 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(500);
+//                v.vibrate(500);
                 Toast.makeText(MainActivity.this, " TEST - Exited Geofence ", Toast.LENGTH_SHORT).show();
             }
 

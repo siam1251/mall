@@ -11,8 +11,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -36,6 +41,9 @@ public class DirectoryFragment extends BaseFragment {
     private CategoriesFragment mCategoriesFragment;
     private PlacesFragment mPlacesFragment;
     private ViewPager mViewPager;
+    private MenuItem mSearchItem;
+    private SearchView mSearchView;
+
 
     private static DirectoryFragment sDirectoryFragment;
     public static DirectoryFragment getInstance(){
@@ -60,6 +68,7 @@ public class DirectoryFragment extends BaseFragment {
         tablayout.setupWithViewPager(mViewPager);
 
         updateCategoryAdapter();
+        setHasOptionsMenu(true);
 
         return view;
     }
@@ -247,8 +256,66 @@ public class DirectoryFragment extends BaseFragment {
         mViewPager.setCurrentItem(pageIndex);
     }
 
+
+
+
+
+
+
+
+    public class QueryTextListener implements SearchView.OnQueryTextListener {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            onTextChange(s);
+            return false;
+        }
+    }
+
+    public void onTextChange(String s) {
+        /*mSearchString = s.toString();
+        setupRecyclerView();*/
+    }
+
+
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.menu_store, menu);
+
+        mSearchItem = menu.findItem(R.id.action_store_search);
+        mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
+        mSearchView.setOnQueryTextListener(new QueryTextListener());
+        mSearchView.setQueryHint(getString(R.string.hint_search_store));
+        mSearchItem.setShowAsAction(MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
+                | MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+
+        MenuItemCompat.setOnActionExpandListener(mSearchItem,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        //BUG : onMenuItemActionCollapse is called when editStartStore or editDestStore's collapsed - is this because of requestFocus?
+                        /*if(mSearchMode.equals(SearchMode.STORE) ||
+                                (!mSearchMode.equals(SearchMode.STORE) && !mMainActivity.isEditTextsEmpty()) ) rv.setVisibility(View.INVISIBLE);
+
+                        if(btnShowMap != null) btnShowMap.setVisibility(View.VISIBLE);
+                        mFilterItem.setVisible(true);*/
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        /*mSearchMode = SearchMode.STORE;
+                        showDirectionCard(false, null, 0, null, null, null);
+                        mFilterItem.setVisible(false);
+                        rv.setVisibility(View.VISIBLE);
+                        if(btnShowMap != null) btnShowMap.setVisibility(View.GONE);*/
+                        return true;
+                    }
+                });
     }
 }

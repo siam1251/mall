@@ -1,19 +1,15 @@
 package com.kineticcafe.kcpmall.fragments;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.renderscript.RSRuntimeException;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,7 +21,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -59,13 +54,8 @@ import com.kineticcafe.kcpmall.mappedin.Amenities;
 import com.kineticcafe.kcpmall.mappedin.Amenities.OnParkingClickListener;
 import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
 import com.kineticcafe.kcpmall.mappedin.CustomLocation;
-import com.kineticcafe.kcpmall.mappedin.Overlay2DBitmap;
 import com.kineticcafe.kcpmall.parking.ParkingManager;
-import com.kineticcafe.kcpmall.utility.BlurBuilder;
 import com.kineticcafe.kcpmall.utility.Utility;
-import com.kineticcafe.kcpmall.views.Blur.FastBlur;
-import com.kineticcafe.kcpmall.views.Blur.RSBlur;
-import com.kineticcafe.kcpmall.views.ThemeColorImageView;
 import com.mappedin.jpct.Logger;
 import com.mappedin.sdk.Coordinate;
 import com.mappedin.sdk.Directions;
@@ -85,9 +75,6 @@ import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.RawData;
 import com.mappedin.sdk.Venue;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -143,7 +130,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private Drawable mAmeityDrawable;
 
     //MAPPED IN
-    private final int PIN_IMAGE_SIZE_DP = 95;
+    private final int PIN_IMAGE_SIZE_DP = 98;
     private final int CAMERA_ZOOM_LEVEL = 30; //BIGGER - farther, SMALLER - closer
     private final int BLUR_RADIUS = 20;
     private boolean accessibleDirections = false;
@@ -165,6 +152,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private CustomLocation mParkingLocation;
 
     public String mPendingExternalCode;
+    private Overlay2DImage mSelectedPin = null;//to keep track of highlited amenity drawable to set back to the original state in clearHighlighted
+    private Overlay2DImage mRemovedPin = null; //overlayImage that was replaced by mSelectedOverlayImage
 
 
     @Override
@@ -621,6 +610,17 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
 
         originalColors.clear();
+
+        if(mRemovedPin != null) {
+            mapView.addMarker(mRemovedPin, false);
+            mRemovedPin = null;
+        }
+
+        if(mSelectedPin != null) {
+            mapView.removeMarker(mSelectedPin);
+            mSelectedPin = null;
+        }
+
     }
 
     private void showAmenityDetail(final CustomLocation location, final Drawable amenityDrawable){
@@ -757,13 +757,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                                         public void onResourceReady(final Bitmap resource, GlideAnimation glideAnimation) {
                                             mAmeityDrawable = new BitmapDrawable(getResources(), resource);
                                             mAmeityDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-//                                            getActivity().runOnUiThread(new Runnable() {
-//                                                @Override
-//                                                public void run() {
                                             dropPin(coordinate, location, mAmeityDrawable);
-//                                                }
-//                                            });
-
                                         }
                                     });
                         }
@@ -779,13 +773,37 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
     }
 
+
+    public void dropPinWithColor(final Coordinate coordinate, final Location location, final Drawable pinDrawable){
+        //TODO: only add pins to the current floor
+        Drawable clone = pinDrawable.getConstantState().newDrawable();
+        clone.mutate(); //prevent all instance of drawables from being affected
+        clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.MULTIPLY);
+        Overlay2DImage label = new Overlay2DImage(PIN_IMAGE_SIZE_DP, PIN_IMAGE_SIZE_DP, clone);
+        label.setPosition(coordinate);
+
+        //if I remove the lable at the same spot and add another label with new LocationLabelClicker,
+        //removed label's LocationLabelClicker gets called again
+        /*LocationLabelClicker clicker = new LocationLabelClicker();
+        clicker.location = (CustomLocation) location;
+        clicker.drawable = pinDrawable;
+        clicker.label = label;
+        clicker.coordinate = coordinate;
+        overlays.put(label, clicker);*/
+
+        mSelectedPin = label;
+
+        mapView.addMarker(label, false);
+    }
+
+
     public void dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable){
         //TODO: only add pins to the current floor
         Overlay2DImage label = new Overlay2DImage(PIN_IMAGE_SIZE_DP, PIN_IMAGE_SIZE_DP, pinDrawable);
         label.setPosition(coordinate);
         LocationLabelClicker clicker = new LocationLabelClicker();
         clicker.location = (CustomLocation) location;
-        clicker.drawable = mAmeityDrawable;
+        clicker.drawable = pinDrawable;
         clicker.label = label;
         clicker.coordinate = coordinate;
         overlays.put(label, clicker);
@@ -905,18 +923,31 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         public void onClick() {
             if(path != null) return; //map shouldn't be clicakble when the paths drawn
             if(location != null) {
-                if(destinationPolygon != null && destinationPolygon == location) {
+                //remove the detail card if this amenity was selected before - to enable
+                //should implement function to check whether this amenity was clicked previously. destinationPolygon == location is always true as it location is not for a specific amenity
+                /*if(destinationPolygon != null && destinationPolygon == location) {
                     destinationPolygon = null;
                     showDirectionCard(false, null, 0, null, null, null);
                     return;
-                }
+                }*/
                 showAmenityDetail((CustomLocation) location, drawable);
                 destinationPolygon = location;
-//                mapView.getCamera().focusOn(location.getNavigatableCoordinates().get(0));
-//                mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL);
+
+                //highlight the polygon
+                dropPinWithColor(coordinate, location, drawable);
+                mRemovedPin = label;
+                mapView.removeMarker(label);
             }
         };
     }
+
+
+    private void didTapMarker (Overlay2DImage label, Coordinate coordinate, Drawable drawable, Location location) {
+        dropPin(coordinate, location, mAmeityDrawable);
+    }
+
+
+
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {

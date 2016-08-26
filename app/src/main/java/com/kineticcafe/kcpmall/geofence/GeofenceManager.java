@@ -49,7 +49,7 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     public static final String GEOFENCE_IS_CONNECTED = "geofence_is_connected";
 
     private Context mContext;
-    protected static final String TAG = "MainActivity";
+    protected static final String TAG = "GeofenceManager";
     protected GoogleApiClient mGoogleApiClient;
     protected ArrayList<Geofence> mGeofenceList;
     private boolean mGeofencesAdded;
