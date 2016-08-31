@@ -55,7 +55,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:9.2.1'
     compile 'com.google.firebase:firebase-core:9.2.1'
     compile 'com.google.firebase:firebase-ads:9.2.1'
-//    compile 'com.google.android.gms:play-services:9.2.1'
+    //    compile 'com.google.android.gms:play-services:9.2.1'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile project(path: ':kcpandroidsdk')
@@ -74,6 +74,8 @@ dependencies {
     compile('com.twitter.sdk.android:twitter:1.14.1@aar') {
         transitive = true;
     }
+    compile 'org.msgpack:jackson-dataformat-msgpack:0.8.9'
+    compile 'org.msgpack:msgpack:0.6.12'
 }
 
 apply plugin: 'com.google.gms.google-services'

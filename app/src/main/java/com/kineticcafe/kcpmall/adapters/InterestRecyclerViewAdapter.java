@@ -198,6 +198,11 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public void setSelectedCategory(CardView cardView, TextView textView, boolean selected){
         if(selected){
+
+            /*cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.white));
+            textView.setTextColor(mContext.getResources().getColor(R.color.black));*/ //TODO: new theme but it's not as visible so...
+
+
             cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.themeColor));
             textView.setTextColor(mContext.getResources().getColor(R.color.white));
 //            textView.setTypeface(null, Typeface.BOLD); //1. AFFECTS THE WIDTH and sometimes the texts don't fit, Typeface.BOLD doesn't affect fonts on Samsung devices

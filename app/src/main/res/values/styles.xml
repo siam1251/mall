@@ -6,6 +6,7 @@
 
 
     <style name="AppTheme.Plain" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!--<style name="AppTheme.Plain" parent="Theme.AppCompat.Light">-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/white</item>
@@ -14,6 +15,7 @@
 
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!--<style name="AppTheme.Base" parent="Theme.AppCompat.Light">-->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/themeColorDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -26,18 +28,7 @@
         <item name="android:textColorSecondary">@color/hamburger_menu</item>
     </style>
 
-    <style name="AppTheme.BaseActiveMall" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/themeColorDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/white</item>
-        <item name="drawerArrowStyle">@style/DrawerArrowStyleActiveMall</item>
-        <item name="actionMenuTextColor">@color/themeColor</item>
-        <item name="android:textCursorDrawable">@null</item>
-        <item name="android:textColorSecondary">@color/hamburger_menu</item>
-    </style>
+
 
     <style name="switchStype">
         <item name="colorControlActivated">@color/themeColor</item>
@@ -67,7 +58,7 @@
         <item name="android:windowBackground">@color/white</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
@@ -112,9 +103,12 @@
         <item name="android:indeterminateTint">@color/themeColor</item>
     </style>
 
-    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorAccent">@color/black</item>
+    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorAccent">@color/toolbarTextColor</item>
     </style>
+
+
+
 
 
     <style name="ProgressBarStyle" parent="Theme.AppCompat.Light.Dialog">

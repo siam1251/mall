@@ -28,7 +28,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
-                android:src="@drawable/img_mallinfo_main"
+                android:src="@drawable/img_mallinfo_main_big"
                 app:layout_collapseParallaxMultiplier="0.8"
                 app:layout_collapseMode="parallax"
                 />

@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:tabTextColor="@color/gray"
-                    app:tabSelectedTextColor="@color/themeColor"
+                    app:tabSelectedTextColor="@color/tabSelectedTextColor"
                     app:tabIndicatorColor="@color/themeColor"
                     app:tabIndicatorHeight="@dimen/home_tab_indicator_height"
                     app:tabMode="fixed"
@@ -61,5 +61,14 @@
         android:id="@+id/flContents"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rvMallDirectory"
+        android:gravity="center_horizontal"
+        android:background="@color/white"
         />
 </RelativeLayout>

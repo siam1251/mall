@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<color name="themeColor">#33b5e5</color>-->
-    <color name="themeColor">#aa66cc</color>
-    <color name="themeColorTransparent">#30aa66cc</color>
-    <color name="warningColor">#aa66cc</color> <!--#CFff4444-->
-    <color name="themeColorDark">#7A4A91</color>
+    <color name="themeColor">#ee3f33</color>
+    <color name="themeColorTransparent">#30ee3f33</color>
+    <color name="warningColor">#ee3f33</color> <!--#CFff4444-->
+    <color name="themeColorDark">#000000</color>
+
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color> <!--status bar-->
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="hamburger_menu">#ee3f33</color>
+    <color name="active_mall_off_state">#FFFFFF</color>
+    <color name="toolbarTextColor">#FFFFFF</color>
+    <color name="tabSelectedTextColor">#FFFFFF</color>
+
+
+
+    <!--interest card-->
+    <color name="intrst_bg">#000000</color>
 
 </resources>

@@ -26,23 +26,29 @@ public class HeaderFactory {
 
     public final static String MALL_INFO_OFFLINE_TEXT = "mallinfo.json";
     public final static String MALL_INFO_URL_BASE = "https://api.myjson.com/";
-    public final static String MALL_INFO_URL_VM = "bins/1ouit"; //vaughan mills
-    public final static String MALL_INFO_URL_MP = "bins/2zv9f"; //metropolis
+    private final static String MALL_INFO_URL_VM = "bins/1ouit"; //vaughan mills
+    private final static String MALL_INFO_URL_MP = "bins/2zv9f"; //metropolis
 
 
     public final static String AMENITIES_OFFLINE_TEXT = "amenities.json";
-    public final static String AMENITIES_URL_VM = "bins/1to8f";
-    public final static String AMENITIES_URL_MP = "bins/1to8f";
+    private final static String AMENITIES_URL_VM = "bins/1to8f";
+    private final static String AMENITIES_URL_MP = "bins/1to8f";
 
 
     public final static String PARKING_OFFLINE_TEXT = "parking.json";
-    public final static String PARKING_URL_VM = "bins/1c8ul";
-    public final static String PARKING_URL_MP = "bins/1c8ul";
+    private final static String PARKING_URL_VM = "bins/1c8ul";
+    private final static String PARKING_URL_MP = "bins/1c8ul";
+
+
+    public static String SEARCH_INDEX_URL_BASE = "https://kcp-pkg.s3-us-west-2.amazonaws.com/";
+    private final static String SEARCH_INDEX_MP = "indexes/staging/metropolis-at-metrotown-index.msgpack";
+    private final static String SEARCH_INDEX_VM = "indexes/staging/metropolis-at-metrotown-index.msgpack";
 
 
     public static String MALL_INFO_URL = MALL_INFO_URL_VM;
     public static String AMENITIES_URL = AMENITIES_URL_VM;
     public static String PARKING_URL = PARKING_URL_VM;
+    public static String SEARCH_INDEX_URL = SEARCH_INDEX_VM;
 
 
     public static String MALL_NAME = "Vaughan Mills";
@@ -67,12 +73,14 @@ public class HeaderFactory {
             AMENITIES_URL = AMENITIES_URL_VM;
             PARKING_URL = PARKING_URL_VM;
             MAP_VENUE_NAME = "Vaughan Mills";
+            SEARCH_INDEX_URL = SEARCH_INDEX_VM;
         } else if(catalog.equals(Constants.HEADER_VALUE_DATAHUB_CATALOG_MP)) {
             MALL_NAME = "Metropolis Metrotown";
             MALL_INFO_URL = MALL_INFO_URL_MP;
             AMENITIES_URL = AMENITIES_URL_MP;
             PARKING_URL = PARKING_URL_MP;
             MAP_VENUE_NAME = "Metropolis";
+            SEARCH_INDEX_URL = SEARCH_INDEX_MP;
         }
 
         constructHeader();

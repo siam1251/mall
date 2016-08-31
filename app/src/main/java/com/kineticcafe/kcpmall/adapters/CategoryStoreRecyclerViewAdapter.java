@@ -42,6 +42,11 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
     private int mContentType;
     private FavouriteInterface mFavouriteInterface;
     private MapFragment.OnStoreClickListener mStoreClickListener;
+    private int mFooterLayout;
+    private boolean mFooterExist = false;
+    private String mFooterText;
+    private View.OnClickListener mOnClickListener;
+
 
     public CategoryStoreRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces, int contentType) {
         mContext = context;
@@ -105,11 +110,6 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         }
         return null;
     }
-
-    private int mFooterLayout;
-    private boolean mFooterExist = false;
-    private String mFooterText;
-    private View.OnClickListener mOnClickListener;
 
     public void addFooter(String footerText, int footerLayout, View.OnClickListener onClickListener){
         mFooterExist = true;

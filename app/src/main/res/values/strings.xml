@@ -133,12 +133,15 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <!--MALL INFO TITLE-->
     <string name="mall_info_mall_hours">Mall Hours</string>
-    <string name="mall_info_gift_card">Gift Card Balance</string>
-    <string name="mall_info_about">About</string>
     <string name="mall_info_guest_service">Guest Service</string>
     <string name="mall_info_amenities">Amenities</string>
-    <string name="mall_info_shuttles">Shopping Shuttle</string>
+    <string name="mall_info_gift_card">Gift Card Balance</string>
     <string name="mall_info_social">Social Network</string>
+    <string name="mall_info_about">About</string>
+    <string name="mall_info_shuttles">Shopping Shuttle</string>
+    <string name="mall_info_public_transportation">Public Transportation</string>
+    <string name="mall_info_tourist_information">Tourist Information</string>
+    <string name="mall_info_accessibility">Accessibility</string>
 
     <!--CTA-->
     <string name="cta_find_on_map">Find on Map</string>
@@ -189,6 +192,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <string name="map_view_amenities_on_map">View Amenities on Map</string>
     <string name="hint_search_store">Search a Store</string>
+    <string name="hint_search_directory">Search Mall Directory</string>
     <string name="hint_search_start">Directions from...</string>
     <string name="hint_search_destination">Directions to...</string>
     <string name="hint_search_start_when_not_empty">from</string>

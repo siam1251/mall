@@ -3,6 +3,8 @@ package com.kineticcafe.kcpmall.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,6 +15,8 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,16 +29,24 @@ import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.managers.KcpPlaceManager;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
+import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.SubCategoryActivity;
+import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
+import com.kineticcafe.kcpmall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
+import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+import com.kineticcafe.kcpmall.managers.ThemeManager;
+import com.kineticcafe.kcpmall.mappedin.CustomLocation;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
+import com.mappedin.sdk.Polygon;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DirectoryFragment extends BaseFragment {
 
@@ -43,6 +55,8 @@ public class DirectoryFragment extends BaseFragment {
     private ViewPager mViewPager;
     private MenuItem mSearchItem;
     private SearchView mSearchView;
+    private RecyclerView rvMallDirectory;
+    private String mSearchString = "";
 
 
     private static DirectoryFragment sDirectoryFragment;
@@ -62,6 +76,7 @@ public class DirectoryFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mViewPager = (ViewPager) view.findViewById(R.id.vpHome);
+        rvMallDirectory = (RecyclerView) view.findViewById(R.id.rvMallDirectory);
         setupViewPager(mViewPager);
 
         TabLayout tablayout = (TabLayout) view.findViewById(R.id.tlHome);
@@ -277,8 +292,8 @@ public class DirectoryFragment extends BaseFragment {
     }
 
     public void onTextChange(String s) {
-        /*mSearchString = s.toString();
-        setupRecyclerView();*/
+        mSearchString = s.toString();
+        setupRecyclerView();
     }
 
 
@@ -288,9 +303,10 @@ public class DirectoryFragment extends BaseFragment {
         getActivity().getMenuInflater().inflate(R.menu.menu_store, menu);
 
         mSearchItem = menu.findItem(R.id.action_store_search);
+        mSearchItem.setIcon(ThemeManager.getThemedMenuDrawable(getActivity(), R.drawable.icn_search));
         mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
         mSearchView.setOnQueryTextListener(new QueryTextListener());
-        mSearchView.setQueryHint(getString(R.string.hint_search_store));
+        mSearchView.setQueryHint(getString(R.string.hint_search_directory));
         mSearchItem.setShowAsAction(MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
                 | MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
@@ -298,7 +314,8 @@ public class DirectoryFragment extends BaseFragment {
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
-                        //BUG : onMenuItemActionCollapse is called when editStartStore or editDestStore's collapsed - is this because of requestFocus?
+                        mMainActivity.setActiveMallDot(true);
+                        rvMallDirectory.setVisibility(View.INVISIBLE);
                         /*if(mSearchMode.equals(SearchMode.STORE) ||
                                 (!mSearchMode.equals(SearchMode.STORE) && !mMainActivity.isEditTextsEmpty()) ) rv.setVisibility(View.INVISIBLE);
 
@@ -309,6 +326,8 @@ public class DirectoryFragment extends BaseFragment {
 
                     @Override
                     public boolean onMenuItemActionExpand(MenuItem item) {
+                        mMainActivity.setActiveMallDot(false);
+                        rvMallDirectory.setVisibility(View.VISIBLE);
                         /*mSearchMode = SearchMode.STORE;
                         showDirectionCard(false, null, 0, null, null, null);
                         mFilterItem.setVisible(false);
@@ -317,5 +336,16 @@ public class DirectoryFragment extends BaseFragment {
                         return true;
                     }
                 });
+    }
+
+    private void setupRecyclerView(){
+
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        rvMallDirectory.setLayoutManager(linearLayoutManager);
+
+
+
+
     }
 }

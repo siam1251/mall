@@ -50,6 +50,7 @@ import com.kineticcafe.kcpmall.adapters.adapterHelper.IndexableRecylerView;
 import com.kineticcafe.kcpmall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+import com.kineticcafe.kcpmall.managers.ThemeManager;
 import com.kineticcafe.kcpmall.mappedin.Amenities;
 import com.kineticcafe.kcpmall.mappedin.Amenities.OnParkingClickListener;
 import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
@@ -119,7 +120,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private ImageView ivUpper;
     private ImageView ivLower;
     private ImageView ivAmenity;
-    private FrameLayout flMap; ///todo: disabled for testing
+//    private FrameLayout flMap; ///todo: disabled for testing
 
     private View viewRoute;
     private String mSearchString = "";
@@ -130,7 +131,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private Drawable mAmeityDrawable;
 
     //MAPPED IN
-    private final int PIN_IMAGE_SIZE_DP = 98;
+    private final int PIN_IMAGE_SIZE_DP = 95;
     private final int CAMERA_ZOOM_LEVEL = 30; //BIGGER - farther, SMALLER - closer
     private final int BLUR_RADIUS = 20;
     private boolean accessibleDirections = false;
@@ -186,7 +187,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         ivUpper = (ImageView) view.findViewById(R.id.ivUpper);
         ivLower = (ImageView) view.findViewById(R.id.ivLower);
         ivAmenity = (ImageView) view.findViewById(R.id.ivAmenity);
-        flMap = (FrameLayout) view.findViewById(R.id.flMap); //todo: disabled for testing
+//        flMap = (FrameLayout) view.findViewById(R.id.flMap); //todo: disabled for testing
         viewRoute = (View) view.findViewById(R.id.viewRoute);
         viewRoute.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +197,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         });
 
         mappedIn = new MappedIn(getActivity());
-        mapView = new MapView(); //TODO: disabled for testing
+//        mapView = new MapView(); //TODO: disabled for testing
 
         showLocationsButton = (Button) view.findViewById(R.id.showLocationButton);
         showLocationsButton.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { showLocations();}});
@@ -346,7 +347,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             if(activeVenue == null) return;
 
             //TODO: choose fragment method
-            android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+            /*android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
             if(!mapView.isAdded()){
                 Log.d("test", "MAP WAS NOT ADDED!");
                 transaction.add(R.id.flMap, mapView);
@@ -356,9 +357,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 mapView = new MapView();
                 transaction.add(R.id.flMap, mapView);
             }
-            transaction.commit();
-//            mapView = (MapView) getActivity().getFragmentManager().findFragmentById(R.id.mapFragment);
-
+            transaction.commit();*/
+            mapView = (MapView) getActivity().getFragmentManager().findFragmentById(R.id.mapFragment);
             mapView.setDelegate(delegate);
 
             mappedIn.getVenue(activeVenue, accessibleDirections, new CustomLocationGenerator(), new GetVenueCallback());
@@ -781,16 +781,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.MULTIPLY);
         Overlay2DImage label = new Overlay2DImage(PIN_IMAGE_SIZE_DP, PIN_IMAGE_SIZE_DP, clone);
         label.setPosition(coordinate);
-
         //if I remove the lable at the same spot and add another label with new LocationLabelClicker,
-        //removed label's LocationLabelClicker gets called again
-        /*LocationLabelClicker clicker = new LocationLabelClicker();
-        clicker.location = (CustomLocation) location;
-        clicker.drawable = pinDrawable;
-        clicker.label = label;
-        clicker.coordinate = coordinate;
-        overlays.put(label, clicker);*/
-
+        //removed label's LocationLabelClicker gets called again so shouldn't add another labelClicker
         mSelectedPin = label;
 
         mapView.addMarker(label, false);
@@ -806,17 +798,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         clicker.drawable = pinDrawable;
         clicker.label = label;
         clicker.coordinate = coordinate;
-        overlays.put(label, clicker);
-        mapView.addMarker(label, false);
-    }
-
-    public void dropPin(final Coordinate coordinate, final Location location){
-        //TODO: only add pins to the current floor
-        Overlay2DLabel label = new Overlay2DLabel(location.getName(), 36, Typeface.DEFAULT);
-        label.setPosition(coordinate);
-        LocationLabelClicker clicker = new LocationLabelClicker();
-        clicker.location = (CustomLocation) location;
-        clicker.drawable = mAmeityDrawable;
         overlays.put(label, clicker);
         mapView.addMarker(label, false);
     }
@@ -966,6 +947,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
         mSearchItem = menu.findItem(R.id.action_search);
         mFilterItem = menu.findItem(R.id.action_filter);
+        mFilterItem.setIcon(ThemeManager.getThemedMenuDrawable(getActivity(), R.drawable.icn_filter));
+
         mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
         mSearchView.setOnQueryTextListener(new QueryTextListener());
         mSearchView.setQueryHint(getString(R.string.hint_search_store));
@@ -976,6 +959,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
+                        mMainActivity.setActiveMallDot(true);
                         //BUG : onMenuItemActionCollapse is called when editStartStore or editDestStore's collapsed - is this because of requestFocus?
                         if(mSearchMode.equals(SearchMode.STORE) ||
                                 (!mSearchMode.equals(SearchMode.STORE) && !mMainActivity.isEditTextsEmpty()) ) rv.setVisibility(View.INVISIBLE);
@@ -987,6 +971,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
                     @Override
                     public boolean onMenuItemActionExpand(MenuItem item) {
+                        mMainActivity.setActiveMallDot(false);
                         mSearchMode = SearchMode.STORE;
                         showDirectionCard(false, null, 0, null, null, null);
                         mFilterItem.setVisible(false);
@@ -1173,66 +1158,20 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         return super.onOptionsItemSelected(item);
     }
 
-    public void loadMapFragment(){
-        if(mapView != null && !mapView.isAdded() && mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_MAP){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-                    transaction.attach(mapView);
-                    transaction.commit();
-                }
-            }).start();
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        loadMapFragment();
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-                            transaction.detach(mapView);
-                            transaction.commit();
-//                            didTapNothing();
-                        } catch (Exception e){
-                            String a = "ewfsef";
-                        }
-                    }
-                });
-            }
-        }).start();
     }
 
 
     @Override
     public void onDetach() {
         super.onDetach();
-
-
-        try {
-            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
-            childFragmentManager.setAccessible(true);
-            childFragmentManager.set(mapView, null);
-
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-
-
     }
 
 

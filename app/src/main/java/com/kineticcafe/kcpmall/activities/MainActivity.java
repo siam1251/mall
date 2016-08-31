@@ -35,7 +35,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -61,6 +60,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
@@ -87,16 +88,26 @@ import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
 import com.kineticcafe.kcpmall.mappedin.CustomLocation;
 import com.kineticcafe.kcpmall.parking.ParkingManager;
 import com.kineticcafe.kcpmall.parking.Parkings;
+import com.kineticcafe.kcpmall.searchIndex.IndexManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
-import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 import com.kineticcafe.kcpmall.views.BadgeView;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 import com.mappedin.sdk.Polygon;
 
-import java.lang.reflect.MalformedParameterizedTypeException;
+import org.msgpack.MessagePack;
+import org.msgpack.unpacker.Unpacker;
+import org.msgpack.unpacker.UnpackerIterator;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
@@ -122,6 +133,7 @@ public class MainActivity extends BaseActivity
     private RelativeLayout rlDestinationEditor;
     private EditText etStartStore;
     private EditText etDestStore;
+    private FrameLayout flActiveMallDot;
     private int mCurrentViewPagerTapPosition = 0;
 
     private BadgeView badgeDeals;
@@ -204,7 +216,6 @@ public class MainActivity extends BaseActivity
                 if(position == VIEWPAGER_PAGE_MAP || position == VIEWPAGER_PAGE_INFO ) expandTopNav(); //TODO: change this hardcode
 
                 if(position == VIEWPAGER_PAGE_MAP) {
-                    MapFragment.getInstance().loadMapFragment();
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
                     setToolbarElevation(true);
@@ -277,7 +288,131 @@ public class MainActivity extends BaseActivity
             InfoFragment.getInstance().initializeMallInfoData();
             initializeMapData();
             initializeParkingData();
+//            initializeSeachIndex();
         }
+    }
+
+    private class ExamplePojo {
+        public String name;
+        public ExamplePojo(String name){
+            this.name = name;
+        }
+
+        public String getName(){
+            return name;
+        }
+    }
+
+    private byte[] downloadUrl(URL toDownload) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        try {
+            byte[] chunk = new byte[4096];
+            int bytesRead;
+            InputStream stream = toDownload.openStream();
+
+            while ((bytesRead = stream.read(chunk)) > 0) {
+                outputStream.write(chunk, 0, bytesRead);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return outputStream.toByteArray();
+    }
+
+
+    @org.msgpack.annotation.Message
+    public static class ReturnValue {
+
+        private Object value;
+        private String type;
+
+        @JsonCreator
+        public ReturnValue(@JsonProperty("value") Object val, @JsonProperty("type") String type) {
+            value = val;
+            this.type = type;
+        }
+    }
+
+    //    @JsonIgnoreProperties(ignoreUnknown = true)
+    @org.msgpack.annotation.Message // Annotation
+    public static class MyMessage {
+        public int[] intArrays;
+        public String[] stringArrays;
+        public byte[] bytes;
+        public int integerValue;
+
+        public List<Map<String, Integer>> listMap = new ArrayList<Map<String, Integer>>();
+        public Map<String, Integer> mapOfStringInteger = new HashMap<String, Integer>();
+        public Map<String, String> mapOfStringString = new HashMap<String, String>();
+        public Map<String, Map<String, Integer>> mapOfMap = new HashMap<String, Map<String, Integer>>();
+        public Map<String, Map<String, String>> mapOfMapStringString = new HashMap<String, Map<String, String>>();
+        public Map<String, Map<String, ArrayList<Integer>>> mapofMapStringIntegerList = new HashMap<String, Map<String, ArrayList<Integer>>>();
+        public Map<String, Map<String, ArrayList<String>>> mapofMapStringStringList = new HashMap<String, Map<String, ArrayList<String>>>();
+    }
+
+    private void initializeSeachIndex() {
+
+        IndexManager indexManager = new IndexManager(this, R.layout.layout_loading_item, new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                        try {
+
+//                            Template<Map<String, String>> mapTmpl = tMap(TString, TString);
+
+                            MessagePack msgpack = new MessagePack();
+                            msgpack.register(MyMessage.class);
+
+                            /*ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
+                            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                            MyMessage temp = objectMapper.readValue(IndexManager.mSearchIndexByte, MyMessage.class);*/
+
+                            /*MyMessage test = new MyMessage();
+                            Map<String, Integer> a = new HashMap<String, Integer>();
+                            a.put("bcd", 123);
+                            test.map.put("abc", a);
+                            byte[] testByte = msgpack.write(test);
+                            MyMessage actual = msgpack.read(testByte, MyMessage.class);*/
+
+
+                            /*ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
+                            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                            MyMessage temp = objectMapper.readValue(IndexManager.mSearchIndexByte, MyMessage.class);*/
+
+
+                            ByteArrayInputStream in = new ByteArrayInputStream(IndexManager.mSearchIndexByte);
+                            Unpacker unpacker = msgpack.createUnpacker(in);
+
+                            UnpackerIterator unpackerIterator = unpacker.iterator();
+                            while(unpackerIterator.hasNext()){
+
+
+                                String a = "s";
+                            }
+
+
+                            System.out.println("TEST");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+
+
+                        break;
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        indexManager.downloadSearchIndexes();
     }
 
     private void initializeToolbar(){
@@ -300,6 +435,26 @@ public class MainActivity extends BaseActivity
         });
 
         mDrawer.addDrawerListener(mToggle);
+        mDrawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                setActiveMallDot(false);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                setActiveMallDot(true);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
         mToggle.syncState();
     }
 
@@ -310,6 +465,7 @@ public class MainActivity extends BaseActivity
             ivToolbar.setVisibility(View.GONE);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setTitle(getResources().getString(R.string.title_map));
+            mToolbar.setTitleTextColor(getResources().getColor(R.color.textColorPrimary));
         } else {
             ivToolbar.setVisibility(View.VISIBLE);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -607,6 +763,15 @@ public class MainActivity extends BaseActivity
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
     }
 
+
+    public void setActiveMallDot(boolean enable) {
+        if(mActiveMall && !enable) {
+            flActiveMallDot.setVisibility(View.GONE);
+        } else if(mActiveMall && enable) {
+            flActiveMallDot.setVisibility(View.VISIBLE);
+        }
+    }
+
     /**
      *
      * @param forceRefresh used when recreating the view's necessary ex. when data's downloaded
@@ -620,6 +785,7 @@ public class MainActivity extends BaseActivity
             LinearLayout llActiveMall = (LinearLayout) findViewById(R.id.llActiveMall);
             RecyclerView rvTodaysDeals = (RecyclerView) findViewById(R.id.rvTodaysDeals);
             RecyclerView rvTodaysEvents = (RecyclerView) findViewById(R.id.rvTodaysEvents);
+            flActiveMallDot = (FrameLayout) findViewById(R.id.flActiveMallDot);
 
             TextView tvMyFav = (TextView) findViewById(R.id.tvMyFav);
             TextView tvMyGC = (TextView) findViewById(R.id.tvMyGC);
@@ -648,6 +814,7 @@ public class MainActivity extends BaseActivity
 
             if(activeMallEnabled) {
                 llActiveMall.setVisibility(View.VISIBLE);
+                flActiveMallDot.setVisibility(View.VISIBLE);
                 panelBackgroundColor = getResources().getColor(R.color.active_mall_bg);
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.themeColor)));
                 badgeTextColor = getResources().getColor(R.color.active_mall_badge_text_color);
@@ -697,7 +864,7 @@ public class MainActivity extends BaseActivity
                     }
                 });
 
-                showSnackBar(R.string.warning_active_mall_activated, R.string.action_ok, getResources().getColor(R.color.themeColor), null);
+                showSnackBar(R.string.warning_active_mall_activated, R.string.action_ok, getResources().getColor(R.color.white), null);
 
                 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 //                v.vibrate(500);
@@ -705,8 +872,10 @@ public class MainActivity extends BaseActivity
             } else {
 
                 llActiveMall.setVisibility(View.GONE);
+                flActiveMallDot.setVisibility(View.GONE);
                 panelBackgroundColor = Color.WHITE;
-                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.black)));
+//                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.black)));
+                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.active_mall_off_state)));
                 badgeTextColor = Color.WHITE;
                 generalTextColor = Color.BLACK;
                 drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_bg);
@@ -822,7 +991,7 @@ public class MainActivity extends BaseActivity
                     public void OnSqueezeAnimationDone() {
                     }
                 }, MainActivity.this, rlSeeParking);
-               if(ParkingManager.isParkingLotSaved(MainActivity.this)) Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, ivFilterParking.isSelected());
+                if(ParkingManager.isParkingLotSaved(MainActivity.this)) Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, ivFilterParking.isSelected());
                 setParkingStatus(Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_hide_parking), getResources().getString(R.string.map_filter_see_parking));
                 if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(!ivFilterParking.isSelected());
             }
@@ -892,7 +1061,6 @@ public class MainActivity extends BaseActivity
 
 
     public void showSnackBar(int msg, int action, int textColor, @Nullable View.OnClickListener onClickListener) {
-        //        if (mOfflineSnackbar != null && (mOfflineSnackbar.isShownOrQueued() || onClickListener == null))
         if (mOfflineSnackbar != null && mOfflineSnackbar.isShownOrQueued())
             return;
         final CoordinatorLayout clMain = (CoordinatorLayout) findViewById(R.id.clMain);
@@ -1032,7 +1200,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
