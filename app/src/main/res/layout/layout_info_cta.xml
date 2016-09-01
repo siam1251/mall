@@ -150,6 +150,7 @@
                 android:layout_height="@dimen/info_direction_height"
 
             <TextView
+                android:id="@+id/tvPark"
                 android:layout_toRightOf="@+id/ivPark"
                 android:gravity="center"
                 android:text="@string/info_save_my_parking_spot"

@@ -49,23 +49,27 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
     private ArrayList<Integer> mFavCatTempList;
     private HashMap<String, KcpContentPage> mFavCatTempMap;
     private ArrayList<String> mFavStoreLikeLinkList;
+    private InterestedCategoryActivity.ItemClickListener mItemClickListener;
 
     private ArrayList<Object> mItems;
 
-    public InterestRecyclerViewAdapter(Context context, ArrayList<KcpCategories> news, ArrayList<InterestedCategoryActivity.GridLayoutItem> gridLayoutItemArrayList) {
+    public InterestRecyclerViewAdapter(Context context, ArrayList<KcpCategories> news, ArrayList<InterestedCategoryActivity.GridLayoutItem> gridLayoutItemArrayList, InterestedCategoryActivity.ItemClickListener itemClickListener) {
         mContext = context;
         mInterestType = InterestType.CATEGORY;
         mKcpCategoriesList = new ArrayList<KcpCategories>(news);
         mGridLayoutItemArrayList = gridLayoutItemArrayList;
         mFavCatTempList = FavouriteManager.getInstance(context).getInterestedCategoryList();
+        mItemClickListener = itemClickListener;
     }
 
-    public InterestRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces) {
+    public InterestRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces, InterestedCategoryActivity.ItemClickListener itemClickListener) {
         mInterestType = InterestType.STORE;
         mContext = context;
         mKcpPlacesRecommendedList = new ArrayList<>(kcpPlaces);
         mFavStoreLikeLinkList = FavouriteManager.getInstance(context).getInterestedStoreList();
         mKcpPlacesOthersList = new ArrayList<>(KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE));
+
+        mItemClickListener = itemClickListener;
 
         createItems();
     }
@@ -242,12 +246,19 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                         public void OnSqueezeAnimationDone() {
                         }
                     }, (Activity) mContext, interestedCategoryHolder.cvIntrst);
+
+
                     if(mFavCatTempList.contains(kcpCategories.getCategoryId())) {
                         mFavCatTempList.remove(Integer.valueOf(kcpCategories.getCategoryId()));
                         setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, false);
                     } else {
                         mFavCatTempList.add(kcpCategories.getCategoryId());
                         setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, true);
+                    }
+
+                    if(mItemClickListener != null) {
+                        if(mFavCatTempList.size() > 0) mItemClickListener.onItemClick(false);
+                        else mItemClickListener.onItemClick(true);
                     }
                 }
             });
@@ -282,6 +293,7 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
 
                         @Override
                         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            interestedStoreHolder.tvIntrstd.setVisibility(View.GONE);
                             return false;
                         }
                     })
@@ -303,6 +315,11 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                     } else {
                         mFavStoreLikeLinkList.add(kcpPlaces.getLikeLink());
                         setSelectedStore(interestedStoreHolder.cvIntrst, interestedStoreHolder.ivFav, true);
+                    }
+
+                    if(mItemClickListener != null) {
+                        if(mFavStoreLikeLinkList.size() > 0) mItemClickListener.onItemClick(false);
+                        else mItemClickListener.onItemClick(true);
                     }
                 }
             });

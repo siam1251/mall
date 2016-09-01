@@ -18,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -50,6 +52,8 @@ public class InterestedCategoryActivity extends AppCompatActivity {
     protected final Logger logger = new Logger(getClass().getName());
     private InterestRecyclerViewAdapter mInterestRecyclerViewAdapter;
     private RecyclerView rvIntrstCat;
+    private FrameLayout flIntrstdBot;
+    private TextView tvIntrstd;
     private boolean mSpanSizeSet = false;
 
     @Override
@@ -65,14 +69,13 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         if(FavouriteManager.getInstance(this).getInterestFavSize() > 0) getSupportActionBar().setTitle(getResources().getString(R.string.activity_title_interested_category_update));
         else getSupportActionBar().setTitle(getResources().getString(R.string.activity_title_interested_category));
 
-        FrameLayout flIntrstdBot = (FrameLayout) findViewById(R.id.flIntrstdBot);
+        flIntrstdBot = (FrameLayout) findViewById(R.id.flIntrstdBot);
 //        flIntrstdBot.setBackgroundColor(getResources().getColor(R.color.themeColor));
 
         rvIntrstCat = (RecyclerView) findViewById(R.id.rvIntrstCat);
         rvIntrstCat.setNestedScrollingEnabled(false); //set false for smooth scroll when nesting recyclerview inside nestedscrollview
-        setupRecyclerView(rvIntrstCat);
 
-        final TextView tvIntrstd = (TextView) findViewById(R.id.tvIntrstd);
+        tvIntrstd = (TextView) findViewById(R.id.tvIntrstd);
         tvIntrstd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +105,11 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 kcpCategoryManager.downloadPlacesForTheseCategoryIds(mInterestRecyclerViewAdapter.getFavCatTempList());
             }
         });
+        setupRecyclerView(rvIntrstCat);
     }
+
+
+
 
     public static class GridLayoutItem {
         public int spanCount;
@@ -199,9 +206,43 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        mInterestRecyclerViewAdapter = new InterestRecyclerViewAdapter(this, kcpCategoriesArrayList, gridLayoutItemArrayList);
+        mInterestRecyclerViewAdapter = new InterestRecyclerViewAdapter(this, kcpCategoriesArrayList, gridLayoutItemArrayList, new ItemClickListener() {
+            @Override
+            public void onItemClick(boolean isListEmpty) {
+                setUpCTA(InterestedCategoryActivity.this, isListEmpty, flIntrstdBot, tvIntrstd);
+            }
+        });
         recyclerView.setAdapter(mInterestRecyclerViewAdapter);
+
+        if(kcpCategoriesArrayList.size() > 0) {
+            flIntrstdBot.setVisibility(View.VISIBLE);
+            tvIntrstd.setText(getString(R.string.action_save));
+        }
     }
+
+    public interface ItemClickListener{
+        void onItemClick(boolean isListEmpty);
+    }
+
+    public static void setUpCTA(Context context, boolean isListEmpty, FrameLayout fl, TextView tv){
+        if(isListEmpty && fl.getVisibility() == View.VISIBLE) {
+            fl.setVisibility(View.GONE);
+            Animation slideUpAnimation = AnimationUtils.loadAnimation(context,
+                    R.anim.anim_slide_down_out_of_screen);
+            slideUpAnimation.reset();
+            fl.startAnimation(slideUpAnimation);
+        } else if(!isListEmpty && fl.getVisibility() == View.GONE){
+            fl.setVisibility(View.VISIBLE);
+            tv.setText(context.getString(R.string.action_save));
+            Animation slideUpAnimation = AnimationUtils.loadAnimation(context,
+                    R.anim.anim_slide_up_from_out_of_screen);
+            slideUpAnimation.reset();
+            fl.startAnimation(slideUpAnimation);
+        }
+    }
+
+
+
 
     public void replaceIfExist(ArrayList<GridLayoutItem> list, int position, GridLayoutItem gridLayoutItem){
         if(position < list.size() ) list.set(position, gridLayoutItem);

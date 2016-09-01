@@ -215,7 +215,12 @@ public class MainActivity extends BaseActivity
                 mCurrentViewPagerTapPosition = position;
                 if(position == VIEWPAGER_PAGE_MAP || position == VIEWPAGER_PAGE_INFO ) expandTopNav(); //TODO: change this hardcode
 
+                if(position == VIEWPAGER_PAGE_INFO) {
+                    InfoFragment.getInstance().setParkingSpotCTA();
+                }
+
                 if(position == VIEWPAGER_PAGE_MAP) {
+                    if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true);
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
                     setToolbarElevation(true);
@@ -1292,6 +1297,7 @@ public class MainActivity extends BaseActivity
             if (resultCode == Activity.RESULT_OK) {
                 setUpRightSidePanel();
                 if(mOnParkingClickListener != null && Amenities.isToggled(this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true);
+                InfoFragment.getInstance().setParkingSpotCTA();
             }
         } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
             if (resultCode != 0) {

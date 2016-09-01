@@ -19,4 +19,6 @@
     <!--interest card-->
     <color name="intrst_bg">#000000</color>
 
+    <!--MAP-->
+    <color name="map_destination_store">#273e94</color>
 </resources>

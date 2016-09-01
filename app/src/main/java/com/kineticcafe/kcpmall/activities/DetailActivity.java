@@ -675,7 +675,7 @@ public class DetailActivity extends AppCompatActivity {
                         .into((ImageView) findViewById(R.id.ivBlurred));*/
 
                 TextView tvExpiryDate = (TextView) findViewById(R.id.tvExpiryDate);
-                tvExpiryDate.setBackgroundColor(getResources().getColor(R.color.themeColor));
+//                tvExpiryDate.setBackgroundColor(getResources().getColor(R.color.themeColor));
                 tvExpiryDate.getBackground().setAlpha(241);
 
                 //TODO: daysLeft shows 1 less date (ex) 2016-05-27T00:00:00.000+00:00 shows date as 26 EST see if this is right

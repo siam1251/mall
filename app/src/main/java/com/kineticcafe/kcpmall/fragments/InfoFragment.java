@@ -8,9 +8,14 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,10 +38,15 @@ import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.MallHourActivity;
 import com.kineticcafe.kcpmall.activities.MallInfoDetailActivity;
+import com.kineticcafe.kcpmall.activities.ParkingActivity;
 import com.kineticcafe.kcpmall.adapters.InfoRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
+import com.kineticcafe.kcpmall.parking.ParkingManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
+import com.twitter.sdk.android.core.models.Card;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -51,6 +61,7 @@ public class InfoFragment extends BaseFragment {
     }
 
 
+    private View mView;
     private InfoRecyclerViewAdapter mInfoRecyclerViewAdapter;
     private boolean shouldScroll = false;
     private OnListFragmentInteractionListener mListener;
@@ -66,11 +77,11 @@ public class InfoFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_info, container, false);
-        final RecyclerView rvInfo = (RecyclerView) view.findViewById(R.id.rvInfo);
+        mView = inflater.inflate(R.layout.fragment_info, container, false);
+        final RecyclerView rvInfo = (RecyclerView) mView.findViewById(R.id.rvInfo);
         setupRecyclerView(rvInfo);
 
-        final AppBarLayout abInfo = (AppBarLayout) view.findViewById(R.id.abInfo);
+        final AppBarLayout abInfo = (AppBarLayout) mView.findViewById(R.id.abInfo);
         abInfo.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout abInfo, int abInfoverticalOffset) {
@@ -93,7 +104,7 @@ public class InfoFragment extends BaseFragment {
             }
         });
 
-        RelativeLayout rlDirection = (RelativeLayout) view.findViewById(R.id.rlDirection);
+        RelativeLayout rlDirection = (RelativeLayout) mView.findViewById(R.id.rlDirection);
         rlDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,16 +112,22 @@ public class InfoFragment extends BaseFragment {
             }
         });
 
-        RelativeLayout rlSaveMyParkingSpot = (RelativeLayout) view.findViewById(R.id.rlSaveMyParkingSpot);
+        RelativeLayout rlSaveMyParkingSpot = (RelativeLayout) mView.findViewById(R.id.rlSaveMyParkingSpot);
         rlSaveMyParkingSpot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT).show();
+                if(!ParkingManager.isParkingLotSaved(getActivity())){
+                    final Intent intent = new Intent (getActivity(), ParkingActivity.class);
+                    intent.putExtra("image", "bitmap.png");
+                    getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
+                } else {
+                    getActivity().startActivityForResult(new Intent(getActivity(), ParkingActivity.class), Constants.REQUEST_CODE_SAVE_PARKING_SPOT); //is startActivityForResult necessary?
+                }
             }
         });
 
 
-        ImageView ivCar = (ImageView) view.findViewById(R.id.ivCar);
+        ImageView ivCar = (ImageView) mView.findViewById(R.id.ivCar);
         ivCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +135,7 @@ public class InfoFragment extends BaseFragment {
             }
         });
 
-        ImageView ivSubway = (ImageView) view.findViewById(R.id.ivTransit);
+        ImageView ivSubway = (ImageView) mView.findViewById(R.id.ivTransit);
         ivSubway.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +143,7 @@ public class InfoFragment extends BaseFragment {
             }
         });
 
-        ImageView ivWalk = (ImageView) view.findViewById(R.id.ivWalk);
+        ImageView ivWalk = (ImageView) mView.findViewById(R.id.ivWalk);
         ivWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,12 +172,45 @@ public class InfoFragment extends BaseFragment {
             });
         }
 
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        tvInfoHoursBold = (TextView) view.findViewById(R.id.tvInfoHoursBold);
-        tvInfoHoursLight = (TextView) view.findViewById(R.id.tvInfoHoursLight);
+        toolbar = (Toolbar) mView.findViewById(R.id.toolbar);
+        tvInfoHoursBold = (TextView) mView.findViewById(R.id.tvInfoHoursBold);
+        tvInfoHoursLight = (TextView) mView.findViewById(R.id.tvInfoHoursLight);
+
         getMallHour();
 
-        return view;
+        return mView;
+    }
+
+    public void setParkingSpotCTA(){
+        ImageView ivPark = (ImageView) mView.findViewById(R.id.ivPark);
+        TextView tvPark = (TextView) mView.findViewById(R.id.tvPark);
+
+        if(!ParkingManager.isParkingLotSaved(getActivity())){
+            ivPark.setImageResource(R.drawable.icn_parking);
+            tvPark.setText(getString(R.string.info_save_my_parking_spot));
+        } else {
+            ivPark.setImageResource(R.drawable.icn_car);
+            String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
+            String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
+//            String sourceString = getString(R.string.info_my_parking_spot) + " " + "<b>" + parkingLotName + ", " + entranceName + "</b> ";
+//            String sourceString = "<b>" + 123 + "</b> " + "testing";
+            String sourceString = getString(R.string.info_my_parking_spot) + " " + parkingLotName + ", " + entranceName;
+
+            final SpannableStringBuilder sb = new SpannableStringBuilder("sourceString");
+            final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD); // Span to make text bold
+            final StyleSpan iss = new StyleSpan(android.graphics.Typeface.ITALIC); //Span to make text italic
+            sb.setSpan(bss, 0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE); // make first 4 characters Bold
+            sb.setSpan(iss, 4, 6, Spannable.SPAN_INCLUSIVE_INCLUSIVE); // make last 2 characters Italic
+
+            tvPark.setText(sb);
+
+
+//            final SpannableStringBuilder str = new SpannableStringBuilder(sourceString);
+//            str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 2, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            tvPark.setText(str);
+
+
+        }
     }
 
     @Override

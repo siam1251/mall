@@ -132,7 +132,7 @@
 
     <!--MAP FILTER-->
     <color name="filter_off_color">#787878</color>
-
+    <color name="map_destination_store">#CFff4444</color>
 
     <!--PARKING-->
     <color name="parking_bg">#b2202020</color>

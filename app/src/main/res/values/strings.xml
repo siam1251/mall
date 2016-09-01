@@ -130,6 +130,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <!--INFO-->
     <string name="info_get_directions">Get Directions</string>
     <string name="info_save_my_parking_spot">Save My Parking Spot</string>
+    <string name="info_my_parking_spot">You parked in </string>
 
     <!--MALL INFO TITLE-->
     <string name="mall_info_mall_hours">Mall Hours</string>
@@ -239,5 +240,9 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="parking_add_note">Add Notes</string>
     <string name="parking_polygon_store_name">My Parked Car</string>
     <string name="parking_remove_my_spot">Remove My Parking Spot</string>
+
+    <!--SEARCH-->
+    <string name="search_store_that_contains">Stores that match : </string>
+    <string name="search_cat_that_contains">Categories that match : </string>
 
 </resources>

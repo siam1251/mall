@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/SelectableItemForegroundNormal"
+    >
+
+    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        app:fontFamily="@string/fontFamily_roboto_regular"
+        android:id="@+id/tvFooter"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:gravity="center_vertical"
+        android:background="@color/colorPrimary"
+        style="@style/SelectableItemForeground"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:lines="1"
+        android:ellipsize="end"
+        android:text="Stores that match"
+        />
+
+</RelativeLayout>
+
+
+
+
+

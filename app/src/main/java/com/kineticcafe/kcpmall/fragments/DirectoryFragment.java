@@ -36,6 +36,7 @@ import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.SubCategoryActivity;
 import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
+import com.kineticcafe.kcpmall.adapters.MallDirectoryRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
@@ -46,7 +47,9 @@ import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.mappedin.sdk.Polygon;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DirectoryFragment extends BaseFragment {
 
@@ -344,8 +347,53 @@ public class DirectoryFragment extends BaseFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rvMallDirectory.setLayoutManager(linearLayoutManager);
 
+        //PLACE
+        ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
+        ArrayList<KcpPlaces> kcpPlacesFiltered;
+        if(mSearchString.equals("")) kcpPlacesFiltered = new ArrayList<>();
+        else {
+            kcpPlacesFiltered = new ArrayList<>();
+            for(int i = 0; i < kcpPlaces.size(); i++){
+                if(kcpPlaces.get(i).getPlaceName().toLowerCase().contains(mSearchString.toLowerCase())) {
+                    kcpPlacesFiltered.add(kcpPlaces.get(i));
+                }
+            }
+        }
 
 
+        //KEYWORD
+        ArrayList<Integer> placeByKeyword = new ArrayList<>();
+        HashMap<String, ArrayList<Integer>> placeByKeywordMap = new HashMap<>();
+        ArrayList<Integer> shoes = new ArrayList<>();
+        shoes.add(450);
+        shoes.add(372);
+        shoes.add(346);
+        shoes.add(295);
+
+        placeByKeywordMap.put("Shoes", shoes);
+
+        ArrayList<Integer> shirts = new ArrayList<>();
+        shoes.add(516);
+        shoes.add(358);
+        shoes.add(375);
+        placeByKeywordMap.put("Shirts", shirts);
+
+        if(mSearchString.equals("")) placeByKeyword = new ArrayList<>();
+        else {
+            for (Map.Entry<String, ArrayList<Integer>> entry : placeByKeywordMap.entrySet()) {
+                String keyword = entry.getKey();
+                ArrayList<Integer> value = entry.getValue();
+                if(keyword.toLowerCase().contains(mSearchString.toLowerCase())) {
+                    placeByKeyword.addAll(value);
+                }
+            }
+        }
+
+
+        //CATEGORY
+
+        MallDirectoryRecyclerViewAdapter mallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), kcpPlacesFiltered, placeByKeyword, null, mSearchString);
+        rvMallDirectory.setAdapter(mallDirectoryRecyclerViewAdapter);
 
     }
 }

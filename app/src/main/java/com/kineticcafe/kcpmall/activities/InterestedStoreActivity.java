@@ -13,6 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -39,6 +42,8 @@ public class InterestedStoreActivity extends AppCompatActivity {
     protected final Logger logger = new Logger(getClass().getName());
     private InterestRecyclerViewAdapter mInterestRecyclerViewAdapter;
     private RecyclerView rvIntrstCat;
+    private FrameLayout flIntrstdBot;
+    private TextView tvIntrstd;
 
 
     @Override
@@ -53,9 +58,9 @@ public class InterestedStoreActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getResources().getString(R.string.activity_title_interested_store));
 
         rvIntrstCat = (RecyclerView) findViewById(R.id.rvIntrstCat);
-        setupRecyclerView(rvIntrstCat);
+        flIntrstdBot = (FrameLayout) findViewById(R.id.flIntrstdBot);
 
-        final TextView tvIntrstd = (TextView) findViewById(R.id.tvIntrstd);
+        tvIntrstd = (TextView) findViewById(R.id.tvIntrstd);
         tvIntrstd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +99,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
                 kcpCategoryManager.postInterestedStores(mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
             }
         });
+        setupRecyclerView(rvIntrstCat);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
@@ -114,8 +120,14 @@ public class InterestedStoreActivity extends AppCompatActivity {
             }
         });
 
-        mInterestRecyclerViewAdapter = new InterestRecyclerViewAdapter(this, kcpPlacesArrayList);
+        mInterestRecyclerViewAdapter = new InterestRecyclerViewAdapter(this, kcpPlacesArrayList, new InterestedCategoryActivity.ItemClickListener() {
+            @Override
+            public void onItemClick(boolean isListEmpty) {
+                InterestedCategoryActivity.setUpCTA(InterestedStoreActivity.this, isListEmpty, flIntrstdBot, tvIntrstd);
+            }
+        });
         recyclerView.setAdapter(mInterestRecyclerViewAdapter);
+        InterestedCategoryActivity.setUpCTA(InterestedStoreActivity.this, kcpPlacesArrayList.size() == 0, flIntrstdBot, tvIntrstd);
     }
 
     @Override
