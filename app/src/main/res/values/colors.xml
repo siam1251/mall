@@ -97,8 +97,9 @@
 
     <!--interested cat-->
     <color name="intrstd_cat_desc">#89000000</color>
-    <color name="intrstd_txt">#787a86</color>
-    <color name="intrstd_card_bg">#fcfcfc</color>
+    <color name="intrstd_txt_off">#9E9FA8</color>
+    <color name="intrstd_txt_on">#212121</color>
+    <color name="intrstd_card_bg">#FAFAFA</color>
     <color name="intrstd_card_bg_with_opacity">#F7F7F7</color>
 
     <!--category-->
@@ -133,6 +134,7 @@
     <!--MAP FILTER-->
     <color name="filter_off_color">#787878</color>
     <color name="map_destination_store">#CFff4444</color>
+    <color name="directionSymbol">#13bed0</color>
 
     <!--PARKING-->
     <color name="parking_bg">#b2202020</color>
@@ -141,7 +143,7 @@
     <!--ACTIVE MALL-->
     <color name="active_mall_text_color">#ddfafafa</color>
     <color name="active_mall_badge_text_color">#FFFFFF</color>
-    <color name="active_mall_bg">#021c1e</color>
+    <color name="active_mall_bg">#080808</color>
     <color name="active_mall_empty_placeholder_text">#898989</color>
 
     <!--OTHERS-->

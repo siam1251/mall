@@ -3,11 +3,8 @@ package com.kineticcafe.kcpmall.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +20,11 @@ import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
-import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
-import com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -204,17 +199,17 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
         if(selected){
 
             /*cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.white));
-            textView.setTextColor(mContext.getResources().getColor(R.color.black));*/ //TODO: new theme but it's not as visible so...
-
+            textView.setTextColor(mContext.getResources().getColor(R.color.intrstd_txt_on)); *///TODO: new theme but it's not as visible so...
 
             cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.themeColor));
             textView.setTextColor(mContext.getResources().getColor(R.color.white));
+
 //            textView.setTypeface(null, Typeface.BOLD); //1. AFFECTS THE WIDTH and sometimes the texts don't fit, Typeface.BOLD doesn't affect fonts on Samsung devices
             /*((CustomFontTextView) textView).setFont(mContext, mContext.getString(R.string.fontFamily_roboto_bold));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.intrstd_name_selected));*/
         } else {
             cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.intrstd_card_bg));
-            textView.setTextColor(mContext.getResources().getColor(R.color.intrstd_txt));
+            textView.setTextColor(mContext.getResources().getColor(R.color.intrstd_txt_off));
 //            textView.setTypeface(null, Typeface.NORMAL);
             /*((CustomFontTextView) textView).setFont(mContext, mContext.getString(R.string.fontFamily_roboto_regular));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.intrstd_name));*/

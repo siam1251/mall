@@ -606,7 +606,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 RelativeLayout rlDetailImage = (RelativeLayout) findViewById(R.id.rlDetailImage);
                 rlDetailImage.setVisibility(View.GONE);
-                toolbar.setBackgroundColor(getResources().getColor(R.color.themeColor));
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             } else {
                 final View backdrop = (View) findViewById(R.id.backdrop);
                 int height = (int) (KcpUtility.getScreenWidth(this) / KcpUtility.getFloat(this, R.dimen.ancmt_image_ratio));

@@ -1,6 +1,5 @@
 package com.kineticcafe.kcpmall.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +11,6 @@ import android.view.MenuItem;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
-import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.CategoryRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
@@ -64,7 +62,7 @@ public class SubCategoryActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         ArrayList<KcpCategories> kcpCategories = new ArrayList<KcpCategories>(KcpCategoryRoot.getInstance().getSubcategories(mExternalCode));
-        KcpCategories currentCategory = KcpCategoryRoot.getInstance().getCategory(mExternalCode);
+        KcpCategories currentCategory = KcpCategoryRoot.getInstance().getCategoryWithExternalCode(mExternalCode);
         if(currentCategory != null) kcpCategories.add(0, currentCategory);
         if(kcpCategories != null){
             mCategoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter(

@@ -216,7 +216,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
         if(kcpCategoriesArrayList.size() > 0) {
             flIntrstdBot.setVisibility(View.VISIBLE);
-            tvIntrstd.setText(getString(R.string.action_save));
+            tvIntrstd.setText(getString(R.string.action_next));
         }
     }
 
@@ -224,7 +224,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         void onItemClick(boolean isListEmpty);
     }
 
-    public static void setUpCTA(Context context, boolean isListEmpty, FrameLayout fl, TextView tv){
+    public static void setUpCTA(Context context, boolean isListEmpty, final FrameLayout fl, TextView tv){
         if(isListEmpty && fl.getVisibility() == View.VISIBLE) {
             fl.setVisibility(View.GONE);
             Animation slideUpAnimation = AnimationUtils.loadAnimation(context,
@@ -232,16 +232,26 @@ public class InterestedCategoryActivity extends AppCompatActivity {
             slideUpAnimation.reset();
             fl.startAnimation(slideUpAnimation);
         } else if(!isListEmpty && fl.getVisibility() == View.GONE){
-            fl.setVisibility(View.VISIBLE);
-            tv.setText(context.getString(R.string.action_save));
+
+            tv.setText(context.getString(R.string.action_next));
             Animation slideUpAnimation = AnimationUtils.loadAnimation(context,
                     R.anim.anim_slide_up_from_out_of_screen);
             slideUpAnimation.reset();
+            slideUpAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {}
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    fl.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+            });
             fl.startAnimation(slideUpAnimation);
         }
     }
-
-
 
 
     public void replaceIfExist(ArrayList<GridLayoutItem> list, int position, GridLayoutItem gridLayoutItem){

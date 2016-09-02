@@ -17,6 +17,7 @@
     <string name="action_done">DONE</string>
     <string name="action_retry">RETRY</string>
     <string name="action_sure">I\'M SURE</string>
+    <string name="action_next">NEXT</string>
 
     <!--ALERT DIALOG TITLE-->
     <string name="title_unsaved_changes">Unsaved Changes</string>
@@ -111,7 +112,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <!--activity title-->
     <string name="activity_title_interested_category">What Interests You?</string>
     <string name="activity_title_interested_category_update">Update My Interests</string>
-    <string name="activity_title_interested_store">Recommended Stores?</string>
+    <string name="activity_title_interested_store">Recommended Stores</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
 
     <!--interested category-->
@@ -244,5 +245,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <!--SEARCH-->
     <string name="search_store_that_contains">Stores that match : </string>
     <string name="search_cat_that_contains">Categories that match : </string>
+    <string name="search_type_cat">(category)</string>
+    <string name="search_type_keyword">(keyword)</string>
+    <string name="search_empty_results_place_holder">We couldn’t find anything by that name</string>
 
 </resources>

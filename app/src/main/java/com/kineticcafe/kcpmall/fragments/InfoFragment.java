@@ -192,22 +192,23 @@ public class InfoFragment extends BaseFragment {
             ivPark.setImageResource(R.drawable.icn_car);
             String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
             String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
-//            String sourceString = getString(R.string.info_my_parking_spot) + " " + "<b>" + parkingLotName + ", " + entranceName + "</b> ";
-//            String sourceString = "<b>" + 123 + "</b> " + "testing";
-            String sourceString = getString(R.string.info_my_parking_spot) + " " + parkingLotName + ", " + entranceName;
+            String sourceString = getString(R.string.info_my_parking_spot) + " " + "<b>" + parkingLotName + ", " + entranceName + "</b> ";
+            tvPark.setText(Html.fromHtml(sourceString));
 
+
+            /*String sourceString = getString(R.string.info_my_parking_spot) + " " + parkingLotName + ", " + entranceName;
             final SpannableStringBuilder sb = new SpannableStringBuilder("sourceString");
             final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD); // Span to make text bold
             final StyleSpan iss = new StyleSpan(android.graphics.Typeface.ITALIC); //Span to make text italic
             sb.setSpan(bss, 0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE); // make first 4 characters Bold
             sb.setSpan(iss, 4, 6, Spannable.SPAN_INCLUSIVE_INCLUSIVE); // make last 2 characters Italic
 
-            tvPark.setText(sb);
+            tvPark.setText(sb);*/
 
 
-//            final SpannableStringBuilder str = new SpannableStringBuilder(sourceString);
-//            str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 2, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            tvPark.setText(str);
+            /*final SpannableStringBuilder str = new SpannableStringBuilder(sourceString);
+            str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 2, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            tvPark.setText(str);*/
 
 
         }

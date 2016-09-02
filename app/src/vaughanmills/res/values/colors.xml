@@ -21,4 +21,5 @@
 
     <!--MAP-->
     <color name="map_destination_store">#273e94</color>
+    <color name="directionSymbol">#000000</color>
 </resources>

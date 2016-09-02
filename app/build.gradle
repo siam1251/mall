@@ -74,8 +74,7 @@ dependencies {
     compile('com.twitter.sdk.android:twitter:1.14.1@aar') {
         transitive = true;
     }
-    compile 'org.msgpack:jackson-dataformat-msgpack:0.8.9'
-    compile 'org.msgpack:msgpack:0.6.12'
+    compile 'org.msgpack:msgpack-core:0.8.9'
 }
 
 apply plugin: 'com.google.gms.google-services'

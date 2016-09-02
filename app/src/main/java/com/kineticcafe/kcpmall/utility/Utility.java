@@ -18,6 +18,8 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
+import android.text.style.CharacterStyle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -557,5 +559,31 @@ public class Utility {
         // 1dp/ms
         a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
+    }
+
+
+    public static CharSequence setSpanBetweenTokens(CharSequence text,
+                                                    String token, CharacterStyle... cs)
+    {
+        // Start and end refer to the points where the span will apply
+        int tokenLen = token.length();
+        int start = text.toString().indexOf(token) + tokenLen;
+        int end = text.toString().indexOf(token, start);
+
+        if (start > -1 && end > -1)
+        {
+            // Copy the spannable string to a mutable spannable string
+            SpannableStringBuilder ssb = new SpannableStringBuilder(text);
+            for (CharacterStyle c : cs)
+                ssb.setSpan(c, start, end, 0);
+
+            // Delete the tokens before and after the span
+            ssb.delete(end, end + tokenLen);
+            ssb.delete(start - tokenLen, start);
+
+            text = ssb;
+        }
+
+        return text;
     }
 }

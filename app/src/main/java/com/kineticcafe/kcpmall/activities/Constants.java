@@ -11,6 +11,7 @@ public class Constants {
 	public final static long DURATION_MAIN_BOT_TAB_ICON_SLIDE_UP_ANIMATION = 	100;
 	public final static long DURATION_MAIN_BOT_TAB_TITLE_ALPHA_ANIMATION = 		100;
 	public final static long DURATION_DETAIL_EXPIRY_DATE_TEXT = 				800;
+	public final static long DURATION_MAIN_DRAWER_ACTIVE_MALL_DOT = 			1300;
 
 
 	public enum DetailType { DEAL, STORE }

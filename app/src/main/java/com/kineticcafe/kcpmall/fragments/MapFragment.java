@@ -122,7 +122,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     private View viewRoute;
     private String mSearchString = "";
-    private MenuItem mSearchItem;
+    public MenuItem mSearchItem;
     private MenuItem mFilterItem;
     public CategoryStoreRecyclerViewAdapter mPlaceRecyclerViewAdapter;
     private ArrayList<String> mExternalCodeList;
@@ -210,6 +210,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
         Log.d("TEST", "startTime time passed : " + (System.currentTimeMillis()));
         //enable below for auto map load
+        //it's disabled for now - it stutters splash screen - decided to initialize after the splashscreen's gone
         initializeMap();
 
         //todo: disabled for testing
@@ -219,25 +220,27 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         setupRecyclerView();
         setHasOptionsMenu(true);
 
+        initializeMap();
+
         return view;
     }
 
-    public void initializeMap() {
-        btnShowMap.setVisibility(View.GONE);
-        btnShowMap = null;
-        pb.setVisibility(View.VISIBLE);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mappedIn.getVenues(new GetVenuesCallback());
-                    }
-                });
 
-            }
-        }).start();
+
+    public void initializeMap() {
+        if(mMainActivity.mSplashScreenGone){
+            btnShowMap.setVisibility(View.GONE);
+            btnShowMap = null;
+            pb.setVisibility(View.VISIBLE);
+            mappedIn.getVenues(new GetVenuesCallback());
+        } else {
+            mMainActivity.setOnReadyToLoadMapListener(new MainActivity.ReadyToLoadMapListener() {
+                @Override
+                public void onReady() {
+                    initializeMap();
+                }
+            });
+        }
     }
 
     public interface OnStoreClickListener {
@@ -652,6 +655,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     didTapNothing();
                     removePin(location);
                     ParkingManager.removeParkingLot(getActivity());
+                    Amenities.saveToggle(getActivity(), Amenities.GSON_KEY_PARKING, false); //make sure to set this as false otherwise everytime map fragment's tapped, it will start parkingActivity
                     mMainActivity.setUpRightSidePanel();
                     Toast.makeText(getActivity(), "Removed Parking Spot", Toast.LENGTH_SHORT).show();
                 }
@@ -946,7 +950,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         mSearchItem = menu.findItem(R.id.action_search);
         mFilterItem = menu.findItem(R.id.action_filter);
         mFilterItem.setIcon(ThemeManager.getThemedMenuDrawable(getActivity(), R.drawable.icn_filter));
-
+        mSearchItem.setIcon(ThemeManager.getThemedMenuDrawable(getActivity(), R.drawable.icn_search));
         mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
         mSearchView.setOnQueryTextListener(new QueryTextListener());
         mSearchView.setQueryHint(getString(R.string.hint_search_store));

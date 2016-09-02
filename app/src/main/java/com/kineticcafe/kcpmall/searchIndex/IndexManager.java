@@ -12,12 +12,24 @@ import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 
+import org.msgpack.core.MessagePack;
+import org.msgpack.core.MessageUnpacker;
+import org.msgpack.value.ImmutableArrayValue;
+import org.msgpack.value.ImmutableMapValue;
+import org.msgpack.value.ImmutableStringValue;
+import org.msgpack.value.MapValue;
+import org.msgpack.value.Value;
+import org.msgpack.value.impl.ImmutableLongValueImpl;
+import org.msgpack.value.impl.ImmutableNilValueImpl;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -43,8 +55,14 @@ public class IndexManager {
     public static final int DATA_ADDED = 3;
     public static final int TASK_COMPLETE = 4;
 
+    private static final String KEY_TAGS = "tags";
+    private static final String KEY_CATEGORIES = "categories";
+
+    public static Map<String, ArrayList<Integer>> sTagsMap = new HashMap<>();
+    public static Map<String, ArrayList<Integer>> sCategoriesMap = new HashMap<>();
+
     private static final String HEADER_KEY_CONTENT_TYPE     = "Content-Type";
-    public static byte[] mSearchIndexByte;
+
 
 
     public IndexService getKcpService(){
@@ -166,14 +184,15 @@ public class IndexManager {
                 }
             }
 
-            return outputStream.toByteArray();
+            byte[] searchIndexBytes = outputStream.toByteArray();
+            prepareIndexes(searchIndexBytes);
+            return searchIndexBytes;
         }
         protected void onProgressUpdate(Integer... progress) {
 
         }
 
         protected void onPostExecute(byte[] result) {
-            mSearchIndexByte = result;
             Message message = new Message();
             message.arg1 = DOWNLOAD_COMPLETE;
             mHandler.sendMessage(message);
@@ -181,6 +200,43 @@ public class IndexManager {
 
     }
 
+
+    public void prepareIndexes(byte[] result){
+        try {
+            if(result == null) return;
+            MessageUnpacker unpacker = MessagePack.newDefaultUnpacker(result);
+            MapValue mv = (MapValue) unpacker.unpackValue();
+            Map<Value, Value> map = mv.map();
+            for (Map.Entry<Value, Value> entry : map.entrySet()) {
+                ImmutableStringValue key = (ImmutableStringValue) entry.getKey();
+                ImmutableMapValue value = (ImmutableMapValue) entry.getValue();
+
+                for (Map.Entry<Value, Value> item : value.entrySet()) {
+                    ImmutableStringValue tagName = (ImmutableStringValue) item.getKey();
+                    ImmutableArrayValue idArrays = (ImmutableArrayValue) item.getValue();
+
+                    ArrayList<Integer> tagsIds = new ArrayList<>();
+                    for(int i = 0; i < idArrays.size(); i++){
+                        if(idArrays.get(i) instanceof ImmutableLongValueImpl) {
+                            ImmutableLongValueImpl id = (ImmutableLongValueImpl) idArrays.get(i);
+                            tagsIds.add(id.asInt());
+                        }
+                    }
+                    if(tagsIds.size() > 0) {
+                        if(key.asString().equals(KEY_TAGS)) {
+                            sTagsMap.put(tagName.asString(), tagsIds);
+                        } else if(key.asString().equals(KEY_CATEGORIES)) {
+                            sCategoriesMap.put(tagName.asString(), tagsIds);
+                        }
+                    }
+                }
+            }
+
+            unpacker.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

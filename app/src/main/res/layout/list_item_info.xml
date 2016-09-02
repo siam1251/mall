@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/SelectableItemForeground"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -14,7 +15,8 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         >
 
-        <TextView
+        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_regular"
             android:textColor="@color/place_txt"
             android:textSize="@dimen/place_txt"
             android:text="ALDO Shoes"
@@ -24,7 +26,8 @@
             android:layout_marginBottom="3dp"
             />
 
-        <TextView
+        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_regular"
             android:layout_marginTop="3dp"
             android:textColor="@color/place_category_txt"
             android:textSize="@dimen/place_category_txt"

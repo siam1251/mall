@@ -45,6 +45,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -60,8 +61,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
@@ -95,19 +94,21 @@ import com.kineticcafe.kcpmall.views.BadgeView;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 import com.mappedin.sdk.Polygon;
 
-import org.msgpack.MessagePack;
-import org.msgpack.unpacker.Unpacker;
-import org.msgpack.unpacker.UnpackerIterator;
+import org.msgpack.core.MessagePack;
+import org.msgpack.core.MessageUnpacker;
+import org.msgpack.value.MapValue;
+import org.msgpack.value.Value;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
@@ -141,9 +142,11 @@ public class MainActivity extends BaseActivity
     private BadgeView badgeStores;
     private BadgeView badgeInterests;
     public boolean mActiveMall = false;
+    public boolean mSplashScreenGone = false; //when map initializes it causes lag to splashscreen. Use this variable to see if splash screen's gone
 
     //GEOFENCE
     private GeofenceManager mGeofenceManager;
+    private Animation mMenuActiveMallDotAnim;
 
 
     @Override
@@ -175,10 +178,12 @@ public class MainActivity extends BaseActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        mSplashScreenGone = true;
                         splashImage.setVisibility(View.GONE);
                         Animation animFadeOut = AnimationUtils.loadAnimation(MainActivity.this,
                                 R.anim.splash_fade_out);
                         splashImage.startAnimation(animFadeOut);
+                        if(mReadyToLoadMapListener != null) mReadyToLoadMapListener.onReady();
                     }
                 });
 
@@ -217,6 +222,9 @@ public class MainActivity extends BaseActivity
 
                 if(position == VIEWPAGER_PAGE_INFO) {
                     InfoFragment.getInstance().setParkingSpotCTA();
+                } else if(position == VIEWPAGER_PAGE_DIRECTORY) {
+                    //when searchView's expanded, keyboard slides up the view, the user chooses to change fragment, come back to Directory Fragment, the recyclerView's not cleared as mSearchItem.collapseActionView() hasn't been called
+                    if(DirectoryFragment.getInstance().mSearchItem != null) DirectoryFragment.getInstance().mSearchItem.collapseActionView();
                 }
 
                 if(position == VIEWPAGER_PAGE_MAP) {
@@ -225,6 +233,7 @@ public class MainActivity extends BaseActivity
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
                     setToolbarElevation(true);
                     showMapToolbar(true); //enable map's toolbar
+                    if(MapFragment.getInstance().mSearchItem != null) MapFragment.getInstance().mSearchItem.collapseActionView();
                 } else {
                     toggleDestinationEditor(true, null, null, null);
                     mViewPager.setPagingEnabled(true);
@@ -288,12 +297,13 @@ public class MainActivity extends BaseActivity
             return;
         } else {
             ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
+
             HomeFragment.getInstance().initializeHomeData();
             DirectoryFragment.getInstance().initializeDirectoryData();
             InfoFragment.getInstance().initializeMallInfoData();
             initializeMapData();
             initializeParkingData();
-//            initializeSeachIndex();
+            initializeSeachIndex();
         }
     }
 
@@ -329,21 +339,7 @@ public class MainActivity extends BaseActivity
     }
 
 
-    @org.msgpack.annotation.Message
-    public static class ReturnValue {
-
-        private Object value;
-        private String type;
-
-        @JsonCreator
-        public ReturnValue(@JsonProperty("value") Object val, @JsonProperty("type") String type) {
-            value = val;
-            this.type = type;
-        }
-    }
-
     //    @JsonIgnoreProperties(ignoreUnknown = true)
-    @org.msgpack.annotation.Message // Annotation
     public static class MyMessage {
         public int[] intArrays;
         public String[] stringArrays;
@@ -357,7 +353,18 @@ public class MainActivity extends BaseActivity
         public Map<String, Map<String, String>> mapOfMapStringString = new HashMap<String, Map<String, String>>();
         public Map<String, Map<String, ArrayList<Integer>>> mapofMapStringIntegerList = new HashMap<String, Map<String, ArrayList<Integer>>>();
         public Map<String, Map<String, ArrayList<String>>> mapofMapStringStringList = new HashMap<String, Map<String, ArrayList<String>>>();
+        public Set<String> mpSet = new HashSet<String>();
+        public Set<Map> mpSetMap = new HashSet<Map>();
+
+
+        public Map<String, Map<String, ArrayList<String>>>  valueMap = new HashMap<>();
+//        public Template<Map<String, String>> map2 = Templates.tMap(Templates.TString, Templates.TString);
+
     }
+
+
+
+
 
     private void initializeSeachIndex() {
 
@@ -368,49 +375,7 @@ public class MainActivity extends BaseActivity
                     case KcpCategoryManager.DOWNLOAD_FAILED:
                         break;
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                        try {
-
-//                            Template<Map<String, String>> mapTmpl = tMap(TString, TString);
-
-                            MessagePack msgpack = new MessagePack();
-                            msgpack.register(MyMessage.class);
-
-                            /*ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
-                            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                            MyMessage temp = objectMapper.readValue(IndexManager.mSearchIndexByte, MyMessage.class);*/
-
-                            /*MyMessage test = new MyMessage();
-                            Map<String, Integer> a = new HashMap<String, Integer>();
-                            a.put("bcd", 123);
-                            test.map.put("abc", a);
-                            byte[] testByte = msgpack.write(test);
-                            MyMessage actual = msgpack.read(testByte, MyMessage.class);*/
-
-
-                            /*ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
-                            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                            MyMessage temp = objectMapper.readValue(IndexManager.mSearchIndexByte, MyMessage.class);*/
-
-
-                            ByteArrayInputStream in = new ByteArrayInputStream(IndexManager.mSearchIndexByte);
-                            Unpacker unpacker = msgpack.createUnpacker(in);
-
-                            UnpackerIterator unpackerIterator = unpacker.iterator();
-                            while(unpackerIterator.hasNext()){
-
-
-                                String a = "s";
-                            }
-
-
-                            System.out.println("TEST");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-
-
-
+                        String a = "ssdf";
                         break;
                     default:
                         super.handleMessage(inputMessage);
@@ -774,6 +739,13 @@ public class MainActivity extends BaseActivity
             flActiveMallDot.setVisibility(View.GONE);
         } else if(mActiveMall && enable) {
             flActiveMallDot.setVisibility(View.VISIBLE);
+            if(mMenuActiveMallDotAnim == null) { //to run it only once
+                mMenuActiveMallDotAnim = new AlphaAnimation(0.1f, 1.0f);
+                mMenuActiveMallDotAnim.setDuration(Constants.DURATION_MAIN_DRAWER_ACTIVE_MALL_DOT);
+                mMenuActiveMallDotAnim.setRepeatMode(Animation.REVERSE);
+                mMenuActiveMallDotAnim.setRepeatCount(5);
+                flActiveMallDot.startAnimation(mMenuActiveMallDotAnim);
+            }
         }
     }
 
@@ -819,7 +791,7 @@ public class MainActivity extends BaseActivity
 
             if(activeMallEnabled) {
                 llActiveMall.setVisibility(View.VISIBLE);
-                flActiveMallDot.setVisibility(View.VISIBLE);
+                setActiveMallDot(true);
                 panelBackgroundColor = getResources().getColor(R.color.active_mall_bg);
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.themeColor)));
                 badgeTextColor = getResources().getColor(R.color.active_mall_badge_text_color);
@@ -877,7 +849,7 @@ public class MainActivity extends BaseActivity
             } else {
 
                 llActiveMall.setVisibility(View.GONE);
-                flActiveMallDot.setVisibility(View.GONE);
+                setActiveMallDot(false);
                 panelBackgroundColor = Color.WHITE;
 //                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.black)));
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.active_mall_off_state)));
@@ -893,7 +865,7 @@ public class MainActivity extends BaseActivity
 
                 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 //                v.vibrate(500);
-                Toast.makeText(MainActivity.this, " TEST - Exited Geofence ", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, " TEST - Exited Geofence ", Toast.LENGTH_SHORT).show();
             }
 
 
@@ -1264,13 +1236,21 @@ public class MainActivity extends BaseActivity
     }
 
     public static RefreshListener mOnRefreshListener;
-
     public void setOnRefreshListener(RefreshListener refreshListener) {
         mOnRefreshListener = refreshListener;
     }
 
     public interface RefreshListener {
         void onRefresh(int msg);
+    }
+
+
+    public ReadyToLoadMapListener mReadyToLoadMapListener;
+    public void setOnReadyToLoadMapListener(ReadyToLoadMapListener readyToLoadMapListener){
+        mReadyToLoadMapListener = readyToLoadMapListener;
+    }
+    public interface ReadyToLoadMapListener {
+        void onReady();
     }
 
     @Override
