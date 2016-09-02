@@ -276,11 +276,11 @@
                 android:id="@+id/viewRoute"
                 android:layout_width="54dp"
                 android:layout_height="54dp"
-                android:background="@drawable/view_circle_white"
+                android:background="@drawable/view_circle_theme"
                 />
 
             <com.kineticcafe.kcpmall.views.ThemeColorImageView
-                ThemedImageView:filterColor="@color/directionSymbol"
+                ThemedImageView:filterColor="@color/white"
                 android:layout_centerInParent="true"
                 android:id="@+id/ivDirection"
                 android:layout_width="20dp"

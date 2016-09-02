@@ -31,6 +31,7 @@ import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
+import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.SubCategoryActivity;
@@ -227,9 +228,11 @@ public class DirectoryFragment extends BaseFragment {
                 public void handleMessage(Message inputMessage) {
                     switch (inputMessage.arg1) {
                         case KcpCategoryManager.DOWNLOAD_FAILED:
+                            ProgressBarWhileDownloading.showProgressDialog(getActivity(), R.layout.layout_loading_item, false);
                             break;
                         case KcpCategoryManager.DOWNLOAD_COMPLETE:
                             showStores(context, externalCode, categoryName, view);
+                            ProgressBarWhileDownloading.showProgressDialog(getActivity(), R.layout.layout_loading_item, false);
                             break;
                         default:
                             super.handleMessage(inputMessage);

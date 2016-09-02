@@ -88,27 +88,16 @@ import com.kineticcafe.kcpmall.mappedin.CustomLocation;
 import com.kineticcafe.kcpmall.parking.ParkingManager;
 import com.kineticcafe.kcpmall.parking.Parkings;
 import com.kineticcafe.kcpmall.searchIndex.IndexManager;
+import com.kineticcafe.kcpmall.user.AccountManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.BadgeView;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
 import com.mappedin.sdk.Polygon;
 
-import org.msgpack.core.MessagePack;
-import org.msgpack.core.MessageUnpacker;
-import org.msgpack.value.MapValue;
-import org.msgpack.value.Value;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
@@ -153,6 +142,7 @@ public class MainActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
 
         FirebaseTracking.getInstance(this).logAppLaunch();
 
@@ -184,6 +174,7 @@ public class MainActivity extends BaseActivity
                                 R.anim.splash_fade_out);
                         splashImage.startAnimation(animFadeOut);
                         if(mReadyToLoadMapListener != null) mReadyToLoadMapListener.onReady();
+                        ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, false);
                     }
                 });
 
@@ -296,9 +287,24 @@ public class MainActivity extends BaseActivity
             });
             return;
         } else {
-            ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
+            AccountManager accountManager = new AccountManager(this, HeaderFactory.getTokenHeader(), new Handler(Looper.getMainLooper()) {
+                @Override
+                public void handleMessage(Message inputMessage) {
+                    switch (inputMessage.arg1) {
+                        case KcpCategoryManager.DOWNLOAD_FAILED:
+                            HomeFragment.getInstance().initializeHomeData();
+                            break;
+                        case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                            HomeFragment.getInstance().initializeHomeData();
+                            break;
+                        default:
+                            super.handleMessage(inputMessage);
+                    }
+                }
+            });
+            accountManager.getUserToken();
 
-            HomeFragment.getInstance().initializeHomeData();
+
             DirectoryFragment.getInstance().initializeDirectoryData();
             InfoFragment.getInstance().initializeMallInfoData();
             initializeMapData();
@@ -307,67 +313,7 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    private class ExamplePojo {
-        public String name;
-        public ExamplePojo(String name){
-            this.name = name;
-        }
-
-        public String getName(){
-            return name;
-        }
-    }
-
-    private byte[] downloadUrl(URL toDownload) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        try {
-            byte[] chunk = new byte[4096];
-            int bytesRead;
-            InputStream stream = toDownload.openStream();
-
-            while ((bytesRead = stream.read(chunk)) > 0) {
-                outputStream.write(chunk, 0, bytesRead);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return outputStream.toByteArray();
-    }
-
-
-    //    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class MyMessage {
-        public int[] intArrays;
-        public String[] stringArrays;
-        public byte[] bytes;
-        public int integerValue;
-
-        public List<Map<String, Integer>> listMap = new ArrayList<Map<String, Integer>>();
-        public Map<String, Integer> mapOfStringInteger = new HashMap<String, Integer>();
-        public Map<String, String> mapOfStringString = new HashMap<String, String>();
-        public Map<String, Map<String, Integer>> mapOfMap = new HashMap<String, Map<String, Integer>>();
-        public Map<String, Map<String, String>> mapOfMapStringString = new HashMap<String, Map<String, String>>();
-        public Map<String, Map<String, ArrayList<Integer>>> mapofMapStringIntegerList = new HashMap<String, Map<String, ArrayList<Integer>>>();
-        public Map<String, Map<String, ArrayList<String>>> mapofMapStringStringList = new HashMap<String, Map<String, ArrayList<String>>>();
-        public Set<String> mpSet = new HashSet<String>();
-        public Set<Map> mpSetMap = new HashSet<Map>();
-
-
-        public Map<String, Map<String, ArrayList<String>>>  valueMap = new HashMap<>();
-//        public Template<Map<String, String>> map2 = Templates.tMap(Templates.TString, Templates.TString);
-
-    }
-
-
-
-
-
     private void initializeSeachIndex() {
-
         IndexManager indexManager = new IndexManager(this, R.layout.layout_loading_item, new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
@@ -375,7 +321,6 @@ public class MainActivity extends BaseActivity
                     case KcpCategoryManager.DOWNLOAD_FAILED:
                         break;
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                        String a = "ssdf";
                         break;
                     default:
                         super.handleMessage(inputMessage);
@@ -1199,9 +1144,11 @@ public class MainActivity extends BaseActivity
             setActiveMall(true, !mActiveMall);
         } else if (id == R.id.action_geofence_test) {
             mGeofenceManager.setGeofence(true);
+            flActiveMallDot.setVisibility(View.VISIBLE);
         } else if (id == R.id.action_geofence_disconnect) {
             mGeofenceManager.setGeofence(false);
             setActiveMall(false, false);
+            flActiveMallDot.setVisibility(View.GONE);
         }
         return super.onOptionsItemSelected(item);
     }

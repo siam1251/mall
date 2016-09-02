@@ -83,27 +83,9 @@ public class IndexManager {
     }
 
     public void downloadSearchIndexes(){
-        /*Call<Map<String, Object>> call = getKcpService().getParkings(HeaderFactory.SEARCH_INDEX_URL);
-        call.enqueue(new Callback<Map<String, Object>>() {
-            @Override
-            public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
-                if(response.isSuccessful()) {
-                    mResult = response.body();
-                    handleState(DOWNLOAD_COMPLETE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Map<String, Object>> call, Throwable t) {
-                handleState(DOWNLOAD_FAILED);
-            }
-        });*/
-
         DownloadBinaryTask downloadImageTask = new DownloadBinaryTask(HeaderFactory.SEARCH_INDEX_URL_BASE + HeaderFactory.SEARCH_INDEX_URL);
         downloadImageTask.execute();
     }
-
-
 
     private void handleState(int state){
         handleState(state, null);
@@ -119,10 +101,10 @@ public class IndexManager {
                 ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, true);
                 break;
             case DOWNLOAD_FAILED:
-                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
+//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
                 break;
             case DOWNLOAD_COMPLETE:
-                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
+//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
                 break;
             case DATA_ADDED:
                 break;
@@ -158,14 +140,6 @@ public class IndexManager {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
             try {
-                /*byte[] chunk = new byte[4096];
-                int bytesRead;
-                InputStream stream = url.openStream();
-
-                while ((bytesRead = stream.read(chunk)) > 0) {
-                    outputStream.write(chunk, 0, bytesRead);
-                }*/
-
                 InputStream stream = url.openStream();
                 byte [] buffer = new byte[1024];
                 int bytesRead = 0;

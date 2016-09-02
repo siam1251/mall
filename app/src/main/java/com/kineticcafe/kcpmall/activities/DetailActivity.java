@@ -72,9 +72,13 @@ import com.kineticcafe.kcpmall.views.CustomAnimation;
 import com.kineticcafe.kcpmall.views.HtmlTextView;
 import com.kineticcafe.kcpmall.views.SpacesItemDecoration;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -299,7 +303,34 @@ public class DetailActivity extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(DetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                            try {
+                                final SimpleDateFormat sdf = new SimpleDateFormat(KcpConstants.EFFECTIVE_DATE_FORMAT);
+                                Date dateObj = sdf.parse(kcpContentPage.effectiveStartTime);
+                                Calendar startTimeCalendar = Calendar.getInstance();
+                                startTimeCalendar.setTime(dateObj);
+                                long eventStartTime = startTimeCalendar.getTimeInMillis();
+                                long eventEndTime = -1;
+                                if(kcpContentPage.effectiveEndTime != null && !kcpContentPage.effectiveEndTime.equals("")){
+                                    dateObj = sdf.parse(kcpContentPage.effectiveEndTime);
+                                    Calendar endTimeCalendar = Calendar.getInstance();
+                                    endTimeCalendar.setTime(dateObj);
+                                    eventEndTime = endTimeCalendar.getTimeInMillis();
+                                }
+
+                                Calendar cal = Calendar.getInstance();
+                                Intent intent = new Intent(Intent.ACTION_EDIT);
+                                intent.setType("vnd.android.cursor.item/event");
+                                intent.putExtra("beginTime", eventStartTime);
+                                intent.putExtra("allDay", true);
+                                intent.putExtra("rrule", "FREQ=YEARLY");
+                                if(eventEndTime != -1) intent.putExtra("endTime", eventEndTime);
+                                intent.putExtra("title", kcpContentPage.getTitle());
+                                startActivity(intent);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+
                         }
                     }, false);
 
