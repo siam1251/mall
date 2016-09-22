@@ -209,7 +209,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         mInterestRecyclerViewAdapter = new InterestRecyclerViewAdapter(this, kcpCategoriesArrayList, gridLayoutItemArrayList, new ItemClickListener() {
             @Override
             public void onItemClick(boolean isListEmpty) {
-                setUpCTA(InterestedCategoryActivity.this, isListEmpty, flIntrstdBot, tvIntrstd);
+//                setUpCTA(InterestedCategoryActivity.this, isListEmpty, flIntrstdBot, tvIntrstd); //in case the user wants to remove the existing store and leave it empty, the CTA should still be visible
             }
         });
         recyclerView.setAdapter(mInterestRecyclerViewAdapter);

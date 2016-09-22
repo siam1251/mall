@@ -240,6 +240,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="parking_btn_edit_selection">Edit Selection</string>
     <string name="parking_add_note">Add Notes</string>
     <string name="parking_polygon_store_name">My Parked Car</string>
+    <string name="parking_polygon_store_name_temporary">Nearest Parking Lot</string>
     <string name="parking_remove_my_spot">Remove My Parking Spot</string>
 
     <!--SEARCH-->

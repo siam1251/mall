@@ -4,15 +4,12 @@ package com.kineticcafe.kcpmall.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
@@ -25,18 +22,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
-import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
-import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DirectoryFragment;
-import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.RecyclerViewFooter;
 
@@ -233,21 +227,62 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
 
-    private KcpPlaces mKcpPlace;
+    public CharSequence getStyledCharacters(String storename, String keyword){
+        String storeNameInLowerCase = storename.toLowerCase();
+        String keywordInLowerCase = keyword.toLowerCase();
+
+        if(!storeNameInLowerCase.contains(keywordInLowerCase)){
+            return storename;
+        } else {
+            int storeNameLength = storeNameInLowerCase.length(); //9
+            int keywordStartingIndex = storeNameInLowerCase.indexOf(keywordInLowerCase); //2
+            int keywordEndingIndex = keywordStartingIndex + keywordInLowerCase.length(); //7
+            char[] storeNameCharArray = storename.toCharArray();
+
+            try {
+                if(keywordStartingIndex == -1) keywordStartingIndex = 0;
+                String a = "";
+                if(keywordStartingIndex != 0) {
+                    a = new String(storeNameCharArray, 0, keywordStartingIndex);
+                }
+                String b = "";
+                if(!keyword.equals("") && storeNameInLowerCase.contains(keywordInLowerCase)){
+                    b = "@@" + new String(storeNameCharArray, keywordStartingIndex, keyword.length()) + "@@";
+                } else {
+                    b = storename;
+                }
+
+                String c = "";
+                if(storeNameCharArray.length > keywordEndingIndex && storeNameInLowerCase.contains(keywordInLowerCase)) {
+                    c = new String(storeNameCharArray, keywordEndingIndex, storeNameLength - keywordEndingIndex);
+                }
+
+                String footerText = a + b + c;
+                return Utility.setSpanBetweenTokens(footerText, "@@", new StyleSpan(Typeface.BOLD));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "";
+            }
+        }
+    }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        KcpPlaces kcpPlace = null;
         if(holder.getItemViewType() == ITEM_TYPE_PLACE_BY_NAME  || holder.getItemViewType() == ITEM_TYPE_PLACE_BY_KEYWORD) {
-            mKcpPlace = null;
             if (holder.getItemViewType() == ITEM_TYPE_PLACE_BY_KEYWORD) {
                 int placeId = (Integer) mItems.get(position);
-                mKcpPlace = KcpPlacesRoot.getInstance().getPlaceById(placeId);
+                kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(placeId);
             } else if (holder.getItemViewType() == ITEM_TYPE_PLACE_BY_NAME ) {
-                mKcpPlace = (KcpPlaces) mItems.get(position);
+                kcpPlace = (KcpPlaces) mItems.get(position);
             }
 
+            if(kcpPlace == null) {
+                return;
+            }
             final StoreViewHolder storeViewHolder = (StoreViewHolder) holder;
 
-            String imageUrl = mKcpPlace.getHighestImageUrl();
+            String imageUrl = kcpPlace.getHighestImageUrl();
             storeViewHolder.ivDealLogo.setImageResource(R.drawable.placeholder);
 
             new GlideFactory().glideWithNoDefaultRatio(
@@ -256,27 +291,40 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
                     storeViewHolder.ivDealLogo,
                     R.drawable.placeholder_logo);
 
-            final String storename = mKcpPlace.getPlaceName();
-            storeViewHolder.tvDealStoreName.setText(storename);
+            final String storename = kcpPlace.getPlaceName();
 
-            final String category = mKcpPlace.getCategoryLabelOverride();
-            String display = mKcpPlace.getFirstDisplay();
-            String primary = mKcpPlace.getPrimaryCategory();
-            if(!display.equals("")) {
-                storeViewHolder.tvDealTitle.setText(display);
-            } else if(!category.equals("")){
-                storeViewHolder.tvDealTitle.setText(category);
+            if(storename.equals("")){
+                storeViewHolder.tvDealStoreName.setText(storename);
             } else {
-                storeViewHolder.tvDealTitle.setText(primary);
+                storeViewHolder.tvDealStoreName.setText(getStyledCharacters(storename, mKeyword));
+            }
+
+            final String category = kcpPlace.getCategoryLabelOverride();
+            String display = kcpPlace.getFirstDisplay();
+            String primary = kcpPlace.getPrimaryCategory();
+
+
+            String categoryToDisplay = "";
+
+            if(!display.equals("")) {
+                categoryToDisplay = display;
+            } else if(!category.equals("")){
+                categoryToDisplay = category;
+            } else {
+                categoryToDisplay = primary;
                 //todo: MP doesn't have display and category name
             }
 
+            storeViewHolder.tvDealTitle.setText(categoryToDisplay);
             storeViewHolder.mView.setTag(position);
+
+            final KcpPlaces kcpPlaceTemp = kcpPlace;
             storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     KcpContentPage kcpContentPage = new KcpContentPage();
-                    kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, mKcpPlace);
+                    kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlaceTemp);
 
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
@@ -288,7 +336,6 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
                             Pair.create((View)storeViewHolder.ivDealLogo, transitionNameLogo));
 
                     ActivityCompat.startActivityForResult((Activity) mContext, intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP, options.toBundle());
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             });
         }
@@ -333,7 +380,15 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
             final KcpCategories kcpCategory = (KcpCategories) mItems.get(position);;
 
             final String categoryName = kcpCategory.getCategoryName();
-            categoryHolder.tvCategory.setText(categoryName);
+
+
+            if(categoryName.equals("")){
+                categoryHolder.tvCategory.setText(categoryName);
+            } else {
+                categoryHolder.tvCategory.setText(getStyledCharacters(categoryName, mKeyword));
+            }
+
+
             final String externalCode = kcpCategory.getExternalCode();
 
             categoryHolder.mView.setOnClickListener(new View.OnClickListener() {

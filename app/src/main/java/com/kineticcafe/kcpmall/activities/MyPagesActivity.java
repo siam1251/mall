@@ -20,6 +20,7 @@ import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.adapters.NewsRecyclerViewAdapter;
@@ -166,6 +167,8 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                     if(todaysDealList == null || todaysDealList.size() == 0) {
                         setUpEmptyPlaceHolder(R.drawable.icn_empty_deals, getResources().getString(R.string.warning_no_deal_for_today), false);
                         return;
+                    } else {
+                        KcpUtility.sortKcpContentPageByStoreName(todaysDealList);
                     }
 
                     StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(COLUMN_COUNT, StaggeredGridLayoutManager.VERTICAL);

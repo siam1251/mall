@@ -128,7 +128,7 @@ public class Amenities {
     }
 
     public interface OnParkingClickListener {
-        public void onParkingClick(boolean enabled);
+        public void onParkingClick(boolean enabled, boolean focus);
     }
 
 

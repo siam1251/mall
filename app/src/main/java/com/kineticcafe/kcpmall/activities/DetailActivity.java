@@ -226,7 +226,12 @@ public class DetailActivity extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(DetailActivity.this, "clicked ", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent();
+                            intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_SHOW_PARKING_SPOT);
+                            intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, kcpContentPage.getStoreParking());
+                            setResult(0, intent);
+                            onBackPressed();
                         }
                     }, true);
 

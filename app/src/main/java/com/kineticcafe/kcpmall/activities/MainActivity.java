@@ -93,10 +93,10 @@ import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.BadgeView;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
+import com.mappedin.sdk.Map;
 import com.mappedin.sdk.Polygon;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 //public class MainActivity extends AppCompatActivity
@@ -219,7 +219,7 @@ public class MainActivity extends BaseActivity
                 }
 
                 if(position == VIEWPAGER_PAGE_MAP) {
-                    if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true);
+                    if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true, false);
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
                     setToolbarElevation(true);
@@ -287,24 +287,7 @@ public class MainActivity extends BaseActivity
             });
             return;
         } else {
-            AccountManager accountManager = new AccountManager(this, HeaderFactory.getTokenHeader(), new Handler(Looper.getMainLooper()) {
-                @Override
-                public void handleMessage(Message inputMessage) {
-                    switch (inputMessage.arg1) {
-                        case KcpCategoryManager.DOWNLOAD_FAILED:
-                            HomeFragment.getInstance().initializeHomeData();
-                            break;
-                        case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                            HomeFragment.getInstance().initializeHomeData();
-                            break;
-                        default:
-                            super.handleMessage(inputMessage);
-                    }
-                }
-            });
-            accountManager.getUserToken();
-
-
+            initializeAccount();
             DirectoryFragment.getInstance().initializeDirectoryData();
             InfoFragment.getInstance().initializeMallInfoData();
             initializeMapData();
@@ -537,6 +520,28 @@ public class MainActivity extends BaseActivity
 
     // ------------------------------------- END OF MAP FRAGMENT -------------------------------------
 
+    private void initializeAccount(){
+
+        AccountManager accountManager = new AccountManager(this, HeaderFactory.getTokenHeader(), new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        HomeFragment.getInstance().initializeHomeData();
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                        HomeFragment.getInstance().initializeHomeData();
+                        break;
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        accountManager.getUserToken();
+
+    }
+
+
     private void initializeMapData(){
 
         String data = "";
@@ -563,7 +568,6 @@ public class MainActivity extends BaseActivity
         });
         amenitiesManager.downloadAmenities();
     }
-
 
     private void initializeParkingData(){
 
@@ -749,7 +753,10 @@ public class MainActivity extends BaseActivity
 
                 ArrayList<KcpContentPage> todaysEventList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED).getKcpContentPageListForToday(true);
                 if(todaysEventList == null || todaysEventList.size() == 0) tvEmptyTodaysEvent.setVisibility(View.VISIBLE);
-                else tvEmptyTodaysEvent.setVisibility(View.GONE);
+                else {
+                    tvEmptyTodaysEvent.setVisibility(View.GONE);
+//                    KcpUtility.sortKcpContentPageByStoreName(todaysEventList);
+                }
                 ActiveMallRecyclerViewAdapter todaysEventAdapter = new ActiveMallRecyclerViewAdapter (
                         this,
                         todaysEventList,
@@ -769,7 +776,10 @@ public class MainActivity extends BaseActivity
 
                 ArrayList<KcpContentPage> todaysDealList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageListForToday(true);
                 if(todaysDealList == null || todaysDealList.size() == 0) tvEmptyTodaysDeal.setVisibility(View.VISIBLE);
-                else tvEmptyTodaysDeal.setVisibility(View.GONE);
+                else {
+                    tvEmptyTodaysDeal.setVisibility(View.GONE);
+                    KcpUtility.sortKcpContentPageByStoreName(todaysDealList);
+                }
                 ActiveMallRecyclerViewAdapter todaysDealAdapter = new ActiveMallRecyclerViewAdapter (
                         this,
                         todaysDealList,
@@ -915,7 +925,7 @@ public class MainActivity extends BaseActivity
                 }, MainActivity.this, rlSeeParking);
                 if(ParkingManager.isParkingLotSaved(MainActivity.this)) Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, ivFilterParking.isSelected());
                 setParkingStatus(Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_hide_parking), getResources().getString(R.string.map_filter_see_parking));
-                if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(!ivFilterParking.isSelected());
+                if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(!ivFilterParking.isSelected(), false);
             }
         });
 
@@ -1223,7 +1233,7 @@ public class MainActivity extends BaseActivity
             mDrawer.closeDrawers();
             if (resultCode == Activity.RESULT_OK) {
                 setUpRightSidePanel();
-                if(mOnParkingClickListener != null && Amenities.isToggled(this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true);
+                if(mOnParkingClickListener != null && Amenities.isToggled(this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true, true);
                 InfoFragment.getInstance().setParkingSpotCTA();
             }
         } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
@@ -1232,10 +1242,23 @@ public class MainActivity extends BaseActivity
                 String externalCode = String.valueOf(resultCode);
                 ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocation(externalCode);
                 if(polygons != null && polygons.size() > 0) {
-                    MapFragment.getInstance().didTapPolygon(polygons.get(0));
+                    MapFragment.getInstance().showStoreOnTheMapFromDetailActivity(polygons.get(0));
                 } else {
                     MapFragment.getInstance().mPendingExternalCode = externalCode;
                 }
+            } else {
+                if(data != null) {
+                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
+                    if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
+                        String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
+                        if(parkingName != null) {
+                            selectPage(2);
+                            int parkingPosition = ParkingManager.sParkings.getParkingPositionByName(parkingName);
+                            if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition);
+                        }
+                    }
+                }
+
             }
         }
     }

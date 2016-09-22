@@ -288,12 +288,6 @@ public class DirectoryFragment extends BaseFragment {
     }
 
 
-
-
-
-
-
-
     public class QueryTextListener implements SearchView.OnQueryTextListener {
         @Override
         public boolean onQueryTextSubmit(String query) {

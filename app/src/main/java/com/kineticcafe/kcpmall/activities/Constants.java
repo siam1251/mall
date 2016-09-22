@@ -87,10 +87,13 @@ public class Constants {
 	public final static int REQUEST_CODE_CHANGE_INTEREST = 101;
 	public final static int REQUEST_CODE_MY_PAGE_TYPE = 102;
 	public final static int REQUEST_CODE_SAVE_PARKING_SPOT = 103;
+	public final static int REQUEST_CODE_SHOW_PARKING_SPOT = 104;
 	public final static int RESULT_DONE_PRESSED_WITH_CHANGE = 0;
 	public final static int RESULT_DONE_PRESSED_WITHOUT_CHANGE = 1;
 	public final static int RESULT_EXIT = 2;
 	public final static int REQUEST_CODE_VIEW_STORE_ON_MAP = 543;
+	public final static String REQUEST_CODE_KEY = "requestCode";
+	public final static String REQUEST_CODE_KEY_PARKING_NAME = "parkingName";
 
 	public final static int RESULT_DEALS = 1;
 	public final static int RESULT_EVENTS = 2;

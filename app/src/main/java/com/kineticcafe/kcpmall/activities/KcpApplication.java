@@ -1,6 +1,9 @@
 package com.kineticcafe.kcpmall.activities;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 import com.kineticcafe.kcpmall.analytics.FirebaseTracking;
 import com.crashlytics.android.Crashlytics;
@@ -13,7 +16,14 @@ import io.fabric.sdk.android.Fabric;
 /**
  * Created by Kay on 2016-04-28.
  */
-public class KcpApplication extends Application {
+public class KcpApplication extends MultiDexApplication {
+
+    @Override
+//    http://stackoverflow.com/questions/37045787/java-lang-noclassdeffounderror-retrofit2-utils-in-android/37178366
+    protected void attachBaseContext(Context newBase) {
+        MultiDex.install(newBase);
+        super.attachBaseContext(newBase);
+    }
 
     @Override
     public void onCreate() {

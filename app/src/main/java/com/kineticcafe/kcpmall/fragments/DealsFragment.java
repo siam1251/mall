@@ -80,8 +80,8 @@ public class DealsFragment extends BaseFragment {
 
         ArrayList<KcpContentPage> dealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true);
         ArrayList<KcpContentPage> recommendedList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true);
-        if(recommendedList != null) KcpUtility.sortByExpiryDate(recommendedList);
-        if(dealsList != null) KcpUtility.sortByExpiryDate(dealsList);
+        if(recommendedList != null) KcpUtility.sortKcpContentpageByExpiryDate(recommendedList);
+        if(dealsList != null) KcpUtility.sortKcpContentpageByExpiryDate(dealsList);
 
         mDealsRecyclerViewAdapter = new DealsRecyclerViewAdapter(
                 getActivity(),

@@ -54,6 +54,7 @@ import com.kineticcafe.kcpmall.mappedin.Amenities;
 import com.kineticcafe.kcpmall.mappedin.Amenities.OnParkingClickListener;
 import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
 import com.kineticcafe.kcpmall.mappedin.CustomLocation;
+import com.kineticcafe.kcpmall.parking.Parking;
 import com.kineticcafe.kcpmall.parking.ParkingManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.mappedin.jpct.Logger;
@@ -148,7 +149,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private Navigatable startPolygon = null;
     private Navigatable destinationPolygon = null;
     private int mCurrentMapLevel = 2;
-    private CustomLocation mParkingLocation;
+    private CustomLocation mSavedParkingLocation;
+    private CustomLocation mTemporaryParkingLocation; //used to show the temporary parking spot from detail activity
 
     public String mPendingExternalCode;
     private Overlay2DImage mSelectedPin = null;//to keep track of highlited amenity drawable to set back to the original state in clearHighlighted
@@ -472,7 +474,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocation(mPendingExternalCode);
             mPendingExternalCode = null;
             if(polygons != null && polygons.size() > 0) {
-                didTapPolygon(polygons.get(0));
+                showStoreOnTheMapFromDetailActivity(polygons.get(0));
             }
         }
 
@@ -488,13 +490,19 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
     }
 
+    public void showStoreOnTheMapFromDetailActivity(Polygon polygon){
+        mapView.getCamera().focusOn(polygon);
+        MapFragment.getInstance().didTapPolygon(polygon);
+    }
+
     public void didTapPolygon(Polygon polygon) {
         try {
             if(path != null || polygon == null) return; //map shouldn't be clicakble when the paths drawn
             if (polygon.getLocations().size() == 0) { //TODO: clearHighlightedColours() used to be above this line - polygon.getLocation().size() was sometimes 0 resulting in skipping highlightPolygon (it returned)
                 return;
             }
-            clearHighlightedColours();
+
+//            clearHighlightedColours();
 
             //tapping the same polygon should dismiss the detail and remove the highlights
             if(destinationPolygon != null && destinationPolygon == polygon) {
@@ -535,10 +543,21 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     mapView.getCamera().focusOn(directions.getPath());
                 }
                 if(destinationPolygon instanceof Polygon) highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
+                /*if(mTemporaryParkingLocation != null) {
+
+                    Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car);
+                    dropPin(coordinate, mTemporaryParkingLocation, amenityDrawable);
+
+                }*/
                 highlightPolygon((Polygon) startPolygon, getResources().getColor(R.color.map_destination_store));
                 showDirectionCard(false, null, 0, null, null, null);
                 return;
             } else {
+
+                clearHighlightedColours();
+
+
+
                 if(destinationPolygon instanceof Polygon){
                     highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
 
@@ -620,67 +639,73 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             mSelectedPin = null;
         }
 
+        removePin(mTemporaryParkingLocation);
+    }
+
+
+    private void showParkingDetail(final CustomLocation location, boolean isThisTempParkingSpot, String parkingLotName, String entranceName, String parkingNote){
+        RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
+
+        String llDealsTitle = "";
+
+        if(isThisTempParkingSpot) {
+            llDealsTitle = getResources().getString(R.string.parking_polygon_store_name_temporary);
+        } else {
+            llDealsTitle = getResources().getString(R.string.parking_polygon_store_name);
+        }
+
+        showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.getExternalID()), llDealsTitle, parkingLotName + ", " + entranceName, null);
+
+        if(isThisTempParkingSpot) {
+            llDeals.setVisibility(View.GONE);
+            param.height = KcpUtility.dpToPx(getActivity(), 109);
+        } else {
+            param.height = KcpUtility.dpToPx(getActivity(), 157);
+            if(!parkingNote.equals("")) {
+                tvParkingNote.setVisibility(View.VISIBLE);
+                tvParkingNote.setText(parkingNote);
+            }
+            llDeals.setVisibility(View.VISIBLE);
+        }
+
+        ivAmenity.setVisibility(View.GONE); //parking doesn't have icon so manually hide it
+        tvParkingNote.setVisibility(View.GONE);
+        tvDealName.setText(getResources().getString(R.string.parking_remove_my_spot));
+        tvNumbOfDeals.setText("");
+        llDeals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                didTapNothing();
+                removePin(location);
+                ParkingManager.removeParkingLot(getActivity());
+                Amenities.saveToggle(getActivity(), Amenities.GSON_KEY_PARKING, false); //make sure to set this as false otherwise everytime map fragment's tapped, it will start parkingActivity
+                mMainActivity.setUpRightSidePanel();
+                Toast.makeText(getActivity(), "Removed Parking Spot", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        llDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().startActivityForResult(new Intent(getActivity(), ParkingActivity.class), Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
+            }
+        });
+
+        ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_remove_parking));
+
+        clearHighlightedColours();
+
     }
 
     private void showAmenityDetail(final CustomLocation location, final Drawable amenityDrawable){
         logger.debug("Location: name = " + location.getName() + " externalID = " + location.getExternalID());
-
-
-        if(location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)){
-
-            RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
-
-            String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
-            String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
-            String parkingNote = ParkingManager.getParkingNotes(getActivity());
-
-            showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.getExternalID()), getResources().getString(R.string.parking_polygon_store_name), parkingLotName + ", " + entranceName, null);
-            ivAmenity.setVisibility(View.GONE); //parking doesn't have icon so manually hide it
-            if(!parkingNote.equals("")) {
-                tvParkingNote.setVisibility(View.VISIBLE);
-                tvParkingNote.setText(parkingNote);
-                param.height = KcpUtility.dpToPx(getActivity(), 157);
-            } else {
-                tvParkingNote.setVisibility(View.GONE);
-                param.height = KcpUtility.dpToPx(getActivity(), 157);
-            }
-
-            llDeals.setVisibility(View.VISIBLE);
-            tvDealName.setText(getResources().getString(R.string.parking_remove_my_spot));
-
-            tvNumbOfDeals.setText("");
-            llDeals.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    didTapNothing();
-                    removePin(location);
-                    ParkingManager.removeParkingLot(getActivity());
-                    Amenities.saveToggle(getActivity(), Amenities.GSON_KEY_PARKING, false); //make sure to set this as false otherwise everytime map fragment's tapped, it will start parkingActivity
-                    mMainActivity.setUpRightSidePanel();
-                    Toast.makeText(getActivity(), "Removed Parking Spot", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            llDirection.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().startActivityForResult(new Intent(getActivity(), ParkingActivity.class), Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
-                }
-            });
-
-            ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_remove_parking));
-
-
-        } else {
-            String categoryName = "";
-            try {
-                categoryName = location.getCategories().get(0).getName();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.getExternalID()), location.getName(), categoryName, amenityDrawable);
+        String categoryName = "";
+        try {
+            categoryName = location.getCategories().get(0).getName();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
+        showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.getExternalID()), location.getName(), categoryName, amenityDrawable);
         clearHighlightedColours();
     }
 
@@ -832,7 +857,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 if(location != null){
                     List<Coordinate> coords = location.getNavigatableCoordinates();
                     for(Coordinate coordinate : coords) {
-                        Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_deals);
+                        Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_deals, 0);
                         dropPin(coordinate, location, amenityDrawable);
                     }
                 }
@@ -845,10 +870,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
     }
 
-    public Drawable getDrawableFromView(int drawable){
+    public Drawable getDrawableFromView(int drawable, int backgroundResource){
 //        View amientyView = View.inflate(getActivity(), R.layout.layout_amenity, (ViewGroup) view); //image gets stuck to parentview
 //        View amientyView = getActivity().getLayoutInflater().inflate(R.layout.layout_amenity, null); //image is an overlay and not stuck anywhere
         ImageView amientyView = (ImageView) getActivity().getLayoutInflater().inflate(R.layout.layout_amenity, null); //image is an overlay and not stuck anywhere
+        if(backgroundResource != 0) amientyView.setBackgroundResource(backgroundResource);
         amientyView.setImageResource(drawable);
         amientyView.setDrawingCacheEnabled(true);
 
@@ -863,8 +889,35 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         return d;
     }
 
+
+    public void showParkingSpotFromDetailActivity(int parkingLotPosition){
+        try {
+            Parking storeParking = ParkingManager.sParkings.getParkings().get(parkingLotPosition);
+            String parkingId = storeParking.getChildParkings().get(0).getParkingId();
+            HashMap<String, CustomLocation> parkingHashMap = CustomLocation.getParkingHashMap();
+            if(parkingHashMap.containsKey(parkingId)){
+                if(mTemporaryParkingLocation != null) removePin(mTemporaryParkingLocation);
+                mTemporaryParkingLocation = parkingHashMap.get(parkingId); //have a single instance of parking so it's easy to delete
+                List<Coordinate> coords = mTemporaryParkingLocation.getNavigatableCoordinates();
+                for(final Coordinate coordinate : coords) {
+                    String parkingLotName = storeParking.getName();
+                    String entranceName = storeParking.getChildParkings().get(0).getName();
+
+                    showParkingDetail(mTemporaryParkingLocation, true, parkingLotName, entranceName, "");
+
+                    Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car, R.drawable.circle_imageview_background_parking);
+                    dropPin(coordinate, mTemporaryParkingLocation, amenityDrawable);
+
+                    destinationPolygon = mTemporaryParkingLocation;
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
+    }
+
     @Override
-    public void onParkingClick(boolean enabled) {
+    public void onParkingClick(boolean enabled, boolean focus) {
         try {
             if(!ParkingManager.isParkingLotSaved(getActivity())){
                 final Intent intent = new Intent (getActivity(), ParkingActivity.class);
@@ -874,18 +927,25 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 HashMap<String, CustomLocation> parkingHashMap = CustomLocation.getParkingHashMap();
                 String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
                 if(parkingHashMap.containsKey(parkingId)){
-                    if(mParkingLocation != null) removePin(mParkingLocation);
-                    mParkingLocation = parkingHashMap.get(parkingId); //have a single instance of parking so it's easy to delete
+                    if(mSavedParkingLocation != null) removePin(mSavedParkingLocation);
+                    mSavedParkingLocation = parkingHashMap.get(parkingId); //have a single instance of parking so it's easy to delete
                     if(enabled) {
-                        List<Coordinate> coords = mParkingLocation.getNavigatableCoordinates();
+                        List<Coordinate> coords = mSavedParkingLocation.getNavigatableCoordinates();
                         for(final Coordinate coordinate : coords) {
-                            Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car);
-                            dropPin(coordinate, mParkingLocation, amenityDrawable);
-                            showAmenityDetail(mParkingLocation, null);
-                            destinationPolygon = mParkingLocation;
+                            Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car, 0);
+                            dropPin(coordinate, mSavedParkingLocation, amenityDrawable);
+//                            if(focus) mapView.getCamera().focusOn(mSavedParkingLocation.getNavigatableCoordinates().get(0)); //need to zoom to the parking pin?
+
+
+                            String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
+                            String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
+                            String parkingNote = ParkingManager.getParkingNotes(getActivity());
+
+                            showParkingDetail(mSavedParkingLocation, false, parkingLotName, entranceName, parkingNote);
+                            destinationPolygon = mSavedParkingLocation;
                         }
                     } else {
-                        removePin(mParkingLocation);
+                        removePin(mSavedParkingLocation);
                         didTapNothing();
                     }
                 }
@@ -910,7 +970,17 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     showDirectionCard(false, null, 0, null, null, null);
                     return;
                 }*/
-                showAmenityDetail((CustomLocation) location, drawable);
+
+                if(location == mSavedParkingLocation) {
+                    String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
+                    String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
+                    String parkingNote = ParkingManager.getParkingNotes(getActivity());
+                    showParkingDetail(location, false, parkingLotName, entranceName, parkingNote);
+                }/* else if(location == mTemporaryParkingLocation ){ //unnecessary
+                    showParkingDetail(location, true, "", "", "");
+                } */else {
+                    showAmenityDetail((CustomLocation) location, drawable);
+                }
                 destinationPolygon = location;
 
                 if(!location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)){

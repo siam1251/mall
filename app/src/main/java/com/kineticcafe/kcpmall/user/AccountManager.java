@@ -12,6 +12,7 @@ import com.kineticcafe.kcpandroidsdk.service.ServiceFactory;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -28,6 +29,8 @@ import retrofit2.http.Url;
 public class AccountManager {
 
     private static final String KEY_TOKEN = "token";
+    private static final String KEY_USER = "user";
+    private static final String KEY_CREDENTIALS = "credentials";
     private static final String KEY_TYPE = "type";
     private static final String KEY_ID = "identifier";
     private static final String KEY_PASSWORD = "password";
@@ -87,7 +90,7 @@ public class AccountManager {
     }
 
     protected void postToCreateToken(){
-        UserAccount userAccount = new UserAccount(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+//        KcpToken kcpTokenMap = new KcpToken("007A27A5-1351-4D2C-910F-33C8009DB127", "2804462D-407F-4DF2-B1B2-1D2F6EAFBE69");
 
         //TAO GAVE ME THIS AND IT WORKS
         /*{
@@ -97,21 +100,39 @@ public class AccountManager {
         }*/
 
 
-        Call<Token> call = getKcpService().postInterestedStores(KcpConstants.URL_POST_CREATE_TOKEN, userAccount.tempMap);
-        call.enqueue(new Callback<Token>() {
+        final KcpUser kcpUser = new KcpUser(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        Call<Token> createUser = getKcpService().postInterestedStores(KcpConstants.URL_POST_CREATE_USER, kcpUser.kcpUser);
+        createUser.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if(response.isSuccessful()){
-                    String token = response.body().getToken();
-                    if(!token.equals("")){
-                        //token received - use this
-                        saveGsonUserToken(token);
-                        mUserToken = token;
-                        HeaderFactory.constructHeader(); //update the header
-                        handleState(DOWNLOAD_COMPLETE);
-                    }
-                } else {
-                    handleState(DOWNLOAD_FAILED);
+                    Call<Token> tokenCall = getKcpService().postInterestedStores(KcpConstants.URL_POST_CREATE_TOKEN, kcpUser.kcpToken.kcpTokenMap);
+                    tokenCall.enqueue(new Callback<Token>() {
+                        @Override
+                        public void onResponse(Call<Token> call, Response<Token> response) {
+                            if(response.isSuccessful()){
+                                String token = response.body().getToken();
+                                if(!token.equals("")){
+                                    //token received - use this
+                                    saveGsonUserToken(token);
+                                    mUserToken = token;
+                                    HeaderFactory.constructHeader(); //update the header
+                                    handleState(DOWNLOAD_COMPLETE);
+                                }
+                            } else {
+                                handleState(DOWNLOAD_FAILED);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Token> call, Throwable t) {
+                            handleState(DOWNLOAD_FAILED);
+                        }
+                    });
+
+
+
+
                 }
             }
 
@@ -120,6 +141,10 @@ public class AccountManager {
                 handleState(DOWNLOAD_FAILED);
             }
         });
+
+
+
+
     }
 
     private void handleState(int state){
@@ -161,28 +186,44 @@ public class AccountManager {
         }
     }
 
-    public class UserAccount {
-//        public HashMap<String, Object> userAccount = new HashMap<>();
-        public HashMap<String, String> tempMap = new HashMap<>();
+    /*{
+        "user" : {
+        "credentials" : [ {
+            "type" : "DeviceCredential",
+                    "identifier" : "ninjapirate",
+                    "password" : "password"
+        } ]
+    }
+    }*/
 
-        public UserAccount(String identifier, String password){
-            tempMap.put(KEY_TYPE, VALUE_DEVICE_CREDENTIAL);
-            tempMap.put(KEY_ID, identifier);
-            tempMap.put(KEY_PASSWORD, password);
-
-//            userAccount.put(KEY_TOKEN, tempMap);
-        }
-
-        public UserAccount(String type, String identifier, String password){
-            tempMap.put(KEY_TYPE, type);
-            tempMap.put(KEY_ID, identifier);
-            tempMap.put(KEY_PASSWORD, password);
-
-//            userAccount.put(KEY_TOKEN, tempMap);
+    public class KcpUser {
+        public HashMap<String, HashMap<String, ArrayList<HashMap<String, String>>>> kcpUser = new HashMap<>();
+        public KcpToken kcpToken;
+        public KcpUser(String identifier, String password){
+            HashMap<String, ArrayList<HashMap<String, String>>> credentialsMap = new HashMap<>();
+            ArrayList<HashMap<String, String>> kcpTokens = new ArrayList<>();
+            kcpToken = new KcpToken(identifier, password);
+            kcpTokens.add(kcpToken.kcpTokenMap);
+            credentialsMap.put(KEY_CREDENTIALS, kcpTokens);
+            kcpUser.put(KEY_USER, credentialsMap);
         }
     }
 
+    /*
+    {
+        "type": "DeviceCredential",
+            "identifier": "ninjapirate",
+            "password": "password"
+    }
+    */
 
-
+    public class KcpToken {
+        public HashMap<String, String> kcpTokenMap = new HashMap<>();
+        public KcpToken(String identifier, String password){
+            kcpTokenMap.put(KEY_TYPE, VALUE_DEVICE_CREDENTIAL);
+            kcpTokenMap.put(KEY_ID, identifier);
+            kcpTokenMap.put(KEY_PASSWORD, password);
+        }
+    }
 
 }
