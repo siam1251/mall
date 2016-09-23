@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:background="@color/white"
     android:layout_height="@dimen/sub_category_item_height">
 
@@ -10,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         android:background="?android:attr/selectableItemBackground"
-        <TextView
+        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_regular"
             android:textColor="@color/sub_category_txt"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:textSize="@dimen/category_txt"

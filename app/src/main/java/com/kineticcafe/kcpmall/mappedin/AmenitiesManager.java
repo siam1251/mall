@@ -96,13 +96,13 @@ public class AmenitiesManager  {
         message.obj = mode;
         switch (state){
             case DOWNLOAD_STARTED:
-                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, true);
+//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, true);
                 break;
             case DOWNLOAD_FAILED:
-                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
+//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
                 break;
             case DOWNLOAD_COMPLETE:
-                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
+//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
                 break;
             case DATA_ADDED:
                 break;

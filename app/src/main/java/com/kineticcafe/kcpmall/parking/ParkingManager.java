@@ -78,32 +78,6 @@ public class ParkingManager {
         });
     }
 
-
-    private void handleState(int state){
-        handleState(state, null);
-    }
-
-    private void handleState(int state, @Nullable String mode){
-        if(mHandler == null) return;
-        Message message = new Message();
-        message.arg1 = state;
-        message.obj = mode;
-        switch (state){
-            case DOWNLOAD_STARTED:
-                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, true);
-                break;
-            case DOWNLOAD_FAILED:
-                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
-                break;
-            case DOWNLOAD_COMPLETE:
-                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
-                break;
-            case DATA_ADDED:
-                break;
-        }
-        mHandler.sendMessage(message);
-    }
-
     public interface ParkingService {
         @GET
         Call<Parkings> getParkings(@Url String url);
@@ -152,6 +126,32 @@ public class ParkingManager {
         KcpUtility.cacheToPreferences(context, KEY_PARKING_LOT_POSITION, -1);
         KcpUtility.cacheToPreferences(context, KEY_ENTRANCE_POSITION, -1);
         saveParkingNotes(context, "");
+    }
+
+
+    private void handleState(int state){
+        handleState(state, null);
+    }
+
+    private void handleState(int state, @Nullable String mode){
+        if(mHandler == null) return;
+        Message message = new Message();
+        message.arg1 = state;
+        message.obj = mode;
+        switch (state){
+            case DOWNLOAD_STARTED:
+//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, true);
+                break;
+            case DOWNLOAD_FAILED:
+//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
+                break;
+            case DOWNLOAD_COMPLETE:
+//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
+                break;
+            case DATA_ADDED:
+                break;
+        }
+        mHandler.sendMessage(message);
     }
 
 }

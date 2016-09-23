@@ -35,7 +35,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -46,6 +45,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -87,14 +87,15 @@ import com.kineticcafe.kcpmall.mappedin.AmenitiesManager;
 import com.kineticcafe.kcpmall.mappedin.CustomLocation;
 import com.kineticcafe.kcpmall.parking.ParkingManager;
 import com.kineticcafe.kcpmall.parking.Parkings;
+import com.kineticcafe.kcpmall.searchIndex.IndexManager;
+import com.kineticcafe.kcpmall.user.AccountManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
-import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 import com.kineticcafe.kcpmall.views.BadgeView;
 import com.kineticcafe.kcpmall.views.KcpAnimatedViewPager;
+import com.mappedin.sdk.Map;
 import com.mappedin.sdk.Polygon;
 
-import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,6 +123,7 @@ public class MainActivity extends BaseActivity
     private RelativeLayout rlDestinationEditor;
     private EditText etStartStore;
     private EditText etDestStore;
+    private FrameLayout flActiveMallDot;
     private int mCurrentViewPagerTapPosition = 0;
 
     private BadgeView badgeDeals;
@@ -129,15 +131,18 @@ public class MainActivity extends BaseActivity
     private BadgeView badgeStores;
     private BadgeView badgeInterests;
     public boolean mActiveMall = false;
+    public boolean mSplashScreenGone = false; //when map initializes it causes lag to splashscreen. Use this variable to see if splash screen's gone
 
     //GEOFENCE
     private GeofenceManager mGeofenceManager;
+    private Animation mMenuActiveMallDotAnim;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
 
         FirebaseTracking.getInstance(this).logAppLaunch();
 
@@ -163,10 +168,13 @@ public class MainActivity extends BaseActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        mSplashScreenGone = true;
                         splashImage.setVisibility(View.GONE);
                         Animation animFadeOut = AnimationUtils.loadAnimation(MainActivity.this,
                                 R.anim.splash_fade_out);
                         splashImage.startAnimation(animFadeOut);
+                        if(mReadyToLoadMapListener != null) mReadyToLoadMapListener.onReady();
+                        ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, false);
                     }
                 });
 
@@ -203,13 +211,22 @@ public class MainActivity extends BaseActivity
                 mCurrentViewPagerTapPosition = position;
                 if(position == VIEWPAGER_PAGE_MAP || position == VIEWPAGER_PAGE_INFO ) expandTopNav(); //TODO: change this hardcode
 
+                if(position == VIEWPAGER_PAGE_INFO) {
+                    InfoFragment.getInstance().setParkingSpotCTA();
+                } else if(position == VIEWPAGER_PAGE_DIRECTORY) {
+                    //when searchView's expanded, keyboard slides up the view, the user chooses to change fragment, come back to Directory Fragment, the recyclerView's not cleared as mSearchItem.collapseActionView() hasn't been called
+                    if(DirectoryFragment.getInstance().mSearchItem != null) DirectoryFragment.getInstance().mSearchItem.collapseActionView();
+                }
+
                 if(position == VIEWPAGER_PAGE_MAP) {
-                    MapFragment.getInstance().loadMapFragment();
+                    if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true, false);
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
                     setToolbarElevation(true);
                     showMapToolbar(true); //enable map's toolbar
+                    if(MapFragment.getInstance().mSearchItem != null) MapFragment.getInstance().mSearchItem.collapseActionView();
                 } else {
+                    toggleDestinationEditor(true, null, null, null);
                     mViewPager.setPagingEnabled(true);
                     setToolbarElevation(false);
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
@@ -270,13 +287,30 @@ public class MainActivity extends BaseActivity
             });
             return;
         } else {
-            ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
-            HomeFragment.getInstance().initializeHomeData();
+            initializeAccount();
             DirectoryFragment.getInstance().initializeDirectoryData();
             InfoFragment.getInstance().initializeMallInfoData();
             initializeMapData();
             initializeParkingData();
+            initializeSeachIndex();
         }
+    }
+
+    private void initializeSeachIndex() {
+        IndexManager indexManager = new IndexManager(this, R.layout.layout_loading_item, new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                        break;
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        indexManager.downloadSearchIndexes();
     }
 
     private void initializeToolbar(){
@@ -299,6 +333,26 @@ public class MainActivity extends BaseActivity
         });
 
         mDrawer.addDrawerListener(mToggle);
+        mDrawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                setActiveMallDot(false);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                setActiveMallDot(true);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
         mToggle.syncState();
     }
 
@@ -309,6 +363,7 @@ public class MainActivity extends BaseActivity
             ivToolbar.setVisibility(View.GONE);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setTitle(getResources().getString(R.string.title_map));
+            mToolbar.setTitleTextColor(getResources().getColor(R.color.textColorPrimary));
         } else {
             ivToolbar.setVisibility(View.VISIBLE);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -465,6 +520,28 @@ public class MainActivity extends BaseActivity
 
     // ------------------------------------- END OF MAP FRAGMENT -------------------------------------
 
+    private void initializeAccount(){
+
+        AccountManager accountManager = new AccountManager(this, HeaderFactory.getTokenHeader(), new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        HomeFragment.getInstance().initializeHomeData();
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                        HomeFragment.getInstance().initializeHomeData();
+                        break;
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        accountManager.getUserToken();
+
+    }
+
+
     private void initializeMapData(){
 
         String data = "";
@@ -491,7 +568,6 @@ public class MainActivity extends BaseActivity
         });
         amenitiesManager.downloadAmenities();
     }
-
 
     private void initializeParkingData(){
 
@@ -606,6 +682,22 @@ public class MainActivity extends BaseActivity
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
     }
 
+
+    public void setActiveMallDot(boolean enable) {
+        if(mActiveMall && !enable) {
+            flActiveMallDot.setVisibility(View.GONE);
+        } else if(mActiveMall && enable) {
+            flActiveMallDot.setVisibility(View.VISIBLE);
+            if(mMenuActiveMallDotAnim == null) { //to run it only once
+                mMenuActiveMallDotAnim = new AlphaAnimation(0.1f, 1.0f);
+                mMenuActiveMallDotAnim.setDuration(Constants.DURATION_MAIN_DRAWER_ACTIVE_MALL_DOT);
+                mMenuActiveMallDotAnim.setRepeatMode(Animation.REVERSE);
+                mMenuActiveMallDotAnim.setRepeatCount(5);
+                flActiveMallDot.startAnimation(mMenuActiveMallDotAnim);
+            }
+        }
+    }
+
     /**
      *
      * @param forceRefresh used when recreating the view's necessary ex. when data's downloaded
@@ -619,6 +711,7 @@ public class MainActivity extends BaseActivity
             LinearLayout llActiveMall = (LinearLayout) findViewById(R.id.llActiveMall);
             RecyclerView rvTodaysDeals = (RecyclerView) findViewById(R.id.rvTodaysDeals);
             RecyclerView rvTodaysEvents = (RecyclerView) findViewById(R.id.rvTodaysEvents);
+            flActiveMallDot = (FrameLayout) findViewById(R.id.flActiveMallDot);
 
             TextView tvMyFav = (TextView) findViewById(R.id.tvMyFav);
             TextView tvMyGC = (TextView) findViewById(R.id.tvMyGC);
@@ -647,6 +740,7 @@ public class MainActivity extends BaseActivity
 
             if(activeMallEnabled) {
                 llActiveMall.setVisibility(View.VISIBLE);
+                setActiveMallDot(true);
                 panelBackgroundColor = getResources().getColor(R.color.active_mall_bg);
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.themeColor)));
                 badgeTextColor = getResources().getColor(R.color.active_mall_badge_text_color);
@@ -659,7 +753,10 @@ public class MainActivity extends BaseActivity
 
                 ArrayList<KcpContentPage> todaysEventList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED).getKcpContentPageListForToday(true);
                 if(todaysEventList == null || todaysEventList.size() == 0) tvEmptyTodaysEvent.setVisibility(View.VISIBLE);
-                else tvEmptyTodaysEvent.setVisibility(View.GONE);
+                else {
+                    tvEmptyTodaysEvent.setVisibility(View.GONE);
+//                    KcpUtility.sortKcpContentPageByStoreName(todaysEventList);
+                }
                 ActiveMallRecyclerViewAdapter todaysEventAdapter = new ActiveMallRecyclerViewAdapter (
                         this,
                         todaysEventList,
@@ -679,7 +776,10 @@ public class MainActivity extends BaseActivity
 
                 ArrayList<KcpContentPage> todaysDealList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageListForToday(true);
                 if(todaysDealList == null || todaysDealList.size() == 0) tvEmptyTodaysDeal.setVisibility(View.VISIBLE);
-                else tvEmptyTodaysDeal.setVisibility(View.GONE);
+                else {
+                    tvEmptyTodaysDeal.setVisibility(View.GONE);
+                    KcpUtility.sortKcpContentPageByStoreName(todaysDealList);
+                }
                 ActiveMallRecyclerViewAdapter todaysDealAdapter = new ActiveMallRecyclerViewAdapter (
                         this,
                         todaysDealList,
@@ -696,16 +796,18 @@ public class MainActivity extends BaseActivity
                     }
                 });
 
-                showSnackBar(R.string.warning_active_mall_activated, R.string.action_ok, getResources().getColor(R.color.themeColor), null);
+                showSnackBar(R.string.warning_active_mall_activated, R.string.action_ok, getResources().getColor(R.color.white), null);
 
                 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(500);
+//                v.vibrate(500);
 
             } else {
 
                 llActiveMall.setVisibility(View.GONE);
+                setActiveMallDot(false);
                 panelBackgroundColor = Color.WHITE;
-                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.black)));
+//                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.black)));
+                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.active_mall_off_state)));
                 badgeTextColor = Color.WHITE;
                 generalTextColor = Color.BLACK;
                 drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_bg);
@@ -717,8 +819,8 @@ public class MainActivity extends BaseActivity
 
 
                 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(500);
-                Toast.makeText(MainActivity.this, " TEST - Exited Geofence ", Toast.LENGTH_SHORT).show();
+//                v.vibrate(500);
+//                Toast.makeText(MainActivity.this, " TEST - Exited Geofence ", Toast.LENGTH_SHORT).show();
             }
 
 
@@ -821,9 +923,9 @@ public class MainActivity extends BaseActivity
                     public void OnSqueezeAnimationDone() {
                     }
                 }, MainActivity.this, rlSeeParking);
-               if(ParkingManager.isParkingLotSaved(MainActivity.this)) Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, ivFilterParking.isSelected());
+                if(ParkingManager.isParkingLotSaved(MainActivity.this)) Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, ivFilterParking.isSelected());
                 setParkingStatus(Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_hide_parking), getResources().getString(R.string.map_filter_see_parking));
-                if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(!ivFilterParking.isSelected());
+                if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(!ivFilterParking.isSelected(), false);
             }
         });
 
@@ -891,7 +993,6 @@ public class MainActivity extends BaseActivity
 
 
     public void showSnackBar(int msg, int action, int textColor, @Nullable View.OnClickListener onClickListener) {
-        //        if (mOfflineSnackbar != null && (mOfflineSnackbar.isShownOrQueued() || onClickListener == null))
         if (mOfflineSnackbar != null && mOfflineSnackbar.isShownOrQueued())
             return;
         final CoordinatorLayout clMain = (CoordinatorLayout) findViewById(R.id.clMain);
@@ -1031,7 +1132,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -1053,9 +1154,11 @@ public class MainActivity extends BaseActivity
             setActiveMall(true, !mActiveMall);
         } else if (id == R.id.action_geofence_test) {
             mGeofenceManager.setGeofence(true);
+            flActiveMallDot.setVisibility(View.VISIBLE);
         } else if (id == R.id.action_geofence_disconnect) {
             mGeofenceManager.setGeofence(false);
             setActiveMall(false, false);
+            flActiveMallDot.setVisibility(View.GONE);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -1090,13 +1193,21 @@ public class MainActivity extends BaseActivity
     }
 
     public static RefreshListener mOnRefreshListener;
-
     public void setOnRefreshListener(RefreshListener refreshListener) {
         mOnRefreshListener = refreshListener;
     }
 
     public interface RefreshListener {
         void onRefresh(int msg);
+    }
+
+
+    public ReadyToLoadMapListener mReadyToLoadMapListener;
+    public void setOnReadyToLoadMapListener(ReadyToLoadMapListener readyToLoadMapListener){
+        mReadyToLoadMapListener = readyToLoadMapListener;
+    }
+    public interface ReadyToLoadMapListener {
+        void onReady();
     }
 
     @Override
@@ -1122,7 +1233,8 @@ public class MainActivity extends BaseActivity
             mDrawer.closeDrawers();
             if (resultCode == Activity.RESULT_OK) {
                 setUpRightSidePanel();
-                if(mOnParkingClickListener != null && Amenities.isToggled(this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true);
+                if(mOnParkingClickListener != null && Amenities.isToggled(this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true, true);
+                InfoFragment.getInstance().setParkingSpotCTA();
             }
         } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
             if (resultCode != 0) {
@@ -1130,10 +1242,23 @@ public class MainActivity extends BaseActivity
                 String externalCode = String.valueOf(resultCode);
                 ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocation(externalCode);
                 if(polygons != null && polygons.size() > 0) {
-                    MapFragment.getInstance().didTapPolygon(polygons.get(0));
+                    MapFragment.getInstance().showStoreOnTheMapFromDetailActivity(polygons.get(0));
                 } else {
                     MapFragment.getInstance().mPendingExternalCode = externalCode;
                 }
+            } else {
+                if(data != null) {
+                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
+                    if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
+                        String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
+                        if(parkingName != null) {
+                            selectPage(2);
+                            int parkingPosition = ParkingManager.sParkings.getParkingPositionByName(parkingName);
+                            if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition);
+                        }
+                    }
+                }
+
             }
         }
     }

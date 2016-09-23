@@ -31,7 +31,7 @@
             android:lines="1"
             android:gravity="center"
             android:id="@+id/tvIntrstd"
-            android:textColor="@color/intrstd_txt"
+            android:textColor="@color/intrstd_txt_off"
             android:layout_height="@dimen/intrstd_card_height"
             android:text="Men's everyday fashion"
             android:textSize="@dimen/intrstd_name"

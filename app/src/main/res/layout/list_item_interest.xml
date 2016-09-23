@@ -14,9 +14,11 @@
         android:layout_marginBottom="@dimen/card_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="?android:attr/selectableItemBackground"
         card_view:cardCornerRadius="@dimen/card_corner_radius"
+        style="@style/SelectableItemForegroundWhite"
         >
+        style="@style/SelectableItemForeground"
+        android:foreground="?android:attr/selectableItemBackground"
         card_view:contentPadding="@dimen/card_content_padding"
         card_view:cardUseCompatPadding="true"
 

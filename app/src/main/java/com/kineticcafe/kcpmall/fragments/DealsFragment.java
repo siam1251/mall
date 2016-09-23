@@ -10,12 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
+import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.activities.MainActivity;
 import com.kineticcafe.kcpmall.views.DealRecyclerItemDecoration;
 import com.kineticcafe.kcpmall.widget.EndlessRecyclerViewScrollListener;
+
+import java.util.ArrayList;
 
 public class DealsFragment extends BaseFragment {
     private final int COLUMN_COUNT = 2;
@@ -73,11 +77,17 @@ public class DealsFragment extends BaseFragment {
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(COLUMN_COUNT, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
+
+        ArrayList<KcpContentPage> dealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true);
+        ArrayList<KcpContentPage> recommendedList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true);
+        if(recommendedList != null) KcpUtility.sortKcpContentpageByExpiryDate(recommendedList);
+        if(dealsList != null) KcpUtility.sortKcpContentpageByExpiryDate(dealsList);
+
         mDealsRecyclerViewAdapter = new DealsRecyclerViewAdapter(
                 getActivity(),
                 true,
-                KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true),
-                KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true));
+                recommendedList,
+                dealsList);
         recyclerView.setAdapter(mDealsRecyclerViewAdapter);
 
         mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {

@@ -6,13 +6,18 @@
     android:layout_width="match_parent"
     app:layout_scrollFlags="scroll|enterAlways"
     android:theme="@style/ToolbarStyle"
+    app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
     android:layout_height="?attr/actionBarSize">
+    <!--app:popupTheme is what really changed the toolbar default menu drawable color-->
 
-    <ImageView
+    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+        xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+        ThemedImageView:filterColor="@color/toolbarTextColor"
         android:id="@+id/ivToolbar"
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/logo_vaughan_mills"/>
+
 </android.support.v7.widget.Toolbar>

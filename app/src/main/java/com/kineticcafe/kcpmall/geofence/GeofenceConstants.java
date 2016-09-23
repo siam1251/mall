@@ -31,7 +31,7 @@ public final class GeofenceConstants {
             GEOFENCE_EXPIRATION_IN_HOURS * 60 * 60 * 1000;
 
 //    public static final float GEOFENCE_RADIUS_IN_METERS = 500; // 500 m
-    public static final float GEOFENCE_RADIUS_IN_METERS = 100; // 500 m
+    public static final float GEOFENCE_RADIUS_IN_METERS = 250; // 500 m
 
     /**
      * Map for storing information about airports in the San Francisco bay area.

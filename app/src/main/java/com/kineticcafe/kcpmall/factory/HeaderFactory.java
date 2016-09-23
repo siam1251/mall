@@ -1,6 +1,7 @@
 package com.kineticcafe.kcpmall.factory;
 
 import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.user.AccountManager;
 
 import java.util.HashMap;
 
@@ -15,6 +16,8 @@ public class HeaderFactory {
     private static final String HEADER_KEY_ACCEPT           = "Accept";
     private static final String HEADER_KEY_AUTHORIZATION    = "Authorization";
 
+    private static final String TOKEN_PREFIX_BEARER    = "Bearer ";
+
 
 
     //------------------------------ END POINT ------------------------------
@@ -26,23 +29,29 @@ public class HeaderFactory {
 
     public final static String MALL_INFO_OFFLINE_TEXT = "mallinfo.json";
     public final static String MALL_INFO_URL_BASE = "https://api.myjson.com/";
-    public final static String MALL_INFO_URL_VM = "bins/1ouit"; //vaughan mills
-    public final static String MALL_INFO_URL_MP = "bins/2zv9f"; //metropolis
+    private final static String MALL_INFO_URL_VM = "bins/1ouit"; //vaughan mills
+    private final static String MALL_INFO_URL_MP = "bins/2zv9f"; //metropolis
 
 
     public final static String AMENITIES_OFFLINE_TEXT = "amenities.json";
-    public final static String AMENITIES_URL_VM = "bins/1to8f";
-    public final static String AMENITIES_URL_MP = "bins/1to8f";
+    private final static String AMENITIES_URL_VM = "bins/1to8f";
+    private final static String AMENITIES_URL_MP = "bins/1to8f";
 
 
     public final static String PARKING_OFFLINE_TEXT = "parking.json";
-    public final static String PARKING_URL_VM = "bins/1c8ul";
-    public final static String PARKING_URL_MP = "bins/1c8ul";
+    private final static String PARKING_URL_VM = "bins/1c8ul";
+    private final static String PARKING_URL_MP = "bins/1c8ul";
+
+
+    public static String SEARCH_INDEX_URL_BASE = "https://kcp-pkg.s3-us-west-2.amazonaws.com/";
+    private final static String SEARCH_INDEX_MP = "indexes/staging/metropolis-at-metrotown-index.msgpack";
+    private final static String SEARCH_INDEX_VM = "indexes/staging/vaughan-mills-index.msgpack";
 
 
     public static String MALL_INFO_URL = MALL_INFO_URL_VM;
     public static String AMENITIES_URL = AMENITIES_URL_VM;
     public static String PARKING_URL = PARKING_URL_VM;
+    public static String SEARCH_INDEX_URL = SEARCH_INDEX_VM;
 
 
     public static String MALL_NAME = "Vaughan Mills";
@@ -67,12 +76,14 @@ public class HeaderFactory {
             AMENITIES_URL = AMENITIES_URL_VM;
             PARKING_URL = PARKING_URL_VM;
             MAP_VENUE_NAME = "Vaughan Mills";
+            SEARCH_INDEX_URL = SEARCH_INDEX_VM;
         } else if(catalog.equals(Constants.HEADER_VALUE_DATAHUB_CATALOG_MP)) {
             MALL_NAME = "Metropolis Metrotown";
             MALL_INFO_URL = MALL_INFO_URL_MP;
             AMENITIES_URL = AMENITIES_URL_MP;
             PARKING_URL = PARKING_URL_MP;
             MAP_VENUE_NAME = "Metropolis";
+            SEARCH_INDEX_URL = SEARCH_INDEX_MP;
         }
 
         constructHeader();
@@ -81,7 +92,6 @@ public class HeaderFactory {
     public static void constructHeader() {
         mHeaders = new HashMap<String, String>();
 
-//        mHeaders.put(HEADER_KEY_DATAHUB_CATALOG,    Constants.HEADER_VALUE_DATAHUB_CATALOG);
         mHeaders.put(HEADER_KEY_DATAHUB_CATALOG,    HEADER_VALUE_DATAHUB_CATALOG);
         mHeaders.put(HEADER_KEY_DATAHUB_LOCALE,     Constants.HEADER_VALUE_DATAHUB_LOCALE);
         mHeaders.put(HEADER_KEY_CLIENT_TOKEN,       Constants.HEADER_VALUE_CLIENT_TOKEN);
@@ -90,12 +100,28 @@ public class HeaderFactory {
         //below two headers are specially needed for view_all_content
         mHeaders.put(HEADER_KEY_CONTENT_TYPE,       Constants.HEADER_VALUE_CONTENT_TYPE);
         mHeaders.put(HEADER_KEY_ACCEPT,             Constants.HEADER_VALUE_ACCEPT);
-
     }
 
     //TODO: implement save and get auth token here
     private static String getAuthorizationToken() {
-        return Constants.HEADER_VALUE_AUTHROZATION;
+        if(!AccountManager.mUserToken.equals("")) {
+            return TOKEN_PREFIX_BEARER + AccountManager.mUserToken;
+        }
+        return AccountManager.mUserToken;
+    }
+
+    //maybe when authorization's empty, just remove the authorization key from the map and use that headermap
+    public static HashMap<String, String> getTokenHeader(){
+
+        HashMap<String, String> headers = new HashMap<String, String>();
+
+        headers.put(HEADER_KEY_DATAHUB_CATALOG,    HEADER_VALUE_DATAHUB_CATALOG);
+        headers.put(HEADER_KEY_DATAHUB_LOCALE,     Constants.HEADER_VALUE_DATAHUB_LOCALE);
+        headers.put(HEADER_KEY_CLIENT_TOKEN,       Constants.HEADER_VALUE_CLIENT_TOKEN);
+        headers.put(HEADER_KEY_CONTENT_TYPE,       Constants.HEADER_VALUE_CONTENT_TYPE);
+        headers.put(HEADER_KEY_ACCEPT,             Constants.HEADER_VALUE_ACCEPT);
+
+        return headers;
     }
 
 }

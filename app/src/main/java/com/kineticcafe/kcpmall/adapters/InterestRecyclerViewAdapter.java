@@ -3,11 +3,8 @@ package com.kineticcafe.kcpmall.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +20,11 @@ import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
-import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.utility.Utility;
-import com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,23 +44,27 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
     private ArrayList<Integer> mFavCatTempList;
     private HashMap<String, KcpContentPage> mFavCatTempMap;
     private ArrayList<String> mFavStoreLikeLinkList;
+    private InterestedCategoryActivity.ItemClickListener mItemClickListener;
 
     private ArrayList<Object> mItems;
 
-    public InterestRecyclerViewAdapter(Context context, ArrayList<KcpCategories> news, ArrayList<InterestedCategoryActivity.GridLayoutItem> gridLayoutItemArrayList) {
+    public InterestRecyclerViewAdapter(Context context, ArrayList<KcpCategories> news, ArrayList<InterestedCategoryActivity.GridLayoutItem> gridLayoutItemArrayList, InterestedCategoryActivity.ItemClickListener itemClickListener) {
         mContext = context;
         mInterestType = InterestType.CATEGORY;
         mKcpCategoriesList = new ArrayList<KcpCategories>(news);
         mGridLayoutItemArrayList = gridLayoutItemArrayList;
         mFavCatTempList = FavouriteManager.getInstance(context).getInterestedCategoryList();
+        mItemClickListener = itemClickListener;
     }
 
-    public InterestRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces) {
+    public InterestRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces, InterestedCategoryActivity.ItemClickListener itemClickListener) {
         mInterestType = InterestType.STORE;
         mContext = context;
         mKcpPlacesRecommendedList = new ArrayList<>(kcpPlaces);
         mFavStoreLikeLinkList = FavouriteManager.getInstance(context).getInterestedStoreList();
         mKcpPlacesOthersList = new ArrayList<>(KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE));
+
+        mItemClickListener = itemClickListener;
 
         createItems();
     }
@@ -198,14 +197,19 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public void setSelectedCategory(CardView cardView, TextView textView, boolean selected){
         if(selected){
+
+            /*cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.white));
+            textView.setTextColor(mContext.getResources().getColor(R.color.intrstd_txt_on)); *///TODO: new theme but it's not as visible so...
+
             cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.themeColor));
             textView.setTextColor(mContext.getResources().getColor(R.color.white));
+
 //            textView.setTypeface(null, Typeface.BOLD); //1. AFFECTS THE WIDTH and sometimes the texts don't fit, Typeface.BOLD doesn't affect fonts on Samsung devices
             /*((CustomFontTextView) textView).setFont(mContext, mContext.getString(R.string.fontFamily_roboto_bold));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.intrstd_name_selected));*/
         } else {
             cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.intrstd_card_bg));
-            textView.setTextColor(mContext.getResources().getColor(R.color.intrstd_txt));
+            textView.setTextColor(mContext.getResources().getColor(R.color.intrstd_txt_off));
 //            textView.setTypeface(null, Typeface.NORMAL);
             /*((CustomFontTextView) textView).setFont(mContext, mContext.getString(R.string.fontFamily_roboto_regular));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.intrstd_name));*/
@@ -237,12 +241,19 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                         public void OnSqueezeAnimationDone() {
                         }
                     }, (Activity) mContext, interestedCategoryHolder.cvIntrst);
+
+
                     if(mFavCatTempList.contains(kcpCategories.getCategoryId())) {
                         mFavCatTempList.remove(Integer.valueOf(kcpCategories.getCategoryId()));
                         setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, false);
                     } else {
                         mFavCatTempList.add(kcpCategories.getCategoryId());
                         setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, true);
+                    }
+
+                    if(mItemClickListener != null) {
+                        if(mFavCatTempList.size() > 0) mItemClickListener.onItemClick(false);
+                        else mItemClickListener.onItemClick(true);
                     }
                 }
             });
@@ -277,6 +288,7 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
 
                         @Override
                         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            interestedStoreHolder.tvIntrstd.setVisibility(View.GONE);
                             return false;
                         }
                     })
@@ -298,6 +310,11 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                     } else {
                         mFavStoreLikeLinkList.add(kcpPlaces.getLikeLink());
                         setSelectedStore(interestedStoreHolder.cvIntrst, interestedStoreHolder.ivFav, true);
+                    }
+
+                    if(mItemClickListener != null) {
+                        if(mFavStoreLikeLinkList.size() > 0) mItemClickListener.onItemClick(false);
+                        else mItemClickListener.onItemClick(true);
                     }
                 }
             });

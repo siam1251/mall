@@ -55,7 +55,8 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/icn_directions"/>
 
-                <TextView
+                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_regular"
                     android:layout_toRightOf="@+id/ivDirection"
                     android:gravity="center"
                     android:text="@string/info_get_directions"
@@ -149,7 +150,9 @@
                 android:layout_width="@dimen/info_direction_height"
                 android:layout_height="@dimen/info_direction_height"
 
-            <TextView
+            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                app:fontFamily="@string/fontFamily_roboto_regular"
+                android:id="@+id/tvPark"
                 android:layout_toRightOf="@+id/ivPark"
                 android:gravity="center"
                 android:text="@string/info_save_my_parking_spot"

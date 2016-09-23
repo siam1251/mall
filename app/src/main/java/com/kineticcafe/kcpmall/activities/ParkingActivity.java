@@ -2,21 +2,15 @@ package com.kineticcafe.kcpmall.activities;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,21 +18,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.mappedin.Amenities;
 import com.kineticcafe.kcpmall.parking.ChildParking;
 import com.kineticcafe.kcpmall.parking.Parking;
 import com.kineticcafe.kcpmall.parking.ParkingManager;
+import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
-import java.io.FileInputStream;
 import java.util.List;
 
 /**
@@ -483,10 +475,16 @@ public class ParkingActivity extends AppCompatActivity {
                 placeHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mParkingLotSelectedPosition = position;
-                        notifyDataSetChanged();
+
+                        Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
+                            @Override
+                            public void OnSqueezeAnimationDone() {
+                                mParkingLotSelectedPosition = position;
+                                notifyDataSetChanged();
 //                        showDoneBtn(false, rvParking);
-                        showDoneBtn(true, rvParking, "NEXT");
+                                showDoneBtn(true, rvParking, "NEXT");
+                            }
+                        }, (Activity) mContext, placeHolder.mView);
                     }
                 });
             } else if(holder.getItemViewType() == ITEM_TYPE_ENTRANCE) {
@@ -497,10 +495,17 @@ public class ParkingActivity extends AppCompatActivity {
                 placeHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mEntranceSelectedPosition = position;
-                        notifyDataSetChanged();
+                        Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
+                            @Override
+                            public void OnSqueezeAnimationDone() {
+                                mEntranceSelectedPosition = position;
+                                notifyDataSetChanged();
 //                        showDoneBtn(false, rvParkingChild);
-                        showDoneBtn(true, rvParkingChild, "DONE");
+                                showDoneBtn(true, rvParkingChild, "DONE");
+                            }
+                        }, (Activity) mContext, placeHolder.mView);
+
+
                     }
                 });
             }
@@ -531,7 +536,7 @@ public class ParkingActivity extends AppCompatActivity {
                 textView.setTypeface(tf);
                 imageView.setVisibility(View.VISIBLE);
             } else {
-                textView.setTextColor(getResources().getColor(R.color.intrstd_txt));
+                textView.setTextColor(getResources().getColor(R.color.intrstd_txt_off));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 Typeface tf = Typeface.createFromAsset(mContext.getAssets(), mContext.getResources().getString(R.string.fontFamily_roboto_regular));
                 textView.setTypeface(tf);

@@ -2,18 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:layout_gravity="center">
-
-
 
     <ImageView
         android:layout_centerInParent="true"
         android:background="@drawable/circle_imageview_background_white"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:elevation="2.5dp"
+        android:elevation="3dp"
         />
 
     <ProgressBar
@@ -26,6 +23,6 @@
         android:indeterminate="true"
         android:indeterminateTintMode="src_atop"
         android:indeterminateTint="@color/themeColor"
-        android:elevation="2.5dp"
+        android:elevation="3dp"
         />
 </RelativeLayout>

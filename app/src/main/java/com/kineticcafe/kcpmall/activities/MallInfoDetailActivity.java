@@ -106,15 +106,21 @@ public class MallInfoDetailActivity extends AppCompatActivity{
             if(mMallInfoType.equals(getResources().getString(R.string.mall_info_gift_card))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_giftcard);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_about))){
-                ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_about);
+                ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_main);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_guest_service))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_guest);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_amenities))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_amenities);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_shuttles))){
-                ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_shuttle);
+                ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_main);
             } else if(mMallInfoType.contains(getResources().getString(R.string.mall_info_social))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_social);
+            } else if(mMallInfoType.contains(getResources().getString(R.string.mall_info_public_transportation))){
+                ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_transportation);
+            } else if(mMallInfoType.contains(getResources().getString(R.string.mall_info_tourist_information))){
+                ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_tourist_info);
+            } else if(mMallInfoType.contains(getResources().getString(R.string.mall_info_accessibility))){
+                ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_accessibility);
             }
 
             ExpandableTextView etvMallInfoDetail = (ExpandableTextView) findViewById(R.id.etvMallInfoDetail);

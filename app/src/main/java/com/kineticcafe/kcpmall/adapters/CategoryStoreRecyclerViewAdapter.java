@@ -42,6 +42,11 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
     private int mContentType;
     private FavouriteInterface mFavouriteInterface;
     private MapFragment.OnStoreClickListener mStoreClickListener;
+    private int mFooterLayout;
+    private boolean mFooterExist = false;
+    private String mFooterText;
+    private View.OnClickListener mOnClickListener;
+
 
     public CategoryStoreRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces, int contentType) {
         mContext = context;
@@ -106,11 +111,6 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         return null;
     }
 
-    private int mFooterLayout;
-    private boolean mFooterExist = false;
-    private String mFooterText;
-    private View.OnClickListener mOnClickListener;
-
     public void addFooter(String footerText, int footerLayout, View.OnClickListener onClickListener){
         mFooterExist = true;
         mFooterText = footerText;
@@ -150,8 +150,15 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
 
         final String category = kcpPlace.getCategoryLabelOverride();
         String display = kcpPlace.getFirstDisplay();
-        if(!display.equals("")) storeViewHolder.tvDealTitle.setText(display);
-        else storeViewHolder.tvDealTitle.setText(category);
+        String primary = kcpPlace.getPrimaryCategory();
+        if(!display.equals("")) {
+            storeViewHolder.tvDealTitle.setText(display);
+        } else if(!category.equals("")) {
+            storeViewHolder.tvDealTitle.setText(category);
+        } else {
+            storeViewHolder.tvDealTitle.setText(primary);
+            //todo: MP doesn't have display and category name
+        }
 
         if (getItemViewType(position) == KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE) {
 
@@ -196,7 +203,6 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
                             Pair.create((View)storeViewHolder.ivDealLogo, transitionNameLogo));
 
                     ActivityCompat.startActivityForResult((Activity) mContext, intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP, options.toBundle());
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
 
             }

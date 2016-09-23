@@ -28,7 +28,8 @@
             android:adjustViewBounds="true"
             />
 
-        <TextView
+        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_regular"
             android:textColor="@color/category_txt"
             android:layout_marginLeft="@dimen/category_txt_left_margin"
             android:layout_toRightOf="@+id/ivCategory"

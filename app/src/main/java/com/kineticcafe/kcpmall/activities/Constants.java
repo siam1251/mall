@@ -11,6 +11,7 @@ public class Constants {
 	public final static long DURATION_MAIN_BOT_TAB_ICON_SLIDE_UP_ANIMATION = 	100;
 	public final static long DURATION_MAIN_BOT_TAB_TITLE_ALPHA_ANIMATION = 		100;
 	public final static long DURATION_DETAIL_EXPIRY_DATE_TEXT = 				800;
+	public final static long DURATION_MAIN_DRAWER_ACTIVE_MALL_DOT = 			1300;
 
 
 	public enum DetailType { DEAL, STORE }
@@ -23,9 +24,12 @@ public class Constants {
 //	public final static String HEADER_VALUE_CLIENT_TOKEN = 		"YmRkYWVjMmQtYjJiOS00YzdhLTllZDktMDg1NmI2M2E1NjA1OjM1ODg4M2M0OTk3YWM5ZTY3Y2EwNDMwMTE4M2RjODIzOTBlNWVhMmEyYTBkODIwOTFiZTY0MDE1NjZkYWY4YmQ0MTQzMzg4MzQ4Yzg0YzhjNzMwM2EzNzQ3YWEzOTJiNDYwYmJjMGIyMWYzZWM5OTIwNjIyODYyMDBmZDM5NjRm"; //PRODUCTION
 	public final static String HEADER_VALUE_CLIENT_TOKEN = 		"OGEyZDYyZTgtNzRmMS00ODNjLTg2YzMtYjQ0YWY1MDc5NWM1OjdjODhjZmY0ZTBjNDk5MTRiM2EzZTY3YjAzZGY1ZTE4ZDM5YTg0ZjM2YTE0ZjI0NWYzNDViN2JhNWY4YTE4YjJiMDUwMWIxOWRiYTExYzE1ZGIzNTJmNzhlM2EzYzI5MGM2MWQ4MmRlMGRjYTkyMzAzZTQ2NWRjZDU3NDJkNGRl"; //STAGING
 	public final static String HEADER_VALUE_CONTENT_TYPE = 		"application/json";
-	public final static String HEADER_VALUE_ACCEPT = 			"application/json, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.place+json; version=1.0";
-//	public final static String HEADER_VALUE_ACCEPT = 			"application/json";
-	public final static String HEADER_VALUE_AUTHROZATION = 		"Bearer 33cce977-6891-4ca5-9df9-6b1e7b9f0d84_YzU5YWM0ZjctODZiOS00ZGJiLTkzYjYtNjZkYzdkYjZkOTE1"; //STAGING
+	public final static String HEADER_VALUE_CONTENT_TYPE_MESSAGE_PACK = 		"application/octet-stream";
+//	public final static String HEADER_VALUE_ACCEPT = 			"application/vnd.kcp.view-all-content+json; version=1.0, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.icmp-event+json; version=1.0, application/vnd.kcp.icmp-announcement+json; version=1.0, application/vnd.kcp.blog-post+json; version=1.0, application/vnd.kcp.icmp-twitter+json; version=1.0, application/vnd.kcp.icmp-instagram+json; version=1.0, application/vnd.kcp.icmp-set-interests+json; version=1.0";
+//	public final static String HEADER_VALUE_ACCEPT = 			"application/json, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.place+json; version=1.0";
+	public final static String HEADER_VALUE_ACCEPT = 			"application/json";
+//	public final static String HEADER_VALUE_AUTHROZATION = 		"Bearer 33cce977-6891-4ca5-9df9-6b1e7b9f0d84_YzU5YWM0ZjctODZiOS00ZGJiLTkzYjYtNjZkYzdkYjZkOTE1"; //STAGING
+	public final static String HEADER_VALUE_AUTHROZATION = 		""; //TODO: AUTHORIZATION DIDN"T WORK SO PASSING AS EMPTY FOR NOW Aug.31
 
 
 	//TWITTER
@@ -83,10 +87,13 @@ public class Constants {
 	public final static int REQUEST_CODE_CHANGE_INTEREST = 101;
 	public final static int REQUEST_CODE_MY_PAGE_TYPE = 102;
 	public final static int REQUEST_CODE_SAVE_PARKING_SPOT = 103;
+	public final static int REQUEST_CODE_SHOW_PARKING_SPOT = 104;
 	public final static int RESULT_DONE_PRESSED_WITH_CHANGE = 0;
 	public final static int RESULT_DONE_PRESSED_WITHOUT_CHANGE = 1;
 	public final static int RESULT_EXIT = 2;
 	public final static int REQUEST_CODE_VIEW_STORE_ON_MAP = 543;
+	public final static String REQUEST_CODE_KEY = "requestCode";
+	public final static String REQUEST_CODE_KEY_PARKING_NAME = "parkingName";
 
 	public final static int RESULT_DEALS = 1;
 	public final static int RESULT_EVENTS = 2;

@@ -30,4 +30,11 @@ public class Parkings {
         this.parkings = parkings;
     }
 
+    public int getParkingPositionByName(String parkingName){
+        for(int i = 0; i < parkings.size(); i++){
+            if(parkings.get(i).getName().equals(parkingName)) return i;
+        }
+        return -1;
+    }
+
 }

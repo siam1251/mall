@@ -17,17 +17,12 @@
     android:background="@color/card_bg"
 
     <!--<fragment
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:name="com.mappedin.sdk.MapView"
-        android:id="@+id/mapFragment"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true" />
--->
+        android:id="@+id/mapFragment"/>-->
+
+
     <ProgressBar
         android:visibility="gone"
         android:layout_centerInParent="true"
