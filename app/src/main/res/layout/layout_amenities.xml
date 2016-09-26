@@ -21,9 +21,9 @@
         android:gravity="center_vertical"
         />
 
+        app:theme="@style/switchStype"
     <android.support.v7.widget.SwitchCompat
         android:theme="@style/switchStype"
-        app:theme="@style/switchStype"
         android:id="@+id/swAmenity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -13,13 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:gravity="center"
-        android:background="@color/colorPrimary"
         style="@style/SelectableItemForeground"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:lines="1"
         android:ellipsize="end"
         android:text="@string/search_empty_results_place_holder"
+        android:background="@color/emptySearchResults"
         />
 
 </RelativeLayout>

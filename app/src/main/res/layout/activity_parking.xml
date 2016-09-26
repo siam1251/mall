@@ -105,12 +105,12 @@
             </RelativeLayout>
 
             <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                app:fontFamily="@string/fontFamily_roboto_medium"
                 android:visibility="gone"
                 android:layout_below="@+id/rlParkingIcon"
                 android:gravity="center"
                 android:text="P1 Underground"
                 android:id="@+id/tvParkingLotName"
-                app:fontFamily="@string/fontFamily_roboto_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -162,12 +162,13 @@
                     android:layout_toRightOf="@+id/ivPenceil"
                     android:textAlignment="center"
                     app:fontFamily="@string/fontFamily_roboto_light"
-                    android:maxWidth="200dp"
+                    android:maxWidth="230dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Add Notes"
                     android:textColor="@color/white"
                     android:textSize="14sp"/>
+                    android:maxWidth="200dp"
 
 
             </RelativeLayout>

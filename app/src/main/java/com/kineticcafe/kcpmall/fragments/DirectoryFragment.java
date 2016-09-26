@@ -60,7 +60,6 @@ public class DirectoryFragment extends BaseFragment {
     private ViewPager mViewPager;
     public MenuItem mSearchItem;
     private SearchView mSearchView;
-    private RecyclerView rvMallDirectory;
     private String mSearchString = "";
     private MallDirectoryRecyclerViewAdapter mMallDirectoryRecyclerViewAdapter;
 
@@ -90,7 +89,6 @@ public class DirectoryFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mViewPager = (ViewPager) view.findViewById(R.id.vpHome);
-        rvMallDirectory = (RecyclerView) view.findViewById(R.id.rvMallDirectory);
         setupViewPager(mViewPager);
 
         TabLayout tablayout = (TabLayout) view.findViewById(R.id.tlHome);
@@ -325,14 +323,14 @@ public class DirectoryFragment extends BaseFragment {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         mMainActivity.setActiveMallDot(true);
-                        rvMallDirectory.setVisibility(View.INVISIBLE);
+                        mMainActivity.rvMallDirectory.setVisibility(View.INVISIBLE);
                         return true;
                     }
 
                     @Override
                     public boolean onMenuItemActionExpand(MenuItem item) {
                         mMainActivity.setActiveMallDot(false);
-                        rvMallDirectory.setVisibility(View.VISIBLE);
+                        mMainActivity.rvMallDirectory.setVisibility(View.VISIBLE);
                         return true;
                     }
                 });
@@ -347,7 +345,7 @@ public class DirectoryFragment extends BaseFragment {
 //        mKcpCategories = null;
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        rvMallDirectory.setLayoutManager(linearLayoutManager);
+        mMainActivity.rvMallDirectory.setLayoutManager(linearLayoutManager);
 
         //PLACE
         ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
@@ -419,7 +417,7 @@ public class DirectoryFragment extends BaseFragment {
 //                if(mMallDirectoryRecyclerViewAdapter == null) {
                     mMallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), mKcpPlacesFiltered, mPlaceByKeyword, mKcpCategories, mSearchString);
 //                    mMallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), new ArrayList<KcpPlaces>(), mPlaceByKeyword, mKcpCategories, mSearchString); //testing
-                    rvMallDirectory.setAdapter(mMallDirectoryRecyclerViewAdapter);
+                    mMainActivity.rvMallDirectory.setAdapter(mMallDirectoryRecyclerViewAdapter);
 //                } else {
 //                    mMallDirectoryRecyclerViewAdapter.updateData(mKcpPlacesFiltered, mPlaceByKeyword, mKcpCategories, mSearchString);
 //                    mMallDirectoryRecyclerViewAdapter.updateData(new ArrayList<KcpPlaces>(), mPlaceByKeyword, mKcpCategories, mSearchString);

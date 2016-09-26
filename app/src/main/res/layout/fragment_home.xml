@@ -63,12 +63,13 @@
         android:layout_height="match_parent"
         />
 
-    <android.support.v7.widget.RecyclerView
+    <!--<android.support.v7.widget.RecyclerView
         android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/rvMallDirectory"
+        android:isScrollContainer="true"
         android:gravity="center_horizontal"
         android:background="@color/white"
-        />
+        />-->
 </RelativeLayout>

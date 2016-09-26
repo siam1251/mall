@@ -15,16 +15,17 @@ public class CustomFontTextView extends TextView {
 
 	public CustomFontTextView(Context context) {
 		super(context);
+		if(!isInEditMode()){}
 	}
 
 	public CustomFontTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init(context, attrs);
+		if(!isInEditMode()) init(context, attrs);
 	}
 
 	public CustomFontTextView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		init(context, attrs);
+		if(!isInEditMode()) init(context, attrs);
 	}
 
 	private void init(Context context, AttributeSet attrs){

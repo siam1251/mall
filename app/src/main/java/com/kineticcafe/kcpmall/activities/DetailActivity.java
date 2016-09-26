@@ -62,7 +62,9 @@ import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
+import com.kineticcafe.kcpmall.fragments.MapFragment;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
+import com.kineticcafe.kcpmall.parking.ParkingManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.Blur.FastBlur;
 import com.kineticcafe.kcpmall.views.Blur.RSBlur;
@@ -222,7 +224,8 @@ public class DetailActivity extends AppCompatActivity {
                     mParentView,
                     R.layout.layout_detail_button,
                     R.drawable.icn_parking,
-                    kcpContentPage.getStoreParking(),
+//                    kcpContentPage.getStoreParking(),
+                    getResources().getString(R.string.parking_nearest_spot),
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -230,7 +233,7 @@ public class DetailActivity extends AppCompatActivity {
                             Intent intent = new Intent();
                             intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_SHOW_PARKING_SPOT);
                             intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, kcpContentPage.getStoreParking());
-                            setResult(0, intent);
+                            setResult(Integer.valueOf(kcpContentPage.getExternalCode()), intent);
                             onBackPressed();
                         }
                     }, true);
@@ -842,11 +845,33 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
-            if (resultCode != 0) {
-                setResult(resultCode, new Intent());
-                onBackPressed();
+        try {
+            if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
+                /*if (resultCode != 0) {
+                    setResult(resultCode, new Intent());
+                    onBackPressed();
+                }*/
+
+                if(data == null) {
+                } else {
+                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
+                    if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
+                        String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
+                        Intent intent = new Intent();
+                        intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_SHOW_PARKING_SPOT);
+                        intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, parkingName);
+                        setResult(Integer.valueOf(resultCode), intent);
+                        onBackPressed();
+                    } else if (resultCode != 0) {
+                        setResult(resultCode, new Intent());
+                        onBackPressed();
+                    }
+                }
+
+
             }
+        } catch (Exception e) {
+            logger.error(e);
         }
     }
 }

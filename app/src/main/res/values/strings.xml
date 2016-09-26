@@ -242,6 +242,9 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="parking_polygon_store_name">My Parked Car</string>
     <string name="parking_polygon_store_name_temporary">Nearest Parking Lot</string>
     <string name="parking_remove_my_spot">Remove My Parking Spot</string>
+    <string name="parking_save_as_my_parking_spot">Set as My Parking Spot</string>
+    <string name="parking_nearest_spot">Nearest Parking Spot</string>
+    <string name="parking_saved_my_parking_spot">My Parking Spot is Saved</string>
 
     <!--SEARCH-->
     <string name="search_store_that_contains">Stores that match : </string>
@@ -249,5 +252,13 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="search_type_cat">(category)</string>
     <string name="search_type_keyword">(keyword)</string>
     <string name="search_empty_results_place_holder">We couldn’t find anything by that name</string>
+
+    <!--WELCOME-->
+    <string name="welcome_title">Welcome</string>
+    <string name="welcome_message_ask">Would you like us to remember where you parked your car?</string>
+    <string name="welcome_message">Welcome to</string>
+    <string name="welcome_no">NO THANKS</string>
+    <string name="welcome_yes">YES PLEASE</string>
+
 
 </resources>

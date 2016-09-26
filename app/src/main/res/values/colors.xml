@@ -155,6 +155,10 @@
     <color name="insta_date_color">#adadad</color>
     <color name="insta_desc_color">#767676</color>
     <color name="alert_dialog_desc_text">#80000000</color>
+    <color name="welcome_btn_color">#009688</color>
+    <color name="emptySearchResults">#FFFFFF</color>
+
+
 
 
 
