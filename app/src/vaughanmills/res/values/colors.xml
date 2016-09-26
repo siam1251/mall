@@ -13,6 +13,7 @@
     <color name="active_mall_off_state">#FFFFFF</color>
     <color name="toolbarTextColor">#FFFFFF</color>
     <color name="tabSelectedTextColor">#FFFFFF</color>
+    <color name="emptySearchResults">#333333</color>
 
 
 

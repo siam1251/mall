@@ -78,8 +78,23 @@
             android:background="@drawable/circle_imageview_background_theme"
             android:layout_width="8dp"
             android:layout_height="8dp"/>
-
-
     </FrameLayout>
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="?attr/actionBarSize"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rvMallDirectory"
+        android:isScrollContainer="true"
+        android:gravity="center_horizontal"
+        android:background="@color/white"
+        />
+
+
+
+
 
 </RelativeLayout>

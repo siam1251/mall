@@ -100,7 +100,7 @@ public class ParkingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ParkingManager.saveParkingSpotAndEntrance(ParkingActivity.this, mParkingNote, mParkingLotSelectedPosition, mEntranceSelectedPosition);
-                Toast.makeText(ParkingActivity.this, "Parking Lot Saved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ParkingActivity.this, getResources().getString(R.string.parking_saved_my_parking_spot), Toast.LENGTH_SHORT).show();
                 setResult(Activity.RESULT_OK, new Intent());
                 onFinish();
             }
@@ -164,13 +164,6 @@ public class ParkingActivity extends AppCompatActivity {
                 }  else if (tvFooter.getText().toString().equals("DONE")){
                     showSaveParkingSpotScreen(true);
                 }
-                /*if(rvParkingChild.getVisibility() == View.VISIBLE) {
-                    setupChildRecyclerView();
-                } else if(rvParkingChild.getVisibility() != View.VISIBLE) {
-                    if(mParkingLotSelectedPosition != -1) setupChildRecyclerView();
-                } else {
-                    showSaveParkingSpotScreen(true);
-                }*/
             }
         });
 
@@ -199,7 +192,6 @@ public class ParkingActivity extends AppCompatActivity {
         rvParking.setHasFixedSize(true);
         ParkingRecyclerViewAdapter parkingRecyclerViewAdapter = new ParkingRecyclerViewAdapter(this, ParkingManager.sParkings.getParkings(), null);
         rvParking.setAdapter(parkingRecyclerViewAdapter);
-
 
         try {
             //select previously saved parking lot

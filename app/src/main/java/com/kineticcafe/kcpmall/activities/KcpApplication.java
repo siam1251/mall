@@ -28,10 +28,14 @@ public class KcpApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
         TwitterAuthConfig authConfig =  new TwitterAuthConfig(Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
-//        Fabric.with(this, new Crashlytics()); //ENABLE FOR PRODUCTION
-//        Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
-        Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
+        if(Constants.IS_APP_IN_PRODUCTION) {
+            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
+//          Fabric.with(this, new Crashlytics()); //ENABLE FOR PRODUCTION
+        } else {
+            Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
+        }
 
     }
 }

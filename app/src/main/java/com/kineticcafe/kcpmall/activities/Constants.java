@@ -4,9 +4,13 @@ import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
 
 public class Constants {
 
-//	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				1000;
-	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				500;
-	public final static int DURATION_SPLASH_ANIMATION = 						5000;
+
+
+	public final static boolean IS_APP_IN_PRODUCTION = false;
+
+	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				1000;
+//	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				500;
+	public final static int DURATION_SPLASH_ANIMATION = 						7000;
 //	public final static int DURATION_SPLASH_ANIMATION = 						10000;
 	public final static long DURATION_MAIN_BOT_TAB_ICON_SLIDE_UP_ANIMATION = 	100;
 	public final static long DURATION_MAIN_BOT_TAB_TITLE_ALPHA_ANIMATION = 		100;
@@ -101,4 +105,7 @@ public class Constants {
 
 	//OTHERS
 	public final static int NUMB_OF_DAYS = 7;
+	public final static String PREF_KEY_WELCOME_MSG_TIME_SAVER = "welcome_message_time_saver";
+
+
 }

@@ -137,12 +137,21 @@ public class MainActivity extends BaseActivity
     private GeofenceManager mGeofenceManager;
     private Animation mMenuActiveMallDotAnim;
 
+    //SEARCH RECYCLERVIEW FROM DIRECTORY FRAGMENT
+    public RecyclerView rvMallDirectory;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
+            }
+        });
 
         FirebaseTracking.getInstance(this).logAppLaunch();
 
@@ -188,6 +197,7 @@ public class MainActivity extends BaseActivity
 //        navigationView.setNavigationItemSelectedListener(this);
 
 
+        rvMallDirectory = (RecyclerView) findViewById(R.id.rvMallDirectory);
         ablTopNav = (AppBarLayout)findViewById(R.id.ablTopNav);
         rlDestinationEditor = (RelativeLayout) findViewById(R.id.rlDestinationEditor);
         ImageView ivBack = (ImageView) findViewById(R.id.ivBack);
@@ -293,6 +303,7 @@ public class MainActivity extends BaseActivity
             initializeMapData();
             initializeParkingData();
             initializeSeachIndex();
+
         }
     }
 
@@ -739,6 +750,20 @@ public class MainActivity extends BaseActivity
             Drawable drawerLayoutBgDrawable;
 
             if(activeMallEnabled) {
+
+                long minStartTime = System.currentTimeMillis() - 1000*60*60*24;
+                long lastTimeRan = KcpUtility.loadLongFromCache(this, Constants.PREF_KEY_WELCOME_MSG_TIME_SAVER, -1);
+
+
+
+                if(   (Constants.IS_APP_IN_PRODUCTION && (!ParkingManager.isParkingLotSaved(this) && lastTimeRan <= minStartTime)) ||
+                        (!Constants.IS_APP_IN_PRODUCTION && !ParkingManager.isParkingLotSaved(this)) ) {
+                    KcpUtility.cacheToPreferences(this, Constants.PREF_KEY_WELCOME_MSG_TIME_SAVER, System.currentTimeMillis());
+                    startActivity(new Intent(MainActivity.this, WelcomeMessage.class));
+                    ActivityAnimation.startActivityAnimation(MainActivity.this);
+                }
+
+
                 llActiveMall.setVisibility(View.VISIBLE);
                 setActiveMallDot(true);
                 panelBackgroundColor = getResources().getColor(R.color.active_mall_bg);
@@ -1132,7 +1157,12 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        if(Constants.IS_APP_IN_PRODUCTION) {
+        } else {
+          getMenuInflater().inflate(R.menu.menu_main, menu);
+        }
+
         return true;
     }
 
@@ -1212,54 +1242,83 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_CODE_CHANGE_INTEREST) {
-            if (resultCode == Activity.RESULT_OK) {
-                HomeFragment.getInstance().downloadNewsAndDeal();
-            } else {
+        try {
+            if (requestCode == Constants.REQUEST_CODE_CHANGE_INTEREST) {
+                if (resultCode == Activity.RESULT_OK) {
+                    HomeFragment.getInstance().downloadNewsAndDeal();
+                } else {
 
-            }
-        } else if (requestCode == Constants.REQUEST_CODE_MY_PAGE_TYPE) {
-            if (resultCode == Constants.RESULT_DEALS) {
-                selectPage(0);
-                HomeFragment.getInstance().selectPage(1);
-            } else if (resultCode == Constants.RESULT_EVENTS) {
-                selectPage(0);
-                HomeFragment.getInstance().selectPage(0);
-            } else if (resultCode == Constants.RESULT_STORES) {
-                selectPage(1);
-                DirectoryFragment.getInstance().selectPage(1);
-            }
-        } else if(requestCode == Constants.REQUEST_CODE_SAVE_PARKING_SPOT) {
-            mDrawer.closeDrawers();
-            if (resultCode == Activity.RESULT_OK) {
-                setUpRightSidePanel();
-                if(mOnParkingClickListener != null && Amenities.isToggled(this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true, true);
-                InfoFragment.getInstance().setParkingSpotCTA();
-            }
-        } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
-            if (resultCode != 0) {
-                selectPage(2);
+                }
+            } else if (requestCode == Constants.REQUEST_CODE_MY_PAGE_TYPE) {
+                if (resultCode == Constants.RESULT_DEALS) {
+                    selectPage(0);
+                    HomeFragment.getInstance().selectPage(1);
+                } else if (resultCode == Constants.RESULT_EVENTS) {
+                    selectPage(0);
+                    HomeFragment.getInstance().selectPage(0);
+                } else if (resultCode == Constants.RESULT_STORES) {
+                    selectPage(1);
+                    DirectoryFragment.getInstance().selectPage(1);
+                }
+            } else if(requestCode == Constants.REQUEST_CODE_SAVE_PARKING_SPOT) {
+                mDrawer.closeDrawers();
+                if (resultCode == Activity.RESULT_OK) {
+                    setUpRightSidePanel();
+                    if(mOnParkingClickListener != null && Amenities.isToggled(this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true, true);
+                    InfoFragment.getInstance().setParkingSpotCTA();
+                }
+            } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
+                //1. show store on the map 2. show nearest parking spot from a store
                 String externalCode = String.valueOf(resultCode);
                 ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocation(externalCode);
-                if(polygons != null && polygons.size() > 0) {
-                    MapFragment.getInstance().showStoreOnTheMapFromDetailActivity(polygons.get(0));
+                //data == null : backpressed
+                //data != null  && !externalCode.equals("0") : locate store
+                //data != null && data.getIntExtra(Constants.REQUEST_CODE_KEY, 0) == Constants.REQUEST_CODE_SHOW_PARKING_SPOT : parking spot
+
+                if(data == null) {
+                    //backpressed
                 } else {
-                    MapFragment.getInstance().mPendingExternalCode = externalCode;
-                }
-            } else {
-                if(data != null) {
                     int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
                     if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
                         String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
                         if(parkingName != null) {
                             selectPage(2);
                             int parkingPosition = ParkingManager.sParkings.getParkingPositionByName(parkingName);
-                            if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition);
+                            if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, polygons.get(0));
+                        }
+                    } else if (!externalCode.equals("0")) {
+                        selectPage(2);
+                        if(polygons != null && polygons.size() > 0) {
+                            MapFragment.getInstance().showStoreOnTheMapFromDetailActivity(polygons.get(0));
+                        } else {
+                            MapFragment.getInstance().mPendingExternalCode = externalCode;
                         }
                     }
                 }
 
+                /*if (data == null) {
+                    if(!externalCode.equals("0")){
+                        selectPage(2);
+                        if(polygons != null && polygons.size() > 0) {
+                            MapFragment.getInstance().showStoreOnTheMapFromDetailActivity(polygons.get(0));
+                        } else {
+                            MapFragment.getInstance().mPendingExternalCode = externalCode;
+                        }
+                    }
+                } else {
+                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
+                    if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
+                        String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
+                        if(parkingName != null) {
+                            selectPage(2);
+                            int parkingPosition = ParkingManager.sParkings.getParkingPositionByName(parkingName);
+                            if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, polygons.get(0));
+                        }
+                    }
+                }*/
             }
+        } catch (Exception e) {
+            logger.error(e);
         }
     }
 
