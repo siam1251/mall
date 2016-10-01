@@ -1,6 +1,5 @@
 package com.kineticcafe.kcpmall.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
@@ -24,6 +22,7 @@ import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.adapters.NewsRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.interfaces.FavouriteInterface;

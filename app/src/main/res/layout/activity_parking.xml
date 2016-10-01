@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#b2202020"
+    android:background="@color/darkTransparentBackground"
     >
 
     <RelativeLayout
@@ -21,7 +21,6 @@
             android:layout_margin="5dp"
             android:src="@drawable/icn_exit"
             />
-
 
         <android.support.v7.widget.RecyclerView
             android:layout_alignParentBottom="true"
@@ -185,13 +184,14 @@
             android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:background="@drawable/btn_style_corner_radius_with_selected_state"
             android:gravity="center"
             android:text="@string/parking_btn_save_parking_spot"
             android:textSize="16sp"
             style="@style/SelectableItemForegroundWhite"
             android:elevation="1dp"
+            android:background="@drawable/btn_style_corner_radius_primary"
             />
+            android:background="@drawable/btn_style_corner_radius_with_selected_state"
 
         <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
             android:visibility="gone"

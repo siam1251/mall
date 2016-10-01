@@ -7,8 +7,8 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 
-import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.constants.Constants;
 
 public class SplashActivity extends AppCompatActivity {
     private Thread mSplashThread;

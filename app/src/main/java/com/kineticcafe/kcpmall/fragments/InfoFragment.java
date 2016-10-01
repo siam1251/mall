@@ -1,30 +1,23 @@
 package com.kineticcafe.kcpmall.fragments;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.managers.KcpInfoManager;
@@ -35,7 +28,8 @@ import com.kineticcafe.kcpandroidsdk.models.MallInfo.InfoList;
 import com.kineticcafe.kcpandroidsdk.models.MallInfo.KcpMallInfoRoot;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.activities.MainActivity;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.activities.MallHourActivity;
 import com.kineticcafe.kcpmall.activities.MallInfoDetailActivity;
 import com.kineticcafe.kcpmall.activities.ParkingActivity;
@@ -44,9 +38,6 @@ import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.parking.ParkingManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
-import com.twitter.sdk.android.core.models.Card;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -121,7 +112,11 @@ public class InfoFragment extends BaseFragment {
                     intent.putExtra("image", "bitmap.png");
                     getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
                 } else {
-                    getActivity().startActivityForResult(new Intent(getActivity(), ParkingActivity.class), Constants.REQUEST_CODE_SAVE_PARKING_SPOT); //is startActivityForResult necessary?
+
+                    mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_MAP);
+                    MapFragment.getInstance().onParkingClick(true, true);
+
+//                    getActivity().startActivityForResult(new Intent(getActivity(), ParkingActivity.class), Constants.REQUEST_CODE_SAVE_PARKING_SPOT); //is startActivityForResult necessary?
                 }
             }
         });
@@ -334,7 +329,7 @@ public class InfoFragment extends BaseFragment {
                 } else {
                     Intent intent = new Intent(getActivity(), MallInfoDetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, infoList);
-                    getActivity().startActivity(intent);
+                    getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_LOCATE_GUEST_SERVICE);
                 }
                 ActivityAnimation.startActivityAnimation(getActivity());
             }

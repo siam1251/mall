@@ -42,6 +42,7 @@ android {
 
         vaughanmills {
             applicationId "com.kineticcafe.kcpmall.vaughanmills"
+            versionName "1.0.0"
         }
 
         layouttest {

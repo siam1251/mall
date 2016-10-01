@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
@@ -24,8 +23,8 @@ import com.kineticcafe.kcpandroidsdk.models.MallInfo.KcpMallInfoRoot;
 import com.kineticcafe.kcpandroidsdk.utils.KcpTimeConverter;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
-import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 
 import java.util.Calendar;

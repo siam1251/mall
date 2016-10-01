@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
-import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.MainActivity;
 import com.kineticcafe.kcpmall.adapters.NewsRecyclerViewAdapter;

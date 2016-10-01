@@ -1,4 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvAncmt"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/SelectableItemForeground"
+    card_view:cardCornerRadius="@dimen/card_corner_radius">-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    style="@style/SelectableItemForeground"
+    android:layout_height="@dimen/category_item_height">
+
+        <com.kineticcafe.kcpmall.views.ThemeColorImageView
+            xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+            ThemedImageView:filterColor="@color/themeColor"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icn_menu_map"
+            android:id="@+id/ivCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:adjustViewBounds="true"
+            />
+
+        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_regular"
+            android:textColor="@color/category_txt"
+            android:layout_marginLeft="@dimen/category_txt_left_margin"
+            android:layout_toRightOf="@+id/ivCategory"
+            android:textSize="@dimen/category_txt"
+            android:gravity="center_vertical"
+            android:text="Women's clothing"
+            android:id="@+id/tvCategory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:transitionName="@string/transition_category_name"
+            />
+
+    </RelativeLayout>
+<!--</android.support.v7.widget.CardView>-->
+
+
+<!--
+<?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -43,4 +94,4 @@
             />
 
     </RelativeLayout>
-</android.support.v7.widget.CardView>
+</android.support.v7.widget.CardView>-->

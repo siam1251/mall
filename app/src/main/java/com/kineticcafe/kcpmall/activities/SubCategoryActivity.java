@@ -14,6 +14,7 @@ import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.CategoryRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.DealRecyclerItemDecoration;

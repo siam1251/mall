@@ -86,5 +86,10 @@ public class FirebaseTracking {
         bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, itemCategory);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM_LIST, bundle);
     }
+
+    public void logEvent(Bundle bundle){
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
+
 }
 

@@ -2,7 +2,6 @@ package com.kineticcafe.kcpmall.activities;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -11,6 +10,7 @@ import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.views.zoomable.TouchImageView;
 
 public class ZoomableImage extends AppCompatActivity {

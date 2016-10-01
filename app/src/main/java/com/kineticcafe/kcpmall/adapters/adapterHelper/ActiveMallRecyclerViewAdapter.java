@@ -12,22 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
-import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
-import com.kineticcafe.kcpmall.fragments.MapFragment;
-import com.kineticcafe.kcpmall.interfaces.FavouriteInterface;
-import com.kineticcafe.kcpmall.managers.FavouriteManager;
-import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
-import com.kineticcafe.kcpmall.views.RecyclerViewFooter;
 
 import java.util.ArrayList;
 

@@ -252,8 +252,8 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                     }
 
                     if(mItemClickListener != null) {
-                        if(mFavCatTempList.size() > 0) mItemClickListener.onItemClick(false);
-                        else mItemClickListener.onItemClick(true);
+//                        if(mFavCatTempList.size() > 0) mItemClickListener.onItemClick(false);
+//                        else mItemClickListener.onItemClick(true);
                     }
                 }
             });
@@ -313,8 +313,8 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                     }
 
                     if(mItemClickListener != null) {
-                        if(mFavStoreLikeLinkList.size() > 0) mItemClickListener.onItemClick(false);
-                        else mItemClickListener.onItemClick(true);
+//                        if(mFavStoreLikeLinkList.size() > 0) mItemClickListener.onItemClick(false);
+//                        else mItemClickListener.onItemClick(true);
                     }
                 }
             });

@@ -94,6 +94,15 @@
         />
 
 
+    <com.kineticcafe.kcpmall.adapters.adapterHelper.IndexableRecylerView
+        android:layout_marginTop="?attr/actionBarSize"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rvMap"
+        android:gravity="center_horizontal"
+        android:background="@color/white"
+        />
 
 
 

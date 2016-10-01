@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.SocialFeedDetailRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.HomeFragment;
 import com.kineticcafe.kcpmall.utility.Utility;

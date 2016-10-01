@@ -9,16 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
 import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.activities.MainActivity;
 import com.kineticcafe.kcpmall.adapters.CategoryRecyclerViewAdapter;
-import com.kineticcafe.kcpmall.adapters.ExpandableCategoryRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
-
-import java.util.ArrayList;
 
 
 public class CategoriesFragment extends BaseFragment {

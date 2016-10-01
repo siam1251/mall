@@ -12,12 +12,13 @@
         android:layout_height="match_parent"
         >
 
+
         <ImageView
             android:id="@+id/ivDrawerLayoutBg"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="147dp"
-            android:src="@drawable/img_activemall_bg"
+            android:src="@drawable/img_profile_activemall"
             />
 
         <View

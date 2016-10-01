@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.R;
 
 public class DetailFragment extends Fragment {

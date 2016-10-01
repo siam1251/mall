@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.activities.InterestedCategoryActivity;
 import com.kineticcafe.kcpmall.activities.SocialDetailActivity;
@@ -253,6 +253,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 ViewGroup.LayoutParams rlAncmtParam = (ViewGroup.LayoutParams) ancmtHolder.rlAncmt.getLayoutParams();
                 rlAncmtParam.height =  (int) mContext.getResources().getDimension(R.dimen.ancmt_desc_height_without_date);
                 ancmtHolder.rlAncmt.setLayoutParams(rlAncmtParam);
+                ancmtHolder.ivFav.setVisibility(View.GONE); //Announcement should not be favourited
             }
 
             final String likeLink = kcpContentPage.getLikeLink();

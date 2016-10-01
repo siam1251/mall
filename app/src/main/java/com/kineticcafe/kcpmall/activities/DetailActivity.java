@@ -1,52 +1,32 @@
 package com.kineticcafe.kcpmall.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.renderscript.RSRuntimeException;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
-import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.managers.KcpCategoryManager;
 import com.kineticcafe.kcpandroidsdk.managers.KcpPlaceManager;
@@ -57,18 +37,14 @@ import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpandroidsdk.utils.KcpTimeConverter;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.factory.GlideFactory;
+import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.fragments.DealsRecyclerViewAdapter;
-import com.kineticcafe.kcpmall.fragments.HomeFragment;
-import com.kineticcafe.kcpmall.fragments.MapFragment;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
-import com.kineticcafe.kcpmall.parking.ParkingManager;
 import com.kineticcafe.kcpmall.utility.Utility;
-import com.kineticcafe.kcpmall.views.Blur.FastBlur;
-import com.kineticcafe.kcpmall.views.Blur.RSBlur;
-import com.kineticcafe.kcpmall.views.BlurTransformation;
 import com.kineticcafe.kcpmall.views.CTA;
 import com.kineticcafe.kcpmall.views.CustomAnimation;
 import com.kineticcafe.kcpmall.views.HtmlTextView;
@@ -80,10 +56,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class DetailActivity extends AppCompatActivity {
 //public class DetailActivity extends SwipeBackActivity {
@@ -154,6 +126,10 @@ public class DetailActivity extends AppCompatActivity {
                 }, DetailActivity.this, ivFav);
             }
         });
+
+        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
+            ivFav.setVisibility(View.GONE);
+        }
 
 
         NestedScrollView nsvDetail = (NestedScrollView) findViewById(R.id.nsvDetail);
@@ -444,6 +420,8 @@ public class DetailActivity extends AppCompatActivity {
                 cTAList.add(phone);
 
             } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
+                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+
                 cTAList.add(location);
                 cTAList.add(parking);
                 cTAList.add(storeHours);
@@ -491,12 +469,14 @@ public class DetailActivity extends AppCompatActivity {
                             }
                         }, false);
 
+
                 CTA webpage = new CTA(
                         this,
                         mParentView,
                         R.layout.layout_detail_social_button,
                         R.drawable.icn_web,
-                        getResources().getString(R.string.social_instagram),
+//                        getResources().getString(R.string.social_webpage),
+                        kcpPlace.getMainWebsiteLink(),
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -508,7 +488,6 @@ public class DetailActivity extends AppCompatActivity {
 
                 //SOCIAL SHARING
 
-                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
                 if(kcpPlace != null && kcpPlace.getFacebookLink() != null || kcpPlace.getTwitterLink() != null || kcpPlace.getInstagramLink() != null || kcpPlace.getMainWebsiteLink() != null){
                     LinearLayout llSharing = (LinearLayout) findViewById(R.id.llSharing);
                     llSharing.setVisibility(View.VISIBLE);
@@ -634,6 +613,7 @@ public class DetailActivity extends AppCompatActivity {
 
             final String toolbarTitle = KcpContentTypeFactory.getContentTypeTitle(kcpContentPage);
 
+            TextView tvExpiryDate = (TextView) findViewById(R.id.tvExpiryDate);
             String imageUrlTemp = kcpContentPage.getHighestResImageUrl();
             if(imageUrlTemp.equals("")) imageUrlTemp = kcpContentPage.getHighestResFallbackImageUrl();
             final String imageUrl = imageUrlTemp;
@@ -713,8 +693,6 @@ public class DetailActivity extends AppCompatActivity {
                         .bitmapTransform(new BlurTransformation(ivDetailImage.getContext()))
                         .into((ImageView) findViewById(R.id.ivBlurred));*/
 
-                TextView tvExpiryDate = (TextView) findViewById(R.id.tvExpiryDate);
-//                tvExpiryDate.setBackgroundColor(getResources().getColor(R.color.themeColor));
                 tvExpiryDate.getBackground().setAlpha(241);
 
                 //TODO: daysLeft shows 1 less date (ex) 2016-05-27T00:00:00.000+00:00 shows date as 26 EST see if this is right
@@ -770,13 +748,22 @@ public class DetailActivity extends AppCompatActivity {
                     tvDetailDate.setTextColor(getResources().getColor(R.color.white));
                 }
             } else {
-                time =
-                        kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EFFECTIVE) +
-                                " - " +
-                                kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EFFECTIVE);
+                String startingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_HOLIDAY_STORE);
+                String endingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_HOLIDAY_STORE);
+
+                if(!startingTime.equals(endingTime)) {
+                    time = startingTime + " - " + endingTime;
+                } else {
+                    String eventStartHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EVENT_HOUR);
+                    String eventEndingHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EVENT_HOUR);
+                    time = startingTime + " @ " + eventStartHour + " to " + eventEndingHour;
+                }
             }
 
-            if(time.equals(" - ")) tvDetailDate.setVisibility(View.GONE);
+            if(time.equals(" - ")) {
+                tvDetailDate.setVisibility(View.GONE);
+                tvExpiryDate.setVisibility(View.GONE);
+            }
             tvDetailDate.setText(time);
 
             TextView tvDetailBody = (TextView) findViewById(R.id.tvDetailBody);

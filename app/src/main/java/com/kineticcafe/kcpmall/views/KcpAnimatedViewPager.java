@@ -12,7 +12,7 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 

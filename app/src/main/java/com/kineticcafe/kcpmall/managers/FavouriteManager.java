@@ -10,7 +10,6 @@ import com.google.gson.reflect.TypeToken;
 import com.kineticcafe.kcpandroidsdk.models.KcpContentPage;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.interfaces.FavouriteInterface;
 
 import java.lang.reflect.Type;

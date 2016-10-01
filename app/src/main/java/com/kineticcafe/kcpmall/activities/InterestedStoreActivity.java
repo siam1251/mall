@@ -1,6 +1,5 @@
 package com.kineticcafe.kcpmall.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,8 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +23,7 @@ import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.adapters.InterestRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
@@ -127,7 +125,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
             }
         });
         recyclerView.setAdapter(mInterestRecyclerViewAdapter);
-        InterestedCategoryActivity.setUpCTA(InterestedStoreActivity.this, kcpPlacesArrayList.size() == 0, flIntrstdBot, tvIntrstd);
+//        InterestedCategoryActivity.setUpCTA(InterestedStoreActivity.this, kcpPlacesArrayList.size() == 0, flIntrstdBot, tvIntrstd);
     }
 
     @Override

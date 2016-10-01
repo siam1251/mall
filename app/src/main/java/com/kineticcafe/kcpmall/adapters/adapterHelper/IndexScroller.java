@@ -48,7 +48,7 @@ public class IndexScroller {
         mDensity = context.getResources().getDisplayMetrics().density;
         mScaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
         recyclerView = lv;
-
+        recyclerView.setScrollContainer(false);
         mIndexbarWidth = 20 * mDensity;
         mIndexbarMargin = 10 * mDensity;
         mPreviewPadding = 5 * mDensity; //square in the center
