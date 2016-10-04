@@ -234,11 +234,6 @@ public class MainActivity extends BaseActivity
                 }
 
                 if(position == VIEWPAGER_PAGE_MAP) {
-                    /*MapFragment.getInstance().runGetVenue = true;
-                    if(!MapFragment.getInstance().isGetVenueAlreadyCalled){
-                        MapFragment.getInstance().runGetVenue();
-                    }*/
-
                     if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true, false);
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
@@ -793,7 +788,7 @@ public class MainActivity extends BaseActivity
                 if(todaysEventList == null || todaysEventList.size() == 0) tvEmptyTodaysEvent.setVisibility(View.VISIBLE);
                 else {
                     tvEmptyTodaysEvent.setVisibility(View.GONE);
-//                    KcpUtility.sortKcpContentPageByStoreName(todaysEventList);
+//                    KcpUtility.sortKcpContentPageByStoreName(todaysEventList); //sort the event list by store name
                 }
                 ActiveMallRecyclerViewAdapter todaysEventAdapter = new ActiveMallRecyclerViewAdapter (
                         this,
@@ -997,24 +992,6 @@ public class MainActivity extends BaseActivity
                     );
 
                 }
-
-
-                /*amenityList.add(new Amenities.AmenityLayout(
-                                MainActivity.this,
-                                (ViewGroup) llAmenitySwitch,
-                                R.layout.layout_amenities,
-                                amenity.getTitle(),
-                                Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_AMENITY + amenity.getTitle()),
-                                new CompoundButton.OnCheckedChangeListener() {
-                                    @Override
-                                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                        Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_AMENITY + amenity.getTitle(), isChecked);
-                                        if(amenity.getExternalIds() == null || amenity.getExternalIds().length == 0) return;
-                                        if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(isChecked, amenity.getExternalIds()[0]);
-                                    }
-                                }
-                        )
-                );*/
             }
         }
 
@@ -1341,27 +1318,6 @@ public class MainActivity extends BaseActivity
                         }
                     }
                 }
-
-                /*if (data == null) {
-                    if(!externalCode.equals("0")){
-                        selectPage(2);
-                        if(polygons != null && polygons.size() > 0) {
-                            MapFragment.getInstance().showStoreOnTheMapFromDetailActivity(polygons.get(0));
-                        } else {
-                            MapFragment.getInstance().mPendingExternalCode = externalCode;
-                        }
-                    }
-                } else {
-                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
-                    if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
-                        String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
-                        if(parkingName != null) {
-                            selectPage(2);
-                            int parkingPosition = ParkingManager.sParkings.getParkingPositionByName(parkingName);
-                            if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, polygons.get(0));
-                        }
-                    }
-                }*/
             }
         } catch (Exception e) {
             logger.error(e);

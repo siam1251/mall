@@ -9,7 +9,9 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
@@ -18,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -76,6 +79,8 @@ import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.RawData;
 import com.mappedin.sdk.Venue;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -83,15 +88,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import javax.microedition.khronos.opengles.GL10;
+
 /**
  * Created by Kay on 2016-06-20.
  */
 public class MapFragment extends BaseFragment implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener {
+
+    private final String TAG = "MapFragment";
+
     private static MapFragment sMapFragment;
     public static MapFragment getInstance(){
         if(sMapFragment == null) sMapFragment = new MapFragment();
         return sMapFragment;
     }
+
+
+
 
     enum SearchMode { STORE, ROUTE_START, ROUTE_DESTINATION }
     public SearchMode mSearchMode = SearchMode.STORE;
@@ -159,6 +172,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     public boolean isGetVenueAlreadyCalled = false; //getvenue takes long so run getVenue when the tab is selected. this flag saves whether getVenue has already been called
     public boolean runGetVenue = false;
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -358,10 +374,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             }
             transaction.commit();
             mapView.setDelegate(delegate);
-//            if(runGetVenue) {
-//                isGetVenueAlreadyCalled = true;
-                mappedIn.getVenue(activeVenue, accessibleDirections, new CustomLocationGenerator(), new GetVenueCallback());
-//            }
+            mappedIn.getVenue(activeVenue, accessibleDirections, new CustomLocationGenerator(), new GetVenueCallback());
         }
 
         @Override
@@ -369,12 +382,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             Logger.log("Error loading any venues. Did you set your credentials? Exception: " + e);
         }
     }
-
-    /*public void runGetVenue() {
-        isGetVenueAlreadyCalled = true;
-        mappedIn.getVenue(activeVenue, accessibleDirections, new CustomLocationGenerator(), new GetVenueCallback());
-    }*/
-
 
     // Get the full details on a single Venue
     private class GetVenueCallback implements MappedinCallback<Venue> {
@@ -500,6 +507,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     public void didTapPolygon(Polygon polygon) {
         try {
+
             if(path != null || polygon == null) return; //map shouldn't be clicakble when the paths drawn
             if (polygon.getLocations().size() == 0) { //TODO: clearHighlightedColours() used to be above this line - polygon.getLocation().size() was sometimes 0 resulting in skipping highlightPolygon (it returned)
                 return;
