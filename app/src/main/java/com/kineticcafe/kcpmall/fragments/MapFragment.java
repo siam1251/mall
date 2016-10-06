@@ -87,6 +87,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -114,7 +115,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private ProgressBar pb;
     private View view;
     private SearchView mSearchView;
-//    private IndexableRecylerView rvMap;
+    //    private IndexableRecylerView rvMap;
     private RelativeLayout rlMap;
     private RelativeLayout rlDirection;
     private TextView tvStoreName;
@@ -153,9 +154,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private MappedIn mappedIn = null;
     private MapView mapView = null;
     private Map[] maps;
-    private Button showLocationsButton = null;
     private HashMap<Polygon, Integer> originalColors = new HashMap<Polygon, Integer>();
-    private HashMap<Overlay, LocationLabelClicker> overlays = new HashMap<Overlay, LocationLabelClicker>();
+    /*private HashMap<Overlay, LocationLabelClicker> overlays = new HashMap<Overlay, LocationLabelClicker>();
+    private HashMap<Coordinate, LocationLabelClicker> mLocationClickersMap = new HashMap<Coordinate, LocationLabelClicker>();*/
+    private ConcurrentHashMap<Overlay, LocationLabelClicker> overlays = new ConcurrentHashMap<Overlay, LocationLabelClicker>();
+    private ConcurrentHashMap<Coordinate, LocationLabelClicker> mLocationClickersMap = new ConcurrentHashMap<Coordinate, LocationLabelClicker>();
     private Venue activeVenue = null;
     private boolean navigationMode = false;
     private Path path;
@@ -169,9 +172,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     public String mPendingExternalCode;
     private Overlay2DImage mSelectedPin = null;//to keep track of highlited amenity drawable to set back to the original state in clearHighlighted
     private Overlay2DImage mRemovedPin = null; //overlayImage that was replaced by mSelectedOverlayImage
-
-    public boolean isGetVenueAlreadyCalled = false; //getvenue takes long so run getVenue when the tab is selected. this flag saves whether getVenue has already been called
-    public boolean runGetVenue = false;
+    private String mAmenityClicked = ""; //to keep track of previously clicked amenity
 
 
 
@@ -216,9 +217,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
         mappedIn = new MappedIn(getActivity());
         mapView = new MapView(); //TODO: disabled for testing
-
-        showLocationsButton = (Button) view.findViewById(R.id.showLocationButton);
-        showLocationsButton.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { showLocations();}});
 
         btnShowMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -359,22 +357,21 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     activeVenue = venue;
                 }
             }
-            if(activeVenue == null) return;
-
-            //TODO: choose fragment method
-            android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-            if(!mapView.isAdded()){
-                Log.d("test", "MAP WAS NOT ADDED!");
-                transaction.add(R.id.flMap, mapView);
-            } else {
-                Log.e("test", "MAP ALREADY ADDED!");
-                transaction.remove(mapView);
-                mapView = new MapView();
-                transaction.add(R.id.flMap, mapView);
-            }
-            transaction.commit();
-            mapView.setDelegate(delegate);
-            mappedIn.getVenue(activeVenue, accessibleDirections, new CustomLocationGenerator(), new GetVenueCallback());
+            if(activeVenue == null || getActivity() == null) return;
+                //TODO: choose fragment method
+                android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+                if(!mapView.isAdded()){
+                    Log.d("test", "MAP WAS NOT ADDED!");
+                    transaction.add(R.id.flMap, mapView);
+                } else {
+                    Log.e("test", "MAP ALREADY ADDED!");
+                    transaction.remove(mapView);
+                    mapView = new MapView();
+                    transaction.add(R.id.flMap, mapView);
+                }
+                transaction.commit();
+                mapView.setDelegate(delegate);
+                mappedIn.getVenue(activeVenue, accessibleDirections, new CustomLocationGenerator(), new GetVenueCallback());
         }
 
         @Override
@@ -392,15 +389,16 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 Logger.log("No maps! Make sure your venue is set up correctly!");
                 return;
             }
-            Arrays.sort(maps, new Comparator<Map>() {
+            //set the map elevation if it exists
+            /*Arrays.sort(maps, new Comparator<Map>() {
                 @Override
                 public int compare(Map a, Map b) {
                     return (int) (a.getElevation() - b.getElevation());
                 }
-            });
+            });*/
 
             mapView.setMap(maps[0]);
-            setMapLevel(maps.length / 2, null); //todo: disabled for testing
+//            setMapLevel(maps.length / 2, null); //set the map level if it exists
             if(pb != null) pb.setVisibility(View.GONE);
             if(maps.length > 1) {
                 ivUpper.setVisibility(View.VISIBLE);
@@ -475,8 +473,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
             Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
             final String externalID = amenity.getExternalIds()[0];
-//            onAmenityClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_AMENITY + amenity.getTitle()), amenity.getExternalIds()[0]);
-            onAmenityClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_AMENITY + externalID), amenity.getExternalIds()[0]);
+            onAmenityClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_AMENITY + externalID), amenity.getExternalIds()[0], false);
         }
 
         //mark the store that's been
@@ -601,9 +598,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    public void didTapMarker() {
     }
 
     public void didTapOverlay(Overlay overlay) {
@@ -738,6 +732,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        mAmenityClicked = location.getAmenityType();
         showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.getExternalID()), location.getName(), categoryName, amenityDrawable);
         clearHighlightedColours();
     }
@@ -780,27 +776,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         path = null;
     }
 
-    private void showLocations() {
-        for (Location location : activeVenue.getLocations()) {
-
-            List<Coordinate> coords = location.getNavigatableCoordinates();
-            if (coords.size() > 0) {
-                Overlay2DLabel label = new Overlay2DLabel(location.getName(), 36, Typeface.DEFAULT);
-                label.setPosition(coords.get(0));
-                LocationLabelClicker clicker = new LocationLabelClicker();
-                clicker.location = (CustomLocation) location;
-                overlays.put(label, clicker);
-                mapView.addMarker(label);
-            }
-        }
-    }
-
-
     @Override
-    public void onAmenityClick(boolean enabled, String amenityName) {
+    public void onAmenityClick(boolean enabled, final String amenityName, final boolean focusPin) {
         try {
-            HashMap<String, ArrayList<CustomLocation>> amenityHashmap = CustomLocation.getAmenityHashMap();
-            ArrayList<CustomLocation> amenityList = amenityHashmap.get(amenityName);
+            ArrayList<CustomLocation> amenityList = CustomLocation.getAmenityHashMap().get(amenityName);
             if(amenityList != null){
                 for(final CustomLocation location : amenityList) {
                     if(enabled){
@@ -816,15 +795,19 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                                             mAmeityDrawable = new BitmapDrawable(getResources(), resource);
                                             mAmeityDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
                                             dropPin(coordinate, location, mAmeityDrawable);
+                                            if(focusPin) clickOverlayWithNameAndPosition(amenityName, 0);
                                         }
                                     });
                         }
                     } else {
+                        if(mAmenityClicked.equals(amenityName)){
+                            showDirectionCard(false, null, 0, null, null, null);
+                        }
+                        mRemovedPin = null;
                         removePin(location);
                     }
                 }
             }
-
 
         } catch (Exception e) {
             logger.error(e);
@@ -839,10 +822,12 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.MULTIPLY);
         Overlay2DImage label = new Overlay2DImage(PIN_IMAGE_SIZE_DP, PIN_IMAGE_SIZE_DP, clone);
         label.setPosition(coordinate);
+        LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         //if I remove the lable at the same spot and add another label with new LocationLabelClicker,
         //removed label's LocationLabelClicker gets called again so shouldn't add another labelClicker
         mSelectedPin = label;
-
+//        overlays.put(label, mLocationClickersMap.get(coordinate)); //should add to overlays so when removing pins, selected (highlighted) ones get removed too
+        overlays.put(label, clicker); //should add to overlays so when removing pins, selected (highlighted) ones get removed too
         mapView.addMarker(label, false);
     }
 
@@ -851,24 +836,91 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         //TODO: only add pins to the current floor
         Overlay2DImage label = new Overlay2DImage(PIN_IMAGE_SIZE_DP, PIN_IMAGE_SIZE_DP, pinDrawable);
         label.setPosition(coordinate);
-        LocationLabelClicker clicker = new LocationLabelClicker();
-        clicker.location = (CustomLocation) location;
-        clicker.drawable = pinDrawable;
-        clicker.label = label;
-        clicker.coordinate = coordinate;
+        LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         overlays.put(label, clicker);
+        mLocationClickersMap.put(coordinate, clicker);
         mapView.addMarker(label, false);
     }
 
-    public void removePin(final Location location) {
-        if(location == null) return;
-        for (HashMap.Entry<Overlay, LocationLabelClicker> entry : overlays.entrySet()) {
-            Overlay overlay = entry.getKey();
-            LocationLabelClicker locationLabelClicker = entry.getValue();
-            if(locationLabelClicker.location == location){
-                mapView.removeMarker(overlay);
+
+    public void clickOverlayWithNameAndPosition(String amenityName, int position){
+        Coordinate coordinate;
+        ArrayList<CustomLocation> amenityList = CustomLocation.getAmenityHashMap().get(amenityName);
+        if(amenityList != null){
+            for(final CustomLocation location : amenityList) {
+                List<Coordinate> coords = location.getNavigatableCoordinates();
+                coordinate = coords.get(position);
+                LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(coordinate);
+                locationLabelClicker.onClick();
             }
         }
+    }
+
+    public void clickOverlayWithCoordinate(Coordinate coordinate, int position){
+        if(coordinate != null){
+                LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(coordinate);
+                locationLabelClicker.onClick();
+        }
+    }
+
+    public Overlay getOverlayFromMap(Location location){
+
+        try {
+            if(location == null) return null;
+            for (HashMap.Entry<Overlay, LocationLabelClicker> entry : overlays.entrySet()) {
+                Overlay overlay = entry.getKey();
+                LocationLabelClicker locationLabelClicker = entry.getValue();
+                if(locationLabelClicker.location == location){
+                    return overlay;
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
+        return null;
+    }
+
+    public void removePin(final Location location) {
+
+        //should remove the direction card of the removed pin
+//        Overlay overlay = getOverlayFromMap(location);
+//        if (overlay != null) {
+//            mapView.removeMarker(overlay);
+//            mLocationClickersMap.remove(overlay.getPosition());
+//            overlays.remove(overlay);
+//        }
+
+        try {
+            for (HashMap.Entry<Overlay, LocationLabelClicker> entry : overlays.entrySet()) {
+                Overlay overlay = entry.getKey();
+                LocationLabelClicker locationLabelClicker = entry.getValue();
+                if(locationLabelClicker.location == location){
+
+                    mapView.removeMarker(overlay);
+                    mLocationClickersMap.remove(overlay.getPosition());
+                    overlays.remove(overlay);
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
+
+
+
+        /*try {
+            if(location == null) return;
+            for (HashMap.Entry<Overlay, LocationLabelClicker> entry : overlays.entrySet()) {
+                Overlay overlay = entry.getKey();
+                LocationLabelClicker locationLabelClicker = entry.getValue();
+                if(locationLabelClicker.location == location){
+                    mapView.removeMarker(overlay);
+                    mLocationClickersMap.remove(overlay.getPosition());
+                    overlays.remove(overlay);
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }*/
     }
 
     @Override
@@ -968,7 +1020,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 if(parkingHashMap.containsKey(parkingId)){
                     if(mSavedParkingLocation != null) removePin(mSavedParkingLocation);
                     mSavedParkingLocation = parkingHashMap.get(parkingId); //have a single instance of parking so it's easy to delete
-                        if(enabled) {
+                    if(enabled) {
                         List<Coordinate> coords = mSavedParkingLocation.getNavigatableCoordinates();
                         for(final Coordinate coordinate : coords) {
 //                            if(focus) mapView.getCamera().focusOn(mSavedParkingLocation.getNavigatableCoordinates().get(0)); //need to zoom to the parking pin?
@@ -992,6 +1044,14 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     }
 
     private class LocationLabelClicker {
+
+        public LocationLabelClicker(Location location, Drawable pinDrawable, Overlay2DImage label, Coordinate coordinate){
+            this.location = (CustomLocation) location;
+            this.drawable = pinDrawable;
+            this.label = label;
+            this.coordinate = coordinate;
+        }
+
         public CustomLocation location = null;
         public Drawable drawable = null;
         public Overlay2DImage label = null;
@@ -1017,10 +1077,12 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 } */else {
                     showAmenityDetail((CustomLocation) location, drawable);
                 }
-                destinationPolygon = location;
 
+                 destinationPolygon = location;
                 if(!location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)){
                     //highlight the polygon
+//                    LocationLabelClicker originalClicker = mLocationClickersMap.get(coordinate);
+//                    originalClicker = null;
                     dropPinWithColor(coordinate, location, drawable);
                     mRemovedPin = label;
                     mapView.removeMarker(label);
@@ -1029,13 +1091,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             }
         };
     }
-
-
-    private void didTapMarker (Overlay2DImage label, Coordinate coordinate, Drawable drawable, Location location) {
-        dropPin(coordinate, location, mAmeityDrawable);
-    }
-
-
 
 
     @Override
@@ -1155,6 +1210,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 slideUpAnimation.reset();
                 rlDirection.startAnimation(slideUpAnimation);
             }
+            mAmenityClicked = "";
             return;
         }
 

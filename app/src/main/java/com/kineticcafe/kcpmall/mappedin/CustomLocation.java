@@ -52,27 +52,12 @@ public class CustomLocation extends Location {
 
             if(rawData.string(TYPE) != null && rawData.string(TYPE).equals(TYPE_AMENITIES)) {
                 amenityType = rawData.string(TYPE_AMENITY);
-                if(amenityType.equals("atm")){
-                    String a = "ef";
-                    Log.d("ATM", "FOUND!");
-                }
-
-                if(amenityType.equals("information_counter")) {
-                    String a = "ef";
-                    Log.d("ATM", "FOUND!");
-                }
-
-
-                    ArrayList<CustomLocation> amenityList;
+                ArrayList<CustomLocation> amenityList;
                 if(amenityHashmap.containsKey(amenityType)) amenityList = amenityHashmap.get(amenityType);
                 else amenityList = new ArrayList<>();
                 amenityList.add(this);
                 amenityHashmap.put(amenityType, amenityList);
-
                 if(amenityType.equals("parking")){
-                    String a = "ef";
-                    Log.d("parking", "FOUND!");
-
                     if(id != null) {
                         parkingHashMap.put(id, this);
                     }
