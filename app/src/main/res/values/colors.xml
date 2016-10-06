@@ -157,6 +157,7 @@
     <color name="alert_dialog_desc_text">#80000000</color>
     <color name="welcome_btn_color">#009688</color>
     <color name="emptySearchResults">#FFFFFF</color>
+    <color name="darkTransparentBackground">#cd000000</color>
 
 
 

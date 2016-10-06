@@ -10,6 +10,7 @@ import com.kineticcafe.kcpandroidsdk.constant.KcpConstants;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.service.ServiceFactory;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class AccountManager {
 
     public UserService getKcpService(){
         ServiceFactory serviceFactory = new ServiceFactory();
-        if(mUserService == null) mUserService = serviceFactory.createRetrofitService(mContext, mHeadersMap, UserService.class, KcpConstants.URL_BASE);
+        if(mUserService == null) mUserService = serviceFactory.createRetrofitService(mContext, mHeadersMap, UserService.class, KcpConstants.getBaseURL());
         return mUserService;
     }
 
@@ -141,10 +142,6 @@ public class AccountManager {
                 handleState(DOWNLOAD_FAILED);
             }
         });
-
-
-
-
     }
 
     private void handleState(int state){
@@ -186,16 +183,6 @@ public class AccountManager {
         }
     }
 
-    /*{
-        "user" : {
-        "credentials" : [ {
-            "type" : "DeviceCredential",
-                    "identifier" : "ninjapirate",
-                    "password" : "password"
-        } ]
-    }
-    }*/
-
     public class KcpUser {
         public HashMap<String, HashMap<String, ArrayList<HashMap<String, String>>>> kcpUser = new HashMap<>();
         public KcpToken kcpToken;
@@ -208,14 +195,6 @@ public class AccountManager {
             kcpUser.put(KEY_USER, credentialsMap);
         }
     }
-
-    /*
-    {
-        "type": "DeviceCredential",
-            "identifier": "ninjapirate",
-            "password": "password"
-    }
-    */
 
     public class KcpToken {
         public HashMap<String, String> kcpTokenMap = new HashMap<>();

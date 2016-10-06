@@ -25,14 +25,12 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.Transformation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.activities.Constants;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
 
 /**
@@ -221,6 +219,14 @@ public class Utility {
         act.getResources().getValue(R.dimen.squeeze_anim_scale_cat, typedValue, true);
         float scaleValue = typedValue.getFloat();
         Integer duration = act.getResources().getInteger(R.integer.squeeze_anim_duration_cat);
+        startSqueezeAnimation(squeezeAnimationListener, act, view, scaleValue, duration);
+    }
+
+    public static void startSqueezeAnimationForInterestedParking(SqueezeListener squeezeAnimationListener, Activity act, final View view){
+        TypedValue typedValue = new TypedValue();
+        act.getResources().getValue(R.dimen.squeeze_anim_scale_cat, typedValue, true);
+        float scaleValue = typedValue.getFloat();
+        Integer duration = act.getResources().getInteger(R.integer.squeeze_anim_duration_parking);
         startSqueezeAnimation(squeezeAnimationListener, act, view, scaleValue, duration);
     }
 

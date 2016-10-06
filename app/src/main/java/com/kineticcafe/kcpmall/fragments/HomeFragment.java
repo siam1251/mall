@@ -22,9 +22,10 @@ import com.kineticcafe.kcpandroidsdk.models.KcpNavigationRoot;
 import com.kineticcafe.kcpandroidsdk.twitter.model.TwitterTweet;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
+import com.kineticcafe.kcpmall.mappedin.Amenities;
 
 import java.util.ArrayList;
 
@@ -227,6 +228,7 @@ public class HomeFragment extends BaseFragment {
                     updateOtherDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
                 } else if(mode.equals(Constants.EXTERNAL_CODE_RECOMMENDED)) {
                     updateRecommendedDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
+                    MapFragment.getInstance().onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL), true);
                 }
             }
         } catch (Exception e) {

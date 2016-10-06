@@ -103,14 +103,17 @@
         <activity
             android:name="com.kineticcafe.kcpmall.activities.ParkingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base" />
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Transparent"
+             />
+        android:theme="@style/AppTheme.Base"
 
         <!--single instance creates another 'window' when 'multi tasking button' pressed-->
         <activity
             android:name="com.kineticcafe.kcpmall.activities.WelcomeMessage"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Base" />
+            android:theme="@style/Theme.Transparent" />
 
         <!--MAPPED IN-->
         <meta-data android:name="com.mappedin.sdk.Username" android:value="56f151b2c753ca4c0d000000"/>

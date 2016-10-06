@@ -223,13 +223,14 @@
                     android:layout_weight="0"
                     android:layout_width="17dp"
                     android:layout_height="17dp"
+                    android:layout_marginRight="10dp"
                     android:src="@drawable/icn_deals"/>
 
+                    android:layout_marginLeft="10dp"
                 <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
                     android:gravity="center_vertical"
                     android:layout_weight="1"
                     app:fontFamily="@string/fontFamily_roboto_regular"
-                    android:layout_marginLeft="10dp"
                     android:id="@+id/tvDealName"
                     android:lines="1"
                     android:ellipsize="end"
@@ -290,15 +291,13 @@
         </RelativeLayout>
     </RelativeLayout>
 
-
-
-    <com.kineticcafe.kcpmall.adapters.adapterHelper.IndexableRecylerView
+    <!--<com.kineticcafe.kcpmall.adapters.adapterHelper.IndexableRecylerView
         android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rv"
+        android:id="@+id/rvMap"
         android:gravity="center_horizontal"
         android:background="@color/white"
-        />
+        />-->
     android:background="@color/card_bg_transparent"
 </RelativeLayout>

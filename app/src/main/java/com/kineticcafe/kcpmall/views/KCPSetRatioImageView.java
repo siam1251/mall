@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.activities.ZoomableImage;
 
 /**

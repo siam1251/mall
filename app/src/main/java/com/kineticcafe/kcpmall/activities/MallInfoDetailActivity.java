@@ -1,40 +1,35 @@
 package com.kineticcafe.kcpmall.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
-import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
-import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpandroidsdk.models.MallInfo.AdditionalInfo;
 import com.kineticcafe.kcpandroidsdk.models.MallInfo.InfoList;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
+import com.kineticcafe.kcpmall.fragments.MapFragment;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
 import com.kineticcafe.kcpmall.views.CTA;
 import com.kineticcafe.kcpmall.views.ExpandableTextView;
 import com.kineticcafe.kcpmall.views.HtmlTextView;
-import com.kineticcafe.kcpmall.views.MyTagHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +146,8 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(MallInfoDetailActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                            setResult(Activity.RESULT_OK, new Intent());
+                            finish();
                         }
                     }, false);
 

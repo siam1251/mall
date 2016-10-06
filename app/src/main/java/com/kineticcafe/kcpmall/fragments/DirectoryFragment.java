@@ -3,20 +3,16 @@ package com.kineticcafe.kcpmall.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,24 +29,17 @@ import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.activities.SubCategoryActivity;
-import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
 import com.kineticcafe.kcpmall.adapters.MallDirectoryRecyclerViewAdapter;
-import com.kineticcafe.kcpmall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
 import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
-import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
 import com.kineticcafe.kcpmall.managers.ThemeManager;
-import com.kineticcafe.kcpmall.mappedin.CustomLocation;
 import com.kineticcafe.kcpmall.searchIndex.IndexManager;
 import com.kineticcafe.kcpmall.views.ActivityAnimation;
-import com.mappedin.sdk.Polygon;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DirectoryFragment extends BaseFragment {
@@ -341,8 +330,6 @@ public class DirectoryFragment extends BaseFragment {
         //initialize
         if(mKeywordThread != null) mKeywordThread.interrupt();
         if(mCategoryThread != null) mCategoryThread.interrupt();
-//        mPlaceByKeyword = null;
-//        mKcpCategories = null;
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mMainActivity.rvMallDirectory.setLayoutManager(linearLayoutManager);

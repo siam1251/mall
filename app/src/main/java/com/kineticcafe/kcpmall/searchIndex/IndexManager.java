@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
 import com.kineticcafe.kcpandroidsdk.service.ServiceFactory;
 import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
-import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 
 import org.msgpack.core.MessagePack;
@@ -20,7 +20,6 @@ import org.msgpack.value.ImmutableStringValue;
 import org.msgpack.value.MapValue;
 import org.msgpack.value.Value;
 import org.msgpack.value.impl.ImmutableLongValueImpl;
-import org.msgpack.value.impl.ImmutableNilValueImpl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,7 +28,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -83,7 +81,7 @@ public class IndexManager {
     }
 
     public void downloadSearchIndexes(){
-        DownloadBinaryTask downloadImageTask = new DownloadBinaryTask(HeaderFactory.SEARCH_INDEX_URL_BASE + HeaderFactory.SEARCH_INDEX_URL);
+        DownloadBinaryTask downloadImageTask = new DownloadBinaryTask(HeaderFactory.SEARCH_INDEX_URL_BASE + HeaderFactory.getSearchIndexUrl());
         downloadImageTask.execute();
     }
 

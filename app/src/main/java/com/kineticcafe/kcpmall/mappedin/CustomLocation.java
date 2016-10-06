@@ -57,7 +57,13 @@ public class CustomLocation extends Location {
                     Log.d("ATM", "FOUND!");
                 }
 
-                ArrayList<CustomLocation> amenityList;
+                if(amenityType.equals("information_counter")) {
+                    String a = "ef";
+                    Log.d("ATM", "FOUND!");
+                }
+
+
+                    ArrayList<CustomLocation> amenityList;
                 if(amenityHashmap.containsKey(amenityType)) amenityList = amenityHashmap.get(amenityType);
                 else amenityList = new ArrayList<>();
                 amenityList.add(this);

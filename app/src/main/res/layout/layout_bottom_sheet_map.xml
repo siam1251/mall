@@ -132,10 +132,10 @@
                     android:src="@drawable/icn_deals"/>
 
                 <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    android:layout_marginLeft="10dp"
                     android:gravity="center_vertical"
                     android:layout_weight="1"
                     app:fontFamily="@string/fontFamily_roboto_regular"
-                    android:layout_marginLeft="10dp"
                     android:id="@+id/tvDealName"
                     android:lines="1"
                     android:ellipsize="end"

@@ -9,7 +9,9 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
@@ -18,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -40,7 +43,7 @@ import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.activities.Constants;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.activities.MainActivity;
 import com.kineticcafe.kcpmall.activities.ParkingActivity;
@@ -76,6 +79,8 @@ import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.RawData;
 import com.mappedin.sdk.Venue;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -83,15 +88,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import javax.microedition.khronos.opengles.GL10;
+
 /**
  * Created by Kay on 2016-06-20.
  */
 public class MapFragment extends BaseFragment implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener {
+
+    private final String TAG = "MapFragment";
+
     private static MapFragment sMapFragment;
     public static MapFragment getInstance(){
         if(sMapFragment == null) sMapFragment = new MapFragment();
         return sMapFragment;
     }
+
+
+
 
     enum SearchMode { STORE, ROUTE_START, ROUTE_DESTINATION }
     public SearchMode mSearchMode = SearchMode.STORE;
@@ -101,7 +114,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private ProgressBar pb;
     private View view;
     private SearchView mSearchView;
-    private IndexableRecylerView rv;
+//    private IndexableRecylerView rvMap;
     private RelativeLayout rlMap;
     private RelativeLayout rlDirection;
     private TextView tvStoreName;
@@ -126,12 +139,12 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     public MenuItem mSearchItem;
     private MenuItem mFilterItem;
     public CategoryStoreRecyclerViewAdapter mPlaceRecyclerViewAdapter;
-    private ArrayList<String> mExternalCodeList;
+    private ArrayList<String> mRecommendedDealsExternalCodeList;
     private Drawable mAmeityDrawable;
 
     //MAPPED IN
     private final int PIN_IMAGE_SIZE_DP = 95;
-    private final int CAMERA_ZOOM_LEVEL_START_UP = 90; //BIGGER - farther, SMALLER - closer
+    private final int CAMERA_ZOOM_LEVEL_NEAREST_PARKING = 90; //
     private final int CAMERA_ZOOM_LEVEL = 30; //BIGGER - farther, SMALLER - closer
     private final int BLUR_RADIUS = 20;
     private boolean accessibleDirections = false;
@@ -157,6 +170,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private Overlay2DImage mSelectedPin = null;//to keep track of highlited amenity drawable to set back to the original state in clearHighlighted
     private Overlay2DImage mRemovedPin = null; //overlayImage that was replaced by mSelectedOverlayImage
 
+    public boolean isGetVenueAlreadyCalled = false; //getvenue takes long so run getVenue when the tab is selected. this flag saves whether getVenue has already been called
+    public boolean runGetVenue = false;
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,7 +189,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         pb = (ProgressBar) view.findViewById(R.id.pb);
         pb.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.themeColor),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
-        rv = (IndexableRecylerView) view.findViewById(R.id.rv);
         rlMap = (RelativeLayout) view.findViewById(R.id.rlMap);
         rlDirection = (RelativeLayout) view.findViewById(R.id.rlDirection);
         tvStoreName = (TextView) view.findViewById(R.id.tvStoreName);
@@ -246,8 +263,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     public void setupRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        rv.setLayoutManager(linearLayoutManager);
-        rv.setLayoutManager(linearLayoutManager);
+        mMainActivity.rvMap.setLayoutManager(linearLayoutManager);
 
         ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
         ArrayList<KcpPlaces> kcpPlacesFiltered;
@@ -318,18 +334,18 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             }
         }
 
-        rv.setFastScrollEnabled(true);
-        rv.setIndexAdapter(sectionName, sectionPosition);
+        mMainActivity.rvMap.setFastScrollEnabled(true);
+        mMainActivity.rvMap.setIndexAdapter(sectionName, sectionPosition);
 
         SectionedLinearRecyclerViewAdapter.Section[] dummy = new SectionedLinearRecyclerViewAdapter.Section[sections.size()];
         SectionedLinearRecyclerViewAdapter mSectionedAdapter = new SectionedLinearRecyclerViewAdapter(
                 getActivity(),
                 R.layout.list_section_place,
                 R.id.section_text,
-                rv,
+                mMainActivity.rvMap,
                 mPlaceRecyclerViewAdapter);
         mSectionedAdapter.setSections(sections.toArray(dummy));
-        rv.setAdapter(mSectionedAdapter);
+        mMainActivity.rvMap.setAdapter(mSectionedAdapter);
     }
 
 
@@ -357,9 +373,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 transaction.add(R.id.flMap, mapView);
             }
             transaction.commit();
-//            mapView = (MapView) getActivity().getFragmentManager().findFragmentById(R.id.mapFragment); //todo: disabled for testing
             mapView.setDelegate(delegate);
-
             mappedIn.getVenue(activeVenue, accessibleDirections, new CustomLocationGenerator(), new GetVenueCallback());
         }
 
@@ -378,7 +392,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 Logger.log("No maps! Make sure your venue is set up correctly!");
                 return;
             }
-
             Arrays.sort(maps, new Comparator<Map>() {
                 @Override
                 public int compare(Map a, Map b) {
@@ -458,10 +471,12 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
         //LOAD AMENITIES, DEALS
         //TODO: TEST - disabled for testing
-        onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL));
+        onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL), false);
         for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
             Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
-            onAmenityClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_AMENITY + amenity.getTitle()), amenity.getExternalIds()[0]);
+            final String externalID = amenity.getExternalIds()[0];
+//            onAmenityClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_AMENITY + amenity.getTitle()), amenity.getExternalIds()[0]);
+            onAmenityClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_AMENITY + externalID), amenity.getExternalIds()[0]);
         }
 
         //mark the store that's been
@@ -492,6 +507,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     public void didTapPolygon(Polygon polygon) {
         try {
+
             if(path != null || polygon == null) return; //map shouldn't be clicakble when the paths drawn
             if (polygon.getLocations().size() == 0) { //TODO: clearHighlightedColours() used to be above this line - polygon.getLocation().size() was sometimes 0 resulting in skipping highlightPolygon (it returned)
                 return;
@@ -503,6 +519,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             if(destinationPolygon != null && destinationPolygon == polygon) {
                 destinationPolygon = null;
                 showDirectionCard(false, null, 0, null, null, null);
+                clearHighlightedColours();
                 return;
             }
 
@@ -533,7 +550,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 }
 
                 if (directions != null) {
-                    path = new Path(directions.getPath(), 0.2f, 0.2f, getResources().getColor(R.color.themeColor));
+                    path = new Path(directions.getPath(), 0.2f, 0.2f, getResources().getColor(R.color.map_destination_store));
                     mapView.addPath(path);
                     mapView.getCamera().focusOn(directions.getPath());
                 }
@@ -753,7 +770,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private void startNavigation() {
         stopNavigation();
         navigationMode = true;
-        rv.setVisibility(View.INVISIBLE);
+        mMainActivity.rvMap.setVisibility(View.INVISIBLE);
         Utility.closeKeybaord(getActivity());
     }
 
@@ -855,21 +872,27 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     }
 
     @Override
-    public void onDealsClick(boolean enabled) {
-        //TODO: when deals list's refreshed, this mExternalCodeList should be set to null to refresh this list too
+    public void onDealsClick(boolean enabled, boolean resetDealsList) {
+        //TODO: when deals list's refreshed, this mRecommendedDealsExternalCodeList should be set to null to refresh this list too
 
-        if(mExternalCodeList == null){
-//            ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true); //ALL DEALS
-            ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS
+//          ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true); //ALL DEALS
+        ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS
+        if(mRecommendedDealsExternalCodeList == null) {
             if(dealContentPages == null) return;
-            mExternalCodeList = new ArrayList<String>();
+            mRecommendedDealsExternalCodeList = new ArrayList<String>();
             for(KcpContentPage kcpContentPage : dealContentPages) {
-                mExternalCodeList.add(kcpContentPage.getExternalCode());
+                mRecommendedDealsExternalCodeList.add(kcpContentPage.getExternalCode());
             }
         }
-        if(enabled){
-            for( String externalCode: mExternalCodeList ) {
-                Location location = CustomLocation.getLocation(externalCode);
+
+        for( String externalCode: mRecommendedDealsExternalCodeList) {
+            Location location = CustomLocation.getLocation(externalCode);
+            if(location != null) removePin(location);
+        }
+
+        if(enabled && dealContentPages != null) {
+            for(KcpContentPage kcpContentPage : dealContentPages) {
+                Location location = CustomLocation.getLocation(kcpContentPage.getExternalCode());
                 if(location != null){
                     List<Coordinate> coords = location.getNavigatableCoordinates();
                     for(Coordinate coordinate : coords) {
@@ -877,11 +900,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                         dropPin(coordinate, location, amenityDrawable);
                     }
                 }
-            }
-        } else {
-            for( String externalCode: mExternalCodeList ) {
-                Location location = CustomLocation.getLocation(externalCode);
-                if(location != null) removePin(location);
+                mRecommendedDealsExternalCodeList = new ArrayList<String>();
+                mRecommendedDealsExternalCodeList.add(kcpContentPage.getExternalCode());
             }
         }
     }
@@ -925,7 +945,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     dropPin(coordinate, mTemporaryParkingLocation, amenityDrawable);
                     mapView.getCamera().focusOn(polygon);
 //                    mapView.getCamera().focusOn(mTemporaryParkingLocation.getNavigatableCoordinates().get(0));//ocusOn(coordinate);
-                    mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_START_UP);
+                    mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_NEAREST_PARKING);
 
                     destinationPolygon = mTemporaryParkingLocation;
                 }
@@ -1054,7 +1074,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                         mMainActivity.setActiveMallDot(true);
                         //BUG : onMenuItemActionCollapse is called when editStartStore or editDestStore's collapsed - is this because of requestFocus?
                         if(mSearchMode.equals(SearchMode.STORE) ||
-                                (!mSearchMode.equals(SearchMode.STORE) && !mMainActivity.isEditTextsEmpty()) ) rv.setVisibility(View.INVISIBLE);
+                                (!mSearchMode.equals(SearchMode.STORE) && !mMainActivity.isEditTextsEmpty()) ) mMainActivity.rvMap.setVisibility(View.INVISIBLE);
 
                         if(btnShowMap != null) btnShowMap.setVisibility(View.VISIBLE);
                         mFilterItem.setVisible(true);
@@ -1067,7 +1087,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                         mSearchMode = SearchMode.STORE;
                         showDirectionCard(false, null, 0, null, null, null);
                         mFilterItem.setVisible(false);
-                        rv.setVisibility(View.VISIBLE);
+                        mMainActivity.rvMap.setVisibility(View.VISIBLE);
                         if(btnShowMap != null) btnShowMap.setVisibility(View.GONE);
                         return true;
                     }
@@ -1079,8 +1099,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         public void onFocusChange(View v, boolean hasFocus) {
             if (hasFocus) {
                 int topMargin = (int) (KcpUtility.dpToPx(getActivity(), 95) - (KcpUtility.dpToPx(getActivity(), 55))); //directionEditor height - actionbar height
-                rv.setPadding(0, topMargin, 0, 0);
-                rv.setVisibility(View.VISIBLE);
+                mMainActivity.rvMap.setPadding(0, topMargin, 0, 0);
+                mMainActivity.rvMap.setVisibility(View.VISIBLE);
                 if(btnShowMap != null) btnShowMap.setVisibility(View.GONE);
                 if(v.getId() == R.id.etDestStore) {
                     mSearchMode = SearchMode.ROUTE_DESTINATION;
@@ -1088,8 +1108,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     mSearchMode = SearchMode.ROUTE_START;
                 }
             } else {
-                rv.setPadding(0, 0, 0, 0);
-                rv.setVisibility(View.INVISIBLE);
+                mMainActivity.rvMap.setPadding(0, 0, 0, 0);
+                mMainActivity.rvMap.setVisibility(View.INVISIBLE);
                 if(btnShowMap != null) btnShowMap.setVisibility(View.VISIBLE);
             }
         }

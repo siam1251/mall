@@ -62,22 +62,6 @@ public class ParkingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parking);
 
-        RelativeLayout rlParking = (RelativeLayout) findViewById(R.id.rlParking);
-        Bitmap bitmap = null;
-        String filename = getIntent().getStringExtra("image");
-        /*if(filename != null) {
-            try {
-                FileInputStream is = this.openFileInput(filename);
-                bitmap = BitmapFactory.decodeStream(is);
-                is.close();
-                if(bitmap != null){
-                    rlParking.setBackground(new BitmapDrawable(bitmap));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }*/
-
         rvParking = (RecyclerView) findViewById(R.id.rvParking);
         rvParkingChild = (RecyclerView) findViewById(R.id.rvParkingChild);
         rlParkingIcon = (RelativeLayout) findViewById(R.id.rlParkingIcon);
@@ -110,7 +94,6 @@ public class ParkingActivity extends AppCompatActivity {
         rlNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
                 alertDialogForInterest.getEditTextAlertDialog(
                         ParkingActivity.this,
@@ -199,8 +182,14 @@ public class ParkingActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        rvParking.findViewHolderForAdapterPosition(mParkingLotSelectedPosition).itemView.performClick();
-                        showDoneBtn(true, rvParking, "NEXT");
+                        try {
+                            if(rvParking.findViewHolderForAdapterPosition(mParkingLotSelectedPosition) != null) {
+                                rvParking.findViewHolderForAdapterPosition(mParkingLotSelectedPosition).itemView.performClick();
+                                showDoneBtn(true, rvParking, "NEXT");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, 1);
             }
@@ -467,13 +456,11 @@ public class ParkingActivity extends AppCompatActivity {
                 placeHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
+                        Utility.startSqueezeAnimationForInterestedParking(new Utility.SqueezeListener() {
                             @Override
                             public void OnSqueezeAnimationDone() {
                                 mParkingLotSelectedPosition = position;
                                 notifyDataSetChanged();
-//                        showDoneBtn(false, rvParking);
                                 showDoneBtn(true, rvParking, "NEXT");
                             }
                         }, (Activity) mContext, placeHolder.mView);
@@ -487,12 +474,11 @@ public class ParkingActivity extends AppCompatActivity {
                 placeHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
+                        Utility.startSqueezeAnimationForInterestedParking(new Utility.SqueezeListener() {
                             @Override
                             public void OnSqueezeAnimationDone() {
                                 mEntranceSelectedPosition = position;
                                 notifyDataSetChanged();
-//                        showDoneBtn(false, rvParkingChild);
                                 showDoneBtn(true, rvParkingChild, "DONE");
                             }
                         }, (Activity) mContext, placeHolder.mView);
