@@ -771,7 +771,6 @@ public class MainActivity extends BaseActivity
                     }
                 }
 
-
                 llActiveMall.setVisibility(View.VISIBLE);
                 setActiveMallDot(true);
                 panelBackgroundColor = getResources().getColor(R.color.active_mall_bg);
@@ -985,7 +984,7 @@ public class MainActivity extends BaseActivity
                                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                             Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, isChecked);
                                             if(amenity.getExternalIds() == null || amenity.getExternalIds().length == 0) return;
-                                            if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(isChecked, amenity.getExternalIds()[0]);
+                                            if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(isChecked, amenity.getExternalIds()[0], false);
                                         }
                                     }
                             )
@@ -1279,9 +1278,14 @@ public class MainActivity extends BaseActivity
                     //turn on the guest service switch and drop a pin
                     selectPage(MainActivity.VIEWPAGER_PAGE_MAP);
                     String externalID = Constants.KEY_GUEST_SERVICE;
-                    Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, true);
-                    if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(true, externalID);
-                    setUpRightSidePanel();
+                    boolean isToggled = Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID);
+                    if(!isToggled) {
+                        Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, true);
+                        setUpRightSidePanel();
+                        if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(true, externalID, true);
+                    } else {
+                        MapFragment.getInstance().clickOverlayWithNameAndPosition(externalID, 0);
+                    }
                 }
             } else if(requestCode == Constants.REQUEST_CODE_SAVE_PARKING_SPOT) {
                 mDrawer.closeDrawers();

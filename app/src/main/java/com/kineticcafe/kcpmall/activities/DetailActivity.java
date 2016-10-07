@@ -25,6 +25,7 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.kineticcafe.kcpandroidsdk.logger.Logger;
@@ -98,14 +99,18 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void init(final KcpContentPage kcpContentPage){
-        setContentView(R.layout.activity_detail_with_ctl);
+        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT) {
+            setContentView(R.layout.activity_detail_with_ctl_ancmt);
+        } else {
+            setContentView(R.layout.activity_detail_with_ctl);
+        }
+
         mParentView = (ViewGroup) findViewById(R.id.svDetail);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-
 
         mLikeLink = kcpContentPage.getLikeLink();
         if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){ //the like links should be given from place if the type is ITEM_TYPE_STORE
@@ -130,22 +135,6 @@ public class DetailActivity extends AppCompatActivity {
         if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
             ivFav.setVisibility(View.GONE);
         }
-
-
-        NestedScrollView nsvDetail = (NestedScrollView) findViewById(R.id.nsvDetail);
-        nsvDetail.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-            }
-        });
-
-        nsvDetail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-            }
-        });
     }
 
     public void downloadIfNecessary(final KcpContentPage kcpContentPage) {
@@ -607,13 +596,16 @@ public class DetailActivity extends AppCompatActivity {
 
     public void showContentsWithCTL(final KcpContentPage kcpContentPage){
         try {
+
+            //TOOLBAR
             final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             final TextView tvToolbar = (TextView) toolbar.findViewById(R.id.tvToolbar);
             getSupportActionBar().setTitle("");
 
             final String toolbarTitle = KcpContentTypeFactory.getContentTypeTitle(kcpContentPage);
-
             TextView tvExpiryDate = (TextView) findViewById(R.id.tvExpiryDate);
+
+            //MAIN IMAGE AT TOP
             String imageUrlTemp = kcpContentPage.getHighestResImageUrl();
             if(imageUrlTemp.equals("")) imageUrlTemp = kcpContentPage.getHighestResFallbackImageUrl();
             final String imageUrl = imageUrlTemp;
@@ -650,10 +642,8 @@ public class DetailActivity extends AppCompatActivity {
                         ivDetailImage,
                         R.drawable.placeholder);
 
-
                 if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
                 else tvToolbar.setText(toolbarTitle);
-
 
                 //to show toolbar title only when collapsed
                 AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.ablDetail);
@@ -673,33 +663,13 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 });
 
-                //BLURRED TOP BAR
-                /*int width = KcpUtility.getScreenWidth(ivDetailImage.getContext());
-                int height = (int) (KcpUtility.getScreenWidth(ivDetailImage.getContext()) / KcpUtility.getFloat(ivDetailImage.getContext(), R.dimen.ancmt_image_ratio));
-
-                Glide.with(ivDetailImage.getContext())
-                        .load(imageUrl)
-                        .crossFade()
-                        .error(R.drawable.placeholder)
-                        .override(width, height)
-                        .placeholder(R.drawable.placeholder)
-                        .into(ivDetailImage);
-
-                Glide.with(this).
-                        load(imageUrl)
-                        .crossFade()
-                        .override(width, height)
-                        .centerCrop()
-                        .bitmapTransform(new BlurTransformation(ivDetailImage.getContext()))
-                        .into((ImageView) findViewById(R.id.ivBlurred));*/
-
                 tvExpiryDate.getBackground().setAlpha(241);
 
                 //TODO: daysLeft shows 1 less date (ex) 2016-05-27T00:00:00.000+00:00 shows date as 26 EST see if this is right
                 int daysLeftUntilEffectiveDate = KcpUtility.getDaysLeftUntil(kcpContentPage.effectiveEndTime, KcpConstants.EFFECTIVE_DATE_FORMAT);
                 String daysLeft = kcpContentPage.getDaysLeftText(daysLeftUntilEffectiveDate, Constants.DAYS_LEFT_TO_SHOW_IN_EXPIRY_DATE);
 
-                if(daysLeft.equals("")){
+                if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT || daysLeft.equals("")){
                     tvExpiryDate.setVisibility(View.GONE);
                 } else {
                     tvExpiryDate.setVisibility(View.VISIBLE);
@@ -707,6 +677,7 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
 
+            //STORE IMAGE
             String logoUrl = kcpContentPage.getStoreLogo();
             TextView tvDetailLogoText = (TextView) findViewById(R.id.tvDetailLogoText);
             ivDetailLogo = (ImageView) findViewById(R.id.ivDetailLogo);
@@ -719,14 +690,13 @@ public class DetailActivity extends AppCompatActivity {
 
             } else {
                 tvDetailLogoText.setVisibility(View.GONE);
-
                 new GlideFactory().glideWithNoDefaultRatio(
                         ivDetailLogo.getContext(),
                         logoUrl,
                         ivDetailLogo);
-
             }
 
+            //TITLE
             TextView tvDetailTitle = (TextView) findViewById(R.id.tvDetailTitle);
             String title = "";
             if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
@@ -737,6 +707,7 @@ public class DetailActivity extends AppCompatActivity {
             if(title.equals("")) tvDetailTitle.setVisibility(View.INVISIBLE);
             else tvDetailTitle.setText(title);
 
+            //ANNOUNCEMENT / EVENT PERIOD
             TextView tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
             String time = "";
             if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
@@ -748,15 +719,20 @@ public class DetailActivity extends AppCompatActivity {
                     tvDetailDate.setTextColor(getResources().getColor(R.color.white));
                 }
             } else {
-                String startingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_HOLIDAY_STORE);
-                String endingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_HOLIDAY_STORE);
-
-                if(!startingTime.equals(endingTime)) {
-                    time = startingTime + " - " + endingTime;
+                if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){ //announcement doesn't have effective start/end date but only publish start date
+                    time = kcpContentPage.getFormattedDate(kcpContentPage.publishStartTime, Constants.DATE_FORMAT_ANNOUNCEMENT);
                 } else {
-                    String eventStartHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EVENT_HOUR);
-                    String eventEndingHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EVENT_HOUR);
-                    time = startingTime + " @ " + eventStartHour + " to " + eventEndingHour;
+                    //if event is for one day, also show its begin/end hours
+                    String startingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_HOLIDAY_STORE);
+                    String endingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_HOLIDAY_STORE);
+
+                    if(!startingTime.equals(endingTime)) {
+                        time = startingTime + " - " + endingTime;
+                    } else {
+                        String eventStartHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EVENT_HOUR);
+                        String eventEndingHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EVENT_HOUR);
+                        time = startingTime + " @ " + eventStartHour + " to " + eventEndingHour;
+                    }
                 }
             }
 
@@ -766,6 +742,7 @@ public class DetailActivity extends AppCompatActivity {
             }
             tvDetailDate.setText(time);
 
+            //BODY
             TextView tvDetailBody = (TextView) findViewById(R.id.tvDetailBody);
             String body = kcpContentPage.getBody();
             if(body.equals("")) tvDetailBody.setVisibility(View.GONE);

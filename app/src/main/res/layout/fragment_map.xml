@@ -39,23 +39,9 @@
         android:layout_centerInParent="true"
         />
 
-
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show Locations"
-        android:id="@+id/showLocationButton"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:visibility="invisible"
-        />
-
-
     <!--TODO: this compass should rotate as the map rotates-->
     <ImageView
+        android:visibility="gone"
         android:id="@+id/ivCompass"
         android:layout_margin="14dp"
         android:layout_alignParentRight="true"

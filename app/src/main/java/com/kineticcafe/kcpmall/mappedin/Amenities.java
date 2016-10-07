@@ -120,7 +120,7 @@ public class Amenities {
     }
 
     public interface OnAmenityClickListener {
-        public void onAmenityClick(boolean enabled, String externalCode);
+        public void onAmenityClick(boolean enabled, String externalCode, boolean focusPin);
     }
 
     public interface OnDealsClickListener {

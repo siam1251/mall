@@ -15,9 +15,9 @@
         android:supportsRtl="true"
         android:largeHeap="true"
         android:windowSoftInputMode="adjustPan"
+        android:hardwareAccelerated="true"
         android:theme="@style/AppTheme">
 
-        android:hardwareAccelerated="true"
 
 
         <activity
