@@ -61,7 +61,8 @@ public class DealsFragment extends BaseFragment {
                         mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                HomeFragment.getInstance().initializeHomeData();
+                if(mMainActivity.mIsDataLoaded) HomeFragment.getInstance().initializeHomeData();
+                else mMainActivity.initializeKcpData();
                 mEndlessRecyclerViewScrollListener.onLoadDone();
             }
         });
@@ -80,8 +81,8 @@ public class DealsFragment extends BaseFragment {
 
         ArrayList<KcpContentPage> dealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true);
         ArrayList<KcpContentPage> recommendedList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true);
-        if(recommendedList != null) KcpUtility.sortKcpContentpageByExpiryDate(recommendedList);
-        if(dealsList != null) KcpUtility.sortKcpContentpageByExpiryDate(dealsList);
+        KcpUtility.sortKcpContentpageByExpiryDate(recommendedList);
+        KcpUtility.sortKcpContentpageByExpiryDate(dealsList);
 
         mDealsRecyclerViewAdapter = new DealsRecyclerViewAdapter(
                 getActivity(),

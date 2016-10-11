@@ -101,6 +101,7 @@ public class HomeFragment extends BaseFragment {
                         case KcpNavigationRootManager.DOWNLOAD_STARTED:
                             break;
                         case KcpNavigationRootManager.DOWNLOAD_COMPLETE:
+                            mMainActivity.mIsDataLoaded = true;
                             if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
                             String mode = (String) inputMessage.obj;
                             updateAdapter(mode);
@@ -113,6 +114,7 @@ public class HomeFragment extends BaseFragment {
                         case KcpNavigationRootManager.TASK_COMPLETE:
                             break;
                         case KcpNavigationRootManager.DOWNLOAD_FAILED:
+                            mMainActivity.mIsDataLoaded = false;
                             mMainActivity.onDataDownloaded();
                             if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
                             break;
@@ -254,9 +256,7 @@ public class HomeFragment extends BaseFragment {
         if(kcpContentPages.size() == 0) {
             mDealsFragment.setEmptyState(getActivity().getResources().getString(R.string.warning_empty_deals));
         }
-        if(kcpContentPages != null) {
-            KcpUtility.sortKcpContentpageByExpiryDate(kcpContentPages);
-        }
+        KcpUtility.sortKcpContentpageByExpiryDate(kcpContentPages);
         mDealsFragment.mDealsRecyclerViewAdapter.updateOtherDealData(kcpContentPages);
     }
 

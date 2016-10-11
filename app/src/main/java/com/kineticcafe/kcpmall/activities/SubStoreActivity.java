@@ -24,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Created by Kay on 2016-06-08.
  */
-public class SubCategoryActivity extends AppCompatActivity {
+public class SubStoreActivity extends AppCompatActivity {
 
     private final int COLUMN_COUNT = 2;
     public CategoryRecyclerViewAdapter mCategoryRecyclerViewAdapter;

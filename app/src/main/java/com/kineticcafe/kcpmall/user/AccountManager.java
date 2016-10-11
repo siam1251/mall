@@ -120,9 +120,7 @@ public class AccountManager {
                                     HeaderFactory.constructHeader(); //update the header
                                     handleState(DOWNLOAD_COMPLETE);
                                 }
-                            } else {
-                                handleState(DOWNLOAD_FAILED);
-                            }
+                            } else handleState(DOWNLOAD_FAILED);
                         }
 
                         @Override

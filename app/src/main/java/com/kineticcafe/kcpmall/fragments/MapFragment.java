@@ -5,13 +5,10 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
@@ -20,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -43,15 +39,15 @@ import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpandroidsdk.utils.KcpUtility;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.activities.DetailActivity;
 import com.kineticcafe.kcpmall.activities.MainActivity;
 import com.kineticcafe.kcpmall.activities.ParkingActivity;
 import com.kineticcafe.kcpmall.adapters.CategoryStoreRecyclerViewAdapter;
-import com.kineticcafe.kcpmall.adapters.adapterHelper.IndexableRecylerView;
 import com.kineticcafe.kcpmall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.factory.KcpContentTypeFactory;
+import com.kineticcafe.kcpmall.interfaces.MapInterface;
 import com.kineticcafe.kcpmall.managers.ThemeManager;
 import com.kineticcafe.kcpmall.mappedin.Amenities;
 import com.kineticcafe.kcpmall.mappedin.Amenities.OnParkingClickListener;
@@ -61,6 +57,7 @@ import com.kineticcafe.kcpmall.parking.Parking;
 import com.kineticcafe.kcpmall.parking.ParkingManager;
 import com.kineticcafe.kcpmall.utility.Utility;
 import com.mappedin.jpct.Logger;
+import com.mappedin.jpct.RGBColor;
 import com.mappedin.sdk.Coordinate;
 import com.mappedin.sdk.Directions;
 import com.mappedin.sdk.Location;
@@ -73,23 +70,16 @@ import com.mappedin.sdk.MappedinCallback;
 import com.mappedin.sdk.Navigatable;
 import com.mappedin.sdk.Overlay;
 import com.mappedin.sdk.Overlay2DImage;
-import com.mappedin.sdk.Overlay2DLabel;
 import com.mappedin.sdk.Path;
 import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.RawData;
 import com.mappedin.sdk.Venue;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Created by Kay on 2016-06-20.
@@ -173,6 +163,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private Overlay2DImage mSelectedPin = null;//to keep track of highlited amenity drawable to set back to the original state in clearHighlighted
     private Overlay2DImage mRemovedPin = null; //overlayImage that was replaced by mSelectedOverlayImage
     private String mAmenityClicked = ""; //to keep track of previously clicked amenity
+    public boolean mMapLoaded = false;
+    private MapInterface mMapInterface;
 
 
 
@@ -280,8 +272,19 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 getActivity(),
                 kcpPlacesFiltered, KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE, new OnStoreClickListener() {
             @Override
-            public void onStoreClick(int storeId, String externalCode, String storeName, String categoryName) {
+            public void onStoreClick(final int storeId, final String externalCode, final String storeName, final String categoryName) {
                 try {
+
+                    if(!mMapLoaded) {
+                        setMapInterface(new MapInterface() {
+                            @Override
+                            public void mapLoaded() {
+                                onStoreClick(storeId, externalCode, storeName, categoryName);
+                            }
+                        });
+                        return;
+                    }
+
                     if(mSearchMode.equals(SearchMode.STORE)){
                         stopNavigation();
                     } else if(mSearchMode.equals(SearchMode.ROUTE_START)){
@@ -404,6 +407,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 ivUpper.setVisibility(View.VISIBLE);
                 ivLower.setVisibility(View.VISIBLE);
             }
+
+            mMapLoaded = true;
+            if(mMapInterface != null) mMapInterface.mapLoaded();
         }
 
         @Override
@@ -411,6 +417,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             Logger.log("Error loading Venue: " + e);
         }
 
+    }
+
+    public void setMapInterface(MapInterface mapInterface){
+        mMapInterface = mapInterface;
     }
 
     private void setLevelImageView(final Map[] maps) {
@@ -498,7 +508,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     }
 
     public void showStoreOnTheMapFromDetailActivity(Polygon polygon){
-        mapView.getCamera().focusOn(polygon);
+        try {
+            mapView.getCamera().focusOn(polygon);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         MapFragment.getInstance().didTapPolygon(polygon);
     }
 
@@ -569,17 +583,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
                 if(destinationPolygon instanceof Polygon){
                     highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
-
-                    Log.d("MapFragment", "first : " + mapView.getCamera().getRotation().first + " second : " + mapView.getCamera().getRotation().second);
-                    Log.d("MapFragment", "BEFORE camera zoom level : " + mapView.getCamera().getZoom());
-
-
                     //allow the camera to zoom in if it's too far away or keep its current zoom if it's close enough
                     if(mapView.getCamera().getZoom() <= CAMERA_ZOOM_LEVEL) { //already zoomed in - keep the same zoom
                         mapView.getCamera().setZoomTo(mapView.getCamera().getZoom());
                     } else {
                         mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL); //camera's currently too zoomed out
-                        Log.d("MapFragment", "AFTER camera zoom level : " + mapView.getCamera().getZoom());
                     }
 
 
@@ -622,7 +630,13 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     private void highlightPolygon(Polygon polygon, int color) {
         if (!originalColors.containsKey(polygon)) {
-            originalColors.put(polygon, polygon.getColor());
+            try {
+                originalColors.put(polygon, polygon.getColor());
+            } catch (Exception e) {
+                /*RGBColor rgbColor = new RGBColor(Integer.valueOf(255).intValue(), Integer.valueOf(255).intValue(), Integer.valueOf(255).intValue());
+                originalColors.put(polygon, Utility.convert2IntColor(rgbColor));*/
+                e.printStackTrace();
+            }
         }
         polygon.setColor(color);
     }
@@ -881,15 +895,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     }
 
     public void removePin(final Location location) {
-
-        //should remove the direction card of the removed pin
-//        Overlay overlay = getOverlayFromMap(location);
-//        if (overlay != null) {
-//            mapView.removeMarker(overlay);
-//            mLocationClickersMap.remove(overlay.getPosition());
-//            overlays.remove(overlay);
-//        }
-
         try {
             for (HashMap.Entry<Overlay, LocationLabelClicker> entry : overlays.entrySet()) {
                 Overlay overlay = entry.getKey();
@@ -904,23 +909,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         } catch (Exception e) {
             logger.error(e);
         }
-
-
-
-        /*try {
-            if(location == null) return;
-            for (HashMap.Entry<Overlay, LocationLabelClicker> entry : overlays.entrySet()) {
-                Overlay overlay = entry.getKey();
-                LocationLabelClicker locationLabelClicker = entry.getValue();
-                if(locationLabelClicker.location == location){
-                    mapView.removeMarker(overlay);
-                    mLocationClickersMap.remove(overlay.getPosition());
-                    overlays.remove(overlay);
-                }
-            }
-        } catch (Exception e) {
-            logger.error(e);
-        }*/
     }
 
     @Override
@@ -996,7 +984,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car, R.drawable.circle_imageview_background_parking);
                     dropPin(coordinate, mTemporaryParkingLocation, amenityDrawable);
                     mapView.getCamera().focusOn(polygon);
-//                    mapView.getCamera().focusOn(mTemporaryParkingLocation.getNavigatableCoordinates().get(0));//ocusOn(coordinate);
                     mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_NEAREST_PARKING);
 
                     destinationPolygon = mTemporaryParkingLocation;

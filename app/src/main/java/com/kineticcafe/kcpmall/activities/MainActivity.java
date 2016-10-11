@@ -83,6 +83,7 @@ import com.kineticcafe.kcpmall.fragments.HomeFragment;
 import com.kineticcafe.kcpmall.fragments.InfoFragment;
 import com.kineticcafe.kcpmall.fragments.MapFragment;
 import com.kineticcafe.kcpmall.geofence.GeofenceManager;
+import com.kineticcafe.kcpmall.interfaces.MapInterface;
 import com.kineticcafe.kcpmall.managers.FavouriteManager;
 import com.kineticcafe.kcpmall.managers.SidePanelManagers;
 import com.kineticcafe.kcpmall.mappedin.Amenities;
@@ -139,9 +140,10 @@ public class MainActivity extends BaseActivity
     private GeofenceManager mGeofenceManager;
     private Animation mMenuActiveMallDotAnim;
 
-
     public RecyclerView rvMallDirectory; //SEARCH RECYCLERVIEW FROM DIRECTORY FRAGMENT
     public IndexableRecylerView rvMap; //Store rv from Map Fragment
+
+    public boolean mIsDataLoaded = false;
 
 
     @Override
@@ -289,7 +291,7 @@ public class MainActivity extends BaseActivity
         mDrawer.openDrawer(scRightDrawerLayout);
     }
 
-    private void initializeKcpData(){
+    public void initializeKcpData(){
         if(!KcpUtility.isNetworkAvailable(this)){
             ProgressBarWhileDownloading.showProgressDialog(this, R.layout.layout_loading_item, false);
             this.onDataDownloaded(); //TODO: error here when offline
@@ -787,7 +789,7 @@ public class MainActivity extends BaseActivity
                 if(todaysEventList == null || todaysEventList.size() == 0) tvEmptyTodaysEvent.setVisibility(View.VISIBLE);
                 else {
                     tvEmptyTodaysEvent.setVisibility(View.GONE);
-//                    KcpUtility.sortKcpContentPageByStoreName(todaysEventList); //sort the event list by store name
+                    KcpUtility.sortKcpContentpageByExpiryDate(todaysEventList); //sort the event list by store name
                 }
                 ActiveMallRecyclerViewAdapter todaysEventAdapter = new ActiveMallRecyclerViewAdapter (
                         this,
@@ -810,7 +812,7 @@ public class MainActivity extends BaseActivity
                 if(todaysDealList == null || todaysDealList.size() == 0) tvEmptyTodaysDeal.setVisibility(View.VISIBLE);
                 else {
                     tvEmptyTodaysDeal.setVisibility(View.GONE);
-                    KcpUtility.sortKcpContentPageByStoreName(todaysDealList);
+                    KcpUtility.sortKcpContentpageByExpiryDate(todaysDealList);
                 }
                 ActiveMallRecyclerViewAdapter todaysDealAdapter = new ActiveMallRecyclerViewAdapter (
                         this,
@@ -1253,6 +1255,41 @@ public class MainActivity extends BaseActivity
         void onReady();
     }
 
+    private void handleActivityResult(final int requestCode, final int resultCode, final Intent data){
+        selectPage(2);
+        if(!MapFragment.getInstance().mMapLoaded) {
+            MapFragment.getInstance().setMapInterface(new MapInterface() {
+                @Override
+                public void mapLoaded() {
+                    handleActivityResult(requestCode, resultCode, data);
+                }
+            });
+            return;
+        }
+
+        rvMallDirectory.setVisibility(View.INVISIBLE);
+        int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
+        String externalCode = String.valueOf(resultCode);
+        ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocation(externalCode);
+        if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
+            String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
+            if(parkingName != null) {
+//                selectPage(2);
+                int parkingPosition = ParkingManager.sParkings.getParkingPositionByName(parkingName);
+                if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, polygons.get(0));
+            }
+        } else if(code == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
+//            selectPage(2);
+            if (polygons != null && polygons.size() > 0) {
+                MapFragment.getInstance().showStoreOnTheMapFromDetailActivity(polygons.get(0));
+            } else {
+                MapFragment.getInstance().mPendingExternalCode = externalCode;
+            }
+        }
+    }
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
@@ -1263,16 +1300,26 @@ public class MainActivity extends BaseActivity
 
                 }
             } else if (requestCode == Constants.REQUEST_CODE_MY_PAGE_TYPE) {
-                if (resultCode == Constants.RESULT_DEALS) {
-                    selectPage(0);
-                    HomeFragment.getInstance().selectPage(1);
-                } else if (resultCode == Constants.RESULT_EVENTS) {
-                    selectPage(0);
-                    HomeFragment.getInstance().selectPage(0);
-                } else if (resultCode == Constants.RESULT_STORES) {
-                    selectPage(1);
-                    DirectoryFragment.getInstance().selectPage(1);
+                if(data == null) {
+
+                } else {
+                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
+                    if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT || code == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP){
+                        handleActivityResult(requestCode, resultCode, data);
+                    } else {
+                        if (resultCode == Constants.RESULT_DEALS) {
+                            selectPage(0);
+                            HomeFragment.getInstance().selectPage(1);
+                        } else if (resultCode == Constants.RESULT_EVENTS) {
+                            selectPage(0);
+                            HomeFragment.getInstance().selectPage(0);
+                        } else if (resultCode == Constants.RESULT_STORES) {
+                            selectPage(1);
+                            DirectoryFragment.getInstance().selectPage(1);
+                        }
+                    }
                 }
+
             } else if (requestCode == Constants.REQUEST_CODE_LOCATE_GUEST_SERVICE) {
                 if (resultCode == Activity.RESULT_OK) {
                     //turn on the guest service switch and drop a pin
@@ -1296,31 +1343,13 @@ public class MainActivity extends BaseActivity
                 }
             } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
                 //1. show store on the map 2. show nearest parking spot from a store
-                String externalCode = String.valueOf(resultCode);
-                ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocation(externalCode);
                 //data == null : backpressed
                 //data != null  && !externalCode.equals("0") : locate store
                 //data != null && data.getIntExtra(Constants.REQUEST_CODE_KEY, 0) == Constants.REQUEST_CODE_SHOW_PARKING_SPOT : parking spot
-
                 if(data == null) {
                     //backpressed
                 } else {
-                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
-                    if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
-                        String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
-                        if(parkingName != null) {
-                            selectPage(2);
-                            int parkingPosition = ParkingManager.sParkings.getParkingPositionByName(parkingName);
-                            if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, polygons.get(0));
-                        }
-                    } else if (!externalCode.equals("0")) {
-                        selectPage(2);
-                        if(polygons != null && polygons.size() > 0) {
-                            MapFragment.getInstance().showStoreOnTheMapFromDetailActivity(polygons.get(0));
-                        } else {
-                            MapFragment.getInstance().mPendingExternalCode = externalCode;
-                        }
-                    }
+                    handleActivityResult(requestCode, resultCode, data);
                 }
             }
         } catch (Exception e) {

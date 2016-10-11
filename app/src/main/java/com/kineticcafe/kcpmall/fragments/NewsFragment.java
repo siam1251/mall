@@ -59,7 +59,8 @@ public class NewsFragment extends BaseFragment {
                         mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                HomeFragment.getInstance().initializeHomeData();
+                if(mMainActivity.mIsDataLoaded) HomeFragment.getInstance().initializeHomeData();
+                else mMainActivity.initializeKcpData();
                 mEndlessRecyclerViewScrollListener.onLoadDone();
             }
         });

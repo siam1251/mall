@@ -178,7 +178,10 @@ public class DetailActivity extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            setResult(Integer.valueOf(kcpContentPage.getExternalCode()), new Intent());
+//                            setResult(Integer.valueOf(kcpContentPage.getExternalCode()), new Intent());
+                            Intent intent = new Intent();
+                            intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
+                            setResult(Integer.valueOf(kcpContentPage.getExternalCode()), intent);
                             onBackPressed();
                         }
                     }, true);
@@ -826,8 +829,10 @@ public class DetailActivity extends AppCompatActivity {
                         intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, parkingName);
                         setResult(Integer.valueOf(resultCode), intent);
                         onBackPressed();
-                    } else if (resultCode != 0) {
-                        setResult(resultCode, new Intent());
+                    } else if(code == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP){
+                        Intent intent = new Intent();
+                        intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
+                        setResult(Integer.valueOf(resultCode), intent);
                         onBackPressed();
                     }
                 }

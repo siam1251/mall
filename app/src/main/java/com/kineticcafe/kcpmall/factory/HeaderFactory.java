@@ -38,6 +38,7 @@ public class HeaderFactory {
 
     public final static String PARKING_OFFLINE_TEXT = "parking.json";
     private final static String PARKING_URL_VM = "bins/1c8ul";
+//    private final static String PARKING_URL_VM = "bins/1c8ulweg"; //TESTING
     private final static String PARKING_URL_MP = "bins/1c8ul";
 
 

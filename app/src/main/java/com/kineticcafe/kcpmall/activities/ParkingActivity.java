@@ -298,6 +298,8 @@ public class ParkingActivity extends AppCompatActivity {
 
 
     private void showSaveParkingSpotScreen(boolean enable){
+        mDoneBtnShown = false;
+
         if(enable) {
             tvParkingLotQuestion.setVisibility(View.GONE);
             tvEntranceQuestion.setVisibility(View.GONE);
@@ -368,8 +370,10 @@ public class ParkingActivity extends AppCompatActivity {
         }
     }*/
 
+    private boolean mDoneBtnShown = false;
     private void showDoneBtn(boolean show, RecyclerView rv, String text) {
         if(!show) {
+            mDoneBtnShown = true;
             tvFooter.setVisibility(View.GONE);
             Animation slideUpAnimation = AnimationUtils.loadAnimation(this,
                     R.anim.anim_slide_down_out_of_screen);
@@ -377,6 +381,7 @@ public class ParkingActivity extends AppCompatActivity {
             tvFooter.startAnimation(slideUpAnimation);
             rv.setPadding(0, 0, 0, 0);
         } else {
+            if(mDoneBtnShown) return;
             tvFooter.setVisibility(View.VISIBLE);
             tvFooter.setText(text);
             if(tvFooter.getVisibility() != View.VISIBLE) {
@@ -456,6 +461,7 @@ public class ParkingActivity extends AppCompatActivity {
                 placeHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        v.clearAnimation();
                         Utility.startSqueezeAnimationForInterestedParking(new Utility.SqueezeListener() {
                             @Override
                             public void OnSqueezeAnimationDone() {
@@ -474,6 +480,7 @@ public class ParkingActivity extends AppCompatActivity {
                 placeHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        v.clearAnimation();
                         Utility.startSqueezeAnimationForInterestedParking(new Utility.SqueezeListener() {
                             @Override
                             public void OnSqueezeAnimationDone() {
@@ -482,8 +489,6 @@ public class ParkingActivity extends AppCompatActivity {
                                 showDoneBtn(true, rvParkingChild, "DONE");
                             }
                         }, (Activity) mContext, placeHolder.mView);
-
-
                     }
                 });
             }
@@ -535,7 +540,6 @@ public class ParkingActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         if(tvEditSelection.getVisibility() == View.VISIBLE){
             showSaveParkingSpotScreen(false);
         } else if(rvParkingChild.getVisibility() == View.VISIBLE) {

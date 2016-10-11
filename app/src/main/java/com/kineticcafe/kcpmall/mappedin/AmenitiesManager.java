@@ -74,7 +74,7 @@ public class AmenitiesManager  {
                 if(response.isSuccessful()){
                     sAmenities = response.body();
                     handleState(DOWNLOAD_COMPLETE);
-                }
+                } else handleState(DOWNLOAD_FAILED);
             }
 
             @Override

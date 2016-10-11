@@ -68,7 +68,7 @@ public class ParkingManager {
                 if(response.isSuccessful()){
                     sParkings = response.body();
                     handleState(DOWNLOAD_COMPLETE);
-                }
+                } else handleState(DOWNLOAD_FAILED);
             }
 
             @Override
