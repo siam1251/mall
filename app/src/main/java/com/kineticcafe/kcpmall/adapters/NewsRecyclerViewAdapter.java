@@ -243,10 +243,19 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             String title = kcpContentPage.getTitle();
             ancmtHolder.tvAnnouncementTitle.setText(title);
             if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_EVENT){
-                String time =
-                        kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EFFECTIVE) +
-                                " - " +
-                                kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EFFECTIVE);
+                //if event is for one day, also show its begin/end hours
+                String time = "";
+                String startingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EFFECTIVE);
+                String endingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EFFECTIVE);
+
+                if(!startingTime.equals(endingTime)) {
+                    time = startingTime + " - " + endingTime;
+                } else {
+                    String eventStartHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EVENT_HOUR);
+                    String eventEndingHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EVENT_HOUR);
+                    time = startingTime + " @ " + eventStartHour + " to " + eventEndingHour;
+                }
+
                 ancmtHolder.tvAnnouncementDate.setText(time);
             } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
                 ancmtHolder.tvAnnouncementDate.setVisibility(View.GONE);

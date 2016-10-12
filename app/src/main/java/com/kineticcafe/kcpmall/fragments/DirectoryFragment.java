@@ -29,10 +29,11 @@ import com.kineticcafe.kcpandroidsdk.models.KcpPlaces;
 import com.kineticcafe.kcpandroidsdk.models.KcpPlacesRoot;
 import com.kineticcafe.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.kineticcafe.kcpmall.R;
-import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.activities.SubCategoryActivity;
+import com.kineticcafe.kcpmall.activities.SubStoreActivity;
 import com.kineticcafe.kcpmall.adapters.HomeTopViewPagerAdapter;
 import com.kineticcafe.kcpmall.adapters.MallDirectoryRecyclerViewAdapter;
+import com.kineticcafe.kcpmall.constants.Constants;
 import com.kineticcafe.kcpmall.factory.CategoryIconFactory;
 import com.kineticcafe.kcpmall.factory.HeaderFactory;
 import com.kineticcafe.kcpmall.managers.ThemeManager;
@@ -151,7 +152,7 @@ public class DirectoryFragment extends BaseFragment {
         kcpCategoryManager.downloadCategories();
     }
 
-    public void expandLevelOnCategory(String externalCode, String categoryName, int position, View view) {
+    public void expandLevelOnCategory(Context context, String externalCode, String categoryName, int position, View view) {
         //EXPANDING
 //        ArrayList<KcpCategories> kcpCategories = KcpCategoryRoot.getInstance().getSubcategories(externalCode);
 //        if(kcpCategories != null) mCategoriesFragment.mExpandableCategoryRecyclerViewAdapter.insertItems(kcpCategories, externalCode, position);
@@ -168,6 +169,7 @@ public class DirectoryFragment extends BaseFragment {
                 Pair.create(view, ""));
 
 //        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+//        ((Activity) context).startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
         getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
         ActivityAnimation.startActivityAnimation(getActivity());
     }
@@ -182,7 +184,7 @@ public class DirectoryFragment extends BaseFragment {
                         case KcpCategoryManager.DOWNLOAD_FAILED:
                             break;
                         case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                            expandLevelOnCategory(externalCode, categoryName, position, view);
+                            expandLevelOnCategory(context, externalCode, categoryName, position, view);
                             break;
                         default:
                             super.handleMessage(inputMessage);
@@ -203,7 +205,7 @@ public class DirectoryFragment extends BaseFragment {
                     }
                 }
             } else {
-                expandLevelOnCategory(externalCode, categoryName, position, view);
+                expandLevelOnCategory(context, externalCode, categoryName, position, view);
             }
         }
     }
@@ -234,7 +236,8 @@ public class DirectoryFragment extends BaseFragment {
 
     public void showStores(Context context, String externalCode, String categoryName, View view) {
         //SEPARATE ACTIVITY
-        Intent intent = new Intent(context, SubCategoryActivity.class);
+//        Intent intent = new Intent(context, SubCategoryActivity.class);
+        Intent intent = new Intent(context, SubStoreActivity.class);
         intent.putExtra(Constants.ARG_CATEGORY_ACTIVITY_TYPE, Constants.CategoryActivityType.STORE.toString());
         intent.putExtra(Constants.ARG_EXTERNAL_CODE, externalCode);
         intent.putExtra(Constants.ARG_CAT_NAME, categoryName);
@@ -245,6 +248,7 @@ public class DirectoryFragment extends BaseFragment {
                 Pair.create(view, ""));
 
         ((Activity) context).startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
+//        getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
         ActivityAnimation.startActivityAnimation(context);
     }
 

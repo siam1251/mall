@@ -9,6 +9,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 
 import com.kineticcafe.kcpmall.R;
 import com.kineticcafe.kcpmall.views.AlertDialogForInterest;
+import com.mappedin.jpct.RGBColor;
 
 /**
  * Created by Kay on 2016-05-02.
@@ -238,14 +240,12 @@ public class Utility {
         final Animation first =  new ScaleAnimation(1, scale, 1, scale,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
-//        first.setDuration(90);
         first.setDuration(duration);
         first.setFillAfter(true);
 
         final Animation second = new ScaleAnimation(scale, 1, scale, 1,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
-//        second.setDuration(90);
         second.setDuration(duration);
         second.setFillAfter(true);
 
@@ -591,5 +591,17 @@ public class Utility {
         }
 
         return text;
+    }
+
+    public static int convert2IntColor(RGBColor color) {
+        if(color != null) {
+            int alpha = color.getAlpha();
+            int red = color.getRed();
+            int green = color.getGreen();
+            int blue = color.getBlue();
+            return Color.argb(alpha, red, green, blue);
+        } else {
+            return 0;
+        }
     }
 }

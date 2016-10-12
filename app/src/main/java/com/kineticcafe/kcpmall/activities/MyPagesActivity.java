@@ -77,10 +77,14 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                     staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
                     rv.setLayoutManager(staggeredGridLayoutManager);
 
+
+                    ArrayList<KcpContentPage> dealContentPages =  FavouriteManager.getInstance(MyPagesActivity.this).getFavDealContentPages();
+                    KcpUtility.sortKcpContentpageByExpiryDate(dealContentPages);
+
                     DealsRecyclerViewAdapter dealsRecyclerViewAdapter = new DealsRecyclerViewAdapter (
                             MyPagesActivity.this,
                             false,
-                            FavouriteManager.getInstance(MyPagesActivity.this).getFavDealContentPages(),
+                            dealContentPages,
                             null);
                     dealsRecyclerViewAdapter.setFavouriteListener(MyPagesActivity.this);
                     rv.setAdapter(dealsRecyclerViewAdapter);
@@ -106,9 +110,14 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
 
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MyPagesActivity.this);
                     rv.setLayoutManager(linearLayoutManager);
+
+                    ArrayList<KcpContentPage> favEventPages =  FavouriteManager.getInstance(MyPagesActivity.this).getFavEventContentPages();
+                    KcpUtility.sortKcpContentpageByExpiryDate(favEventPages);
+
                     NewsRecyclerViewAdapter newsRecyclerViewAdapter = new NewsRecyclerViewAdapter (
                             MyPagesActivity.this,
-                            FavouriteManager.getInstance(MyPagesActivity.this).getFavEventContentPages());
+                            favEventPages
+                            );
                     newsRecyclerViewAdapter.setFavouriteListener(MyPagesActivity.this);
                     rv.setAdapter(newsRecyclerViewAdapter);
                     newsRecyclerViewAdapter.addFooter(getString(R.string.explore_more_events), R.layout.list_item_my_page_footer, new View.OnClickListener() {
@@ -133,7 +142,7 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                     for(int i = 0; i < kcpContentPages.size(); i++){
                         kcpPlaces.add(kcpContentPages.get(i).getStore());
                     }
-
+                    KcpUtility.sortPlaceList(kcpPlaces);
                     if(kcpPlaces.size() == 0) {
                         setUpEmptyPlaceHolder(R.drawable.icn_empty_stores, getResources().getString(R.string.empty_placeholder_desc_store), true);
                         return;
@@ -287,4 +296,34 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
     public void didChangeFavourite() {
         setUpRecyclerView();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
+                if(data == null) {
+                    onFinish(resultCode);
+                } else {
+                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
+                    if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
+                        String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
+                        Intent intent = new Intent();
+                        intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_SHOW_PARKING_SPOT);
+                        intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, parkingName);
+                        setResult(Integer.valueOf(resultCode), intent);
+                        onBackPressed();
+                    } else if(code == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP){
+                        Intent intent = new Intent();
+                        intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
+                        setResult(Integer.valueOf(resultCode), intent);
+                        onBackPressed();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
+    }
+
 }
