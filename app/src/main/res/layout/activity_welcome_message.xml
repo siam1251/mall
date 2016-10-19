@@ -17,7 +17,7 @@
         android:background="@color/white">
 
 
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_medium"
             android:id="@+id/tvWelcome"
             android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
             android:textColor="@color/toolbar_text"
             />
 
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             android:layout_below="@+id/tvWelcome"
             android:layout_marginTop="6dp"
             app:fontFamily="@string/fontFamily_roboto_regular"
@@ -40,7 +40,7 @@
             />
 
 
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             style="@style/SelectableItemForegroundNormal"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
@@ -55,7 +55,7 @@
             android:text="@string/welcome_yes"
             />
 
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             style="@style/SelectableItemForegroundNormal"
             app:fontFamily="@string/fontFamily_roboto_medium"
             android:gravity="center"
@@ -75,7 +75,7 @@
 
 
 
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:paddingLeft="20dp"
         android:paddingBottom="25dp"
         app:fontFamily="@string/fontFamily_roboto_light"
@@ -89,7 +89,7 @@
         />
 
 
-    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+    <com.ivanhoecambridge.mall.views.ThemeColorImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
         ThemedImageView:filterColor="@color/white"
         android:layout_marginLeft="20dp"

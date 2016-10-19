@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/intrst_card_height">
 
-            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 android:layout_marginTop="@dimen/intrst_title_top_margin"
                 android:gravity="center_vertical"

@@ -10,7 +10,7 @@
         android:layout_width="@dimen/store_hour_list_width"
         android:layout_height="wrap_content">
 
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_bold"
             android:layout_alignParentLeft="true"
             android:id="@+id/tvDate"
@@ -34,7 +34,7 @@
             />
     </RelativeLayout>
 
-    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+    <com.ivanhoecambridge.mall.views.ThemeColorImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
         ThemedImageView:filterColor="@color/info_mall_hour_holiday_stroke"
         android:visibility="gone"

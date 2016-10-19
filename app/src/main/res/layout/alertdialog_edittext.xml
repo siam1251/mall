@@ -17,7 +17,7 @@
         />
         android:cursorVisible="false"
 
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:id="@+id/tvCharacterLeft"
         app:fontFamily="@string/fontFamily_roboto_light"
         android:layout_width="wrap_content"

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         android:background="?android:attr/selectableItemBackground"
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_regular"
             android:textColor="@color/sub_category_txt"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"

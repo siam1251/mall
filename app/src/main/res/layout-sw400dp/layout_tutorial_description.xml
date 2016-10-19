@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="28dp"
+    android:paddingRight="28dp"
+    android:orientation="vertical">
+    android:background="@drawable/view_gradient_onboarding"
+
+
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+        android:layout_marginTop="43dp"
+        android:textSize="23sp"
+        android:id="@+id/tvOnbdTitle"
+        app:fontFamily="@string/fontFamily_roboto_bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Find Your Favourite Brands"
+        android:textColor="@color/white"
+        />
+
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+        android:layout_below="@+id/tvOnbdTitle"
+        app:fontFamily="@string/fontFamily_roboto_regular"
+        android:gravity="center_horizontal"
+        android:id="@+id/tvOnbdDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textSize="19sp"
+        android:lineSpacingMultiplier="1.35"
+        android:text="Get smart deal recommendations from your favourite stores and shopping interests"/>
+
+    <Button
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_tutorial_start"
+        android:background="@drawable/btn_intrstd_cat"
+        android:textColor="@color/white"
+        android:layout_marginTop="50dp"
+        android:text="Start NorthPark App" />
+
+</RelativeLayout>

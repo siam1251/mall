@@ -63,7 +63,7 @@
                     >
                     android:background="#cb272626"
 
-                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                         app:fontFamily="@string/fontFamily_roboto_regular"
                         android:id="@+id/tvStoreName"
                         android:layout_width="match_parent"
@@ -77,7 +77,7 @@
                         android:layout_marginBottom="2dp"
                         android:text="Holt Renfrew"/>
 
-                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                         app:fontFamily="@string/fontFamily_roboto_regular"
                         android:layout_marginTop="2dp"
                         android:layout_below="@id/tvStoreName"
@@ -88,7 +88,7 @@
                         android:textColor="#89ffffff"
                         android:text="Department Store"/>
 
-                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                         android:visibility="gone"
                         app:fontFamily="@string/fontFamily_roboto_lightitalic"
                         android:layout_marginTop="5dp"
@@ -123,7 +123,7 @@
                 android:visibility="gone"
                 android:orientation="horizontal">
 
-                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                <com.ivanhoecambridge.mall.views.ThemeColorImageView
                     ThemedImageView:filterColor="@color/white"
                     android:id="@+id/ivDeal"
                     android:layout_weight="0"
@@ -131,7 +131,7 @@
                     android:layout_height="17dp"
                     android:src="@drawable/icn_deals"/>
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:layout_marginLeft="10dp"
                     android:gravity="center_vertical"
                     android:layout_weight="1"
@@ -146,7 +146,7 @@
                     android:text="Save Now, Wear Now"/>
 
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     style="@style/SelectableItemForeground"
                     android:gravity="center_vertical"
                     android:layout_weight="0"
@@ -185,7 +185,7 @@
                 android:background="@drawable/view_circle_theme"
                 />
 
-            <com.kineticcafe.kcpmall.views.ThemeColorImageView
+            <com.ivanhoecambridge.mall.views.ThemeColorImageView
                 ThemedImageView:filterColor="@color/white"
                 android:layout_centerInParent="true"
                 android:id="@+id/ivDirection"

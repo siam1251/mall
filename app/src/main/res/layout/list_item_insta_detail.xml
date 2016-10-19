@@ -27,7 +27,7 @@
         />
 
 
-    <com.kineticcafe.kcpmall.views.ExpandableTextView
+    <com.ivanhoecambridge.mall.views.ExpandableTextView
         android:layout_marginTop="3dp"
         android:layout_marginBottom="5dp"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -60,7 +60,7 @@
             android:text="VIEW MORE"
             android:textColor="@color/themeColor"
             />
-    </com.kineticcafe.kcpmall.views.ExpandableTextView>
+    </com.ivanhoecambridge.mall.views.ExpandableTextView>
 
 
 </RelativeLayout>

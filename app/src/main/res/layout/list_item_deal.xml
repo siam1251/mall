@@ -24,7 +24,7 @@
             android:layout_height="wrap_content">
 
 
-            <com.kineticcafe.kcpmall.views.KCPSetRatioImageView
+            <com.ivanhoecambridge.mall.views.KCPSetRatioImageView
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
                 android:transitionName="@string/transition_news_image"
                 />
 
-            <com.kineticcafe.kcpmall.views.AlphaTextView
+            <com.ivanhoecambridge.mall.views.AlphaTextView
                 android:visibility="gone"
                 xmlns:textAlpha="http://schemas.android.com/apk/res-auto"
                 android:gravity="center"
@@ -59,7 +59,7 @@
                 android:layout_below="@+id/ivDealLogo"
                 >
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     app:fontFamily="@string/fontFamily_roboto_medium"
                     android:layout_marginTop="@dimen/deal_desc_top_margin"
                     android:gravity="center_vertical"

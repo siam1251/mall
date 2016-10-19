@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.kineticcafe.kcpmall.adapters.adapterHelper.IndexableRecylerView
+        <com.ivanhoecambridge.mall.adapters.adapterHelper.IndexableRecylerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/rv"
@@ -19,7 +19,7 @@
             />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:layout_below="@+id/ablTop"
         android:id="@+id/tvEmptyState"
         style="@style/emptyStateMsg"

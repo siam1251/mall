@@ -26,7 +26,7 @@
         style="@style/SelectableItemForegroundOpaque"
 
             app:fontFamily="@string/fontFamily_roboto_regular"
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             android:layout_gravity="center"
             android:lines="1"
             android:gravity="center"

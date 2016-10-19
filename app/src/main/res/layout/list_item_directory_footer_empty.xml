@@ -7,7 +7,7 @@
     style="@style/SelectableItemForegroundNormal"
     >
 
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         app:fontFamily="@string/fontFamily_roboto_regular"
         android:id="@+id/tvFooter"
         android:layout_width="match_parent"

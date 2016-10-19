@@ -27,7 +27,7 @@
         android:layout_marginRight="42dp"
         android:textSize="@dimen/toolbar_text"/>
 
-    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+    <com.ivanhoecambridge.mall.views.ThemeColorImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
         ThemedImageView:filterColor="@color/white"
         android:layout_marginRight="9dp"

@@ -29,7 +29,7 @@
             />
 
 
-        <com.kineticcafe.kcpmall.views.CircleImageView
+        <com.ivanhoecambridge.mall.views.CircleImageView
             android:visibility="gone"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
@@ -61,7 +61,7 @@
                 android:ellipsize="end"
                 android:text="Andrew Cherwenka"/>
 
-            <com.kineticcafe.kcpmall.views.ThemeColorImageView
+            <com.ivanhoecambridge.mall.views.ThemeColorImageView
                 xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                 android:visibility="gone"
                 android:layout_weight="0"
@@ -74,7 +74,7 @@
                 style="@style/SelectableItemBackground"
                 android:src="@drawable/icn_profilesettings"/>
 
-            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 android:visibility="gone"
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 android:id="@+id/tvDetailDate"
@@ -107,7 +107,7 @@
 
 
 
-            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:id="@+id/tvMyFav"
                 android:gravity="center_vertical"
@@ -123,14 +123,14 @@
                 android:id="@+id/flDeals"
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout">
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     app:fontFamily="@string/fontFamily_roboto_medium"
                     android:id="@+id/tvDeals"
                     style="@style/DrawerLayoutFavouriteItemsTextView"
                     android:text="@string/drawer_deals"
                     />
 
-                <com.kineticcafe.kcpmall.views.BadgeView
+                <com.ivanhoecambridge.mall.views.BadgeView
                     xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
                     BadgeView:badgeBgColor="@color/themeColor"
                     style="@style/DrawerLayoutFavouriteItemsBadge"
@@ -143,14 +143,14 @@
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout"
                 >
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvEvents"
                     style="@style/DrawerLayoutFavouriteItemsTextView"
                     app:fontFamily="@string/fontFamily_roboto_medium"
                     android:text="@string/drawer_events"
                     />
 
-                <com.kineticcafe.kcpmall.views.BadgeView
+                <com.ivanhoecambridge.mall.views.BadgeView
                     xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
                     BadgeView:badgeBgColor="@color/themeColor"
                     style="@style/DrawerLayoutFavouriteItemsBadge"
@@ -164,14 +164,14 @@
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout"
                 >
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvStores"
                     style="@style/DrawerLayoutFavouriteItemsTextView"
                     app:fontFamily="@string/fontFamily_roboto_medium"
                     android:text="@string/drawer_stores"
                     />
 
-                <com.kineticcafe.kcpmall.views.BadgeView
+                <com.ivanhoecambridge.mall.views.BadgeView
                     xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
                     BadgeView:badgeBgColor="@color/themeColor"
                     style="@style/DrawerLayoutFavouriteItemsBadge"
@@ -184,14 +184,14 @@
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout"
                 >
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvInterests"
                     style="@style/DrawerLayoutFavouriteItemsTextView"
                     app:fontFamily="@string/fontFamily_roboto_medium"
                     android:text="@string/drawer_interests"
                     />
 
-                <com.kineticcafe.kcpmall.views.BadgeView
+                <com.ivanhoecambridge.mall.views.BadgeView
                     xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
                     BadgeView:badgeBgColor="@color/themeColor"
                     style="@style/DrawerLayoutFavouriteItemsBadge"
@@ -208,7 +208,7 @@
                 />
 
 
-            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 android:visibility="gone"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:id="@+id/tvMyGC"
@@ -228,14 +228,14 @@
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout"
                 >
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvGCNumber"
                     style="@style/DrawerLayoutFavouriteItemsTextView"
                     app:fontFamily="@string/fontFamily_roboto_medium"
                     android:text="2956-3845-2839-6018"
                     />
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     app:fontFamily="@string/fontFamily_roboto_medium"
                     android:id="@+id/tvGCBalance"
                     style="@style/DrawerLayoutFavouriteItemsTextView"
@@ -252,7 +252,7 @@
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout"
                 >
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvAddGC"
                     style="@style/DrawerLayoutFavouriteItemsTextView"
                     app:fontFamily="@string/fontFamily_roboto_medium"

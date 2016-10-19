@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.kineticcafe.kcpmall.views.ThemeColorImageView
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
             xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
             ThemedImageView:filterColor="@color/white"
             android:id="@+id/ivDismiss"
@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="228dp"/>
 
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_medium"
             android:visibility="gone"
             android:id="@+id/tvFooter"
@@ -54,7 +54,7 @@
             android:layout_alignParentBottom="true"
             />
 
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_regular"
             android:layout_above="@+id/rvParking"
             android:id="@+id/tvParkingLotQuestion"
@@ -65,7 +65,7 @@
             android:textColor="@color/white"
             android:text="@string/parking_which_parking_lot"/>
 
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_regular"
             android:visibility="gone"
             android:layout_above="@+id/rvParking"
@@ -93,7 +93,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     />
-                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                <com.ivanhoecambridge.mall.views.ThemeColorImageView
                     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                     ThemedImageView:filterColor="@color/themeColor"
                     android:layout_centerInParent="true"
@@ -103,7 +103,7 @@
                     />
             </RelativeLayout>
 
-            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 android:visibility="gone"
                 android:layout_below="@+id/rlParkingIcon"
@@ -115,7 +115,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/white"/>
 
-            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 app:fontFamily="@string/fontFamily_roboto_regular"
                 android:visibility="gone"
                 android:layout_below="@+id/tvParkingLotName"
@@ -143,7 +143,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                <com.ivanhoecambridge.mall.views.ThemeColorImageView
                     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                     ThemedImageView:filterColor="@color/white"
                     android:layout_centerVertical="true"
@@ -154,7 +154,7 @@
                     android:layout_marginRight="3dp"
                     />
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:layout_marginTop="3dp"
                     android:id="@+id/tvNote"
                     android:layout_centerVertical="true"
@@ -175,7 +175,7 @@
         </RelativeLayout>
 
 
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             android:visibility="gone"
             android:layout_alignParentBottom="true"
             app:fontFamily="@string/fontFamily_roboto_medium"
@@ -193,7 +193,7 @@
             />
             android:background="@drawable/btn_style_corner_radius_with_selected_state"
 
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             android:visibility="gone"
             android:layout_above="@+id/tvSaveParkingLot"
             app:fontFamily="@string/fontFamily_roboto_medium"

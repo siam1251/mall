@@ -1,8 +1,7 @@
-package com.kineticcafe.kcpmall.factory;
+package com.ivanhoecambridge.mall.factory;
 
-import com.kineticcafe.kcpandroidsdk.models.KcpCategories;
-import com.kineticcafe.kcpandroidsdk.models.KcpCategoryRoot;
-import com.kineticcafe.kcpmall.R;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
+import com.ivanhoecambridge.mall.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

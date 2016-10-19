@@ -16,7 +16,7 @@
     style="@style/SelectableItemForeground"
     android:layout_height="@dimen/category_item_height">
 
-        <com.kineticcafe.kcpmall.views.ThemeColorImageView
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
             xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
             ThemedImageView:filterColor="@color/themeColor"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -30,7 +30,7 @@
             android:adjustViewBounds="true"
             />
 
-        <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_regular"
             android:textColor="@color/category_txt"
             android:layout_marginLeft="@dimen/category_txt_left_margin"

@@ -34,7 +34,7 @@
                     android:layout_height="74dp"
                     >
 
-                    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                    <com.ivanhoecambridge.mall.views.ThemeColorImageView
                         android:layout_centerVertical="true"
                         ThemedImageView:filterColor="@color/themeColor"
                         ThemedImageView:filterColorUnselected="@color/filter_off_color"
@@ -44,7 +44,7 @@
                         android:layout_width="20dp"
                         />
 
-                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                         app:fontFamily="@string/fontFamily_roboto_regular"
                         android:id="@+id/tvFilterDeal"
                         android:gravity="center_vertical"
@@ -70,7 +70,7 @@
                     android:layout_height="74dp"
                     >
 
-                    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                    <com.ivanhoecambridge.mall.views.ThemeColorImageView
                         android:layout_centerVertical="true"
                         ThemedImageView:filterColor="@color/themeColor"
                         ThemedImageView:filterColorUnselected="@color/filter_off_color"
@@ -80,7 +80,7 @@
                         android:layout_width="20dp"
                         />
 
-                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                         app:fontFamily="@string/fontFamily_roboto_regular"
                         android:id="@+id/tvFilterParking"
                         android:gravity="center_vertical"
@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     app:fontFamily="@string/fontFamily_roboto_medium"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:id="@+id/tvHolidayName"

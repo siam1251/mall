@@ -18,6 +18,7 @@
     <string name="action_retry">RETRY</string>
     <string name="action_sure">I\'M SURE</string>
     <string name="action_next">NEXT</string>
+    <string name="action_dismiss">DISMISS</string>
 
     <!--ALERT DIALOG TITLE-->
     <string name="title_unsaved_changes">Unsaved Changes</string>
@@ -257,9 +258,27 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <!--WELCOME-->
     <string name="welcome_title">Welcome</string>
     <string name="welcome_message_ask">Would you like us to remember where you parked your car?</string>
+    <string name="welcome_message_ask_notification">Would you like to save where you parked your car?</string>
     <string name="welcome_message">Welcome to</string>
     <string name="welcome_no">NO THANKS</string>
     <string name="welcome_yes">YES PLEASE</string>
 
+    <!--ONBOARDING-->
+    <string name="onbd_one_title">Welcome to Vaughan Mills new companion app</string>
+    <string name="onbd_two_title">Get Recommended Deals</string>
+    <string name="onbd_three_title">Find Your Favourite Brands</string>
+    <string name="onbd_four_title">Never Get Lost</string>
+    <string name="onbd_five_title">Live Mall Stream</string>
 
+    <string name="onbd_one_desc">""</string>
+    <string name="onbd_two_desc">Get smart deal recommendations from your favourite stores and shopping interests</string>
+    <string name="onbd_three_desc">Easily discover stores with our advanced store search</string>
+    <string name="onbd_four_desc">With advanced wayfinding, get directions easily to a store or to your parked car</string>
+    <string name="onbd_five_desc">On arrival the app will connect to the mall and provide everything you need for a great shopping experience!</string>
+
+    <string name="onbd_btn_lets_get_started">Let’s Get Started</string>
+    <string name="onbd_btn_lets_get_skip">Skip</string>
+    <string name="onbd_btn_lets_get_done">Done</string>
+
+    <!---->
 </resources>

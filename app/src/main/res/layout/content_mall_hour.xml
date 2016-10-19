@@ -38,7 +38,7 @@
             android:background="@drawable/rectangle_mall_hour_holiday"
             android:layout_height="wrap_content">
 
-            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 android:id="@+id/tvHolidayName"
                 android:gravity="center_horizontal"
@@ -73,7 +73,7 @@
                 android:text="Extended Holiday Hours from 10 AM to 11 PM, and from 10 AM to 8 PM on weekends."
                 />
 
-            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 app:fontFamily="@string/fontFamily_roboto_bold"
                 android:id="@+id/tvHolidayhoursList"
                 android:gravity="center"

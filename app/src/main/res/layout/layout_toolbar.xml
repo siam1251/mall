@@ -10,7 +10,7 @@
     android:layout_height="?attr/actionBarSize">
     <!--app:popupTheme is what really changed the toolbar default menu drawable color-->
 
-    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+    <com.ivanhoecambridge.mall.views.ThemeColorImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
         ThemedImageView:filterColor="@color/toolbarTextColor"
         android:id="@+id/ivToolbar"

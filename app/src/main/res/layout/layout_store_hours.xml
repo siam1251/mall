@@ -11,7 +11,7 @@
         style="@style/separater"
         />
 
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         app:fontFamily="@string/fontFamily_roboto_medium"
         android:text="@string/hours_of_operation"
         android:gravity="center_horizontal"

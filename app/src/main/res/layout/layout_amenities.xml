@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     >
 
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         app:fontFamily="@string/fontFamily_roboto_regular"
         android:id="@+id/tvAmenity"
         android:layout_width="wrap_content"

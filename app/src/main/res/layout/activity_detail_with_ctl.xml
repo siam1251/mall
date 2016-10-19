@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.kineticcafe.kcpmall.views.KCPSetRatioImageView
+                <com.ivanhoecambridge.mall.views.KCPSetRatioImageView
                     android:scaleType="centerCrop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/placeholder_rectangle_theme"/>
 
-                <com.kineticcafe.kcpmall.views.AlphaTextView
+                <com.ivanhoecambridge.mall.views.AlphaTextView
                     android:visibility="gone"
                     xmlns:textAlpha="http://schemas.android.com/apk/res-auto"
                     android:gravity="center"

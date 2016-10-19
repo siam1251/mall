@@ -13,7 +13,7 @@
     android:visibility="gone"
     >
 
-    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+    <com.ivanhoecambridge.mall.views.ThemeColorImageView
         android:layout_gravity="center"
         style="@style/SelectableItemForegroundWhite"
         android:layout_marginLeft="2dp"
@@ -30,7 +30,7 @@
 
     android:paddingLeft="40dp"
     <!--<EditText-->
-    <com.kineticcafe.kcpmall.utility.ClearableEditText
+    <com.ivanhoecambridge.mall.utility.ClearableEditText
         android:longClickable="false"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:paddingLeft="@dimen/activity_margin_small"
@@ -67,7 +67,7 @@
         android:textSize="14sp"
         android:layout_height="28dp" />
 
-    <com.kineticcafe.kcpmall.utility.ClearableEditText
+    <com.ivanhoecambridge.mall.utility.ClearableEditText
         android:longClickable="false"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:focusable="true"
