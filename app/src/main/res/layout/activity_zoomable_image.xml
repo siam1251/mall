@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     >
 
-    <com.kineticcafe.kcpmall.views.zoomable.TouchImageView
+    <com.ivanhoecambridge.mall.views.zoomable.TouchImageView
         android:transitionName="@string/transition_news_image"
         android:id="@+id/ivDetailImage"
         android:layout_width="match_parent"

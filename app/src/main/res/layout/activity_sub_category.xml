@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/cdlIntCat"
-        tools:context="com.kineticcafe.kcpmall.activities.InterestedCategoryActivity">
+        tools:context="com.ivanhoecambridge.mall.activities.InterestedCategoryActivity">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/ablTop"

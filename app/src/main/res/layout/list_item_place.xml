@@ -37,7 +37,7 @@
             android:gravity="center"
             android:layout_height="match_parent">
 
-            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 android:textColor="@color/place_txt"
                 android:textSize="@dimen/place_txt"
@@ -48,7 +48,7 @@
                 android:layout_marginBottom="3dp"
                 />
 
-            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 app:fontFamily="@string/fontFamily_roboto_regular"
                 android:layout_marginTop="3dp"
                 android:textColor="@color/place_category_txt"

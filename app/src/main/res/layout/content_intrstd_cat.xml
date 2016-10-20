@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kineticcafe.kcpmall.activities.InterestedCategoryActivity"
+    tools:context="com.ivanhoecambridge.mall.activities.InterestedCategoryActivity"
     tools:showIn="@layout/activity_intrstd_category"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     >

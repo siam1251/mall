@@ -7,7 +7,7 @@
     android:layout_height="@dimen/main_tab_height">
 
     <!--hack to prevent the tablayout to limit its size to the minimum height of its children-->
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         app:fontFamily="@string/fontFamily_roboto_medium"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/main_tab_height"/>

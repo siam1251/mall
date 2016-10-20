@@ -10,7 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/cdlIntCat"
         android:background="@color/card_bg"
-        tools:context="com.kineticcafe.kcpmall.activities.InterestedCategoryActivity">
+        tools:context="com.ivanhoecambridge.mall.activities.InterestedCategoryActivity">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/ablTop"

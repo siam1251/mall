@@ -14,7 +14,7 @@
     app:layout_collapseMode="parallax"
 
 
-    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+    <com.ivanhoecambridge.mall.views.ThemeColorImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
         ThemedImageView:filterColor="@color/white"
         android:visibility="gone"

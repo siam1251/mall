@@ -32,7 +32,7 @@
             android:layout_height="wrap_content">
 
             <!--<ImageView-->
-            <com.kineticcafe.kcpmall.views.KCPSetRatioImageView
+            <com.ivanhoecambridge.mall.views.KCPSetRatioImageView
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                 >
 
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     app:fontFamily="@string/fontFamily_roboto_medium"
                     android:layout_marginTop="@dimen/ancmt_desc_top_margin"
                     android:gravity="center_vertical"
@@ -64,7 +64,7 @@
                     android:textColor="@color/ancmt_title_color"
                     />
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     app:fontFamily="@string/fontFamily_roboto_regular"
                     android:gravity="center_vertical"
                     android:layout_width="wrap_content"

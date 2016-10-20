@@ -14,6 +14,7 @@
     <!--viewpager circle dot-->
     <dimen name="viewpager_circle_dot_margin">2dp</dimen>
     <dimen name="viewpager_circle_dot_size">8dp</dimen>
+    <dimen name="viewpager_circle_dot_margin_onbrd">4dp</dimen>
 
 
     <!--card in general-->

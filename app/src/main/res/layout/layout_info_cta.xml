@@ -44,7 +44,7 @@
                 style="@style/SelectableItemForeground"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <com.kineticcafe.kcpmall.views.ThemeColorImageView
+                <com.ivanhoecambridge.mall.views.ThemeColorImageView
                     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                     ThemedImageView:filterColor="@color/themeColor"
                     android:id="@+id/ivDirection"
@@ -55,7 +55,7 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/icn_directions"/>
 
-                <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     app:fontFamily="@string/fontFamily_roboto_regular"
                     android:layout_toRightOf="@+id/ivDirection"
                     android:gravity="center"
@@ -73,7 +73,7 @@
                 style="@style/verticalSeparater"
                 />
 
-            <com.kineticcafe.kcpmall.views.ThemeColorImageView
+            <com.ivanhoecambridge.mall.views.ThemeColorImageView
                 style="@style/SelectableItemForeground"
                 android:id="@+id/ivCar"
                 xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
@@ -87,7 +87,7 @@
                 style="@style/verticalSeparater"
                 />
 
-            <com.kineticcafe.kcpmall.views.ThemeColorImageView
+            <com.ivanhoecambridge.mall.views.ThemeColorImageView
                 style="@style/SelectableItemForeground"
                 android:id="@+id/ivTransit"
                 xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
@@ -101,7 +101,7 @@
                 style="@style/verticalSeparater"
                 />
 
-            <com.kineticcafe.kcpmall.views.ThemeColorImageView
+            <com.ivanhoecambridge.mall.views.ThemeColorImageView
                 style="@style/SelectableItemForeground"
                 android:id="@+id/ivWalk"
                 xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
@@ -134,7 +134,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.kineticcafe.kcpmall.views.ThemeColorImageView
+            <com.ivanhoecambridge.mall.views.ThemeColorImageView
                 android:id="@+id/ivPark"
                 xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                 android:layout_centerVertical="true"
@@ -150,7 +150,7 @@
                 android:layout_width="@dimen/info_direction_height"
                 android:layout_height="@dimen/info_direction_height"
 
-            <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 app:fontFamily="@string/fontFamily_roboto_regular"
                 android:id="@+id/tvPark"
                 android:layout_toRightOf="@+id/ivPark"
@@ -162,7 +162,7 @@
                 android:layout_width="wrap_content"
                 />
 
-            <com.kineticcafe.kcpmall.views.ThemeColorImageView
+            <com.ivanhoecambridge.mall.views.ThemeColorImageView
                 android:layout_alignParentRight="true"
                 xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                 ThemedImageView:filterColor="@color/info_save_my_parking_spot_arrow"

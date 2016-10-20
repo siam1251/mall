@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kineticcafe.kcpmall">
+    package="com.ivanhoecambridge.mall">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <permission
+        android:name="com.ivanhoecambridge.mall.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.ivanhoecambridge.mall.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <application
         android:name=".activities.KcpApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:largeHeap="true"
-        android:windowSoftInputMode="adjustPan"
-        android:hardwareAccelerated="true"
-        android:theme="@style/AppTheme">
-
-
-
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:windowSoftInputMode="adjustPan">
         <activity
             android:name=".activities.SplashActivity"
             android:screenOrientation="portrait"
@@ -31,106 +38,155 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.kineticcafe.kcpmall.activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.SplashScreen">
-            android:windowSoftInputMode="adjustResize|stateHidden" <!--slides up view-->
+            android:theme="@style/Theme.SplashScreen"
+            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            <!-- slides up view -->
             android:windowSoftInputMode="adjustPan"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+                <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.DetailActivity"
-            android:parentActivityName="com.kineticcafe.kcpmall.activities.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base"
-            >
+            android:theme="@style/AppTheme.Base">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kineticcafe.kcpmall.activities.MainActivity" />
+                android:value="com.ivanhoecambridge.mall.activities.MainActivity" />
         </activity>
         <activity
-            android:name="com.kineticcafe.kcpmall.activities.ZoomableImage"
+            android:name=".activities.ZoomableImage"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Plain" />
         <activity
-            android:name="com.kineticcafe.kcpmall.activities.InterestedCategoryActivity"
+            android:name=".activities.InterestedCategoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
-            android:name="com.kineticcafe.kcpmall.activities.InterestedStoreActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base" />
-
-        <activity
-            android:name="com.kineticcafe.kcpmall.activities.SubCategoryActivity"
+            android:name=".activities.InterestedStoreActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
-            android:name="com.kineticcafe.kcpmall.activities.SubStoreActivity"
+            android:name=".activities.SubCategoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
-            android:name="com.kineticcafe.kcpmall.activities.MallInfoDetailActivity"
+            android:name=".activities.SubStoreActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
-            android:name="com.kineticcafe.kcpmall.activities.MallHourActivity"
-            android:parentActivityName="com.kineticcafe.kcpmall.activities.MainActivity"
+            android:name=".activities.MallInfoDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base" >
+            android:theme="@style/AppTheme.Base" />
+        <activity
+            android:name=".activities.MallHourActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kineticcafe.kcpmall.activities.MainActivity" />
+                android:value="com.ivanhoecambridge.mall.activities.MainActivity" />
         </activity>
-
         <activity
-            android:name="com.kineticcafe.kcpmall.activities.ProfileInformationActivity"
+            android:name=".activities.ProfileInformationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
-
         <activity
-            android:name="com.kineticcafe.kcpmall.activities.MyPagesActivity"
+            android:name=".activities.MyPagesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
-
         <activity
-            android:name="com.kineticcafe.kcpmall.activities.SocialDetailActivity"
+            android:name=".activities.SocialDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
-
         <activity
-            android:name="com.kineticcafe.kcpmall.activities.ParkingActivity"
-            android:screenOrientation="portrait"
+            android:name=".activities.ParkingActivity"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.Transparent"
-             />
-        android:theme="@style/AppTheme.Base"
-
-        <!--single instance creates another 'window' when 'multi tasking button' pressed-->
-        <activity
-            android:name="com.kineticcafe.kcpmall.activities.WelcomeMessage"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".onboarding.TutorialActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
+
+        <receiver android:name=".receivers.WelcomeMsgReceiver" />
+
+        <!-- single instance creates another 'window' when 'multi tasking button' pressed -->
+        <activity
+            android:name=".activities.WelcomeMessage"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
 
-        <!--MAPPED IN-->
-        <meta-data android:name="com.mappedin.sdk.Username" android:value="56f151b2c753ca4c0d000000"/>
-        <meta-data android:name="com.mappedin.sdk.Password" android:value="0a11271a19b109e9211bbcc256f2e35d"/>
+        <!-- MAPPED IN -->
+        <meta-data
+            android:name="com.mappedin.sdk.Username"
+            android:value="56f151b2c753ca4c0d000000" />
+        <meta-data
+            android:name="com.mappedin.sdk.Password"
+            android:value="0a11271a19b109e9211bbcc256f2e35d" />
 
-        <!--FABRIC CRASHLYTICS-->
+        <!-- FABRIC CRASHLYTICS -->
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="e04c4216c76caf16ad59f27ad0ecf4e2bcdb0fdd"
-            />
+            android:value="e04c4216c76caf16ad59f27ad0ecf4e2bcdb0fdd" />
 
-        <!--GEOFENCE SERVICE-->
-        <service android:name="com.kineticcafe.kcpmall.geofence.GeofenceTransitionsIntentService"/>
+        <!-- GEOFENCE SERVICE -->
+        <service android:name=".geofence.GeofenceTransitionsIntentService" />
+
+        <!-- ETPushReceiver and Service -->
+        <receiver
+            android:name="com.exacttarget.etpushsdk.ETPushReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.ivanhoecambridge.mall.MESSAGE_OPENED" />
+                <action android:name="com.exacttarget.etpushsdk.SEND_REGISTRATION" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+                <action android:name="android.intent.action.BATTERY_LOW" />
+                <action android:name="android.intent.action.BATTERY_OKAY" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.exacttarget.etpushsdk.ETPushService"
+            android:enabled="true" />
+
+        <!-- END ETPushReceiver and Service -->
+
+
+        <!-- FIREBASE PUSH SERVICE -->
+        <service android:name="com.ivanhoecambridge.mall.push.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service android:name="com.ivanhoecambridge.mall.push.FirebaseIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

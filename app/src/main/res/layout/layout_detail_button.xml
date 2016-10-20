@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/detail_button_height">
 
-        <com.kineticcafe.kcpmall.views.ThemeColorImageView
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
             xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
             ThemedImageView:filterColor="@color/themeColor"
             android:layout_marginLeft="@dimen/detail_button_image_left_margin"

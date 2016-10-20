@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.kineticcafe.kcpmall.fragments.TestFragment">
+    tools:context="com.ivanhoecambridge.mall.fragments.TestFragment">
 
-    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:layout_gravity="center"
         android:gravity="center"
         android:id="@+id/tvEmptyState"

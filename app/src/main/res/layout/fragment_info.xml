@@ -10,7 +10,7 @@
         android:id="@+id/abInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="com.kineticcafe.kcpmall.views.FlingBehaviorAppBarLayout"
+        app:layout_behavior="com.ivanhoecambridge.mall.views.FlingBehaviorAppBarLayout"
         >
 
         <!--if I use collapsingToolbarLayout with layout_scrollFlags set (scroll|exitUntilCollapsed) it doesn't pass the scroll event to the main activity appbarlayout and it's consumed here-->
@@ -34,7 +34,7 @@
                 />
             app:layout_collapseMode="parallax"
 
-            <com.kineticcafe.kcpmall.views.ThemeColorImageView
+            <com.ivanhoecambridge.mall.views.ThemeColorImageView
                 xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                 ThemedImageView:filterColor="@color/white"
                 android:layout_gravity="center"
@@ -71,7 +71,7 @@
                     android:gravity="center"
                     >
 
-                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                         app:fontFamily="@string/fontFamily_roboto_medium"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -82,7 +82,7 @@
                         android:gravity="center_vertical"
                         />
 
-                    <com.kineticcafe.kcpmall.views.CustomFontView.CustomFontTextView
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                         app:fontFamily="@string/fontFamily_roboto_light"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"

@@ -5,7 +5,7 @@
     android:background="@color/detail_social_sharing_bg"
     android:layout_height="@dimen/detail_button_height">
 
-    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+    <com.ivanhoecambridge.mall.views.ThemeColorImageView
         android:layout_marginLeft="@dimen/detail_button_image_left_margin"
         android:layout_centerVertical="true"
         android:src="@drawable/icn_facebook"

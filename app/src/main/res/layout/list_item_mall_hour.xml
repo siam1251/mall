@@ -36,7 +36,7 @@
         style="@style/separater"
         />
 
-    <com.kineticcafe.kcpmall.views.ThemeColorImageView
+    <com.ivanhoecambridge.mall.views.ThemeColorImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
         ThemedImageView:filterColor="@color/info_mall_hour_holiday_stroke"
         android:visibility="gone"

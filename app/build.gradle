@@ -21,7 +21,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.kineticcafe.kcpmall"
+        applicationId "com.ivanhoecambridge.mall"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
@@ -37,16 +37,16 @@ android {
 
     productFlavors {
         metropolitan {
-            applicationId "com.kineticcafe.kcpmall.metropolitan"
+            applicationId "com.ivanhoecambridge.mall.metropolitan"
         }
 
         vaughanmills {
-            applicationId "com.kineticcafe.kcpmall.vaughanmills"
+            applicationId "com.ivanhoecambridge.mall.vaughanmills"
             versionName "1.0.0"
         }
 
         layouttest {
-            applicationId "com.kineticcafe.kcpmall.layouttest"
+            applicationId "com.ivanhoecambridge.mall.layouttest"
         }
     }
 }
@@ -56,6 +56,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:9.2.1'
     compile 'com.google.firebase:firebase-core:9.2.1'
     compile 'com.google.firebase:firebase-ads:9.2.1'
+    compile 'com.google.firebase:firebase-messaging:9.2.1'
     //    compile 'com.google.android.gms:play-services:9.2.1'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
@@ -76,6 +77,9 @@ dependencies {
         transitive = true;
     }
     compile 'org.msgpack:msgpack-core:0.8.9'
+    compile 'com.exacttarget.etpushsdk:etsdk:4.5.0@aar'
+    compile 'com.google.android.gms:play-services-gcm:9.2.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha1'
 }
 
 apply plugin: 'com.google.gms.google-services'

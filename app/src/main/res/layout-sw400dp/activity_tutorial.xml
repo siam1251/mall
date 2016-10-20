@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/view_gradient_onboarding">
+    <ImageView
+        android:id="@+id/iv_android_frame"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/android_phone_frame"
+        />
+
+    <!--<android.support.v4.view.ViewPager-->
+    <com.ivanhoecambridge.mall.onboarding.TouchConnectedViewPager
+        android:id="@+id/vp_tutorial_image"
+        android:layout_width="312dp"
+        android:layout_height="446dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
+
+    <!--<android.support.v4.view.ViewPager-->
+    <com.ivanhoecambridge.mall.onboarding.TouchConnectedViewPager
+        android:id="@+id/vp_tutorial_description"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_height="64dp">
+
+        <LinearLayout
+            android:background="@color/white"
+            android:layout_height="64dp"
+            android:id="@+id/llViewPagerCircle"
+            android:layout_width="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:orientation="horizontal" />
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            style="@style/SelectableItemForeground"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/themeColor"
+            android:padding="@dimen/activity_margin_medium"
+            android:text="@string/onbd_btn_lets_get_skip"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="16sp"
+            android:id="@+id/tvOnbdSkip"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="25dp"
+            />
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:background="@color/white"
+            style="@style/SelectableItemForeground"
+            android:gravity="center"
+            android:textColor="@color/themeColor"
+            android:text="@string/onbd_btn_lets_get_started"
+            android:layout_height="64dp"
+            android:layout_width="match_parent"
+            android:textSize="17sp"
+            android:id="@+id/tvOnbd"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>
