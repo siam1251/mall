@@ -144,8 +144,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private MapView mapView = null;
     private Map[] maps;
     private HashMap<Polygon, Integer> originalColors = new HashMap<Polygon, Integer>();
-    /*private HashMap<Overlay, LocationLabelClicker> overlays = new HashMap<Overlay, LocationLabelClicker>();
-    private HashMap<Coordinate, LocationLabelClicker> mLocationClickersMap = new HashMap<Coordinate, LocationLabelClicker>();*/
     private ConcurrentHashMap<Overlay, LocationLabelClicker> overlays = new ConcurrentHashMap<Overlay, LocationLabelClicker>();
     private ConcurrentHashMap<Coordinate, LocationLabelClicker> mLocationClickersMap = new ConcurrentHashMap<Coordinate, LocationLabelClicker>();
     private Venue activeVenue = null;
@@ -164,9 +162,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private String mAmenityClicked = ""; //to keep track of previously clicked amenity
     public boolean mMapLoaded = false;
     private MapInterface mMapInterface;
-
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -565,12 +560,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     mapView.getCamera().focusOn(directions.getPath());
                 }
                 if(destinationPolygon instanceof Polygon) highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
-                /*if(mTemporaryParkingLocation != null) {
-
-                    Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car);
-                    dropPin(coordinate, mTemporaryParkingLocation, amenityDrawable);
-
-                }*/
                 highlightPolygon((Polygon) startPolygon, getResources().getColor(R.color.map_destination_store));
                 showDirectionCard(false, null, 0, null, null, null);
                 return;
@@ -625,6 +614,16 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         startPolygon = null;
         destinationPolygon = null;
         mSearchMode = SearchMode.STORE;
+    }
+
+    @Override
+    public void onCameraBearingChange(final double bearing) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ivCompass.setRotation((float)(bearing/Math.PI*180));
+            }
+        });
     }
 
     private void highlightPolygon(Polygon polygon, int color) {
