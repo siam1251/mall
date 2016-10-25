@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
@@ -27,7 +28,7 @@ import retrofit2.http.Url;
  * Created by Kay on 2016-09-02.
  */
 public class AccountManager {
-
+    private static final String TAG = "AccountManager";
     private static final String KEY_TOKEN = "token";
     private static final String KEY_USER = "user";
     private static final String KEY_CREDENTIALS = "credentials";
@@ -90,17 +91,10 @@ public class AccountManager {
     }
 
     protected void postToCreateToken(){
-//        KcpToken kcpTokenMap = new KcpToken("007A27A5-1351-4D2C-910F-33C8009DB127", "2804462D-407F-4DF2-B1B2-1D2F6EAFBE69");
-
-        //TAO GAVE ME THIS AND IT WORKS
-        /*{
-            "type": "DeviceCredential",
-                "identifier": "007A27A5-1351-4D2C-910F-33C8009DB127",
-                "password": "2804462D-407F-4DF2-B1B2-1D2F6EAFBE69"
-        }*/
-
-
-        final KcpUser kcpUser = new KcpUser(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        String identifier = UUID.randomUUID().toString();
+        String password = UUID.randomUUID().toString();
+        Log.d(TAG, "identifier: " + identifier + " password: " + password);
+        final KcpUser kcpUser = new KcpUser(identifier, password);
         Call<Token> createUser = getKcpService().postInterestedStores(KcpConstants.URL_POST_CREATE_USER, kcpUser.kcpUser);
         createUser.enqueue(new Callback<Token>() {
             @Override
@@ -127,10 +121,6 @@ public class AccountManager {
                             handleState(DOWNLOAD_FAILED);
                         }
                     });
-
-
-
-
                 }
             }
 

@@ -115,7 +115,9 @@
         <activity
             android:name=".onboarding.TutorialActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base" />
+            android:theme="@style/AppTheme.Base"
+            />
+            android:theme="@style/Theme.Transparent"
 
         <receiver android:name=".receivers.WelcomeMsgReceiver" />
 
@@ -143,7 +145,7 @@
         <service android:name=".geofence.GeofenceTransitionsIntentService" />
 
         <!-- ETPushReceiver and Service -->
-        <receiver
+        <!--<receiver
             android:name="com.exacttarget.etpushsdk.ETPushReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
@@ -165,7 +167,7 @@
 
                 <data android:scheme="package" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
 
         <service
             android:name="com.exacttarget.etpushsdk.ETPushService"

@@ -104,6 +104,7 @@ public class Constants {
 	public final static int NUMB_OF_DAYS = 7;
 	public final static String PREF_KEY_WELCOME_MSG_TIME_SAVER = "welcome_message_time_saver";
 	public final static String PREF_KEY_WELCOME_MSG_DID_APPEAR = "welcome_message_did_appear";
+	public final static String PREF_KEY_ONBOARDING_DID_APPEAR = "onboarding_did_appear";
 
 	//PARKING
 	public final static String KEY_GUEST_SERVICE = "information-counter";

@@ -19,18 +19,19 @@ import android.widget.TextView;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategoryRoot;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.InterestRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Kay on 2016-05-31.
@@ -65,7 +66,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
                 final ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
                 pb.setVisibility(View.VISIBLE);
                 tvIntrstd.setVisibility(View.GONE);
-                KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(InterestedStoreActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
+                /*KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(InterestedStoreActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
                     @Override
                     public void handleMessage(Message inputMessage) {
                         tvIntrstd.setVisibility(View.VISIBLE);
@@ -80,6 +81,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
 
                                 ArrayList<String> savedStoreLikeList = FavouriteManager.getInstance(InterestedStoreActivity.this).getInterestedStoreList();
                                 ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();
+
                                 if(!KcpUtility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
                                     FavouriteManager.getInstance(InterestedStoreActivity.this).cacheInterestedStoreList(mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
                                     setResult(Constants.RESULT_DONE_PRESSED_WITH_CHANGE, new Intent());
@@ -92,9 +94,27 @@ public class InterestedStoreActivity extends AppCompatActivity {
                                 super.handleMessage(inputMessage);
                         }
                     }
+                });*/
+
+//                kcpCategoryManager.postInterestedStores(mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
+
+                FavouriteManager.getInstance(InterestedStoreActivity.this).updateFavStore(mInterestRecyclerViewAdapter.getTempStoreMap(), mInterestRecyclerViewAdapter.getRemovedStoreMap(), true, new Handler(Looper.getMainLooper()) {
+                    @Override
+                    public void handleMessage(Message inputMessage) {
+                        switch (inputMessage.arg1) {
+                            case KcpCategoryManager.DOWNLOAD_FAILED:
+                                break;
+                            case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                                setResult(Constants.RESULT_DONE_PRESSED_WITH_CHANGE, new Intent());
+                                onFinish();
+                                break;
+                            default:
+                                super.handleMessage(inputMessage);
+                        }
+                    }
                 });
 
-                kcpCategoryManager.postInterestedStores(mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
+
             }
         });
         setupRecyclerView(rvIntrstCat);
@@ -141,7 +161,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case R.id.action_reset:
-                mInterestRecyclerViewAdapter.resetFavStoreLikeLinkList();
+                mInterestRecyclerViewAdapter.resetLikedList();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -165,8 +185,18 @@ public class InterestedStoreActivity extends AppCompatActivity {
 
 
     public void checkIfNotSaved(final AlertDialogForInterest.DialogAnsweredListener dialogAnsweredListener){
-        ArrayList<String> savedStoreLikeList = FavouriteManager.getInstance(this).getInterestedStoreList();
-        ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();
+        /*ArrayList<String> savedStoreLikeList = FavouriteManager.getInstance(this).getInterestedStoreList();
+        ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();*/
+
+        /*ArrayList<String> savedStoreLikeList = LikeManager.getInstance(this).getLocalLikeListCopy();
+        ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getTempLikeList();*/
+
+        HashMap<String, KcpContentPage> savedStoreLikeMap = FavouriteManager.getInstance(this).getFavStoreMap();
+        HashMap<String, KcpContentPage> newStoreLikeMap = mInterestRecyclerViewAdapter.getTempStoreMap();
+
+        ArrayList<String> savedStoreLikeList = FavouriteManager.getInstance(this).getLikeListFromContentPage(savedStoreLikeMap);
+        ArrayList<String> newStoreLikeList = FavouriteManager.getInstance(this).getLikeListFromContentPage(newStoreLikeMap);
+
         if(!KcpUtility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
             AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
             alertDialogForInterest.getAlertDialog(
