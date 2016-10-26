@@ -11,7 +11,7 @@
 
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:layout_marginTop="43dp"
-        android:textSize="21sp"
+        android:textSize="24sp"
         android:id="@+id/tvOnbdTitle"
         app:fontFamily="@string/fontFamily_roboto_bold"
         android:layout_width="match_parent"

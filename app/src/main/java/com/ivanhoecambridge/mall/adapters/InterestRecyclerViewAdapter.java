@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategoryRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
@@ -41,10 +42,13 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
     private ArrayList<KcpPlaces> mKcpPlacesRecommendedList;
     private ArrayList<KcpPlaces> mKcpPlacesOthersList;
     private ArrayList<InterestedCategoryActivity.GridLayoutItem> mGridLayoutItemArrayList;
-    private ArrayList<Integer> mFavCatTempList;
-    private HashMap<String, KcpContentPage> mFavCatTempMap;
-    private ArrayList<String> mFavStoreLikeLinkList;
     private InterestedCategoryActivity.ItemClickListener mItemClickListener;
+    private HashMap<String, KcpCategories> mRemovedCatFavs;
+    private HashMap<String, KcpCategories> mTempCatFav;
+    private HashMap<String, KcpContentPage> mRemovedStoreFavs;
+    private HashMap<String, KcpContentPage> mTempStoreFav;
+
+//    private ArrayList<String> mRemovedLikeList;
 
     private ArrayList<Object> mItems;
 
@@ -53,7 +57,8 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
         mInterestType = InterestType.CATEGORY;
         mKcpCategoriesList = new ArrayList<KcpCategories>(news);
         mGridLayoutItemArrayList = gridLayoutItemArrayList;
-        mFavCatTempList = FavouriteManager.getInstance(context).getInterestedCategoryList();
+        mRemovedCatFavs = new HashMap<>();
+        mTempCatFav = FavouriteManager.getInstance(context).getFavCatMap();
         mItemClickListener = itemClickListener;
     }
 
@@ -61,22 +66,40 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
         mInterestType = InterestType.STORE;
         mContext = context;
         mKcpPlacesRecommendedList = new ArrayList<>(kcpPlaces);
-        mFavStoreLikeLinkList = FavouriteManager.getInstance(context).getInterestedStoreList();
         mKcpPlacesOthersList = new ArrayList<>(KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE));
-
+        mRemovedStoreFavs = new HashMap<>();
+        mTempStoreFav = FavouriteManager.getInstance(context).getFavStoreMap();
         mItemClickListener = itemClickListener;
 
         createItems();
     }
 
-    public ArrayList<Integer> getFavCatTempList() {
-        if(mFavCatTempList == null) return new ArrayList<>();
-        return mFavCatTempList;
+    public ArrayList<Integer> getCatIdsFromMap(){
+        ArrayList<Integer> catIds = new ArrayList<Integer>();
+        HashMap<Integer, KcpCategories> kcpCategoriesHashMap = KcpCategoryRoot.getInstance().getFingerPrintCategoriesMap();
+        for (String link : mTempCatFav.keySet()) {
+            KcpCategories kcpCategories = kcpCategoriesHashMap.get(link);
+            if(kcpCategories != null) {
+                catIds.add(kcpCategories.getCategoryId());
+            }
+        }
+        return catIds;
     }
 
-    public ArrayList<String> getFavStoreLikeLinkList() {
-        if(mFavStoreLikeLinkList == null) return new ArrayList<String>();
-        return mFavStoreLikeLinkList;
+    public HashMap<String, KcpCategories> getTempCatMap(){
+        return mTempCatFav;
+    }
+
+    public HashMap<String, KcpCategories> getRemovedCatMap(){
+        return mRemovedCatFavs;
+    }
+
+    public HashMap<String, KcpContentPage> getTempStoreMap(){
+        return mTempStoreFav;
+    }
+
+    public HashMap<String, KcpContentPage> getRemovedStoreMap(){
+        return mRemovedStoreFavs;
     }
 
 
@@ -152,13 +175,15 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void resetFavCatTempList() {
-        mFavCatTempList.clear();
+    public void resetLikedList() {
+        mRemovedStoreFavs = new HashMap<String, KcpContentPage>(mTempStoreFav);
+        mTempStoreFav.clear();
         notifyDataSetChanged();
     }
 
-    public void resetFavStoreLikeLinkList() {
-        mFavStoreLikeLinkList.clear();
+    public void resetFavCatList() {
+        mRemovedCatFavs = new HashMap<String, KcpCategories>(mTempCatFav);
+        mTempCatFav.clear();
         notifyDataSetChanged();
     }
 
@@ -231,7 +256,7 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
             final InterestedCategoryHolder interestedCategoryHolder = (InterestedCategoryHolder) holder;
             final KcpCategories kcpCategories = mKcpCategoriesList.get(position);
 
-            setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, mFavCatTempList.contains(kcpCategories.getCategoryId()));
+            setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, mTempCatFav.containsKey(kcpCategories.getLikeLink()));
             interestedCategoryHolder.tvIntrstd.setText(kcpCategories.getCategoryName());
             interestedCategoryHolder.cvIntrst.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -242,12 +267,13 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                         }
                     }, (Activity) mContext, interestedCategoryHolder.cvIntrst);
 
-
-                    if(mFavCatTempList.contains(kcpCategories.getCategoryId())) {
-                        mFavCatTempList.remove(Integer.valueOf(kcpCategories.getCategoryId()));
+                    if(mTempCatFav.containsKey(kcpCategories.getLikeLink())) {
+                        mRemovedCatFavs.put(kcpCategories.getLikeLink(), kcpCategories);
+                        mTempCatFav.remove(kcpCategories.getLikeLink());
                         setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, false);
                     } else {
-                        mFavCatTempList.add(kcpCategories.getCategoryId());
+                        if(mRemovedCatFavs.containsKey(kcpCategories.getLikeLink())) mRemovedCatFavs.remove(kcpCategories.getLikeLink());
+                        mTempCatFav.put(kcpCategories.getLikeLink(), kcpCategories);
                         setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, true);
                     }
 
@@ -260,13 +286,6 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
             RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) interestedCategoryHolder.cvIntrst.getLayoutParams();
             int relativeLayotRule = mGridLayoutItemArrayList.get(position).relativeLayoutRule;
 
-
-
-            if(relativeLayotRule == RelativeLayout.CENTER_HORIZONTAL) {
-//                ((RelativeLayout) interestedCategoryHolder.mView).setGravity(Gravity.CENTER);
-//                int margin = KcpUtility.dpToPx((Activity )mContext, 3);
-//                param.setMargins(margin, margin, margin, margin);
-            }
             param.addRule(relativeLayotRule);
             interestedCategoryHolder.cvIntrst.setLayoutParams(param);
         } else if (holder.getItemViewType() == KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE) {
@@ -276,8 +295,6 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
             String imageUrl = kcpPlaces.getHighestImageUrl();
             Glide.with(mContext)
                     .load(imageUrl)
-//                    .crossFade()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -295,7 +312,7 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                     .placeholder(R.drawable.placeholder_rectangle)
                     .into(interestedStoreHolder.ivIntrstd);
 
-            setSelectedStore(interestedStoreHolder.cvIntrst, interestedStoreHolder.ivFav, mFavStoreLikeLinkList.contains(kcpPlaces.getLikeLink()));
+            setSelectedStore(interestedStoreHolder.cvIntrst, interestedStoreHolder.ivFav, mTempStoreFav.containsKey(kcpPlaces.getLikeLink()));
             interestedStoreHolder.cvIntrst.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -304,11 +321,17 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                         public void OnSqueezeAnimationDone() {
                         }
                     }, (Activity) mContext, interestedStoreHolder.cvIntrst);
-                    if(mFavStoreLikeLinkList.contains(kcpPlaces.getLikeLink())) {
-                        mFavStoreLikeLinkList.remove(kcpPlaces.getLikeLink());
+
+                    KcpContentPage kcpContentPage = new KcpContentPage();
+                    kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlaces);
+
+                    if(mTempStoreFav.containsKey(kcpPlaces.getLikeLink())) {
+                        mRemovedStoreFavs.put(kcpPlaces.getLikeLink(), kcpContentPage);
+                        mTempStoreFav.remove(kcpPlaces.getLikeLink());
                         setSelectedStore(interestedStoreHolder.cvIntrst, interestedStoreHolder.ivFav, false);
                     } else {
-                        mFavStoreLikeLinkList.add(kcpPlaces.getLikeLink());
+                        if(mRemovedStoreFavs.containsKey(kcpPlaces.getLikeLink())) mRemovedStoreFavs.remove(kcpPlaces.getLikeLink());
+                        mTempStoreFav.put(kcpPlaces.getLikeLink(), kcpContentPage);
                         setSelectedStore(interestedStoreHolder.cvIntrst, interestedStoreHolder.ivFav, true);
                     }
 

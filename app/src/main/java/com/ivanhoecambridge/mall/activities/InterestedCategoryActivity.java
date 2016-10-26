@@ -40,6 +40,7 @@ import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 /**
  * Created by Kay on 2016-05-31.
@@ -67,8 +68,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         else getSupportActionBar().setTitle(getResources().getString(R.string.activity_title_interested_category));
 
         flIntrstdBot = (FrameLayout) findViewById(R.id.flIntrstdBot);
-//        flIntrstdBot.setBackgroundColor(getResources().getColor(R.color.themeColor));
-
         rvIntrstCat = (RecyclerView) findViewById(R.id.rvIntrstCat);
         rvIntrstCat.setNestedScrollingEnabled(false); //set false for smooth scroll when nesting recyclerview inside nestedscrollview
 
@@ -82,7 +81,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(InterestedCategoryActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
                     @Override
                     public void handleMessage(Message inputMessage) {
-
                         tvIntrstd.setVisibility(View.VISIBLE);
                         pb.setVisibility(View.GONE);
 
@@ -90,7 +88,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                             case KcpCategoryManager.DOWNLOAD_FAILED:
                                 break;
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                                FavouriteManager.getInstance(InterestedCategoryActivity.this).cacheInterestedCategoryList(mInterestRecyclerViewAdapter.getFavCatTempList());
                                 InterestedCategoryActivity.this.startActivityForResult(new Intent(InterestedCategoryActivity.this, InterestedStoreActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
                                 ActivityAnimation.startActivityAnimation(InterestedCategoryActivity.this);
                                 break;
@@ -99,7 +96,10 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                         }
                     }
                 });
-                kcpCategoryManager.downloadPlacesForTheseCategoryIds(mInterestRecyclerViewAdapter.getFavCatTempList());
+                kcpCategoryManager.downloadPlacesForTheseCategoryIds(mInterestRecyclerViewAdapter.getCatIdsFromMap());
+                FavouriteManager.getInstance(InterestedCategoryActivity.this).updateFavCat(mInterestRecyclerViewAdapter.getTempCatMap(), mInterestRecyclerViewAdapter.getRemovedCatMap(), true, null);
+
+
             }
         });
         setupRecyclerView(rvIntrstCat);
@@ -256,15 +256,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         else list.add(position, gridLayoutItem);
     }
 
-    /*public float getTextSize(String string){
-        Paint p = new Paint();
-        p.setTextSize(getResources().getDimension(R.dimen.intrstd_name));
-//        p.setTextSize(KcpUtility.dpToPx(this, 19f));
-//        p.setTextSize(KcpUtility.dpToPx(this, 18f));
-        return p.measureText(string);
-    }*/
-
-//    private static View mInterestedCategoryLayout;
     private View mInterestedCategoryLayout;
     public int getTextSize(String text) {
 
@@ -279,26 +270,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         mInterestedCategoryLayout.measure(KcpUtility.getScreenWidth(this), KcpUtility.getScreenHeight(this));
 
         return mInterestedCategoryLayout.getMeasuredWidth();
-
-
-
-        /*TextView textView = new TextView(this);
-        textView.setPadding(0,0,0,0);
-        textView.setText(text);
-//        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.intrstd_name));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, KcpUtility.dpToPx(this, 15.8f));
-//        textView.setTextSize(getResources().getDimension(R.dimen.intrstd_name));
-
-        *//*int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(KcpUtility.getScreenWidth(this), View.MeasureSpec.AT_MOST);
-        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-
-        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) getResources().getDimension(R.dimen.intrstd_card_height), View.MeasureSpec.AT_MOST);
-        textView.measure(widthMeasureSpec, heightMeasureSpec);*//*
-
-        textView.measure(0, 0);
-
-        return textView.getMeasuredWidth();*/
     }
 
     public float getSpaceLeftFromOneSide(float size){
@@ -319,7 +290,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case R.id.action_reset:
-                mInterestRecyclerViewAdapter.resetFavCatTempList();
+                mInterestRecyclerViewAdapter.resetFavCatList();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -347,10 +318,11 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 setResult(Activity.RESULT_OK, new Intent());
                 onFinish();
             } else if (resultCode == Constants.RESULT_DONE_PRESSED_WITHOUT_CHANGE) {
-                setResult(Activity.RESULT_CANCELED, new Intent());
-                onFinish();
+                //should never be here
+                /*setResult(Activity.RESULT_CANCELED, new Intent());
+                onFinish();*/
             } else if (resultCode == Constants.RESULT_EXIT){
-
+                setResult(Activity.RESULT_OK, new Intent());
             } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
                 if (resultCode != 0) {
                     setResult(resultCode, new Intent());
@@ -361,9 +333,13 @@ public class InterestedCategoryActivity extends AppCompatActivity {
     }
 
     public void checkIfNotSaved(final AlertDialogForInterest.DialogAnsweredListener dialogAnsweredListener){
-        ArrayList<Integer> savedFavCatList = FavouriteManager.getInstance(InterestedCategoryActivity.this).getInterestedCategoryList();
-        ArrayList<Integer> newFavCatList = mInterestRecyclerViewAdapter.getFavCatTempList();
-        if(!KcpUtility.isTwoIntegerListsEqual(savedFavCatList, newFavCatList)){
+        HashMap<String, KcpCategories> savedStoreLikeMap = FavouriteManager.getInstance(InterestedCategoryActivity.this).getFavCatMap();
+        HashMap<String, KcpCategories> newStoreLikeMap = mInterestRecyclerViewAdapter.getTempCatMap();
+
+        ArrayList<String> savedStoreLikeList = FavouriteManager.getInstance(InterestedCategoryActivity.this).getLikeListFromMap(savedStoreLikeMap);
+        ArrayList<String> newStoreLikeList = FavouriteManager.getInstance(InterestedCategoryActivity.this).getLikeListFromMap(newStoreLikeMap);
+
+        if(!KcpUtility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
             AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
             alertDialogForInterest.getAlertDialog(
                     this,

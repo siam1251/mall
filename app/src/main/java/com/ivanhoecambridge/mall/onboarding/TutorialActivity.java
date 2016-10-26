@@ -21,6 +21,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -38,16 +39,20 @@ public class TutorialActivity extends BaseActivity {
     private TouchConnectedViewPager mImagePager;
     private TouchConnectedViewPager mDescriptionPager;
     private TutorialImageAdapter mImageAdapter;
+    private RelativeLayout rlOnbrd;
     private TextView tvOnbd;
     private TextView tvOnbdSkip;
 
-    //CIRCLE VIEWPAGER INDICATOR
-    public ImageView[] dots;
-    public int dotsCount;
-    public LinearLayout llViewPagerCountDots;
+    private ImageView[] dots;
+    private final int NUMB_ONBRD_SCREENS = 5;
+    private LinearLayout llViewPagerCountDots;
+    private GetStartedButtonClicker mGetStartedButtonClicker;
+    private boolean mHasFakeAlphaPage = false;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
+        if(mHasFakeAlphaPage) setTheme(R.style.Theme_Transparent);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
 
@@ -55,7 +60,7 @@ public class TutorialActivity extends BaseActivity {
         mImagePager = (TouchConnectedViewPager) findViewById(R.id.vp_tutorial_image);
         llViewPagerCountDots = (LinearLayout) findViewById(R.id.llViewPagerCircle);
 
-
+        rlOnbrd = (RelativeLayout) findViewById(R.id.rlOnbrd);
         tvOnbdSkip = (TextView) findViewById(R.id.tvOnbdSkip);
         tvOnbdSkip.setOnClickListener(new OnClickListener() {
             @Override
@@ -65,53 +70,53 @@ public class TutorialActivity extends BaseActivity {
             }
         });
         tvOnbd = (TextView) findViewById(R.id.tvOnbd);
-        tvOnbd.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDescriptionPager.setCurrentItem(1, true);
-                removeGetStartedBtn(true);
-            }
-        });
+        mGetStartedButtonClicker = new GetStartedButtonClicker();
+        tvOnbd.setOnClickListener(mGetStartedButtonClicker);
 
         mDescriptionFragments = new ArrayList<Fragment>();
-        mDescriptionFragments.add(TutorialDescription.newInstance(0));
-        mDescriptionFragments.add(TutorialDescription.newInstance(1));
-        mDescriptionFragments.add(TutorialDescription.newInstance(2));
-        mDescriptionFragments.add(TutorialDescription.newInstance(4));
-        mDescriptionFragments.add(TutorialDescription.newInstance(5));
-
+        mDescriptionFragments.add(TutorialDescription.newInstance(R.string.onbd_one_title, 0));
+        mDescriptionFragments.add(TutorialDescription.newInstance(R.string.onbd_two_title, R.string.onbd_two_desc));
+        mDescriptionFragments.add(TutorialDescription.newInstance(R.string.onbd_three_title, R.string.onbd_three_desc));
+        mDescriptionFragments.add(TutorialDescription.newInstance(R.string.onbd_four_title, R.string.onbd_four_desc));
+        mDescriptionFragments.add(TutorialDescription.newInstance(R.string.onbd_five_title, R.string.onbd_five_desc));
+        if(mHasFakeAlphaPage) mDescriptionFragments.add(TutorialDescription.newInstance(0, 0));
 
         mDescriptionAdapter = new TutorialDescriptionAdapter(this, getSupportFragmentManager());
         mDescriptionPager.setAdapter(mDescriptionAdapter);
         mDescriptionPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                if(mHasFakeAlphaPage && position == NUMB_ONBRD_SCREENS - 1 && positionOffset > 0){
+                    rlOnbrd.setAlpha(1.0f - Math.abs(positionOffset));
+                }
             }
 
             @Override
             public void onPageSelected(int position) {
-                for (int i = 0; i < dotsCount; i++) {
+                for (int i = 0; i < NUMB_ONBRD_SCREENS; i++) {
                     dots[i].setImageDrawable(TutorialActivity.this.getResources().getDrawable(R.drawable.viewpager_circle_page_incdicator_dot_unselected));
                 }
                 dots[position % dots.length].setImageDrawable(TutorialActivity.this.getResources().getDrawable(R.drawable.viewpager_circle_page_incdicator_dot_selected_black));
                 removeGetStartedBtn(position != 0);
-                if(position == mDescriptionFragments.size() - 1) {
+                if(position == NUMB_ONBRD_SCREENS - 1) {
                     tvOnbdSkip.setText(getString(R.string.onbd_btn_lets_get_done));
                 } else {
                     tvOnbdSkip.setText(getString(R.string.onbd_btn_lets_get_skip));
                 }
                 controlAnimationPlayback(position);
+
+                if(mHasFakeAlphaPage && position == NUMB_ONBRD_SCREENS){
+                    finish();
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    /*if(mHasFakeAlphaPage) overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    else ActivityAnimation.exitActivityAnimation(TutorialActivity.this);*/
+                }
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
-
-
             }
         });
-        Log.d("NewsRecyclerViewAdapter", "setUiPageViewController");
         setUiPageViewController();
 
         mDescriptionPager.setViewPager(mImagePager);
@@ -127,9 +132,10 @@ public class TutorialActivity extends BaseActivity {
         mImageFragments = new ArrayList<TutorialImage>();
         mImageFragments.add(TutorialImage.newInstance(R.raw.animate_1));
         mImageFragments.add(TutorialImage.newInstance(R.raw.animate_2));
-        mImageFragments.add(TutorialImage.newInstance(R.raw.animate_1));
-        mImageFragments.add(TutorialImage.newInstance(R.raw.animate_1));
-        mImageFragments.add(TutorialImage.newInstance(R.raw.animate_1));
+        mImageFragments.add(TutorialImage.newInstance(R.raw.animate_3));
+        mImageFragments.add(TutorialImage.newInstance(R.raw.animate_4));
+        mImageFragments.add(TutorialImage.newInstance(R.raw.animate_5));
+        if(mHasFakeAlphaPage) mImageFragments.add(TutorialImage.newInstance(0));
 
         mImageAdapter = new TutorialImageAdapter(this, getSupportFragmentManager());
         mImagePager.setAdapter(mImageAdapter);
@@ -148,21 +154,13 @@ public class TutorialActivity extends BaseActivity {
         } else {
             hideShowAnim = AnimationUtils.loadAnimation(TutorialActivity.this,
                     android.R.anim.fade_in);
-            tvOnbd.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mDescriptionPager.setCurrentItem(1);
-                    removeGetStartedBtn(true);
-                }
-            });
+            tvOnbd.setOnClickListener(mGetStartedButtonClicker);
             visibility = View.VISIBLE;
         }
         hideShowAnim.reset();
         hideShowAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
+            public void onAnimationStart(Animation animation) {}
 
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -170,25 +168,29 @@ public class TutorialActivity extends BaseActivity {
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
+            public void onAnimationRepeat(Animation animation) {}
         });
         tvOnbd.startAnimation(hideShowAnim);
-
     }
 
-    public class TutorialDescriptionAdapter extends FragmentStatePagerAdapter {
+    public class GetStartedButtonClicker implements OnClickListener {
 
+        @Override
+        public void onClick(View v) {
+            mDescriptionPager.setCurrentItem(1);
+            removeGetStartedBtn(true);
+        }
+    }
+
+
+    public class TutorialDescriptionAdapter extends FragmentStatePagerAdapter {
         public TutorialDescriptionAdapter(Context context, FragmentManager fm) {
             super(fm);
         }
-
         @Override
         public Fragment getItem(int i) {
             return mDescriptionFragments.get(i);
         }
-
         @Override
         public int getCount() {
             return mDescriptionFragments.size();
@@ -196,16 +198,13 @@ public class TutorialActivity extends BaseActivity {
     }
 
     public class TutorialImageAdapter extends FragmentStatePagerAdapter {
-
         public TutorialImageAdapter(Context context, FragmentManager fm) {
             super(fm);
         }
-
         @Override
         public Fragment getItem(int i) {
             return mImageFragments.get(i);
         }
-
         @Override
         public int getCount() {
             return mImageFragments.size();
@@ -213,11 +212,10 @@ public class TutorialActivity extends BaseActivity {
     }
 
     private void setUiPageViewController() {
-        dotsCount = 5; //viewpagerAdapter.getCount(); used for actual counting
-        dots = new ImageView[dotsCount];
+        dots = new ImageView[NUMB_ONBRD_SCREENS];
 
         llViewPagerCountDots.removeAllViews(); //prevent from creating second indicator
-        for (int i = 0; i < dotsCount; i++) {
+        for (int i = 0; i < NUMB_ONBRD_SCREENS; i++) {
             dots[i] = new ImageView(this);
             dots[i].setImageDrawable(getResources().getDrawable(R.drawable.viewpager_circle_page_incdicator_dot_unselected));
 
@@ -234,14 +232,15 @@ public class TutorialActivity extends BaseActivity {
         if(dots.length > 0) dots[0].setImageDrawable(getResources().getDrawable(R.drawable.viewpager_circle_page_incdicator_dot_selected_black));
     }
 
-
-
     public static class TutorialDescription extends Fragment {
+        private static final String TITLE_ID = "titleId";
+        private static final String DESC_ID = "descId";
 
-        public static TutorialDescription newInstance(int position) {
+        public static TutorialDescription newInstance(int title, int desc) {
             TutorialDescription fragment = new TutorialDescription();
             Bundle args = new Bundle();
-            args.putInt("position", position);
+            args.putInt(TITLE_ID, title);
+            args.putInt(DESC_ID, desc);
             fragment.setArguments(args);
             return fragment;
         }
@@ -252,7 +251,6 @@ public class TutorialActivity extends BaseActivity {
             super.onCreateView(inflater, container, savedInstanceState);
 
             Bundle args = getArguments();
-            int position = args.getInt("position");
 
             View v = inflater.inflate(R.layout.layout_tutorial_description, container, false);
             TextView tvOnbdTitle = (TextView) v.findViewById(R.id.tvOnbdTitle);
@@ -265,22 +263,14 @@ public class TutorialActivity extends BaseActivity {
                     getActivity().finish();
                 }
             });
-            if(position == 0){
-                tvOnbdTitle.setText(R.string.onbd_one_title);
-                tvOnbdDesc.setVisibility(View.GONE);
-            } else if(position == 1){
-                tvOnbdTitle.setText(R.string.onbd_two_title);
-                tvOnbdDesc.setText(R.string.onbd_two_desc);
-            } else if(position == 2){
-                tvOnbdTitle.setText(R.string.onbd_three_title);
-                tvOnbdDesc.setText(R.string.onbd_three_desc);
-            } else if(position == 3){
-                tvOnbdTitle.setText(R.string.onbd_four_title);
-                tvOnbdDesc.setText(R.string.onbd_four_desc);
-            } else if(position == 4){
-                tvOnbdTitle.setText(R.string.onbd_five_title);
-                tvOnbdDesc.setText(R.string.onbd_five_desc);
-            }
+
+            int title = args.getInt(TITLE_ID);
+            int desc = args.getInt(DESC_ID);
+
+            if(title == 0) tvOnbdTitle.setVisibility(View.GONE);
+            else tvOnbdTitle.setText(title);
+            if(desc == 0) tvOnbdDesc.setVisibility(View.GONE);
+            else tvOnbdDesc.setText(desc);
 
             return v;
         }
@@ -290,7 +280,6 @@ public class TutorialActivity extends BaseActivity {
 
         private static final String IMAGE_ID = "imageId";
         private VideoView vvOnbrd;
-        private boolean mShouldPlay = false;
 
         public static TutorialImage newInstance(int imageId) {
             TutorialImage fragment = new TutorialImage();
@@ -308,10 +297,11 @@ public class TutorialActivity extends BaseActivity {
             int imageId = args.getInt(IMAGE_ID);
 
             View v = inflater.inflate(R.layout.layout_tutorial_image, container, false);
-            /*ImageView ivOnbrd = (ImageView) v.findViewById(R.id.ivOnbrd);
-            ivOnbrd.setImageResource(imageId);*/
-
             vvOnbrd = (VideoView) v.findViewById(R.id.vvOnbrd);
+            if(imageId == 0) {
+                vvOnbrd.setVisibility(View.GONE);
+//                return v;
+            }
             getActivity().getWindow().setFormat(PixelFormat.TRANSLUCENT);
             Uri video = Uri.parse("android.resource://" + getActivity().getPackageName() + "/"
                     + imageId);
@@ -328,8 +318,7 @@ public class TutorialActivity extends BaseActivity {
         }
 
         public void playAnimation(boolean play){
-//            mShouldPlay = play;
-            if(vvOnbrd != null) {
+            if(vvOnbrd != null && vvOnbrd.getVisibility() == View.VISIBLE) {
                 if(play) {
                     vvOnbrd.seekTo(0);
                     vvOnbrd.start();

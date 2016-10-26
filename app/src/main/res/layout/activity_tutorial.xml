@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlOnbrd"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,13 +12,14 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:adjustViewBounds="true"
-        android:src="@drawable/android_phone_frame"
+        android:src="@drawable/android_phone_frame_black"
         />
 
     <!--<android.support.v4.view.ViewPager-->
     <com.ivanhoecambridge.mall.onboarding.TouchConnectedViewPager
+        android:background="@color/black"
         android:id="@+id/vp_tutorial_image"
-        android:layout_width="237dp"
+        android:layout_width="239dp"
         android:layout_height="337dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"/>
@@ -73,6 +75,4 @@
             />
 
     </RelativeLayout>
-
-
 </RelativeLayout>

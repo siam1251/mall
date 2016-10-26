@@ -3,14 +3,22 @@ package com.ivanhoecambridge.mall.managers;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.factory.HeaderFactory;
 import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
+import com.ivanhoecambridge.mall.models.MultiLike;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -36,6 +44,7 @@ public class FavouriteManager {
     private final static String KEY_GSON_FAV_DEAL               = "DEAL";
     private final static String KEY_GSON_FAV_EVENT_ANOUNCEMENT  = "EVENT_ANNOUNCEMENT";
     private final static String KEY_GSON_FAV_STORE              = "STORE";
+    private final static String KEY_GSON_FAV_CAT                = "CAT";
 
     public final static String PREFS_KEY_CATEGORY = 			"prefs_key_category";
     public final static String PREFS_KEY_FAV_STORE_LIKE_LINK = 	"prefs_key_store_like_link";
@@ -43,8 +52,8 @@ public class FavouriteManager {
     private static HashMap<String, KcpContentPage> mDealFavs;
     private static HashMap<String, KcpContentPage> mEventFavs;
     private static HashMap<String, KcpContentPage> mStoreFavs;
-    private static ArrayList<Integer> mInterestedCategoryList;
-    private static ArrayList<String> mInterestedStoreList;
+    private static HashMap<String, KcpCategories> mCatFavs;
+
     private FavouriteInterface mFavouriteInterface;
 
 
@@ -59,23 +68,13 @@ public class FavouriteManager {
         mDealFavs = loadGsonHashMapContentPage(KEY_GSON_FAV_DEAL);
         mEventFavs = loadGsonHashMapContentPage(KEY_GSON_FAV_EVENT_ANOUNCEMENT);
         mStoreFavs = loadGsonHashMapContentPage(KEY_GSON_FAV_STORE);
-        mInterestedCategoryList = KcpUtility.loadGsonArrayList(mContext, PREFS_KEY_CATEGORY);
-        mInterestedStoreList = KcpUtility.loadGsonArrayListString(mContext, PREFS_KEY_FAV_STORE_LIKE_LINK);
+        mCatFavs = loadGsonHashMapCategories(KEY_GSON_FAV_CAT);
     }
 
     public SidePanelManagers.FavouriteListener mFavouriteListener;
     public void setFavouriteListener(SidePanelManagers.FavouriteListener favouriteListener){
         mFavouriteListener = favouriteListener;
     }
-
-    public ArrayList<Integer> getInterestedCategoryList(){
-        return new ArrayList<Integer>(mInterestedCategoryList);
-    }
-
-    public ArrayList<String> getInterestedStoreList(){
-        return new ArrayList<String>(mInterestedStoreList);
-    }
-
 
     public boolean addOrRemoveFavContent(final String likeLink, final KcpContentPage kcpContentPage, FavouriteInterface favouriteInterface){
         mFavouriteInterface = favouriteInterface;
@@ -110,6 +109,7 @@ public class FavouriteManager {
                     favHashMap.put(likeLink, kcpContentPage);
                     showToast(mContext.getResources().getString(R.string.warning_fav_added));
                 }
+
                 KcpUtility.saveGson(mContext, mGsonFavKey, favHashMap);
                 if(mFavouriteListener != null) mFavouriteListener.onFavouriteChanged();
                 mGsonFavKey = "";
@@ -120,18 +120,6 @@ public class FavouriteManager {
         return true;
     }
 
-    public void cacheInterestedCategoryList(ArrayList<Integer> favCatTempList){
-        mInterestedCategoryList = new ArrayList<>(favCatTempList);
-        KcpUtility.saveGson(mContext, PREFS_KEY_CATEGORY, favCatTempList);
-        if(mFavouriteListener != null) mFavouriteListener.onFavouriteChanged();
-    }
-
-    public void cacheInterestedStoreList(ArrayList<String> interestedStoreList){
-        mInterestedStoreList = new ArrayList<String>(interestedStoreList);
-        KcpUtility.saveGson(mContext, PREFS_KEY_FAV_STORE_LIKE_LINK, interestedStoreList);
-        //No Need to notify through the listener
-    }
-
     public void showToast(final String text){
         ((Activity)mContext).runOnUiThread(new Runnable() {
             @Override
@@ -140,7 +128,6 @@ public class FavouriteManager {
             }
         });
     }
-
 
 
     public String getGsonKey(KcpContentPage kcpContentPage){
@@ -179,6 +166,16 @@ public class FavouriteManager {
         else return obj;
     }
 
+    public static HashMap<String, KcpCategories> loadGsonHashMapCategories(String gsonFavKey){
+        Gson gson = new Gson();
+        String json = mContext.getSharedPreferences("PreferenceManager", Context.MODE_PRIVATE).getString(gsonFavKey, "");
+        Type listType = new TypeToken<HashMap<String, KcpCategories>>() {}.getType();
+        HashMap<String, KcpCategories> obj = gson.fromJson(json, listType);
+        if(obj == null) return new HashMap<String, KcpCategories>();
+        else return obj;
+    }
+
+
     public static ArrayList<KcpContentPage> getFavDealContentPages(){
         return new ArrayList<KcpContentPage>(mDealFavs.values());
     }
@@ -189,6 +186,14 @@ public class FavouriteManager {
 
     public static ArrayList<KcpContentPage> getFavStoreContentPages(){
         return new ArrayList<KcpContentPage>(mStoreFavs.values());
+    }
+
+    public HashMap<String, KcpCategories> getFavCatMap(){
+        return new HashMap<String, KcpCategories>(mCatFavs);
+    }
+
+    public HashMap<String, KcpContentPage> getFavStoreMap(){
+        return new HashMap<String, KcpContentPage>(mStoreFavs);
     }
 
     public int getDealFavSize(){
@@ -204,6 +209,82 @@ public class FavouriteManager {
     }
 
     public int getInterestFavSize(){
-        return mInterestedCategoryList.size();
+        return mCatFavs.size();
     }
+
+    public synchronized void updateFavCat(final HashMap<String, KcpCategories> likeList, HashMap<String, KcpCategories> unlikeList, boolean postLikeListToServer, @Nullable Handler handler){
+        mCatFavs = likeList;
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                KcpUtility.saveGson(mContext, KEY_GSON_FAV_CAT, likeList);
+            }
+        });
+        if(postLikeListToServer) {
+            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, new HeaderFactory().getHeaders(), new LikeListHandler(handler));
+            kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch( getLikeListFromMap(likeList) , getLikeListFromMap(unlikeList)));
+        }
+    }
+
+    public synchronized void updateFavStore(final HashMap<String, KcpContentPage> likeList, HashMap<String, KcpContentPage> unlikeList, boolean postLikeListToServer, @Nullable Handler handler){
+        mStoreFavs = likeList;
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                KcpUtility.saveGson(mContext, KEY_GSON_FAV_STORE, likeList);
+            }
+        });
+        if(postLikeListToServer) {
+            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, new HeaderFactory().getHeaders(), new LikeListHandler(handler));
+            kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch( getLikeListFromContentPage(likeList) , getLikeListFromContentPage(unlikeList)));
+        }
+    }
+
+    public static ArrayList<String> getLikeListFromMap(HashMap<String, KcpCategories> map){
+        ArrayList<String> likeList = new ArrayList<String>();
+        for (String key : map.keySet()) {
+            likeList.add(key);
+        }
+        return likeList;
+    }
+
+    public static ArrayList<String> getLikeListFromContentPage(HashMap<String, KcpContentPage> map){
+        ArrayList<String> likeList = new ArrayList<String>();
+        for (String key : map.keySet()) {
+            likeList.add(key);
+        }
+        return likeList;
+    }
+
+
+    private HashMap<String, Object> getDeltaMultiLikeBatch(ArrayList<String> likeList, ArrayList<String> unlikeList){
+        return new MultiLike(likeList, unlikeList).getMultiLikeBody();
+    }
+
+    public class LikeListHandler extends Handler {
+        private Handler handler;
+        public LikeListHandler (Handler handler){
+            this.handler = handler;
+        }
+
+        @Override
+        public void handleMessage(Message inputMessage) {
+            switch (inputMessage.arg1) {
+                case KcpCategoryManager.DOWNLOAD_FAILED:
+                    break;
+                case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                    if(mFavouriteListener != null) mFavouriteListener.onFavouriteChanged();
+                    break;
+                default:
+                    super.handleMessage(inputMessage);
+            }
+
+            Message message = new Message();
+            message.arg1 = inputMessage.arg1;
+            if(handler != null) handler.sendMessage(message);
+
+        }
+    }
+
+
 }

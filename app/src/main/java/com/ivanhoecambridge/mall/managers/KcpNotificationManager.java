@@ -53,17 +53,14 @@ public class KcpNotificationManager{
         mBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
 
         mBuilder.setSmallIcon(R.drawable.icn_noti);
-//        mBuilder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icn_noti_parking));
-
-//        mBuilder.setSmallIcon(R.drawable.icn_noti);
+        mBuilder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_launcher));
 
         mBuilder.setContentTitle(title);
         mBuilder.setContentText(body);
         mBuilder.setAutoCancel(true);
-        mBuilder.setColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
-
-//        mBuilder.addAction(R.drawable.img_profile_default, mContext.getString(R.string.action_dismiss), dismissPendingIntent);
-//        mBuilder.addAction(R.drawable.img_profile_default, mContext.getString(R.string.action_save), savePendingIntent);
+//        mBuilder.setColor(ContextCompat.getColor(mContext, R.color.themeColor)); //set icon bg color - disabled because ET push noti doesn't have color set
+//        mBuilder.addAction(R.drawable.img_profile_default, mContext.getString(R.string.action_dismiss), dismissPendingIntent); //add a action btn
+//        mBuilder.addAction(R.drawable.img_profile_default, mContext.getString(R.string.action_save), savePendingIntent); //add a action btn
 
         NotificationCompat.BigTextStyle bigtext =  new NotificationCompat.BigTextStyle();
         bigtext.setBigContentTitle(title);
