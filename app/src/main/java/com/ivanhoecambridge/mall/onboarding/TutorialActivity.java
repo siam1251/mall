@@ -25,11 +25,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.BaseActivity;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 
 import java.util.ArrayList;
+
+import static android.util.TypedValue.COMPLEX_UNIT_PX;
 
 public class TutorialActivity extends BaseActivity {
     private ArrayList<Fragment> mDescriptionFragments;
@@ -74,12 +77,12 @@ public class TutorialActivity extends BaseActivity {
         tvOnbd.setOnClickListener(mGetStartedButtonClicker);
 
         mDescriptionFragments = new ArrayList<Fragment>();
-        mDescriptionFragments.add(TutorialDescription.newInstance(R.string.onbd_one_title, 0));
-        mDescriptionFragments.add(TutorialDescription.newInstance(R.string.onbd_two_title, R.string.onbd_two_desc));
-        mDescriptionFragments.add(TutorialDescription.newInstance(R.string.onbd_three_title, R.string.onbd_three_desc));
-        mDescriptionFragments.add(TutorialDescription.newInstance(R.string.onbd_four_title, R.string.onbd_four_desc));
-        mDescriptionFragments.add(TutorialDescription.newInstance(R.string.onbd_five_title, R.string.onbd_five_desc));
-        if(mHasFakeAlphaPage) mDescriptionFragments.add(TutorialDescription.newInstance(0, 0));
+        mDescriptionFragments.add(TutorialDescription.newInstance(0, R.string.onbd_one_title, 0));
+        mDescriptionFragments.add(TutorialDescription.newInstance(1, R.string.onbd_two_title, R.string.onbd_two_desc));
+        mDescriptionFragments.add(TutorialDescription.newInstance(2, R.string.onbd_three_title, R.string.onbd_three_desc));
+        mDescriptionFragments.add(TutorialDescription.newInstance(3, R.string.onbd_four_title, R.string.onbd_four_desc));
+        mDescriptionFragments.add(TutorialDescription.newInstance(4,R.string.onbd_five_title, R.string.onbd_five_desc));
+        if(mHasFakeAlphaPage) mDescriptionFragments.add(TutorialDescription.newInstance(5, 0, 0));
 
         mDescriptionAdapter = new TutorialDescriptionAdapter(this, getSupportFragmentManager());
         mDescriptionPager.setAdapter(mDescriptionAdapter);
@@ -233,12 +236,14 @@ public class TutorialActivity extends BaseActivity {
     }
 
     public static class TutorialDescription extends Fragment {
+        private static final String POSITION = "position";
         private static final String TITLE_ID = "titleId";
         private static final String DESC_ID = "descId";
 
-        public static TutorialDescription newInstance(int title, int desc) {
+        public static TutorialDescription newInstance(int position, int title, int desc) {
             TutorialDescription fragment = new TutorialDescription();
             Bundle args = new Bundle();
+            args.putInt(POSITION, position);
             args.putInt(TITLE_ID, title);
             args.putInt(DESC_ID, desc);
             fragment.setArguments(args);
@@ -264,6 +269,7 @@ public class TutorialActivity extends BaseActivity {
                 }
             });
 
+            int position = args.getInt(POSITION);
             int title = args.getInt(TITLE_ID);
             int desc = args.getInt(DESC_ID);
 
@@ -271,6 +277,16 @@ public class TutorialActivity extends BaseActivity {
             else tvOnbdTitle.setText(title);
             if(desc == 0) tvOnbdDesc.setVisibility(View.GONE);
             else tvOnbdDesc.setText(desc);
+
+            if(position == 0) {
+                tvOnbdTitle.setTextSize(COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.onboarding_first_title));
+                /*RelativeLayout.LayoutParams pr = (RelativeLayout.LayoutParams) tvOnbdTitle.getLayoutParams();
+                int marginLeft = (int) getResources().getDimension(R.dimen.onboarding_first_title_margin);
+                pr.setMargins(marginLeft, KcpUtility.dpToPx(getActivity(), 43), marginLeft, 0);;
+                tvOnbdTitle.setLayoutParams(pr);*/
+            } else {
+                tvOnbdTitle.setTextSize(COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.onboarding_second_title));
+            }
 
             return v;
         }

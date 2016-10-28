@@ -4,8 +4,8 @@ public class Constants {
 
 
 
-	public final static boolean IS_APP_IN_PRODUCTION = true;
-//	public final static boolean IS_APP_IN_PRODUCTION = false;
+//	public final static boolean IS_APP_IN_PRODUCTION = true;
+	public final static boolean IS_APP_IN_PRODUCTION = false;
 
 	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				1000;
 //	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				500;
@@ -81,7 +81,8 @@ public class Constants {
 	public static final String ARG_EXTERNAL_CODE = 			"external_code";
 	public static final String ARG_CAT_NAME = 				"cat_name";
 	public static final String ARG_CATEGORY_ACTIVITY_TYPE = "cat_activity_type";
-	public static final String ARG_ACTIVITY_TYPE = "activity_type";
+	public static final String ARG_ACTIVITY_TYPE = 			"activity_type";
+	public static final String ARG_MOVIE_ID = 				"movie_id";
 	public enum CategoryActivityType { SUBCATEGORY, STORE }
 
 

@@ -19,6 +19,7 @@ public class Theaters
 
     public House getHouse ()
     {
+        if(house == null) return new House();
         return house;
     }
 

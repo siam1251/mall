@@ -11,13 +11,14 @@
 
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:layout_marginTop="43dp"
-        android:textSize="24sp"
+        android:textSize="@dimen/onboarding_first_title"
         android:id="@+id/tvOnbdTitle"
         app:fontFamily="@string/fontFamily_roboto_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="Find Your Favourite Brands"
+        android:text="Welcome to Vaughan Mills new companion app"
+        android:lineSpacingMultiplier="1.2"
         android:textColor="@color/white"
         />
 

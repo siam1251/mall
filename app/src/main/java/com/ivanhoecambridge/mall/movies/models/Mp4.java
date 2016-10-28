@@ -16,6 +16,7 @@ public class Mp4 {
 
     public String getMed ()
     {
+        if(med == null) return "";
         return med;
     }
 
@@ -26,6 +27,7 @@ public class Mp4 {
 
     public String getHigh ()
     {
+        if(high == null) return "";
         return high;
     }
 
@@ -36,6 +38,7 @@ public class Mp4 {
 
     public String getLow ()
     {
+        if(low == null) return "";
         return low;
     }
 

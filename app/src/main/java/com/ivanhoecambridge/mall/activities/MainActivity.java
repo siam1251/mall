@@ -167,16 +167,17 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(MainActivity.this, MoviesActivity.class));
-        ActivityAnimation.startActivityAnimation(MainActivity.this);
+        //TESTING
+//        startActivity(new Intent(MainActivity.this, MoviesActivity.class));
+//        ActivityAnimation.startActivityAnimation(MainActivity.this);
 
 
         boolean didOnboardingAppear = KcpUtility.loadFromSharedPreferences(this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, false);
-//        if(!didOnboardingAppear) {
+        if(!didOnboardingAppear) {
             startActivity(new Intent(MainActivity.this, TutorialActivity.class));
             ActivityAnimation.startActivityAnimation(MainActivity.this);
             KcpUtility.saveToSharedPreferences(this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, true);
-//        }
+        }
 
         KcpNotificationManager.onWelcomeNotiClick(this, getIntent());
         runOnUiThread(new Runnable() {
@@ -817,6 +818,7 @@ public class MainActivity extends BaseActivity
                 Log.v("Geofence", "Active Mall Set TRUE");
 
                 long minStartTime = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(WELCOME_MSG_RESET_TIMER_IN_HOUR);
+//                long minStartTime = System.currentTimeMillis() - WELCOME_MSG_RESET_TIMER_IN_HOUR * 60 * 60 * 1000;
                 long lastTimeRan = KcpUtility.loadLongFromCache(this, Constants.PREF_KEY_WELCOME_MSG_TIME_SAVER, -1);
 
                 boolean didWelcomeMessageAlreadyAppear = KcpUtility.loadFromSharedPreferences(this, Constants.PREF_KEY_WELCOME_MSG_DID_APPEAR, false);

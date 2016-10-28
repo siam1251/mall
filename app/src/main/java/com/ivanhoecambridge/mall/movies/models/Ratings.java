@@ -10,6 +10,9 @@ import org.simpleframework.xml.Root;
 @Root(strict = false)
 public class Ratings {
 
+    public static final String RATINGS_PROVINCE_CODE_ON = "on-rating";
+    public static final String RATINGS_PROVINCE_CODE_BC = "bc-rating";
+
     @Element(name = "pq-rating", required = false)
     private String pq_rating;
 

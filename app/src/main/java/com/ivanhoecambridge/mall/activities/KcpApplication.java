@@ -22,11 +22,14 @@ import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
+import com.ivanhoecambridge.mall.utility.Utility;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
 import java.util.LinkedHashSet;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import io.fabric.sdk.android.Fabric;
 

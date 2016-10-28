@@ -17,8 +17,9 @@ public class Schedule
     @ElementList(inline = true)
     private List<Movie> movies;
 
-    public List<Movie> getMovie ()
+    public List<Movie> getMovies()
     {
+        if(movies == null) return new ArrayList<Movie>();
         return movies;
     }
 
@@ -32,5 +33,13 @@ public class Schedule
     {
         return "ClassPojo [movie = "+movies+"]";
     }
+
+    public Movie getMovie(String movieId){
+        for(Movie movie : getMovies()) {
+            if(movie.getMovie_id().equals(movieId)) return movie;
+        }
+        return new Movie();
+    }
+
 }
 

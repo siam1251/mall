@@ -1,5 +1,6 @@
 package com.ivanhoecambridge.mall.activities;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
@@ -19,9 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -29,17 +28,21 @@ import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.MoviesRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.movies.MovieInterface;
 import com.ivanhoecambridge.mall.movies.MovieManager;
 import com.ivanhoecambridge.mall.movies.models.Address;
 import com.ivanhoecambridge.mall.movies.models.House;
 import com.ivanhoecambridge.mall.movies.models.MovieDetail;
+import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.CTA;
-import com.ivanhoecambridge.mall.views.DealRecyclerItemDecoration;
 import com.ivanhoecambridge.mall.views.MovieRecyclerItemDecoration;
+import com.ivanhoecambridge.mall.views.NewsRecyclerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ivanhoecambridge.mall.adapters.MoviesRecyclerViewAdapter.ITEM_TYPE_THEATER_VIEWER;
 
 /**
  * Created by Kay on 2016-10-26.
@@ -51,6 +54,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
     private ViewGroup mParentView;
     private View mLayoutStoreHours;
     private ImageView ivDetailImage;
+    private ImageView ivDetailImageBg;
     private MoviesRecyclerViewAdapter mMoviesRecyclerViewAdapter;
     private boolean mHasTransitionStarted = false;
 
@@ -110,6 +114,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
             });
 
             ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
+            ivDetailImageBg = (ImageView) findViewById(R.id.ivDetailImageBg);
             Glide.with(this)
                     .load(R.drawable.img_movies)
                     .crossFade()
@@ -145,7 +150,9 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
             llViewShowtimes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(MoviesActivity.this, "View All Showtimes", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MoviesActivity.this, ShowtimesActivity.class);
+                MoviesActivity.this.startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
+                ActivityAnimation.startActivityAnimation(MoviesActivity.this);
                 }
             });
 
@@ -158,10 +165,10 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
     @Override
     protected void onStart() {
         super.onStart();
-        if(!mHasTransitionStarted) {
+        /*if(!mHasTransitionStarted) {
             ivDetailImage.setVisibility(View.GONE);
 //            fadeOutTransitionImage();
-        }
+        }*/
     }
 
     private void fadeOutTransitionImage(){
@@ -297,17 +304,16 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
     private void setRecyclerView(){
         ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
         RecyclerView rvMovies = (RecyclerView) findViewById(R.id.rvMovies);
-        LinearLayoutManager staggeredGridLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        rvMovies.setLayoutManager(staggeredGridLayoutManager);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvMovies.setLayoutManager(linearLayoutManager);
 
         ArrayList<MovieDetail> movieDetails = (ArrayList) MovieManager.sMovies.getMovie();
         if(movieDetails != null) {
-            mMoviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(this, movieDetails);
+            mMoviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(this, null, movieDetails, ITEM_TYPE_THEATER_VIEWER);
             rvMovies.setAdapter(mMoviesRecyclerViewAdapter);
             rvMovies.setNestedScrollingEnabled(false);
 
-//            MovieRecyclerItemDecoration itemDecoration = new MovieRecyclerItemDecoration(this, R.dimen.movie_poster_margin, mMoviesRecyclerViewAdapter);
-            MovieRecyclerItemDecoration itemDecoration = new MovieRecyclerItemDecoration(this, R.dimen.movie_poster_horizontal_margin, mMoviesRecyclerViewAdapter);
+            MovieRecyclerItemDecoration itemDecoration = new MovieRecyclerItemDecoration(this, R.dimen.movie_poster_horizontal_margin);
             rvMovies.addItemDecoration(itemDecoration);
 
             pb.setVisibility(View.GONE);
@@ -326,10 +332,51 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public void onMovieDownloaded() {
         setRecyclerView();
         setUpCTA();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ivDetailImageBg.setVisibility(View.INVISIBLE);
+        ivDetailImage.setVisibility(View.VISIBLE);
+        ActivityAnimation.exitActivityAnimation(this);
+    }
+
+    public void onFinish(int resultCode){
+        setResult(resultCode, new Intent());
+        onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
+                if(data == null) {
+                    onFinish(resultCode);
+                } else {
+                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
+                    if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
+                        String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
+                        Intent intent = new Intent();
+                        intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_SHOW_PARKING_SPOT);
+                        intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, parkingName);
+                        setResult(Integer.valueOf(resultCode), intent);
+                        onBackPressed();
+                    } else if(code == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP){
+                        Intent intent = new Intent();
+                        intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
+                        setResult(Integer.valueOf(resultCode), intent);
+                        onBackPressed();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
     }
 }

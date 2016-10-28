@@ -6,6 +6,10 @@ import org.simpleframework.xml.ElementArray;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,6 +24,7 @@ public class Movie
 
     public List<String> getShowtimes ()
     {
+        if(showtimes == null) return new ArrayList<String>();
         return showtimes;
     }
 
@@ -40,6 +45,7 @@ public class Movie
 
     public String getMovie_id ()
     {
+        if(movie_id == null) return "";
         return movie_id;
     }
 
@@ -71,6 +77,31 @@ public class Movie
     @Override
     public String toString()
     {
+        return "";
+    }
+
+    /**
+     *
+     * @return return show times in series ex) "12:45 3:45 7:05 10:00"
+     */
+    public String getShowtimesString(){
+        String showtimes = "";
+        for(String showtime : getShowtimes()) {
+            showtime = convert24Hrto12Hr(showtime);
+            if(showtimes.equals("")) showtimes = showtime;
+            else showtimes = showtimes + " " + showtime;
+        }
+        return showtimes;
+    }
+
+    public String convert24Hrto12Hr(String time){
+        try {
+            final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+            final Date dateObj = sdf.parse(time);
+            return new SimpleDateFormat("K:mm").format(dateObj);
+        } catch (final ParseException e) {
+            e.printStackTrace();
+        }
         return "";
     }
 }

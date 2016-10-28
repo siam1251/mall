@@ -16,11 +16,9 @@ import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 public class MovieRecyclerItemDecoration extends RecyclerView.ItemDecoration {
 
     private int mItemOffset;
-    private RecyclerView.Adapter mAdapter;
 
-    public MovieRecyclerItemDecoration(@NonNull Context context, @DimenRes int itemOffsetId, RecyclerView.Adapter adapter) {
+    public MovieRecyclerItemDecoration(@NonNull Context context, @DimenRes int itemOffsetId) {
         mItemOffset = context.getResources().getDimensionPixelSize(itemOffsetId);
-        mAdapter = adapter;
     }
 
     @Override

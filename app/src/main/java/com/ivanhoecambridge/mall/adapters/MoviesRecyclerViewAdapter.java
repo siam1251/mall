@@ -3,66 +3,46 @@ package com.ivanhoecambridge.mall.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Typeface;
-import android.media.Rating;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.util.Pair;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
-import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
-import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
+import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.mall.R;
-import com.ivanhoecambridge.mall.activities.DetailActivity;
-import com.ivanhoecambridge.mall.activities.InterestedCategoryActivity;
+import com.ivanhoecambridge.mall.activities.MovieDetailActivity;
+import com.ivanhoecambridge.mall.activities.MoviesActivity;
+import com.ivanhoecambridge.mall.activities.ShowtimesActivity;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.factory.GlideFactory;
-import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
-import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
-import com.ivanhoecambridge.mall.managers.FavouriteManager;
-import com.ivanhoecambridge.mall.movies.MovieUtility;
+import com.ivanhoecambridge.mall.movies.models.House;
 import com.ivanhoecambridge.mall.movies.models.MovieDetail;
-import com.ivanhoecambridge.mall.movies.models.Ratings;
-import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
-import com.ivanhoecambridge.mall.views.RecyclerViewFooter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import constants.MallConstants;
 
 public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
-    private static final int ITEM_TYPE_HORIZONTAL_MOVIE_VIEWER =             0;
-    private static final int ITEM_TYPE_VERTICAL_MOVIE_VIEWER =               1;
+    protected final Logger logger = new Logger(getClass().getName());
+    private int mRecyclerType = -1;
+    public static final int ITEM_TYPE_THEATER_VIEWER =             0;
+    public static final int ITEM_TYPE_SHOWTIMES_VIEWER =               1;
 
     private ArrayList<MovieDetail> mMovieDetails;
+    private House mHouse;
 
-    public MoviesRecyclerViewAdapter(Context context, ArrayList<MovieDetail> movieDetails) {
+    public MoviesRecyclerViewAdapter(Context context, @Nullable House house, ArrayList<MovieDetail> movieDetails, int recyclerType) {
         mContext = context;
+        mHouse = house == null ? new House() : house;
         mMovieDetails = movieDetails == null ? new ArrayList<MovieDetail>() : new ArrayList<MovieDetail>(movieDetails);
+        mRecyclerType = recyclerType;
     }
-
 
     public class MainViewHolder extends RecyclerView.ViewHolder {
         public View mView;
@@ -73,18 +53,31 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public class HorizontalMovieViewer extends MainViewHolder {
+    public class TheaterViewer extends MainViewHolder {
         public ImageView ivMoviePoster;
         public TextView tvMovieTitle;
         public TextView tvMovieRating;
 
-        public HorizontalMovieViewer(View itemView) {
+        public TheaterViewer(View itemView) {
             super(itemView);
-
             ivMoviePoster = (ImageView) itemView.findViewById(R.id.ivMoviePoster);
             tvMovieTitle = (TextView) itemView.findViewById(R.id.tvMovieTitle);
             tvMovieRating = (TextView) itemView.findViewById(R.id.tvMovieRating);
+        }
+    }
 
+    public class ShowtimesViewer extends MainViewHolder {
+        public ImageView ivMoviePoster;
+        public TextView tvMovieTitleRating;
+        public TextView tvMovieLengthGenre;
+        public TextView tvMovieShowtimes;
+
+        public ShowtimesViewer(View itemView) {
+            super(itemView);
+            ivMoviePoster = (ImageView) itemView.findViewById(R.id.ivMoviePoster);
+            tvMovieTitleRating = (TextView) itemView.findViewById(R.id.tvMovieTitleRating);
+            tvMovieLengthGenre = (TextView) itemView.findViewById(R.id.tvMovieLengthGenre);
+            tvMovieShowtimes = (TextView) itemView.findViewById(R.id.tvMovieShowtimes);
         }
     }
 
@@ -92,69 +85,112 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         switch (viewType){
-            case ITEM_TYPE_HORIZONTAL_MOVIE_VIEWER:
-                return new HorizontalMovieViewer(LayoutInflater.from(mContext).inflate(R.layout.list_item_movie, parent, false));
+            case ITEM_TYPE_THEATER_VIEWER:
+                return new TheaterViewer(LayoutInflater.from(mContext).inflate(R.layout.list_item_movie, parent, false));
+            case ITEM_TYPE_SHOWTIMES_VIEWER:
+                return new ShowtimesViewer(LayoutInflater.from(mContext).inflate(R.layout.list_item_showtimes, parent, false));
         }
         return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof HorizontalMovieViewer) {
-            final HorizontalMovieViewer horizontalMovieViewer = (HorizontalMovieViewer) holder;
+        try {
+            final MovieDetail movieDetail = mMovieDetails.get(position);
+            if (holder instanceof TheaterViewer) {
+                final TheaterViewer theaterViewer = (TheaterViewer) holder;
+                //Poster
+                String photoUrl = movieDetail.getPhotoUrl();
+                if(!photoUrl.equals("")) {
+                    Glide.with(mContext)
+                            .load(photoUrl)
+                            .crossFade()
+                            .centerCrop()
+                            .placeholder(R.drawable.icn_movies_placeholder)
+                            .into(theaterViewer.ivMoviePoster);
+                }
 
-            MovieDetail movieDetail = mMovieDetails.get(position);
-            List<String> lgphotos = movieDetail.getLargePhotos();
-            List<String> photos = movieDetail.getPhotos();
+                //Title
+                String title = movieDetail.getMovieTitle();
+                theaterViewer.tvMovieTitle.setText(title);
 
-            String photoUrl = "";
-            if(lgphotos != null && lgphotos.size() > 0) {
-                photoUrl = lgphotos.get(0);
-            } else if (photos != null && photos.size() > 0){
-                photoUrl = photos.get(0);
-            }
+                //Rating
+                String rating = movieDetail.getMovieRating(MallConstants.RATINGS_PROVINCE_CODE);
+                rating = getStylishRatings(rating);
+                theaterViewer.tvMovieRating.setText(rating);
 
-            if(!photoUrl.equals("")) {
-                Glide.with(mContext)
-                        .load(photoUrl)
-                        .asBitmap()
-//                        .centerCrop()
-                        .placeholder(R.drawable.placeholder_movie)
-                        .override(KcpUtility.dpToPx((Activity) mContext, 150), KcpUtility.dpToPx((Activity) mContext, 222))
-                        .into(new BitmapImageViewTarget(horizontalMovieViewer.ivMoviePoster) {
+                theaterViewer.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
-                        circularBitmapDrawable.setCornerRadius(KcpUtility.dpToPx((Activity) mContext, 4));
-                        horizontalMovieViewer.ivMoviePoster.setImageDrawable(circularBitmapDrawable);
+                    public void onClick(View v) {
+                        startMovieDetailActivity(movieDetail.getMovie_id());
+                        ActivityAnimation.startActivityAnimation(mContext);
                     }
                 });
 
 
+            } else if(holder instanceof ShowtimesViewer){
+                final ShowtimesViewer showtimesViewer = (ShowtimesViewer) holder;
+                //Poster
+                String photoUrl = movieDetail.getPhotoUrl();
+                if(!photoUrl.equals("")) {
+                    Glide.with(mContext)
+                            .load(photoUrl)
+                            .crossFade()
+                            .centerCrop()
+                            .placeholder(R.drawable.icn_movies_placeholder)
+                            .into(showtimesViewer.ivMoviePoster);
+                }
+
+                //Title and Rating
+                String title = movieDetail.getMovieTitle();
+                String rating = movieDetail.getMovieRating(MallConstants.RATINGS_PROVINCE_CODE);
+                rating = getStylishRatings(rating);
+
+                String movieTitleRating = title + " " + rating;
+                showtimesViewer.tvMovieTitleRating.setText(movieTitleRating);
+
+                //Runtime and Genre
+                String runTime = movieDetail.getRuntimeInFormat();
+                String genre = movieDetail.getGenresInFormat();
+
+                String runTimeGenre = runTime + " • " + genre;
+                if(runTimeGenre.equals("")) showtimesViewer.tvMovieLengthGenre.setVisibility(View.GONE);
+                showtimesViewer.tvMovieLengthGenre.setText(runTimeGenre);
+
+                //showtimes
+                String showtimes = mHouse.getShowtimes(movieDetail.getMovie_id());
+                if(showtimes.equals("")) showtimesViewer.tvMovieShowtimes.setVisibility(View.GONE);
+                showtimesViewer.tvMovieShowtimes.setText(showtimes);
+
+                showtimesViewer.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startMovieDetailActivity(movieDetail.getMovie_id());
+                        ActivityAnimation.startActivityAnimation(mContext);
+                    }
+                });
             }
+        } catch (Exception e) {
+            logger.error(e);
+        }
+    }
 
-            String movieTitle = movieDetail.getTitle();
-            String movieName = movieDetail.getName();
+    public void startMovieDetailActivity(String movieId){
+        Intent intent = new Intent(mContext, MovieDetailActivity.class);
+        intent.putExtra(Constants.ARG_MOVIE_ID, movieId);
+        ((Activity) mContext).startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
+        ActivityAnimation.startActivityAnimation(mContext);
+    }
 
-
-            String title = movieName == null ? movieTitle : movieName;
-            Ratings ratings = movieDetail.getRating();
-            String rating = MovieUtility.getMovieRating(ratings, MallConstants.RATINGS_PROVINCE_CODE);
-            if(rating != null && !rating.equals("")) rating = "(" + rating + ")";
-            /*if(movieTitle != null && rating != null) {
-                String footerText = title + " @@" + rating + "@@ ";
-//                CharSequence cs = Utility.setSpanBetweenTokens((CharSequence)footerText, "@@", new StyleSpan(Typeface.NORMAL));
-                CharSequence cs = Utility.setSpanBetweenTokens((CharSequence)footerText, "@@", new ForegroundColorSpan(mContext.getResources().getColor(R.color.themeColor)));
-                horizontalMovieViewer.tvMovieTitle.setText(cs);
-            }*/
-            if(title != null) horizontalMovieViewer.tvMovieTitle.setText(title);
-            horizontalMovieViewer.tvMovieRating.setText(rating);
-
-
-        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST){
-        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST){
-
+    /**
+     *
+     * @param ratings
+     * @return ratings will have round brackets ex) 14-A will become (14-A)
+     */
+    public String getStylishRatings(String ratings){
+        if(ratings.equals("")) return ratings;
+        else {
+            return "(" + ratings + ")";
         }
     }
 
@@ -165,8 +201,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return ITEM_TYPE_HORIZONTAL_MOVIE_VIEWER;
-
+        return mRecyclerType;
     }
 
 

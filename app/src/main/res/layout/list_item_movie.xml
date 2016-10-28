@@ -1,81 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
 
-    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="150dp"
-        android:layout_height="match_parent">
+    <android.support.v7.widget.CardView
+        android:layout_centerHorizontal="true"
+        android:id="@+id/cvMoviePoster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="4dp"
+        style="@style/SelectableItemForegroundNormal"
+        android:elevation="3dp"
+        android:layout_margin="5dp"
+        >
 
+        <ImageView
+            android:layout_gravity="center"
+            android:id="@+id/ivMoviePoster"
+            android:layout_width="145dp"
+            android:layout_height="217.5dp"
+            android:src="@drawable/placeholder_movie"
+            />
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/cvMoviePoster"
-            android:layout_width="match_parent"
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="4dp"
+        android:layout_below="@+id/cvMoviePoster"
+        android:layout_width="145dp"
+        android:layout_height="wrap_content">
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_bold"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="15dp"
-            app:cardCornerRadius="4dp"
-            android:layout_marginLeft="@dimen/movie_poster_horizontal_margin"
-            android:layout_marginRight="@dimen/movie_poster_horizontal_margin"
-            style="@style/SelectableItemForegroundNormal"
-            >
-            android:layout_marginBottom="@dimen/card_vertical_margin"
-            android:layout_marginTop="@dimen/card_vertical_margin"
+            android:textColor="@color/black"
+            android:text="WEWEFWEFWEF"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:id="@+id/tvMovieTitle"
+            />
 
-            <ImageView
-                android:layout_gravity="center"
-                android:id="@+id/ivMoviePoster"
-                android:layout_width="150dp"
-                android:layout_height="222dp"
-                android:src="@drawable/placeholder_movie"
-                />
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            android:id="@+id/tvMovieRating"
+            android:layout_marginLeft="2dp"
+            app:fontFamily="@string/fontFamily_roboto_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:textColor="@color/black"
+            android:text="(PG)"
+            android:textSize="14sp"
+            />
 
-        </android.support.v7.widget.CardView>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="@dimen/card_horizontal_margin"
-            android:layout_marginRight="@dimen/card_horizontal_margin"
-            android:layout_below="@+id/cvMoviePoster"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                app:fontFamily="@string/fontFamily_roboto_bold"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text=""
-                android:textSize="14sp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:id="@+id/tvMovieTitle"
-                />
-
-            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                android:id="@+id/tvMovieRating"
-                android:layout_marginLeft="2dp"
-                app:fontFamily="@string/fontFamily_roboto_regular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:textColor="@color/black"
-                android:text="(PG)"
-                android:textSize="14sp"
-                />
-
-        </LinearLayout>
-
-
-    </RelativeLayout>
-</android.support.design.widget.CoordinatorLayout>
+    </LinearLayout>
+</RelativeLayout>
 
 

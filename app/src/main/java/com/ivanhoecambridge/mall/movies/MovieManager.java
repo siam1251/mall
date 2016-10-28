@@ -89,7 +89,7 @@ public class MovieManager {
 
                         House house = sTheaters.getHouse();
                         Schedule schedule = house.getSchedule();
-                        List<Movie> movies = schedule.getMovie();
+                        List<Movie> movies = schedule.getMovies();
 
                         String movieIds = "";
                         for(Movie movie : movies) {

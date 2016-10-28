@@ -21,6 +21,7 @@ public class House
 
     public String getLocation ()
     {
+        if(location == null) return "";
         return location;
     }
 
@@ -31,6 +32,7 @@ public class House
 
     public Address getAddress ()
     {
+        if(address == null) return new Address();
         return address;
     }
 
@@ -41,6 +43,7 @@ public class House
 
     public Schedule getSchedule ()
     {
+        if(schedule == null) return new Schedule();
         return schedule;
     }
 
@@ -53,5 +56,9 @@ public class House
     public String toString()
     {
         return "";
+    }
+
+    public String getShowtimes(String movieId){
+        return getSchedule().getMovie(movieId).getShowtimesString();
     }
 }

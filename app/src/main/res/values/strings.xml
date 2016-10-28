@@ -264,7 +264,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="welcome_yes">YES PLEASE</string>
 
     <!--ONBOARDING-->
-    <string name="onbd_one_title">Welcome to Vaughan Mills new companion app</string>
+    <string name="onbd_one_title">Welcome to\nVaughan Mills new\ncompanion app</string>
     <string name="onbd_two_title">Get Recommended Deals</string>
     <string name="onbd_three_title">Find Your Favourite Brands</string>
     <string name="onbd_four_title">Never Get Lost</string>
@@ -286,6 +286,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="movie_now_playing">Now Playing</string>
     <string name="movie_showtime">View All Showtimes</string>
     <string name="movie_find_on_map">Find On Map</string>
+    <string name="movie_showtimes_title">Showtimes</string>
+    <string name="movie_detail_title">Movie Details</string>
 
     <!---->
 </resources>

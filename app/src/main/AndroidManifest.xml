@@ -112,6 +112,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
+            android:name=".activities.ShowtimesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
+
+        <activity
+            android:name=".activities.MovieDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
+        <activity
             android:name=".activities.ParkingActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"

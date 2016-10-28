@@ -19,6 +19,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
 
+            <!--<ImageView-->
             <com.ivanhoecambridge.mall.views.KCPSetRatioImageView
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
@@ -27,6 +28,7 @@
                 android:src="@drawable/img_cinema_hero"
                 />
 
+            <!--<ImageView-->
             <com.ivanhoecambridge.mall.views.KCPSetRatioImageView
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"

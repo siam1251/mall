@@ -33,8 +33,8 @@ public class Address {private String zip;
         this.zip = zip;
     }
 
-    public String getPhone ()
-    {
+    public String getPhone () {
+        if(phone == null) return "";
         return phone;
     }
 

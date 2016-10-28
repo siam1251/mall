@@ -1,9 +1,12 @@
 package com.ivanhoecambridge.mall.movies.models;
 
+import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,6 +15,8 @@ import java.util.List;
 
 @Root(strict = false)
 public class MovieDetail {
+
+    protected final Logger logger = new Logger(getClass().getName());
 
     @Element
     private String movie_id;
@@ -24,6 +29,9 @@ public class MovieDetail {
 
     @ElementList
     private List<String> lgphotos;
+
+    @ElementList
+    private List<String> hiphotos;
 
     @Element
     private Mp4 mp4;
@@ -69,6 +77,7 @@ public class MovieDetail {
 
     public List<String> getGenres ()
     {
+        if(genres == null) return new ArrayList<String>();
         return genres;
     }
 
@@ -79,6 +88,7 @@ public class MovieDetail {
 
     public List<String> getPhotos ()
     {
+        if(photos == null) return new ArrayList<String>();
         return photos;
     }
 
@@ -90,6 +100,17 @@ public class MovieDetail {
     public List<String> getLargePhotos ()
     {
         return lgphotos;
+    }
+
+    public void sethighPhotos (List<String> hiphotos)
+    {
+        this.hiphotos = hiphotos;
+    }
+
+    public List<String> getHighPhotos ()
+    {
+        if(hiphotos == null) return new ArrayList<String>();
+        return hiphotos;
     }
 
     public void setLargePhotos (List<String> lgphotos)
@@ -129,6 +150,7 @@ public class MovieDetail {
 
     public String getTitle ()
     {
+        if(title == null) return "";
         return title;
     }
 
@@ -149,6 +171,7 @@ public class MovieDetail {
 
     public String getName ()
     {
+        if(name == null) return "";
         return name;
     }
 
@@ -189,6 +212,7 @@ public class MovieDetail {
 
     public Ratings getRating ()
     {
+        if(ratings == null) return new Ratings();
         return ratings;
     }
 
@@ -220,7 +244,72 @@ public class MovieDetail {
     @Override
     public String toString()
     {
-//        return "ClassPojo [movie_id = "+movie_id+", genres = "+genres+", website = "+website+", hiphotos = "+hiphotos+", lgphotos = "+lgphotos+", mp4 = "+mp4+", runtime = "+runtime+", imdb = "+imdb+", release_dates = "+release_dates+", photos = "+photos+", title = "+title+", advisory = "+advisory+", name = "+name+", synopsis = "+synopsis+", mlang = "+mlang+", actors = "+actors+", writers = "+writers+", distributor = "+distributor+", rating = "+rating+", directors = "+directors+", producers = "+producers+", ratings = "+ratings+", parent_id = "+parent_id+"]";
         return "";
     }
+
+
+    public String getPhotoUrl(){
+        List<String> hiPhotos = getHighPhotos();
+        List<String> photos = getPhotos();
+
+        String photoUrl = "";
+        if(hiPhotos != null && hiPhotos.size() > 0) {
+            photoUrl = hiPhotos.get(0);
+        } else if (photos != null && photos.size() > 0){
+            photoUrl = photos.get(0);
+        }
+        return photoUrl;
+    }
+
+    public String getMovieTitle(){
+        String movieTitle = getTitle();
+        String movieName = getName();
+        return movieName == "" ? movieTitle : movieName;
+    }
+
+    public String getMovieRating(String provinceCode){
+        String ratings = "";
+        if(provinceCode.equals(Ratings.RATINGS_PROVINCE_CODE_ON)){
+            ratings = getRating().getOn_rating();
+        } else if(provinceCode.equals(Ratings.RATINGS_PROVINCE_CODE_BC)){
+            ratings = getRating().getBc_rating();
+        }
+
+        if(ratings == null) ratings = "";
+        return ratings;
+    }
+
+
+    /**
+     * @return return runTime hour in format ex) 118 -> 1hr 58min
+     */
+    public String getRuntimeInFormat(){
+        String runTime = getRuntime();
+        if(!runtime.equals("")){
+            try {
+                int runTimeInt = Integer.parseInt(runTime);
+                //convert 118 to 1hr 58min
+                int hours = (int)runTimeInt/60;
+                int minutes = (int)runTimeInt%60;
+
+                return hours + "hr " + minutes + "min";
+            } catch(NumberFormatException nfe) {
+                logger.error(nfe);
+            }
+        }
+        return "";
+    }
+
+    /**
+     * @return return genres in format ex) Action/Adventure, Drama
+     */
+    public String getGenresInFormat(){
+        String genres = "";
+        for(String genre : getGenres()){
+            if(genres.equals(""))genres = genre;
+            else genres = genres + ", " + genre;
+        }
+        return genres;
+    }
+
 }
