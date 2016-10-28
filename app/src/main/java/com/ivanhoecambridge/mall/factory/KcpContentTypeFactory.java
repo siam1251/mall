@@ -16,6 +16,7 @@ public class KcpContentTypeFactory {
     public static final String CONTENT_TYPE_STORE = "store";
     public static final String CONTENT_TYPE_CATEGORY = "category";
     public static final String CONTENT_TYPE_FOOTER = "footer";
+    public static final String CONTENT_TYPE_MOVIE = "movie";
 
     //NEWS & DEAL ADAPTER ITEM TYPE
     public static final int ITEM_TYPE_LOADING =                             0;
@@ -29,6 +30,7 @@ public class KcpContentTypeFactory {
     public static final int ITEM_TYPE_SECTION_HEADER_OTHER_DEALS =          8;
     public static final int ITEM_TYPE_ADJUST_MY_INTEREST =                  9;
     public static final int ITEM_TYPE_DEAL =                                10;
+    public static final int ITEM_TYPE_MOVIE =                               11;
     public static final int ITEM_TYPE_FOOTER =                              100;
 
     public static final int ITEM_TYPE_SECTION_HEADER_CATEGORY =   11;
@@ -92,6 +94,8 @@ public class KcpContentTypeFactory {
             return ITEM_TYPE_STORE;
         } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_DEAL)){
             return ITEM_TYPE_DEAL;
+        } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_MOVIE)){
+            return ITEM_TYPE_MOVIE;
         } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_FOOTER)){
             return ITEM_TYPE_FOOTER;
         } else {

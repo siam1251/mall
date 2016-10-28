@@ -65,8 +65,8 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
         TwitterAuthConfig authConfig =  new TwitterAuthConfig(Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
         KcpConstants.setBaseURL(Constants.IS_APP_IN_PRODUCTION);
         if(Constants.IS_APP_IN_PRODUCTION) {
-            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
-//            Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
+//            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
+            Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         } else {
             Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         }

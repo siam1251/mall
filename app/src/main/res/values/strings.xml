@@ -280,5 +280,12 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="onbd_btn_lets_get_skip">Skip</string>
     <string name="onbd_btn_lets_get_done">Done</string>
 
+    <!--MOVIES-->
+    <string name="movie_title">Movie Cinema</string>
+    <string name="movie_desc">View Movies and Showtimes</string>
+    <string name="movie_now_playing">Now Playing</string>
+    <string name="movie_showtime">View All Showtimes</string>
+    <string name="movie_find_on_map">Find On Map</string>
+
     <!---->
 </resources>

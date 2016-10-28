@@ -188,6 +188,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         tvNumbOfDeals = (TextView) view.findViewById(R.id.tvNumbOfDeals);
         btnShowMap = (Button) view.findViewById(R.id.btnShowMap);
         ivCompass = (ImageView) view.findViewById(R.id.ivCompass);
+        ivCompass.bringToFront();
         tvLevel = (TextView) view.findViewById(R.id.tvLevel);
         ivUpper = (ImageView) view.findViewById(R.id.ivUpper);
         ivLower = (ImageView) view.findViewById(R.id.ivLower);
