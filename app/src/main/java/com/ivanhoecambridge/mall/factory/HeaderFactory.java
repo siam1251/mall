@@ -21,8 +21,8 @@ public class HeaderFactory {
 
 
     //------------------------------ END POINT ------------------------------
-    public static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_VM; //CHANGE THE END POINT to VM
-//    public static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_MP; //CHANGE THE END POINT to MP
+//    public static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_VM; //CHANGE THE END POINT to VM
+    public static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_MP; //CHANGE THE END POINT to MP
     //------------------------------ END POINT ------------------------------
 
 
