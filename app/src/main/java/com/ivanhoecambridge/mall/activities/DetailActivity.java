@@ -3,7 +3,6 @@ package com.ivanhoecambridge.mall.activities;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,7 +40,7 @@ import com.ivanhoecambridge.mall.factory.GlideFactory;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.mall.factory.HeaderFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
-import com.ivanhoecambridge.mall.fragments.DealsRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.adapters.DealsRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.CTA;
@@ -60,7 +59,6 @@ public class DetailActivity extends AppCompatActivity {
 //public class DetailActivity extends SwipeBackActivity {
 
     protected final Logger logger = new Logger(getClass().getName());
-    private Rect mRect = new Rect();
     private ViewGroup mParentView;
     private ImageView ivDetailImage; //transition image
     private ImageView ivDetailLogo; //transition logo

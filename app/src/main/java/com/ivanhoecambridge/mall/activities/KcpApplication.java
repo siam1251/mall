@@ -1,6 +1,7 @@
 package com.ivanhoecambridge.mall.activities;
 
 import android.content.Context;
+import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
@@ -22,11 +23,15 @@ import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
+import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import com.ivanhoecambridge.mall.utility.Utility;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
 import java.util.LinkedHashSet;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -64,9 +69,10 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
 
         TwitterAuthConfig authConfig =  new TwitterAuthConfig(Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
         KcpConstants.setBaseURL(Constants.IS_APP_IN_PRODUCTION);
+        HeaderFactory.changeCatalog(HeaderFactory.HEADER_VALUE_DATAHUB_CATALOG);
         if(Constants.IS_APP_IN_PRODUCTION) {
-            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
-//            Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
+//            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
+            Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         } else {
             Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         }

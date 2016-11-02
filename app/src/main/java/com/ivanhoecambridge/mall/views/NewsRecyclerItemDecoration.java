@@ -23,8 +23,11 @@ public class NewsRecyclerItemDecoration extends RecyclerView.ItemDecoration {
         super.getItemOffsets(outRect, view, parent, state);
 
         int position = parent.getChildAdapterPosition(view);
+        final int itemCount = state.getItemCount();
         if(position == 0){
             outRect.top = mItemOffset;
+        } else if(itemCount > 0 && position == itemCount - 1 ){
+            outRect.bottom = mItemOffset;
         }
     }
 }

@@ -17,14 +17,18 @@ import android.view.View;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class BlurBuilder {
-    private static final float BITMAP_SCALE = 0.4f;
-    private static final float BLUR_RADIUS = 7.5f;
+    /*private static final float BITMAP_SCALE = 0.4f;
+    private static final float BLUR_RADIUS = 7.5f;*/
+
+    private static final float BITMAP_SCALE = 0.1f;
+    private static final float BLUR_RADIUS = 25f;
 
     public static Bitmap blur(View v) {
         return blur(v.getContext(), getScreenshot(v));
     }
 
     public static Bitmap blur(Context ctx, Bitmap image) {
+        if(image == null) return null;
         int width = Math.round(image.getWidth() * BITMAP_SCALE);
         int height = Math.round(image.getHeight() * BITMAP_SCALE);
 
@@ -43,7 +47,8 @@ public class BlurBuilder {
         return outputBitmap;
     }
 
-    private static Bitmap getScreenshot(View v) {
+    public static Bitmap getScreenshot(View v) {
+        if(v.getWidth() == 0 || v.getHeight() == 0) return null;
         Bitmap b = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(b);
         v.draw(c);

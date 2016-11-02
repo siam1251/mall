@@ -21,8 +21,8 @@ public class HeaderFactory {
 
 
     //------------------------------ END POINT ------------------------------
-    private static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_VM; //CHANGE THE END POINT to VM
-//    private static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_MP; //CHANGE THE END POINT to MP
+//    public static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_VM; //CHANGE THE END POINT to VM
+    public static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_MP; //CHANGE THE END POINT to MP
     //------------------------------ END POINT ------------------------------
 
 
@@ -31,14 +31,12 @@ public class HeaderFactory {
     private final static String MALL_INFO_URL_VM = "bins/1ouit"; //vaughan mills
     private final static String MALL_INFO_URL_MP = "bins/2zv9f"; //metropolis
 
-
     public final static String AMENITIES_OFFLINE_TEXT = "amenities.json";
     private final static String AMENITIES_URL_VM = "bins/3ihvo";
     private final static String AMENITIES_URL_MP = "bins/3ihvo";
 
     public final static String PARKING_OFFLINE_TEXT = "parking.json";
     private final static String PARKING_URL_VM = "bins/1c8ul";
-//    private final static String PARKING_URL_VM = "bins/1c8ulweg"; //TESTING
     private final static String PARKING_URL_MP = "bins/1c8ul";
 
 
@@ -53,6 +51,10 @@ public class HeaderFactory {
     public static String AMENITIES_URL = AMENITIES_URL_VM;
     public static String PARKING_URL = PARKING_URL_VM;
     private static String SEARCH_INDEX_URL = SEARCH_INDEX_VM_STAGING;
+
+
+    //MOVIES
+    public final static String MOVIE_URL_BASE = "http://ivanhoe.webservice.cinema-source.com/";
 
 
     public static String MALL_NAME = "Vaughan Mills";

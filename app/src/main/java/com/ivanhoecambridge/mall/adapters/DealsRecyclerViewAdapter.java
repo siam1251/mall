@@ -1,4 +1,4 @@
-package com.ivanhoecambridge.mall.fragments;
+package com.ivanhoecambridge.mall.adapters;
 
 import android.app.Activity;
 import android.content.Context;

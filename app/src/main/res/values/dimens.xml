@@ -39,6 +39,7 @@
 
     <item name="ancmt_image_ratio" format="float" type="dimen">1.6</item>
     <item name="ancmt_image_ratio_square" format="float" type="dimen">1</item>
+    <item name="movie_detail_top_layout_ratio" format="float" type="dimen">1.5</item>
 
 
     <!--deal card-->
@@ -217,4 +218,15 @@
     <integer name="squeeze_anim_duration_fav">78</integer>
     <integer name="squeeze_anim_duration_cat">90</integer>
     <integer name="squeeze_anim_duration_parking">40</integer>
+
+    <!--MOVIE POSTER RATIO-->
+    <item name="movie_poster_ratio" format="float" type="dimen">0.675</item>
+    <dimen name="movie_poster_margin">2.5dp</dimen>
+    <dimen name="movie_poster_horizontal_margin">5dp</dimen>
+    <dimen name="movie_poster_horizontal_margin_half">2.5dp</dimen>
+
+    <!--ONBOARDING-->
+    <dimen name="onboarding_first_title">24sp</dimen>
+    <dimen name="onboarding_second_title">21sp</dimen>
+
 </resources>

@@ -6,6 +6,11 @@
     android:fitsSystemWindows="true"
     >
 
+    <ProgressBar
+        android:id="@+id/pb"
+        style="@style/progressBarSmall"
+        />
+    
     <com.ivanhoecambridge.mall.views.zoomable.TouchImageView
         android:transitionName="@string/transition_news_image"
         android:id="@+id/ivDetailImage"

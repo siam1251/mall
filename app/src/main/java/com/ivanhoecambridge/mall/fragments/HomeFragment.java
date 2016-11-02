@@ -170,7 +170,7 @@ public class HomeFragment extends BaseFragment {
         });
 
         mKcpSocialFeedManager.downloadTwitterTweets(Constants.TWITTER_SCREEN_NAME, Constants.NUMB_OF_TWEETS, Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
-        mKcpSocialFeedManager.downloadInstagram(Constants.INSTAGRAM_USER_NAME, Constants.INSTAGRAM_USER_ID, Constants.INSTAGRAM_ACCESS_TOKEN, Constants.INSTAGRAM_BASE_URL, Constants.NUMB_OF_INSTA);
+//        mKcpSocialFeedManager.downloadInstagram(Constants.INSTAGRAM_USER_NAME, Constants.INSTAGRAM_USER_ID, Constants.INSTAGRAM_ACCESS_TOKEN, Constants.INSTAGRAM_BASE_URL, Constants.NUMB_OF_INSTA); //DISABLED : IA-170
     }
 
     private void downloadFingerPrintingCategories(){

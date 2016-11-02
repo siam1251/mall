@@ -188,6 +188,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         tvNumbOfDeals = (TextView) view.findViewById(R.id.tvNumbOfDeals);
         btnShowMap = (Button) view.findViewById(R.id.btnShowMap);
         ivCompass = (ImageView) view.findViewById(R.id.ivCompass);
+        ivCompass.bringToFront();
         tvLevel = (TextView) view.findViewById(R.id.tvLevel);
         ivUpper = (ImageView) view.findViewById(R.id.ivUpper);
         ivLower = (ImageView) view.findViewById(R.id.ivLower);
@@ -251,15 +252,19 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
         ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
         ArrayList<KcpPlaces> kcpPlacesFiltered;
+
+
+
         if(mSearchString.equals("")) kcpPlacesFiltered = new ArrayList<>(kcpPlaces);
         else {
-            kcpPlacesFiltered = new ArrayList<>();
+            kcpPlacesFiltered = KcpPlacesRoot.getInstance().getPlaceByName(mSearchString.toLowerCase());
+            /*kcpPlacesFiltered = new ArrayList<>();
             for(int i = 0; i < kcpPlaces.size(); i++){
 
                 if(kcpPlaces.get(i).getPlaceName().toLowerCase().contains(mSearchString.toLowerCase())) {
                     kcpPlacesFiltered.add(kcpPlaces.get(i));
                 }
-            }
+            }*/
         }
 
         mPlaceRecyclerViewAdapter = new CategoryStoreRecyclerViewAdapter(
@@ -996,8 +1001,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     public void onParkingClick(boolean enabled, boolean focus) {
         try {
             if(!ParkingManager.isParkingLotSaved(getActivity())){
+//                final View content = getActivity().findViewById(android.R.id.content).getRootView();
+//                Utility.addBlurredBitmapToMemoryCache(content, Constants.KEY_PARKING_BLURRED);
                 final Intent intent = new Intent (getActivity(), ParkingActivity.class);
-                intent.putExtra("image", "bitmap.png");
                 getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
             } else {
                 HashMap<String, CustomLocation> parkingHashMap = CustomLocation.getParkingHashMap();

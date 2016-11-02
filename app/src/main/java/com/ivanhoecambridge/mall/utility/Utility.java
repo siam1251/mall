@@ -10,6 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -18,22 +19,34 @@ import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.Nullable;
+import android.support.v4.util.LruCache;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.style.CharacterStyle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.Transformation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 import com.mappedin.jpct.RGBColor;
+
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * Created by Kay on 2016-05-02.
@@ -116,6 +129,12 @@ public class Utility {
             context.startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://instagram.com/" + userName)));
         }
+    }
+
+    public static void playVideo(Context context, String url){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        intent.setDataAndType(Uri.parse(url), "video/*");
+        context.startActivity(intent);
     }
 
     public static boolean isAppInstalled(Context context, String packageName){
@@ -604,4 +623,96 @@ public class Utility {
             return 0;
         }
     }
+
+    public static HostnameVerifier getTrustToCertificates() throws Exception {
+        TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+            }
+            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+            }
+        }
+        };
+
+        // Install the all-trusting trust manager
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+        // Create all-trusting host name verifier
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+
+        return allHostsValid;
+    }
+
+    public static void blurImageView(final Context context, final ImageView ivToBlur, final ImageView ivToApplyBlur){
+        if(context == null || ivToBlur == null || ivToApplyBlur == null) return;
+        if (ivToBlur.getWidth() > 0) {
+            blurImage(context, ivToBlur, ivToApplyBlur);
+        } else {
+            ivToBlur.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    blurImage(context, ivToBlur, ivToApplyBlur);
+                }
+            });
+        }
+    }
+
+    private static void blurImage(Context context, final ImageView ivToBlur, final ImageView ivToApplyBlur){
+        Bitmap image = BlurBuilder.blur(ivToBlur);
+        if(image != null) ivToApplyBlur.setBackground(new BitmapDrawable(context.getResources(), image));
+    }
+
+
+    private static LruCache<String, Bitmap> mMemoryCache;
+
+    public static void addBlurredBitmapToMemoryCache(final View v, final String key){
+        if( v == null) return;
+        if (v.getWidth() > 0) {
+            Bitmap blurred = BlurBuilder.blur(v);
+            addBitmapToMemoryCache(key, blurred);
+        } else {
+            v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    Bitmap blurred = BlurBuilder.blur(v);
+                    addBitmapToMemoryCache(key, blurred);
+                }
+            });
+        }
+    }
+
+    private static void cacheBitmap(Bitmap bitmap){
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / 8;
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount() / 1024;
+            }
+        };
+    }
+
+    private static void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if(mMemoryCache == null) cacheBitmap(bitmap);
+        if (getBitmapFromMemCache(key, true) == null) {
+            mMemoryCache.put(key, bitmap);
+        }
+    }
+
+    public static Bitmap getBitmapFromMemCache(String key, boolean removeAfter) {
+        if(mMemoryCache == null) return null;
+        Bitmap bitmap = mMemoryCache.get(key);
+        if(removeAfter) mMemoryCache.remove(key);
+        return bitmap;
+
+    }
+
 }

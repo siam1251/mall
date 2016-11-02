@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
 import com.ivanhoecambridge.mall.parking.ChildParking;
 import com.ivanhoecambridge.mall.parking.Parking;
@@ -63,6 +66,10 @@ public class ParkingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parking);
+
+        ImageView ivBlur = (ImageView) findViewById(R.id.ivBlur);
+        Bitmap blurred = Utility.getBitmapFromMemCache(Constants.KEY_PARKING_BLURRED, true);
+        if(blurred != null) ivBlur.setBackground(new BitmapDrawable(getResources(), blurred));
 
         rvParking = (RecyclerView) findViewById(R.id.rvParking);
         rvParkingChild = (RecyclerView) findViewById(R.id.rvParkingChild);

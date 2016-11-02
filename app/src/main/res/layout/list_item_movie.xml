@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+
+    <android.support.v7.widget.CardView
+        android:layout_centerHorizontal="true"
+        android:id="@+id/cvMoviePoster"
+        android:layout_width="145dp"
+        android:layout_height="217.5dp"
+        app:cardCornerRadius="4dp"
+        style="@style/SelectableItemForegroundNormal"
+        android:elevation="3dp"
+        android:layout_margin="5dp"
+        android:transitionName="@string/transition_movie_poster"
+        >
+
+        <ImageView
+            android:layout_gravity="center"
+            android:id="@+id/ivMoviePoster"
+            android:layout_width="145dp"
+            android:layout_height="217.5dp"
+            android:src="@drawable/placeholder_movie"
+            />
+
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="4dp"
+        android:layout_below="@+id/cvMoviePoster"
+        android:layout_width="145dp"
+        android:layout_height="wrap_content">
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_bold"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="WEWEFWEFWEF"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:id="@+id/tvMovieTitle"
+            />
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            android:id="@+id/tvMovieRating"
+            android:layout_marginLeft="2dp"
+            app:fontFamily="@string/fontFamily_roboto_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:textColor="@color/black"
+            android:text="(PG)"
+            android:textSize="14sp"
+            />
+
+    </LinearLayout>
+</RelativeLayout>
+
+

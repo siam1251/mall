@@ -5,6 +5,7 @@ public class Constants {
 
 
 	public final static boolean IS_APP_IN_PRODUCTION = true;
+//	public final static boolean IS_APP_IN_PRODUCTION = false;
 
 	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				1000;
 //	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				500;
@@ -22,12 +23,13 @@ public class Constants {
 	//HEADER
 	public final static String HEADER_VALUE_DATAHUB_CATALOG_VM = 	"vaughan-mills";
 	public final static String HEADER_VALUE_DATAHUB_CATALOG_MP = 	"metropolis-at-metrotown";
-	public final static String HEADER_VALUE_DATAHUB_LOCALE = 	"en-CA";
-	public final static String HEADER_VALUE_CLIENT_TOKEN_PRODUCTION = 	"YmRkYWVjMmQtYjJiOS00YzdhLTllZDktMDg1NmI2M2E1NjA1OjM1ODg4M2M0OTk3YWM5ZTY3Y2EwNDMwMTE4M2RjODIzOTBlNWVhMmEyYTBkODIwOTFiZTY0MDE1NjZkYWY4YmQ0MTQzMzg4MzQ4Yzg0YzhjNzMwM2EzNzQ3YWEzOTJiNDYwYmJjMGIyMWYzZWM5OTIwNjIyODYyMDBmZDM5NjRm"; //PRODUCTION
-	public final static String HEADER_VALUE_CLIENT_TOKEN_STAGING 	= 	"OGEyZDYyZTgtNzRmMS00ODNjLTg2YzMtYjQ0YWY1MDc5NWM1OjdjODhjZmY0ZTBjNDk5MTRiM2EzZTY3YjAzZGY1ZTE4ZDM5YTg0ZjM2YTE0ZjI0NWYzNDViN2JhNWY4YTE4YjJiMDUwMWIxOWRiYTExYzE1ZGIzNTJmNzhlM2EzYzI5MGM2MWQ4MmRlMGRjYTkyMzAzZTQ2NWRjZDU3NDJkNGRl"; //STAGING
+	public final static String HEADER_VALUE_DATAHUB_LOCALE = 		"en-CA";
+	public final static String HEADER_VALUE_CLIENT_TOKEN_PRODUCTION = 	"ZmVmZTYxZGItNjhkYy00NjUyLTg0MGYtYzZlNGU2NTgxMTFhOmI3YTlkNjBlOTM0NTQ5OTdkZTUwZTdlNzQ4YjFmNTU5M2Y3ZjY3ZDRmNDA2YjkwOWNiZmUxZTdiZmZjMDlhMWRmNTY3YzVjNzAwMGYzNTMyYzU5NDc3NTJiYTViMGRiOTk2YWI4NTJlNjIwNWNlYTliM2QyOWE1MTA0N2E4M2Iw"; //PRODUCTION
+	public final static String HEADER_VALUE_CLIENT_TOKEN_STAGING 	= 	"YmRkYWVjMmQtYjJiOS00YzdhLTllZDktMDg1NmI2M2E1NjA1OjM1ODg4M2M0OTk3YWM5ZTY3Y2EwNDMwMTE4M2RjODIzOTBlNWVhMmEyYTBkODIwOTFiZTY0MDE1NjZkYWY4YmQ0MTQzMzg4MzQ4Yzg0YzhjNzMwM2EzNzQ3YWEzOTJiNDYwYmJjMGIyMWYzZWM5OTIwNjIyODYyMDBmZDM5NjRm"; //STAGING
 	public final static String HEADER_VALUE_CONTENT_TYPE = 		"application/json";
+//	public final static String HEADER_VALUE_ACCEPT = 			"application/json";
+	public final static String HEADER_VALUE_ACCEPT = 			"application/json, application/vnd.kcp.place+json; version=1.0, application/vnd.kcp.view-all-content+json; version=1.0, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.icmp-event+json; version=1.0, application/vnd.kcp.icmp-announcement+json; version=1.0, application/vnd.kcp.blog-post+json; version=1.0, application/vnd.kcp.icmp-twitter+json; version=1.0, application/vnd.kcp.icmp-instagram+json; version=1.0, application/vnd.kcp.icmp-set-interests+json; version=1.0, application/vnd.kcp.icmp-movie+json; version=1.0";
 	public final static String HEADER_VALUE_CONTENT_TYPE_MESSAGE_PACK = 		"application/octet-stream";
-	public final static String HEADER_VALUE_ACCEPT = 			"application/json";
 
 
 	//TWITTER
@@ -79,7 +81,8 @@ public class Constants {
 	public static final String ARG_EXTERNAL_CODE = 			"external_code";
 	public static final String ARG_CAT_NAME = 				"cat_name";
 	public static final String ARG_CATEGORY_ACTIVITY_TYPE = "cat_activity_type";
-	public static final String ARG_ACTIVITY_TYPE = "activity_type";
+	public static final String ARG_ACTIVITY_TYPE = 			"activity_type";
+	public static final String ARG_MOVIE_ID = 				"movie_id";
 	public enum CategoryActivityType { SUBCATEGORY, STORE }
 
 
@@ -106,8 +109,14 @@ public class Constants {
 	public final static String PREF_KEY_WELCOME_MSG_DID_APPEAR = "welcome_message_did_appear";
 	public final static String PREF_KEY_ONBOARDING_DID_APPEAR = "onboarding_did_appear";
 
+
+	public final static long DURATION_DAY = 1000*60*60*24;
+
 	//PARKING
 	public final static String KEY_GUEST_SERVICE = "information-counter";
+
+	//BITMAP KEY
+	public final static String KEY_PARKING_BLURRED = "parking_image";
 
 
 }

@@ -4,6 +4,7 @@ package com.ivanhoecambridge.mall.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Movie;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -20,9 +21,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.activities.MoviesActivity;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.activities.DetailActivity;
 import com.ivanhoecambridge.mall.activities.InterestedCategoryActivity;
@@ -47,10 +51,12 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     private ArrayList<KcpContentPage> mKcpContentPagesNews;
     private SocialFeedViewPagerAdapter mSocialFeedViewPagerAdapter;
     private FavouriteInterface mFavouriteInterface;
+    private boolean showInstagramFeed = false;
 
     public NewsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> news) {
         mContext = context;
         mKcpContentPagesNews = news == null ? new ArrayList<KcpContentPage>() : news;
+        removeInstagram();
         removeInterestIfNeeded();
     }
 
@@ -58,6 +64,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         mKcpContentPagesNews.clear();
         mKcpContentPagesNews.addAll(kcpContentPages);
         removeInterestIfNeeded();
+        removeInstagram();
         notifyDataSetChanged();
     }
 
@@ -81,6 +88,18 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 if(KcpContentTypeFactory.getContentType(kcpContentPage) == KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST) {
                     mKcpContentPagesNews.remove(i);
                     break;
+                }
+            }
+        }
+    }
+
+    private void removeInstagram(){
+        if(!showInstagramFeed){
+            for(KcpContentPage kcpContentPage : mKcpContentPagesNews){
+                int contentType = KcpContentTypeFactory.getContentType(kcpContentPage);
+                if(contentType == KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM){
+                    mKcpContentPagesNews.remove(kcpContentPage);
+                    return;
                 }
             }
         }
@@ -155,6 +174,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         public TextView  tvAnnouncementTitle;
         public TextView  tvAnnouncementDate;
         public ImageView  ivFav;
+        public ImageView  ivSymbol;
 
         public AnnouncementViewHolder(View v) {
             super(v);
@@ -163,6 +183,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             tvAnnouncementTitle = (TextView)  v.findViewById(R.id.tvAncmtTitle);
             tvAnnouncementDate  = (TextView)  v.findViewById(R.id.tvAncmtDate);
             ivFav         = (ImageView)  v.findViewById(R.id.ivFav);
+            ivSymbol         = (ImageView)  v.findViewById(R.id.ivSymbol);
         }
     }
 
@@ -187,6 +208,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     public class InstagramFeedViewHolder extends MainViewHolder {
         public InstagramFeedViewHolder (View v, int socialFeedIcon, String socialFeedType){
             super(v);
+
             vpTw                 = (ViewPager) v.findViewById(R.id.vpSocialFeed);
             ivSocialFeedLogo     = (ImageView) v.findViewById(R.id.ivSocialFeedLogo);
             tvSocialFeedUser     = (TextView) v.findViewById(R.id.tvSocialFeedUser);
@@ -205,6 +227,8 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             case KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT:
                 return new AnnouncementViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_announcement, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_EVENT:
+                return new AnnouncementViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_announcement, parent, false));
+            case KcpContentTypeFactory.ITEM_TYPE_MOVIE:
                 return new AnnouncementViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_announcement, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST:
                 return new SetMyInterestViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_interest, parent, false));
@@ -296,6 +320,39 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                     ActivityAnimation.startActivityAnimation(mContext);
                 }
             });
+
+        } else if (holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_MOVIE) {
+
+            final AnnouncementViewHolder ancmtHolder = (AnnouncementViewHolder) holder;
+            Glide.with(mContext)
+                    .load(R.drawable.img_movies)
+                    .crossFade()
+                    .error(R.drawable.placeholder)
+                    .override(KcpUtility.getScreenWidth(mContext), (int) (KcpUtility.getScreenWidth(mContext) / KcpUtility.getFloat(mContext, R.dimen.ancmt_image_ratio)))
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .placeholder(R.drawable.placeholder)
+                    .into(ancmtHolder.ivAnnouncementLogo);
+
+
+            ancmtHolder.ivSymbol.setVisibility(View.VISIBLE);
+            ancmtHolder.tvAnnouncementTitle.setText(mContext.getString(R.string.movie_title));
+            ancmtHolder.tvAnnouncementDate.setText(mContext.getString(R.string.movie_desc));
+            ancmtHolder.ivFav.setVisibility(View.GONE);
+            ancmtHolder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, MoviesActivity.class);
+                    String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
+
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            (Activity)mContext,
+                            Pair.create((View)ancmtHolder.ivAnnouncementLogo, transitionNameImage));
+
+                    ActivityCompat.startActivityForResult((Activity) mContext, intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP, options.toBundle());
+                    ActivityAnimation.startActivityAnimation(mContext);
+                }
+            });
+
 
         } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST){
             SetMyInterestViewHolder intrstHolder = (SetMyInterestViewHolder) holder;

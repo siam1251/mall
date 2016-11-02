@@ -62,9 +62,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.exacttarget.etpushsdk.ETAnalytics;
-import com.exacttarget.etpushsdk.ETException;
-import com.exacttarget.etpushsdk.ETLocationManager;
 import com.exacttarget.etpushsdk.ETPush;
 import com.exacttarget.etpushsdk.util.EventBus;
 import com.google.gson.Gson;
@@ -95,6 +92,7 @@ import com.ivanhoecambridge.mall.managers.SidePanelManagers;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
 import com.ivanhoecambridge.mall.mappedin.CustomLocation;
+import com.ivanhoecambridge.mall.movies.MovieManager;
 import com.ivanhoecambridge.mall.onboarding.TutorialActivity;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
 import com.ivanhoecambridge.mall.parking.Parkings;
@@ -108,12 +106,14 @@ import com.mappedin.sdk.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, KcpApplication.EtPushListener{
 
     protected static final String TAG = "MainActivity";
+    private final static int WELCOME_MSG_RESET_TIMER_IN_HOUR = 12; //every this hour, it will try to show the welcome msg to help parking
 
     public final static int VIEWPAGER_PAGE_HOME = 0;
     public final static int VIEWPAGER_PAGE_DIRECTORY = 1;
@@ -153,7 +153,7 @@ public class MainActivity extends BaseActivity
 
     //ET Push
     private ETPush etPush;
-
+    public static MovieManager sMovieManager;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -166,6 +166,11 @@ public class MainActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //TESTING
+//        startActivity(new Intent(MainActivity.this, MoviesActivity.class));
+//        ActivityAnimation.startActivityAnimation(MainActivity.this);
+
 
         boolean didOnboardingAppear = KcpUtility.loadFromSharedPreferences(this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, false);
         if(!didOnboardingAppear) {
@@ -345,6 +350,7 @@ public class MainActivity extends BaseActivity
             initializeMapData();
             initializeParkingData();
             initializeSeachIndex();
+            initializeMovieData();
 
         }
     }
@@ -648,6 +654,23 @@ public class MainActivity extends BaseActivity
         parkingManager.downloadParkings();
     }
 
+    private void initializeMovieData(){
+        sMovieManager = new MovieManager(this, R.layout.layout_loading_item, new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                        break;
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        sMovieManager.downloadMovies();
+    }
+
 
     private void setUpLeftSidePanel(){
         //ACCOUNT
@@ -794,8 +817,8 @@ public class MainActivity extends BaseActivity
 
                 Log.v("Geofence", "Active Mall Set TRUE");
 
-//                long minStartTime = System.currentTimeMillis() - 1000*60*60*24;
-                long minStartTime = System.currentTimeMillis() - 1000; //TESTING
+                long minStartTime = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(WELCOME_MSG_RESET_TIMER_IN_HOUR);
+//                long minStartTime = System.currentTimeMillis() - WELCOME_MSG_RESET_TIMER_IN_HOUR * 60 * 60 * 1000;
                 long lastTimeRan = KcpUtility.loadLongFromCache(this, Constants.PREF_KEY_WELCOME_MSG_TIME_SAVER, -1);
 
                 boolean didWelcomeMessageAlreadyAppear = KcpUtility.loadFromSharedPreferences(this, Constants.PREF_KEY_WELCOME_MSG_DID_APPEAR, false);

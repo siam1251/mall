@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:id="@+id/svDetail"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.DetailActivity"
+    tools:showIn="@layout/activity_movie_detail"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <RelativeLayout
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                android:layout_marginTop="17dp"
+                android:id="@+id/tvShowtimesTitle"
+                app:fontFamily="@string/fontFamily_roboto_medium"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:textColor="@color/sub_category_txt"
+                android:text="@string/movie_showtimes_title"
+                />
+
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="17dp"
+                android:layout_below="@+id/tvShowtimesTitle"
+                android:id="@+id/tvShowtimes"
+                app:fontFamily="@string/fontFamily_roboto_regular"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:textColor="#787a86"
+                android:text="12:45 3:45 7:05 10:00 12:45 3:45 7:05 10:00 12:45 3:45 7:05 10:00"
+                />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_alignParentBottom="true"
+            style="@style/separater"
+            />
+        
+        <LinearLayout
+            android:id="@+id/llWatchTrailer"
+            style="@style/SelectableItemForegroundNormal"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.ivanhoecambridge.mall.views.ThemeColorImageView
+                ThemedImageView:filterColor="#ee3f33"
+                android:src="@drawable/icn_view_trailer"
+                android:layout_width="24dp"
+                android:layout_height="16.5dp"
+                />
+
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                app:fontFamily="@string/fontFamily_roboto_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/movie_watch_trailer"
+                android:layout_marginLeft="14dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="18dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                app:fontFamily="@string/fontFamily_roboto_medium"
+                android:text="@string/movie_synopsis"
+                android:textSize="16sp"
+                android:textColor="@color/sub_category_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                android:id="@+id/tvMovieSynopsis"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                app:fontFamily="@string/fontFamily_roboto_regular"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="18dp"
+                android:text="In the midst of veteran con man Nicky’s latest scheme, a woman from his past - now an accomplished femme fatale - shows up and throws his plans for a loop."
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_alignParentBottom="true"
+                style="@style/separater"
+                />
+
+            <LinearLayout
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:layout_marginBottom="20dp">
+
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:textSize="14sp"
+                    android:layout_width="90dp"
+                    android:textColor="@color/sub_category_txt"
+                    android:layout_height="wrap_content"
+                    android:text="@string/movie_starring"/>
+
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvMovieStarring"
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    android:textSize="14sp"
+                    android:text="Will Smith, Margot Robbie, Rodrigo Santoro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
+
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:textSize="14sp"
+                    android:layout_width="90dp"
+                    android:textColor="@color/sub_category_txt"
+                    android:layout_height="wrap_content"
+                    android:text="@string/movie_directed_by"/>
+
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvMovieDirectors"
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    android:textSize="14sp"
+                    android:text="Glenn Ficarra, John Requa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:layout_marginBottom="25dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:textSize="14sp"
+                    android:layout_width="90dp"
+                    android:textColor="@color/sub_category_txt"
+                    android:layout_height="wrap_content"
+                    android:text="@string/movie_advisory"/>
+
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvMovieAdvisory"
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    android:textSize="14sp"
+                    android:text="PG - Violence, Not Recommended for Young Children, Tobacco Use"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_alignParentBottom="true"
+                style="@style/separater"
+                />
+
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
