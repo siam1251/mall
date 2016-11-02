@@ -39,6 +39,7 @@
 
     <item name="ancmt_image_ratio" format="float" type="dimen">1.6</item>
     <item name="ancmt_image_ratio_square" format="float" type="dimen">1</item>
+    <item name="movie_detail_top_layout_ratio" format="float" type="dimen">1.5</item>
 
 
     <!--deal card-->

@@ -25,6 +25,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.MoviesRecyclerViewAdapter;
@@ -37,10 +39,11 @@ import com.ivanhoecambridge.mall.movies.models.MovieDetail;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.CTA;
 import com.ivanhoecambridge.mall.views.MovieRecyclerItemDecoration;
-import com.ivanhoecambridge.mall.views.NewsRecyclerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import constants.MallConstants;
 
 import static com.ivanhoecambridge.mall.adapters.MoviesRecyclerViewAdapter.ITEM_TYPE_THEATER_VIEWER;
 
@@ -68,7 +71,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
     }
 
     private void init(){
-        setContentView(R.layout.activity_detail_movie);
+        setContentView(R.layout.activity_movie);
         mParentView = (ViewGroup) findViewById(R.id.svDetail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -194,6 +197,17 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Intent intent = new Intent();
+                            intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
+                            ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlaceByName(MallConstants.CINEMA_NAME);
+                            String externalCode = null;
+                            if(kcpPlaces.size() > 0) {
+                                externalCode = kcpPlaces.get(0).getExternalCode();
+                            }
+                            if(externalCode != null) {
+                                setResult(Integer.valueOf(externalCode), intent);
+                                onBackPressed();
+                            }
                         }
                     }, true);
 
@@ -207,7 +221,21 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Intent intent = new Intent();
 
+                            ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlaceByName(MallConstants.CINEMA_NAME);
+                            String storeParking = null;
+                            String externalCode = null;
+                            if(kcpPlaces.size() > 0) {
+                                storeParking = kcpPlaces.get(0).location.getParking();
+                                externalCode = kcpPlaces.get(0).getExternalCode();
+                            }
+                            if(storeParking != null) {
+                                intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_SHOW_PARKING_SPOT);
+                                intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, storeParking);
+                                setResult(Integer.valueOf(externalCode), intent);
+                                onBackPressed();
+                            }
                         }
                     }, true);
 
@@ -303,12 +331,13 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
 
     private void setRecyclerView(){
         ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
+        LinearLayout llViewShowtimes = (LinearLayout) findViewById(R.id.llViewShowtimes);
         RecyclerView rvMovies = (RecyclerView) findViewById(R.id.rvMovies);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvMovies.setLayoutManager(linearLayoutManager);
 
-        ArrayList<MovieDetail> movieDetails = (ArrayList) MovieManager.sMovies.getMovie();
-        if(movieDetails != null) {
+        ArrayList<MovieDetail> movieDetails = (ArrayList) MovieManager.sMovies.getMovies();
+        if(movieDetails.size() != 0) {
             mMoviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(this, null, movieDetails, ITEM_TYPE_THEATER_VIEWER);
             rvMovies.setAdapter(mMoviesRecyclerViewAdapter);
             rvMovies.setNestedScrollingEnabled(false);
@@ -317,8 +346,10 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
             rvMovies.addItemDecoration(itemDecoration);
 
             pb.setVisibility(View.GONE);
+            llViewShowtimes.setVisibility(View.VISIBLE);
         } else {
             MainActivity.sMovieManager.setMovieInterface(this);
+            llViewShowtimes.setVisibility(View.GONE);
         }
     }
 
@@ -357,7 +388,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
         try {
             if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
                 if(data == null) {
-                    onFinish(resultCode);
+//                    onFinish(resultCode);
                 } else {
                     int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
                     if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){

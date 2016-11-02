@@ -53,12 +53,12 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/detail_social_sharing_bg"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        android:background="@color/detail_social_sharing_bg"
 
         <include
-            layout="@layout/content_detail_movie" />
+            layout="@layout/content_movie" />
 
     </android.support.v4.widget.NestedScrollView>
 

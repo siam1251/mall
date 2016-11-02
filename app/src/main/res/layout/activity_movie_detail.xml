@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/ablDetail"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:theme="@style/AppTheme.PopupOverlay"
+        >
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/ctlDetail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!--<com.ivanhoecambridge.mall.views.TopCropImageView-->
+                <ImageView
+                    android:id="@+id/ivBlur"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitStart"
+                    />
+
+                <android.support.v7.widget.CardView
+                    android:layout_margin="10dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/cvMovieImage"
+                    android:layout_width="145dp"
+                    android:layout_height="217.5dp"
+                    app:cardCornerRadius="4dp"
+                    style="@style/SelectableItemForegroundNormal"
+                    android:elevation="3dp"
+                    app:cardBackgroundColor="@color/black"
+                    >
+
+                    <ImageView
+                        android:transitionName="@string/transition_movie_poster"
+                        android:layout_gravity="center"
+                        android:id="@+id/ivDetailImage"
+                        android:layout_width="145dp"
+                        android:layout_height="217.5dp"
+                        android:src="@drawable/placeholder_movie"
+                        />
+
+                </android.support.v7.widget.CardView>
+
+                <LinearLayout
+                    android:layout_margin="10dp"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:layout_toRightOf="@+id/cvMovieImage"
+                    android:layout_marginLeft="14dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                        app:fontFamily="@string/fontFamily_roboto_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="24sp"
+                        android:id="@+id/tvMovieTitle"
+                        android:text="The Amazing Adventures of Focus Man"
+                        android:layout_marginBottom="10dp"
+                        />
+
+
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                        android:gravity="center_vertical"
+                        android:background="@drawable/rectangle_movie_rating"
+                        app:fontFamily="@string/fontFamily_roboto_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvMovieRating"
+                        android:text="PG"
+                        android:padding="3.5dp"
+                        android:textSize="11sp"
+                        android:textColor="@color/white"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="10dp"
+                        />
+
+
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                        android:gravity="center_vertical"
+                        app:fontFamily="@string/fontFamily_roboto_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvMovieRuntime"
+                        android:text="2hr 4min"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        />
+
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                        android:gravity="center_vertical"
+                        app:fontFamily="@string/fontFamily_roboto_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvMovieGenre"
+                        android:text="17:20 19:55 22:30"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:layout_marginBottom="3.5dp"
+                        />
+
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                        android:gravity="center_vertical"
+                        app:fontFamily="@string/fontFamily_roboto_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvMovieLang"
+                        android:text="17:20 19:55 22:30"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_marginBottom="3.5dp"
+                        />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/backdrop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/placeholder_rectangle_theme"/>
+
+            <include
+                layout="@layout/layout_toolbar_mall_hour" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/detail_social_sharing_bg"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+        <include
+            layout="@layout/content_movie_detail" />
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

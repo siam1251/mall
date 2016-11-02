@@ -1,6 +1,5 @@
 package com.ivanhoecambridge.mall.movies.models;
 
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -17,10 +16,17 @@ public class Movies {
     @ElementList(entry = "movie", inline = true)
     private List<MovieDetail> movieDetail;
 
-    public List<MovieDetail> getMovie ()
+    public List<MovieDetail> getMovies()
     {
         if(movieDetail == null) return new ArrayList<MovieDetail>();
         return movieDetail;
+    }
+
+    public MovieDetail getMovieDetailWithId(String movieId){
+        for(MovieDetail movieDetail : getMovies()) {
+            if(movieDetail.getMovie_id().equals(movieId)) return movieDetail;
+        }
+        return null;
     }
 
     public void setMovie (List<MovieDetail> movie)

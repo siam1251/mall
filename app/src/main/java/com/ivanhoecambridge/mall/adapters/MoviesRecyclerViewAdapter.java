@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.MovieDetailActivity;
-import com.ivanhoecambridge.mall.activities.MoviesActivity;
-import com.ivanhoecambridge.mall.activities.ShowtimesActivity;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.movies.models.House;
 import com.ivanhoecambridge.mall.movies.models.MovieDetail;
@@ -54,12 +60,14 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public class TheaterViewer extends MainViewHolder {
+        public CardView cvMoviePoster;
         public ImageView ivMoviePoster;
         public TextView tvMovieTitle;
         public TextView tvMovieRating;
 
         public TheaterViewer(View itemView) {
             super(itemView);
+            cvMoviePoster = (CardView) itemView.findViewById(R.id.cvMoviePoster);
             ivMoviePoster = (ImageView) itemView.findViewById(R.id.ivMoviePoster);
             tvMovieTitle = (TextView) itemView.findViewById(R.id.tvMovieTitle);
             tvMovieRating = (TextView) itemView.findViewById(R.id.tvMovieRating);
@@ -67,6 +75,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public class ShowtimesViewer extends MainViewHolder {
+        public CardView cvMoviePoster;
         public ImageView ivMoviePoster;
         public TextView tvMovieTitleRating;
         public TextView tvMovieLengthGenre;
@@ -74,6 +83,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
 
         public ShowtimesViewer(View itemView) {
             super(itemView);
+            cvMoviePoster = (CardView) itemView.findViewById(R.id.cvMoviePoster);
             ivMoviePoster = (ImageView) itemView.findViewById(R.id.ivMoviePoster);
             tvMovieTitleRating = (TextView) itemView.findViewById(R.id.tvMovieTitleRating);
             tvMovieLengthGenre = (TextView) itemView.findViewById(R.id.tvMovieLengthGenre);
@@ -100,7 +110,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
             if (holder instanceof TheaterViewer) {
                 final TheaterViewer theaterViewer = (TheaterViewer) holder;
                 //Poster
-                String photoUrl = movieDetail.getPhotoUrl();
+                String photoUrl = movieDetail.getLargePhotoUrl();
                 if(!photoUrl.equals("")) {
                     Glide.with(mContext)
                             .load(photoUrl)
@@ -108,6 +118,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
                             .centerCrop()
                             .placeholder(R.drawable.icn_movies_placeholder)
                             .into(theaterViewer.ivMoviePoster);
+
                 }
 
                 //Title
@@ -116,13 +127,13 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
 
                 //Rating
                 String rating = movieDetail.getMovieRating(MallConstants.RATINGS_PROVINCE_CODE);
-                rating = getStylishRatings(rating);
+                rating = movieDetail.getStylishRatings(rating);
                 theaterViewer.tvMovieRating.setText(rating);
 
                 theaterViewer.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startMovieDetailActivity(movieDetail.getMovie_id());
+                        startMovieDetailActivity(theaterViewer.cvMoviePoster, movieDetail.getMovie_id());
                         ActivityAnimation.startActivityAnimation(mContext);
                     }
                 });
@@ -131,7 +142,8 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
             } else if(holder instanceof ShowtimesViewer){
                 final ShowtimesViewer showtimesViewer = (ShowtimesViewer) holder;
                 //Poster
-                String photoUrl = movieDetail.getPhotoUrl();
+//                String photoUrl = movieDetail.getHighPhotoUrl();
+                String photoUrl = movieDetail.getLargePhotoUrl();
                 if(!photoUrl.equals("")) {
                     Glide.with(mContext)
                             .load(photoUrl)
@@ -144,7 +156,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
                 //Title and Rating
                 String title = movieDetail.getMovieTitle();
                 String rating = movieDetail.getMovieRating(MallConstants.RATINGS_PROVINCE_CODE);
-                rating = getStylishRatings(rating);
+                rating = movieDetail.getStylishRatings(rating);
 
                 String movieTitleRating = title + " " + rating;
                 showtimesViewer.tvMovieTitleRating.setText(movieTitleRating);
@@ -165,7 +177,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
                 showtimesViewer.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startMovieDetailActivity(movieDetail.getMovie_id());
+                        startMovieDetailActivity(showtimesViewer.cvMoviePoster, movieDetail.getMovie_id());
                         ActivityAnimation.startActivityAnimation(mContext);
                     }
                 });
@@ -175,24 +187,22 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void startMovieDetailActivity(String movieId){
+    public void startMovieDetailActivity(View v, String movieId){
+
         Intent intent = new Intent(mContext, MovieDetailActivity.class);
         intent.putExtra(Constants.ARG_MOVIE_ID, movieId);
-        ((Activity) mContext).startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
+
+        String transitionNameImage = mContext.getResources().getString(R.string.transition_movie_poster);
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                (Activity)mContext,
+                Pair.create(v, transitionNameImage));
+
+        ActivityCompat.startActivityForResult((Activity) mContext, intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP, options.toBundle());
         ActivityAnimation.startActivityAnimation(mContext);
     }
 
-    /**
-     *
-     * @param ratings
-     * @return ratings will have round brackets ex) 14-A will become (14-A)
-     */
-    public String getStylishRatings(String ratings){
-        if(ratings.equals("")) return ratings;
-        else {
-            return "(" + ratings + ")";
-        }
-    }
+
 
     @Override
     public int getItemCount() {

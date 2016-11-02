@@ -57,6 +57,9 @@ public class MovieDetail {
     @ElementList
     private List<String> actors;
 
+    @ElementList
+    private List<String> directors;
+
     @Element
     private Ratings ratings;
 
@@ -210,6 +213,16 @@ public class MovieDetail {
         this.actors = actors;
     }
 
+    public List<String> getDirectors()
+    {
+        return directors;
+    }
+
+    public void setDirectors (List<String> directors)
+    {
+        this.directors = directors;
+    }
+
     public Ratings getRating ()
     {
         if(ratings == null) return new Ratings();
@@ -248,17 +261,24 @@ public class MovieDetail {
     }
 
 
-    public String getPhotoUrl(){
-        List<String> hiPhotos = getHighPhotos();
-        List<String> photos = getPhotos();
+    public String getLargePhotoUrl(){
+        return getPhoto(getLargePhotos());
+    }
 
+    public String getHighPhotoUrl(){
+        return getPhoto(getHighPhotos());
+    }
+
+    private String getPhoto(List<String> downloadedPhotos){
+        List<String> photos = getPhotos();
         String photoUrl = "";
-        if(hiPhotos != null && hiPhotos.size() > 0) {
-            photoUrl = hiPhotos.get(0);
+        if(downloadedPhotos != null && downloadedPhotos.size() > 0) {
+            photoUrl = downloadedPhotos.get(0);
         } else if (photos != null && photos.size() > 0){
             photoUrl = photos.get(0);
         }
         return photoUrl;
+
     }
 
     public String getMovieTitle(){
@@ -289,10 +309,14 @@ public class MovieDetail {
             try {
                 int runTimeInt = Integer.parseInt(runTime);
                 //convert 118 to 1hr 58min
-                int hours = (int)runTimeInt/60;
-                int minutes = (int)runTimeInt%60;
+                int hours = (int)runTimeInt / 60;
+                int minutes = (int)runTimeInt % 60;
 
-                return hours + "hr " + minutes + "min";
+                String hoursInFormat = hours == 0 ? "" : hours + "hr ";
+                String minutesInFormat = minutes == 0 ? "" : minutes + "min ";
+
+
+                return hoursInFormat + minutesInFormat;
             } catch(NumberFormatException nfe) {
                 logger.error(nfe);
             }
@@ -304,12 +328,36 @@ public class MovieDetail {
      * @return return genres in format ex) Action/Adventure, Drama
      */
     public String getGenresInFormat(){
-        String genres = "";
-        for(String genre : getGenres()){
-            if(genres.equals(""))genres = genre;
-            else genres = genres + ", " + genre;
+        return convertListStringToSeriesWithComma(getGenres());
+    }
+
+    /**
+     *
+     * @param ratings
+     * @return ratings will have round brackets ex) 14-A will become (14-A)
+     */
+    public String getStylishRatings(String ratings){
+        if(ratings.equals("")) return ratings;
+        else {
+            return "(" + ratings + ")";
         }
-        return genres;
+    }
+
+    public String getActorsInFormat(){
+        return convertListStringToSeriesWithComma(getActors());
+    }
+
+    public String getDirectorsInFormat(){
+        return convertListStringToSeriesWithComma(getDirectors());
+    }
+
+    public String convertListStringToSeriesWithComma(List<String> listStrings){
+        String series = "";
+        for(String string : listStrings) {
+            if(series.equals("")) series = string;
+            else series = string + ", " + string;
+        }
+        return series;
     }
 
 }

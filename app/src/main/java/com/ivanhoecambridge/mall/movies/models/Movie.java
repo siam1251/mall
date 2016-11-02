@@ -19,7 +19,8 @@ import java.util.List;
 @Root(strict = false)
 public class Movie
 {
-    @ElementList
+//    @ElementList(entry = "showtimes", required = false, inline = true)
+//    @ElementList(entry = "showtimes", required = false)
     private List<String> showtimes;
 
     public List<String> getShowtimes ()

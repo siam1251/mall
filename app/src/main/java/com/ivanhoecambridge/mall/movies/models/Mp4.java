@@ -1,5 +1,6 @@
 package com.ivanhoecambridge.mall.movies.models;
 
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
@@ -8,10 +9,14 @@ import org.simpleframework.xml.Root;
 
 @Root(strict = false)
 public class Mp4 {
+
+    @Element
     private String med;
 
+    @Element
     private String high;
 
+    @Element
     private String low;
 
     public String getMed ()
@@ -19,6 +24,7 @@ public class Mp4 {
         if(med == null) return "";
         return med;
     }
+
 
     public void setMed (String med)
     {
@@ -51,5 +57,13 @@ public class Mp4 {
     public String toString()
     {
         return "ClassPojo [med = "+med+", high = "+high+", low = "+low+"]";
+    }
+
+    public String getMovieUrlHighestQuality(){
+        String url = getHigh();
+        if(url.equals("")) url = getMed();
+        if(url.equals("")) url = getLow();
+
+        return url;
     }
 }

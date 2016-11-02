@@ -4,8 +4,8 @@ public class Constants {
 
 
 
-//	public final static boolean IS_APP_IN_PRODUCTION = true;
-	public final static boolean IS_APP_IN_PRODUCTION = false;
+	public final static boolean IS_APP_IN_PRODUCTION = true;
+//	public final static boolean IS_APP_IN_PRODUCTION = false;
 
 	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				1000;
 //	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				500;
@@ -114,6 +114,9 @@ public class Constants {
 
 	//PARKING
 	public final static String KEY_GUEST_SERVICE = "information-counter";
+
+	//BITMAP KEY
+	public final static String KEY_PARKING_BLURRED = "parking_image";
 
 
 }

@@ -15,7 +15,6 @@ import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.movies.MovieManager;
 import com.ivanhoecambridge.mall.movies.models.House;
 import com.ivanhoecambridge.mall.movies.models.MovieDetail;
-import com.ivanhoecambridge.mall.movies.models.Theaters;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class ShowtimesActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(linearLayoutManager);
 
-        ArrayList<MovieDetail> movieDetails = (ArrayList) MovieManager.sMovies.getMovie();
+        ArrayList<MovieDetail> movieDetails = (ArrayList) MovieManager.sMovies.getMovies();
         House house = (House) MovieManager.sTheaters.getHouse();
         if(movieDetails != null) {
             mMoviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(this, house, movieDetails, ITEM_TYPE_SHOWTIMES_VIEWER);
@@ -86,7 +85,6 @@ public class ShowtimesActivity extends AppCompatActivity {
         try {
             if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
                 if(data == null) {
-                    onFinish(resultCode);
                 } else {
                     int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
                     if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){

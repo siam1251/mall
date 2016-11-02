@@ -71,6 +71,7 @@
     <string name="transition_news_expiry_date">transition expiry date</string>
     <string name="transition_fav">transition fav</string>
     <string name="transition_category_name">transition category name</string>
+    <string name="transition_movie_poster">transition movie poster</string>
 
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non ante dictum, tempor orci nec, ultricies urna. Donec a consequat leo. Aliquam commodo venenatis nisi tempor lacinia. Aenean scelerisque, diam eu fringilla tempus, risus nisl dignissim nisl, at pharetra arcu orci et erat. Nullam pharetra gravida neque, sit amet accumsan nisl ornare volutpat. Nulla mauris turpis, consectetur consequat neque eget, egestas tristique felis. Fusce et sodales orci. Duis odio purus, consectetur a pulvinar a, ultrices mollis tortor. Duis efficitur posuere malesuada. Donec fringilla aliquet metus id faucibus. Aliquam erat volutpat. Integer felis ante, pharetra vel nibh in, blandit pulvinar enim. Duis sed eleifend lectus, eu accumsan risus. Maecenas tincidunt dignissim dictum. Fusce velit nibh, pellentesque at finibus sed, fringilla id ipsum.
 
@@ -288,6 +289,11 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="movie_find_on_map">Find On Map</string>
     <string name="movie_showtimes_title">Showtimes</string>
     <string name="movie_detail_title">Movie Details</string>
+    <string name="movie_watch_trailer">Watch Trailer</string>
+    <string name="movie_synopsis">Synopsis</string>
+    <string name="movie_starring">Starring:</string>
+    <string name="movie_directed_by">Directed by:</string>
+    <string name="movie_advisory">Advisory:</string>
 
     <!---->
 </resources>

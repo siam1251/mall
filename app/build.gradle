@@ -27,6 +27,9 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+
+        renderscriptTargetApi 18
+        renderscriptSupportModeEnabled true
     }
     buildTypes {
         release {

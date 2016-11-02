@@ -54,6 +54,7 @@ public class MovieManager {
     public static Theaters sTheaters = new Theaters();
     public static Movies sMovies = new Movies();
     private MovieInterface mMovieInterface;
+    private boolean mIsDownloadFailed = false;
 
     public MovieService getKcpService(){
         ServiceFactory serviceFactory = new ServiceFactory();
@@ -70,6 +71,7 @@ public class MovieManager {
 
     public void setMovieInterface(MovieInterface movieInterface){
         mMovieInterface = movieInterface;
+        if(mIsDownloadFailed) downloadMovies();
     }
 
     public void downloadMovies(){
@@ -108,6 +110,7 @@ public class MovieManager {
             @Override
             public void onFailure(Call<Theaters> call, Throwable t) {
                 handleState(DOWNLOAD_FAILED);
+                logger.error(t);
             }
         });
     }
@@ -174,9 +177,11 @@ public class MovieManager {
 //                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, true);
                 break;
             case DOWNLOAD_FAILED:
+                mIsDownloadFailed = true;
 //                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
                 break;
             case DOWNLOAD_COMPLETE:
+                mIsDownloadFailed = false;
 //                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
                 break;
             case DATA_ADDED:

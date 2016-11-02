@@ -108,8 +108,8 @@ public class InfoFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 if(!ParkingManager.isParkingLotSaved(getActivity())){
+//                    Utility.addBlurredBitmapToMemoryCache(mView, Constants.KEY_PARKING_BLURRED);
                     final Intent intent = new Intent (getActivity(), ParkingActivity.class);
-                    intent.putExtra("image", "bitmap.png");
                     getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
                 } else {
 
