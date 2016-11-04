@@ -1,5 +1,9 @@
 package com.ivanhoecambridge.mall.factory;
 
+import android.content.Context;
+
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
+import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.user.AccountManager;
 
@@ -15,10 +19,6 @@ public class HeaderFactory {
     private static final String HEADER_KEY_CONTENT_TYPE     = "Content-Type";
     private static final String HEADER_KEY_ACCEPT           = "Accept";
     private static final String HEADER_KEY_AUTHORIZATION    = "Authorization";
-
-    private static final String TOKEN_PREFIX_BEARER    = "Bearer ";
-
-
 
     //------------------------------ END POINT ------------------------------
 //    public static String HEADER_VALUE_DATAHUB_CATALOG = Constants.HEADER_VALUE_DATAHUB_CATALOG_VM; //CHANGE THE END POINT to VM
@@ -56,11 +56,13 @@ public class HeaderFactory {
     //MOVIES
     public final static String MOVIE_URL_BASE = "http://ivanhoe.webservice.cinema-source.com/";
 
-
     public static String MALL_NAME = "Vaughan Mills";
     public static String MAP_VENUE_NAME = "Vaughan Mills";
 //    public static String MALL_NAME = "Metropolis Metrotown"; //should go with HEADER_VALUE_DATAHUB_CATALOG initially
 //    public static String MAP_VENUE_NAME = "Metropolis";
+
+
+
 
     private static HashMap<String, String> mHeaders;
     public static HashMap<String, String> getHeaders(){
@@ -98,32 +100,11 @@ public class HeaderFactory {
         mHeaders.put(HEADER_KEY_DATAHUB_CATALOG,    HEADER_VALUE_DATAHUB_CATALOG);
         mHeaders.put(HEADER_KEY_DATAHUB_LOCALE,     Constants.HEADER_VALUE_DATAHUB_LOCALE);
         mHeaders.put(HEADER_KEY_CLIENT_TOKEN,       getClientToken());
-        mHeaders.put(HEADER_KEY_AUTHORIZATION,      getAuthorizationToken());
+        mHeaders.put(HEADER_KEY_AUTHORIZATION,      KcpAccount.getInstance().getUserTokenWithBearer());
 
         //below two headers are specially needed for view_all_content
         mHeaders.put(HEADER_KEY_CONTENT_TYPE,       Constants.HEADER_VALUE_CONTENT_TYPE);
         mHeaders.put(HEADER_KEY_ACCEPT,             Constants.HEADER_VALUE_ACCEPT);
-    }
-
-    //TODO: implement save and get auth token here
-    private static String getAuthorizationToken() {
-        if(!AccountManager.mUserToken.equals("")) {
-            return TOKEN_PREFIX_BEARER + AccountManager.mUserToken;
-        }
-        return AccountManager.mUserToken;
-    }
-
-    public static HashMap<String, String> getTokenHeader(){
-
-        HashMap<String, String> headers = new HashMap<String, String>();
-
-        headers.put(HEADER_KEY_DATAHUB_CATALOG,    HEADER_VALUE_DATAHUB_CATALOG);
-        headers.put(HEADER_KEY_DATAHUB_LOCALE,     Constants.HEADER_VALUE_DATAHUB_LOCALE);
-        headers.put(HEADER_KEY_CLIENT_TOKEN,       getClientToken());
-        headers.put(HEADER_KEY_CONTENT_TYPE,       Constants.HEADER_VALUE_CONTENT_TYPE);
-        headers.put(HEADER_KEY_ACCEPT,             Constants.HEADER_VALUE_ACCEPT);
-
-        return headers;
     }
 
     public static String getClientToken(){

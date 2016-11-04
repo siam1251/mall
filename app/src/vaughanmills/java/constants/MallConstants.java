@@ -18,5 +18,4 @@ public class MallConstants {
 
     public static String RATINGS_PROVINCE_CODE = "on-rating";
     public static String CINEMA_NAME = "SilverCity";
-
 }

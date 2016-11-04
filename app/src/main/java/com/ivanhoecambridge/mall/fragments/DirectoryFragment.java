@@ -27,6 +27,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategoryRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.SubCategoryActivity;
@@ -54,10 +55,12 @@ public class DirectoryFragment extends BaseFragment {
     private MallDirectoryRecyclerViewAdapter mMallDirectoryRecyclerViewAdapter;
 
     private ArrayList<KcpPlaces> mKcpPlacesFiltered;
-    private ArrayList<Integer> mPlaceByKeyword;
+    private ArrayList<Integer> mPlaceByBrand;
+    private ArrayList<Integer> mPlaceByTag;
     private ArrayList<KcpCategories> mKcpCategories;
 
-    private Thread mKeywordThread;
+    private Thread mBrandThread;
+    private Thread mTagThread;
     private Thread mCategoryThread;
 
 
@@ -332,7 +335,8 @@ public class DirectoryFragment extends BaseFragment {
     private void setupRecyclerView(){
 
         //initialize
-        if(mKeywordThread != null) mKeywordThread.interrupt();
+        if(mBrandThread != null) mBrandThread.interrupt();
+        if(mTagThread != null) mTagThread.interrupt();
         if(mCategoryThread != null) mCategoryThread.interrupt();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -350,25 +354,51 @@ public class DirectoryFragment extends BaseFragment {
             }
         }
 
-        mKeywordThread = new Thread(new Runnable() {
+        mBrandThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 //KEYWORD
-                mPlaceByKeyword = new ArrayList<>();
+                mPlaceByBrand = new ArrayList<>();
+                if(!mSearchString.equals("")) {
+                    for (Map.Entry<String, ArrayList<Integer>> entry : IndexManager.sBrandsMap.entrySet()) {
+                        String keyword = entry.getKey();
+                        ArrayList<Integer> value = entry.getValue();
+                        if(keyword.toLowerCase().contains(mSearchString.toLowerCase())) {
+                            if(mPlaceByBrand == null) mPlaceByBrand = new ArrayList<>();
+                            mPlaceByBrand.removeAll(value);
+                            mPlaceByBrand.addAll(value);
+                        }
+                    }
+                }
+                sortKcpPlaces(mPlaceByBrand);
+                createOrUpdateAdapter();
+            }
+        });
+        mBrandThread.start();
+
+
+        mTagThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //KEYWORD
+                mPlaceByTag = new ArrayList<>();
                 if(!mSearchString.equals("")) {
                     for (Map.Entry<String, ArrayList<Integer>> entry : IndexManager.sTagsMap.entrySet()) {
                         String keyword = entry.getKey();
                         ArrayList<Integer> value = entry.getValue();
                         if(keyword.toLowerCase().contains(mSearchString.toLowerCase())) {
-                            if(mPlaceByKeyword == null) mPlaceByKeyword = new ArrayList<>();
-                            mPlaceByKeyword.addAll(value);
+                            if(mPlaceByTag == null) mPlaceByTag = new ArrayList<>();
+                            mPlaceByTag.removeAll(value);
+                            mPlaceByTag.addAll(value);
                         }
                     }
                 }
+                sortKcpPlaces(mPlaceByTag);
                 createOrUpdateAdapter();
             }
         });
-        mKeywordThread.start();
+        mTagThread.start();
+
 
         mCategoryThread = new Thread(new Runnable() {
             @Override
@@ -381,11 +411,13 @@ public class DirectoryFragment extends BaseFragment {
                         String keyword = entry.getKey();
                         ArrayList<Integer> value = entry.getValue();
                         if(keyword.toLowerCase().contains(mSearchString.toLowerCase())) {
+                            categoryByName.removeAll(value);
                             categoryByName.addAll(value);
                         }
                     }
                 }
 
+                //Making sure the categories exist within the kcp data
                 mKcpCategories = new ArrayList<KcpCategories>();
                 for(int categoryId : categoryByName) {
                     KcpCategories categoryFound = KcpCategoryRoot.getInstance().getCategoryWithId(categoryId);
@@ -394,6 +426,7 @@ public class DirectoryFragment extends BaseFragment {
                         mKcpCategories.add(categoryFound);
                     }
                 }
+                sortKcpCategories(mKcpCategories);
                 createOrUpdateAdapter();
             }
         });
@@ -406,15 +439,24 @@ public class DirectoryFragment extends BaseFragment {
             @Override
             public void run() {
 //                if(mMallDirectoryRecyclerViewAdapter == null) {
-                    mMallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), mKcpPlacesFiltered, mPlaceByKeyword, mKcpCategories, mSearchString);
-//                    mMallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), new ArrayList<KcpPlaces>(), mPlaceByKeyword, mKcpCategories, mSearchString); //testing
+
+                    mMallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), mKcpPlacesFiltered, mPlaceByBrand, mPlaceByTag, mKcpCategories, mSearchString);
+//                    mMallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), new ArrayList<KcpPlaces>(), mPlaceByBrand, mKcpCategories, mSearchString); //testing
                     mMainActivity.rvMallDirectory.setAdapter(mMallDirectoryRecyclerViewAdapter);
 //                } else {
-//                    mMallDirectoryRecyclerViewAdapter.updateData(mKcpPlacesFiltered, mPlaceByKeyword, mKcpCategories, mSearchString);
-//                    mMallDirectoryRecyclerViewAdapter.updateData(new ArrayList<KcpPlaces>(), mPlaceByKeyword, mKcpCategories, mSearchString);
+//                    mMallDirectoryRecyclerViewAdapter.updateData(mKcpPlacesFiltered, mPlaceByBrand, mKcpCategories, mSearchString);
+//                    mMallDirectoryRecyclerViewAdapter.updateData(new ArrayList<KcpPlaces>(), mPlaceByBrand, mKcpCategories, mSearchString);
 //                }
             }
         });
+    }
+
+    private void sortKcpPlaces(ArrayList<Integer> listToSort){
+        KcpUtility.sortPlaceListById(listToSort);
+    }
+
+    private void sortKcpCategories(ArrayList<KcpCategories> listToSort){
+        KcpUtility.sortCategoryListById(listToSort);
     }
 
 }

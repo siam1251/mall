@@ -71,6 +71,7 @@ public class ParkingManager {
 
             @Override
             public void onFailure(Call<Parkings> call, Throwable t) {
+                logger.error(t);
                 handleState(DOWNLOAD_FAILED);
             }
         });

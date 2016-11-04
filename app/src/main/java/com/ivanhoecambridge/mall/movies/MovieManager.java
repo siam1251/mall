@@ -99,18 +99,17 @@ public class MovieManager {
                             movieIds = movieIds == "" ? movieId : movieIds + ", " + movieId;
                         }
                         if(!movieIds.equals(""))downloadMovieDetails(movieIds);
-
-//                        handleState(DOWNLOAD_COMPLETE);
                     } else handleState(DOWNLOAD_FAILED);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    logger.error(e);
                 }
             }
 
             @Override
             public void onFailure(Call<Theaters> call, Throwable t) {
-                handleState(DOWNLOAD_FAILED);
                 logger.error(t);
+                handleState(DOWNLOAD_FAILED);
             }
         });
     }
@@ -137,6 +136,7 @@ public class MovieManager {
 
             @Override
             public void onFailure(Call<Movies> call, Throwable t) {
+                logger.error(t);
                 handleState(DOWNLOAD_FAILED);
             }
         });

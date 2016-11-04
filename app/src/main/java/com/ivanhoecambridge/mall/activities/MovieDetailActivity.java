@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -16,6 +17,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -27,6 +29,7 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.movies.MovieManager;
+import com.ivanhoecambridge.mall.movies.models.Movie;
 import com.ivanhoecambridge.mall.movies.models.MovieDetail;
 import com.ivanhoecambridge.mall.utility.BlurBuilder;
 import com.ivanhoecambridge.mall.utility.Utility;
@@ -107,6 +110,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
             final String trailerLink = movieDetail.getMp4().getMovieUrlHighestQuality();
             LinearLayout llWatchTrailer = (LinearLayout) findViewById(R.id.llWatchTrailer);
+            if(trailerLink.equals("")) llWatchTrailer.setVisibility(View.GONE);
             llWatchTrailer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -155,13 +159,14 @@ public class MovieDetailActivity extends AppCompatActivity {
             tvMovieAdvisory.setText(advisory);
 
 
-            final String largePhotoUrl = movieDetail.getLargePhotoUrl();
+//            final String photoUrl = movieDetail.getLargePhotoUrl();
+            final String photoUrl = movieDetail.getHighPhotoUrl();
             ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
             ivDetailImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MovieDetailActivity.this, ZoomableImage.class);
-                    intent.putExtra(Constants.ARG_IMAGE_URL, largePhotoUrl);
+                    intent.putExtra(Constants.ARG_IMAGE_URL, photoUrl);
                     MovieDetailActivity.this.startActivity(intent);
                     MovieDetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
@@ -170,7 +175,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
             final ImageView ivBlur = (ImageView) findViewById(R.id.ivBlur);
             Glide.with(this)
-                    .load(largePhotoUrl)
+                    .load(photoUrl)
 //                    .asBitmap()
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override

@@ -33,7 +33,7 @@ public class MovieDetail {
     @ElementList
     private List<String> hiphotos;
 
-    @Element
+    @Element(required = false)
     private Mp4 mp4;
 
     @Element
@@ -102,6 +102,7 @@ public class MovieDetail {
 
     public List<String> getLargePhotos ()
     {
+        if(lgphotos == null) return new ArrayList<String>();
         return lgphotos;
     }
 
@@ -123,6 +124,7 @@ public class MovieDetail {
 
     public Mp4 getMp4 ()
     {
+        if(mp4 == null) return new Mp4();
         return mp4;
     }
 
@@ -313,7 +315,7 @@ public class MovieDetail {
                 int minutes = (int)runTimeInt % 60;
 
                 String hoursInFormat = hours == 0 ? "" : hours + "hr ";
-                String minutesInFormat = minutes == 0 ? "" : minutes + "min ";
+                String minutesInFormat = minutes == 0 ? "" : minutes + "min";
 
 
                 return hoursInFormat + minutesInFormat;
@@ -355,7 +357,7 @@ public class MovieDetail {
         String series = "";
         for(String string : listStrings) {
             if(series.equals("")) series = string;
-            else series = string + ", " + string;
+            else series = series + ", " + string;
         }
         return series;
     }

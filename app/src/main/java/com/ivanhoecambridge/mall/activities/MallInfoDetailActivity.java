@@ -259,8 +259,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 cTAList.add(webpage);
 
             } else if(mMallInfoType.contains(getResources().getString(R.string.mall_info_social))){
-
-
                 CTA facebook = new CTA(
                         this,
                         mParentView,
@@ -270,7 +268,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Utility.openWebPage(MallInfoDetailActivity.this, info.getFacebook().getUrl());
+                                Utility.openFacebook(MallInfoDetailActivity.this, info.getFacebook().getUrl());
                             }
                         }, false);
 
@@ -283,7 +281,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Utility.openWebPage(MallInfoDetailActivity.this, info.getInstagram().getUrl());
+                                Utility.openInstagramWithName(MallInfoDetailActivity.this, Constants.INSTAGRAM_USER_NAME);
                             }
                         }, false);
 
@@ -296,7 +294,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Utility.openWebPage(MallInfoDetailActivity.this, info.getTwitter().getUrl());
+                                Utility.openTwitter(MallInfoDetailActivity.this, info.getTwitter().getUrl());
                             }
                         }, false);
 

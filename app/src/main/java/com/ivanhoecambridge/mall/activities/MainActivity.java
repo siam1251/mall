@@ -73,6 +73,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.adapters.HomeBottomTapAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.ActiveMallRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.IndexableRecylerView;
@@ -266,6 +267,7 @@ public class MainActivity extends BaseActivity
 
                 if(position == VIEWPAGER_PAGE_MAP) {
                     if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true, false);
+                    if(mOnDealsClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_DEAL)) mOnDealsClickListener.onDealsClick(true);
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
                     setToolbarElevation(true);
@@ -344,14 +346,14 @@ public class MainActivity extends BaseActivity
             });
             return;
         } else {
-            initializeAccount();
+            if(KcpAccount.getInstance().isTokenAvailable()) HomeFragment.getInstance().initializeHomeData();
+            else initializeAccount();
             DirectoryFragment.getInstance().initializeDirectoryData();
             InfoFragment.getInstance().initializeMallInfoData();
             initializeMapData();
             initializeParkingData();
             initializeSeachIndex();
             initializeMovieData();
-
         }
     }
 
@@ -579,8 +581,7 @@ public class MainActivity extends BaseActivity
     // ------------------------------------- END OF MAP FRAGMENT -------------------------------------
 
     private void initializeAccount(){
-
-        AccountManager accountManager = new AccountManager(this, HeaderFactory.getTokenHeader(), new Handler(Looper.getMainLooper()) {
+        AccountManager accountManager = new AccountManager(this, HeaderFactory.getHeaders(), new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
                 switch (inputMessage.arg1) {
@@ -595,7 +596,7 @@ public class MainActivity extends BaseActivity
                 }
             }
         });
-        accountManager.getUserToken();
+        accountManager.downloadUserToken();
 
     }
 
@@ -818,7 +819,6 @@ public class MainActivity extends BaseActivity
                 Log.v("Geofence", "Active Mall Set TRUE");
 
                 long minStartTime = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(WELCOME_MSG_RESET_TIMER_IN_HOUR);
-//                long minStartTime = System.currentTimeMillis() - WELCOME_MSG_RESET_TIMER_IN_HOUR * 60 * 60 * 1000;
                 long lastTimeRan = KcpUtility.loadLongFromCache(this, Constants.PREF_KEY_WELCOME_MSG_TIME_SAVER, -1);
 
                 boolean didWelcomeMessageAlreadyAppear = KcpUtility.loadFromSharedPreferences(this, Constants.PREF_KEY_WELCOME_MSG_DID_APPEAR, false);
@@ -998,7 +998,7 @@ public class MainActivity extends BaseActivity
                         setDealParkingStatus(false, rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
                         return;
                     } else {
-                        mOnDealsClickListener.onDealsClick(!ivFilterDeal.isSelected(), true);
+                        mOnDealsClickListener.onDealsClick(!ivFilterDeal.isSelected());
                     }
                     Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_DEAL, !ivFilterDeal.isSelected());
                 }

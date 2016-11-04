@@ -44,19 +44,27 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
 
 
     private static final int ITEM_TYPE_PLACE_BY_NAME =  0;
-    private static final int ITEM_TYPE_FOOTER_PLACE =  1;
-    private static final int ITEM_TYPE_PLACE_BY_KEYWORD =  2;
+
+    private static final int ITEM_TYPE_FOOTER_PLACE_BRAND =  10;
+    private static final int ITEM_TYPE_FOOTER_PLACE_TAG =  111;
+
+    private static final int ITEM_TYPE_PLACE_BY_BRAND =  2;
     private static final int ITEM_TYPE_FOOTER_CATEGORY =  3;
+
     private static final int ITEM_TYPE_CATEGORY =  4;
     private static final int ITEM_TYPE_FOOTER_EMPTY =  5;
 
     private static final int ITEM_TYPE_LOADING_PLACE = 6;
     private static final int ITEM_TYPE_LOADING_CATEGORY = 7;
 
+    private static final int ITEM_TYPE_PLACE_BY_TAG =  8;
+    private static final int ITEM_TYPE_FOOTER_TAG =  9;
+
 
     private Context mContext;
     private ArrayList<KcpPlaces> mPlacesByName;
-    private ArrayList<Integer> mPlacesByKeyword;
+    private ArrayList<Integer> mPlacesByBrand;
+    private ArrayList<Integer> mPlacesByTag;
     private ArrayList<KcpCategories> mKcpCategories;
     private int mFooterLayout;
     private boolean mFooterExist = false;
@@ -66,14 +74,14 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public MallDirectoryRecyclerViewAdapter(Context context,
                                             ArrayList<KcpPlaces> placesByName,
-                                            ArrayList<Integer> placesByKeyword,
+                                            ArrayList<Integer> placesByBrand,
+                                            ArrayList<Integer> placesByTag,
                                             ArrayList<KcpCategories> kcpCategories,
                                             String keyword) {
         mContext = context;
         mPlacesByName = placesByName == null ? new ArrayList<KcpPlaces>() : placesByName;
-        /*mPlacesByKeyword = placesByKeyword == null ? new ArrayList<Integer>() : placesByKeyword;
-        mKcpCategories = kcpCategories == null ? new ArrayList<KcpCategories>() : kcpCategories;*/
-        mPlacesByKeyword = placesByKeyword;
+        mPlacesByBrand = placesByBrand;
+        mPlacesByTag = placesByTag;
         mKcpCategories = kcpCategories;
         mKeyword = keyword;
 
@@ -81,11 +89,13 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public void updateData(ArrayList<KcpPlaces> placesByName,
-                           ArrayList<Integer> placesByKeyword,
+                           ArrayList<Integer> placesByBrand,
+                           ArrayList<Integer> placesByTag,
                            ArrayList<KcpCategories> kcpCategories,
                            String keyword) {
         mPlacesByName = placesByName == null ? new ArrayList<KcpPlaces>() : placesByName;
-        mPlacesByKeyword = placesByKeyword == null ? new ArrayList<Integer>() : placesByKeyword;
+        mPlacesByBrand = placesByBrand == null ? new ArrayList<Integer>() : placesByBrand;
+        mPlacesByTag = placesByTag == null ? new ArrayList<Integer>() : placesByTag;
         mKcpCategories = kcpCategories == null ? new ArrayList<KcpCategories>() : kcpCategories;
         createItems(keyword);
         notifyDataSetChanged();
@@ -103,14 +113,25 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
             mItems.addAll(mPlacesByName);
         }
 
-        if(mPlacesByKeyword == null) {
+        if(mPlacesByBrand == null) {
             addFooter("", ITEM_TYPE_LOADING_PLACE);
         } else {
-            int sizeOfPlacesByKeyword = mPlacesByKeyword.size();
+            int sizeOfPlacesByKeyword = mPlacesByBrand.size();
             boolean placesByKeywordExist = sizeOfPlacesByKeyword > 0 ? true : false;
             if(placesByKeywordExist){
-                addFooter(keyword, ITEM_TYPE_FOOTER_PLACE);
-                mItems.addAll(mPlacesByKeyword);
+                addFooter(keyword, ITEM_TYPE_FOOTER_PLACE_BRAND);
+                mItems.addAll(mPlacesByBrand);
+            }
+        }
+
+        if(mPlacesByTag == null) {
+            addFooter("", ITEM_TYPE_LOADING_PLACE);
+        } else {
+            int sizeOfPlacesByTag = mPlacesByTag.size();
+            boolean placesByTagExist = sizeOfPlacesByTag > 0 ? true : false;
+            if(placesByTagExist){
+                addFooter(keyword, ITEM_TYPE_FOOTER_PLACE_TAG);
+                mItems.addAll(mPlacesByTag);
             }
         }
 
@@ -201,13 +222,19 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
             case ITEM_TYPE_PLACE_BY_NAME: //A to Z store list
                 return new StoreViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_place, parent, false));
-            case ITEM_TYPE_PLACE_BY_KEYWORD:
+            case ITEM_TYPE_PLACE_BY_BRAND:
+                return new StoreViewHolder(
+                        LayoutInflater.from(mContext).inflate(R.layout.list_item_place, parent, false));
+            case ITEM_TYPE_PLACE_BY_TAG:
                 return new StoreViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_place, parent, false));
             case ITEM_TYPE_CATEGORY:
                 return new CategoryHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_sub_category, parent, false));
-            case ITEM_TYPE_FOOTER_PLACE:
+            case ITEM_TYPE_FOOTER_PLACE_BRAND:
+                return new RecyclerViewFooter.FooterViewHolder(
+                        LayoutInflater.from(mContext).inflate(R.layout.list_item_directory_footer, parent, false));
+            case ITEM_TYPE_FOOTER_PLACE_TAG:
                 return new RecyclerViewFooter.FooterViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_directory_footer, parent, false));
             case ITEM_TYPE_FOOTER_CATEGORY:
@@ -269,8 +296,8 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         KcpPlaces kcpPlace = null;
-        if(holder.getItemViewType() == ITEM_TYPE_PLACE_BY_NAME  || holder.getItemViewType() == ITEM_TYPE_PLACE_BY_KEYWORD) {
-            if (holder.getItemViewType() == ITEM_TYPE_PLACE_BY_KEYWORD) {
+        if(holder.getItemViewType() == ITEM_TYPE_PLACE_BY_NAME  || holder.getItemViewType() == ITEM_TYPE_PLACE_BY_BRAND || holder.getItemViewType() == ITEM_TYPE_PLACE_BY_TAG) {
+            if (holder.getItemViewType() == ITEM_TYPE_PLACE_BY_BRAND || holder.getItemViewType() == ITEM_TYPE_PLACE_BY_TAG ) {
                 int placeId = (Integer) mItems.get(position);
                 kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(placeId);
             } else if (holder.getItemViewType() == ITEM_TYPE_PLACE_BY_NAME ) {
@@ -339,10 +366,13 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
                 }
             });
         }
-        else if (holder.getItemViewType() == ITEM_TYPE_FOOTER_PLACE){
+        else if (holder.getItemViewType() == ITEM_TYPE_FOOTER_PLACE_BRAND || holder.getItemViewType() == ITEM_TYPE_FOOTER_PLACE_TAG){
 
             final RecyclerViewFooter.FooterViewHolder footerViewHolder = (RecyclerViewFooter.FooterViewHolder) holder;
-            String footerText = mContext.getString(R.string.search_store_that_contains) + " @@" + mKeyword + "@@ " + mContext.getString(R.string.search_type_keyword);
+
+            String hintInBracket = holder.getItemViewType() == ITEM_TYPE_FOOTER_PLACE_BRAND ? mContext.getString(R.string.search_type_brand) : mContext.getString(R.string.search_type_tag);
+            String footerText = mContext.getString(R.string.search_store_that_contains) + " @@" + mKeyword + "@@ " + hintInBracket;
+//            CharSequence cs = Utility.setSpanBetweenTokens((CharSequence)footerText, "@@", new RelativeSizeSpan(1.3f), new ForegroundColorSpan(mContext.getResources().getColor(R.color.themeColor)));
             CharSequence cs = Utility.setSpanBetweenTokens((CharSequence)footerText, "@@", new RelativeSizeSpan(1.3f), new ForegroundColorSpan(mContext.getResources().getColor(R.color.themeColor)));
             ((RecyclerViewFooter.FooterViewHolder) holder).tvFooter.setText(cs);
 
@@ -423,7 +453,7 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
             Footer footer = (Footer) mItems.get(position);
             return footer.itemType;
         } else if(mItems.get(position) instanceof Integer) {
-            return ITEM_TYPE_PLACE_BY_KEYWORD;
+            return ITEM_TYPE_PLACE_BY_BRAND;
         } else if(mItems.get(position) instanceof KcpCategories) {
             return ITEM_TYPE_CATEGORY;
         }

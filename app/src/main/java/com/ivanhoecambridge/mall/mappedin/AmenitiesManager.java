@@ -64,6 +64,7 @@ public class AmenitiesManager  {
 
             @Override
             public void onFailure(Call<Amenities> call, Throwable t) {
+                logger.error(t);
                 handleState(DOWNLOAD_FAILED);
             }
         });

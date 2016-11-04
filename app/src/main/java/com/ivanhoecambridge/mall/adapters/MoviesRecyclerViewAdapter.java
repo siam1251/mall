@@ -110,7 +110,8 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
             if (holder instanceof TheaterViewer) {
                 final TheaterViewer theaterViewer = (TheaterViewer) holder;
                 //Poster
-                String photoUrl = movieDetail.getLargePhotoUrl();
+                String photoUrl = movieDetail.getHighPhotoUrl();
+//                String photoUrl = movieDetail.getLargePhotoUrl();
                 if(!photoUrl.equals("")) {
                     Glide.with(mContext)
                             .load(photoUrl)
@@ -142,8 +143,8 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
             } else if(holder instanceof ShowtimesViewer){
                 final ShowtimesViewer showtimesViewer = (ShowtimesViewer) holder;
                 //Poster
-//                String photoUrl = movieDetail.getHighPhotoUrl();
-                String photoUrl = movieDetail.getLargePhotoUrl();
+                String photoUrl = movieDetail.getHighPhotoUrl();
+//                String photoUrl = movieDetail.getLargePhotoUrl();
                 if(!photoUrl.equals("")) {
                     Glide.with(mContext)
                             .load(photoUrl)

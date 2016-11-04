@@ -54,10 +54,12 @@ public class IndexManager {
     public static final int TASK_COMPLETE = 4;
 
     private static final String KEY_TAGS = "tags";
+    private static final String KEY_BRANDS = "brands";
     private static final String KEY_CATEGORIES = "categories";
 
-    public static Map<String, ArrayList<Integer>> sTagsMap = new HashMap<>();
+    public static Map<String, ArrayList<Integer>> sBrandsMap = new HashMap<>();
     public static Map<String, ArrayList<Integer>> sCategoriesMap = new HashMap<>();
+    public static Map<String, ArrayList<Integer>> sTagsMap = new HashMap<>();
 
     private static final String HEADER_KEY_CONTENT_TYPE     = "Content-Type";
 
@@ -195,10 +197,12 @@ public class IndexManager {
                         }
                     }
                     if(tagsIds.size() > 0) {
-                        if(key.asString().equals(KEY_TAGS)) {
-                            sTagsMap.put(tagName.asString(), tagsIds);
+                        if(key.asString().equals(KEY_BRANDS)) {
+                            sBrandsMap.put(tagName.asString(), tagsIds);
                         } else if(key.asString().equals(KEY_CATEGORIES)) {
                             sCategoriesMap.put(tagName.asString(), tagsIds);
+                        } else if(key.asString().equals(KEY_TAGS)) {
+                            sTagsMap.put(tagName.asString(), tagsIds);
                         }
                     }
                 }
