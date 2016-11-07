@@ -36,7 +36,7 @@ import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
 import com.ivanhoecambridge.mall.adapters.MallDirectoryRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.managers.ThemeManager;
 import com.ivanhoecambridge.mall.searchIndex.IndexManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;

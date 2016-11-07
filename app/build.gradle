@@ -39,17 +39,16 @@ android {
     }
 
     productFlavors {
-        metropolitan {
-            applicationId "com.ivanhoecambridge.mall.metropolitan"
+        metropolis {
+            applicationId "com.ivanhoecambridge.mall.metropolis"
+            buildConfigField 'String', 'MALL', '"metropolis-at-metrotown"'
+            versionName "1.0.0"
         }
 
         vaughanmills {
             applicationId "com.ivanhoecambridge.mall.vaughanmills"
+            buildConfigField 'String', 'MALL', '"vaughan-mills"'
             versionName "1.0.0"
-        }
-
-        layouttest {
-            applicationId "com.ivanhoecambridge.mall.layouttest"
         }
     }
 }
@@ -74,7 +73,7 @@ dependencies {
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile 'com.android.support:recyclerview-v7:23.3.0'
     compile 'com.mappedin.sdk:mappedin:0.4.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
     compile('com.twitter.sdk.android:twitter:1.14.1@aar') {

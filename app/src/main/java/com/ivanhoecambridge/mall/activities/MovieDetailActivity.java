@@ -159,8 +159,8 @@ public class MovieDetailActivity extends AppCompatActivity {
             tvMovieAdvisory.setText(advisory);
 
 
-//            final String photoUrl = movieDetail.getLargePhotoUrl();
             final String photoUrl = movieDetail.getHighPhotoUrl();
+            final String photoLargeUrl = movieDetail.getLargePhotoUrl();
             ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
             ivDetailImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -176,8 +176,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             final ImageView ivBlur = (ImageView) findViewById(R.id.ivBlur);
             Glide.with(this)
                     .load(photoUrl)
-//                    .asBitmap()
-                    .listener(new RequestListener<String, GlideDrawable>() {
+                    .listener(new    RequestListener<String, GlideDrawable>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
                             return false;
@@ -186,6 +185,13 @@ public class MovieDetailActivity extends AppCompatActivity {
                         @Override
                         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                             Utility.blurImageView(MovieDetailActivity.this, ivDetailImage, ivBlur);
+                            ImageView ivDetailImageLargePhoto = (ImageView) findViewById(R.id.ivDetailImageLargePhoto);
+                            ivDetailImageLargePhoto.setVisibility(View.VISIBLE);
+                            Glide.with(MovieDetailActivity.this)
+                                    .load(photoLargeUrl)
+                                    .crossFade()
+                                    .centerCrop()
+                                    .into(ivDetailImageLargePhoto);
                             return false;
                         }
                     })

@@ -32,6 +32,24 @@ public class Constants {
 	public final static String HEADER_VALUE_CONTENT_TYPE_MESSAGE_PACK = 		"application/octet-stream";
 
 
+    //COMMON CONSTANTS AMONG THE MALLS
+    public static final String HEADER_KEY_DATAHUB_CATALOG  = "Datahub-Catalog";
+    public static final String HEADER_KEY_DATAHUB_LOCALE   = "Datahub-Locale";
+    public static final String HEADER_KEY_CLIENT_TOKEN     = "Client-Token";
+    public static final String HEADER_KEY_CONTENT_TYPE     = "Content-Type";
+    public static final String HEADER_KEY_ACCEPT           = "Accept";
+    public static final String HEADER_KEY_AUTHORIZATION    = "Authorization";
+
+    public static String SEARCH_INDEX_URL_BASE = "https://kcp-pkg.s3-us-west-2.amazonaws.com/";
+    public final static String MOVIE_URL_BASE = "http://ivanhoe.webservice.cinema-source.com/";
+
+    public final static String MALL_INFO_OFFLINE_TEXT = "mallinfo.json";
+    public final static String MALL_INFO_URL_BASE = "https://api.myjson.com/";
+    public final static String AMENITIES_OFFLINE_TEXT = "amenities.json";
+    public final static String PARKING_OFFLINE_TEXT = "parking.json";
+
+
+
 	//TWITTER
 	public final static String TWITTER_SCREEN_NAME = 		"Vaughan_Mills";
 	public final static int 	NUMB_OF_TWEETS = 		5; //how many twitter tweets it will show at a time

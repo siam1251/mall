@@ -10,7 +10,7 @@ import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 
 import org.msgpack.core.MessagePack;
 import org.msgpack.core.MessageUnpacker;
@@ -71,7 +71,7 @@ public class IndexManager {
         HashMap<String, String> headers = new HashMap<String, String>();
         headers.put(HEADER_KEY_CONTENT_TYPE,       Constants.HEADER_VALUE_CONTENT_TYPE_MESSAGE_PACK);
 
-        if(mIndexService == null) mIndexService = serviceFactory.createRetrofitService(mContext, headers, IndexService.class, HeaderFactory.SEARCH_INDEX_URL_BASE);
+        if(mIndexService == null) mIndexService = serviceFactory.createRetrofitService(mContext, headers, IndexService.class, Constants.SEARCH_INDEX_URL_BASE);
         return mIndexService;
     }
 
@@ -83,7 +83,7 @@ public class IndexManager {
     }
 
     public void downloadSearchIndexes(){
-        DownloadBinaryTask downloadImageTask = new DownloadBinaryTask(HeaderFactory.SEARCH_INDEX_URL_BASE + HeaderFactory.getSearchIndexUrl());
+        DownloadBinaryTask downloadImageTask = new DownloadBinaryTask(Constants.SEARCH_INDEX_URL_BASE + HeaderFactory.getSearchIndexUrl());
         downloadImageTask.execute();
     }
 

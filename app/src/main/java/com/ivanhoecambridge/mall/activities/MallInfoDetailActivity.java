@@ -22,7 +22,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.InfoList;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.CTA;

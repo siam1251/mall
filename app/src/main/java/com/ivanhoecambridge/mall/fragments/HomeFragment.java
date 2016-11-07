@@ -24,7 +24,7 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 
 import java.util.ArrayList;

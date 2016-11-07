@@ -79,7 +79,7 @@ import com.ivanhoecambridge.mall.adapters.adapterHelper.ActiveMallRecyclerViewAd
 import com.ivanhoecambridge.mall.adapters.adapterHelper.IndexableRecylerView;
 import com.ivanhoecambridge.mall.analytics.FirebaseTracking;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.DirectoryFragment;
 import com.ivanhoecambridge.mall.fragments.HomeFragment;
@@ -171,7 +171,6 @@ public class MainActivity extends BaseActivity
         //TESTING
 //        startActivity(new Intent(MainActivity.this, MoviesActivity.class));
 //        ActivityAnimation.startActivityAnimation(MainActivity.this);
-
 
         boolean didOnboardingAppear = KcpUtility.loadFromSharedPreferences(this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, false);
         if(!didOnboardingAppear) {
@@ -605,7 +604,7 @@ public class MainActivity extends BaseActivity
 
         String data = "";
         try {
-            data = KcpUtility.convertStreamToString(getAssets().open(HeaderFactory.AMENITIES_OFFLINE_TEXT));
+            data = KcpUtility.convertStreamToString(getAssets().open(Constants.AMENITIES_OFFLINE_TEXT));
             Gson gson = new Gson();
             AmenitiesManager.sAmenities = gson.fromJson(data, Amenities.class);
         } catch (Exception e) {
@@ -632,7 +631,7 @@ public class MainActivity extends BaseActivity
 
         String data = "";
         try {
-            data = KcpUtility.convertStreamToString(getAssets().open(HeaderFactory.PARKING_OFFLINE_TEXT));
+            data = KcpUtility.convertStreamToString(getAssets().open(Constants.PARKING_OFFLINE_TEXT));
             Gson gson = new Gson();
             ParkingManager.sParkings = gson.fromJson(data, Parkings.class);
         } catch (Exception e) {

@@ -46,7 +46,7 @@ import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
 import com.ivanhoecambridge.mall.managers.ThemeManager;

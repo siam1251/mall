@@ -11,7 +11,7 @@ import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.models.MultiLike;
 
 import java.util.ArrayList;

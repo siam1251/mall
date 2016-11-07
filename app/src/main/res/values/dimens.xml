@@ -224,6 +224,11 @@
     <dimen name="movie_poster_margin">2.5dp</dimen>
     <dimen name="movie_poster_horizontal_margin">5dp</dimen>
     <dimen name="movie_poster_horizontal_margin_half">2.5dp</dimen>
+    <dimen name="movie_poster_width_small">68dp</dimen>
+    <dimen name="movie_poster_height_small">102dp</dimen>
+    <dimen name="movie_poster_width_large">145dp</dimen>
+    <dimen name="movie_poster_height_large">217.5dp</dimen>
+
 
     <!--ONBOARDING-->
     <dimen name="onboarding_first_title">24sp</dimen>

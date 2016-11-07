@@ -9,7 +9,9 @@ import android.support.annotation.Nullable;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
+
+import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 
 import retrofit2.Call;
@@ -47,7 +49,7 @@ public class ParkingManager {
 
     public ParkingService getKcpService(){
         ServiceFactory serviceFactory = new ServiceFactory();
-        if(mParkingService == null) mParkingService = serviceFactory.createRetrofitService(mContext, ParkingService.class, HeaderFactory.MALL_INFO_URL_BASE);
+        if(mParkingService == null) mParkingService = serviceFactory.createRetrofitService(mContext, ParkingService.class, Constants.MALL_INFO_URL_BASE);
         return mParkingService;
     }
 

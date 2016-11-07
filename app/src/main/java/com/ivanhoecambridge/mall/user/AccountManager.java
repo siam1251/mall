@@ -12,7 +12,7 @@ import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.account.KcpAccount;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;

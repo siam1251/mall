@@ -1,14 +1,12 @@
 package com.ivanhoecambridge.mall.activities;
 
 import android.content.Context;
-import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
 import com.exacttarget.etpushsdk.ETAnalytics;
 import com.exacttarget.etpushsdk.ETException;
 import com.exacttarget.etpushsdk.ETLogListener;
@@ -21,19 +19,17 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
+import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
-import com.ivanhoecambridge.mall.utility.Utility;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
 import java.util.LinkedHashSet;
 
-import javax.net.ssl.HttpsURLConnection;
-
+import factory.HeaderFactory;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -81,40 +77,45 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
 
         KcpUtility.cacheToPreferences(this, Constants.PREF_KEY_WELCOME_MSG_DID_APPEAR, false); //resetting the welcome message flag as false to indicate it has never shown for this app launch
 
-        //EXACT TARGET
-        EventBus.getInstance().register(this);
-        try {
-            String appId = "";
-            String accessToken = "";
-            String gcmSenderId = "";
+        if(BuildConfig.MALL.equals(Constants.HEADER_VALUE_DATAHUB_CATALOG_MP)){
 
-            if(Constants.IS_APP_IN_PRODUCTION) {
-                appId = getString(R.string.app_id);
-                accessToken = getString(R.string.access_token);
-                gcmSenderId = getString(R.string.gcm_sender_id);
-            } else {
-                appId = getString(R.string.staging_app_id);
-                accessToken = getString(R.string.staging_access_token);
-                gcmSenderId = getString(R.string.staging_gcm_sender_id);
+        } else if (BuildConfig.MALL.equals(Constants.HEADER_VALUE_DATAHUB_CATALOG_VM)){
+            //EXACT TARGET
+            EventBus.getInstance().register(this);
+            try {
+                String appId = "";
+                String accessToken = "";
+                String gcmSenderId = "";
+
+                if(Constants.IS_APP_IN_PRODUCTION) {
+                    appId = getString(R.string.app_id);
+                    accessToken = getString(R.string.access_token);
+                    gcmSenderId = getString(R.string.gcm_sender_id);
+                } else {
+                    appId = getString(R.string.staging_app_id);
+                    accessToken = getString(R.string.staging_access_token);
+                    gcmSenderId = getString(R.string.staging_gcm_sender_id);
+                }
+
+                ETPush.configureSdk(new ETPushConfig.Builder(this)
+                                .setEtAppId(appId)
+                                .setAccessToken(accessToken)
+                                .setGcmSenderId(gcmSenderId)
+                                .setAnalyticsEnabled(ANALYTICS_ENABLED)
+                                .setLocationEnabled(LOCATION_ENABLED)
+                                .setPiAnalyticsEnabled(WAMA_ENABLED)
+                                .setCloudPagesEnabled(CLOUD_PAGES_ENABLED)
+                                .setProximityEnabled(PROXIMITY_ENABLED)
+                                .setNotificationResourceId(R.drawable.icn_noti)
+                                .build()
+                        , this // Our ETPushConfigureSdkListener
+                );
+            } catch (ETException e) {
+                Log.e(TAG, e.getMessage(), e);
             }
-
-            ETPush.configureSdk(new ETPushConfig.Builder(this)
-                            .setEtAppId(appId)
-                            .setAccessToken(accessToken)
-                            .setGcmSenderId(gcmSenderId)
-//                            .setLogLevel(BuildConfig.DEBUG ? Log.VERBOSE : Log.ERROR)
-                            .setAnalyticsEnabled(ANALYTICS_ENABLED)
-                            .setLocationEnabled(LOCATION_ENABLED)
-                            .setPiAnalyticsEnabled(WAMA_ENABLED)
-                            .setCloudPagesEnabled(CLOUD_PAGES_ENABLED)
-                            .setProximityEnabled(PROXIMITY_ENABLED)
-                            .setNotificationResourceId(R.drawable.icn_noti)
-                            .build()
-                    , this // Our ETPushConfigureSdkListener
-            );
-        } catch (ETException e) {
-            Log.e(TAG, e.getMessage(), e);
         }
+
+
     }
 
     @Override

@@ -34,7 +34,7 @@ import com.ivanhoecambridge.mall.activities.MallHourActivity;
 import com.ivanhoecambridge.mall.activities.MallInfoDetailActivity;
 import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.adapters.InfoRecyclerViewAdapter;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
@@ -295,7 +295,7 @@ public class InfoFragment extends BaseFragment {
             }
         });
         logger.debug("URL is " + HeaderFactory.MALL_INFO_URL);
-        kcpInfoManager.downloadMallInfo(HeaderFactory.MALL_INFO_URL_BASE, HeaderFactory.MALL_INFO_URL);
+        kcpInfoManager.downloadMallInfo(Constants.MALL_INFO_URL_BASE, HeaderFactory.MALL_INFO_URL);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
@@ -320,7 +320,7 @@ public class InfoFragment extends BaseFragment {
 
 
         KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
-        kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), HeaderFactory.MALL_INFO_OFFLINE_TEXT);
+        kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), Constants.MALL_INFO_OFFLINE_TEXT);
 
         mInfoRecyclerViewAdapter = new InfoRecyclerViewAdapter(
                 getActivity(),
