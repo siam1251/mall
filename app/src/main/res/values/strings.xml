@@ -233,8 +233,6 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="unknown_geofence_transition">Unknown Transition</string>
     <string name="geofence_transition_notification_text">Click notification to return to app</string>
 
-    <!--ACTIVE MALL-->
-    <string name="active_mall_welcome_msg">Welcome to Vaughan Mills, here’s what’s happening today!</string>
 
     <!--PARKING-->
     <string name="parking_which_parking_lot">Which parking lot did you park in?</string>
@@ -267,7 +265,6 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="welcome_yes">YES PLEASE</string>
 
     <!--ONBOARDING-->
-    <string name="onbd_one_title">Welcome to\nVaughan Mills new\ncompanion app</string>
     <string name="onbd_two_title">Get Recommended Deals</string>
     <string name="onbd_three_title">Find Your Favourite Brands</string>
     <string name="onbd_four_title">Never Get Lost</string>

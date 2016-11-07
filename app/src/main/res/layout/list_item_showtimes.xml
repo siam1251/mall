@@ -24,7 +24,7 @@
                 android:id="@+id/ivMoviePoster"
                 android:layout_width="@dimen/movie_poster_width_small"
                 android:layout_height="@dimen/movie_poster_height_small"
-                android:src="@drawable/placeholder_movie"
+                android:src="@drawable/icn_movies_placeholder"
                 />
 
             <ImageView

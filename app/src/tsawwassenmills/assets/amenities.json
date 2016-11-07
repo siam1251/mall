@@ -1,0 +1,92 @@
+{
+  "amenities": [
+    {
+      "type":"57c5b03bbbf01426f0000000",
+      "enabled":true,
+      "title": "Washrooms",
+      "externalIds":[
+        "washroom"
+      ]
+    },
+    {
+      "type":"57c6e482bbf0141f92000002",
+      "enabled":true,
+      "title": "Family Washrooms",
+      "externalIds":[
+        "family-washroom"
+      ]
+    },
+    {
+      "type": "57d05ed3bbf0145ac8000004",
+      "enabled": true,
+      "title": "Guest Services",
+      "externalIds": [
+        "information_counter"
+      ]
+    },
+    {
+      "type":"57c6e4d0bbf0141f92000006",
+      "enabled":true,
+      "title": "Strollers",
+      "externalIds":[
+        "strollers"
+      ]
+    },
+    {
+      "type":"57c6e4bbbbf0141f92000005",
+      "enabled":true,
+      "title": "Nursing Room",
+      "externalIds":[
+        "changing-room"
+      ]
+    },
+    {
+      "type":"57c5f020bbf01435f5000006",
+      "enabled":true,
+      "title": "ATM",
+      "externalIds":[
+        "atm"
+      ]
+    },
+    {
+      "type":"57d06274bbf0145ac800000d",
+      "enabled":true,
+      "title": "Parcel Pick Up",
+      "externalIds":[
+        "pick-up"
+      ]
+    },
+    {
+      "type":"57c6e44abbf0141f92000000",
+      "enabled":true,
+      "title": "Bus Shelter",
+      "externalIds":[
+        "bus-terminal"
+      ]
+    },
+    {
+      "type":"57c6e490bbf0141f92000003",
+      "enabled":true,
+      "title": "Ferry Shuttle",
+      "externalIds":[
+        "shuttle"
+      ]
+    },
+    {
+      "type":"57c6e4dbbbf0141f92000007",
+      "enabled":true,
+      "title": "Taxi",
+      "externalIds":[
+        "taxi-stand"
+      ]
+    },
+    {
+      "type":"57c6e468bbf0141f92000001",
+      "enabled":true,
+      "title": "Electric Vehicle Charging Station",
+      "externalIds":[
+        "charging"
+      ]
+    }
+  ]
+}

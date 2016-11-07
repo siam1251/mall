@@ -50,6 +50,12 @@ android {
             buildConfigField 'String', 'MALL', '"vaughan-mills"'
             versionName "1.0.0"
         }
+
+        tsawwassenmills {
+            applicationId "com.ivanhoecambridge.mall.tsawwassenmills"
+            buildConfigField 'String', 'MALL', '"tsawwassen-mills"'
+            versionName "1.0.0"
+        }
     }
 }
 

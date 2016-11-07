@@ -22,6 +22,8 @@ import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.InfoList;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
+
+import constants.MallConstants;
 import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
@@ -281,7 +283,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Utility.openInstagramWithName(MallInfoDetailActivity.this, Constants.INSTAGRAM_USER_NAME);
+                                Utility.openInstagramWithName(MallInfoDetailActivity.this, MallConstants.INSTAGRAM_USER_NAME);
                             }
                         }, false);
 

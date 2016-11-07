@@ -34,7 +34,7 @@
                 />
             app:layout_collapseMode="parallax"
 
-            <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            <ImageView
                 xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
                 ThemedImageView:filterColor="@color/white"
                 android:layout_gravity="center"
@@ -42,7 +42,7 @@
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/logo_vaughan_mills"
+                android:src="@drawable/logo_mall"
                 app:layout_collapseParallaxMultiplier="0.5"
                 app:layout_collapseMode="parallax"
                 />

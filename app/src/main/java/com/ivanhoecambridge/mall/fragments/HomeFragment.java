@@ -24,6 +24,8 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
+
+import constants.MallConstants;
 import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 
@@ -169,7 +171,7 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
-        mKcpSocialFeedManager.downloadTwitterTweets(Constants.TWITTER_SCREEN_NAME, Constants.NUMB_OF_TWEETS, Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
+        mKcpSocialFeedManager.downloadTwitterTweets(MallConstants.TWITTER_SCREEN_NAME, MallConstants.NUMB_OF_TWEETS, MallConstants.TWITTER_API_KEY, MallConstants.TWITTER_API_SECRET);
 //        mKcpSocialFeedManager.downloadInstagram(Constants.INSTAGRAM_USER_NAME, Constants.INSTAGRAM_USER_ID, Constants.INSTAGRAM_ACCESS_TOKEN, Constants.INSTAGRAM_BASE_URL, Constants.NUMB_OF_INSTA); //DISABLED : IA-170
     }
 

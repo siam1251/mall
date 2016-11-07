@@ -29,6 +29,7 @@ import com.twitter.sdk.android.tweetui.TweetUi;
 
 import java.util.LinkedHashSet;
 
+import constants.MallConstants;
 import factory.HeaderFactory;
 import io.fabric.sdk.android.Fabric;
 
@@ -64,7 +65,7 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
     public void onCreate() {
         super.onCreate();
 
-        TwitterAuthConfig authConfig =  new TwitterAuthConfig(Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
+        TwitterAuthConfig authConfig =  new TwitterAuthConfig(MallConstants.TWITTER_API_KEY, MallConstants.TWITTER_API_SECRET);
         KcpConstants.setBaseURL(Constants.IS_APP_IN_PRODUCTION);
         KcpAccount.getInstance().initialize(getApplicationContext());
         HeaderFactory.changeCatalog(HeaderFactory.HEADER_VALUE_DATAHUB_CATALOG);

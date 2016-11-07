@@ -49,7 +49,7 @@
                         android:id="@+id/ivDetailImage"
                         android:layout_width="@dimen/movie_poster_width_large"
                         android:layout_height="@dimen/movie_poster_height_large"
-                        android:src="@drawable/placeholder_movie"
+                        android:src="@drawable/icn_movies_placeholder"
                         />
 
                     <ImageView

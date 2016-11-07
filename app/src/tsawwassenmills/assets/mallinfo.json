@@ -1,0 +1,177 @@
+{
+    "hoursExceptions": [
+    ],
+    "infoList": [
+        {
+            "title": "Mall Hours",
+            "subtitle": "See upcoming holiday hours, special hours, etc.",
+            "imageURLs": ["mallinfo-banner-mallhours"]
+        },
+        {
+            "menuTitle": "Guest Service Kiosk",
+            "title": "Guest Service",
+            "subtitle": "Get in touch with our friendly guest service staff",
+            "locations": [
+                {
+                    "name": "Guest Service Kiosk",
+                    "locationID": "57d05ed3bbf0145ac8000004",
+                    "locationType": "amenity"
+                }
+            ],
+            "hours": "Today",
+            "imageURLs": ["mallinfo-banner-customerservice"],
+            "phoneNumber": "(604) 948-9889",
+            "phoneURL": "tel://+16049489889",
+            "email": {
+                "title": "info@tsawwassenmills.com",
+                "url": "mailto:info@tsawwassenmills.com"
+            },
+            "details": "Need a hand? Our friendly guest service staff is located near Entry 3. Available services are listed below.",
+            "additionalInfoTitle": "Available Services",
+            "additionalInfo": [
+                {
+                    "title": "Wheelchairs & Scooters",
+                    "details": "Wheelchairs & scooters are available on a first-come, first-served basis. Photo Identification and valid credit card are required."
+                },
+                {
+                    "title": "Lost & Found",
+                    "details": "Lost or found an item during your visit? Be sure to contact Guest service.\n\nFound items are transferred to Guest service where they are kept for a period of 30 days."
+                },
+                {
+                    "title": "First Aid",
+                    "details": "A first aid kit is available at the kiosk for our guests."
+                },
+                {
+                    "title": "Stow and Go",
+                    "details": "If you have too much to carry and would like the freedom to shop some more, you can drop off your parcels at Guest Services. We'll store them securely while you shop. Once your shopping is complete, you can pick up your checked items from the comfort of your vehicle at Parcel Pick Up located at exterior Service Court 3D. A Guest Services team member will deliver the checked items to your vehicle. Free service."
+                }
+            ]
+        },
+        {
+            "title": "Amenities",
+            "subtitle": "Find the Washrooms, lockers, 24-hour security, ATM and other amenities",
+            "imageURLs": ["mallinfo-banner-amenities"],
+            "details": "Looking for something else not listed? Tsawwassen Mills offers various amenities and complimentary services. View them on the interactive mall map.\n\nGuest Service\nWashrooms\nLockers\nATM\nPublic telephones\nShopping Shuttle\nAutomobile battery boost\n\n<b>Other Available Services:</b>\n24-hour security\nWi-Fi\nFamily conveniences\nUniversal washrooms + Nursing lounges\nStroller rentals\nFamily parking\nEmergency infant supplies\n\nFor more information please visit the website: <a href=\"https://www.tsawwassenmills.com/info/centre-services/\">https://www.tsawwassenmills.com/info/centre-services/</a>"
+        },
+        {
+            "title": "Gift Card Balance",
+            "subtitle": "Check your Ivanhoé Cambridge Gift Card balance",
+            "imageURLs": ["mallinfo-banner-giftcard"],
+            "locations": [
+                {
+                    "name": "Guest Service Kiosk",
+                    "locationID": "57d05ed3bbf0145ac8000004",
+                    "locationType": "amenity"
+                }
+            ],
+            "phoneNumber": "1 (800) 840-5542",
+            "phoneURL": "tel://+18008405542",
+            "links": [
+                {
+                    "linkURL": "tab/profile_giftcards",
+                    "linkTitle": "Check Your Balance",
+                    "linkType": "internal"
+                }
+            ],
+            "details": "The Ivanho&eacute Cambridge Gift Card is accepted at our 250 fashion, outlet, dining, and entertainment options. Available at our Guest Services kiosk.",
+            "additionalInfoTitle": "Frequently Asked Questions",
+            "additionalInfo": [
+                {
+                    "title": "Check your gift card balance",
+                    "details": "Already have a gift card? Tap on the \"Check your balance\" button above to check your balance online."
+                },
+                {
+                    "title": "Where to buy a gift card?",
+                    "details": "Come visit us at the Guest Service kiosk to get yours today!"
+                },
+                {
+                    "title": "Who accepts the gift card?",
+                    "details": "The Ivanho&eacute Cambridge gift card is accepted by all retailers with the exception of those listed on the non-participating merchant list found <a href=\"http://tsawwassenmills.com/info/gift-card/\">here</a>."
+                },
+                {
+                    "title": "Further notice",
+                    "details": "Gift cards can be purchased in any denomination ranging from $5 to $500."
+                }
+            ]
+        },
+        {
+            "menuTitle": "Social Network",
+            "title": "Tsawwassen Mills Social Network",
+            "subtitle": "Get social with Tsawwassen Mills",
+            "imageURLs": ["mallinfo-banner-social"],
+            "details": "Follow Tsawwassen Mills on all the following social networks!",
+            "facebook": {
+                "title": "TsawwassenMills",
+                "url": "https://www.facebook.com/TsawwassenMills/"
+            },
+            "twitter": {
+                "title": "TsawwassenMills",
+                "url": "https://twitter.com/tsawwassenmills"
+            },
+            "instagram": {
+                "title": "tsawwassenmills",
+                "url": "https://www.instagram.com/tsawwassenmills/"
+            }
+        },
+        {
+            "title": "Public Transportation",
+            "subtitle": "See public transportation information and schedules",
+            "details": "FROM BRIDGEPORT STATION CANADA LINE\nGo to Bay 7\nHop on the #601 - South Delta via Ladner Exchange\nHop off at 52nd St.\n-\nGo to Bay 4\nHop on the #620 - Tsawwassen Ferry Terminal via Ladner Exchange\nHop off at 52nd St.\n-\nFROM TSAWWASSEN\nGo to Bay 2\nHop on the #609 - South Delta Exchange\nHop off at 48th St.",
+            "imageURLs": ["mallinfo-banner-transportation"],
+            "links": [
+                {
+                    "linkURL": "https://www.google.ca/maps/place/Tsawwassen+Mills+Mall/@49.0375553,-123.0930679,17z/data=!4m8!1m2!2m1!1stsawwassen+mills!3m4!1s0x0:0xc8559b6c1c5c3b57!8m2!3d49.0370639!4d-123.089329",
+                    "linkTitle": "Get Directions"
+                },
+                {
+                    "linkURL": "http://mobile.bcferries.com/cc/mobile/at-a-glance-tsa.asp",
+                    "linkTitle": "View BC Ferries Schedule"
+                }
+            ]
+        },
+        {
+            "title": "Shopping Shuttle",
+            "subtitle": "Our exclusive 42-passenger shopping shuttle provides free roundtrip transportation",
+            "imageURLs": ["mallinfo-banner-shuttle"],
+            "phoneNumber": "(604) 948-9889",
+            "phoneURL": "tel://+16049489889",
+            "links": [
+                {
+                    "linkURL": "http://tsawwassenmills.com/info/ferry-shuttle/",
+                    "linkTitle": "Shopping Shuttle"
+                }
+            ],
+            "locations": [
+                {
+                    "name": "Map Directions",
+                    "locationID": "57c6e490bbf0141f92000003",
+                    "locationType": "amenity"
+                }
+            ],
+            "details": "Our exclusive 42-passenger shopping shuttle provides free roundtrip transportation from Tsawwassen Ferry Terminal to Tsawwassen Mills daily, coordinating with the Nanaimo and Victoria ferry sailing times. Please note Ferry parking is not permitted at Tsawwassen Mills.\n",
+            "additionalInfoTitle": "Daily Schedule",
+            "additionalInfo": [
+                {
+                    "title": "Monday - Saturday",
+                    "details": "10 am - 9 pm"
+                },
+                {
+                    "title": "Sundays/Holidays",
+                    "details": "10 am - 7 pm"
+                }
+            ]
+        },
+        {
+            "title": "Accessibility",
+            "subtitle": "Tsawwassen Mills is committed to excellence in serving all customers",
+            "imageURLs": ["mallinfo-banner-accessibility"],
+            "details": "Tsawwassen Mills is committed to excellence in serving all customers and is an easily-accessible, one level shopping centre with:\n\nA Simple-to-Navigate Racetrack Design\nAutomatic Sliding Doors\nEasily Accessible Washrooms\nPrime Designated Accessible Parking Spaces\nComplimentary Wheelchairs and Scooters\n\nWheelchairs &amp; scooters are available on a first-come, first-served basis. Photo Identification and valid credit card are required."
+        },
+        {
+            "title": "About Tsawwassen Mills",
+            "subtitle": "Learn more at Tsawwassen Mills",
+            "imageURLs": ["mallinfo-banner-about"],
+            "details": "Mills malls are designed around all these feelings that come from a great shopping experience. All our efforts revolve around you. From the stores to the food, from the prices to the entertainment that can deliver for the whole entire family, a trip to a Mills mall is hard to match. Tsawwassen Mills, will include approximately 1.2 million sq. ft. of retail with a unique mix of premium fashion brands, factory outlets, restaurants and first-to-market retailers, as well as a 1,100-seat food hall. It is modelled on the successful CrossIron Mills in the Calgary Region and Vaughan Mills in the Greater Toronto Area.\n"
+        }
+    ]
+}

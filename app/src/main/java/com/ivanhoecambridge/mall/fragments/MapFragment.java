@@ -338,7 +338,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         List<Integer> sectionPosition = new ArrayList<Integer>();
         String startLetter = null;
         for(int i = 0; i < kcpPlacesFiltered.size(); i++){
-            String currentStoreNameStartLetter = String.valueOf(kcpPlacesFiltered.get(i).getPlaceName().toUpperCase().charAt(0));
+            String storeName = kcpPlaces.get(i).getPlaceName().toUpperCase();
+            String currentStoreNameStartLetter = "";
+            if(storeName.length() > 0) currentStoreNameStartLetter = String.valueOf(kcpPlaces.get(i).getPlaceName().toUpperCase().charAt(0));
             if(startLetter == null || !startLetter.equals(currentStoreNameStartLetter)) {
                 startLetter = currentStoreNameStartLetter;
                 sections.add(new SectionedLinearRecyclerViewAdapter.Section(i, startLetter));
