@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "515687595124",
+    "firebase_url": "https://metropolis-testing.firebaseio.com",
+    "project_id": "metropolis-testing",
+    "storage_bucket": "metropolis-testing.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515687595124:android:c0104e4e347b6b55",
+        "android_client_info": {
+          "package_name": "com.ivanhoecambridge.mall.metropolis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "515687595124-fc7m9j5hbic0h4uhkv5emlm54l6m9asa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZkNQep4Atl8eN_80JhP-_ZrDpURv6nL8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

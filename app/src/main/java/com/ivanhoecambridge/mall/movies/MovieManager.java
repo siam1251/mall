@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
+
+import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.movies.models.House;
 import com.ivanhoecambridge.mall.movies.models.Movie;
 import com.ivanhoecambridge.mall.movies.models.Movies;
@@ -58,7 +60,7 @@ public class MovieManager {
 
     public MovieService getKcpService(){
         ServiceFactory serviceFactory = new ServiceFactory();
-        if(mMovieServices == null) mMovieServices = serviceFactory.createRetrofitService(mContext, MovieService.class, HeaderFactory.MOVIE_URL_BASE, SimpleXmlConverterFactory.create());
+        if(mMovieServices == null) mMovieServices = serviceFactory.createRetrofitService(mContext, MovieService.class, Constants.MOVIE_URL_BASE, SimpleXmlConverterFactory.create());
         return mMovieServices;
     }
 
@@ -99,18 +101,17 @@ public class MovieManager {
                             movieIds = movieIds == "" ? movieId : movieIds + ", " + movieId;
                         }
                         if(!movieIds.equals(""))downloadMovieDetails(movieIds);
-
-//                        handleState(DOWNLOAD_COMPLETE);
                     } else handleState(DOWNLOAD_FAILED);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    logger.error(e);
                 }
             }
 
             @Override
             public void onFailure(Call<Theaters> call, Throwable t) {
-                handleState(DOWNLOAD_FAILED);
                 logger.error(t);
+                handleState(DOWNLOAD_FAILED);
             }
         });
     }
@@ -137,6 +138,7 @@ public class MovieManager {
 
             @Override
             public void onFailure(Call<Movies> call, Throwable t) {
+                logger.error(t);
                 handleState(DOWNLOAD_FAILED);
             }
         });

@@ -254,14 +254,22 @@
             android:src="@drawable/view_shadow_inverted"/>
 
         <RelativeLayout
+            android:id="@+id/rlRoute"
             android:layout_marginRight="14dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:src="@drawable/icn_current_location_shadow"
+                />
 
             <View
+                android:layout_centerInParent="true"
                 android:id="@+id/viewRoute"
                 android:layout_width="54dp"
                 android:layout_height="54dp"

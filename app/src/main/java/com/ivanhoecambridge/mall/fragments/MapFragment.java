@@ -3,6 +3,7 @@ package com.ivanhoecambridge.mall.fragments;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
@@ -45,7 +46,7 @@ import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
 import com.ivanhoecambridge.mall.managers.ThemeManager;
@@ -53,6 +54,7 @@ import com.ivanhoecambridge.mall.mappedin.Amenities;
 import com.ivanhoecambridge.mall.mappedin.Amenities.OnParkingClickListener;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
 import com.ivanhoecambridge.mall.mappedin.CustomLocation;
+import com.ivanhoecambridge.mall.parking.ChildParking;
 import com.ivanhoecambridge.mall.parking.Parking;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
 import com.ivanhoecambridge.mall.utility.Utility;
@@ -125,6 +127,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private FrameLayout flMap; ///todo: disabled for testing
 
     private View viewRoute;
+//    private RelativeLayout rlRoute;
     private String mSearchString = "";
     public MenuItem mSearchItem;
     private MenuItem mFilterItem;
@@ -133,7 +136,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private Drawable mAmeityDrawable;
 
     //MAPPED IN
-    private final int PIN_IMAGE_SIZE_DP = 95;
+    private final int PIN_IMAGE_SIZE_DP = 95; //ends up 64 px
+    //    private final int PIN_IMAGE_SIZE_DP = 99; //ends up 128
     private final int CAMERA_ZOOM_LEVEL_NEAREST_PARKING = 90; //
     private final int CAMERA_ZOOM_LEVEL = 30; //BIGGER - farther, SMALLER - closer
     private final int BLUR_RADIUS = 20;
@@ -194,6 +198,15 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         ivLower = (ImageView) view.findViewById(R.id.ivLower);
         ivAmenity = (ImageView) view.findViewById(R.id.ivAmenity);
         flMap = (FrameLayout) view.findViewById(R.id.flMap); //todo: disabled for testing
+
+        /*rlRoute = (RelativeLayout) view.findViewById(R.id.rlRoute);
+        rlRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDirectionEditor("", tvStoreName.getText().toString());
+            }
+        });*/
+
         viewRoute = (View) view.findViewById(R.id.viewRoute);
         viewRoute.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -360,20 +373,20 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 }
             }
             if(activeVenue == null || getActivity() == null) return;
-                //TODO: choose fragment method
-                android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
-                if(!mapView.isAdded()){
-                    Log.d("test", "MAP WAS NOT ADDED!");
-                    transaction.add(R.id.flMap, mapView);
-                } else {
-                    Log.e("test", "MAP ALREADY ADDED!");
-                    transaction.remove(mapView);
-                    mapView = new MapView();
-                    transaction.add(R.id.flMap, mapView);
-                }
-                transaction.commit();
-                mapView.setDelegate(delegate);
-                mappedIn.getVenue(activeVenue, accessibleDirections, new CustomLocationGenerator(), new GetVenueCallback());
+            //TODO: choose fragment method
+            android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+            if(!mapView.isAdded()){
+                Log.d("test", "MAP WAS NOT ADDED!");
+                transaction.add(R.id.flMap, mapView);
+            } else {
+                Log.e("test", "MAP ALREADY ADDED!");
+                transaction.remove(mapView);
+                mapView = new MapView();
+                transaction.add(R.id.flMap, mapView);
+            }
+            transaction.commit();
+            mapView.setDelegate(delegate);
+            mappedIn.getVenue(activeVenue, accessibleDirections, new CustomLocationGenerator(), new GetVenueCallback());
         }
 
         @Override
@@ -400,7 +413,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             });*/
 
             mapView.setMap(maps[0]);
-//            setMapLevel(maps.length / 2, null); //set the map level if it exists
+            setMapLevel(maps.length / 2, null); //set the map level if it exists
             if(pb != null) pb.setVisibility(View.GONE);
             if(maps.length > 1) {
                 ivUpper.setVisibility(View.VISIBLE);
@@ -477,8 +490,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         setLevelImageView(maps);
 
         //LOAD AMENITIES, DEALS
-        //TODO: TEST - disabled for testing
-        onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL), false);
+        onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL));
         for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
             Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
             final String externalID = amenity.getExternalIds()[0];
@@ -836,7 +848,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         //TODO: only add pins to the current floor
         Drawable clone = pinDrawable.getConstantState().newDrawable();
         clone.mutate(); //prevent all instance of drawables from being affected
-        clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.MULTIPLY);
+        clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.MULTIPLY); //change white colors
+//        clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.SRC_ATOP); //change the entire colors
         Overlay2DImage label = new Overlay2DImage(PIN_IMAGE_SIZE_DP, PIN_IMAGE_SIZE_DP, clone);
         label.setPosition(coordinate);
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
@@ -875,8 +888,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     public void clickOverlayWithCoordinate(Coordinate coordinate, int position){
         if(coordinate != null){
-                LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(coordinate);
-                locationLabelClicker.onClick();
+            LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(coordinate);
+            locationLabelClicker.onClick();
         }
     }
 
@@ -915,7 +928,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     }
 
     @Override
-    public void onDealsClick(boolean enabled, boolean resetDealsList) {
+    public void onDealsClick(boolean enabled) {
         //TODO: when deals list's refreshed, this mRecommendedDealsExternalCodeList should be set to null to refresh this list too
 
 //          ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true); //ALL DEALS
@@ -934,6 +947,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
 
         if(enabled && dealContentPages != null) {
+            mRecommendedDealsExternalCodeList = new ArrayList<String>();
             for(KcpContentPage kcpContentPage : dealContentPages) {
                 Location location = CustomLocation.getLocation(kcpContentPage.getExternalCode());
                 if(location != null){
@@ -943,7 +957,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                         dropPin(coordinate, location, amenityDrawable);
                     }
                 }
-                mRecommendedDealsExternalCodeList = new ArrayList<String>();
                 mRecommendedDealsExternalCodeList.add(kcpContentPage.getExternalCode());
             }
         }
@@ -970,7 +983,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
 
     public void showParkingSpotFromDetailActivity(int parkingLotPosition, Polygon polygon){
-        try {
+
+        /*try {
             Parking storeParking = ParkingManager.sParkings.getParkings().get(parkingLotPosition);
             String parkingId = storeParking.getChildParkings().get(0).getParkingId();
             HashMap<String, CustomLocation> parkingHashMap = CustomLocation.getParkingHashMap();
@@ -984,7 +998,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     String entranceName = storeParking.getChildParkings().get(0).getName();
                     showParkingDetail(mTemporaryParkingLocation, true, parkingLotName, entranceName, "", parkingLotPosition);
 
-                    Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car, R.drawable.circle_imageview_background_parking);
+                    Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car, R.drawable.circle_imageview_background_black);
                     dropPin(coordinate, mTemporaryParkingLocation, amenityDrawable);
                     mapView.getCamera().focusOn(polygon);
                     mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_NEAREST_PARKING);
@@ -992,6 +1006,50 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     destinationPolygon = mTemporaryParkingLocation;
                 }
             }
+        } catch (Exception e) {
+            logger.error(e);
+        }*/
+
+        try {
+            didTapPolygon(polygon);
+            HashMap<String, CustomLocation> parkingHashMap = CustomLocation.getParkingHashMap();
+            Parking storeParking = ParkingManager.sParkings.getParkings().get(parkingLotPosition);
+            List<ChildParking> childParkings = storeParking.getChildParkings();
+
+            CustomLocation currentNearestParkingLocation = null;
+            double currentDistanceFromParkingToStore = 0.0;
+            ChildParking currentNearestChildParking = null;
+
+            for(ChildParking childParking : childParkings) {
+                String parkingId = childParking.getParkingId();
+                if(parkingHashMap.containsKey(parkingId)){
+                    CustomLocation parkingLocation = parkingHashMap.get(parkingId);
+                    List<Coordinate> coords = parkingLocation.getNavigatableCoordinates();
+                    Coordinate parkingLotCoordinate = coords.get(0);
+                    Coordinate storeCoordinate = polygon.getLocations().get(0).getNavigatableCoordinates().get(0);
+                    double distance = storeCoordinate.metersFrom(parkingLotCoordinate);
+                    if(currentDistanceFromParkingToStore == 0.0 || distance < currentDistanceFromParkingToStore) {
+                        currentNearestParkingLocation = parkingLocation;
+                        currentDistanceFromParkingToStore = distance;
+                        currentNearestChildParking = childParking;
+                    }
+                }
+            }
+
+            if(mTemporaryParkingLocation != null) removePin(mTemporaryParkingLocation);
+            mTemporaryParkingLocation = currentNearestParkingLocation;
+
+            String parkingLotName = storeParking.getName();
+            String entranceName = currentNearestChildParking.getName();
+            showParkingDetail(mTemporaryParkingLocation, true, parkingLotName, entranceName, "", parkingLotPosition);
+
+            Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car, R.drawable.circle_imageview_background_black);
+            dropPin(mTemporaryParkingLocation.getNavigatableCoordinates().get(0), mTemporaryParkingLocation, amenityDrawable);
+            mapView.getCamera().focusOn(polygon);
+            mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_NEAREST_PARKING);
+
+            destinationPolygon = mTemporaryParkingLocation;
+
         } catch (Exception e) {
             logger.error(e);
         }
@@ -1069,15 +1127,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     showAmenityDetail((CustomLocation) location, drawable);
                 }
 
-                 destinationPolygon = location;
-                if(!location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)){
-                    //highlight the polygon
-//                    LocationLabelClicker originalClicker = mLocationClickersMap.get(coordinate);
-//                    originalClicker = null;
-                    dropPinWithColor(coordinate, location, drawable);
-                    mRemovedPin = label;
-                    mapView.removeMarker(label);
-                }
+                if(destinationPolygon == location || location == mSavedParkingLocation) return;
+                destinationPolygon = location;
+                dropPinWithColor(coordinate, location, drawable);
+                if(!location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) mRemovedPin = label; //parking pin is temporary - shouldn'be be readded
+                mapView.removeMarker(label);
 
             }
         };
@@ -1218,6 +1272,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
         //check if deal exists for this store
         ArrayList<KcpContentPage> dealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true);
+        ArrayList<KcpContentPage> recommendedDealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true);
+        dealsList.addAll(recommendedDealsList);
+
         final ArrayList<KcpContentPage> dealsForThisStore = new ArrayList<KcpContentPage>();
 
         if(dealsList != null){
@@ -1236,7 +1293,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_deals));
             llDeals.setVisibility(View.VISIBLE);
             tvDealName.setText(dealsForThisStore.get(0).getTitle());
-            param.height = KcpUtility.dpToPx(getActivity(), 157);
+            param.height = KcpUtility.dpToPx(getActivity(), 161);
 
             if(dealsForThisStore.size() > 1){
                 int moreDeals = dealsForThisStore.size() - 1;
@@ -1262,7 +1319,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
         } else {
             llDeals.setVisibility(View.GONE);
-            param.height = KcpUtility.dpToPx(getActivity(), 109);
+            param.height = KcpUtility.dpToPx(getActivity(), 113);
         }
         rlDirection.setLayoutParams(param);
         mMainActivity.expandTopNav();

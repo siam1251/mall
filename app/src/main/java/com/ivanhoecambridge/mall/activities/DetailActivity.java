@@ -38,7 +38,6 @@ import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.GlideFactory;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.adapters.DealsRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
@@ -47,6 +46,7 @@ import com.ivanhoecambridge.mall.views.CTA;
 import com.ivanhoecambridge.mall.views.CustomAnimation;
 import com.ivanhoecambridge.mall.views.HtmlTextView;
 import com.ivanhoecambridge.mall.views.SpacesItemDecoration;
+import factory.HeaderFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

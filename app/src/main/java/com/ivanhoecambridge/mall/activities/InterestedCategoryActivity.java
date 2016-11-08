@@ -32,7 +32,7 @@ import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.InterestRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;

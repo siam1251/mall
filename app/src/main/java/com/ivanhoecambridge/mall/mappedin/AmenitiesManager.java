@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import com.ivanhoecambridge.mall.constants.Constants;
+
+import factory.HeaderFactory;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +42,7 @@ public class AmenitiesManager  {
 
     public AmenityService getKcpService(){
         ServiceFactory serviceFactory = new ServiceFactory();
-        if(mAmenityService == null) mAmenityService = serviceFactory.createRetrofitService(mContext, AmenityService.class, HeaderFactory.MALL_INFO_URL_BASE);
+        if(mAmenityService == null) mAmenityService = serviceFactory.createRetrofitService(mContext, AmenityService.class, Constants.MALL_INFO_URL_BASE);
         return mAmenityService;
     }
 
@@ -64,6 +66,7 @@ public class AmenitiesManager  {
 
             @Override
             public void onFailure(Call<Amenities> call, Throwable t) {
+                logger.error(t);
                 handleState(DOWNLOAD_FAILED);
             }
         });

@@ -117,7 +117,7 @@ public class Amenities {
     }
 
     public interface OnDealsClickListener {
-        public void onDealsClick(boolean enabled, boolean resetDealsList);
+        public void onDealsClick(boolean enabled);
     }
 
     public interface OnParkingClickListener {

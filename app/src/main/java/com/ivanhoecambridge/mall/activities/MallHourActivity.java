@@ -24,7 +24,7 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpTimeConverter;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 
 import java.util.Calendar;

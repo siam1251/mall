@@ -10,7 +10,7 @@ import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 
 import org.msgpack.core.MessagePack;
 import org.msgpack.core.MessageUnpacker;
@@ -54,10 +54,12 @@ public class IndexManager {
     public static final int TASK_COMPLETE = 4;
 
     private static final String KEY_TAGS = "tags";
+    private static final String KEY_BRANDS = "brands";
     private static final String KEY_CATEGORIES = "categories";
 
-    public static Map<String, ArrayList<Integer>> sTagsMap = new HashMap<>();
+    public static Map<String, ArrayList<Integer>> sBrandsMap = new HashMap<>();
     public static Map<String, ArrayList<Integer>> sCategoriesMap = new HashMap<>();
+    public static Map<String, ArrayList<Integer>> sTagsMap = new HashMap<>();
 
     private static final String HEADER_KEY_CONTENT_TYPE     = "Content-Type";
 
@@ -69,7 +71,7 @@ public class IndexManager {
         HashMap<String, String> headers = new HashMap<String, String>();
         headers.put(HEADER_KEY_CONTENT_TYPE,       Constants.HEADER_VALUE_CONTENT_TYPE_MESSAGE_PACK);
 
-        if(mIndexService == null) mIndexService = serviceFactory.createRetrofitService(mContext, headers, IndexService.class, HeaderFactory.SEARCH_INDEX_URL_BASE);
+        if(mIndexService == null) mIndexService = serviceFactory.createRetrofitService(mContext, headers, IndexService.class, Constants.SEARCH_INDEX_URL_BASE);
         return mIndexService;
     }
 
@@ -81,7 +83,7 @@ public class IndexManager {
     }
 
     public void downloadSearchIndexes(){
-        DownloadBinaryTask downloadImageTask = new DownloadBinaryTask(HeaderFactory.SEARCH_INDEX_URL_BASE + HeaderFactory.getSearchIndexUrl());
+        DownloadBinaryTask downloadImageTask = new DownloadBinaryTask(Constants.SEARCH_INDEX_URL_BASE + HeaderFactory.getSearchIndexUrl());
         downloadImageTask.execute();
     }
 
@@ -195,10 +197,12 @@ public class IndexManager {
                         }
                     }
                     if(tagsIds.size() > 0) {
-                        if(key.asString().equals(KEY_TAGS)) {
-                            sTagsMap.put(tagName.asString(), tagsIds);
+                        if(key.asString().equals(KEY_BRANDS)) {
+                            sBrandsMap.put(tagName.asString(), tagsIds);
                         } else if(key.asString().equals(KEY_CATEGORIES)) {
                             sCategoriesMap.put(tagName.asString(), tagsIds);
+                        } else if(key.asString().equals(KEY_TAGS)) {
+                            sTagsMap.put(tagName.asString(), tagsIds);
                         }
                     }
                 }

@@ -62,6 +62,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
     public class TheaterViewer extends MainViewHolder {
         public CardView cvMoviePoster;
         public ImageView ivMoviePoster;
+        public ImageView ivDetailImageLargePhoto;
         public TextView tvMovieTitle;
         public TextView tvMovieRating;
 
@@ -69,6 +70,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
             super(itemView);
             cvMoviePoster = (CardView) itemView.findViewById(R.id.cvMoviePoster);
             ivMoviePoster = (ImageView) itemView.findViewById(R.id.ivMoviePoster);
+            ivDetailImageLargePhoto = (ImageView) itemView.findViewById(R.id.ivDetailImageLargePhoto);
             tvMovieTitle = (TextView) itemView.findViewById(R.id.tvMovieTitle);
             tvMovieRating = (TextView) itemView.findViewById(R.id.tvMovieRating);
         }
@@ -77,6 +79,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
     public class ShowtimesViewer extends MainViewHolder {
         public CardView cvMoviePoster;
         public ImageView ivMoviePoster;
+        public ImageView ivDetailImageLargePhoto;
         public TextView tvMovieTitleRating;
         public TextView tvMovieLengthGenre;
         public TextView tvMovieShowtimes;
@@ -85,6 +88,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
             super(itemView);
             cvMoviePoster = (CardView) itemView.findViewById(R.id.cvMoviePoster);
             ivMoviePoster = (ImageView) itemView.findViewById(R.id.ivMoviePoster);
+            ivDetailImageLargePhoto = (ImageView) itemView.findViewById(R.id.ivDetailImageLargePhoto);
             tvMovieTitleRating = (TextView) itemView.findViewById(R.id.tvMovieTitleRating);
             tvMovieLengthGenre = (TextView) itemView.findViewById(R.id.tvMovieLengthGenre);
             tvMovieShowtimes = (TextView) itemView.findViewById(R.id.tvMovieShowtimes);
@@ -110,12 +114,29 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
             if (holder instanceof TheaterViewer) {
                 final TheaterViewer theaterViewer = (TheaterViewer) holder;
                 //Poster
-                String photoUrl = movieDetail.getLargePhotoUrl();
+                String photoUrl = movieDetail.getHighPhotoUrl();
+                final String photoUrlLarge = movieDetail.getLargePhotoUrl();
                 if(!photoUrl.equals("")) {
                     Glide.with(mContext)
                             .load(photoUrl)
                             .crossFade()
                             .centerCrop()
+                            .listener(new RequestListener<String, GlideDrawable>() {
+                                @Override
+                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                    Glide.with(mContext)
+                                            .load(photoUrlLarge)
+                                            .crossFade()
+                                            .centerCrop()
+                                            .into(theaterViewer.ivDetailImageLargePhoto);
+                                    return false;
+                                }
+                            })
                             .placeholder(R.drawable.icn_movies_placeholder)
                             .into(theaterViewer.ivMoviePoster);
 
@@ -142,11 +163,27 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
             } else if(holder instanceof ShowtimesViewer){
                 final ShowtimesViewer showtimesViewer = (ShowtimesViewer) holder;
                 //Poster
-//                String photoUrl = movieDetail.getHighPhotoUrl();
-                String photoUrl = movieDetail.getLargePhotoUrl();
+                String photoUrl = movieDetail.getHighPhotoUrl();
+                final String photoUrlLarge = movieDetail.getLargePhotoUrl();
                 if(!photoUrl.equals("")) {
                     Glide.with(mContext)
                             .load(photoUrl)
+                            .listener(new RequestListener<String, GlideDrawable>() {
+                                @Override
+                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                    Glide.with(mContext)
+                                            .load(photoUrlLarge)
+                                            .crossFade()
+                                            .centerCrop()
+                                            .into(showtimesViewer.ivDetailImageLargePhoto);
+                                    return false;
+                                }
+                            })
                             .crossFade()
                             .centerCrop()
                             .placeholder(R.drawable.icn_movies_placeholder)

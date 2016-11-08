@@ -35,8 +35,8 @@
                     android:layout_margin="10dp"
                     android:layout_centerVertical="true"
                     android:id="@+id/cvMovieImage"
-                    android:layout_width="145dp"
-                    android:layout_height="217.5dp"
+                    android:layout_width="@dimen/movie_poster_width_large"
+                    android:layout_height="@dimen/movie_poster_height_large"
                     app:cardCornerRadius="4dp"
                     style="@style/SelectableItemForegroundNormal"
                     android:elevation="3dp"
@@ -47,9 +47,17 @@
                         android:transitionName="@string/transition_movie_poster"
                         android:layout_gravity="center"
                         android:id="@+id/ivDetailImage"
-                        android:layout_width="145dp"
-                        android:layout_height="217.5dp"
+                        android:layout_width="@dimen/movie_poster_width_large"
+                        android:layout_height="@dimen/movie_poster_height_large"
                         android:src="@drawable/placeholder_movie"
+                        />
+
+                    <ImageView
+                        android:visibility="gone"
+                        android:layout_gravity="center"
+                        android:id="@+id/ivDetailImageLargePhoto"
+                        android:layout_width="@dimen/movie_poster_width_large"
+                        android:layout_height="@dimen/movie_poster_height_large"
                         />
 
                 </android.support.v7.widget.CardView>

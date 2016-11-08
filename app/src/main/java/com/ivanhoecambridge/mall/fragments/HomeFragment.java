@@ -24,7 +24,7 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 
 import java.util.ArrayList;
@@ -230,7 +230,7 @@ public class HomeFragment extends BaseFragment {
                     updateOtherDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
                 } else if(mode.equals(Constants.EXTERNAL_CODE_RECOMMENDED)) {
                     updateRecommendedDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
-                    MapFragment.getInstance().onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL), true);
+                    MapFragment.getInstance().onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL));
                 }
             }
         } catch (Exception e) {

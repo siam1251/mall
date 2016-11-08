@@ -1,8 +1,6 @@
 package com.ivanhoecambridge.mall.movies.models;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementArray;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -19,30 +17,46 @@ import java.util.List;
 @Root(strict = false)
 public class Movie
 {
-//    @ElementList(entry = "showtimes", required = false, inline = true)
-//    @ElementList(entry = "showtimes", required = false)
-    private List<String> showtimes;
-
-    public List<String> getShowtimes ()
-    {
-        if(showtimes == null) return new ArrayList<String>();
-        return showtimes;
-    }
-
-    public void setShowtimes (List<String> showTimes)
-    {
-        this.showtimes = showTimes;
-    }
-
-
     @Element
     private String movie_id;
 
     @Element
     private String movie_name;
 
-    @Element(required = false)
+    @Element
     private String movie_rating;
+
+
+
+    @ElementList(entry = "showtimes", inline = true)
+    private List<Showtimes> showtimes; //change all the getters, setters
+
+    public List<Showtimes> getShowtimes()
+    {
+        if(showtimes == null) return new ArrayList<Showtimes>();
+        return showtimes;
+    }
+
+    public void setShowtimes(List<Showtimes> showTimes)
+    {
+        this.showtimes = showTimes;
+    }
+
+    /*@Element(name = "showtimes")
+    private Showtimes showtimes; //change all the getters, setters
+
+    public Showtimes getShowtimes()
+    {
+        if(showtimes == null) return new Showtimes();
+        return showtimes;
+    }
+
+    public void setShowtimes(Showtimes showTimes)
+    {
+        this.showtimes = showTimes;
+    }*/
+
+
 
     public String getMovie_id ()
     {
@@ -86,13 +100,16 @@ public class Movie
      * @return return show times in series ex) "12:45 3:45 7:05 10:00"
      */
     public String getShowtimesString(){
-        String showtimes = "";
-        for(String showtime : getShowtimes()) {
-            showtime = convert24Hrto12Hr(showtime);
-            if(showtimes.equals("")) showtimes = showtime;
-            else showtimes = showtimes + " " + showtime;
+        String showtimesString = "";
+        if(getShowtimes().size() > 0 ){
+            Showtimes showtimes = getShowtimes().get(0);
+            for(String showtime : showtimes.getShowtimes()) {
+                showtime = convert24Hrto12Hr(showtime);
+                if(showtimes.equals("")) showtimesString = showtime;
+                else showtimesString = showtimesString + "   " + showtime;
+            }
         }
-        return showtimes;
+        return showtimesString;
     }
 
     public String convert24Hrto12Hr(String time){
@@ -105,4 +122,5 @@ public class Movie
         }
         return "";
     }
+
 }

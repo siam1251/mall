@@ -12,6 +12,7 @@
         android:id="@+id/tvFooter"
         android:layout_width="match_parent"
         android:layout_height="28dp"
+        android:layout_centerVertical="true"
         android:gravity="center_vertical"
         android:background="@color/colorPrimary"
         style="@style/SelectableItemForeground"

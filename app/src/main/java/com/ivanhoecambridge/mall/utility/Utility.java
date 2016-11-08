@@ -10,6 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -103,6 +104,20 @@ public class Utility {
         context.startActivity(browserIntent);
     }
 
+    public static void openFacebook(Context context, String url) {
+        Uri uri = Uri.parse(url);
+        try {
+            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo("com.facebook.katana", 0);
+            if (applicationInfo.enabled) {
+                // http://stackoverflow.com/a/24547437/1048340
+                uri = Uri.parse("fb://facewebmodal/f?href=" + url);
+            }
+        } catch (PackageManager.NameNotFoundException ignored) {
+        }
+        context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+    }
+
+
     public static void openInstagramWithDialog(final Context context, final String title, final String msg, final String positiveBtn, final String negativebtn, final String userName){
         AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
         alertDialogForInterest.getAlertDialog(
@@ -114,12 +129,12 @@ public class Utility {
                 new AlertDialogForInterest.DialogAnsweredListener() {
                     @Override
                     public void okClicked() {
-                        openInstagram(context, userName);
+                        openInstagramWithName(context, userName);
                     }
                 }).show();
     }
 
-    public static void openInstagram(Context context, String userName){
+    public static void openInstagramWithName(Context context, String userName){
         Uri uri = Uri.parse("http://instagram.com/_u/" + userName);
         Intent likeIng = new Intent(Intent.ACTION_VIEW, uri);
         likeIng.setPackage("com.instagram.android");
@@ -129,6 +144,18 @@ public class Utility {
             context.startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://instagram.com/" + userName)));
         }
+    }
+
+    public static void openTwitter(Context context, String url){
+        Intent intent = null;
+        try {
+            context.getPackageManager().getPackageInfo("com.twitter.android", 0);
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } catch (Exception e) {
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        }
+        context.startActivity(intent);
     }
 
     public static void playVideo(Context context, String url){
@@ -715,4 +742,20 @@ public class Utility {
 
     }
 
+    public static Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(
+                bm, 0, 0, width, height, matrix, false);
+        bm.recycle();
+        return resizedBitmap;
+    }
 }

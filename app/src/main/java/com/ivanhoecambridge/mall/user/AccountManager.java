@@ -11,7 +11,8 @@ import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
-import com.ivanhoecambridge.mall.factory.HeaderFactory;
+import com.ivanhoecambridge.mall.account.KcpAccount;
+import factory.HeaderFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,9 @@ import retrofit2.http.Url;
  * Created by Kay on 2016-09-02.
  */
 public class AccountManager {
+
+
+
     private static final String TAG = "AccountManager";
     private static final String KEY_TOKEN = "token";
     private static final String KEY_USER = "user";
@@ -37,7 +41,7 @@ public class AccountManager {
     private static final String KEY_PASSWORD = "password";
     private static final String VALUE_DEVICE_CREDENTIAL = "DeviceCredential";
 
-    public final static String PREFS_KEY_USER_TOKEN = 	"prefs_key_user_token";
+//    public final static String PREFS_KEY_USER_TOKEN = 	"prefs_key_user_token";
 
 
     public static final int DOWNLOAD_FAILED = -1;
@@ -50,8 +54,8 @@ public class AccountManager {
     protected Logger logger = null;
     protected Context mContext;
     protected HashMap<String, String> mHeadersMap;
-    public static String mUserToken = "";
 
+//    public static String mUserToken = "";
 
     /**
      *
@@ -59,6 +63,7 @@ public class AccountManager {
      * @param headersMap DO NOT include Authorization
      * @param handler
      */
+
     public AccountManager(Context context, HashMap<String, String> headersMap, Handler handler) {
         mContext = context;
         mHandler = handler;
@@ -72,23 +77,17 @@ public class AccountManager {
         return mUserService;
     }
 
-
-    public void getUserToken() {
-        mUserToken = loadUserToken();
-        if(mUserToken.equals("")) {
-            postToCreateToken();
-        } else {
-            handleState(DOWNLOAD_COMPLETE);
-        }
+    public void downloadUserToken() {
+        postToCreateToken();
     }
 
-    public void saveGsonUserToken(String token){
+    /*public void saveGsonUserToken(String token){
         KcpUtility.cacheToPreferences(mContext, PREFS_KEY_USER_TOKEN, token);
     }
 
     public String loadUserToken(){
         return KcpUtility.loadFromCache(mContext, PREFS_KEY_USER_TOKEN, "");
-    }
+    }*/
 
     protected void postToCreateToken(){
         String identifier = UUID.randomUUID().toString();
@@ -108,8 +107,7 @@ public class AccountManager {
                                 String token = response.body().getToken();
                                 if(!token.equals("")){
                                     //token received - use this
-                                    saveGsonUserToken(token);
-                                    mUserToken = token;
+                                    KcpAccount.getInstance().saveGsonUserToken(mContext, token);
                                     HeaderFactory.constructHeader(); //update the header
                                     handleState(DOWNLOAD_COMPLETE);
                                 }
@@ -118,6 +116,7 @@ public class AccountManager {
 
                         @Override
                         public void onFailure(Call<Token> call, Throwable t) {
+                            logger.error(t);
                             handleState(DOWNLOAD_FAILED);
                         }
                     });
@@ -126,6 +125,7 @@ public class AccountManager {
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
+                logger.error(t);
                 handleState(DOWNLOAD_FAILED);
             }
         });
