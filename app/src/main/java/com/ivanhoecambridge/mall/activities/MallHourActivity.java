@@ -25,6 +25,8 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import factory.HeaderFactory;
+
+import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 
 import java.util.Calendar;
@@ -82,7 +84,7 @@ public class MallHourActivity extends AppCompatActivity {
                     Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
                     int alpha = 255 - Math.round(f);
                     backdrop.getBackground().setAlpha(alpha);
-                    tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
+                    tvToolbar.setTextColor(Utility.getColorWithAlpha(MallHourActivity.this, R.color.toolbarTextColor, alpha));
                     toolbar.getBackground().setAlpha(255 - alpha);
                 }
             });

@@ -42,18 +42,21 @@ android {
         metropolis {
             applicationId "com.ivanhoecambridge.mall.metropolis"
             buildConfigField 'String', 'MALL', '"metropolis-at-metrotown"'
+            buildConfigField 'Boolean', 'Push', 'false'
             versionName "1.0.0"
         }
 
         vaughanmills {
             applicationId "com.ivanhoecambridge.mall.vaughanmills"
             buildConfigField 'String', 'MALL', '"vaughan-mills"'
+            buildConfigField 'Boolean', 'Push', 'true'
             versionName "1.0.0"
         }
 
         tsawwassenmills {
             applicationId "com.ivanhoecambridge.mall.tsawwassenmills"
             buildConfigField 'String', 'MALL', '"tsawwassen-mills"'
+            buildConfigField 'Boolean', 'Push', 'false'
             versionName "1.0.0"
         }
     }

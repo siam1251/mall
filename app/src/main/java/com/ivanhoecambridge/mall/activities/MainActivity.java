@@ -70,6 +70,7 @@ import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpDataListener;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
+import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.KcpMallInfo;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
@@ -552,6 +553,16 @@ public class MainActivity extends BaseActivity
 
     }
 
+    public String getStartStoreName(){
+        if(etStartStore == null || etStartStore.getText() == null) return "";
+        return etStartStore.getText().toString();
+    }
+
+    public String getDestStoreName(){
+        if(etDestStore == null || etDestStore.getText() == null) return "";
+        return etDestStore.getText().toString();
+    }
+
     public boolean isEditTextsEmpty(){
         if(etStartStore.getText().toString() != null && !etStartStore.getText().toString().equals("") &&
                 etDestStore.getText().toString() != null && !etDestStore.getText().toString().equals("") ) {
@@ -631,6 +642,7 @@ public class MainActivity extends BaseActivity
 
         String data = "";
         try {
+
             data = KcpUtility.convertStreamToString(getAssets().open(Constants.PARKING_OFFLINE_TEXT));
             Gson gson = new Gson();
             ParkingManager.sParkings = gson.fromJson(data, Parkings.class);

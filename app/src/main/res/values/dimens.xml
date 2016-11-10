@@ -41,7 +41,6 @@
     <item name="ancmt_image_ratio_square" format="float" type="dimen">1</item>
     <item name="movie_detail_top_layout_ratio" format="float" type="dimen">1.4</item>
 
-
     <!--deal card-->
 
     <dimen name="deal_desc_top_margin">15dp</dimen>
@@ -179,6 +178,7 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="shadow_inverted_height">4dp</dimen>
+    <item name="default_img_ratio" format="float" type="dimen">1.875</item>
 
     <!--TOOLBAR-->
     <dimen name="toolbar_elevation">3dp</dimen>
@@ -233,5 +233,8 @@
     <!--ONBOARDING-->
     <dimen name="onboarding_first_title">24sp</dimen>
     <dimen name="onboarding_second_title">21sp</dimen>
+
+
+
 
 </resources>

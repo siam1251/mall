@@ -45,6 +45,10 @@ public class KCPSetRatioImageView extends ImageView implements ImageView.OnClick
         super(context, attrs, defStyleAttr);
     }
 
+    public void setImageRatio(float ratio){
+        mImageRatio = ratio;
+    }
+
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         try {

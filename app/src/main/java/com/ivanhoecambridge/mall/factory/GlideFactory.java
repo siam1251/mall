@@ -11,6 +11,9 @@ import com.ivanhoecambridge.mall.R;
 
 /**
  * Created by Kay on 2016-05-06.
+ *
+ * .dontanimate() should be used where the image ratios are not consistent between images
+ * https://github.com/bumptech/glide/issues/542
  */
 public class GlideFactory {
 

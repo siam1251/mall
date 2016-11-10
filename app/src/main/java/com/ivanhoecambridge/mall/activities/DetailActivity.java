@@ -616,7 +616,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 RelativeLayout rlDetailImage = (RelativeLayout) findViewById(R.id.rlDetailImage);
                 rlDetailImage.setVisibility(View.GONE);
-                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                toolbar.setBackgroundColor(getResources().getColor(R.color.detailActivityToolbarColor));
             } else {
                 final View backdrop = (View) findViewById(R.id.backdrop);
                 int height = (int) (KcpUtility.getScreenWidth(this) / KcpUtility.getFloat(this, R.dimen.ancmt_image_ratio));
@@ -657,7 +657,8 @@ public class DetailActivity extends AppCompatActivity {
                         Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
                         int alpha = 255 - Math.round(f);
                         backdrop.getBackground().setAlpha(alpha);
-                        tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
+//                        tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
+                        tvToolbar.setTextColor(Utility.getColorWithAlpha(DetailActivity.this, R.color.toolbarTextColor, alpha));
                         toolbar.getBackground().setAlpha(255 - alpha);
                     }
                 });
@@ -692,7 +693,8 @@ public class DetailActivity extends AppCompatActivity {
                 new GlideFactory().glideWithNoDefaultRatio(
                         ivDetailLogo.getContext(),
                         logoUrl,
-                        ivDetailLogo);
+                        ivDetailLogo/*,
+                        R.drawable.placeholder*/);
             }
 
             //TITLE

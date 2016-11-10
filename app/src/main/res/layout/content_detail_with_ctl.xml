@@ -42,10 +42,11 @@
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="fitCenter"
                 android:transitionName="@string/transition_news_logo"
                 android:id="@+id/ivDetailLogo"
+                android:scaleType="fitCenter"
                 />
+                android:scaleType="centerCrop"
         </FrameLayout>
 
         <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView

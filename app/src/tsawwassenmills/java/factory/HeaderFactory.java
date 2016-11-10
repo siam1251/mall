@@ -28,7 +28,7 @@ public class HeaderFactory {
 
     public static String MALL_INFO_URL = "bins/2iu4o";
     public static String AMENITIES_URL = "bins/4da3s";
-    public static String PARKING_URL = "bins/21oug";
+    public static String PARKING_URL = "bins/141i4";
 
     private static HashMap<String, String> mHeaders;
     public static HashMap<String, String> getHeaders(){

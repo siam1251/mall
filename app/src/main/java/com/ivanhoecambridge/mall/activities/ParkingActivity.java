@@ -94,7 +94,6 @@ public class ParkingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ParkingManager.saveParkingSpotAndEntrance(ParkingActivity.this, mParkingNote, mParkingLotSelectedPosition, mEntranceSelectedPosition);
                 Toast.makeText(ParkingActivity.this, getResources().getString(R.string.parking_saved_my_parking_spot), Toast.LENGTH_SHORT).show();
-                KcpNotificationManager.cancelNotification(ParkingActivity.this, NOTIFICATION_ID_WELCOME);
                 setResult(Activity.RESULT_OK, new Intent());
                 onFinish();
             }

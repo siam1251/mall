@@ -19,6 +19,7 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
 import android.support.v7.widget.Toolbar;
@@ -758,4 +759,14 @@ public class Utility {
         bm.recycle();
         return resizedBitmap;
     }
+
+    public static int getColorWithAlpha(int color, int alpha){
+        return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
+    }
+
+    public static int getColorWithAlpha(Context context, @ColorRes int colorResource, int alpha){
+        int color = context.getResources().getColor(colorResource);
+        return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
+    }
+
 }

@@ -4,8 +4,11 @@ package com.ivanhoecambridge.mall.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,8 +18,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.activities.DetailActivity;
@@ -26,6 +36,7 @@ import com.ivanhoecambridge.mall.fragments.MapFragment;
 import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.utility.Utility;
+import com.ivanhoecambridge.mall.views.KCPSetRatioImageView;
 import com.ivanhoecambridge.mall.views.RecyclerViewFooter;
 
 import java.util.ArrayList;
@@ -44,6 +55,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
     private boolean mFooterExist = false;
     private String mFooterText;
     private View.OnClickListener mOnClickListener;
+    private Drawable placeholder;
 
 
     public CategoryStoreRecyclerViewAdapter(Context context, ArrayList<KcpPlaces> kcpPlaces, int contentType) {
@@ -62,7 +74,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
     public class StoreViewHolder extends RecyclerView.ViewHolder {
         public View mView;
         public RelativeLayout rlDeal;
-        public ImageView ivDealLogo;
+        public KCPSetRatioImageView ivDealLogo;
         public TextView tvDealStoreName;
         public TextView tvDealTitle;
         public TextView tvExpiryDate;
@@ -73,7 +85,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
             mView = v;
 
             rlDeal             = (RelativeLayout)  v.findViewById(R.id.rlDeal);
-            ivDealLogo  = (ImageView) v.findViewById(R.id.ivDealLogo);
+            ivDealLogo  = (KCPSetRatioImageView) v.findViewById(R.id.ivDealLogo);
             ivDealLogo.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ivDealLogo.getLayoutParams();
@@ -134,13 +146,49 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         final StoreViewHolder storeViewHolder = (StoreViewHolder) holder;
 
         String imageUrl = kcpPlace.getHighestImageUrl();
-        storeViewHolder.ivDealLogo.setImageResource(R.drawable.placeholder);
+        placeholder = ContextCompat.getDrawable(mContext, R.drawable.placeholder);
 
-        new GlideFactory().glideWithNoDefaultRatio(
-                mContext,
-                imageUrl,
-                storeViewHolder.ivDealLogo,
-                R.drawable.placeholder_logo);
+        Glide.with(mContext)
+                .load(imageUrl)
+                .crossFade()
+                .placeholder(placeholder)
+                .error(placeholder)
+                .dontAnimate()
+                /*.listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        *//*int resourceWidth = resource.getIntrinsicWidth();
+                        int resourceHeight = resource.getIntrinsicHeight();
+                        placeholder.setBounds(0, 0, resourceWidth, resourceHeight);
+                        storeViewHolder.ivDealLogo.setImageDrawable(placeholder);*//*
+
+                        *//*int resourceWidth = resource.getIntrinsicWidth();
+                        int resourceHeight = resource.getIntrinsicHeight();
+
+                        int width;
+                        int height;
+
+                        float placeHolderRatio = (float) KcpUtility.getFloat(mContext, R.dimen.default_img_ratio);
+                        if(resourceWidth > resourceHeight) {
+                            width = KcpUtility.dpToPx((Activity) mContext, 80);
+                            height = width * resourceHeight / resourceWidth;
+                        } else {
+                            height = (int) (KcpUtility.dpToPx((Activity) mContext, 80) / placeHolderRatio);
+                            width = height * resourceWidth / resourceHeight;
+                        }
+                        placeholder.setBounds(0, 0, width, height);
+                        storeViewHolder.ivDealLogo.setImageDrawable(placeholder);*//*
+
+                        return false;
+                    }
+                })*/
+//                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(storeViewHolder.ivDealLogo);
 
         final String storename = kcpPlace.getPlaceName();
         storeViewHolder.tvDealStoreName.setText(storename);

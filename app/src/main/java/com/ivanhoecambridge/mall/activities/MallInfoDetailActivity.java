@@ -92,7 +92,8 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                     Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
                     int alpha = 255 - Math.round(f);
                     backdrop.getBackground().setAlpha(alpha);
-                    tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
+//                    tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
+                    tvToolbar.setTextColor(Utility.getColorWithAlpha(MallInfoDetailActivity.this, R.color.toolbarTextColor, alpha));
                     toolbar.getBackground().setAlpha(255 - alpha);
                 }
             });
@@ -169,7 +170,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                                     info.getPhoneNumber()
                             );
                         }
-                    }, false);
+                    }, true);
 
             CTA checkBalance = new CTA(
                     this,
@@ -198,7 +199,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                         public void onClick(View v) {
                             Utility.openGoogleMapWithAddress(MallInfoDetailActivity.this, HeaderFactory.MALL_NAME);
                         }
-                    }, false);
+                    }, true);
 
             CTA email = new CTA(
                     this,
@@ -256,7 +257,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                             public void onClick(View v) {
                                 Utility.openWebPage(MallInfoDetailActivity.this, info.getLinkURL());
                             }
-                        }, false);
+                        }, true);
 
                 cTAList.add(webpage);
 
@@ -266,65 +267,65 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                         mParentView,
                         R.layout.layout_detail_social_button_mall_info,
                         R.drawable.icn_facebook,
-                        info.getFacebook().getTitle(),
+                        info.getFacebook() == null ? "" : info.getFacebook().getTitle(),
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Utility.openFacebook(MallInfoDetailActivity.this, info.getFacebook().getUrl());
                             }
-                        }, false);
+                        }, true);
 
                 CTA instagram = new CTA(
                         this,
                         mParentView,
                         R.layout.layout_detail_social_button_mall_info,
                         R.drawable.icn_instagram,
-                        info.getInstagram().getTitle(),
+                        info.getInstagram() == null ? "" : info.getInstagram().getTitle(),
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Utility.openInstagramWithName(MallInfoDetailActivity.this, MallConstants.INSTAGRAM_USER_NAME);
                             }
-                        }, false);
+                        }, true);
 
                 CTA twiter = new CTA(
                         this,
                         mParentView,
                         R.layout.layout_detail_social_button_mall_info,
                         R.drawable.icn_twitter,
-                        info.getTwitter().getTitle(),
+                        info.getTwitter() == null ? "" : info.getTwitter().getTitle(),
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Utility.openTwitter(MallInfoDetailActivity.this, info.getTwitter().getUrl());
                             }
-                        }, false);
+                        }, true);
 
                 CTA youtube = new CTA(
                         this,
                         mParentView,
                         R.layout.layout_detail_social_button_mall_info,
                         R.drawable.icn_youtube,
-                        info.getYoutube().getTitle(),
+                        info.getYoutube() == null ? "" : info.getYoutube().getTitle(),
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Utility.openWebPage(MallInfoDetailActivity.this, info.getYoutube().getUrl());
                             }
-                        }, false);
+                        }, true);
 
                 CTA pinterest = new CTA(
                         this,
                         mParentView,
                         R.layout.layout_detail_social_button_mall_info,
                         R.drawable.icn_pinterest,
-                        info.getPinterest().getTitle(),
+                        info.getPinterest() == null ? "" : info.getPinterest().getTitle(),
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Utility.openWebPage(MallInfoDetailActivity.this, info.getPinterest().getUrl());
                             }
-                        }, false);
+                        }, true);
 
 
                 cTAList.add(facebook);

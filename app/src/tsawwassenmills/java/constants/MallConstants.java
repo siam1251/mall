@@ -19,12 +19,11 @@ public class MallConstants {
     public static String RATINGS_PROVINCE_CODE = "on-rating";
     public static String CINEMA_NAME = "SilverCity";
 
-
     //TWITTER
-    public final static String TWITTER_SCREEN_NAME = 		"Tsawwassen_Mills";
+    public final static String TWITTER_SCREEN_NAME = 		"TsawwassenMills";
     public final static int 	NUMB_OF_TWEETS = 		5; //how many twitter tweets it will show at a time
-    public final static String TWITTER_API_KEY = 		"bM8knFuF8iYVrYIULOZvyt2ew";
-    public final static String TWITTER_API_SECRET = 	"8KzSsk0u1yhYU5RUrnV5T2O75KeIUUXicbXXOD2eUxnRxvc4DB";
+    public final static String TWITTER_API_KEY = 		"RmPjnLfNKjx0XttsUDOoD1cuw";
+    public final static String TWITTER_API_SECRET = 	"bLilNH7B4IhY56IDoTNK9LbGTadbI3U2HIdCnX6UmMfph01ZNU";
 
     //INSTAGRAM
     public final static int 	NUMB_OF_INSTA = 		10; //how many twitter tweets it will show at a time

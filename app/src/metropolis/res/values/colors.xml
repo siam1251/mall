@@ -6,4 +6,21 @@
     <color name="warningColor">#13bed0</color> <!--#CFff4444-->
     <color name="themeColorDark">#108E9C</color>
 
+
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#303F9F</color> <!--status bar-->
+    <color name="textColorPrimary">#000000</color>
+    <color name="hamburger_menu">#212121</color>
+    <color name="active_mall_off_state">#000000</color>
+    <color name="toolbarTextColor">#FFFFFF</color>
+    <color name="tabSelectedTextColor">#13bed0</color>
+    <color name="emptySearchResults">#13bed0</color>
+    <color name="detailActivityToolbarColor">#13bed0</color>
+
+
+    <!--MAP-->
+    <color name="map_destination_store">#273e94</color>
+    <color name="directionSymbol">#000000</color>
+
+
 </resources>

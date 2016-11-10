@@ -7,6 +7,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.exacttarget.etpushsdk.ETAnalytics;
 import com.exacttarget.etpushsdk.ETException;
 import com.exacttarget.etpushsdk.ETLogListener;
@@ -70,17 +71,14 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
         KcpAccount.getInstance().initialize(getApplicationContext());
         HeaderFactory.changeCatalog(HeaderFactory.HEADER_VALUE_DATAHUB_CATALOG);
         if(Constants.IS_APP_IN_PRODUCTION) {
-//            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
-            Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
+            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
+//            Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         } else {
             Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         }
 
         KcpUtility.cacheToPreferences(this, Constants.PREF_KEY_WELCOME_MSG_DID_APPEAR, false); //resetting the welcome message flag as false to indicate it has never shown for this app launch
-
-        if(BuildConfig.MALL.equals(Constants.HEADER_VALUE_DATAHUB_CATALOG_MP)){
-
-        } else if (BuildConfig.MALL.equals(Constants.HEADER_VALUE_DATAHUB_CATALOG_VM)){
+        if(BuildConfig.Push){
             //EXACT TARGET
             EventBus.getInstance().register(this);
             try {
@@ -115,8 +113,6 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
                 Log.e(TAG, e.getMessage(), e);
             }
         }
-
-
     }
 
     @Override
