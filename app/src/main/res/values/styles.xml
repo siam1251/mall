@@ -118,12 +118,10 @@
         <item name="android:indeterminateTint">@color/themeColor</item>
     </style>
 
-    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    <!--<style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
+    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Light">
         <item name="colorAccent">@color/toolbarTextColor</item>
     </style>
-
-
-
 
 
     <style name="ProgressBarStyle" parent="Theme.AppCompat.Light.Dialog">

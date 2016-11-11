@@ -15,7 +15,8 @@
         android:layout_height="match_parent">
         android:background="?android:attr/selectableItemBackground"
 
-        <ImageView
+        <!--<ImageView-->
+        <com.ivanhoecambridge.mall.views.KCPSetRatioImageView
             android:layout_centerVertical="true"
             android:src="@drawable/placeholder_square"
             android:id="@+id/ivDealLogo"

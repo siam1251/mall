@@ -36,6 +36,7 @@ import com.ivanhoecambridge.mall.movies.MovieManager;
 import com.ivanhoecambridge.mall.movies.models.Address;
 import com.ivanhoecambridge.mall.movies.models.House;
 import com.ivanhoecambridge.mall.movies.models.MovieDetail;
+import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.CTA;
 import com.ivanhoecambridge.mall.views.MovieRecyclerItemDecoration;
@@ -111,7 +112,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
                     Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
                     int alpha = 255 - Math.round(f);
                     backdrop.getBackground().setAlpha(alpha);
-                    tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
+                    tvToolbar.setTextColor(Utility.getColorWithAlpha(MoviesActivity.this, R.color.toolbarTextColor, alpha));
                     toolbar.getBackground().setAlpha(255 - alpha);
                 }
             });

@@ -11,7 +11,9 @@ import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import factory.HeaderFactory;
 
+import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.constants.Constants;
+import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 
 import retrofit2.Call;
@@ -19,6 +21,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Url;
+
+import static com.ivanhoecambridge.mall.managers.KcpNotificationManager.NOTIFICATION_ID_WELCOME;
 
 /**
  * Created by Kay on 2016-07-25.
@@ -98,6 +102,7 @@ public class ParkingManager {
         KcpUtility.cacheToPreferences(context, KEY_ENTRANCE_POSITION, entrancePosition);
         saveParkingNotes(context, note);
         Amenities.saveToggle(context, Amenities.GSON_KEY_PARKING, true);
+        KcpNotificationManager.cancelNotification(context, NOTIFICATION_ID_WELCOME);
     }
 
     public static int getSavedParkingLotPosition(final Context context){

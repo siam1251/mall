@@ -10,14 +10,14 @@
     android:layout_height="?attr/actionBarSize">
     <!--app:popupTheme is what really changed the toolbar default menu drawable color-->
 
-    <com.ivanhoecambridge.mall.views.ThemeColorImageView
+    <ImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
         ThemedImageView:filterColor="@color/toolbarTextColor"
         android:id="@+id/ivToolbar"
         android:gravity="center"
         android:layout_gravity="center"
-        android:layout_width="wrap_content"
+        android:layout_width="107dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo_vaughan_mills"/>
+        android:src="@drawable/logo_mall"/>
 
 </android.support.v7.widget.Toolbar>

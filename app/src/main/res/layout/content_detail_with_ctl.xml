@@ -40,13 +40,13 @@
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:layout_gravity="center"
-                android:src="@drawable/logo_vaughan_mills"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="fitCenter"
                 android:transitionName="@string/transition_news_logo"
                 android:id="@+id/ivDetailLogo"
+                android:scaleType="fitCenter"
                 />
+                android:scaleType="centerCrop"
         </FrameLayout>
 
         <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView

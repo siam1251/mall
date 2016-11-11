@@ -59,6 +59,8 @@
                     android:textSize="@dimen/ancmt_title_txt"
                     android:text="Announcement Title"
                     android:textColor="@color/ancmt_title_color"
+                    android:lines="1"
+                    android:ellipsize="end"
                     />
 
                 <!--<ImageView-->

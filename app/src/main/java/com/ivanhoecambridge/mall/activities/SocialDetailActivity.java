@@ -24,6 +24,8 @@ import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
 import com.twitter.sdk.android.tweetui.UserTimeline;
 
+import constants.MallConstants;
+
 /**
  * Created by Kay on 2016-07-05.
  */
@@ -52,26 +54,26 @@ public class SocialDetailActivity extends AppCompatActivity {
             icn_share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(Utility.isAppInstalled(SocialDetailActivity.this, Constants.INSTAGRAM_PACKAGE_NAME)){
+                    if(Utility.isAppInstalled(SocialDetailActivity.this, MallConstants.INSTAGRAM_PACKAGE_NAME)){
                         Utility.openInstagramWithDialog(SocialDetailActivity.this,
                                 getResources().getString(R.string.title_open_instagram_app),
                                 getResources().getString(R.string.warning_open_instagram_app),
                                 getResources().getString(R.string.action_ok),
                                 getResources().getString(R.string.action_no_thanks),
-                                Constants.INSTAGRAM_USER_NAME);
+                                MallConstants.INSTAGRAM_USER_NAME);
                     } else {
                         Utility.openInstagramWithDialog(SocialDetailActivity.this,
                                 getResources().getString(R.string.title_open_instagram_website),
                                 getResources().getString(R.string.warning_open_instagram_website),
                                 getResources().getString(R.string.action_ok),
                                 getResources().getString(R.string.action_no_thanks),
-                                Constants.INSTAGRAM_USER_NAME);
+                                MallConstants.INSTAGRAM_USER_NAME);
                     }
                 }
             });
-            pageTitle = "@" + Constants.INSTAGRAM_USER_NAME;
+            pageTitle = "@" + MallConstants.INSTAGRAM_USER_NAME;
         } else if(mItemType == KcpContentTypeFactory.ITEM_TYPE_TWITTER) {
-            pageTitle = "@" + Constants.TWITTER_SCREEN_NAME;
+            pageTitle = "@" + MallConstants.TWITTER_SCREEN_NAME;
             toolbar.setBackgroundColor(getResources().getColor(R.color.twitter_theme_color));
         }
         getSupportActionBar().setTitle(pageTitle);
@@ -101,7 +103,7 @@ public class SocialDetailActivity extends AppCompatActivity {
             }
 
             final UserTimeline userTimeline = new UserTimeline.Builder()
-                    .screenName(Constants.TWITTER_SCREEN_NAME)
+                    .screenName(MallConstants.TWITTER_SCREEN_NAME)
                     .build();
 
             final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(this)

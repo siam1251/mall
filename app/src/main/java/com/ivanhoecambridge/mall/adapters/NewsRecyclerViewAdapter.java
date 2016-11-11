@@ -42,6 +42,8 @@ import com.ivanhoecambridge.mall.views.RecyclerViewFooter;
 
 import java.util.ArrayList;
 
+import constants.MallConstants;
+
 /**
  * Created by Kay on 2016-05-05.
  */
@@ -236,12 +238,12 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 return new TwitterFeedViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_social_feed_pager, parent, false),
                         R.drawable.icn_twitter,
-                        "@" + Constants.TWITTER_SCREEN_NAME);
+                        "@" + MallConstants.TWITTER_SCREEN_NAME);
             case KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM:
                 return new InstagramFeedViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_social_feed_pager, parent, false),
                         R.drawable.icn_instagram,
-                        "@" + Constants.INSTAGRAM_USER_NAME);
+                        "@" + MallConstants.INSTAGRAM_USER_NAME);
             case KcpContentTypeFactory.ITEM_TYPE_FOOTER:
                 return new RecyclerViewFooter.FooterViewHolder(
                         LayoutInflater.from(mContext).inflate(mFooterLayout, parent, false));

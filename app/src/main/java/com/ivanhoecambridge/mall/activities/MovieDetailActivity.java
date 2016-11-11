@@ -95,7 +95,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                     Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
                     int alpha = 255 - Math.round(f);
                     backdrop.getBackground().setAlpha(alpha);
-                    tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
+                    tvToolbar.setTextColor(Utility.getColorWithAlpha(MovieDetailActivity.this, R.color.toolbarTextColor, alpha));
                     toolbar.getBackground().setAlpha(255 - alpha);
                 }
             });

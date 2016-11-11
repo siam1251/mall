@@ -49,25 +49,6 @@ public class Constants {
     public final static String PARKING_OFFLINE_TEXT = "parking.json";
 
 
-
-	//TWITTER
-	public final static String TWITTER_SCREEN_NAME = 		"Vaughan_Mills";
-	public final static int 	NUMB_OF_TWEETS = 		5; //how many twitter tweets it will show at a time
-	public final static String TWITTER_API_KEY = 		"bM8knFuF8iYVrYIULOZvyt2ew";
-	public final static String TWITTER_API_SECRET = 	"8KzSsk0u1yhYU5RUrnV5T2O75KeIUUXicbXXOD2eUxnRxvc4DB";
-
-	//INSTAGRAM
-	public final static int 	NUMB_OF_INSTA = 		10; //how many twitter tweets it will show at a time
-	public final static String INSTAGRAM_BASE_URL = 	"https://api.instagram.com/v1/";
-	public final static String INSTAGRAM_USER_NAME = 		"Vaughan_Mills";
-	public final static String INSTAGRAM_PACKAGE_NAME = 		"com.instagram.android"; //to see if app is installed
-//    public final static String INSTAGRAM_ACCESS_TOKEN = "1327329361.faee812.fd4d8c7df4be4407b535d4d11a264ce3"; //METROPOLIS
-//    public final static String INSTAGRAM_USER_ID = 		"231349563"; //METROPOLIS
-
-	public final static String INSTAGRAM_ACCESS_TOKEN = "231349563.faee812.1a7e1f16f9354236979f88ffb646154b"; //METROPOLIS
-	public final static String INSTAGRAM_USER_ID = 		"249069342"; //VAUGHAN MILLS
-
-
 	//DOWNLOAD TYPES
 	public final static String EXTERNAL_CODE_DEAL = 		"deals-list";
 	public final static String EXTERNAL_CODE_FEED = 		"feed";

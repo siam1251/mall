@@ -39,6 +39,6 @@ public final class GeofenceConstants {
     public static final HashMap<String, LatLng> GEOFENCE_AREA_LAT_LONG = new HashMap<String, LatLng>();
     static {
         GEOFENCE_AREA_LAT_LONG.put("Kinetic Cafe", new LatLng(43.642848, -79.375370));//kinetic cafe building
-        GEOFENCE_AREA_LAT_LONG.put("Vaughan Mills", new LatLng(43.825410, -79.538450));//real location
+        GEOFENCE_AREA_LAT_LONG.put("Metropolis", new LatLng(45.502519, -73.562517));//real location
     }
 }

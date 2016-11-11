@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "920227983388",
+    "firebase_url": "https://tsawwassenmills-testing.firebaseio.com",
+    "project_id": "tsawwassenmills-testing",
+    "storage_bucket": "tsawwassenmills-testing.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920227983388:android:db9bbf0741dbb6ec",
+        "android_client_info": {
+          "package_name": "com.ivanhoecambridge.mall.tsawwassenmills"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "920227983388-q4sgk3a339rvh945c72vtv6cte3v1pk9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABXHk3Dkt-xqIzg_dINc0m9nvxledtHTc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

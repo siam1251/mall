@@ -14,6 +14,7 @@
     <color name="toolbarTextColor">#FFFFFF</color>
     <color name="tabSelectedTextColor">#FFFFFF</color>
     <color name="emptySearchResults">#333333</color>
+    <color name="detailActivityToolbarColor">#000000</color>
 
 
 

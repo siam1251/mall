@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Tsawwassen Mills</string>
+    <string name="mall_name">Tsawwassen Mills</string>
+
+    <!--MOVIES-->
+    <string name="movie_title">SilverCity Cinema</string>
+
+    <!--ACTIVE MALL-->
+    <string name="active_mall_welcome_msg">Welcome to Vaughan Mills, here’s what’s happening today!</string>
+
+    <!--ONBOARDING-->
+    <string name="onbd_one_title">Welcome to\nTsawwassen Mills new\ncompanion app</string>
+
+</resources>

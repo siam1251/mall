@@ -1,0 +1,7 @@
+<resources>
+    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">@color/toolbarTextColor</item>
+    </style>
+</resources>
+
+
