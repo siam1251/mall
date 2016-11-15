@@ -28,8 +28,8 @@ public class CustomLocation extends Location {
 
 
     private static HashMap<String, ArrayList<CustomLocation>> amenityHashmap = new HashMap<>();
-    private static HashMap<String, CustomLocation> locationHashmapByExternalId = new HashMap<>();
-    private static HashMap<String, CustomLocation> locationHashmapById = new HashMap<>();
+    private static HashMap<String, CustomLocation> locationHashmapByExternalId = new HashMap<>(); //used to find polygons for stores - that use external iD
+//    private static HashMap<String, CustomLocation> locationHashmapById = new HashMap<>(); //used to find polygons for parking lots - that use ID
     private static HashMap<String, CustomLocation> parkingHashMap = new HashMap<>();
 
     public CustomLocation(RawData rawData) throws Exception {
@@ -46,21 +46,39 @@ public class CustomLocation extends Location {
 
             if(rawData.string(TYPE_ID) != null) {
                 id = rawData.stringForce(TYPE_ID);
+//                locationHashmapById.put(id, this);
             }
 
+
+
+            //2016. 11. 10 - https://api.mappedin.com/1/location?venue=vaughan-mills doesn't give 'parking' and i don't know where the 'parking' data comes from for vaughan mills
+            //wherever 'parking' data comes for VM, it receives this data from type: "amenity", amenity: "parking"
+            //whwereas for Tsawwassen, the parking data comes from type: "amenity", amenities: "parking"
+
+            amenityType = rawData.string(TYPE_AMENITY);
             if(rawData.string(TYPE) != null && rawData.string(TYPE).equals(TYPE_AMENITIES)) {
-                amenityType = rawData.string(TYPE_AMENITY);
                 ArrayList<CustomLocation> amenityList;
                 if(amenityHashmap.containsKey(amenityType)) amenityList = amenityHashmap.get(amenityType);
                 else amenityList = new ArrayList<>();
                 amenityList.add(this);
                 amenityHashmap.put(amenityType, amenityList);
-                if(amenityType.equals("parking")){
+                if(amenityType != null && amenityType.equals(TYPE_AMENITY_PARKING)){
                     if(id != null) {
                         parkingHashMap.put(id, this);
                     }
                 }
             }
+
+
+            if(amenityType != null && amenityType.equals(TYPE_AMENITY_PARKING)){
+                if(id != null) {
+                    parkingHashMap.put(id, this);
+                }
+            }
+
+        //2016. 11. 10 - noticed that parking polygons for Tsawwassen's under type: "amenity", amenity: "parking" so rawData.string(TYPE).equals(TYPE_AMENITIES) gives "amenity" NOT "amenities"
+
+
 
         } catch (Exception var3) {
             Logger.log("create location failed");
@@ -71,20 +89,25 @@ public class CustomLocation extends Location {
         return amenityHashmap;
     }
 
-    private static HashMap<String, CustomLocation> getLocationHashMap() {
-        return locationHashmapByExternalId;
-    }
 
-
-    public static Location getLocation(String externalCode){
-        if(locationHashmapByExternalId != null && locationHashmapByExternalId.containsKey(externalCode)) return locationHashmapByExternalId.get(externalCode);
+    public static Location getLocationWithExternalCode(String externalCode){
+        if(locationHashmapByExternalId.containsKey(externalCode)) return locationHashmapByExternalId.get(externalCode);
         return null;
     }
 
-    public static ArrayList<Polygon> getPolygonsFromLocation(String externalCode){
-        if(locationHashmapByExternalId != null && locationHashmapByExternalId.containsKey(externalCode)) return locationHashmapByExternalId.get(externalCode).getPolygons();
+    public static ArrayList<Polygon> getPolygonsFromLocationWithExternalCode(String externalCode){
+        if(locationHashmapByExternalId.containsKey(externalCode)) return locationHashmapByExternalId.get(externalCode).getPolygons();
         return null;
+    }
 
+    public static Location getParkingLocationWithId(String id){
+        if(parkingHashMap.containsKey(id)) return parkingHashMap.get(id);
+        return null;
+    }
+
+    public static ArrayList<Polygon> getParkingPolygonsFromLocationWithId(String id){
+        if(parkingHashMap.containsKey(id)) return parkingHashMap.get(id).getPolygons();
+        return null;
     }
 
     public static HashMap<String, CustomLocation> getParkingHashMap() {
@@ -100,5 +123,10 @@ public class CustomLocation extends Location {
         if(amenityType == null) return "";
         return amenityType;
 
+    }
+
+    public String getId() {
+        if(id == null) return "";
+        return this.id;
     }
 }

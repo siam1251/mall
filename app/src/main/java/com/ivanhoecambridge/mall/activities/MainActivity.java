@@ -70,9 +70,9 @@ import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpDataListener;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
-import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.KcpMallInfo;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
+import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.adapters.HomeBottomTapAdapter;
@@ -94,6 +94,7 @@ import com.ivanhoecambridge.mall.managers.SidePanelManagers;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
 import com.ivanhoecambridge.mall.mappedin.CustomLocation;
+import com.ivanhoecambridge.mall.mappedin.MapUtility;
 import com.ivanhoecambridge.mall.movies.MovieManager;
 import com.ivanhoecambridge.mall.onboarding.TutorialActivity;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
@@ -1347,18 +1348,25 @@ public class MainActivity extends BaseActivity
         rvMallDirectory.setVisibility(View.INVISIBLE);
         int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
         String externalCode = String.valueOf(resultCode);
-        ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocation(externalCode);
+        ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocationWithExternalCode(externalCode);
+        if(polygons == null || polygons.size() == 0) return;
+        Polygon storePolygon = polygons.get(0);
         if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
             String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
             if(parkingName != null) {
-//                selectPage(2);
                 int parkingPosition = ParkingManager.sParkings.getParkingPositionByName(parkingName);
-                if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, polygons.get(0));
+                if(BuildConfig.ParkingPolygonEnabled) {
+                    Polygon nearestParkingPolygon = MapUtility.getNearestParkingPolygonFromStorePolygon(storePolygon);
+                    MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, nearestParkingPolygon);
+                } else {
+                    if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, storePolygon);
+                }
+
+
             }
         } else if(code == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
-//            selectPage(2);
             if (polygons != null && polygons.size() > 0) {
-                MapFragment.getInstance().showStoreOnTheMapFromDetailActivity(polygons.get(0));
+                MapFragment.getInstance().showStoreOnTheMapFromDetailActivity(storePolygon);
             } else {
                 MapFragment.getInstance().mPendingExternalCode = externalCode;
             }

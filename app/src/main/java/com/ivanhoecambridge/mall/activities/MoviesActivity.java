@@ -36,6 +36,7 @@ import com.ivanhoecambridge.mall.movies.MovieManager;
 import com.ivanhoecambridge.mall.movies.models.Address;
 import com.ivanhoecambridge.mall.movies.models.House;
 import com.ivanhoecambridge.mall.movies.models.MovieDetail;
+import com.ivanhoecambridge.mall.movies.models.Movies;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.CTA;
@@ -339,6 +340,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
 
         ArrayList<MovieDetail> movieDetails = (ArrayList) MovieManager.sMovies.getMovies();
         if(movieDetails.size() != 0) {
+            Movies.sortMoviesList(movieDetails);
             mMoviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(this, null, movieDetails, ITEM_TYPE_THEATER_VIEWER);
             rvMovies.setAdapter(mMoviesRecyclerViewAdapter);
             rvMovies.setNestedScrollingEnabled(false);

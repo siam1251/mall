@@ -15,6 +15,7 @@ import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.movies.MovieManager;
 import com.ivanhoecambridge.mall.movies.models.House;
 import com.ivanhoecambridge.mall.movies.models.MovieDetail;
+import com.ivanhoecambridge.mall.movies.models.Movies;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class ShowtimesActivity extends AppCompatActivity {
         ArrayList<MovieDetail> movieDetails = (ArrayList) MovieManager.sMovies.getMovies();
         House house = (House) MovieManager.sTheaters.getHouse();
         if(movieDetails != null) {
+            Movies.sortMoviesList(movieDetails);
             mMoviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(this, house, movieDetails, ITEM_TYPE_SHOWTIMES_VIEWER);
             rv.setAdapter(mMoviesRecyclerViewAdapter);
             rv.setNestedScrollingEnabled(true);
