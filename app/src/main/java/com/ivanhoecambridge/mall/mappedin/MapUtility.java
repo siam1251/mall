@@ -11,8 +11,12 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.mappedin.sdk.Coordinate;
 import com.mappedin.sdk.Overlay2DImage;
+import com.mappedin.sdk.Polygon;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Kay on 2016-11-09.
@@ -67,6 +71,29 @@ public class MapUtility {
 
     public static int getDp(Context context, int px){
         return KcpUtility.dpToPx((Activity) context , px);
+    }
+
+    public static Polygon getNearestParkingPolygonFromStorePolygon(Polygon polygon){
+        try {
+            HashMap<String, CustomLocation> parkingHashmap = CustomLocation.getParkingHashMap();
+            Coordinate storeCoordinate = polygon.getLocations().get(0).getNavigatableCoordinates().get(0);
+
+            double nearestDistance = 0;
+            Polygon nearestParkingPolygon = null;
+            for (CustomLocation parkingLocation : parkingHashmap.values()) {
+
+                Coordinate parkingLotCoord = parkingLocation.getNavigatableCoordinates().get(0);
+                double distance = parkingLotCoord.metersFrom(storeCoordinate);
+                if(nearestDistance == 0 || nearestDistance > distance) {
+                    nearestParkingPolygon = parkingLocation.getPolygons().get(0);
+                    nearestDistance = distance;
+                }
+            }
+
+            return nearestParkingPolygon;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

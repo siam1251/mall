@@ -43,6 +43,7 @@ android {
             applicationId "com.ivanhoecambridge.mall.metropolis"
             buildConfigField 'String', 'MALL', '"metropolis-at-metrotown"'
             buildConfigField 'Boolean', 'Push', 'false'
+            buildConfigField 'Boolean', 'ParkingPolygonEnabled', 'true'
             versionName "1.0.0"
         }
 
@@ -50,6 +51,7 @@ android {
             applicationId "com.ivanhoecambridge.mall.vaughanmills"
             buildConfigField 'String', 'MALL', '"vaughan-mills"'
             buildConfigField 'Boolean', 'Push', 'true'
+            buildConfigField 'Boolean', 'ParkingPolygonEnabled', 'false'
             versionName "1.0.0"
         }
 
@@ -57,6 +59,7 @@ android {
             applicationId "com.ivanhoecambridge.mall.tsawwassenmills"
             buildConfigField 'String', 'MALL', '"tsawwassen-mills"'
             buildConfigField 'Boolean', 'Push', 'false'
+            buildConfigField 'Boolean', 'ParkingPolygonEnabled', 'true'
             versionName "1.0.0"
         }
     }

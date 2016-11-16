@@ -105,6 +105,16 @@ public class ParkingManager {
         KcpNotificationManager.cancelNotification(context, NOTIFICATION_ID_WELCOME);
     }
 
+    public static void saveParkingSpotAndEntrance(final Context context, String parkingId){
+
+        int[] parkingPostion = new int[2];
+        ParkingManager.sParkings.getParkingPositionById(parkingId, parkingPostion);
+        KcpUtility.cacheToPreferences(context, KEY_PARKING_LOT_POSITION, parkingPostion == null ? 0 : parkingPostion[0]);
+        KcpUtility.cacheToPreferences(context, KEY_ENTRANCE_POSITION, parkingPostion == null ? 0 : parkingPostion[1]);
+        Amenities.saveToggle(context, Amenities.GSON_KEY_PARKING, true);
+        KcpNotificationManager.cancelNotification(context, NOTIFICATION_ID_WELCOME);
+    }
+
     public static int getSavedParkingLotPosition(final Context context){
         return KcpUtility.loadIntFromCache(context, KEY_PARKING_LOT_POSITION, -1);
     }
@@ -120,11 +130,13 @@ public class ParkingManager {
 
     public static Parking getMyParkingLot(final Context context){
         int parkingLotPosition = ParkingManager.getSavedParkingLotPosition(context);
+        if(parkingLotPosition == -1) return null;
         return ParkingManager.sParkings.getParkings().get(parkingLotPosition);
     }
 
     public static ChildParking getMyEntrance(final Context context){
         int entrancePosition = ParkingManager.getSavedEntrancePosition(context);
+        if(entrancePosition == -1) return null;
         return getMyParkingLot(context).getChildParkings().get(entrancePosition);
     }
 

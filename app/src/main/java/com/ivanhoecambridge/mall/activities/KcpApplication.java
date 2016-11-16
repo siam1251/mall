@@ -71,8 +71,8 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
         KcpAccount.getInstance().initialize(getApplicationContext());
         HeaderFactory.changeCatalog(HeaderFactory.HEADER_VALUE_DATAHUB_CATALOG);
         if(Constants.IS_APP_IN_PRODUCTION) {
-            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
-//            Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
+//            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
+            Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         } else {
             Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         }
