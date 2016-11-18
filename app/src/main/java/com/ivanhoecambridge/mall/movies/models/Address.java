@@ -10,7 +10,7 @@ import org.simpleframework.xml.Root;
 @Root(strict = false)
 public class Address {private String zip;
 
-    @Element
+    @Element(required = false)
     private String phone;
 
     private String county;

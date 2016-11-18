@@ -10,13 +10,13 @@ import org.simpleframework.xml.Root;
 @Root(strict = false)
 public class House
 {
-    @Element
+    @Element(required = false)
     private String location;
 
-    @Element
+    @Element(required = false)
     private Address address;
 
-    @Element
+    @Element(required = false)
     private Schedule schedule;
 
     public String getLocation ()

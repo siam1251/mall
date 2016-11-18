@@ -18,6 +18,7 @@ import com.exacttarget.etpushsdk.ETRequestStatus;
 import com.exacttarget.etpushsdk.util.EventBus;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.crash.FirebaseCrash;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.BuildConfig;
@@ -78,7 +79,7 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
         }
 
         KcpUtility.cacheToPreferences(this, Constants.PREF_KEY_WELCOME_MSG_DID_APPEAR, false); //resetting the welcome message flag as false to indicate it has never shown for this app launch
-        if(BuildConfig.Push){
+        if(BuildConfig.PUSH){
             //EXACT TARGET
             EventBus.getInstance().register(this);
             try {
@@ -113,6 +114,23 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
                 Log.e(TAG, e.getMessage(), e);
             }
         }
+
+
+        //enable below for firebase crash reporting
+        Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler()
+        {
+            @Override
+            public void uncaughtException (Thread thread, Throwable e)
+            {
+                if(BuildConfig.REPORT_CRASH)
+                {
+                    FirebaseCrash.report( e);
+                }
+            }
+        });
+
+
+
     }
 
     @Override

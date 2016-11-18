@@ -297,4 +297,9 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="movie_advisory">Advisory:</string>
 
     <!---->
+
+
+    <string name="BottomSheetBehaviorGoogleMapsLike">com.ivanhoecambridge.mall.views.BottomSheetBehaviorGoogleMapsLike</string>
+
+
 </resources>

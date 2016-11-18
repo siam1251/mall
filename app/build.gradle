@@ -35,6 +35,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "Boolean", "REPORT_CRASH", 'true'
+        }
+
+        debug {
+            buildConfigField "Boolean", "REPORT_CRASH", 'false'
         }
     }
 
@@ -42,24 +47,27 @@ android {
         metropolis {
             applicationId "com.ivanhoecambridge.mall.metropolis"
             buildConfigField 'String', 'MALL', '"metropolis-at-metrotown"'
-            buildConfigField 'Boolean', 'Push', 'false'
-            buildConfigField 'Boolean', 'ParkingPolygonEnabled', 'true'
+            buildConfigField 'Boolean', 'PUSH', 'false'
+            buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
+            buildConfigField 'Boolean', 'MOVIE', 'true'
             versionName "1.0.0"
         }
 
         vaughanmills {
             applicationId "com.ivanhoecambridge.mall.vaughanmills"
             buildConfigField 'String', 'MALL', '"vaughan-mills"'
-            buildConfigField 'Boolean', 'Push', 'true'
-            buildConfigField 'Boolean', 'ParkingPolygonEnabled', 'false'
+            buildConfigField 'Boolean', 'PUSH', 'true'
+            buildConfigField 'Boolean', 'PARKING_POLYGON', 'false'
+            buildConfigField 'Boolean', 'MOVIE', 'false'
             versionName "1.0.0"
         }
 
         tsawwassenmills {
             applicationId "com.ivanhoecambridge.mall.tsawwassenmills"
             buildConfigField 'String', 'MALL', '"tsawwassen-mills"'
-            buildConfigField 'Boolean', 'Push', 'false'
-            buildConfigField 'Boolean', 'ParkingPolygonEnabled', 'true'
+            buildConfigField 'Boolean', 'PUSH', 'true'
+            buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
+            buildConfigField 'Boolean', 'MOVIE', 'false'
             versionName "1.0.0"
         }
     }

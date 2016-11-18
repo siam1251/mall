@@ -27,7 +27,8 @@ public class ZoomableImage extends AppCompatActivity {
 		setContentView(R.layout.activity_zoomable_image);
 
 		String imageUrl = (String) getIntent().getSerializableExtra(Constants.ARG_IMAGE_URL);
-		TouchImageView ivDetailImage = (TouchImageView) findViewById(R.id.ivDetailImage);
+		final String imageUrlLarge = (String) getIntent().getSerializableExtra(Constants.ARG_IMAGE_URL_LARGE);
+		final TouchImageView ivDetailImage = (TouchImageView) findViewById(R.id.ivDetailImage);
         ivDetailImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,6 +51,17 @@ public class ZoomableImage extends AppCompatActivity {
 					@Override
 					public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
 						pb.setVisibility(View.GONE);
+						if(imageUrlLarge != null){
+							Glide.with(ZoomableImage.this)
+									.load(imageUrlLarge)
+									.crossFade()
+//									.centerCrop()
+									.into(ivDetailImage);
+
+						}
+
+
+
 						return false;
 					}
 				})

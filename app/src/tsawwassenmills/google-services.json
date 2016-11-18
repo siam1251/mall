@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "920227983388",
-    "firebase_url": "https://tsawwassenmills-testing.firebaseio.com",
-    "project_id": "tsawwassenmills-testing",
-    "storage_bucket": "tsawwassenmills-testing.appspot.com"
+    "project_number": "413290996427",
+    "firebase_url": "https://tsa-android-push-notific-b7f1c.firebaseio.com",
+    "project_id": "tsa-android-push-notific-b7f1c",
+    "storage_bucket": "tsa-android-push-notific-b7f1c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:920227983388:android:db9bbf0741dbb6ec",
+        "mobilesdk_app_id": "1:413290996427:android:db9bbf0741dbb6ec",
         "android_client_info": {
           "package_name": "com.ivanhoecambridge.mall.tsawwassenmills"
         }
       },
       "oauth_client": [
         {
-          "client_id": "920227983388-q4sgk3a339rvh945c72vtv6cte3v1pk9.apps.googleusercontent.com",
+          "client_id": "413290996427-g5ap83o1llgnlkptet32or8fj404p253.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyABXHk3Dkt-xqIzg_dINc0m9nvxledtHTc"
+          "current_key": "AIzaSyDBp5ZAUSz7d6f0FPrby5Rr07yH3WJrsKg"
         }
       ],
       "services": {

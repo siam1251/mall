@@ -14,7 +14,7 @@ import java.util.List;
 @Root(strict = false)
 public class Theaters
 {
-    @Element
+    @Element(required = false)
     private House house;
 
     public House getHouse ()

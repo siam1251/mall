@@ -20,6 +20,7 @@
             >
 
             <ImageView
+                android:layout_gravity="center"
                 android:transitionName="@string/transition_movie_poster"
                 android:id="@+id/ivMoviePoster"
                 android:layout_width="@dimen/movie_poster_width_small"
