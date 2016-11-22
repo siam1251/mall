@@ -10,13 +10,13 @@ import org.simpleframework.xml.Root;
 @Root(strict = false)
 public class Mp4 {
 
-    @Element
+    @Element(required = false)
     private String med;
 
-    @Element
+    @Element(required = false)
     private String high;
 
-    @Element
+    @Element(required = false)
     private String low;
 
     public String getMed ()

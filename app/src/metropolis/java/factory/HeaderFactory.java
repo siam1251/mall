@@ -22,7 +22,7 @@ public class HeaderFactory {
     //------------------------------ END POINT ------------------------------
 
     public static String MALL_NAME = "Metropolis at Metrotown";
-    public static String MAP_VENUE_NAME = "Metropolis at Metrotown";
+    public static String MAP_VENUE_NAME = "Metropolis";
     private final static String SEARCH_INDEX_MP_STAGING = "indexes/staging/metropolis-at-metrotown-index.msgpack";
     private final static String SEARCH_INDEX_MP_PRODUCTION = "indexes/production/metropolis-at-metrotown-index.msgpack";
 

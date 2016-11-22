@@ -76,6 +76,7 @@ public class Constants {
 	//ARG_KEY
 	public final static String ARG_CONTENT_PAGE = 			"arg_content_page";
 	public final static String ARG_IMAGE_URL = 				"arg_image_url";
+	public final static String ARG_IMAGE_URL_LARGE = 		"arg_image_url_large";
 	public final static String ARG_IMAGE_BITMAP = 			"arg_image_bitmap";
 	public static final String ARG_EXTERNAL_CODE = 			"external_code";
 	public static final String ARG_CAT_NAME = 				"cat_name";

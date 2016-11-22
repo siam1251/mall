@@ -19,9 +19,33 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                app:layout_scrollFlags="scroll|snap|enterAlways"
                 android:layout_height="wrap_content">
 
                 <include layout="@layout/layout_toolbar" />
+
+                <FrameLayout
+                    android:visibility="gone"
+                    android:id="@+id/flActiveMallDot"
+                    android:layout_marginLeft="28dp"
+                    android:layout_marginTop="17dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.ivanhoecambridge.mall.views.ThemeColorImageView
+                        android:layout_gravity="center"
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:background="@drawable/circle_imageview_background_primary"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"/>
+
+                    <com.ivanhoecambridge.mall.views.ThemeColorImageView
+                        android:layout_gravity="center"
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:background="@drawable/circle_imageview_background_theme"
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"/>
+                </FrameLayout>
 
             </RelativeLayout>
 
@@ -56,31 +80,6 @@
         android:layout_height="@dimen/shadow_inverted_height"
         android:src="@drawable/view_shadow_inverted"
         />
-
-    <FrameLayout
-        android:visibility="gone"
-        android:id="@+id/flActiveMallDot"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="17dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <com.ivanhoecambridge.mall.views.ThemeColorImageView
-            android:layout_gravity="center"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:background="@drawable/circle_imageview_background_primary"
-            android:layout_width="12dp"
-            android:layout_height="12dp"/>
-
-        <com.ivanhoecambridge.mall.views.ThemeColorImageView
-            android:layout_gravity="center"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:background="@drawable/circle_imageview_background_theme"
-            android:layout_width="8dp"
-            android:layout_height="8dp"/>
-    </FrameLayout>
-
-
 
     <android.support.v7.widget.RecyclerView
         android:layout_marginTop="?attr/actionBarSize"

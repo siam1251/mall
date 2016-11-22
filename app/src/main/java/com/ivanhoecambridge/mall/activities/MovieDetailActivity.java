@@ -125,6 +125,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
             String rating = movieDetail.getMovieRating(MallConstants.RATINGS_PROVINCE_CODE);
             TextView tvMovieRating = (TextView) findViewById(R.id.tvMovieRating);
+            if(rating.equals("")) tvMovieRating.setVisibility(View.GONE);
             tvMovieRating.setText(rating);
 
             String runTime = movieDetail.getRuntimeInFormat();
@@ -167,6 +168,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(MovieDetailActivity.this, ZoomableImage.class);
                     intent.putExtra(Constants.ARG_IMAGE_URL, photoUrl);
+                    intent.putExtra(Constants.ARG_IMAGE_URL_LARGE, photoLargeUrl);
                     MovieDetailActivity.this.startActivity(intent);
                     MovieDetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }

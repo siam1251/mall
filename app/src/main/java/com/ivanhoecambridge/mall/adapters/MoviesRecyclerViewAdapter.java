@@ -184,7 +184,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
                                     return false;
                                 }
                             })
-                            .crossFade()
+//                            .crossFade()
                             .centerCrop()
                             .placeholder(R.drawable.icn_movies_placeholder)
                             .into(showtimesViewer.ivMoviePoster);

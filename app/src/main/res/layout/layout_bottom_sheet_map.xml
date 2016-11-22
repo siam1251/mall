@@ -16,15 +16,11 @@
         android:id="@+id/rlDirection"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="109dp"
+        android:layout_height="@dimen/bottom_sheet_height_normal"
         android:visibility="invisible"
-
+        android:layout_marginBottom="55dp"
         >
 
-        <!--height = height of llDirection + 1/2 height of imageView + height of llDeals (if exist)-->
-        <!--82 + 54 / 2 + 48 = 157-->
-        <!--or in case deal layout's missing, height = 157 - height of deal layout (48)-->
-        style="@style/SelectableItemForegroundWhite"
         <LinearLayout
             style="@style/SelectableItemBackgroundOpaque"
             android:layout_alignParentBottom="true"
@@ -129,10 +125,11 @@
                     android:layout_weight="0"
                     android:layout_width="17dp"
                     android:layout_height="17dp"
+                    android:layout_marginRight="10dp"
                     android:src="@drawable/icn_deals"/>
 
+                android:layout_marginLeft="10dp"
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                    android:layout_marginLeft="10dp"
                     android:gravity="center_vertical"
                     android:layout_weight="1"
                     app:fontFamily="@string/fontFamily_roboto_regular"
@@ -171,14 +168,22 @@
             android:src="@drawable/view_shadow_inverted"/>
 
         <RelativeLayout
+            android:id="@+id/rlRoute"
             android:layout_marginRight="14dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:src="@drawable/icn_current_location_shadow"
+                />
 
             <View
+                android:layout_centerInParent="true"
                 android:id="@+id/viewRoute"
                 android:layout_width="54dp"
                 android:layout_height="54dp"
@@ -194,6 +199,13 @@
                 android:src="@drawable/icn_routes"/>
 
         </RelativeLayout>
+
+        <!--<include
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/activity_movie"
+            />-->
+
     </RelativeLayout>
 
 </LinearLayout>

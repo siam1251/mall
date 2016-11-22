@@ -17,13 +17,13 @@ import java.util.List;
 @Root(strict = false)
 public class Movie
 {
-    @Element
+    @Element(required = false)
     private String movie_id;
 
-    @Element
+    @Element(required = false)
     private String movie_name;
 
-    @Element
+    @Element(required = false)
     private String movie_rating;
 
 
@@ -41,22 +41,6 @@ public class Movie
     {
         this.showtimes = showTimes;
     }
-
-    /*@Element(name = "showtimes")
-    private Showtimes showtimes; //change all the getters, setters
-
-    public Showtimes getShowtimes()
-    {
-        if(showtimes == null) return new Showtimes();
-        return showtimes;
-    }
-
-    public void setShowtimes(Showtimes showTimes)
-    {
-        this.showtimes = showTimes;
-    }*/
-
-
 
     public String getMovie_id ()
     {

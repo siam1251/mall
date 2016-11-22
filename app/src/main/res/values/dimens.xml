@@ -234,7 +234,13 @@
     <dimen name="onboarding_first_title">24sp</dimen>
     <dimen name="onboarding_second_title">21sp</dimen>
 
-
+    <!--BOTTOM SHEET PEEK HEIGHT-->
+    <!--<dimen name="bottom_sheet_peek_height_normal">165dp</dimen>-->
+    <!--<dimen name="bottom_sheet_peek_height_extended">217dp</dimen>-->
+    <dimen name="bottom_sheet_peek_height_normal">250dp</dimen>
+    <dimen name="bottom_sheet_peek_height_extended">300dp</dimen>
+    <dimen name="bottom_sheet_height_normal">109dp</dimen>
+    <dimen name="bottom_sheet_height_extended">161dp</dimen>
 
 
 </resources>

@@ -28,7 +28,7 @@ public class Showtimes {
     @Attribute
     private String comments;
 
-    @ElementList(entry = "showtime", inline = true)
+    @ElementList(entry = "showtime", inline = true, required = false)
     private List<String> showtimes;
 
     public List<String> getShowtimes(){

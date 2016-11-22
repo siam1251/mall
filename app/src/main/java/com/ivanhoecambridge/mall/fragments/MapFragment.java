@@ -8,8 +8,12 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -38,6 +42,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
+import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.DetailActivity;
@@ -59,6 +64,7 @@ import com.ivanhoecambridge.mall.parking.ChildParking;
 import com.ivanhoecambridge.mall.parking.Parking;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
 import com.ivanhoecambridge.mall.utility.Utility;
+import com.ivanhoecambridge.mall.views.BottomSheetBehaviorGoogleMapsLike;
 import com.mappedin.jpct.Logger;
 import com.mappedin.sdk.Coordinate;
 import com.mappedin.sdk.Directions;
@@ -108,7 +114,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private View view;
     private SearchView mSearchView;
     //    private IndexableRecylerView rvMap;
-    private RelativeLayout rlMap;
     private RelativeLayout rlDirection;
     private TextView tvStoreName;
     private TextView tvCategoryName;
@@ -121,6 +126,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private TextView tvParkingNote;
     private TextView tvNumbOfDeals;
     private ImageView ivCompass;
+    private FrameLayout flCompass;
     private TextView tvLevel;
     private ImageView ivUpper;
     private ImageView ivLower;
@@ -139,7 +145,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private final int PIN_AMENITY_IMAGE_SIZE_DP = 20; //ends up 64 px
     private final int PIN_PARKING_IMAGE_SIZE_DP = 32; //ends up 64 px
     private final int CAMERA_ZOOM_LEVEL_NEAREST_PARKING = 90; //
-    private final int CAMERA_ZOOM_LEVEL = 30; //BIGGER - farther, SMALLER - closer
+    private final int CAMERA_ZOOM_LEVEL = 40; //BIGGER - farther, SMALLER - closer
     private final int BLUR_RADIUS = 20;
     private boolean accessibleDirections = false;
     private MapViewDelegate delegate = this;
@@ -168,6 +174,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private String mAmenityClicked = ""; //to keep track of previously clicked amenity
     public boolean mMapLoaded = false;
     private MapInterface mMapInterface;
+    private final float DEFAULT_PITCH = 0.7f;
+    private boolean mAnimationInProgress = false;
+    private boolean mBearingEntered = false; //indicate whether it has entered onCameraBearingChange to decide when to start showing the compass icon
+//    private BottomSheetBehavior mBottomSheetBehavior;
+//    private BottomSheetBehaviorGoogleMapsLike mBottomSheetBehavior;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -182,7 +193,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         pb = (ProgressBar) view.findViewById(R.id.pb);
         pb.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.themeColor),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
-        rlMap = (RelativeLayout) view.findViewById(R.id.rlMap);
         rlDirection = (RelativeLayout) view.findViewById(R.id.rlDirection);
         tvStoreName = (TextView) view.findViewById(R.id.tvStoreName);
         tvCategoryName = (TextView) view.findViewById(R.id.tvCategoryName);
@@ -195,6 +205,34 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         btnShowMap = (Button) view.findViewById(R.id.btnShowMap);
         ivCompass = (ImageView) view.findViewById(R.id.ivCompass);
         ivCompass.bringToFront();
+        flCompass = (FrameLayout) view.findViewById(R.id.flCompass);
+
+        ivCompass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAnimationInProgress = true;
+                flCompass.setAnimation(ProgressBarWhileDownloading.getEndAnimation(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        mAnimationInProgress = false;
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                }));
+                flCompass.setVisibility(View.INVISIBLE);
+                mapView.getCamera().setPositionTo(0, 0);
+                mapView.getCamera().setRotationTo(DEFAULT_PITCH, 0);
+            }
+        });
+
         tvLevel = (TextView) view.findViewById(R.id.tvLevel);
         ivUpper = (ImageView) view.findViewById(R.id.ivUpper);
         ivLower = (ImageView) view.findViewById(R.id.ivLower);
@@ -227,6 +265,46 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         setHasOptionsMenu(true);
 
         initializeMap();
+
+        /*CoordinatorLayout coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorlayout);
+        NestedScrollView bottom_sheet = (NestedScrollView) coordinatorLayout.findViewById(R.id.bottom_sheet);
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet);*/
+//        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+
+        /*CoordinatorLayout coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorlayout);
+        NestedScrollView bottom_sheet = (NestedScrollView) coordinatorLayout.findViewById(R.id.bottom_sheet);
+        mBottomSheetBehavior = BottomSheetBehaviorGoogleMapsLike.from(bottom_sheet);
+        mBottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehaviorGoogleMapsLike.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED:
+                        Log.d("bottomsheet-", "STATE_COLLAPSED");
+                        break;
+                    case BottomSheetBehaviorGoogleMapsLike.STATE_DRAGGING:
+                        Log.d("bottomsheet-", "STATE_DRAGGING");
+                        break;
+                    case BottomSheetBehaviorGoogleMapsLike.STATE_EXPANDED:
+                        Log.d("bottomsheet-", "STATE_EXPANDED");
+                        break;
+                    case BottomSheetBehaviorGoogleMapsLike.STATE_ANCHOR_POINT:
+                        Log.d("bottomsheet-", "STATE_ANCHOR_POINT");
+                        break;
+                    case BottomSheetBehaviorGoogleMapsLike.STATE_HIDDEN:
+                        Log.d("bottomsheet-", "STATE_HIDDEN");
+                        break;
+                    default:
+                        Log.d("bottomsheet-", "STATE_SETTLING");
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            }
+        });
+*/
 
         return view;
     }
@@ -609,7 +687,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
 
 
-                    mapView.getCamera().focusOn(polygon);
+//                    mapView.getCamera().focusOn(polygon);
                     float zoomLevel = CAMERA_ZOOM_LEVEL; //camera's currently too zoomed out
                     //allow the camera to zoom in if it's too far away or keep its current zoom if it's close enough
                     if(mapView.getCamera().getZoom() <= CAMERA_ZOOM_LEVEL) { //already zoomed in - keep the same zoom
@@ -669,7 +747,13 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if(flCompass.getVisibility() != View.VISIBLE && !mAnimationInProgress && mBearingEntered){
+                    flCompass.setAnimation(ProgressBarWhileDownloading.getStartAnimation(null));
+                    flCompass.setVisibility(View.VISIBLE);
+                }
+                logger.debug("bearing :" + (float)(bearing/Math.PI*180));
                 ivCompass.setRotation((float)(bearing/Math.PI*180));
+                mBearingEntered = true;
             }
         });
     }
@@ -722,6 +806,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
      * @param parkingPosition position of the parking in the parking arraylist
      */
     private void showParkingDetail(final CustomLocation location, boolean isThisTempParkingSpot, String parkingLotName, String entranceName, String parkingNote, final int parkingPosition, final int entrancePosition){
+//        FrameLayout.LayoutParams param = (FrameLayout.LayoutParams) rlDirection.getLayoutParams(); //when coordinator layout is used
         RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
         String llDealsTitle = "";
 
@@ -732,7 +817,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
 
         showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.getExternalID()), llDealsTitle, parkingLotName + ", " + entranceName, null);
-        param.height = KcpUtility.dpToPx(getActivity(), 161);
+        param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_extended);
+//        mBottomSheetBehavior.setPeekHeight((int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_peek_height_extended)); //when coordinator layout is used
 
         if(isThisTempParkingSpot) {
             tvParkingNote.setVisibility(View.GONE);
@@ -758,13 +844,13 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             llDeals.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(BuildConfig.ParkingPolygonEnabled) {
+                    if(BuildConfig.PARKING_POLYGON) {
                         String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
                         showMySavedParkingPolygon(false, parkingId);
-                    } else {
+                    } /*else {*/
                         didTapNothing();
                         removePin(location);
-                    }
+//                    }
 
                     ParkingManager.removeParkingLot(getActivity());
                     Amenities.saveToggle(getActivity(), Amenities.GSON_KEY_PARKING, false); //make sure to set this as false otherwise everytime map fragment's tapped, it will start parkingActivity
@@ -822,8 +908,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             String llDealsTitle = getResources().getString(R.string.parking_polygon_parking_lot);
             showDirectionCard(true, idType, Integer.valueOf(location.getExternalID()), llDealsTitle, storeName, null);
 
+//            FrameLayout.LayoutParams param = (FrameLayout.LayoutParams) rlDirection.getLayoutParams();
             RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
-            param.height = KcpUtility.dpToPx(getActivity(), 161);
+            param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_extended);
+//            mBottomSheetBehavior.setPeekHeight((int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_peek_height_extended)); //when coordinator layout is used
 
             ivDeal.setVisibility(View.VISIBLE);
             tvParkingNote.setVisibility(View.GONE);
@@ -831,7 +919,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             llDeals.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     String parkingId;
                     if(ParkingManager.isParkingLotSaved(getActivity())){
                         parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
@@ -843,16 +930,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     mMainActivity.setUpRightSidePanel();
                     onParkingClick(true, true);
                     InfoFragment.getInstance().setParkingSpotCTA();
-
-                    //first remove saved parking spot, and save the new one
-                    /*String parkingId;
-                    if(ParkingManager.isParkingLotSaved(getActivity())){
-                        parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
-                        showMySavedParkingPolygon(false, parkingId);
-                    }
-                    parkingId = location.getId();
-                    ParkingManager.saveParkingSpotAndEntrance(getActivity(), parkingId);
-                    showMySavedParkingPolygon(true, parkingId);*/
                 }
             });
             rlDirection.setLayoutParams(param);
@@ -1091,10 +1168,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     public void showParkingSpotFromDetailActivity(int parkingLotPosition, Polygon polygon){
         try {
             if(polygon == null) return;
-            if(BuildConfig.ParkingPolygonEnabled) {
+            if(BuildConfig.PARKING_POLYGON) {
                 mapView.getCamera().focusOn(polygon);
                 didTapPolygon(polygon);
-            } else {
+            } /*else {*/
                 HashMap<String, CustomLocation> parkingHashMap = CustomLocation.getParkingHashMap();
                 Parking storeParking = ParkingManager.sParkings.getParkings().get(parkingLotPosition);
                 List<ChildParking> childParkings = storeParking.getChildParkings();
@@ -1135,7 +1212,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_NEAREST_PARKING);
 
                 destinationPolygon = mTemporaryParkingLocation;
-            }
+//            }
 
 
 
@@ -1152,7 +1229,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 if(mSavedParkingLocation != null) {
                     removePin(mSavedParkingLocation);
                 }
-                if(mSavedParkingPolygon != null && mOriginalColorsForParking != 0) mSavedParkingPolygon.setColor(mOriginalColorsForParking);
+                if(mSavedParkingPolygon != null && mOriginalColorsForParking != 0) {
+                    mSavedParkingPolygon.setColor(mOriginalColorsForParking);
+                    mOriginalColorsForParking = 0;
+                }
                 mSavedParkingLocation = CustomLocation.getParkingHashMap().get(parkingId); //have a single instance of parking so it's easy to delete
                 mSavedParkingPolygon = polygons.get(0);
                 mapView.getCamera().focusOn(mSavedParkingPolygon);
@@ -1175,10 +1255,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 final Intent intent = new Intent (getActivity(), ParkingActivity.class);
                 getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
             } else {
-                if(BuildConfig.ParkingPolygonEnabled) {
+                if(BuildConfig.PARKING_POLYGON) {
                     String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
                     showMySavedParkingPolygon(enabled, parkingId);
-                } else {
+                } /*else {*/
                     HashMap<String, CustomLocation> parkingHashMap = CustomLocation.getParkingHashMap();
                     String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
                     if(parkingHashMap.containsKey(parkingId)){
@@ -1195,13 +1275,14 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                                 Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car, 0);
                                 dropPin(coordinate, mSavedParkingLocation, amenityDrawable);
                                 destinationPolygon = mSavedParkingLocation;
+                                break; //prevent it from dropping two pin images in case there is more than one polygon
                             }
                         } else {
                             removePin(mSavedParkingLocation);
                             didTapNothing();
                         }
                     }
-                }
+//                }
 
 
             }
@@ -1406,11 +1487,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
 
         RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
-
-
+//        FrameLayout.LayoutParams param = (FrameLayout.LayoutParams) rlDirection.getLayoutParams(); //when coordinator layout is used
 
         if(dealsForThisStore.size() > 0 || idType.equals(IdType.PARKING)) {
-            param.height = KcpUtility.dpToPx(getActivity(), 161);
+            param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_extended);
+//            mBottomSheetBehavior.setPeekHeight((int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_peek_height_extended));//when coordinator layout is used
             ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_deals));
             llDeals.setVisibility(View.VISIBLE);
             if(dealsForThisStore.size() > 0) tvDealName.setText(dealsForThisStore.get(0).getTitle());
@@ -1438,7 +1519,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 }
             });
         } else {
-            param.height = KcpUtility.dpToPx(getActivity(), 113);
+            param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_normal);
+//            mBottomSheetBehavior.setPeekHeight((int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_peek_height_normal));//when coordinator layout is used
             llDeals.setVisibility(View.GONE);
         }
 

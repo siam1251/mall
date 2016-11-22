@@ -170,10 +170,6 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //TESTING
-//        startActivity(new Intent(MainActivity.this, MoviesActivity.class));
-//        ActivityAnimation.startActivityAnimation(MainActivity.this);
-
         boolean didOnboardingAppear = KcpUtility.loadFromSharedPreferences(this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, false);
         if(!didOnboardingAppear) {
             startActivity(new Intent(MainActivity.this, TutorialActivity.class));
@@ -354,7 +350,7 @@ public class MainActivity extends BaseActivity
             initializeMapData();
             initializeParkingData();
             initializeSeachIndex();
-            initializeMovieData();
+            if(BuildConfig.MOVIE)initializeMovieData();
         }
     }
 
@@ -800,6 +796,7 @@ public class MainActivity extends BaseActivity
             RecyclerView rvTodaysDeals = (RecyclerView) findViewById(R.id.rvTodaysDeals);
             RecyclerView rvTodaysEvents = (RecyclerView) findViewById(R.id.rvTodaysEvents);
             flActiveMallDot = (FrameLayout) findViewById(R.id.flActiveMallDot);
+//            flActiveMallDot = (FrameLayout) mToolbar.findViewById(R.id.flActiveMallDot);
 
             TextView tvMyFav = (TextView) findViewById(R.id.tvMyFav);
             TextView tvMyGC = (TextView) findViewById(R.id.tvMyGC);
@@ -1111,7 +1108,7 @@ public class MainActivity extends BaseActivity
         final CoordinatorLayout clMain = (CoordinatorLayout) findViewById(R.id.clMain);
         if (onClickListener == null) {
             mOfflineSnackbar = Snackbar
-                    .make(clMain, getResources().getString(msg), Snackbar.LENGTH_LONG);
+                    .make(clMain, getResources().getString(msg), Snackbar.LENGTH_SHORT);
         } else {
             mOfflineSnackbar = Snackbar
                     .make(clMain, getResources().getString(msg), Snackbar.LENGTH_INDEFINITE)
@@ -1355,7 +1352,7 @@ public class MainActivity extends BaseActivity
             String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
             if(parkingName != null) {
                 int parkingPosition = ParkingManager.sParkings.getParkingPositionByName(parkingName);
-                if(BuildConfig.ParkingPolygonEnabled) {
+                if(BuildConfig.PARKING_POLYGON) {
                     Polygon nearestParkingPolygon = MapUtility.getNearestParkingPolygonFromStorePolygon(storePolygon);
                     MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, nearestParkingPolygon);
                 } else {

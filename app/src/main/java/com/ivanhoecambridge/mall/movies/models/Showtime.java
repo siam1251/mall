@@ -9,6 +9,6 @@ import org.simpleframework.xml.Root;
 
 @Root(strict = false)
 public class Showtime {
-    @Element
+    @Element(required = false)
     private String showtime;
 }

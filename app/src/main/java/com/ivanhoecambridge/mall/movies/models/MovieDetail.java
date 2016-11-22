@@ -18,52 +18,52 @@ public class MovieDetail {
 
     protected final Logger logger = new Logger(getClass().getName());
 
-    @Element
+    @Element(required = false)
     private String movie_id;
 
-    @ElementList
+    @ElementList(required = false)
     private List<String> genres;
 
-    @ElementList
+    @ElementList(required = false)
     private List<String> photos;
 
-    @ElementList
+    @ElementList(required = false)
     private List<String> lgphotos;
 
-    @ElementList
+    @ElementList(required = false)
     private List<String> hiphotos;
 
     @Element(required = false)
     private Mp4 mp4;
 
-    @Element
+    @Element(required = false)
     private String runtime;
 
-    @Element
+    @Element(required = false)
     private String title;
 
     @Element(required = false)
     private String advisory;
 
-    @Element
+    @Element(required = false)
     private String name;
 
-    @Element
+    @Element(required = false)
     private String synopsis;
 
-    @Element
+    @Element(required = false)
     private String mlang;
 
-    @ElementList
+    @ElementList(required = false)
     private List<String> actors;
 
-    @ElementList
+    @ElementList(required = false)
     private List<String> directors;
 
-    @Element
+    @Element(required = false)
     private Ratings ratings;
 
-    @ElementList
+    @ElementList(required = false)
     private List<String> producers;
 
     private String parent_id;

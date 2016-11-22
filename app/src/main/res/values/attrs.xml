@@ -50,5 +50,9 @@
         <attr name="collapseDrawable" format="reference"/>
         <attr name="textColor" format="color"/>
     </declare-styleable>
+
+    <declare-styleable name="CustomBottomSheetBehavior">
+        <attr name="anchorPoint" format="dimension"/>
+    </declare-styleable>
 </resources>
 

@@ -15,7 +15,7 @@ import java.util.List;
 @Root(strict = false)
 public class Movies {
 
-    @ElementList(entry = "movie", inline = true)
+    @ElementList(entry = "movie", inline = true, required = false)
     private List<MovieDetail> movieDetail;
 
     public List<MovieDetail> getMovies()
