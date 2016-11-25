@@ -95,41 +95,45 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void init(final KcpContentPage kcpContentPage){
-        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT) {
-            setContentView(R.layout.activity_detail_with_ctl_ancmt);
-        } else {
-            setContentView(R.layout.activity_detail_with_ctl);
-        }
-
-        mParentView = (ViewGroup) findViewById(R.id.svDetail);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-
-        mLikeLink = kcpContentPage.getLikeLink();
-        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){ //the like links should be given from place if the type is ITEM_TYPE_STORE
-            mLikeLink = kcpContentPage.getStore().getLikeLink();
-        }
-
-        final ImageView ivFav = (ImageView) toolbar.findViewById(R.id.ivFav);
-        ivFav.setSelected(FavouriteManager.getInstance(DetailActivity.this).isLiked(mLikeLink, kcpContentPage));
-        ivFav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
-                    @Override
-                    public void OnSqueezeAnimationDone() {
-                        ivFav.setSelected(!ivFav.isSelected());
-                        FavouriteManager.getInstance(DetailActivity.this).addOrRemoveFavContent(mLikeLink, kcpContentPage);
-                    }
-                }, DetailActivity.this, ivFav);
+        try {
+            if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT) {
+                setContentView(R.layout.activity_detail_with_ctl_ancmt);
+            } else {
+                setContentView(R.layout.activity_detail_with_ctl);
             }
-        });
 
-        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
-            ivFav.setVisibility(View.GONE);
+            mParentView = (ViewGroup) findViewById(R.id.svDetail);
+
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+
+            mLikeLink = kcpContentPage.getLikeLink();
+            if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){ //the like links should be given from place if the type is ITEM_TYPE_STORE
+                mLikeLink = kcpContentPage.getStore().getLikeLink();
+            }
+
+            final ImageView ivFav = (ImageView) toolbar.findViewById(R.id.ivFav);
+            ivFav.setSelected(FavouriteManager.getInstance(DetailActivity.this).isLiked(mLikeLink, kcpContentPage));
+            ivFav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
+                        @Override
+                        public void OnSqueezeAnimationDone() {
+                            ivFav.setSelected(!ivFav.isSelected());
+                            FavouriteManager.getInstance(DetailActivity.this).addOrRemoveFavContent(mLikeLink, kcpContentPage);
+                        }
+                    }, DetailActivity.this, ivFav);
+                }
+            });
+
+            if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
+                ivFav.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            logger.error(e);
         }
     }
 
@@ -222,7 +226,7 @@ public class DetailActivity extends AppCompatActivity {
                                     kcpContentPage.getStoreNumber()
                             );
                         }
-                    }, false);
+                    }, true);
 
             //Store Info
             CTA info = new CTA(
@@ -604,9 +608,15 @@ public class DetailActivity extends AppCompatActivity {
             final String toolbarTitle = KcpContentTypeFactory.getContentTypeTitle(kcpContentPage);
             TextView tvExpiryDate = (TextView) findViewById(R.id.tvExpiryDate);
 
+            ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
             //MAIN IMAGE AT TOP
+            int placeHolderDrawable = R.drawable.placeholder;
             String imageUrlTemp = kcpContentPage.getHighestResImageUrl();
-            if(imageUrlTemp.equals("")) imageUrlTemp = kcpContentPage.getHighestResFallbackImageUrl();
+            if(imageUrlTemp.equals("")) {
+                imageUrlTemp = kcpContentPage.getHighestResFallbackImageUrl();
+                placeHolderDrawable = R.drawable.placeholder_logo;
+//                ivDetailImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            }
             final String imageUrl = imageUrlTemp;
             if(imageUrl.equals("")){
                 //TODO: if it's necessary to have toolbar in white, change the theme here (now it's in themeColor)
@@ -624,7 +634,6 @@ public class DetailActivity extends AppCompatActivity {
                 lp.height = height;
                 backdrop.setLayoutParams(lp);
 
-                ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
                 ivDetailImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -639,7 +648,7 @@ public class DetailActivity extends AppCompatActivity {
                         ivDetailImage.getContext(),
                         imageUrl,
                         ivDetailImage,
-                        R.drawable.placeholder);
+                        placeHolderDrawable);
 
                 if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
                 else tvToolbar.setText(toolbarTitle);

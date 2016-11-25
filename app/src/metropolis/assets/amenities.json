@@ -1,1 +1,70 @@
-{"amenities":[{"type":"56ec218092eb3329db000004","enabled":true,"title":"Guest Services","externalIds":["information_counter"]},{"type":"56ec29c592eb3329db00000b","enabled":true,"title":"Washrooms","externalIds":["washroom"]},{"type":"56ec20c092eb3329db000003","enabled":true,"title":"Family Washrooms","externalIds":["family-washroom"]},{"type":"56ec218092eb3329db000004","enabled":true,"title":"Strollers","externalIds":["strollers"]},{"type":"56ec292392eb3329db000005","enabled":true,"title":"Lockers","externalIds":["lockers"]},{"type":"56ec294992eb3329db000007","enabled":true,"title":"Taxi Stand","externalIds":["taxi-stand"]},{"type":"56ec299b92eb3329db000009","enabled":true,"title":"Tour Bus / Shopping Shuttle","externalIds":["shuttle"]},{"type":"56ec20ab92eb3329db000002","enabled":true,"title":"ATM","externalIds":["atm"]},{"type":"56ec296792eb3329db000008","enabled":true,"title":"Telephones","externalIds":["telephone"]},{"type":"56ec29bb92eb3329db00000a","enabled":true,"title":"TTY Telephones","externalIds":["tty-telephone"]}]}
+{
+  "amenities": [
+    {
+      "type":"0",
+      "enabled":true,
+      "title": "Customer Service",
+      "externalIds":[
+        "information-counter"
+      ]
+    },
+    {
+      "type":"1",
+      "enabled":true,
+      "title": "Restrooms",
+      "externalIds":[
+        "washroom",
+        "family-washroom"
+      ]
+    },
+    {
+      "type": "2",
+      "enabled": false,
+      "title": "Community Room",
+      "externalIds": [
+        "community-room"
+      ]
+    },
+    {
+      "type":"3",
+      "enabled":true,
+      "title": "Elevators",
+      "externalIds":[
+        "Elevator"
+      ]
+    },
+    {
+      "type":"4",
+      "enabled":true,
+      "title": "Stairs &amp; Escalators",
+      "externalIds":[
+        "Stairs",
+        "Escalator"
+      ]
+    },
+    {
+      "type":"6",
+      "enabled":false,
+      "title": "Lockers",
+      "externalIds":[
+        "lockers"
+      ]
+    },
+    {
+      "type":"7",
+      "enabled":false,
+      "title": "ATM Machines",
+      "externalIds":[
+        "atm"
+      ]
+    },
+    {
+      "type":"9",
+      "enabled":true,
+      "title": "Bus Loop",
+      "externalIds":[
+        "shuttle"
+      ]
+    }
+  ]
+}

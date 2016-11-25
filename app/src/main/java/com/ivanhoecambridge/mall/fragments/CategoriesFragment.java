@@ -53,8 +53,8 @@ public class CategoriesFragment extends BaseFragment {
                         mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                if(mMainActivity.mIsDataLoaded) DirectoryFragment.getInstance().downloadCategories();
-                else mMainActivity.initializeKcpData();
+                /*if(mMainActivity.mIsDataLoaded) DirectoryFragment.getInstance().downloadCategories();
+                else*/ mMainActivity.initializeKcpData(srl);
             }
         });
         return view;

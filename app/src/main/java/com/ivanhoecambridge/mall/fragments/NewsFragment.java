@@ -59,8 +59,8 @@ public class NewsFragment extends BaseFragment {
                         mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                if(mMainActivity.mIsDataLoaded) HomeFragment.getInstance().initializeHomeData();
-                else mMainActivity.initializeKcpData();
+                /*if(mMainActivity.mIsDataLoaded) HomeFragment.getInstance().initializeHomeData();
+                else*/ mMainActivity.initializeKcpData(srl);
                 mEndlessRecyclerViewScrollListener.onLoadDone();
             }
         });

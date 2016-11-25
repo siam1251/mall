@@ -44,7 +44,7 @@ public class MapUtility {
      * @param pinDrawable
      * @return overlay2DImage with transparent pixel around it as a hack to adjust its sizes
      */
-    public static Overlay2DImage getOverlayImageWithPadding(Context context, Drawable pinDrawable) {
+    /*public static Overlay2DImage getOverlayImageWithPadding(Context context, Drawable pinDrawable) {
         // Actual size of logo
         int width = pinDrawable.getIntrinsicWidth();
         int height = pinDrawable.getIntrinsicHeight();
@@ -67,7 +67,7 @@ public class MapUtility {
         // Create an Overlay2DImage using a new drawable derived from the bitmap we made
         Overlay2DImage label = new Overlay2DImage(maxDimension, maxDimension, new BitmapDrawable(context.getResources(), bitmap));
         return label;
-    }
+    }*/
 
     public static int getDp(Context context, int px){
         return KcpUtility.dpToPx((Activity) context , px);

@@ -27,7 +27,7 @@ public class HeaderFactory {
     private final static String SEARCH_INDEX_MP_PRODUCTION = "indexes/production/metropolis-at-metrotown-index.msgpack";
 
     public static String MALL_INFO_URL = "bins/2zv9f";
-    public static String AMENITIES_URL = "bins/3ihvo";
+    public static String AMENITIES_URL = "bins/3nmth";
     public static String PARKING_URL = "bins/1c8ul";
 
     private static HashMap<String, String> mHeaders;

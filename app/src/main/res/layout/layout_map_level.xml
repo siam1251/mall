@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/map_level_width"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    android:layout_gravity="center"
+    android:background="@color/white"
+    tools:showIn="@layout/fragment_map"
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        >
+        android:layout_height="@dimen/map_level_arrow_bg_height"
+
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            android:id="@+id/ivUpperBg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/img_bttn_multilevel_top"
+            />
+
+            android:background="?selectableItemBackgroundBorderless"
+            style="@style/SelectableItemForegroundCircle"
+            ThemedImageView:filterColor="@color/map_level_disabled"
+            ThemedImageView:filterColorUnselected="@color/map_level_enabled"
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/ivUpper"
+            android:layout_marginTop="20dp"
+            android:padding="5dp"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_level_arrow_up"
+            />
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <ImageView
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/img_bttn_multilevel_middle"
+            android:scaleType="fitXY"
+            />
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_centerInParent="true"
+            app:fontFamily="@string/fontFamily_roboto_bold"
+            android:gravity="center"
+            android:id="@+id/tvLevel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="#787a86"
+            android:textSize="10sp"
+            android:text="SC, OG N UP3"
+            android:lines="2"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            android:adjustViewBounds="true"
+            android:id="@+id/ivLowerBg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_bttn_multilevel_bottom"
+            />
+
+            android:background="?selectableItemBackgroundBorderless"
+            style="@style/SelectableItemForegroundCircle"
+            android:src="@drawable/icn_multilevel_arrow_down"
+        <!--<com.ivanhoecambridge.mall.views.ThemeColorImageView-->
+            ThemedImageView:filterColor="@color/map_level_disabled"
+            ThemedImageView:filterColorUnselected="@color/map_level_enabled"
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/ivLower"
+            android:layout_marginTop="3dp"
+            android:padding="5dp"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_level_arrow_down"
+            />
+
+        android:layout_width="@dimen/map_level_arrow_width"
+        android:layout_height="@dimen/map_level_arrow_height"
+
+    </RelativeLayout>
+
+
+</LinearLayout>

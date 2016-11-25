@@ -133,11 +133,13 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
                                             .load(photoUrlLarge)
                                             .crossFade()
                                             .centerCrop()
+                                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                             .into(theaterViewer.ivDetailImageLargePhoto);
                                     return false;
                                 }
                             })
                             .placeholder(R.drawable.icn_movies_placeholder)
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                             .into(theaterViewer.ivMoviePoster);
 
                 }
@@ -180,12 +182,14 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
                                             .load(photoUrlLarge)
                                             .crossFade()
                                             .centerCrop()
+                                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                             .into(showtimesViewer.ivDetailImageLargePhoto);
                                     return false;
                                 }
                             })
 //                            .crossFade()
                             .centerCrop()
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                             .placeholder(R.drawable.icn_movies_placeholder)
                             .into(showtimesViewer.ivMoviePoster);
                 }

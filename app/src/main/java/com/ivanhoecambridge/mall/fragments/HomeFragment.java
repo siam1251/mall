@@ -232,7 +232,7 @@ public class HomeFragment extends BaseFragment {
                     updateOtherDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
                 } else if(mode.equals(Constants.EXTERNAL_CODE_RECOMMENDED)) {
                     updateRecommendedDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
-                    MapFragment.getInstance().onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL));
+                    MapFragment.getInstance().onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL, false));
                 }
             }
         } catch (Exception e) {

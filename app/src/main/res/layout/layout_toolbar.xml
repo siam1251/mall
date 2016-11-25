@@ -16,8 +16,9 @@
         android:id="@+id/ivToolbar"
         android:gravity="center"
         android:layout_gravity="center"
-        android:layout_width="107dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
         android:src="@drawable/logo_mall"/>
+        android:layout_width="107dp"
 
 </android.support.v7.widget.Toolbar>

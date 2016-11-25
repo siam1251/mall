@@ -1,5 +1,6 @@
 package com.ivanhoecambridge.mall.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -303,7 +304,10 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
         try {
             if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
                 if(data == null) {
-                    onFinish(resultCode);
+//                    onFinish(resultCode);
+//                    onFinish(Activity.RESULT_OK);
+//                    setResult(Activity.RESULT_OK, null);
+//                    onBackPressed();
                 } else {
                     int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
                     if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){

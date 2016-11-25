@@ -34,6 +34,19 @@ public class Amenities {
         return amenityList;
     }
 
+    public Amenity getAmenityWithExternalId(String exteralId){
+        List<Amenity> amenities = getAmenityList();
+        if(amenities == null) return null;
+        for(Amenity amenity : amenities){
+
+            String[] externalIds = amenity.getExternalIds();
+            for(String id : externalIds) {
+                if(id.equals(exteralId)) return amenity;
+            }
+        }
+        return null;
+    }
+
     public class Amenity {
 
         @SerializedName("type")
@@ -75,8 +88,8 @@ public class Amenities {
         KcpUtility.saveToSharedPreferences(context, key, isToggled);
     }
 
-    public static boolean isToggled(Context context, String key){
-        return KcpUtility.loadFromSharedPreferences(context, key, false);
+    public static boolean isToggled(Context context, String key, boolean defaultValue){
+        return KcpUtility.loadFromSharedPreferences(context, key, defaultValue);
     }
 
     public static class AmenityLayout {

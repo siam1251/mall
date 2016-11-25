@@ -168,6 +168,11 @@
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
 
+    <style name="SelectableItemForegroundCircle">
+        <item name="android:theme">@style/SelectableItemTheme</item>
+        <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
     <style name="SelectableItemTheme">
         <item name="colorControlHighlight">@color/themeColorTransparent</item>
     </style>

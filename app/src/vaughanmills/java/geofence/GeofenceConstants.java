@@ -40,5 +40,6 @@ public final class GeofenceConstants {
     static {
         GEOFENCE_AREA_LAT_LONG.put("Kinetic Cafe", new LatLng(43.642848, -79.375370));//kinetic cafe building
         GEOFENCE_AREA_LAT_LONG.put("Vaughan Mills", new LatLng(43.825410, -79.538450));//real location
+        GEOFENCE_AREA_LAT_LONG.put("Home", new LatLng(43.782455, -79.441867));
     }
 }

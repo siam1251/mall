@@ -11,4 +11,7 @@
     <!--ONBOARDING-->
     <string name="onbd_one_title">Welcome to\nMetropolis’s new\ncompanion app</string>
 
+    <!--PRIVACY-->
+    <string name="url_privacy_policy">https://metropolisatmetrotown.com/privacy-policy/</string>
+
 </resources>

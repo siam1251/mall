@@ -81,7 +81,10 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     String subCategoriesUrl = kcpCategory.getSubCategoriesLink();
-                    if(!subCategoriesUrl.equals("")){
+                    boolean hideChildCategories = kcpCategory.getCustom().getHideChildCategories();
+                    if(hideChildCategories || subCategoriesUrl.equals("")) {
+                        DirectoryFragment.getInstance().tryDownloadPlacesForThisCategory(mContext, categoryName, externalCode, kcpCategory.getPlacesLink(), categoryHolder.tvCategory);
+                    } else {
                         DirectoryFragment.getInstance().tryDownloadSubCategories(mContext, externalCode, categoryName, subCategoriesUrl, position, categoryHolder.tvCategory);
                     }
                 }

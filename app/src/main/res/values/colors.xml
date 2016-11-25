@@ -159,6 +159,14 @@
     <color name="emptySearchResults">#FFFFFF</color>
     <color name="darkTransparentBackground">#cd000000</color>
 
+    <!--MAP-->
+
+    <color name="map_level_enabled">#787a86</color>
+    <color name="map_level_disabled">#c8c8cc</color>
+
+    <!--LEFT PANEL-->
+    <color name="privacy_policy_text_color">#101010</color>
+
 
 
 

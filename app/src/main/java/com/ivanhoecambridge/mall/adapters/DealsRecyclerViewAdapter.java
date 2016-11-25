@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
@@ -26,6 +28,7 @@ import com.ivanhoecambridge.mall.activities.InterestedCategoryActivity;
 import com.ivanhoecambridge.mall.factory.GlideFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
+import com.ivanhoecambridge.mall.views.KCPSetRatioImageView;
 import com.ivanhoecambridge.mall.views.RecyclerViewFooter;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.utility.Utility;
@@ -172,7 +175,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
     private int mHeight;
     public class DealsViewHolder extends MainViewHolder {
         public RelativeLayout rlDeal;
-        public ImageView ivDealLogo;
+        public KCPSetRatioImageView ivDealLogo;
         public TextView tvDealStoreName;
         public TextView tvDealTitle;
         public TextView tvExpiryDate;
@@ -181,7 +184,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         public DealsViewHolder(View v) {
             super(v);
             rlDeal             = (RelativeLayout)  v.findViewById(R.id.rlDeal);
-            ivDealLogo  = (ImageView) v.findViewById(R.id.ivDealLogo);
+            ivDealLogo  = (KCPSetRatioImageView) v.findViewById(R.id.ivDealLogo);
             tvDealStoreName = (TextView)  v.findViewById(R.id.tvDealStoreName);
             tvDealTitle = (TextView)  v.findViewById(R.id.tvDealTitle);
             tvExpiryDate = (TextView)  v.findViewById(R.id.tvExpiryDate);
@@ -283,13 +286,22 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             final KcpContentPage kcpContentPage = (KcpContentPage) mItems.get(position);
             final DealsViewHolder dealHolder = (DealsViewHolder) holder;
 
+            if(kcpContentPage.getStoreName().contains("Tommy")){
+                String a = "ewfsef";
+            }
+
+            int placeHolderDrawable = R.drawable.placeholder;
             String imageUrl = kcpContentPage.getHighestResImageUrl();
-            if(imageUrl.equals("")) imageUrl = kcpContentPage.getHighestResFallbackImageUrl();
+            if(imageUrl.equals("")) {
+                imageUrl = kcpContentPage.getHighestResFallbackImageUrl();
+                placeHolderDrawable = R.drawable.placeholder_logo;
+            }
             new GlideFactory().glideWithDefaultRatio(
                     mContext,
                     imageUrl,
                     dealHolder.ivDealLogo,
-                    R.drawable.placeholder);
+                    placeHolderDrawable);
+
 
             String storename = kcpContentPage.getStoreName();
             dealHolder.tvDealStoreName.setText(storename);

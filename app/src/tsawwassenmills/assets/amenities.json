@@ -10,7 +10,7 @@
     },
     {
       "type":"57c6e482bbf0141f92000002",
-      "enabled":true,
+      "enabled":false,
       "title": "Family Washrooms",
       "externalIds":[
         "family-washroom"
@@ -21,12 +21,12 @@
       "enabled": true,
       "title": "Guest Services",
       "externalIds": [
-        "information_counter"
+        "information-counter"
       ]
     },
     {
       "type":"57c6e4d0bbf0141f92000006",
-      "enabled":true,
+      "enabled":false,
       "title": "Strollers",
       "externalIds":[
         "strollers"
@@ -34,7 +34,7 @@
     },
     {
       "type":"57c6e4bbbbf0141f92000005",
-      "enabled":true,
+      "enabled":false,
       "title": "Nursing Room",
       "externalIds":[
         "changing-room"
@@ -42,7 +42,7 @@
     },
     {
       "type":"57c5f020bbf01435f5000006",
-      "enabled":true,
+      "enabled":false,
       "title": "ATM",
       "externalIds":[
         "atm"
@@ -50,7 +50,7 @@
     },
     {
       "type":"57d06274bbf0145ac800000d",
-      "enabled":true,
+      "enabled":false,
       "title": "Parcel Pick Up",
       "externalIds":[
         "pick-up"
@@ -74,7 +74,7 @@
     },
     {
       "type":"57c6e4dbbbf0141f92000007",
-      "enabled":true,
+      "enabled":false,
       "title": "Taxi",
       "externalIds":[
         "taxi-stand"

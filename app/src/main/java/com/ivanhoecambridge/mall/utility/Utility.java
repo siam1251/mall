@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -767,6 +768,18 @@ public class Utility {
     public static int getColorWithAlpha(Context context, @ColorRes int colorResource, int alpha){
         int color = context.getResources().getColor(colorResource);
         return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
+    }
+
+    public static float getFloatValue(Context context, int floatResource){
+        try {
+            TypedValue outValue = new TypedValue();
+            context.getResources().getValue(floatResource, outValue, true);
+            float value = outValue.getFloat();
+            return value;
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0.0f;
     }
 
 }

@@ -135,7 +135,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <!--INFO-->
     <string name="info_get_directions">Get Directions</string>
     <string name="info_save_my_parking_spot">Save My Parking Spot</string>
-    <string name="info_my_parking_spot">You parked in </string>
+    <string name="info_my_parking_spot">You are parked in </string>
 
     <!--MALL INFO TITLE-->
     <string name="mall_info_mall_hours">Mall Hours</string>
@@ -298,8 +298,9 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <!---->
 
-
-    <string name="BottomSheetBehaviorGoogleMapsLike">com.ivanhoecambridge.mall.views.BottomSheetBehaviorGoogleMapsLike</string>
+    <string name="privacy_policy">Privacy Policy • Terms of Service</string>
+    <string name="version_name_prefix">Version </string>
+    <string name="version_name_suffix"> (TESTING) </string>
 
 
 </resources>

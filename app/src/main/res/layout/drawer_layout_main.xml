@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-
 
         <ImageView
             android:id="@+id/ivDrawerLayoutBg"
@@ -97,6 +97,7 @@
             layout="@layout/layout_active_mall"
             android:layout_below="@+id/ivDrawerLayoutBg"
             />
+            android:visibility="gone"
 
         <LinearLayout
             android:layout_below="@+id/llActiveMall"
@@ -260,6 +261,43 @@
                     />
 
             </FrameLayout>
+
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:gravity="bottom"
+                android:layout_height="match_parent">
+
+                    style="@style/SelectableItemForeground"
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvPrivacyPolicy"
+                    android:layout_gravity="center_horizontal"
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:textSize="10sp"
+                    android:text="@string/privacy_policy"
+                    android:textColor="@color/privacy_policy_text_color"
+                    />
+                    android:layout_marginBottom="5dp"
+
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvVersionNumber"
+                    android:gravity="center_horizontal"
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:text="1.0.0"
+                    android:textColor="@color/insta_desc_color"
+                    android:layout_marginBottom="13dp"
+                    />
+
+            </LinearLayout>
+
+
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

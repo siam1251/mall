@@ -8,7 +8,9 @@
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/clMain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/main_app_bar_layout_height"
+        >
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/ablTopNav"
@@ -48,8 +50,8 @@
                 </FrameLayout>
 
             </RelativeLayout>
-
         </android.support.design.widget.AppBarLayout>
+
         <com.ivanhoecambridge.mall.views.KcpAnimatedViewPager
             android:id="@+id/vpMain"
             android:layout_width="match_parent"
@@ -57,7 +59,6 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:selectedColor="@color/themeColor"
             app:unSelectedColor="@color/menu_text_unselected"
-            android:paddingBottom="@dimen/main_app_bar_layout_height"
             />
 
     </android.support.design.widget.CoordinatorLayout>

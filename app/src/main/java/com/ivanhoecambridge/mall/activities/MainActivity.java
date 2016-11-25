@@ -33,6 +33,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -263,8 +264,8 @@ public class MainActivity extends BaseActivity
                 }
 
                 if(position == VIEWPAGER_PAGE_MAP) {
-                    if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true, false);
-                    if(mOnDealsClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_DEAL)) mOnDealsClickListener.onDealsClick(true);
+                    if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING, false)) mOnParkingClickListener.onParkingClick(true, false);
+                    if(mOnDealsClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_DEAL, false)) mOnDealsClickListener.onDealsClick(true);
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
                     setToolbarElevation(true);
@@ -295,7 +296,7 @@ public class MainActivity extends BaseActivity
         setupTabIcons(tabLayout, fragmentTitleList, fragmentIconList);
         mViewPager.setTabLayout(tabLayout);
 
-        initializeKcpData();
+        initializeKcpData(null);
         setUpLeftSidePanel();
         setUpRightSidePanel();
 
@@ -330,15 +331,17 @@ public class MainActivity extends BaseActivity
         mDrawer.openDrawer(scRightDrawerLayout);
     }
 
-    public void initializeKcpData(){
+    public void initializeKcpData(final SwipeRefreshLayout srl){
         if(!KcpUtility.isNetworkAvailable(this)){
+            mOfflineSnackbar = null;
+            if(srl != null) srl.setRefreshing(false);
             ProgressBarWhileDownloading.showProgressDialog(this, R.layout.layout_loading_item, false);
             this.onDataDownloaded(); //TODO: error here when offline
             this.showSnackBar(R.string.warning_no_internet_connection, R.string.warning_retry, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
-                    initializeKcpData();
+                    initializeKcpData(srl);
                 }
             });
             return;
@@ -764,6 +767,11 @@ public class MainActivity extends BaseActivity
         });
 
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
+
+        //version
+        TextView tvVersionNumber = (TextView) findViewById(R.id.tvVersionNumber);
+        String suffx = BuildConfig.DEBUG ? " " + getString(R.string.version_name_suffix) : "";
+        tvVersionNumber.setText(getString(R.string.version_name_prefix) + " " + BuildConfig.VERSION_NAME + suffx);
     }
 
 
@@ -817,10 +825,21 @@ public class MainActivity extends BaseActivity
 
             ImageView ivDrawerLayoutBg = (ImageView) findViewById(R.id.ivDrawerLayoutBg);
 
+            TextView tvPrivacyPolicy = (TextView) findViewById(R.id.tvPrivacyPolicy);
+            TextView tvVersionNumber = (TextView) findViewById(R.id.tvVersionNumber);
+            tvPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utility.openWebPage(MainActivity.this, getString(R.string.url_privacy_policy));
+                }
+            });
+
             int hamburgerMenuColor;
             int panelBackgroundColor;
             int generalTextColor;
             int badgeTextColor;
+            int privacyTextColor;
+            int versionNumberTextColor;
             Drawable drawerLayoutBgDrawable;
 
             if(activeMallEnabled) {
@@ -849,6 +868,8 @@ public class MainActivity extends BaseActivity
                 badgeTextColor = getResources().getColor(R.color.active_mall_badge_text_color);
                 generalTextColor = getResources().getColor(R.color.active_mall_text_color);
                 drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_activemall);
+                privacyTextColor = getResources().getColor(R.color.white);
+                versionNumberTextColor = getResources().getColor(R.color.white);
 
                 LinearLayoutManager llManagerEvents = new LinearLayoutManager(this);
                 LinearLayoutManager llManagerDeals = new LinearLayoutManager(this);
@@ -916,10 +937,13 @@ public class MainActivity extends BaseActivity
                 badgeTextColor = Color.WHITE;
                 generalTextColor = Color.BLACK;
                 drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_bg_inactive);
+                privacyTextColor = getResources().getColor(R.color.privacy_policy_text_color);
+                versionNumberTextColor = getResources().getColor(R.color.insta_desc_color);
+
 
                 if (mOfflineSnackbar != null){
-                    mOfflineSnackbar.dismiss();
-                    mOfflineSnackbar = null;
+//                    mOfflineSnackbar.dismiss();
+//                    mOfflineSnackbar = null; //TESTING - why setting it to null?
                 }
 
 
@@ -944,6 +968,8 @@ public class MainActivity extends BaseActivity
             tvStores.setTextColor(generalTextColor);
             tvInterests.setTextColor(generalTextColor);
             ivDrawerLayoutBg.setImageDrawable(drawerLayoutBgDrawable);
+            tvPrivacyPolicy.setTextColor(privacyTextColor);
+            tvVersionNumber.setTextColor(versionNumberTextColor);
         } catch (Resources.NotFoundException e) {
             logger.error(e);
         } catch (Exception e){
@@ -990,7 +1016,7 @@ public class MainActivity extends BaseActivity
         final ImageView ivFilterDeal = (ImageView) findViewById(R.id.ivFilterDeal);
         final TextView tvFilterDeal = (TextView) findViewById(R.id.tvFilterDeal);
 
-        setDealParkingStatus(Amenities.isToggled(this, Amenities.GSON_KEY_DEAL), rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
+        setDealParkingStatus(Amenities.isToggled(this, Amenities.GSON_KEY_DEAL, false), rlSeeDeal, tvFilterDeal, ivFilterDeal, getResources().getString(R.string.map_filter_hide_deal), getResources().getString(R.string.map_filter_see_deal));
         rlSeeDeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1018,7 +1044,7 @@ public class MainActivity extends BaseActivity
         final ImageView ivFilterParking= (ImageView) findViewById(R.id.ivFilterParking);
         final TextView tvFilterParking = (TextView) findViewById(R.id.tvFilterParking);
 
-        setParkingStatus(Amenities.isToggled(this, Amenities.GSON_KEY_PARKING), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_hide_parking), getResources().getString(R.string.map_filter_see_parking));
+        setParkingStatus(Amenities.isToggled(this, Amenities.GSON_KEY_PARKING, false), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_hide_parking), getResources().getString(R.string.map_filter_see_parking));
         rlSeeParking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1028,7 +1054,7 @@ public class MainActivity extends BaseActivity
                     }
                 }, MainActivity.this, rlSeeParking);
                 if(ParkingManager.isParkingLotSaved(MainActivity.this)) Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, ivFilterParking.isSelected());
-                setParkingStatus(Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_hide_parking), getResources().getString(R.string.map_filter_see_parking));
+                setParkingStatus(Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING, false), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_hide_parking), getResources().getString(R.string.map_filter_see_parking));
                 if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(!ivFilterParking.isSelected(), false);
             }
         });
@@ -1038,11 +1064,8 @@ public class MainActivity extends BaseActivity
 
         if(AmenitiesManager.sAmenities == null) return;
         for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
-
             final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
-            if(amenity.isEnabled()) {
-
-
+//            if(amenity.isEnabled()) {
                 if(amenity.getExternalIds() != null && amenity.getExternalIds().length > 0){
                     final String externalID = amenity.getExternalIds()[0];
                     amenityList.add(new Amenities.AmenityLayout(
@@ -1050,7 +1073,7 @@ public class MainActivity extends BaseActivity
                                     (ViewGroup) llAmenitySwitch,
                                     R.layout.layout_amenities,
                                     amenity.getTitle(),
-                                    Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID),
+                                    Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, amenity.isEnabled()),
                                     new CompoundButton.OnCheckedChangeListener() {
                                         @Override
                                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1063,7 +1086,7 @@ public class MainActivity extends BaseActivity
                     );
 
                 }
-            }
+//            }
         }
 
         ((ViewGroup)llAmenitySwitch).removeAllViews();
@@ -1103,12 +1126,20 @@ public class MainActivity extends BaseActivity
 
 
     public void showSnackBar(int msg, int action, int textColor, @Nullable View.OnClickListener onClickListener) {
-        if (mOfflineSnackbar != null && mOfflineSnackbar.isShownOrQueued())
+
+        if(mOfflineSnackbar == null) logger.debug("mOfflineSnackbar = null");
+        else logger.debug("mOfflineSnackbar is NOT null");
+        if(mOfflineSnackbar != null && mOfflineSnackbar.isShownOrQueued()) logger.debug("mOfflineSnackbar.isShownOrQueued()");
+
+
+        if (mOfflineSnackbar != null && mOfflineSnackbar.isShownOrQueued()) {
+            logger.debug("returned from showSnacBar");
             return;
+        }
         final CoordinatorLayout clMain = (CoordinatorLayout) findViewById(R.id.clMain);
         if (onClickListener == null) {
             mOfflineSnackbar = Snackbar
-                    .make(clMain, getResources().getString(msg), Snackbar.LENGTH_SHORT);
+                    .make(clMain, getResources().getString(msg), Snackbar.LENGTH_LONG);
         } else {
             mOfflineSnackbar = Snackbar
                     .make(clMain, getResources().getString(msg), Snackbar.LENGTH_INDEFINITE)
@@ -1119,7 +1150,7 @@ public class MainActivity extends BaseActivity
         View snackbarView = mOfflineSnackbar.getView();
 
         CoordinatorLayout.LayoutParams param = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
-        param.bottomMargin = (int) getResources().getDimension(R.dimen.main_app_bar_layout_height);
+//        param.bottomMargin = (int) getResources().getDimension(R.dimen.main_app_bar_layout_height);
         snackbarView.setLayoutParams(param);
         snackbarView.setBackgroundColor(Color.DKGRAY);
 
@@ -1130,6 +1161,7 @@ public class MainActivity extends BaseActivity
         TextView actionText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_action);
         actionText.setTextColor(getResources().getColor(R.color.warningColor));
 
+        logger.debug("showing showSnacBar, msg: " + getResources().getString(msg));
         mOfflineSnackbar.show();
 
     }
@@ -1256,11 +1288,11 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
         if (id == R.id.action_backend_vm) {
             HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_VM);
-            initializeKcpData();
+            initializeKcpData(null);
             return true;
         } else if (id == R.id.action_backend_mp) {
             HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_MP);
-            initializeKcpData();
+            initializeKcpData(null);
             return true;
         } else if (id == android.R.id.home){
             onBackPressed();
@@ -1407,7 +1439,8 @@ public class MainActivity extends BaseActivity
                     //turn on the guest service switch and drop a pin
                     selectPage(MainActivity.VIEWPAGER_PAGE_MAP);
                     String externalID = Constants.KEY_GUEST_SERVICE;
-                    boolean isToggled = Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID);
+                    final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityWithExternalId(externalID);
+                    boolean isToggled = Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, amenity == null ? false : amenity.isEnabled());
                     if(!isToggled) {
                         Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, true);
                         setUpRightSidePanel();
@@ -1420,7 +1453,7 @@ public class MainActivity extends BaseActivity
                 mDrawer.closeDrawers();
                 if (resultCode == Activity.RESULT_OK) {
                     setUpRightSidePanel();
-                    if(mOnParkingClickListener != null && Amenities.isToggled(this, Amenities.GSON_KEY_PARKING)) mOnParkingClickListener.onParkingClick(true, true);
+                    if(mOnParkingClickListener != null && Amenities.isToggled(this, Amenities.GSON_KEY_PARKING, false)) mOnParkingClickListener.onParkingClick(true, true);
                     InfoFragment.getInstance().setParkingSpotCTA();
                 }
             } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {

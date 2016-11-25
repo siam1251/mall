@@ -60,8 +60,8 @@ public class PlacesFragment extends BaseFragment {
                         mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                if(mMainActivity.mIsDataLoaded) DirectoryFragment.getInstance().downloadPlaces();
-                else mMainActivity.initializeKcpData();
+                /*if(mMainActivity.mIsDataLoaded) DirectoryFragment.getInstance().downloadPlaces();
+                else*/ mMainActivity.initializeKcpData(srl);
             }
         });
         return view;
