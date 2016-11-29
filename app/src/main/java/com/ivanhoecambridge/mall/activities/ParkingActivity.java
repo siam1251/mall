@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
 import com.ivanhoecambridge.mall.parking.ChildParking;
 import com.ivanhoecambridge.mall.parking.Parking;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
@@ -35,8 +34,6 @@ import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
 import java.util.List;
-
-import static com.ivanhoecambridge.mall.managers.KcpNotificationManager.NOTIFICATION_ID_WELCOME;
 
 /**
  * Created by Kay on 2016-08-15.
@@ -57,8 +54,8 @@ public class ParkingActivity extends AppCompatActivity {
     private RelativeLayout rlNote;
     private TextView tvParkingLotName;
     private TextView tvEntrancename;
-    private TextView tvParkingLotQuestion;
-    private TextView tvEntranceQuestion;
+    private TextView tvQuestionOne;
+    private TextView tvQuestionTwo;
     private TextView tvEditSelection;
     private TextView tvSaveParkingLot;
 
@@ -78,8 +75,8 @@ public class ParkingActivity extends AppCompatActivity {
         tvParkingLotName = (TextView) findViewById(R.id.tvParkingLotName);
         tvNote = (TextView) findViewById(R.id.tvNote);
         tvEntrancename = (TextView) findViewById(R.id.tvEntrancename);
-        tvParkingLotQuestion = (TextView) findViewById(R.id.tvParkingLotQuestion);
-        tvEntranceQuestion = (TextView) findViewById(R.id.tvEntranceQuestion);
+        tvQuestionOne = (TextView) findViewById(R.id.tvQuestionOne);
+        tvQuestionTwo = (TextView) findViewById(R.id.tvQuestionTwo);
         tvEditSelection = (TextView) findViewById(R.id.tvEditSelection);
         tvEditSelection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +122,7 @@ public class ParkingActivity extends AppCompatActivity {
         ivDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mParkingLotSelectedPosition != -1) {
+                if(mParkingLotSelectedPosition != -1 && !ParkingManager.isParkingLotSaved(ParkingActivity.this)) {
                     AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
                     alertDialogForInterest.getAlertDialog(
                             ParkingActivity.this,
@@ -195,6 +192,8 @@ public class ParkingActivity extends AppCompatActivity {
                             if(rvParking.findViewHolderForAdapterPosition(mParkingLotSelectedPosition) != null) {
                                 rvParking.findViewHolderForAdapterPosition(mParkingLotSelectedPosition).itemView.performClick();
                                 showDoneBtn(true, rvParking, "NEXT");
+                                if(ParkingManager.isParkingLotSaved(ParkingActivity.this)) showSaveParkingSpotScreen(true);
+                                rvParkingChild.setVisibility(View.VISIBLE);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -236,8 +235,8 @@ public class ParkingActivity extends AppCompatActivity {
                     R.anim.anim_slide_up_from_its_position);
             slideUpAnimation.reset();
             slideUpAnimation.setFillAfter(true);
-            ;
-            if(rvParkingChild.getVisibility() == View.VISIBLE) {
+
+            if(rvParkingChild.getVisibility() == View.VISIBLE) { //show 1st page
                 rvParkingChild.setVisibility(View.GONE);
 
                 tvParkingLotName.setVisibility(View.GONE);
@@ -252,12 +251,11 @@ public class ParkingActivity extends AppCompatActivity {
                 else showDoneBtn(false, rvParking, "");
 
 
-                tvParkingLotQuestion.startAnimation(fadeInAnim);
-                tvParkingLotQuestion.setVisibility(View.VISIBLE);
-                tvEntranceQuestion.startAnimation(fadeOutAnim);
-                tvEntranceQuestion.setVisibility(View.GONE);
-            } else {
-
+                tvQuestionOne.startAnimation(fadeInAnim);
+                tvQuestionOne.setVisibility(View.VISIBLE);
+                tvQuestionTwo.startAnimation(fadeOutAnim);
+                tvQuestionTwo.setVisibility(View.GONE);
+            } else {//now 2nd page
                 rlParkingIcon.startAnimation(slideUpAnimation);
 
                 tvParkingLotName.setVisibility(View.VISIBLE);
@@ -295,10 +293,10 @@ public class ParkingActivity extends AppCompatActivity {
                 else showDoneBtn(true, rvParkingChild, "BACK");
 
 
-                tvParkingLotQuestion.startAnimation(fadeOutAnim);
-                tvParkingLotQuestion.setVisibility(View.GONE);
-                tvEntranceQuestion.startAnimation(fadeInAnim);
-                tvEntranceQuestion.setVisibility(View.VISIBLE);
+                tvQuestionOne.startAnimation(fadeOutAnim);
+                tvQuestionOne.setVisibility(View.GONE);
+                tvQuestionTwo.startAnimation(fadeInAnim);
+                tvQuestionTwo.setVisibility(View.VISIBLE);
             }
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
@@ -309,9 +307,9 @@ public class ParkingActivity extends AppCompatActivity {
     private void showSaveParkingSpotScreen(boolean enable){
         mDoneBtnShown = false;
 
-        if(enable) {
-            tvParkingLotQuestion.setVisibility(View.GONE);
-            tvEntranceQuestion.setVisibility(View.GONE);
+        if(enable) { //now show 3rd page
+            tvQuestionOne.setVisibility(View.GONE);
+            tvQuestionTwo.setVisibility(View.GONE);
 
             Animation slideDownAnimation = AnimationUtils.loadAnimation(ParkingActivity.this,
                     R.anim.anim_slide_down_out_of_screen);
@@ -337,8 +335,8 @@ public class ParkingActivity extends AppCompatActivity {
 
         } else {
 
-            tvParkingLotQuestion.setVisibility(View.GONE);
-            tvEntranceQuestion.setVisibility(View.VISIBLE);
+            tvQuestionOne.setVisibility(View.GONE);
+            tvQuestionTwo.setVisibility(View.VISIBLE);
 
             Animation slideUpAnimation = AnimationUtils.loadAnimation(ParkingActivity.this,
                     R.anim.anim_slide_up_from_out_of_screen);
@@ -551,6 +549,7 @@ public class ParkingActivity extends AppCompatActivity {
     public void onBackPressed() {
         if(tvEditSelection.getVisibility() == View.VISIBLE){
             showSaveParkingSpotScreen(false);
+            setupChildRecyclerView();
         } else if(rvParkingChild.getVisibility() == View.VISIBLE) {
             setupChildRecyclerView();
         } else {

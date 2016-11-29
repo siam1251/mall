@@ -37,6 +37,8 @@ import com.ivanhoecambridge.mall.adapters.MallDirectoryRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
 import factory.HeaderFactory;
+
+import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.managers.ThemeManager;
 import com.ivanhoecambridge.mall.searchIndex.IndexManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
@@ -185,6 +187,7 @@ public class DirectoryFragment extends BaseFragment {
                 public void handleMessage(Message inputMessage) {
                     switch (inputMessage.arg1) {
                         case KcpCategoryManager.DOWNLOAD_FAILED:
+                            if(NetworkManager.isConnected(context)) return;
                             break;
                         case KcpCategoryManager.DOWNLOAD_COMPLETE:
                             expandLevelOnCategory(context, externalCode, categoryName, position, view);
@@ -220,6 +223,7 @@ public class DirectoryFragment extends BaseFragment {
                 public void handleMessage(Message inputMessage) {
                     switch (inputMessage.arg1) {
                         case KcpCategoryManager.DOWNLOAD_FAILED:
+                            if(NetworkManager.isConnected(context)) return;
                             ProgressBarWhileDownloading.showProgressDialog(getActivity(), R.layout.layout_loading_item, false);
                             break;
                         case KcpCategoryManager.DOWNLOAD_COMPLETE:

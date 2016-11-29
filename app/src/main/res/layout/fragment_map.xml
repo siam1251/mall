@@ -34,7 +34,7 @@
     <FrameLayout
         android:visibility="invisible"
         android:id="@+id/flCompass"
-        android:layout_margin="14dp"
+        android:layout_margin="@dimen/map_compass_margin"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_width="40dp"

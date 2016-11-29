@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -20,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
@@ -62,6 +62,7 @@ import com.ivanhoecambridge.mall.parking.ChildParking;
 import com.ivanhoecambridge.mall.parking.Parking;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
 import com.ivanhoecambridge.mall.utility.Utility;
+import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 import com.ivanhoecambridge.mall.views.ThemeColorImageView;
 import com.mappedin.jpct.Logger;
 import com.mappedin.sdk.Coordinate;
@@ -151,8 +152,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 20; //ends up 64 px
     private final int PIN_PARKING_IMAGE_SIZE_DP = 32; //ends up 64 px*/
 
-    private final int PIN_AMENITY_IMAGE_SIZE_DP = 120;
-    private final int PIN_PARKING_IMAGE_SIZE_DP = 120;
+    /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 60;
+    private final int PIN_PARKING_IMAGE_SIZE_DP = 60;*/
+
+    private final int PIN_AMENITY_IMAGE_SIZE_DP = 97;
+    private final int PIN_PARKING_IMAGE_SIZE_DP = 97;
 
 
     private final int CAMERA_ZOOM_LEVEL_NEAREST_PARKING = 90; //
@@ -324,11 +328,29 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             }
         });
 */
-
         return view;
     }
 
+    private void setViewListener(){
+        mMainActivity.rlDestinationEditor.setTag(mMainActivity.rlDestinationEditor.getVisibility());
+        mMainActivity.rlDestinationEditor.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int newVis = mMainActivity.rlDestinationEditor.getVisibility();
+                if((int)mMainActivity.rlDestinationEditor.getTag() != newVis) {
+                    mMainActivity.rlDestinationEditor.setTag(mMainActivity.rlDestinationEditor.getVisibility());
+                    if(flCompass.getVisibility() == View.VISIBLE) {
+                        if(mMainActivity.rlDestinationEditor.getVisibility() == View.VISIBLE){ //Visibility changed!
+                            slideDownCompass(true);
+                        } else {
+                            slideDownCompass(false);
+                        }
+                    }
 
+                }
+            }
+        });
+    }
 
     public void initializeMap() {
         if(mMainActivity.mSplashScreenGone){
@@ -791,6 +813,51 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         });
     }
 
+    public void slideDownCompass(boolean slideDown){
+        final int yBy = KcpUtility.dpToPx(getActivity(), 40);
+        final int yInitialPosition = KcpUtility.dpToPx(getActivity(), 55);
+        final int yFinalPosition = (int) getResources().getDimension(R.dimen.map_compass_margin);
+        if(slideDown) {
+            Animation anim = new TranslateAnimation(0, 0, 0, yBy);
+            anim.setDuration(100);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {}
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) flCompass.getLayoutParams();
+                    lp.topMargin = yInitialPosition; // use topmargin for the y-property, left margin for the x-property of your view
+                    flCompass.setLayoutParams(lp);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+            });
+            flCompass.startAnimation(anim);
+
+
+        } else {
+            Animation anim = new TranslateAnimation(0, 0, 0, -yBy);
+            anim.setDuration(100);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {}
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) flCompass.getLayoutParams();
+                    lp.topMargin = yFinalPosition; // use topmargin for the y-property, left margin for the x-property of your view
+                    flCompass.setLayoutParams(lp);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+            });
+            flCompass.startAnimation(anim);
+        }
+    }
+
     private void highlightPolygon(Polygon polygon, int color) {
         if (mSavedParkingPolygon != null && mSavedParkingPolygon == polygon && mOriginalColorsForParking == 0) {
             //mOriginalColorsForParking != 0 so that when tapping already highlighted parking polygon, it doesn't save that highlight color to mOriginalColorsForParking
@@ -856,13 +923,35 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             llDeals.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(parkingPosition == -1) return;
-                    clearHighlightedColours();
-                    mTemporaryParkingLocation = null;
-                    ParkingManager.saveParkingSpotAndEntrance(getActivity(), "", parkingPosition, entrancePosition);
-                    mMainActivity.setUpRightSidePanel();
-                    onParkingClick(true, true);
-                    InfoFragment.getInstance().setParkingSpotCTA();
+                    if(ParkingManager.isParkingLotSaved(getActivity())) {
+                        AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+                        alertDialogForInterest.getAlertDialog(
+                                getActivity(),
+                                R.string.title_change_parking_spot,
+                                R.string.warning_change_my_parking_spot,
+                                R.string.action_ok,
+                                R.string.action_cancel,
+                                new AlertDialogForInterest.DialogAnsweredListener() {
+                                    @Override
+                                    public void okClicked() {
+                                        if(parkingPosition == -1) return;
+                                        clearHighlightedColours();
+                                        mTemporaryParkingLocation = null;
+                                        ParkingManager.saveParkingSpotAndEntrance(getActivity(), "", parkingPosition, entrancePosition);
+                                        mMainActivity.setUpRightSidePanel();
+                                        onParkingClick(true, true);
+                                        InfoFragment.getInstance().setParkingSpotCTA();
+                                    }
+                                }).show();
+                    } else {
+                        if(parkingPosition == -1) return;
+                        clearHighlightedColours();
+                        mTemporaryParkingLocation = null;
+                        ParkingManager.saveParkingSpotAndEntrance(getActivity(), "", parkingPosition, entrancePosition);
+                        mMainActivity.setUpRightSidePanel();
+                        onParkingClick(true, true);
+                        InfoFragment.getInstance().setParkingSpotCTA();
+                    }
                 }
             });
         } else {
@@ -874,18 +963,30 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             llDeals.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(BuildConfig.PARKING_POLYGON) {
-                        String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
-                        showMySavedParkingPolygon(false, parkingId);
-                    } /*else {*/
-                        didTapNothing();
-                        removePin(location);
+                    AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+                    alertDialogForInterest.getAlertDialog(
+                            getActivity(),
+                            R.string.title_remove_my_parking,
+                            R.string.warning_remove_my_parking,
+                            R.string.action_ok,
+                            R.string.action_cancel,
+                            new AlertDialogForInterest.DialogAnsweredListener() {
+                                @Override
+                                public void okClicked() {
+                                    if(BuildConfig.PARKING_POLYGON) {
+                                        String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
+                                        showMySavedParkingPolygon(false, parkingId);
+                                    } /*else {*/
+                                    didTapNothing();
+                                    removePin(location);
 //                    }
 
-                    ParkingManager.removeParkingLot(getActivity());
-                    Amenities.saveToggle(getActivity(), Amenities.GSON_KEY_PARKING, false); //make sure to set this as false otherwise everytime map fragment's tapped, it will start parkingActivity
-                    mMainActivity.setUpRightSidePanel();
-                    Toast.makeText(getActivity(), "Removed Parking Spot", Toast.LENGTH_SHORT).show();
+                                    ParkingManager.removeParkingLot(getActivity());
+                                    Amenities.saveToggle(getActivity(), Amenities.GSON_KEY_PARKING, false); //make sure to set this as false otherwise everytime map fragment's tapped, it will start parkingActivity
+                                    mMainActivity.setUpRightSidePanel();
+                                    Toast.makeText(getActivity(), "Removed Parking Spot", Toast.LENGTH_SHORT).show();
+                                }
+                            }).show();
                 }
             });
         }
@@ -995,8 +1096,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                         for(final Coordinate coordinate : coords) {
                             Glide
                                     .with(getActivity())
-                                    .load(location.logo.get(MapUtility.getDp(getActivity(), PIN_AMENITY_IMAGE_SIZE_DP)))
+                                    .load(location.logo.get(getImagePinSize()))
                                     .asBitmap()
+//                                    .into(new SimpleTarget<Bitmap>(getImagePinSize(), getImagePinSize()) {
                                     .into(new SimpleTarget<Bitmap>(MapUtility.getDp(getActivity(), PIN_AMENITY_IMAGE_SIZE_DP), MapUtility.getDp(getActivity(), PIN_AMENITY_IMAGE_SIZE_DP)) {
                                         @Override
                                         public void onResourceReady(final Bitmap resource, GlideAnimation glideAnimation) {
@@ -1029,7 +1131,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         clone.mutate(); //prevent all instance of drawables from being affected
         clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.MULTIPLY); //change white colors
 //        clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.SRC_ATOP); //change the entire colors
-        Overlay2DImage label = new Overlay2DImage(PIN_AMENITY_IMAGE_SIZE_DP, PIN_AMENITY_IMAGE_SIZE_DP, clone);
+        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), clone);
 //        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), clone);
         label.setPosition(coordinate);
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
@@ -1042,9 +1144,14 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     }
 
 
+    private int getImagePinSize(){
+//        return KcpUtility.dpToPx(getActivity(), PIN_AMENITY_IMAGE_SIZE_DP);
+        return PIN_AMENITY_IMAGE_SIZE_DP;
+    }
+
     public void dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable){
         //TODO: only add pins to the current floor
-        Overlay2DImage label = new Overlay2DImage(PIN_AMENITY_IMAGE_SIZE_DP, PIN_AMENITY_IMAGE_SIZE_DP, pinDrawable);
+        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable);
 //        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), pinDrawable);
         label.setPosition(coordinate);
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);

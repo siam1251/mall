@@ -34,6 +34,7 @@ import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
 import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
+import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
@@ -86,6 +87,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
                         switch (inputMessage.arg1) {
                             case KcpCategoryManager.DOWNLOAD_FAILED:
+                                if(NetworkManager.isConnected(InterestedCategoryActivity.this)) return;
                                 break;
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
                                 InterestedCategoryActivity.this.startActivityForResult(new Intent(InterestedCategoryActivity.this, InterestedStoreActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);

@@ -9,6 +9,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,10 +121,17 @@ public class MallInfoDetailActivity extends AppCompatActivity{
             }
 
             ExpandableTextView etvMallInfoDetail = (ExpandableTextView) findViewById(R.id.etvMallInfoDetail);
+
+//            String detail = info.getDetails().replace("\\\n", System.getProperty("line.separator"));
             etvMallInfoDetail.setText(info.getDetails());
 
             TextView expandable_text = (TextView) findViewById(R.id.expandable_text);
             HtmlTextView.setHtmlTextView(this, expandable_text, info.getDetails(), R.color.html_link_text_color);
+
+
+            /*TextView expandable_text = (TextView) findViewById(R.id.expandable_text);
+            expandable_text.setText(Html.fromHtml(info.getDetails()));*/
+
 
             TextView tvMallInfoDetailTitle = (TextView) findViewById(R.id.tvMallInfoDetailTitle);
             tvMallInfoDetailTitle.setText(mMallInfoType);

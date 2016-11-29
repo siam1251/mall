@@ -41,6 +41,7 @@ import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.adapters.DealsRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
+import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.CTA;
 import com.ivanhoecambridge.mall.views.CustomAnimation;
@@ -557,6 +558,7 @@ public class DetailActivity extends AppCompatActivity {
             public void handleMessage(Message inputMessage) {
                 switch (inputMessage.arg1) {
                     case KcpCategoryManager.DOWNLOAD_FAILED:
+                        if(NetworkManager.isConnected(DetailActivity.this)) return;
                         break;
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:
                         KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
@@ -580,6 +582,7 @@ public class DetailActivity extends AppCompatActivity {
             public void handleMessage(Message inputMessage) {
                 switch (inputMessage.arg1) {
                     case KcpCategoryManager.DOWNLOAD_FAILED:
+                        if(NetworkManager.isConnected(DetailActivity.this)) return;
                         break;
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:
                         KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();

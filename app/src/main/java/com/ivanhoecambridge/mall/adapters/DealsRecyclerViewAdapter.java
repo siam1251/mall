@@ -175,7 +175,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
     private int mHeight;
     public class DealsViewHolder extends MainViewHolder {
         public RelativeLayout rlDeal;
-        public KCPSetRatioImageView ivDealLogo;
+        public ImageView ivDealLogo;
         public TextView tvDealStoreName;
         public TextView tvDealTitle;
         public TextView tvExpiryDate;
@@ -184,7 +184,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         public DealsViewHolder(View v) {
             super(v);
             rlDeal             = (RelativeLayout)  v.findViewById(R.id.rlDeal);
-            ivDealLogo  = (KCPSetRatioImageView) v.findViewById(R.id.ivDealLogo);
+            ivDealLogo  = (ImageView) v.findViewById(R.id.ivDealLogo);
             tvDealStoreName = (TextView)  v.findViewById(R.id.tvDealStoreName);
             tvDealTitle = (TextView)  v.findViewById(R.id.tvDealTitle);
             tvExpiryDate = (TextView)  v.findViewById(R.id.tvExpiryDate);
@@ -286,7 +286,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             final KcpContentPage kcpContentPage = (KcpContentPage) mItems.get(position);
             final DealsViewHolder dealHolder = (DealsViewHolder) holder;
 
-            if(kcpContentPage.getStoreName().contains("Tommy")){
+            if(kcpContentPage.getStoreName().contains("Oakley")){
                 String a = "ewfsef";
             }
 
@@ -295,13 +295,39 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             if(imageUrl.equals("")) {
                 imageUrl = kcpContentPage.getHighestResFallbackImageUrl();
                 placeHolderDrawable = R.drawable.placeholder_logo;
+//                dealHolder.ivDealLogo.setImageRatio(KcpUtility.getFloat(mContext, R.dimen.default_img_ratio));
+
+
+                Glide.with(mContext)
+                        .load(imageUrl)
+                        .crossFade()
+                        .error(placeHolderDrawable)
+                        .fitCenter()
+                        .override(KcpUtility.getScreenWidth(mContext), (int) (KcpUtility.getScreenWidth(mContext) / KcpUtility.getFloat(mContext, R.dimen.ancmt_image_ratio)))
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .placeholder(placeHolderDrawable)
+                        .into(dealHolder.ivDealLogo);
+
+
+            } else {
+
+
+                Glide.with(mContext)
+                        .load(imageUrl)
+                        .crossFade()
+                        .error(placeHolderDrawable)
+                        .centerCrop()
+                        .override(KcpUtility.getScreenWidth(mContext), (int) (KcpUtility.getScreenWidth(mContext) / KcpUtility.getFloat(mContext, R.dimen.ancmt_image_ratio)))
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .placeholder(placeHolderDrawable)
+                        .into(dealHolder.ivDealLogo);
             }
-            new GlideFactory().glideWithDefaultRatio(
+
+            /*new GlideFactory().glideWithDefaultRatio(
                     mContext,
                     imageUrl,
                     dealHolder.ivDealLogo,
-                    placeHolderDrawable);
-
+                    placeHolderDrawable);*/
 
             String storename = kcpContentPage.getStoreName();
             dealHolder.tvDealStoreName.setText(storename);

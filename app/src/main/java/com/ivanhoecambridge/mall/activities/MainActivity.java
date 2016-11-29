@@ -134,7 +134,7 @@ public class MainActivity extends BaseActivity
     private View scRightDrawerLayout;
     private AppBarLayout ablTopNav;
     private Toolbar mToolbar;
-    private RelativeLayout rlDestinationEditor;
+    public RelativeLayout rlDestinationEditor;
     private EditText etStartStore;
     private EditText etDestStore;
     private FrameLayout flActiveMallDot;
@@ -493,8 +493,8 @@ public class MainActivity extends BaseActivity
         InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
         if(hide) {
             Utility.closeKeybaord(this);
-
             if(isDestinationEditorVisible()){
+                MapFragment.getInstance().slideDownCompass(false);
                 Animation slideDownAnimation = AnimationUtils.loadAnimation(MainActivity.this,
                         R.anim.anim_slide_up_out_of_screen);
                 slideDownAnimation.reset();
@@ -519,6 +519,7 @@ public class MainActivity extends BaseActivity
 
             mToolbar.setVisibility(View.INVISIBLE); //SHOUDLN'T SET TO GONE - it changes the layout height resulting in map re-rendering and slows down process
             rlDestinationEditor.setVisibility(View.VISIBLE);
+            MapFragment.getInstance().slideDownCompass(true);
 
             Animation slideDownAnimation = AnimationUtils.loadAnimation(MainActivity.this,
                     R.anim.anim_slide_down);
@@ -1126,7 +1127,6 @@ public class MainActivity extends BaseActivity
 
 
     public void showSnackBar(int msg, int action, int textColor, @Nullable View.OnClickListener onClickListener) {
-
         if(mOfflineSnackbar == null) logger.debug("mOfflineSnackbar = null");
         else logger.debug("mOfflineSnackbar is NOT null");
         if(mOfflineSnackbar != null && mOfflineSnackbar.isShownOrQueued()) logger.debug("mOfflineSnackbar.isShownOrQueued()");

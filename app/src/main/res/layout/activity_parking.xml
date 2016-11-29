@@ -62,25 +62,25 @@
         <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_regular"
             android:layout_above="@+id/rvParking"
-            android:id="@+id/tvParkingLotQuestion"
+            android:id="@+id/tvQuestionOne"
             android:layout_margin="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textColor="@color/white"
-            android:text="@string/parking_which_parking_lot"/>
+            android:text="@string/parking_question_one"/>
 
         <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_regular"
             android:visibility="gone"
             android:layout_above="@+id/rvParking"
-            android:id="@+id/tvEntranceQuestion"
+            android:id="@+id/tvQuestionTwo"
             android:layout_margin="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textColor="@color/white"
-            android:text="@string/parking_which_entrance"/>
+            android:text="@string/parking_question_two"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

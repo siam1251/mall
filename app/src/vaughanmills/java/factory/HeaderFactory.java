@@ -26,7 +26,7 @@ public class HeaderFactory {
     private final static String SEARCH_INDEX_VM_STAGING = "indexes/staging/vaughan-mills-index.msgpack";
     private final static String SEARCH_INDEX_VM_PRODUCTION = "indexes/production/vaughan-mills-index.msgpack";
 
-    public static String MALL_INFO_URL = "bins/1ouit";
+    public static String MALL_INFO_URL = "bins/18nnt";
     public static String AMENITIES_URL = "bins/33hid";
     public static String PARKING_URL = "bins/1c8ul";
 

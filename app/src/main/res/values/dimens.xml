@@ -258,5 +258,6 @@
     <dimen name="map_level_panel_original_y">20dp</dimen>
     <dimen name="map_level_panel_bot_margin">135dp</dimen>
     <dimen name="map_level_panel_space_btn_direction_panel">115dp</dimen>
+    <dimen name="map_compass_margin">14dp</dimen>
 
 </resources>

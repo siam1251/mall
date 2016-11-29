@@ -6,14 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".activities.MallHourActivity"
     tools:showIn="@layout/activity_mall_info_detail"
-    android:background="@color/white">
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
 
-        <TextView
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_regular"
             android:lines="1"
             android:ellipsize="end"
             android:id="@+id/tvMallInfoDetailTitle"
@@ -37,7 +39,8 @@
             expandableTextView:textColor="@color/black"
             android:orientation="vertical">
 
-            <TextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                app:fontFamily="@string/fontFamily_roboto_regular"
                 android:lineSpacingMultiplier="@dimen/detail_line_spacing_multiplier"
                 android:textSize="14sp"
                 android:layout_width="match_parent"
@@ -47,8 +50,10 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:id="@id/expandable_text"
                 />
+                android:id="@+id/expandable_text"
 
-            <TextView
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                app:fontFamily="@string/fontFamily_roboto_regular"
                 android:id="@id/expand_collapse"
                 android:gravity="center"
                 android:layout_width="match_parent"
