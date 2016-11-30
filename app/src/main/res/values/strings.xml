@@ -302,7 +302,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <!---->
 
-    <string name="privacy_policy">Privacy Policy • Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_of_service">Terms of Service</string>
     <string name="version_name_prefix">Version </string>
     <string name="version_name_suffix"> (TESTING) </string>
 

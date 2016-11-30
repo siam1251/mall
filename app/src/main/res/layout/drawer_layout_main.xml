@@ -269,8 +269,58 @@
                 android:gravity="bottom"
                 android:layout_height="match_parent">
 
-                    style="@style/SelectableItemForeground"
-                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:padding="4dp">
+
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                        style="@style/SelectableItemForeground"
+                        android:layout_gravity="center"
+                        android:id="@+id/tvPrivacyPolicy"
+                        app:fontFamily="@string/fontFamily_roboto_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:text="@string/privacy_policy"
+                        android:textColor="@color/privacy_policy_text_color"
+                        />
+
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                        style="@style/SelectableItemForeground"
+                        android:layout_gravity="center"
+                        android:id="@+id/tvDot"
+                        app:fontFamily="@string/fontFamily_roboto_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:text="•"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:textColor="@color/privacy_policy_text_color"
+                        />
+
+
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                        style="@style/SelectableItemForeground"
+                        android:layout_gravity="center"
+                        android:id="@+id/tvTermsOfService"
+                        app:fontFamily="@string/fontFamily_roboto_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:text="@string/terms_of_service"
+                        android:textColor="@color/privacy_policy_text_color"
+                        />
+
+                </LinearLayout>
+
+
+
+
+                <!--<com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvPrivacyPolicy"
                     android:layout_gravity="center_horizontal"
                     app:fontFamily="@string/fontFamily_roboto_medium"
@@ -280,7 +330,7 @@
                     android:textSize="10sp"
                     android:text="@string/privacy_policy"
                     android:textColor="@color/privacy_policy_text_color"
-                    />
+                    />-->
                     android:layout_marginBottom="5dp"
 
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView

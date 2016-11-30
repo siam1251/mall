@@ -173,9 +173,8 @@ public class MainActivity extends BaseActivity
 
         boolean didOnboardingAppear = KcpUtility.loadFromSharedPreferences(this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, false);
         if(!didOnboardingAppear) {
-            startActivity(new Intent(MainActivity.this, TutorialActivity.class));
+            startActivityForResult(new Intent(MainActivity.this, TutorialActivity.class), Constants.REQUEST_CODE_TUTORIAL);
             ActivityAnimation.startActivityAnimation(MainActivity.this);
-            KcpUtility.saveToSharedPreferences(this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, true);
         }
 
         KcpNotificationManager.onWelcomeNotiClick(this, getIntent());
@@ -303,7 +302,9 @@ public class MainActivity extends BaseActivity
         scRightDrawerLayout = (View) findViewById(R.id.scRightDrawerLayout);
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
 
-        mGeofenceManager = new GeofenceManager(this);
+        if(didOnboardingAppear) {
+            mGeofenceManager = new GeofenceManager(this);
+        }
         setActiveMall(false, false);
 
 
@@ -827,11 +828,21 @@ public class MainActivity extends BaseActivity
             ImageView ivDrawerLayoutBg = (ImageView) findViewById(R.id.ivDrawerLayoutBg);
 
             TextView tvPrivacyPolicy = (TextView) findViewById(R.id.tvPrivacyPolicy);
+            TextView tvTermsOfService = (TextView) findViewById(R.id.tvTermsOfService);
+            TextView tvDot = (TextView) findViewById(R.id.tvDot);
             TextView tvVersionNumber = (TextView) findViewById(R.id.tvVersionNumber);
+
             tvPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Utility.openWebPage(MainActivity.this, getString(R.string.url_privacy_policy));
+                }
+            });
+
+            tvTermsOfService.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utility.openWebPage(MainActivity.this, getString(R.string.url_terms));
                 }
             });
 
@@ -970,6 +981,8 @@ public class MainActivity extends BaseActivity
             tvInterests.setTextColor(generalTextColor);
             ivDrawerLayoutBg.setImageDrawable(drawerLayoutBgDrawable);
             tvPrivacyPolicy.setTextColor(privacyTextColor);
+            tvTermsOfService.setTextColor(privacyTextColor);
+            tvDot.setTextColor(privacyTextColor);
             tvVersionNumber.setTextColor(versionNumberTextColor);
         } catch (Resources.NotFoundException e) {
             logger.error(e);
@@ -1466,6 +1479,9 @@ public class MainActivity extends BaseActivity
                 } else {
                     handleActivityResult(requestCode, resultCode, data);
                 }
+            } else if (requestCode == Constants.REQUEST_CODE_TUTORIAL){
+                KcpUtility.saveToSharedPreferences(this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, true);
+                mGeofenceManager = new GeofenceManager(this);
             }
         } catch (Exception e) {
             logger.error(e);

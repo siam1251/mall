@@ -121,18 +121,10 @@ public class MallInfoDetailActivity extends AppCompatActivity{
             }
 
             ExpandableTextView etvMallInfoDetail = (ExpandableTextView) findViewById(R.id.etvMallInfoDetail);
-
-//            String detail = info.getDetails().replace("\\\n", System.getProperty("line.separator"));
-            etvMallInfoDetail.setText(info.getDetails());
-
+            String infoDetail = info.getDetails().replaceAll("\n", "<br>");
+            etvMallInfoDetail.setText(infoDetail);
             TextView expandable_text = (TextView) findViewById(R.id.expandable_text);
-            HtmlTextView.setHtmlTextView(this, expandable_text, info.getDetails(), R.color.html_link_text_color);
-
-
-            /*TextView expandable_text = (TextView) findViewById(R.id.expandable_text);
-            expandable_text.setText(Html.fromHtml(info.getDetails()));*/
-
-
+            HtmlTextView.setHtmlTextView(this, expandable_text, infoDetail, R.color.html_link_text_color); // /n doesn't work
             TextView tvMallInfoDetailTitle = (TextView) findViewById(R.id.tvMallInfoDetailTitle);
             tvMallInfoDetailTitle.setText(mMallInfoType);
 

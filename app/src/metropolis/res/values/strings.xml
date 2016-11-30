@@ -13,5 +13,5 @@
 
     <!--PRIVACY-->
     <string name="url_privacy_policy">https://metropolisatmetrotown.com/privacy-policy/</string>
-
+    <string name="url_terms">https://metropolisatmetrotown.com/terms-conditions/</string>
 </resources>

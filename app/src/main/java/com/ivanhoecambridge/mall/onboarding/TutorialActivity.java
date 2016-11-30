@@ -1,6 +1,7 @@
 package com.ivanhoecambridge.mall.onboarding;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -28,6 +29,8 @@ import android.widget.VideoView;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.BaseActivity;
+import com.ivanhoecambridge.mall.activities.MainActivity;
+import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 
 import java.util.ArrayList;
@@ -68,8 +71,10 @@ public class TutorialActivity extends BaseActivity {
         tvOnbdSkip.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                ActivityAnimation.exitActivityAnimation(TutorialActivity.this);
+                /*finish();
+                ActivityAnimation.exitActivityAnimation(TutorialActivity.this);*/
+                startMainActivity();
+
             }
         });
         tvOnbd = (TextView) findViewById(R.id.tvOnbd);
@@ -352,4 +357,15 @@ public class TutorialActivity extends BaseActivity {
         }
     }
 
+    private void startMainActivity(){
+        finish();
+//        startActivity(new Intent(this, MainActivity.class));
+        ActivityAnimation.exitActivityAnimation(TutorialActivity.this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        startMainActivity();
+
+    }
 }

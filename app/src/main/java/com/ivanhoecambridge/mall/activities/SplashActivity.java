@@ -7,8 +7,10 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
+import com.ivanhoecambridge.mall.onboarding.TutorialActivity;
 
 public class SplashActivity extends AppCompatActivity {
     private Thread mSplashThread;
@@ -50,6 +52,19 @@ public class SplashActivity extends AppCompatActivity {
         Animation animation = new AlphaAnimation( 0.0f, 1.0f );
         animation.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationEnd(Animation arg0) {
+                /*boolean didOnboardingAppear = KcpUtility.loadFromSharedPreferences(SplashActivity.this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, false);
+                    Intent intent = new Intent();
+                if(didOnboardingAppear) {
+                    intent.setClass(SplashActivity.this, MainActivity.class);
+                } else {
+                    KcpUtility.saveToSharedPreferences(SplashActivity.this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, true);
+                    intent.setClass(SplashActivity.this, TutorialActivity.class);
+                }
+
+                startActivity(intent);
+                overridePendingTransition(R.anim.splash_fake, R.anim.splash_fake);
+                finish();*/
+
                 Intent intent = new Intent();
                 intent.setClass(SplashActivity.this, MainActivity.class);
                 startActivity(intent);

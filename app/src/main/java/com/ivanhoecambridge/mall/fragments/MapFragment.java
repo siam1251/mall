@@ -765,7 +765,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         float zoomLevel = CAMERA_ZOOM_LEVEL; //camera's currently too zoomed out
         //allow the camera to zoom in if it's too far away or keep its current zoom if it's close enough
         if(mapView.getCamera().getZoom() <= CAMERA_ZOOM_LEVEL) { //already zoomed in - keep the same zoom
-//            zoomLevel = mapView.getCamera().getZoom();
+            zoomLevel = mapView.getCamera().getZoom();
         }
 
         mapView.getCamera().setZoomTo(zoomLevel);
@@ -1443,15 +1443,15 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
                     String parkingNote = ParkingManager.getParkingNotes(getActivity());
                     showParkingDetail(location, false, parkingLotName, entranceName, parkingNote, -1, -1);
-//                    mapView.getCamera().focusOn(coordinate);
-//                    mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL);
-
                 } else {
                     showAmenityDetail((CustomLocation) location, drawable);
                 }
+
+                mapView.getCamera().focusOn(coordinate);
+                zoomInOut();
+
                 destinationPolygon = location;
                 if(location == mSavedParkingLocation) return;
-//                if(destinationPolygon == location || location == mSavedParkingLocation) return;
                 highlightThisLabel();
             }
         }
