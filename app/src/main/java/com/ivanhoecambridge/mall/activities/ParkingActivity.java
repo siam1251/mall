@@ -59,10 +59,18 @@ public class ParkingActivity extends AppCompatActivity {
     private TextView tvEditSelection;
     private TextView tvSaveParkingLot;
 
+
+    private int mTempParkingLotPreviouslySaved = -1;
+    private int mTempEntrancePreviouslySaved = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parking);
+
+        mTempParkingLotPreviouslySaved = ParkingManager.getSavedParkingLotPosition(this);
+        mTempEntrancePreviouslySaved = ParkingManager.getSavedEntrancePosition(this);
+
 
         ImageView ivBlur = (ImageView) findViewById(R.id.ivBlur);
         Bitmap blurred = Utility.getBitmapFromMemCache(Constants.KEY_PARKING_BLURRED, true);
@@ -122,22 +130,7 @@ public class ParkingActivity extends AppCompatActivity {
         ivDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mParkingLotSelectedPosition != -1 && !ParkingManager.isParkingLotSaved(ParkingActivity.this)) {
-                    AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
-                    alertDialogForInterest.getAlertDialog(
-                            ParkingActivity.this,
-                            R.string.title_do_not_save_parking,
-                            R.string.warning_no_parking_saved,
-                            R.string.action_do_not_save,
-                            R.string.action_cancel,
-                            new AlertDialogForInterest.DialogAnsweredListener() {
-                                @Override
-                                public void okClicked() {
-                                    onFinish();
-                                }
-                            }).show();
-                } else onFinish();
-
+                checkForUnsavedAndShowAlertBeforeExit();
             }
         });
 
@@ -161,6 +154,25 @@ public class ParkingActivity extends AppCompatActivity {
         mEntranceSelectedPosition = ParkingManager.getSavedEntrancePosition(this);
 
         setupRecyclerView();
+    }
+
+    private void checkForUnsavedAndShowAlertBeforeExit(){
+        //                if(mParkingLotSelectedPosition != -1 && !ParkingManager.isParkingLotSaved(ParkingActivity.this)) {
+        if(mParkingLotSelectedPosition != mTempParkingLotPreviouslySaved || mEntranceSelectedPosition != mTempEntrancePreviouslySaved) {
+            AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+            alertDialogForInterest.getAlertDialog(
+                    ParkingActivity.this,
+                    R.string.title_do_not_save_parking,
+                    R.string.warning_no_parking_saved,
+                    R.string.action_do_not_save,
+                    R.string.action_cancel,
+                    new AlertDialogForInterest.DialogAnsweredListener() {
+                        @Override
+                        public void okClicked() {
+                            onFinish();
+                        }
+                    }).show();
+        } else onFinish();
     }
 
     private void setParkingNoteBtn(String note){
@@ -553,7 +565,8 @@ public class ParkingActivity extends AppCompatActivity {
         } else if(rvParkingChild.getVisibility() == View.VISIBLE) {
             setupChildRecyclerView();
         } else {
-            onFinish();
+            checkForUnsavedAndShowAlertBeforeExit();
+//            onFinish();
         }
     }
 

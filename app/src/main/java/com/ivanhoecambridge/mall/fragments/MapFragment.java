@@ -738,7 +738,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 if(destinationPolygon instanceof Polygon){
                     highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
 //                    mapView.getCamera().focusOn(polygon);
-                    zoomInOut();
+//                    zoomInOut();
                     try {
                         if(mSavedParkingPolygon != null && destinationPolygon == mSavedParkingPolygon) {
 //                            mapView.getCamera().focusOn(polygon);
@@ -934,23 +934,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                                 new AlertDialogForInterest.DialogAnsweredListener() {
                                     @Override
                                     public void okClicked() {
-                                        if(parkingPosition == -1) return;
-                                        clearHighlightedColours();
-                                        mTemporaryParkingLocation = null;
-                                        ParkingManager.saveParkingSpotAndEntrance(getActivity(), "", parkingPosition, entrancePosition);
-                                        mMainActivity.setUpRightSidePanel();
-                                        onParkingClick(true, true);
-                                        InfoFragment.getInstance().setParkingSpotCTA();
+                                        setAsParkingSpot(parkingPosition, entrancePosition);
                                     }
                                 }).show();
                     } else {
-                        if(parkingPosition == -1) return;
-                        clearHighlightedColours();
-                        mTemporaryParkingLocation = null;
-                        ParkingManager.saveParkingSpotAndEntrance(getActivity(), "", parkingPosition, entrancePosition);
-                        mMainActivity.setUpRightSidePanel();
-                        onParkingClick(true, true);
-                        InfoFragment.getInstance().setParkingSpotCTA();
+                        setAsParkingSpot(parkingPosition, entrancePosition);
                     }
                 }
             });
@@ -1005,6 +993,31 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         clearHighlightedColours();
     }
 
+    private void setAsParkingSpot(final int parkingPosition, final int entrancePosition){
+        if(parkingPosition == -1) return;
+        clearHighlightedColours();
+        mTemporaryParkingLocation = null;
+        ParkingManager.saveParkingSpotAndEntrance(getActivity(), "", parkingPosition, entrancePosition);
+        mMainActivity.setUpRightSidePanel();
+        onParkingClick(true, true);
+        InfoFragment.getInstance().setParkingSpotCTA();
+
+    }
+
+    private void setAsParkingSpot(final CustomLocation location){
+        String parkingId;
+        if(ParkingManager.isParkingLotSaved(getActivity())){
+            parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
+            showMySavedParkingPolygon(false, parkingId);
+        }
+
+        parkingId = location.getId();
+        ParkingManager.saveParkingSpotAndEntrance(getActivity(), parkingId);
+        mMainActivity.setUpRightSidePanel();
+        onParkingClick(true, true);
+        InfoFragment.getInstance().setParkingSpotCTA();
+    }
+
     private void showAmenityDetail(final CustomLocation location, final Drawable amenityDrawable){
         logger.debug("Location: name = " + location.getName() + " externalID = " + location.getExternalID());
         String categoryName = "";
@@ -1046,17 +1059,23 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             llDeals.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String parkingId;
-                    if(ParkingManager.isParkingLotSaved(getActivity())){
-                        parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
-                        showMySavedParkingPolygon(false, parkingId);
+                    if(ParkingManager.isParkingLotSaved(getActivity())) {
+                        AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+                        alertDialogForInterest.getAlertDialog(
+                                getActivity(),
+                                R.string.title_change_parking_spot,
+                                R.string.warning_change_my_parking_spot,
+                                R.string.action_ok,
+                                R.string.action_cancel,
+                                new AlertDialogForInterest.DialogAnsweredListener() {
+                                    @Override
+                                    public void okClicked() {
+                                        setAsParkingSpot(location);
+                                    }
+                                }).show();
+                    } else {
+                        setAsParkingSpot(location);
                     }
-
-                    parkingId = location.getId();
-                    ParkingManager.saveParkingSpotAndEntrance(getActivity(), parkingId);
-                    mMainActivity.setUpRightSidePanel();
-                    onParkingClick(true, true);
-                    InfoFragment.getInstance().setParkingSpotCTA();
                 }
             });
         }  else {
@@ -1302,7 +1321,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             if(BuildConfig.PARKING_POLYGON) {
                 mapView.getCamera().focusOn(polygon);
                 didTapPolygon(polygon);
-            } /*else {*/
+            }
+
+            if(parkingLotPosition != -1){
                 HashMap<String, CustomLocation> parkingHashMap = CustomLocation.getParkingHashMap();
                 Parking storeParking = ParkingManager.sParkings.getParkings().get(parkingLotPosition);
                 List<ChildParking> childParkings = storeParking.getChildParkings();
@@ -1343,7 +1364,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_NEAREST_PARKING);
 
                 destinationPolygon = mTemporaryParkingLocation;
-//            }
+//
+            }
+
 
 
 

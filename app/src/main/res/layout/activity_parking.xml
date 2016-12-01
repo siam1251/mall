@@ -186,7 +186,7 @@
             app:fontFamily="@string/fontFamily_roboto_medium"
             android:id="@+id/tvSaveParkingLot"
             android:layout_margin="@dimen/card_horizontal_margin"
-            android:textColor="@color/white"
+            android:textColor="@color/parkingSaveBtnTextColor"
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:gravity="center"

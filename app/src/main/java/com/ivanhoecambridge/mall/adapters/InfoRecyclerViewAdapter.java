@@ -61,7 +61,9 @@ public class InfoRecyclerViewAdapter extends RecyclerView.Adapter {
         final InfoList info = (InfoList) mInfoList.get(position);
         final InfoViewHolder infoViewHolder = (InfoViewHolder) holder;
 
-        infoViewHolder.tvInfoTitle.setText(info.getTitle());
+        String menuTitle = info.getMenuTitle();
+        if(menuTitle == null || menuTitle.equals("")) menuTitle = info.getTitle();
+        infoViewHolder.tvInfoTitle.setText(menuTitle);
         infoViewHolder.tvInfoSubTitle.setText(info.getSubtitle());
 
         infoViewHolder.mView.setOnClickListener(new View.OnClickListener() {

@@ -155,12 +155,16 @@
                 android:id="@+id/tvPark"
                 android:layout_toRightOf="@+id/ivPark"
                 android:gravity="center"
-                android:text="@string/info_save_my_parking_spot"
                 android:textSize="@dimen/info_direction_text"
                 android:textColor="@color/info_txt"
                 android:layout_height="@dimen/intrstd_card_height"
                 android:layout_width="wrap_content"
+                android:layout_marginRight="40dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="@string/info_save_my_parking_spot"
                 />
+                android:text="info_save_my_parking_spotinfo_save_my_parking_spotinfo_save_my_parking_spotinfo_save_my_parking_spotinfo_save_my_parking_spot"
 
             <com.ivanhoecambridge.mall.views.ThemeColorImageView
                 android:layout_alignParentRight="true"

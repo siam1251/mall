@@ -345,6 +345,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, MoviesActivity.class);
+                    intent.putExtra(Constants.ARG_TRANSITION_ENABLED, true);
                     String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
 
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -376,7 +377,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 mSocialFeedViewPagerAdapter.getTwitterViewPagerAdapter(mContext, HomeFragment.sTwitterFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
-                        if(NetworkManager.isConnected(mContext)) return;
+                        if(!NetworkManager.isConnected(mContext)) return;
                         Intent intent = new Intent(mContext, SocialDetailActivity.class);
                         intent.putExtra(Constants.ARG_ACTIVITY_TYPE, KcpContentTypeFactory.ITEM_TYPE_TWITTER);
                         mContext.startActivity(intent);
@@ -388,7 +389,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 mSocialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext, HomeFragment.sInstaFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
-                        if(NetworkManager.isConnected(mContext)) return;
+                        if(!NetworkManager.isConnected(mContext)) return;
                         Intent intent = new Intent(mContext, SocialDetailActivity.class);
                         intent.putExtra(Constants.ARG_ACTIVITY_TYPE, KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM);
                         mContext.startActivity(intent);

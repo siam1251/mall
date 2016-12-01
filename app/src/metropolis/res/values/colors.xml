@@ -4,11 +4,11 @@
     <color name="themeColor">#f37021</color>
     <color name="themeColorTransparent">#30f37021</color>
     <color name="warningColor">#f37021</color> <!--#CFff4444-->
-    <color name="themeColorDark">#951b1f23</color>
+    <color name="themeColorDark">#CC5D1B</color>
 
 
     <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#303F9F</color> <!--status bar-->
+    <color name="colorPrimaryDark">#951b1f23</color> <!--status bar-->
     <color name="textColorPrimary">#000000</color>
     <color name="hamburger_menu">#212121</color>
     <color name="active_mall_off_state">#000000</color>
@@ -16,6 +16,7 @@
     <color name="tabSelectedTextColor">#000000</color>
     <color name="emptySearchResults">#f37021</color>
     <color name="detailActivityToolbarColor">#f37021</color>
+    <color name="parkingSaveBtnTextColor">#f37021</color>
 
     <!--interest card-->
     <color name="intrst_bg">#f37021</color>

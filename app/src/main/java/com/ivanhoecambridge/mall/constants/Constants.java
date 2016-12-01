@@ -83,6 +83,8 @@ public class Constants {
 	public static final String ARG_CATEGORY_ACTIVITY_TYPE = "cat_activity_type";
 	public static final String ARG_ACTIVITY_TYPE = 			"activity_type";
 	public static final String ARG_MOVIE_ID = 				"movie_id";
+	public static final String ARG_TRANSITION_ENABLED = 	"transition_enabled";
+	public static final String ARG_LOCATION_ID = 			"location_id";
 	public enum CategoryActivityType { SUBCATEGORY, STORE }
 
 

@@ -302,7 +302,7 @@ public class MainActivity extends BaseActivity
         scRightDrawerLayout = (View) findViewById(R.id.scRightDrawerLayout);
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
 
-        if(didOnboardingAppear) {
+        if(didOnboardingAppear) { //to prevent the permission from showing up before onboarding's finished
             mGeofenceManager = new GeofenceManager(this);
         }
         setActiveMall(false, false);
@@ -1428,7 +1428,6 @@ public class MainActivity extends BaseActivity
                 }
             } else if (requestCode == Constants.REQUEST_CODE_MY_PAGE_TYPE) {
                 if(data == null) {
-
                 } else {
                     int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
                     if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT || code == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP){
@@ -1446,12 +1445,14 @@ public class MainActivity extends BaseActivity
                         }
                     }
                 }
-
             } else if (requestCode == Constants.REQUEST_CODE_LOCATE_GUEST_SERVICE) {
                 if (resultCode == Activity.RESULT_OK) {
                     //turn on the guest service switch and drop a pin
                     selectPage(MainActivity.VIEWPAGER_PAGE_MAP);
-                    String externalID = Constants.KEY_GUEST_SERVICE;
+//                    String externalID = Constants.KEY_GUEST_SERVICE;
+                    String locationID = data.getStringExtra(Constants.ARG_LOCATION_ID);
+                    CustomLocation customLocation = CustomLocation.getLocationWithLocationId(locationID);
+                    String externalID = customLocation.getAmenityType(); //Amenity Type from MappedIn == ExternalID from amenities.json
                     final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityWithExternalId(externalID);
                     boolean isToggled = Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, amenity == null ? false : amenity.isEnabled());
                     if(!isToggled) {

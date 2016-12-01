@@ -27,7 +27,7 @@
     <string name="title_open_instagram_app">Open in Instagram App</string>
     <string name="title_open_instagram_website">View on Instagram Website</string>
     <string name="title_map">Map</string>
-    <string name="title_do_not_save_parking">Don’t Save My Parking</string>
+    <string name="title_do_not_save_parking">Close Without Saving</string>
     <string name="title_remove_my_parking">Remove My Parking</string>
     <string name="title_add_notes">Add Notes</string>
     <string name="title_permission_denied">Location Access Denied</string>
@@ -103,7 +103,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="warning_open_instagram_app">Would you like to view this in the Instagram App?</string>
     <string name="warning_open_instagram_website">Would you like to view this on the Instagram website?</string>
     <string name="warning_no_recommended_deals">There are no matches for Recommended Deals at this time.</string>
-    <string name="warning_no_parking_saved">Closing this window will remove all saved information about your parking spot.</string>
+    <string name="warning_no_parking_saved">Closing this window will clear any unsaved changes you have made to your parking spot.</string>
     <string name="warning_active_mall_activated">You are now connected to the mall!</string>
     <string name="warning_no_deal_for_today">There are no deals happening today. Please check back later.</string>
     <string name="warning_no_event_for_today">There are no events happening today. Please check back later.</string>
@@ -152,6 +152,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="mall_info_public_transportation">Public Transportation</string>
     <string name="mall_info_tourist_information">Tourist Information</string>
     <string name="mall_info_accessibility">Accessibility</string>
+    <string name="mall_info_customer_service">Customer Service</string>
+    <string name="mall_info_cinema">Cinema</string>
 
     <!--CTA-->
     <string name="cta_find_on_map">Find on Map</string>
@@ -302,8 +304,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <!---->
 
-    <string name="privacy_policy">Privacy Policy</string>
-    <string name="terms_of_service">Terms of Service</string>
+    <string name="privacy_policy"><u>Privacy Policy</u></string>
+    <string name="terms_of_service"><u>Terms of Service</u></string>
     <string name="version_name_prefix">Version </string>
     <string name="version_name_suffix"> (TESTING) </string>
 

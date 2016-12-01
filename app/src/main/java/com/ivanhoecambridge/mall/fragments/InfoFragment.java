@@ -1,5 +1,6 @@
 package com.ivanhoecambridge.mall.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,6 +8,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +33,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.KcpMallInfoRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.MainActivity;
+import com.ivanhoecambridge.mall.activities.MoviesActivity;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.activities.MallHourActivity;
 import com.ivanhoecambridge.mall.activities.MallInfoDetailActivity;
@@ -309,6 +314,16 @@ public class InfoFragment extends BaseFragment {
                 List<InfoList> infoLists = kcpMallInfoRoot.getKcpMallInfo().getInfoList();
                 if(infoLists.get(position).getTitle().contains(getResources().getString(R.string.mall_info_mall_hours))){
                     getActivity().startActivity(new Intent(getActivity(), MallHourActivity.class));
+                } else if (infoLists.get(position).getMenuTitle() != null && infoLists.get(position).getMenuTitle().contains(getString(R.string.mall_info_cinema))){
+                    Intent intent = new Intent(getActivity(), MoviesActivity.class);
+                    intent.putExtra(Constants.ARG_TRANSITION_ENABLED, false);
+                    /*String transitionNameImage = getActivity().getResources().getString(R.string.transition_news_image);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            getActivity(),
+                            Pair.create((View)ancmtHolder.ivAnnouncementLogo, transitionNameImage));*/
+//                    ActivityCompat.startActivityForResult((Activity) getActivity(), intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP, null);
+                    getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
+                    ActivityAnimation.startActivityAnimation(getActivity());
                 } else {
                     Intent intent = new Intent(getActivity(), MallInfoDetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, infoList);

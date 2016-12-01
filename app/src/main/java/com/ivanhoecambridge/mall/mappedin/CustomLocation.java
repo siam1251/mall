@@ -89,6 +89,21 @@ public class CustomLocation extends Location {
         return amenityHashmap;
     }
 
+    public static CustomLocation getLocationWithLocationId(String locationId){
+        try {
+            for (ArrayList<CustomLocation> customLocations : amenityHashmap.values()) {
+                for(CustomLocation customLocation : customLocations) {
+                    if(customLocation.getId().equals(locationId)){
+                        return customLocation;
+                    }
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     public static Location getLocationWithExternalCode(String externalCode){
         if(locationHashmapByExternalId.containsKey(externalCode)) return locationHashmapByExternalId.get(externalCode);

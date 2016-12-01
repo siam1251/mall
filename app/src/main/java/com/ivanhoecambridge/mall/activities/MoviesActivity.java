@@ -149,6 +149,12 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
                     @Override
                     public void onTransitionResume(Transition transition) {}
                 });
+            } else {
+                ivDetailImage.setVisibility(View.INVISIBLE);
+            }
+
+            if(!getIntent().getExtras().getBoolean(Constants.ARG_TRANSITION_ENABLED)) {
+                ivDetailImage.setVisibility(View.INVISIBLE);
             }
 
             LinearLayout llViewShowtimes = (LinearLayout) findViewById(R.id.llViewShowtimes);

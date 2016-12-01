@@ -81,13 +81,20 @@ public class MapUtility {
             double nearestDistance = 0;
             Polygon nearestParkingPolygon = null;
             for (CustomLocation parkingLocation : parkingHashmap.values()) {
-
-                Coordinate parkingLotCoord = parkingLocation.getNavigatableCoordinates().get(0);
+                ArrayList<Coordinate> navigatableCoordinates = parkingLocation.getNavigatableCoordinates();
+                for(Coordinate parkingLotCoord : navigatableCoordinates) {
+                    double distance = parkingLotCoord.metersFrom(storeCoordinate);
+                    if(nearestDistance == 0 || nearestDistance > distance) {
+                        nearestParkingPolygon = parkingLocation.getPolygons().get(0);
+                        nearestDistance = distance;
+                    }
+                }
+                /*Coordinate parkingLotCoord = parkingLocation.getNavigatableCoordinates().get(0);
                 double distance = parkingLotCoord.metersFrom(storeCoordinate);
                 if(nearestDistance == 0 || nearestDistance > distance) {
                     nearestParkingPolygon = parkingLocation.getPolygons().get(0);
                     nearestDistance = distance;
-                }
+                }*/
             }
 
             return nearestParkingPolygon;

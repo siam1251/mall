@@ -4,7 +4,7 @@
     <color name="themeColor">#ee3f33</color>
     <color name="themeColorTransparent">#30ee3f33</color>
     <color name="warningColor">#ee3f33</color> <!--#CFff4444-->
-    <color name="themeColorDark">#000000</color>
+    <color name="themeColorDark">#ba2e24</color>
 
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color> <!--status bar-->
@@ -15,7 +15,7 @@
     <color name="tabSelectedTextColor">#FFFFFF</color>
     <color name="emptySearchResults">#333333</color>
     <color name="detailActivityToolbarColor">#000000</color>
-
+    <color name="parkingSaveBtnTextColor">#FFFFFF</color>
 
 
     <!--interest card-->

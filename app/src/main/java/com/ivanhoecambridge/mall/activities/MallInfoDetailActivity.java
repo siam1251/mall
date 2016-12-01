@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.AdditionalInfo;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.InfoList;
+import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.Location;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
@@ -104,7 +105,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_giftcard);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_about))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_main);
-            } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_guest_service))){
+            } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_guest_service)) || mMallInfoType.startsWith(getResources().getString(R.string.mall_info_customer_service))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_guest);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_amenities))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_amenities);
@@ -121,7 +122,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
             }
 
             ExpandableTextView etvMallInfoDetail = (ExpandableTextView) findViewById(R.id.etvMallInfoDetail);
-            String infoDetail = info.getDetails().replaceAll("\n", "<br>");
+            String infoDetail = info.getDetails() == null ? "" : info.getDetails().replaceAll("\n", "<br>");
             etvMallInfoDetail.setText(infoDetail);
             TextView expandable_text = (TextView) findViewById(R.id.expandable_text);
             HtmlTextView.setHtmlTextView(this, expandable_text, infoDetail, R.color.html_link_text_color); // /n doesn't work
@@ -138,7 +139,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
     public void setUpCTA(final InfoList info){
         try {
             List<CTA> cTAList = new ArrayList<>();
-            CTA location = new CTA(
+            /*CTA location = new CTA(
                     this,
                     mParentView,
                     R.layout.layout_detail_button,
@@ -150,7 +151,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                             setResult(Activity.RESULT_OK, new Intent());
                             finish();
                         }
-                    }, false);
+                    }, false);*/
 
             CTA phone = new CTA(
                     this,
@@ -212,7 +213,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                         public void onClick(View v) {
                             Utility.sendEmail(MallInfoDetailActivity.this, info.getEmail().getTitle(), "");
                         }
-                    }, false);
+                    }, true);
 
             CTA webpage = new CTA(
                     this,
@@ -225,18 +226,19 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                         public void onClick(View v) {
                              Utility.openWebPage(MallInfoDetailActivity.this, info.getLinkURL());
                         }
-                    }, false);
+                    }, true);
 
             if(mMallInfoType.equals(getResources().getString(R.string.mall_info_gift_card))){
-                cTAList.add(location);
+                addLocationCTA(cTAList, info);
+//                cTAList.add(location);
                 cTAList.add(phone);
                 cTAList.add(checkBalance);
             } else if (mMallInfoType.startsWith(getResources().getString(R.string.mall_info_about))){
                 cTAList.add(googleMap);
                 cTAList.add(phone);
-            } else if (mMallInfoType.startsWith(getResources().getString(R.string.mall_info_guest_service))){
-                cTAList.add(location);
-//                cTAList.add(phone);
+            } else if (mMallInfoType.startsWith(getResources().getString(R.string.mall_info_guest_service)) || mMallInfoType.startsWith(getResources().getString(R.string.mall_info_customer_service))){
+                addLocationCTA(cTAList, info);
+//                cTAList.add(location);
                 cTAList.add(phone);
                 cTAList.add(email);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_amenities))){
@@ -245,20 +247,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
 
                 cTAList.add(googleMap);
                 cTAList.add(phone);
-
-                webpage = new CTA(
-                        this,
-                        mParentView,
-                        R.layout.layout_detail_button,
-                        R.drawable.icn_web,
-                        info.getLinkTitle(),
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Utility.openWebPage(MallInfoDetailActivity.this, info.getLinkURL());
-                            }
-                        }, true);
-
                 cTAList.add(webpage);
 
             } else if(mMallInfoType.contains(getResources().getString(R.string.mall_info_social))){
@@ -333,8 +321,10 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 cTAList.add(twiter);
                 cTAList.add(youtube);
                 cTAList.add(pinterest);
-
-
+            } else {
+                addLocationCTA(cTAList, info);
+                cTAList.add(phone);
+                cTAList.add(webpage);
             }
 
             View llCTA = findViewById(R.id.llCTA);
@@ -346,6 +336,30 @@ public class MallInfoDetailActivity extends AppCompatActivity{
             logger.error(e);
         } catch (Exception e){
             logger.error(e);
+        }
+    }
+
+    private void addLocationCTA(List<CTA> cTAList, final InfoList info){
+        List<Location> locations = info.getLocations();
+        if(locations != null) {
+            for(final Location loc : locations) {
+                CTA location = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_button,
+                        R.drawable.icn_menu_map,
+                        loc.getName(),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent();
+                                intent.putExtra(Constants.ARG_LOCATION_ID, loc.getLocationID());
+                                setResult(Activity.RESULT_OK, intent);
+                                finish();
+                            }
+                        }, false);
+                cTAList.add(location);
+            }
         }
     }
 
