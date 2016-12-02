@@ -1,5 +1,10 @@
 <resources>
-    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Light">
+    <!--<style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Light">-->
+    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorAccent">@color/tabSelectedTextColor</item>
+    </style>
+
+    <style name="MainToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Light">
         <item name="colorAccent">@color/toolbarTextColor</item>
     </style>
 </resources>

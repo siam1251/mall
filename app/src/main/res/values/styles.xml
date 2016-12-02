@@ -43,6 +43,11 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="Theme.Onboarding" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/themeColor</item>
+    </style>
+
 
 
     <style name="switchStype">
@@ -118,10 +123,10 @@
         <item name="android:indeterminateTint">@color/themeColor</item>
     </style>
 
-    <!--<style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
-    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Light">
+    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorAccent">@color/toolbarTextColor</item>
     </style>
+
 
 
     <style name="ProgressBarStyle" parent="Theme.AppCompat.Light.Dialog">

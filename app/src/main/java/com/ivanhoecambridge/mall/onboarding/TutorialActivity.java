@@ -58,7 +58,7 @@ public class TutorialActivity extends BaseActivity {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         if(mHasFakeAlphaPage) setTheme(R.style.Theme_Transparent);
-
+        setTheme(R.style.Theme_Onboarding);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
 

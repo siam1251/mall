@@ -2,6 +2,10 @@
     <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorAccent">@color/toolbarTextColor</item>
     </style>
+
+    <style name="MainToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorAccent">@color/toolbarTextColor</item>
+    </style>
 </resources>
 
 
