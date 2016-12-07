@@ -37,7 +37,7 @@
                     <com.ivanhoecambridge.mall.views.ThemeColorImageView
                         android:layout_centerVertical="true"
                         ThemedImageView:filterColor="@color/themeColor"
-                        ThemedImageView:filterColorUnselected="@color/filter_off_color"
+                        ThemedImageView:filterColorSelected="@color/filter_off_color"
                         android:id="@+id/ivFilterDeal"
                         android:layout_height="wrap_content"
                         android:src="@drawable/icn_deals"
@@ -73,7 +73,7 @@
                     <com.ivanhoecambridge.mall.views.ThemeColorImageView
                         android:layout_centerVertical="true"
                         ThemedImageView:filterColor="@color/themeColor"
-                        ThemedImageView:filterColorUnselected="@color/filter_off_color"
+                        ThemedImageView:filterColorSelected="@color/filter_off_color"
                         android:id="@+id/ivFilterParking"
                         android:layout_height="wrap_content"
                         android:src="@drawable/icn_car"

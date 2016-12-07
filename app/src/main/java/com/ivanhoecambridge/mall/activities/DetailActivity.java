@@ -34,6 +34,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpTimeConverter;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
+import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.GlideFactory;
@@ -116,6 +117,9 @@ public class DetailActivity extends AppCompatActivity {
             }
 
             final ImageView ivFav = (ImageView) toolbar.findViewById(R.id.ivFav);
+            if(BuildConfig.WHITE_FAV){
+                ivFav.setImageResource(R.drawable.btn_fav_white);
+            }
             ivFav.setSelected(FavouriteManager.getInstance(DetailActivity.this).isLiked(mLikeLink, kcpContentPage));
             ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -179,11 +183,12 @@ public class DetailActivity extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                            setResult(Integer.valueOf(kcpContentPage.getExternalCode()), new Intent());
+                            setResult(Integer.valueOf(kcpContentPage.getExternalCode()), new Intent());
                             Intent intent = new Intent();
                             intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
                             setResult(Integer.valueOf(kcpContentPage.getExternalCode()), intent);
                             onBackPressed();
+//
                         }
                     }, true);
 
@@ -198,12 +203,18 @@ public class DetailActivity extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
-                            Intent intent = new Intent();
-                            intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_SHOW_PARKING_SPOT);
-                            intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, kcpContentPage.getStoreParking());
-                            setResult(Integer.valueOf(kcpContentPage.getExternalCode()), intent);
-                            onBackPressed();
+                            if(BuildConfig.NEAREST_PARKING_IMG){
+                                Intent intent = new Intent(DetailActivity.this, ZoomableImage.class);
+                                intent.putExtra(Constants.ARG_IMAGE_RESOURCE, R.drawable.ic_nearestparking);
+                                DetailActivity.this.startActivity(intent);
+                                DetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                            } else {
+                                Intent intent = new Intent();
+                                intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_SHOW_PARKING_SPOT);
+                                intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, kcpContentPage.getStoreParking());
+                                setResult(Integer.valueOf(kcpContentPage.getExternalCode()), intent);
+                                onBackPressed();
+                            }
                         }
                     }, true);
 

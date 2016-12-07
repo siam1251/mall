@@ -30,6 +30,10 @@ public class HeaderFactory {
     public static String AMENITIES_URL = "bins/3nmth";
     public static String PARKING_URL = "bins/2gidf";
 
+    public final static String HEADER_VALUE_ACCEPT = "application/json, application/vnd.kcp.place+json; version=1.0, application/vnd.kcp.view-all-content+json; version=1.0, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.icmp-event+json; version=1.0, application/vnd.kcp.icmp-announcement+json; version=1.0, application/vnd.kcp.blog-post+json; version=1.0, application/vnd.kcp.icmp-twitter+json; version=1.0, application/vnd.kcp.icmp-instagram+json; version=1.0, application/vnd.kcp.icmp-set-interests+json; version=1.0, application/vnd.kcp.icmp-movie+json; version=1.0";
+
+
+
     private static HashMap<String, String> mHeaders;
     public static HashMap<String, String> getHeaders(){
         if(mHeaders == null) {
@@ -53,7 +57,7 @@ public class HeaderFactory {
 
         //below two headers are specially needed for view_all_content
         mHeaders.put(HEADER_KEY_CONTENT_TYPE,       Constants.HEADER_VALUE_CONTENT_TYPE);
-        mHeaders.put(HEADER_KEY_ACCEPT,             Constants.HEADER_VALUE_ACCEPT);
+        mHeaders.put(HEADER_KEY_ACCEPT,             HEADER_VALUE_ACCEPT);
     }
 
     public static String getClientToken(){

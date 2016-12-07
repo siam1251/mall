@@ -54,9 +54,11 @@ android {
         metropolis {
             applicationId "com.ivanhoecambridge.mall.metropolis"
             buildConfigField 'String', 'MALL', '"metropolis-at-metrotown"'
-            buildConfigField 'Boolean', 'PUSH', 'false'
+            buildConfigField 'Boolean', 'PUSH', 'true'
             buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
             buildConfigField 'Boolean', 'MOVIE', 'true'
+            buildConfigField 'Boolean', 'WHITE_FAV', 'true' //show white fav icon in case the selected fav's same as the toolbar bg color
+            buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'true'
             versionName "0.0.2"
         }
 
@@ -66,6 +68,10 @@ android {
             buildConfigField 'Boolean', 'PUSH', 'true'
             buildConfigField 'Boolean', 'PARKING_POLYGON', 'false'
             buildConfigField 'Boolean', 'MOVIE', 'false'
+            buildConfigField 'Boolean', 'WHITE_FAV', 'false'
+            buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
+
+
             versionName "0.0.5"
         }
 
@@ -75,8 +81,25 @@ android {
             buildConfigField 'Boolean', 'PUSH', 'true'
             buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
             buildConfigField 'Boolean', 'MOVIE', 'false'
+            buildConfigField 'Boolean', 'WHITE_FAV', 'false'
+            buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
+
+
             versionName "0.0.3"
         }
+
+        crossironmills {
+            applicationId "com.ivanhoecambridge.mall.crossironmills"
+            buildConfigField 'String', 'MALL', '"crossiron-mills"'
+            buildConfigField 'Boolean', 'PUSH', 'true'
+            buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
+            buildConfigField 'Boolean', 'MOVIE', 'false'
+            buildConfigField 'Boolean', 'WHITE_FAV', 'false'
+            buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
+
+            versionName "0.0.1"
+        }
+
     }
 }
 

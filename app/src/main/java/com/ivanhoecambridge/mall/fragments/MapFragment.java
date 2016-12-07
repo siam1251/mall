@@ -83,6 +83,8 @@ import com.mappedin.sdk.RawData;
 import com.mappedin.sdk.Venue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -149,18 +151,19 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     //MAPPED IN
     //when using getOverlayImageWithPadding
-    /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 20; //ends up 64 px
-    private final int PIN_PARKING_IMAGE_SIZE_DP = 32; //ends up 64 px*/
+    private final int PIN_AMENITY_IMAGE_SIZE_DP = 20; //ends up 64 px
+    private final int PIN_PARKING_IMAGE_SIZE_DP = 32; //ends up 64 px
 
     /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 60;
     private final int PIN_PARKING_IMAGE_SIZE_DP = 60;*/
 
-    private final int PIN_AMENITY_IMAGE_SIZE_DP = 97;
-    private final int PIN_PARKING_IMAGE_SIZE_DP = 97;
+    /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 97;
+    private final int PIN_PARKING_IMAGE_SIZE_DP = 97;*/ //use with Overlay2DImage but the pin size varies a bit depending on the device resolution as of 0.4.5
 
 
     private final int CAMERA_ZOOM_LEVEL_NEAREST_PARKING = 90; //
-    private final int CAMERA_ZOOM_LEVEL = 40; //BIGGER - farther, SMALLER - closer
+//    private final int CAMERA_ZOOM_LEVEL = 40; //BIGGER - farther, SMALLER - closer
+    private final int CAMERA_ZOOM_LEVEL = 25; //BIGGER - farther, SMALLER - closer
     private final int BLUR_RADIUS = 20;
     private boolean accessibleDirections = false;
     private MapViewDelegate delegate = this;
@@ -168,6 +171,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private MappedIn mappedIn = null;
     private MapView mapView = null;
     private Map[] maps;
+    ArrayList<String> mMapInPath = new ArrayList<String>();
     private HashMap<Polygon, Integer> originalColors = new HashMap<Polygon, Integer>();
     private ConcurrentHashMap<Overlay, LocationLabelClicker> overlays = new ConcurrentHashMap<Overlay, LocationLabelClicker>();
     private ConcurrentHashMap<Coordinate, LocationLabelClicker> mLocationClickersMap = new ConcurrentHashMap<Coordinate, LocationLabelClicker>();
@@ -179,7 +183,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private Navigatable destinationPolygon = null;
     private Polygon mSavedParkingPolygon = null;
     private int mOriginalColorsForParking; //original colors for parking used to clear its highlights on polygon
-    private int mCurrentMapLevel = 2;
+    private int mCurrentLevelIndex = -50;
     private CustomLocation mSavedParkingLocation;
     private CustomLocation mTemporaryParkingLocation; //used to show the temporary parking spot from detail activity
 
@@ -437,9 +441,12 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocationWithExternalCode(externalCode);
                     if(polygons != null && polygons.size() > 0) {
                         //TODO: loop through to highlight all the polygons found in getPolygons()
+                        //todo: highlight the polygon that's on the current map level
 //                        setMapLevel(0, CustomLocation.getLocationHashMap().get(externalCode).getPolygons().get(0).getMap().getShortName()); //for map with multi levels
                         mapView.getCamera().focusOn(polygons.get(0));
                         didTapPolygon(polygons.get(0));
+                        zoomInOut();
+//                        mapView.getCamera().setZoomTo(200);
                     } else {
                         showDirectionCard(true, IdType.ID, storeId, storeName, categoryName, null);
                     }
@@ -531,17 +538,21 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 Logger.log("No maps! Make sure your venue is set up correctly!");
                 return;
             }
-            //set the map elevation if it exists
-            /*Arrays.sort(maps, new Comparator<Map>() {
-                @Override
-                public int compare(Map a, Map b) {
-                    return (int) (a.getElevation() - b.getElevation());
-                }
-            });*/
 
-            mapView.setMap(maps[0]);
-//            setMapLevel(maps.length / 2, null); //set the map level if it exists
-            setMapLevel(maps.length - 1, null); //set the map level if it exists
+            if(maps.length > 0) {
+                //set the map elevation if it exists
+                Arrays.sort(maps, new Comparator<Map>() {
+                    @Override
+                    public int compare(Map a, Map b) {
+                        return (int) (a.getElevation() - b.getElevation());
+                    }
+                });
+            }
+
+            int groundMapIndex = MapUtility.getGroundMapIndex(maps);
+            if(groundMapIndex == -50) groundMapIndex = 0;
+            setMapLevel(groundMapIndex, null);
+
             if(pb != null) pb.setVisibility(View.GONE);
             if(maps.length > 1) {
                 rlSlidingPanel.setVisibility(View.VISIBLE);
@@ -562,43 +573,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         mMapInterface = mapInterface;
     }
 
-    private void setLevelImageView(final Map[] maps) {
-        try {
-            final int upperLevel = mCurrentMapLevel + 1;
-            final int lowerLevel = mCurrentMapLevel - 1;
-
-            if(upperLevel >= maps.length) {
-                ivUpper.setSelected(false);
-                ivUpper.setColor(getResources().getColor(R.color.map_level_disabled), getResources().getColor(R.color.map_level_enabled));
-                ivUpper.setOnClickListener(null);
-            } else {
-                ivUpper.setSelected(true);
-                ivUpper.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setMapLevel(upperLevel, null);
-                    }
-                });
-            }
-
-            if(lowerLevel < 0) {
-                ivLower.setSelected(false);
-                ivLower.setColor(getResources().getColor(R.color.map_level_disabled), getResources().getColor(R.color.map_level_enabled));
-                ivLower.setOnClickListener(null);
-            } else {
-                ivLower.setSelected(true);
-                ivLower.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setMapLevel(lowerLevel, null);
-                    }
-                });
-            }
-        } catch (Exception e) {
-            logger.error(e);
-        }
-    }
-
     /**
      *
      * @param level
@@ -607,21 +581,26 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
      * drop amenities / deals / parking lots - do stuffs that need to be done on map load
      */
     private void setMapLevel (int level, @Nullable String shortName){
+        //todo: when setting map level from normal arrow button, follow the normal level order
+        // if this is called by selecting the highlighted arrow, load the right level
         try {
             if(shortName != null){
                 for(int i = 0; i < maps.length; i++){
                     Map map = maps[i];
                     if(map.getShortName().equals(shortName)){
-                        mCurrentMapLevel = i;
+                        if(i == mCurrentLevelIndex) return;
+                        mCurrentLevelIndex = i;
                         break;
                     }
                 }
             } else {
-                mCurrentMapLevel = level;
+                if(level == mCurrentLevelIndex) return;
+                mCurrentLevelIndex = level;
             }
 
-            mapView.setMap(maps[mCurrentMapLevel]);
-            tvLevel.setText(maps[mCurrentMapLevel].getShortName());
+            logger.debug("setting map level: " + mCurrentLevelIndex);
+            mapView.setMap(maps[mCurrentLevelIndex]);
+            tvLevel.setText(maps[mCurrentLevelIndex].getShortName());
             setLevelImageView(maps);
 
             //LOAD AMENITIES, DEALS
@@ -649,6 +628,74 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
     }
 
+    private int upperLevel;
+    private int lowerLevel;
+
+    private void setLevelImageView(final Map[] maps) {
+        try {
+
+            upperLevel = mCurrentLevelIndex + 1;
+            lowerLevel = mCurrentLevelIndex - 1;
+
+            ivUpperBg.setSelected(false);
+            ivLowerBg.setSelected(false);
+
+            ivUpper.setColor(getResources().getColor(R.color.map_level_disabled), getResources().getColor(R.color.map_level_enabled));
+            ivLower.setColor(getResources().getColor(R.color.map_level_disabled), getResources().getColor(R.color.map_level_enabled));
+
+            if(mMapInPath.size() > 0) {
+                String currentLevelName = maps[mCurrentLevelIndex].getShortName();
+                if(mMapInPath.contains(currentLevelName)){
+                    int currentLevelIndexInList = mMapInPath.indexOf(currentLevelName);
+                    if(mMapInPath.size() > currentLevelIndexInList + 1){
+                        String nextLevelInPath = mMapInPath.get(currentLevelIndexInList + 1);
+                        int nextLevelIndex = MapUtility.getMapIndexWithShortName(maps, nextLevelInPath);
+                        if(mCurrentLevelIndex > nextLevelIndex) { //path continued to lower levels
+                            lowerLevel = nextLevelIndex;
+                            ivUpperBg.setSelected(false);
+                            ivLowerBg.setSelected(true);
+                            ivLower.setColor(getResources().getColor(R.color.transparent), getResources().getColor(R.color.white));
+                        }  else { //path continued to upper levels
+                            upperLevel = nextLevelIndex;
+                            ivUpperBg.setSelected(true);
+                            ivLowerBg.setSelected(false);
+                            ivUpper.setColor(getResources().getColor(R.color.transparent), getResources().getColor(R.color.white));
+                        }
+                    }
+                }
+            }
+
+            //checking whether upperLevel exists && ivUpper has been colored white which means upper level has a path
+            if(upperLevel >= maps.length && ivUpper.getSelectedFilterColor() != getResources().getColor(R.color.white)) {
+                ivUpper.setSelected(false);
+                ivUpper.setOnClickListener(null);
+            } else {
+                ivUpper.setSelected(true);
+                ivUpper.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setMapLevel(upperLevel, null);
+                    }
+                });
+            }
+
+            if(lowerLevel < 0 && ivLower.getSelectedFilterColor() != getResources().getColor(R.color.white)) {
+                ivLower.setSelected(false);
+                ivLower.setOnClickListener(null);
+            } else {
+                ivLower.setSelected(true);
+                ivLower.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setMapLevel(lowerLevel, null);
+                    }
+                });
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
+    }
+
     private class CustomLocationGenerator implements LocationGenerator {
         @Override
         public Location locationGenerator(RawData rawData) throws Exception {
@@ -659,6 +706,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     public void showStoreOnTheMapFromDetailActivity(Polygon polygon){
         try {
             mapView.getCamera().focusOn(polygon);
+
+            destinationPolygon = null;
+            showDirectionCard(false, null, 0, null, null, null);
+            clearHighlightedColours();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -671,7 +723,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             if (polygon.getLocations().size() == 0) { //TODO: clearHighlightedColours() used to be above this line - polygon.getLocationWithExternalCode().size() was sometimes 0 resulting in skipping highlightPolygon (it returned)
                 return;
             }
-//            clearHighlightedColours();
+            /*if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName());*/
 
             //tapping the same polygon should dismiss the detail and remove the highlights
             if(destinationPolygon != null && destinationPolygon == polygon && mSavedParkingPolygon != polygon) {
@@ -714,7 +766,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     path = new Path(directions.getPath(), 0.2f, 0.2f, getResources().getColor(R.color.map_destination_store));
                     mapView.addPath(path);
                     mapView.getCamera().focusOn(directions.getPath());
-//                    zoomInOut();
+                    setMapLevelsInPath(directions.getPath());
                 }
 
                 if(destinationPolygon instanceof Polygon) {
@@ -732,6 +784,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 }
                 highlightPolygon((Polygon) startPolygon, getResources().getColor(R.color.map_destination_store));
                 showDirectionCard(false, null, 0, null, null, null);
+                if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName());
+
+
+
                 return;
             } else {
                 clearHighlightedColours();
@@ -751,6 +807,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                         e.printStackTrace();
                     }
                 }
+                if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName());
             }
         } catch (Resources.NotFoundException e) {
             logger.error(e);
@@ -760,6 +817,23 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             e.printStackTrace();
         }
     }
+
+    /**
+     * creates arraylist of map shortnames of floors where the path's drawn onto
+     * @param directionCoordinates
+     */
+    private void setMapLevelsInPath(Coordinate[] directionCoordinates){
+        mMapInPath.clear();
+        for(Coordinate coordinate : directionCoordinates){
+            String mapShortName = coordinate.getMap().getShortName();
+            if(!mMapInPath.contains(mapShortName)) mMapInPath.add(mapShortName);
+        }
+    }
+
+    private void highlightMapArrow(){
+
+    }
+
 
     private void zoomInOut(){
         float zoomLevel = CAMERA_ZOOM_LEVEL; //camera's currently too zoomed out
@@ -795,6 +869,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         startPolygon = null;
         destinationPolygon = null;
         mSearchMode = SearchMode.STORE;
+        mMapInPath.clear();
+        setLevelImageView(maps);
     }
 
     @Override
@@ -915,7 +991,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
 
         showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.getExternalID()), llDealsTitle, parkingLotName + ", " + entranceName, null);
-        slidePanel(true, true);
+//        slidePanel(true, true);
+        llDeals.setVisibility(View.VISIBLE);
+        slidePanel(true);
 
         if(isThisTempParkingSpot) {
             tvParkingNote.setVisibility(View.GONE);
@@ -978,8 +1056,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 }
             });
         }
-
-        llDeals.setVisibility(View.VISIBLE);
         ivAmenity.setVisibility(View.GONE); //parking doesn't have icon so manually hide it
         tvNumbOfDeals.setText("");
         llDirection.setOnClickListener(new View.OnClickListener() {
@@ -1051,9 +1127,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
             String llDealsTitle = getResources().getString(R.string.parking_polygon_parking_lot);
             showDirectionCard(true, idType, Integer.valueOf(location.getExternalID()), llDealsTitle, storeName, null);
-            slidePanel(true, true);
-
             ivDeal.setVisibility(View.VISIBLE);
+            slidePanel(true);
             tvParkingNote.setVisibility(View.GONE);
             tvDealName.setText(getResources().getString(R.string.parking_save_as_my_parking_spot));
             llDeals.setOnClickListener(new View.OnClickListener() {
@@ -1150,8 +1225,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         clone.mutate(); //prevent all instance of drawables from being affected
         clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.MULTIPLY); //change white colors
 //        clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.SRC_ATOP); //change the entire colors
-        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), clone);
-//        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), clone);
+//        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), clone);
+        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), clone);
         label.setPosition(coordinate);
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         //if I remove the lable at the same spot and add another label with new LocationLabelClicker,
@@ -1170,8 +1245,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     public void dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable){
         //TODO: only add pins to the current floor
-        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable);
-//        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), pinDrawable);
+//        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable);
+        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), pinDrawable);
         label.setPosition(coordinate);
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         overlays.put(label, clicker);
@@ -1459,7 +1534,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         public Overlay2DImage label = null;
         public Coordinate coordinate = null;
         public void onClick() {
-            if(path != null) return; //map shouldn't be clicakble when the paths drawn
+            if(path != null || coordinate.getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) return; //map shouldn't be clicakble when the paths drawn
             if(location != null) {
                 if(location == mSavedParkingLocation) {
                     String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
@@ -1599,7 +1674,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     public void showDirectionCard(final boolean showCard, final IdType idType, final int id, final String storeName, final String categoryName, final Drawable amenityDrawable){
         if(!showCard){
             if(isDirectionCardVisible()){ //only do animation if direction card is visible
-                slidePanel(false, false);
+//                slidePanel(false, false);
+                slidePanel(false);
                 /*rlDirection.setVisibility(View.GONE);
                 Animation slideUpAnimation = AnimationUtils.loadAnimation(getActivity(),
                         R.anim.anim_slide_down_out_of_screen);
@@ -1639,7 +1715,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
 
         if(dealsForThisStore.size() > 0 || idType.equals(IdType.PARKING)) {
-            slidePanel(true, true);
+//            slidePanel(true, true);
+//            slidePanel(true);
             ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_deals));
             llDeals.setVisibility(View.VISIBLE);
             if(dealsForThisStore.size() > 0) tvDealName.setText(dealsForThisStore.get(0).getTitle());
@@ -1667,9 +1744,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 }
             });
         } else {
-            slidePanel(true, false);
             llDeals.setVisibility(View.GONE);
+//            slidePanel(true, false);
+//            slidePanel(true);
         }
+        slidePanel(true);
 
         mMainActivity.expandTopNav();
         if(mSearchItem != null) mSearchItem.collapseActionView();
@@ -1703,13 +1782,14 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         });
     }
 
-    private void slidePanel(boolean up, boolean withExtraRow){
+    private void slidePanel(boolean up){
         RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
         View rootView = getActivity().findViewById(android.R.id.content);
 
         if(up) {
-            if(withExtraRow) param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_extended);
-            else param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_normal);
+            if(llDeals.getVisibility() == View.VISIBLE) {
+                param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_extended);
+            } else param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_normal);
             rlDirection.setLayoutParams(param);
             rlSlidingPanel.animate().y(rootView.getHeight() - rlSlidingPanel.getHeight() - (int) getResources().getDimension(R.dimen.map_level_panel_space_btn_direction_panel) - param.height);
         } else {

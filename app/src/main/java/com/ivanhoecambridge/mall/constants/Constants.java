@@ -28,7 +28,7 @@ public class Constants {
 	public final static String HEADER_VALUE_CLIENT_TOKEN_STAGING 	= 	"YmRkYWVjMmQtYjJiOS00YzdhLTllZDktMDg1NmI2M2E1NjA1OjM1ODg4M2M0OTk3YWM5ZTY3Y2EwNDMwMTE4M2RjODIzOTBlNWVhMmEyYTBkODIwOTFiZTY0MDE1NjZkYWY4YmQ0MTQzMzg4MzQ4Yzg0YzhjNzMwM2EzNzQ3YWEzOTJiNDYwYmJjMGIyMWYzZWM5OTIwNjIyODYyMDBmZDM5NjRm"; //STAGING
 	public final static String HEADER_VALUE_CONTENT_TYPE = 		"application/json";
 //	public final static String HEADER_VALUE_ACCEPT = 			"application/json";
-	public final static String HEADER_VALUE_ACCEPT = 			"application/json, application/vnd.kcp.place+json; version=1.0, application/vnd.kcp.view-all-content+json; version=1.0, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.icmp-event+json; version=1.0, application/vnd.kcp.icmp-announcement+json; version=1.0, application/vnd.kcp.blog-post+json; version=1.0, application/vnd.kcp.icmp-twitter+json; version=1.0, application/vnd.kcp.icmp-instagram+json; version=1.0, application/vnd.kcp.icmp-set-interests+json; version=1.0, application/vnd.kcp.icmp-movie+json; version=1.0";
+//	public final static String HEADER_VALUE_ACCEPT = 			"application/json, application/vnd.kcp.place+json; version=1.0, application/vnd.kcp.view-all-content+json; version=1.0, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.icmp-event+json; version=1.0, application/vnd.kcp.icmp-announcement+json; version=1.0, application/vnd.kcp.blog-post+json; version=1.0, application/vnd.kcp.icmp-twitter+json; version=1.0, application/vnd.kcp.icmp-instagram+json; version=1.0, application/vnd.kcp.icmp-set-interests+json; version=1.0, application/vnd.kcp.icmp-movie+json; version=1.0";
 	public final static String HEADER_VALUE_CONTENT_TYPE_MESSAGE_PACK = 		"application/octet-stream";
 
 
@@ -76,6 +76,7 @@ public class Constants {
 	//ARG_KEY
 	public final static String ARG_CONTENT_PAGE = 			"arg_content_page";
 	public final static String ARG_IMAGE_URL = 				"arg_image_url";
+	public final static String ARG_IMAGE_RESOURCE = 		"arg_image_resource";
 	public final static String ARG_IMAGE_URL_LARGE = 		"arg_image_url_large";
 	public final static String ARG_IMAGE_BITMAP = 			"arg_image_bitmap";
 	public static final String ARG_EXTERNAL_CODE = 			"external_code";

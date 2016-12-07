@@ -27,6 +27,7 @@ public class ZoomableImage extends AppCompatActivity {
 		setContentView(R.layout.activity_zoomable_image);
 
 		String imageUrl = (String) getIntent().getSerializableExtra(Constants.ARG_IMAGE_URL);
+		int imageResource = getIntent().getIntExtra(Constants.ARG_IMAGE_RESOURCE, 0);
 		final String imageUrlLarge = (String) getIntent().getSerializableExtra(Constants.ARG_IMAGE_URL_LARGE);
 		final TouchImageView ivDetailImage = (TouchImageView) findViewById(R.id.ivDetailImage);
         ivDetailImage.setOnClickListener(new View.OnClickListener() {
@@ -38,34 +39,41 @@ public class ZoomableImage extends AppCompatActivity {
         });
 
 		final ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
-        Glide.with(this)
-                .load(imageUrl)
-                .crossFade()
-                .error(R.drawable.placeholder)
-				.listener(new RequestListener<String, GlideDrawable>() {
-					@Override
-					public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-						return false;
-					}
 
-					@Override
-					public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-						pb.setVisibility(View.GONE);
-						if(imageUrlLarge != null){
-							Glide.with(ZoomableImage.this)
-									.load(imageUrlLarge)
-									.crossFade()
-//									.centerCrop()
-									.into(ivDetailImage);
-
+		if(imageUrl != null){
+			Glide.with(this)
+					.load(imageUrl)
+					.crossFade()
+					.error(R.drawable.placeholder)
+					.listener(new RequestListener<String, GlideDrawable>() {
+						@Override
+						public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+							return false;
 						}
 
+						@Override
+						public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+							pb.setVisibility(View.GONE);
+							if(imageUrlLarge != null){
+								Glide.with(ZoomableImage.this)
+										.load(imageUrlLarge)
+										.crossFade()
+	//									.centerCrop()
+										.into(ivDetailImage);
+							}
+							return false;
+						}
+					})
+					.into(ivDetailImage);
+		} else {
+			pb.setVisibility(View.GONE);
+			Glide.with(this)
+					.load(imageResource)
+					.crossFade()
+					.error(R.drawable.placeholder)
+					.into(ivDetailImage);
+		}
 
-
-						return false;
-					}
-				})
-                .into(ivDetailImage);
 
 		initActionBar();
 		hideSystemUi();

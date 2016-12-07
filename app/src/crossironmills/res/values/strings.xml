@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">CrossIron Mills</string>
+    <string name="mall_name">CrossIron Mills</string>
+
+    <!--MOVIES-->
+    <string name="movie_title">SilverCity Cinema</string>
+
+    <!--ACTIVE MALL-->
+    <string name="active_mall_welcome_msg">Welcome to CrossIron Mills, here’s what’s happening today!</string>
+
+    <!--ONBOARDING-->
+    <string name="onbd_one_title">Welcome to\nCrossIron Mills new\ncompanion app</string>
+
+    <!--PRIVACY-->
+    <string name="url_privacy_policy">https://www.crossironmills.com/privacy-policy/</string>
+    <string name="url_terms">https://www.crossironmills.com/terms-conditions/</string>
+</resources>

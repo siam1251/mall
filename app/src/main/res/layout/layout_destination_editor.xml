@@ -19,7 +19,7 @@
         android:layout_marginLeft="2dp"
         android:id="@+id/ivBack"
         ThemedImageView:filterColor="@color/white"
-        ThemedImageView:filterColorUnselected="@color/filter_off_color"
+        ThemedImageView:filterColorSelected="@color/filter_off_color"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:padding="10dp"

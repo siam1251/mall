@@ -7,15 +7,20 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.mappedin.sdk.Coordinate;
+import com.mappedin.sdk.Map;
 import com.mappedin.sdk.Overlay2DImage;
 import com.mappedin.sdk.Polygon;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -38,13 +43,75 @@ public class MapUtility {
         return position;
     }
 
+    public static Map getGroundMap(Map[] maps){
+        try {
+            for(Map map : maps){
+                if(map.getElevation() == 0) return map;
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static int getGroundMapIndex(Map[] maps){
+        try {
+
+            for(int i = 0; i < maps.length; i++){
+                if(maps[i].getElevation() == 0) return i;
+
+            }
+            return -50;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -50;
+        }
+    }
+
+
+    public static int getMapIndexWithShortName(Map[] maps, String shortName){
+        for(int i = 0; i < maps.length; i++){
+            if(maps[i].getShortName().equals(shortName)) return i;
+        }
+        return 0;
+    }
+
+    public static Map[] sortMapLevelByElevetaion(Map[] map){
+        try {
+            /*Arrays.sort(map, new Comparator<Map>() {
+                @Override
+                public int compare(Map a, Map b) {
+                    return (int) (a.getElevation() - b.getElevation());
+                }
+            });*/
+            List<Map> mapList = new ArrayList<Map>(Arrays.asList(map));
+            Collections.sort(mapList, new MapElevationComparator());
+            return (Map[]) mapList.toArray(new Map[map.length]);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return map;
+        }
+    }
+
+    public static class MapElevationComparator implements Comparator<Map> {
+        @Override
+        public int compare(Map o1, Map o2) {
+            try {
+                return Integer.valueOf((int)o1.getElevation()).compareTo(Integer.valueOf((int)o2.getElevation()));
+            } catch (Exception e) {
+                return 0;
+            }
+        }
+    }
+
     /**
      *
      * @param context
      * @param pinDrawable
      * @return overlay2DImage with transparent pixel around it as a hack to adjust its sizes
      */
-    /*public static Overlay2DImage getOverlayImageWithPadding(Context context, Drawable pinDrawable) {
+    public static Overlay2DImage getOverlayImageWithPadding(Context context, Drawable pinDrawable) {
         // Actual size of logo
         int width = pinDrawable.getIntrinsicWidth();
         int height = pinDrawable.getIntrinsicHeight();
@@ -67,7 +134,7 @@ public class MapUtility {
         // Create an Overlay2DImage using a new drawable derived from the bitmap we made
         Overlay2DImage label = new Overlay2DImage(maxDimension, maxDimension, new BitmapDrawable(context.getResources(), bitmap));
         return label;
-    }*/
+    }
 
     public static int getDp(Context context, int px){
         return KcpUtility.dpToPx((Activity) context , px);
