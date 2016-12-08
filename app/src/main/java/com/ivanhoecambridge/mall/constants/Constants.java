@@ -86,6 +86,7 @@ public class Constants {
 	public static final String ARG_MOVIE_ID = 				"movie_id";
 	public static final String ARG_TRANSITION_ENABLED = 	"transition_enabled";
 	public static final String ARG_LOCATION_ID = 			"location_id";
+	public static final String ARG_LOCATION_MAP_NAME = 		"location_map_name";
 	public enum CategoryActivityType { SUBCATEGORY, STORE }
 
 

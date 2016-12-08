@@ -272,7 +272,8 @@ public class MainActivity extends BaseActivity
                     showMapToolbar(true); //enable map's toolbar
                     if(MapFragment.getInstance().mSearchItem != null) MapFragment.getInstance().mSearchItem.collapseActionView();
                 } else {
-                    toggleDestinationEditor(true, null, null, null);
+                    MapFragment.getInstance().didTapNothing();
+//                    toggleDestinationEditor(true, null, null, null);
                     mViewPager.setPagingEnabled(true);
                     setToolbarElevation(false);
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
@@ -513,8 +514,8 @@ public class MainActivity extends BaseActivity
                     public void onAnimationRepeat(Animation animation) {}
                 });
             }
-
-            MapFragment.getInstance().showDirectionCard(false, null, 0, null, null, null);
+            //TODO: 12/08 it was uncommented - clicked amenity detail is hidden when changing the tab and when coming back to it, there's not way to reshow it
+//            MapFragment.getInstance().showDirectionCard(false, null, 0, null, null, null);
         } else {
             etStartStore.setOnFocusChangeListener(focusListener);
             etDestStore.setOnFocusChangeListener(focusListener);
@@ -1094,7 +1095,7 @@ public class MainActivity extends BaseActivity
                                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                             Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, isChecked);
                                             if(amenity.getExternalIds() == null || amenity.getExternalIds().length == 0) return;
-                                            if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(isChecked, amenity.getExternalIds()[0], false);
+                                            if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(isChecked, amenity.getExternalIds()[0], false, null);
                                         }
                                     }
                             )
@@ -1404,8 +1405,6 @@ public class MainActivity extends BaseActivity
                 } else {
                     if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, storePolygon);
                 }
-
-
             }
         } else if(code == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
             if (polygons != null && polygons.size() > 0) {
@@ -1450,8 +1449,9 @@ public class MainActivity extends BaseActivity
                 if (resultCode == Activity.RESULT_OK) {
                     //turn on the guest service switch and drop a pin
                     selectPage(MainActivity.VIEWPAGER_PAGE_MAP);
-//                    String externalID = Constants.KEY_GUEST_SERVICE;
                     String locationID = data.getStringExtra(Constants.ARG_LOCATION_ID);
+                    String mapName = data.getStringExtra(Constants.ARG_LOCATION_MAP_NAME);
+                    if(mapName != null) MapFragment.getInstance().setMapLevel(-50, null, mapName);
                     CustomLocation customLocation = CustomLocation.getLocationWithLocationId(locationID);
                     String externalID = customLocation.getAmenityType(); //Amenity Type from MappedIn == ExternalID from amenities.json
                     final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityWithExternalId(externalID);
@@ -1459,9 +1459,9 @@ public class MainActivity extends BaseActivity
                     if(!isToggled) {
                         Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, true);
                         setUpRightSidePanel();
-                        if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(true, externalID, true);
+                        if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(true, externalID, true, mapName);
                     } else {
-                        MapFragment.getInstance().clickOverlayWithNameAndPosition(externalID, 0);
+                        MapFragment.getInstance().clickOverlayWithNameAndPosition(externalID, mapName);
                     }
                 }
             } else if(requestCode == Constants.REQUEST_CODE_SAVE_PARKING_SPOT) {

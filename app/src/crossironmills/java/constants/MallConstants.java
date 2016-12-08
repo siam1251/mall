@@ -16,7 +16,7 @@ public class MallConstants {
     public static String MOVIE_MP4 = "cnidg";
     public static String MOVIE_PHOTOS = "large";
 
-    public static String RATINGS_PROVINCE_CODE = "on-rating";
+    public static String RATINGS_PROVINCE_CODE = "ab-rating";
     public static String CINEMA_NAME = "SilverCity";
 
     //TWITTER

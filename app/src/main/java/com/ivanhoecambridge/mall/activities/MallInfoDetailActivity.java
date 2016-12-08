@@ -354,6 +354,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                             public void onClick(View v) {
                                 Intent intent = new Intent();
                                 intent.putExtra(Constants.ARG_LOCATION_ID, loc.getLocationID());
+                                intent.putExtra(Constants.ARG_LOCATION_MAP_NAME, loc.getMapName());
                                 setResult(Activity.RESULT_OK, intent);
                                 finish();
                             }

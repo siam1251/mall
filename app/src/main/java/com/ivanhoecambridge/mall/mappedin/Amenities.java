@@ -2,6 +2,7 @@ package com.ivanhoecambridge.mall.mappedin;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,7 +127,7 @@ public class Amenities {
     }
 
     public interface OnAmenityClickListener {
-        public void onAmenityClick(boolean enabled, String externalCode, boolean focusPin);
+        public void onAmenityClick(boolean enabled, String externalCode, boolean focusPin, @Nullable String mapName);
     }
 
     public interface OnDealsClickListener {

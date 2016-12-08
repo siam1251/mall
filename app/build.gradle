@@ -93,7 +93,7 @@ android {
             buildConfigField 'String', 'MALL', '"crossiron-mills"'
             buildConfigField 'Boolean', 'PUSH', 'true'
             buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
-            buildConfigField 'Boolean', 'MOVIE', 'false'
+            buildConfigField 'Boolean', 'MOVIE', 'true'
             buildConfigField 'Boolean', 'WHITE_FAV', 'false'
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
 

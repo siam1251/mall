@@ -192,14 +192,17 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     }, true);
 
+            String neartParkingCTA = getResources().getString(R.string.parking_nearest_spot);
+            if(BuildConfig.NEAREST_PARKING_IMG) {
+                neartParkingCTA = kcpContentPage.getStoreParking();
+            }
             //Store Parking
             CTA parking = new CTA(
                     this,
                     mParentView,
                     R.layout.layout_detail_button,
                     R.drawable.icn_parking,
-//                    kcpContentPage.getStoreParking(),
-                    getResources().getString(R.string.parking_nearest_spot),
+                    neartParkingCTA,
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

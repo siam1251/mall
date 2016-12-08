@@ -28,9 +28,10 @@ public class HeaderFactory {
 
     public static String MALL_INFO_URL = "bins/4053r";
     public static String AMENITIES_URL = "bins/5bea9";
-    public static String PARKING_URL = "bins/2nhk7";
+//    public static String PARKING_URL = "bins/2nhk7"; //testing crash
+    public static String PARKING_URL = "bins/231an";
 
-    public final static String HEADER_VALUE_ACCEPT = 			"application/json";
+    public final static String HEADER_VALUE_ACCEPT = "application/json, application/vnd.kcp.place+json; version=1.0, application/vnd.kcp.view-all-content+json; version=1.0, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.icmp-event+json; version=1.0, application/vnd.kcp.icmp-announcement+json; version=1.0, application/vnd.kcp.blog-post+json; version=1.0, application/vnd.kcp.icmp-twitter+json; version=1.0, application/vnd.kcp.icmp-instagram+json; version=1.0, application/vnd.kcp.icmp-set-interests+json; version=1.0, application/vnd.kcp.icmp-movie+json; version=1.0";
 
 
     private static HashMap<String, String> mHeaders;

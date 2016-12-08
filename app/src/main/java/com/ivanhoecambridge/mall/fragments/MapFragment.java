@@ -58,6 +58,7 @@ import com.ivanhoecambridge.mall.mappedin.Amenities.OnParkingClickListener;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
 import com.ivanhoecambridge.mall.mappedin.CustomLocation;
 import com.ivanhoecambridge.mall.mappedin.MapUtility;
+import com.ivanhoecambridge.mall.mappedin.Pin;
 import com.ivanhoecambridge.mall.parking.ChildParking;
 import com.ivanhoecambridge.mall.parking.Parking;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
@@ -152,7 +153,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     //MAPPED IN
     //when using getOverlayImageWithPadding
     private final int PIN_AMENITY_IMAGE_SIZE_DP = 20; //ends up 64 px
-    private final int PIN_PARKING_IMAGE_SIZE_DP = 32; //ends up 64 px
+    private final int PIN_PARKING_IMAGE_SIZE_DP = 35; //ends up 64 px
 
     /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 60;
     private final int PIN_PARKING_IMAGE_SIZE_DP = 60;*/
@@ -188,8 +189,12 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private CustomLocation mTemporaryParkingLocation; //used to show the temporary parking spot from detail activity
 
     public String mPendingExternalCode;
-    private Overlay2DImage mSelectedPin = null;//to keep track of highlited amenity drawable to set back to the original state in clearHighlighted
-    private Overlay2DImage mRemovedPin = null; //overlayImage that was replaced by mSelectedOverlayImage
+    /*private Overlay2DImage mSelectedPin = null;//to keep track of highlited amenity drawable to set back to the original state in clearHighlighted
+    private Overlay2DImage mRemovedPin = null; //overlayImage that was replaced by mSelectedOverlayImage*/
+
+    private Pin mSelectedPin;
+    private Pin mRemovedPin;
+
     private String mAmenityClicked = ""; //to keep track of previously clicked amenity
     public boolean mMapLoaded = false;
     private MapInterface mMapInterface;
@@ -551,7 +556,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
             int groundMapIndex = MapUtility.getGroundMapIndex(maps);
             if(groundMapIndex == -50) groundMapIndex = 0;
-            setMapLevel(groundMapIndex, null);
+            setMapLevel(groundMapIndex, null, null);
+            loadAmenitiesAndParkingLot();
 
             if(pb != null) pb.setVisibility(View.GONE);
             if(maps.length > 1) {
@@ -566,21 +572,34 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         public void onError(Exception e) {
             Logger.log("Error loading Venue: " + e);
         }
-
     }
 
     public void setMapInterface(MapInterface mapInterface){
         mMapInterface = mapInterface;
     }
 
+    private void loadAmenitiesAndParkingLot(){
+        //LOAD AMENITIES, DEALS
+        onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL, false));
+        for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
+            Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
+            final String externalID = amenity.getExternalIds()[0];
+            onAmenityClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_AMENITY + externalID, amenity.isEnabled()), amenity.getExternalIds()[0], false, null);
+        }
+
+        if(ParkingManager.isParkingLotSaved(getActivity())) {
+            onParkingClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_PARKING, false), false);
+        }
+    }
+
     /**
+     * set map level using one of the three params
+     * @param mapIndex index of the map to load in maps array
+     * @param shortName shortname of the map to load
+     * @param mapName mapname of the map to load
      *
-     * @param level
-     * @param shortName
-     *
-     * drop amenities / deals / parking lots - do stuffs that need to be done on map load
      */
-    private void setMapLevel (int level, @Nullable String shortName){
+    public void setMapLevel (int mapIndex, @Nullable String shortName, @Nullable String mapName){
         //todo: when setting map level from normal arrow button, follow the normal level order
         // if this is called by selecting the highlighted arrow, load the right level
         try {
@@ -593,9 +612,18 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                         break;
                     }
                 }
+            } else if(mapName != null) {
+                for(int i = 0; i < maps.length; i++){
+                    Map map = maps[i];
+                    if(map.getName().equals(mapName)){
+                        if(i == mCurrentLevelIndex) return;
+                        mCurrentLevelIndex = i;
+                        break;
+                    }
+                }
             } else {
-                if(level == mCurrentLevelIndex) return;
-                mCurrentLevelIndex = level;
+                if(mapIndex == mCurrentLevelIndex) return;
+                mCurrentLevelIndex = mapIndex;
             }
 
             logger.debug("setting map level: " + mCurrentLevelIndex);
@@ -603,15 +631,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             tvLevel.setText(maps[mCurrentLevelIndex].getShortName());
             setLevelImageView(maps);
 
-            //LOAD AMENITIES, DEALS
-            onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL, false));
-            for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
-                Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
-                final String externalID = amenity.getExternalIds()[0];
-                onAmenityClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_AMENITY + externalID, amenity.isEnabled()), amenity.getExternalIds()[0], false);
-            }
-
-            //mark the store that's been
+            //highlight the store that has been pending
             if(mPendingExternalCode != null) {
                 ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocationWithExternalCode(mPendingExternalCode);
                 mPendingExternalCode = null;
@@ -620,9 +640,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 }
             }
 
-            if(ParkingManager.isParkingLotSaved(getActivity())) {
-                onParkingClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_PARKING, false), false);
-            }
+
         } catch (Exception e) {
             logger.error(e);
         }
@@ -674,7 +692,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 ivUpper.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setMapLevel(upperLevel, null);
+                        setMapLevel(upperLevel, null, null);
                     }
                 });
             }
@@ -687,7 +705,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 ivLower.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setMapLevel(lowerLevel, null);
+                        setMapLevel(lowerLevel, null, null);
                     }
                 });
             }
@@ -715,6 +733,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             e.printStackTrace();
         }
         MapFragment.getInstance().didTapPolygon(polygon);
+        zoomInOut();
     }
 
     public void didTapPolygon(Polygon polygon) {
@@ -784,7 +803,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 }
                 highlightPolygon((Polygon) startPolygon, getResources().getColor(R.color.map_destination_store));
                 showDirectionCard(false, null, 0, null, null, null);
-                if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName());
+                if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName(), null);
 
 
 
@@ -807,7 +826,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                         e.printStackTrace();
                     }
                 }
-                if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName());
+                if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName(), null);
             }
         } catch (Resources.NotFoundException e) {
             logger.error(e);
@@ -958,7 +977,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
         originalColors.clear();
 
-        if(mRemovedPin != null) {
+        /*if(mRemovedPin != null) {
             mapView.addMarker(mRemovedPin, false);
             mRemovedPin = null;
         }
@@ -966,7 +985,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         if(mSelectedPin != null) {
             mapView.removeMarker(mSelectedPin);
             mSelectedPin = null;
-        }
+        }*/
 
         if(mTemporaryParkingLocation != null) removePin(mTemporaryParkingLocation);
     }
@@ -1179,8 +1198,15 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         path = null;
     }
 
+    /**
+     *
+     * @param enabled
+     * @param amenityName
+     * @param clickOverlay if true, highlight pin as it was clicked to give it a focus
+     * @param mapName when mapName Exists, it's looking for a specific amenity on a specific floor
+     */
     @Override
-    public void onAmenityClick(boolean enabled, final String amenityName, final boolean focusPin) {
+    public void onAmenityClick(boolean enabled, final String amenityName, final boolean clickOverlay, final @Nullable String mapName) {
         try {
             ArrayList<CustomLocation> amenityList = CustomLocation.getAmenityHashMap().get(amenityName);
             if(amenityList != null){
@@ -1199,7 +1225,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                                             mAmeityDrawable = new BitmapDrawable(getResources(), resource);
                                             mAmeityDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
                                             dropPin(coordinate, location, mAmeityDrawable);
-                                            if(focusPin) clickOverlayWithNameAndPosition(amenityName, 0);
+                                            if(clickOverlay) {
+                                                clickOverlayWithNameAndPosition(amenityName, mapName);
+                                            }
                                         }
                                     });
                         }
@@ -1207,12 +1235,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                         if(mAmenityClicked.equals(amenityName)){
                             showDirectionCard(false, null, 0, null, null, null);
                         }
-                        mRemovedPin = null;
+//                        mRemovedPin = null;
                         removePin(location);
                     }
                 }
             }
-
         } catch (Exception e) {
             logger.error(e);
         }
@@ -1228,12 +1255,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 //        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), clone);
         Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), clone);
         label.setPosition(coordinate);
-        LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
+//        LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         //if I remove the lable at the same spot and add another label with new LocationLabelClicker,
         //removed label's LocationLabelClicker gets called again so shouldn't add another labelClicker
-        mSelectedPin = label;
-//        overlays.put(label, mLocationClickersMap.get(coordinate)); //should add to overlays so when removing pins, selected (highlighted) ones get removed too
-        overlays.put(label, clicker); //should add to overlays so when removing pins, selected (highlighted) ones get removed too
+        mSelectedPin = new Pin(coordinate, label);
+        overlays.put(label, mLocationClickersMap.get(coordinate)); //should add to overlays so when removing pins, selected (highlighted) ones get removed too
         mapView.addMarker(label, false);
     }
 
@@ -1246,6 +1272,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     public void dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable){
         //TODO: only add pins to the current floor
 //        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable);
+        if(mLocationClickersMap != null && mLocationClickersMap.containsKey(coordinate)) return;
         Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), pinDrawable);
         label.setPosition(coordinate);
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
@@ -1256,16 +1283,23 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     }
 
 
-    public void clickOverlayWithNameAndPosition(String amenityName, int position){
-        Coordinate coordinate;
+//    public void clickOverlayWithNameAndPosition(String amenityName, Coordinate amenityCoordinate){
+    public void clickOverlayWithNameAndPosition(String amenityName, String mapName){
         ArrayList<CustomLocation> amenityList = CustomLocation.getAmenityHashMap().get(amenityName);
         if(amenityList != null){
             for(final CustomLocation location : amenityList) {
                 List<Coordinate> coords = location.getNavigatableCoordinates();
-                coordinate = coords.get(position);
-                LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(coordinate);
-                locationLabelClicker.onClick();
-                return;
+                for(Coordinate coordinate : coords) {
+                    if(mapName == null || (mapName != null && coordinate.getMap().getName().equals(mapName))) {
+                        //if the map's already has the pin selected then return
+                        if(mSelectedPin != null && mSelectedPin.getCoordinate() == coordinate) {
+                            return;
+                        }
+                        LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(coordinate);
+                        locationLabelClicker.onClick();
+                        return;
+                    }
+                }
             }
         }
     }
@@ -1541,23 +1575,43 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
                     String parkingNote = ParkingManager.getParkingNotes(getActivity());
                     showParkingDetail(location, false, parkingLotName, entranceName, parkingNote, -1, -1);
-                } else {
-                    showAmenityDetail((CustomLocation) location, drawable);
                 }
+
 
                 mapView.getCamera().focusOn(coordinate);
                 zoomInOut();
 
                 destinationPolygon = location;
                 if(location == mSavedParkingLocation) return;
-                highlightThisLabel();
+
+                if(mSelectedPin == null) {
+                    highlightThisLabel();
+                    showAmenityDetail((CustomLocation) location, drawable);
+                } else {
+
+                    Coordinate removeableMarkerCoordinate = mSelectedPin.getCoordinate();
+                    mapView.removeMarker(mSelectedPin.getOverlay2DImage());
+                    overlays.remove(mSelectedPin.getOverlay2DImage());
+                    mSelectedPin = null;
+                    mapView.addMarker(mRemovedPin.getOverlay2DImage(), false);
+//                    overlays.remove(mRemovedPin.getOverlay2DImage());
+                    mRemovedPin = null;
+                    showDirectionCard(false, null, 0, null, null, null);
+
+                    if(removeableMarkerCoordinate != coordinate) {
+                        highlightThisLabel();
+                        showAmenityDetail((CustomLocation) location, drawable);
+                    }
+
+
+                }
             }
         }
 
         public void highlightThisLabel(){
 //            destinationPolygon = location;
             dropPinWithColor(coordinate, location, drawable);
-            if(!location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) mRemovedPin = label; //parking pin is temporary - shouldn'be be readded
+            if(!location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) mRemovedPin = new Pin(coordinate, label); //parking pin is temporary - shouldn'be be readded
             mapView.removeMarker(label);
         }
     }
