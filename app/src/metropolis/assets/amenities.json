@@ -36,10 +36,9 @@
     {
       "type":"4",
       "enabled":true,
-      "title": "Stairs &amp; Escalators",
+      "title": "Stairs & Escalators",
       "externalIds":[
-        "Stairs",
-        "Escalator"
+        "escalator/stairs"
       ]
     },
     {

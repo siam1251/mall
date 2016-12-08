@@ -264,7 +264,7 @@ public class MainActivity extends BaseActivity
                 }
 
                 if(position == VIEWPAGER_PAGE_MAP) {
-                    if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING, false)) mOnParkingClickListener.onParkingClick(true, false);
+//                    if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING, false)) mOnParkingClickListener.onParkingClick(true, false);
                     if(mOnDealsClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_DEAL, false)) mOnDealsClickListener.onDealsClick(true);
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
@@ -272,7 +272,7 @@ public class MainActivity extends BaseActivity
                     showMapToolbar(true); //enable map's toolbar
                     if(MapFragment.getInstance().mSearchItem != null) MapFragment.getInstance().mSearchItem.collapseActionView();
                 } else {
-                    MapFragment.getInstance().didTapNothing();
+                    if(rlDestinationEditor.getVisibility() == View.VISIBLE) MapFragment.getInstance().didTapNothing();
 //                    toggleDestinationEditor(true, null, null, null);
                     mViewPager.setPagingEnabled(true);
                     setToolbarElevation(false);
@@ -1071,7 +1071,9 @@ public class MainActivity extends BaseActivity
                 }, MainActivity.this, rlSeeParking);
                 if(ParkingManager.isParkingLotSaved(MainActivity.this)) Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_PARKING, ivFilterParking.isSelected());
                 setParkingStatus(Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING, false), rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_hide_parking), getResources().getString(R.string.map_filter_see_parking));
-                if(mOnParkingClickListener != null) mOnParkingClickListener.onParkingClick(!ivFilterParking.isSelected(), false);
+                if(mOnParkingClickListener != null) {
+                    mOnParkingClickListener.onParkingClick(!ivFilterParking.isSelected(), true);
+                }
             }
         });
 

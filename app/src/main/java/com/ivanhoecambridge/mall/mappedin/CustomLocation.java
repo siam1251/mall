@@ -27,6 +27,11 @@ public class CustomLocation extends Location {
     public static final String TYPE_AMENITY_PARKING = "parking";
 
 
+    private final String TYPE_ELEVATOR = "elevator";
+    private final String TYPE_ESCALATOR_STAIRS = "escalator/stairs";
+
+
+
     private static HashMap<String, ArrayList<CustomLocation>> amenityHashmap = new HashMap<>();
     private static HashMap<String, CustomLocation> locationHashmapByExternalId = new HashMap<>(); //used to find polygons for stores - that use external iD
 //    private static HashMap<String, CustomLocation> locationHashmapById = new HashMap<>(); //used to find polygons for parking lots - that use ID
@@ -67,6 +72,17 @@ public class CustomLocation extends Location {
                         parkingHashMap.put(id, this);
                     }
                 }
+            }
+
+            //2016. 12. 8 - metropolis has pins like 'escalator/stairs' and 'elevator' and they dont' have 'amenity' as their type
+            if(rawData.string(TYPE) != null && (rawData.string(TYPE).equals(TYPE_ELEVATOR) || rawData.string(TYPE).equals(TYPE_ESCALATOR_STAIRS))){
+
+                amenityType = rawData.string(TYPE);
+                ArrayList<CustomLocation> amenityList;
+                if(amenityHashmap.containsKey(amenityType)) amenityList = amenityHashmap.get(amenityType);
+                else amenityList = new ArrayList<>();
+                amenityList.add(this);
+                amenityHashmap.put(amenityType, amenityList);
             }
 
 
