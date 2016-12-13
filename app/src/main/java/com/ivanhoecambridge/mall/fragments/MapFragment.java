@@ -59,6 +59,7 @@ import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
 import com.ivanhoecambridge.mall.mappedin.CustomLocation;
 import com.ivanhoecambridge.mall.mappedin.MapUtility;
 import com.ivanhoecambridge.mall.mappedin.Pin;
+import com.ivanhoecambridge.mall.mappedin.VortexPin;
 import com.ivanhoecambridge.mall.parking.ChildParking;
 import com.ivanhoecambridge.mall.parking.Parking;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
@@ -195,7 +196,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     private Pin mSelectedPin;
     private Pin mRemovedPin;
-    private Pin mTempPin; //such as destination flag when drawing a paht
+    private Pin mDestinationPin; //such as destination flag when drawing a paht
+    private ArrayList<VortexPin> mVortexPins = new ArrayList<VortexPin>(); //such as destination flag when drawing a paht
 
     private String mAmenityClicked = ""; //to keep track of previously clicked amenity
     public boolean mMapLoaded = false;
@@ -297,7 +299,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         mMainActivity.setOnParkingClickListener(MapFragment.this);
         setupRecyclerView();
         setHasOptionsMenu(true);
-
+//        setViewListener();
         initializeMap();
 
         /*CoordinatorLayout coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorlayout);
@@ -562,9 +564,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             loadAmenitiesAndParkingLot();
 
             if(pb != null) pb.setVisibility(View.GONE);
-            if(maps.length > 1) {
-                rlSlidingPanel.setVisibility(View.VISIBLE);
-            }
+            setMapLevelArrowVisibility();
 
             mMapLoaded = true;
             if(mMapInterface != null) mMapInterface.mapLoaded();
@@ -573,6 +573,12 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         @Override
         public void onError(Exception e) {
             Logger.log("Error loading Venue: " + e);
+        }
+    }
+
+    private void setMapLevelArrowVisibility(){
+        if(maps != null && maps.length > 1) {
+            rlSlidingPanel.setVisibility(View.VISIBLE);
         }
     }
 
@@ -642,6 +648,17 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 }
             }
 
+            /*if(destinationPolygon != null) {
+                Coordinate coordinate = null;
+                if(destinationPolygon instanceof Polygon){
+                    coordinate = ((Polygon) destinationPolygon).getLocations().get(0).getNavigatableCoordinates().get(0);
+                } else if(destinationPolygon instanceof CustomLocation){
+                    List<Coordinate> coords = ((CustomLocation) destinationPolygon).getNavigatableCoordinates();
+                    coordinate = coords.get(0);
+                }
+                mapView.getCamera().focusOn(coordinate);
+                zoomInOut();
+            }*/
 
         } catch (Exception e) {
             logger.error(e);
@@ -818,7 +835,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 highlightPolygon((Polygon) startPolygon, getResources().getColor(R.color.map_destination_store));
                 showDirectionCard(false, null, 0, null, null, null);
                 if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName(), null);
-                dropTempPin(destinationPolygonCoordinate, getResources().getDrawable(R.drawable.icn_wayfinding_destination));
+                dropDestinationPin(destinationPolygonCoordinate, getResources().getDrawable(R.drawable.icn_wayfinding_destination));
                 dropVortexOnThePath(directions.getInstructions());
 
                 return true;
@@ -855,10 +872,22 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     private void dropVortexOnThePath(List<Instruction> instructions){
         for(Instruction instruction : instructions) {
-            String vortexType = instruction.atLocation.getType();
             logger.debug("type : " + instruction.atLocation.getType() + " : " + instruction.instruction);
+            if(VortexPin.isVortex(instruction)) {
+                VortexPin vortexPin = new VortexPin(getActivity(), instruction);
+                mVortexPins.add(vortexPin);
+                dropVortexPin(vortexPin);
+            }
         }
     }
+
+    private void dropVortexPin(VortexPin vortexPin){
+        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), vortexPin.getVortexDrawable());
+        label.setPosition(vortexPin.getVortexCoordinate());
+        vortexPin.setVortexPin(new Pin(vortexPin.getVortexCoordinate(), label));
+        mapView.addMarker(label, false);
+    }
+
 
     /**
      * creates arraylist of map shortnames of floors where the path's drawn onto
@@ -914,10 +943,18 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         mSearchMode = SearchMode.STORE;
         mMapInPath.clear();
         setLevelImageView(maps);
-        if(mTempPin != null) {
-            mapView.removeMarker(mTempPin.getOverlay2DImage());
-            mTempPin = null;
+        if(mDestinationPin != null) {
+            mapView.removeMarker(mDestinationPin.getOverlay2DImage());
+            mDestinationPin = null;
         }
+
+        if(mVortexPins.size() > 0) {
+            for(VortexPin vortexPin : mVortexPins){
+                mapView.removeMarker(vortexPin.getVortexPin().getOverlay2DImage());
+            }
+            mVortexPins.clear();
+        }
+
         replaceSelectedPinWithRemovedPin();
     }
 
@@ -1291,7 +1328,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         //removed label's LocationLabelClicker gets called again so shouldn't add another labelClicker
         mSelectedPin = new Pin(coordinate, label);
         overlays.put(label, mLocationClickersMap.get(coordinate)); //should add to overlays so when removing pins, selected (highlighted) ones get removed too
-        mapView.addMarker(label, false);
+        mapView.addMarker(label, true);
     }
 
 
@@ -1309,14 +1346,14 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         overlays.put(label, clicker);
         mLocationClickersMap.put(coordinate, clicker);
-        mapView.addMarker(label, false);
+        mapView.addMarker(label, true);
 
     }
 
-    private void dropTempPin(final Coordinate coordinate, final Drawable pinDrawable){
+    private void dropDestinationPin(final Coordinate coordinate, final Drawable pinDrawable){
         Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), pinDrawable);
         label.setPosition(coordinate);
-        mTempPin = new Pin(coordinate, label);
+        mDestinationPin = new Pin(coordinate, label);
         mapView.addMarker(label, false);
     }
 
@@ -1900,6 +1937,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_extended);
             } else param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_normal);
             rlDirection.setLayoutParams(param);
+            logger.debug("sliding up - rootView.getHeight() : " + rootView.getHeight() + " rlSlidingPanel.getHeight() : " + rlSlidingPanel.getHeight() + " param.height : " + param.height);
             rlSlidingPanel.animate().y(rootView.getHeight() - rlSlidingPanel.getHeight() - (int) getResources().getDimension(R.dimen.map_level_panel_space_btn_direction_panel) - param.height);
         } else {
             rlDirection.setVisibility(View.GONE);
@@ -1907,6 +1945,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     R.anim.anim_slide_down_out_of_screen);
             slideUpAnimation.reset();
             rlDirection.startAnimation(slideUpAnimation);
+            logger.debug("sliding down - rootView.getHeight() : " + rootView.getHeight() + " rlSlidingPanel.getHeight() : " + rlSlidingPanel.getHeight() + " param.height : " + param.height);
             rlSlidingPanel.animate().y(rootView.getHeight() - rlSlidingPanel.getHeight() - (int) getResources().getDimension(R.dimen.map_level_panel_bot_margin));
         }
     }

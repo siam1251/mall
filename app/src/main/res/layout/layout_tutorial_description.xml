@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="Welcome to Vaughan Mills new companion app"
+        android:text="Welcome to Metropolis at Metrotown's new companion app"
         android:lineSpacingMultiplier="1.2"
         android:textColor="@color/white"
         />

@@ -23,7 +23,7 @@
         card_view:cardUseCompatPadding="true"
 
         <RelativeLayout
-            android:background="@color/intrst_bg"
+            android:background="@color/themeColor"
             android:paddingLeft="@dimen/card_desc_horizontal_padding"
             android:paddingRight="@dimen/card_desc_horizontal_padding"
             android:layout_width="match_parent"

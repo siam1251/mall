@@ -254,6 +254,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onPageSelected(int position) {
                 mCurrentViewPagerTapPosition = position;
+                showMapToolbar(position);
                 if(position == VIEWPAGER_PAGE_MAP || position == VIEWPAGER_PAGE_INFO ) expandTopNav(); //TODO: change this hardcode
 
                 if(position == VIEWPAGER_PAGE_INFO) {
@@ -269,7 +270,6 @@ public class MainActivity extends BaseActivity
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
                     setToolbarElevation(true);
-                    showMapToolbar(true); //enable map's toolbar
                     if(MapFragment.getInstance().mSearchItem != null) MapFragment.getInstance().mSearchItem.collapseActionView();
                 } else {
                     if(rlDestinationEditor.getVisibility() == View.VISIBLE) MapFragment.getInstance().didTapNothing();
@@ -277,7 +277,6 @@ public class MainActivity extends BaseActivity
                     mViewPager.setPagingEnabled(true);
                     setToolbarElevation(false);
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
-                    showMapToolbar(false);
                 }
             }
 
@@ -422,15 +421,25 @@ public class MainActivity extends BaseActivity
 
 
     // ------------------------------------- START OF MAP FRAGMENT -------------------------------------
-    public void showMapToolbar(boolean enableMapToolbar){
-        if(enableMapToolbar){
+    public void showMapToolbar(int position){
+        if(position == VIEWPAGER_PAGE_HOME) {
+            ivToolbar.setVisibility(View.VISIBLE);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        } else if(position == VIEWPAGER_PAGE_DIRECTORY) {
+            ivToolbar.setVisibility(View.GONE);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setTitle(getResources().getString(R.string.title_directory));
+            mToolbar.setTitleTextColor(getResources().getColor(R.color.textColorPrimary));
+        } else if(position == VIEWPAGER_PAGE_MAP) {
             ivToolbar.setVisibility(View.GONE);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setTitle(getResources().getString(R.string.title_map));
             mToolbar.setTitleTextColor(getResources().getColor(R.color.textColorPrimary));
-        } else {
-            ivToolbar.setVisibility(View.VISIBLE);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        } else if(position == VIEWPAGER_PAGE_INFO) {
+            ivToolbar.setVisibility(View.GONE);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setTitle(getResources().getString(R.string.title_info));
+            mToolbar.setTitleTextColor(getResources().getColor(R.color.textColorPrimary));
         }
     }
 
@@ -497,7 +506,6 @@ public class MainActivity extends BaseActivity
         if(hide) {
             Utility.closeKeybaord(this);
             if(isDestinationEditorVisible()){
-                MapFragment.getInstance().slideDownCompass(false);
                 Animation slideDownAnimation = AnimationUtils.loadAnimation(MainActivity.this,
                         R.anim.anim_slide_up_out_of_screen);
                 slideDownAnimation.reset();
@@ -513,6 +521,7 @@ public class MainActivity extends BaseActivity
                     @Override
                     public void onAnimationRepeat(Animation animation) {}
                 });
+//                MapFragment.getInstance().slideDownCompass(false);
             }
             //TODO: 12/08 it was uncommented - clicked amenity detail is hidden when changing the tab and when coming back to it, there's not way to reshow it
 //            MapFragment.getInstance().showDirectionCard(false, null, 0, null, null, null);
@@ -522,15 +531,29 @@ public class MainActivity extends BaseActivity
 
             mToolbar.setVisibility(View.INVISIBLE); //SHOUDLN'T SET TO GONE - it changes the layout height resulting in map re-rendering and slows down process
             rlDestinationEditor.setVisibility(View.VISIBLE);
-            MapFragment.getInstance().slideDownCompass(true);
-
             Animation slideDownAnimation = AnimationUtils.loadAnimation(MainActivity.this,
                     R.anim.anim_slide_down);
             slideDownAnimation.reset();
             rlDestinationEditor.startAnimation(slideDownAnimation);
+            slideDownAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
 
             setDestionationNames(start, dest); //set destination names - ex) start : A&W , destionation : Club Monaco
             moveFocusToNextEditText();
+//            MapFragment.getInstance().slideDownCompass(true);
 
 //            if(start == null || start.equals("")) etStartStore.requestFocus(); //if start name is empty, request focus to destination
 //            else etDestStore.requestFocus();

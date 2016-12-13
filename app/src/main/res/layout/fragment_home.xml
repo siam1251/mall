@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:tabTextColor="@color/gray"
-                    app:tabSelectedTextColor="@color/parkingSaveBtnTextColor"
+                    app:tabSelectedTextColor="@color/tabSelectedTextColor"
                     app:tabIndicatorColor="@color/themeColor"
                     app:tabIndicatorHeight="@dimen/home_tab_indicator_height"
                     app:tabMode="fixed"

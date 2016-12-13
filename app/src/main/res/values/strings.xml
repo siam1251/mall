@@ -26,12 +26,14 @@
     <string name="title_testing">INSERT MSG</string>
     <string name="title_open_instagram_app">Open in Instagram App</string>
     <string name="title_open_instagram_website">View on Instagram Website</string>
-    <string name="title_map">Map</string>
     <string name="title_do_not_save_parking">Close Without Saving</string>
     <string name="title_remove_my_parking">Remove My Parking</string>
     <string name="title_add_notes">Add Notes</string>
     <string name="title_permission_denied">Location Access Denied</string>
     <string name="title_change_parking_spot">Change Parking Spot</string>
+    <string name="title_map">Map</string>
+    <string name="title_directory">Mall Directory</string>
+    <string name="title_info">Mall Information</string>
 
 
     <!--FRAGMENT TITLE-->
