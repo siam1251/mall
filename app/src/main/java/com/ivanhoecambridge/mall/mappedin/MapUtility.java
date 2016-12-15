@@ -111,7 +111,7 @@ public class MapUtility {
      * @param pinDrawable
      * @return overlay2DImage with transparent pixel around it as a hack to adjust its sizes
      */
-    public static Overlay2DImage getOverlayImageWithPadding(Context context, Drawable pinDrawable) {
+    private static Overlay2DImage getOverlayImageWithPadding(Context context, Drawable pinDrawable) {
         // Actual size of logo
         int width = pinDrawable.getIntrinsicWidth();
         int height = pinDrawable.getIntrinsicHeight();

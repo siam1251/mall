@@ -10,7 +10,7 @@
     },
     {
       "type":"57c6e482bbf0141f92000002",
-      "enabled":false,
+      "enabled":true,
       "title": "Family Washrooms",
       "externalIds":[
         "family-washroom"
@@ -66,7 +66,7 @@
     },
     {
       "type":"57c6e490bbf0141f92000003",
-      "enabled":true,
+      "enabled":false,
       "title": "Ferry Shuttle",
       "externalIds":[
         "shuttle"
@@ -82,7 +82,7 @@
     },
     {
       "type":"57c6e468bbf0141f92000001",
-      "enabled":true,
+      "enabled":false,
       "title": "Electric Vehicle Charging Station",
       "externalIds":[
         "charging"

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.AdditionalInfo;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.InfoList;
+import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.Links;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.Location;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
@@ -247,7 +248,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
 
                 cTAList.add(googleMap);
                 cTAList.add(phone);
-                cTAList.add(webpage);
+                addWebpages(cTAList, info);
 
             } else if(mMallInfoType.contains(getResources().getString(R.string.mall_info_social))){
                 CTA facebook = new CTA(
@@ -323,6 +324,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 cTAList.add(pinterest);
             } else {
                 addLocationCTA(cTAList, info);
+                addWebpages(cTAList, info);
                 cTAList.add(phone);
                 cTAList.add(webpage);
             }
@@ -357,6 +359,28 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                                 intent.putExtra(Constants.ARG_LOCATION_MAP_NAME, loc.getMapName());
                                 setResult(Activity.RESULT_OK, intent);
                                 finish();
+                            }
+                        }, false);
+                cTAList.add(location);
+            }
+        }
+    }
+
+    private void addWebpages(List<CTA> cTAList, final InfoList info){
+        List<Links> links = info.getLinks();
+        if(links != null) {
+            for(final Links link : links) {
+                CTA location = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_button,
+                        R.drawable.icn_web,
+                        link.getLinkTitle(),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Utility.openWebPage(MallInfoDetailActivity.this, link.getLinkURL());
+
                             }
                         }, false);
                 cTAList.add(location);

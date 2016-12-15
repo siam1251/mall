@@ -33,9 +33,10 @@
         android:layout_marginTop="8dp"
         android:textColor="@color/white"
         android:textAlignment="center"
-        android:textSize="19sp"
+        android:textSize="17sp"
         android:lineSpacingMultiplier="1.35"
         android:text="Get smart deal recommendations from your favourite stores and shopping interests"/>
+        android:textSize="19sp"
 
     <Button
         android:visibility="gone"

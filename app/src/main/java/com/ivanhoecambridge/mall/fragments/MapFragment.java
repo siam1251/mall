@@ -112,7 +112,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     enum SearchMode { STORE, ROUTE_START, ROUTE_DESTINATION }
     public SearchMode mSearchMode = SearchMode.STORE;
 
-    enum IdType { ID, EXTERNAL_CODE, AMENITY, PARKING };
+    enum IdType { ID, EXTERNAL_CODE, AMENITY, PARKING, INSTRUCTION };
 
     private ProgressBar pb;
     private View view;
@@ -145,6 +145,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private RelativeLayout rlSlidingPanel; ///todo: disabled for testing
 
     private View viewRoute;
+    private RelativeLayout rlRoute;
     private String mSearchString = "";
     public MenuItem mSearchItem;
     private MenuItem mFilterItem;
@@ -154,8 +155,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     //MAPPED IN
     //when using getOverlayImageWithPadding
-    private final int PIN_AMENITY_IMAGE_SIZE_DP = 20; //ends up 64 px
-    private final int PIN_PARKING_IMAGE_SIZE_DP = 35; //ends up 64 px
+    private final int PIN_AMENITY_IMAGE_SIZE_DP = 30; //ends up 64 px
+    private final int PIN_PARKING_IMAGE_SIZE_DP = 30; //ends up 64 px
 
     /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 60;
     private final int PIN_PARKING_IMAGE_SIZE_DP = 60;*/
@@ -165,8 +166,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
 
     private final int CAMERA_ZOOM_LEVEL_NEAREST_PARKING = 90; //
-//    private final int CAMERA_ZOOM_LEVEL = 40; //BIGGER - farther, SMALLER - closer
-    private final int CAMERA_ZOOM_LEVEL = 25; //BIGGER - farther, SMALLER - closer
+//    private final int CAMERA_ZOOM_LEVEL_DEFAULT = 40; //BIGGER - farther, SMALLER - closer
+    private final int CAMERA_ZOOM_LEVEL_DEFAULT = 25; //BIGGER - farther, SMALLER - closer
+    private final int CAMERA_ZOOM_LEVEL_ZOOMED_IN = 2; //BIGGER - farther, SMALLER - closer
     private final int BLUR_RADIUS = 20;
     private boolean accessibleDirections = false;
     private MapViewDelegate delegate = this;
@@ -206,6 +208,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private boolean mAnimationInProgress = false;
     private boolean mBearingEntered = false; //indicate whether it has entered onCameraBearingChange to decide when to start showing the compass icon
     private int mLevelPanelYDistance = 0;
+    private int mRootViewHeight = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -221,6 +224,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         pb.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.themeColor),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
         rlDirection = (RelativeLayout) view.findViewById(R.id.rlDirection);
+        rlRoute = (RelativeLayout) view.findViewById(R.id.rlRoute);
         tvStoreName = (TextView) view.findViewById(R.id.tvStoreName);
         tvCategoryName = (TextView) view.findViewById(R.id.tvCategoryName);
         llDirection = (LinearLayout) view.findViewById(R.id.llDirection);
@@ -235,7 +239,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         flCompass = (FrameLayout) view.findViewById(R.id.flCompass);
         rlSlidingPanel = (RelativeLayout) view.findViewById(R.id.rlSlidingPanel);
         rlSlidingPanel.setVisibility(View.GONE); //DELETED FOR TESTING
-
 
         ivCompass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -299,7 +302,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         mMainActivity.setOnParkingClickListener(MapFragment.this);
         setupRecyclerView();
         setHasOptionsMenu(true);
-//        setViewListener();
+        setViewListener();
         initializeMap();
 
         /*CoordinatorLayout coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorlayout);
@@ -354,9 +357,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     mMainActivity.rlDestinationEditor.setTag(mMainActivity.rlDestinationEditor.getVisibility());
                     if(flCompass.getVisibility() == View.VISIBLE) {
                         if(mMainActivity.rlDestinationEditor.getVisibility() == View.VISIBLE){ //Visibility changed!
-                            slideDownCompass(true);
+                            flCompass.animate().setStartDelay(100).y((int) getResources().getDimension(R.dimen.map_compass_top_width_expanded));
+//                            slideDownCompass(true);
                         } else {
-                            slideDownCompass(false);
+                            flCompass.animate().setStartDelay(100).y((int) getResources().getDimension(R.dimen.map_compass_top_width));
+//                            slideDownCompass(false);
                         }
                     }
 
@@ -615,7 +620,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 for(int i = 0; i < maps.length; i++){
                     Map map = maps[i];
                     if(map.getShortName().equals(shortName)){
-                        if(i == mCurrentLevelIndex) return;
+                        if(i == mCurrentLevelIndex) {
+                            setLevelImageView(maps);
+                            return;
+                        }
                         mCurrentLevelIndex = i;
                         break;
                     }
@@ -624,13 +632,19 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 for(int i = 0; i < maps.length; i++){
                     Map map = maps[i];
                     if(map.getName().equals(mapName)){
-                        if(i == mCurrentLevelIndex) return;
+                        if(i == mCurrentLevelIndex) {
+                            setLevelImageView(maps);
+                            return;
+                        }
                         mCurrentLevelIndex = i;
                         break;
                     }
                 }
             } else {
-                if(mapIndex == mCurrentLevelIndex) return;
+                if(mapIndex == mCurrentLevelIndex) {
+                    setLevelImageView(maps);
+                    return;
+                }
                 mCurrentLevelIndex = mapIndex;
             }
 
@@ -638,6 +652,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             mapView.setMap(maps[mCurrentLevelIndex]);
             tvLevel.setText(maps[mCurrentLevelIndex].getShortName());
             setLevelImageView(maps);
+            showInstruction(maps[mCurrentLevelIndex].getElevation());
 
             //highlight the store that has been pending
             if(mPendingExternalCode != null) {
@@ -800,6 +815,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     arriveAtLocation = ((Polygon) destinationPolygon).getLocations().get(0);
                 } else if(destinationPolygon instanceof CustomLocation){
                     arriveAt = ((CustomLocation) destinationPolygon).getName();
+                    arriveAtLocation = ((CustomLocation) destinationPolygon);
                 }
 //                directions = destinationPolygon.directionsFrom(activeVenue, startPolygon, departFrom, arriveAt);
                 directions = destinationPolygon.directionsFrom(activeVenue, startPolygon, ((Polygon) startPolygon).getLocations().get(0), arriveAtLocation);
@@ -837,6 +853,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName(), null);
                 dropDestinationPin(destinationPolygonCoordinate, getResources().getDrawable(R.drawable.icn_wayfinding_destination));
                 dropVortexOnThePath(directions.getInstructions());
+                showInstruction(maps[mCurrentLevelIndex].getElevation());
 
                 return true;
             } else {
@@ -882,12 +899,24 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     }
 
     private void dropVortexPin(VortexPin vortexPin){
-        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), vortexPin.getVortexDrawable());
+//        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), vortexPin.getVortexPinDrawable());
+        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), vortexPin.getVortexPinDrawable());
         label.setPosition(vortexPin.getVortexCoordinate());
         vortexPin.setVortexPin(new Pin(vortexPin.getVortexCoordinate(), label));
         mapView.addMarker(label, false);
     }
 
+    private void showInstruction(double elevation){
+        if(mVortexPins.size() > 0) {
+            int position = VortexPin.getPostionOfVortext(mVortexPins, elevation);
+            if(position == -1) {
+                showDirectionCard(false, null, 0, null, null, null);
+                return;
+            }
+            VortexPin vortexPin = mVortexPins.get(position);
+            showDirectionCard(true, IdType.INSTRUCTION, 0, vortexPin.getTextInstruction(), "", vortexPin.getVortexInstructionDrawable());
+        }
+    }
 
     /**
      * creates arraylist of map shortnames of floors where the path's drawn onto
@@ -907,13 +936,13 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
 
     private void zoomInOut(){
-        /*float zoomLevel = CAMERA_ZOOM_LEVEL; //camera's currently too zoomed out
+        /*float zoomLevel = CAMERA_ZOOM_LEVEL_DEFAULT; //camera's currently too zoomed out
         //allow the camera to zoom in if it's too far away or keep its current zoom if it's close enough
-        if(mapView.getCamera().getZoom() <= CAMERA_ZOOM_LEVEL) { //already zoomed in - keep the same zoom
+        if(mapView.getCamera().getZoom() <= CAMERA_ZOOM_LEVEL_DEFAULT) { //already zoomed in - keep the same zoom
             zoomLevel = mapView.getCamera().getZoom();
         }
         mapView.getCamera().setZoomTo(zoomLevel);*/
-        mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL);
+        mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_DEFAULT);
     }
 
     private void showSavedParkingDetail(){
@@ -1320,15 +1349,15 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         clone.mutate(); //prevent all instance of drawables from being affected
         clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.MULTIPLY); //change white colors
 //        clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.SRC_ATOP); //change the entire colors
-//        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), clone);
-        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), clone);
+        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), clone);
+//        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), clone);
         label.setPosition(coordinate);
 //        LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         //if I remove the lable at the same spot and add another label with new LocationLabelClicker,
         //removed label's LocationLabelClicker gets called again so shouldn't add another labelClicker
         mSelectedPin = new Pin(coordinate, label);
         overlays.put(label, mLocationClickersMap.get(coordinate)); //should add to overlays so when removing pins, selected (highlighted) ones get removed too
-        mapView.addMarker(label, true);
+        mapView.addMarker(label, false);
     }
 
 
@@ -1339,19 +1368,20 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
     public void dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable){
         //TODO: only add pins to the current floor
-//        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable);
+        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable);
         if(mLocationClickersMap != null && mLocationClickersMap.containsKey(coordinate)) return;
-        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), pinDrawable);
+//        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), pinDrawable);
         label.setPosition(coordinate);
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         overlays.put(label, clicker);
         mLocationClickersMap.put(coordinate, clicker);
-        mapView.addMarker(label, true);
+        mapView.addMarker(label, false);
 
     }
 
     private void dropDestinationPin(final Coordinate coordinate, final Drawable pinDrawable){
-        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), pinDrawable);
+//        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), pinDrawable);
+        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable);
         label.setPosition(coordinate);
         mDestinationPin = new Pin(coordinate, label);
         mapView.addMarker(label, false);
@@ -1820,31 +1850,35 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     public void showDirectionCard(final boolean showCard, final IdType idType, final int id, final String storeName, final String categoryName, final Drawable amenityDrawable){
         if(!showCard){
             if(isDirectionCardVisible()){ //only do animation if direction card is visible
-//                slidePanel(false, false);
                 slidePanel(false);
-                /*rlDirection.setVisibility(View.GONE);
-                Animation slideUpAnimation = AnimationUtils.loadAnimation(getActivity(),
-                        R.anim.anim_slide_down_out_of_screen);
-                slideUpAnimation.reset();
-                rlDirection.startAnimation(slideUpAnimation);*/
             }
             mAmenityClicked = "";
             return;
         }
 
         //if idType is NOT parking && (NOT amenity and id == 0 or -1) return
-        if( !idType.equals(IdType.PARKING) && !idType.equals(IdType.AMENITY) && (id == 0 || id == -1)) {
+        if( !idType.equals(IdType.PARKING) && !idType.equals(IdType.AMENITY) && !idType.equals(IdType.INSTRUCTION)
+                && (id == 0 || id == -1)) {
             return;
         }
 
-        if(amenityDrawable != null && idType.equals(IdType.AMENITY)) {
+        tvStoreName.setMaxLines(1);
+        tvParkingNote.setVisibility(View.GONE);
+        rlRoute.setVisibility(View.VISIBLE);
+
+        if(amenityDrawable != null && idType.equals(IdType.AMENITY) || idType.equals(IdType.INSTRUCTION)) {
+            tvCategoryName.setVisibility(View.GONE);
             ivAmenity.setVisibility(View.VISIBLE);
             ivAmenity.setImageDrawable(amenityDrawable);
+            if(idType.equals(IdType.INSTRUCTION)) {
+                tvStoreName.setMaxLines(2);
+                rlRoute.setVisibility(View.GONE);
+            }
         } else {
+            tvCategoryName.setVisibility(View.VISIBLE);
             ivAmenity.setVisibility(View.GONE);
         }
 
-        tvParkingNote.setVisibility(View.GONE);
 
         ArrayList<KcpContentPage> dealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true);
         ArrayList<KcpContentPage> recommendedDealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true);
@@ -1858,7 +1892,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 }
             }
         }
-
 
         if(dealsForThisStore.size() > 0 || idType.equals(IdType.PARKING)) {
 //            slidePanel(true, true);
@@ -1928,25 +1961,27 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         });
     }
 
-    private void slidePanel(boolean up){
-        RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
+    private void slidePanel(final boolean up){
+        final RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
         View rootView = getActivity().findViewById(android.R.id.content);
-
+        if(mRootViewHeight == 0) mRootViewHeight = rootView.getHeight();
         if(up) {
             if(llDeals.getVisibility() == View.VISIBLE) {
                 param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_extended);
-            } else param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_normal);
+            } else {
+                param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_normal);
+            }
             rlDirection.setLayoutParams(param);
-            logger.debug("sliding up - rootView.getHeight() : " + rootView.getHeight() + " rlSlidingPanel.getHeight() : " + rlSlidingPanel.getHeight() + " param.height : " + param.height);
-            rlSlidingPanel.animate().y(rootView.getHeight() - rlSlidingPanel.getHeight() - (int) getResources().getDimension(R.dimen.map_level_panel_space_btn_direction_panel) - param.height);
+            if(rlRoute.getVisibility() != View.VISIBLE) param.height = (int) getActivity().getResources().getDimension(R.dimen.bottom_sheet_height_reduced);
+            logger.debug("sliding up - rootView.getHeight() : " + mRootViewHeight + " rlSlidingPanel.getHeight() : " + rlSlidingPanel.getHeight() + " param.height : " + param.height);
+            rlSlidingPanel.animate().setStartDelay(100).y(mRootViewHeight - rlSlidingPanel.getHeight() - (int) getResources().getDimension(R.dimen.map_level_panel_space_btn_direction_panel) - param.height);
         } else {
             rlDirection.setVisibility(View.GONE);
             Animation slideUpAnimation = AnimationUtils.loadAnimation(getActivity(),
                     R.anim.anim_slide_down_out_of_screen);
             slideUpAnimation.reset();
             rlDirection.startAnimation(slideUpAnimation);
-            logger.debug("sliding down - rootView.getHeight() : " + rootView.getHeight() + " rlSlidingPanel.getHeight() : " + rlSlidingPanel.getHeight() + " param.height : " + param.height);
-            rlSlidingPanel.animate().y(rootView.getHeight() - rlSlidingPanel.getHeight() - (int) getResources().getDimension(R.dimen.map_level_panel_bot_margin));
+            rlSlidingPanel.animate().setStartDelay(100).y(mRootViewHeight - rlSlidingPanel.getHeight() - (int) getResources().getDimension(R.dimen.map_level_panel_bot_margin));
         }
     }
 

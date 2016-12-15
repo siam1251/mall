@@ -20,7 +20,7 @@ public class MallConstants {
     public static String CINEMA_NAME = "SilverCity";
 
     //TWITTER
-    public final static String TWITTER_SCREEN_NAME = 		"Metropolis";
+    public final static String TWITTER_SCREEN_NAME = 		"MetropolisatMet";
     public final static int 	NUMB_OF_TWEETS = 		5; //how many twitter tweets it will show at a time
     public final static String TWITTER_API_KEY = 		"bM8knFuF8iYVrYIULOZvyt2ew";
     public final static String TWITTER_API_SECRET = 	"8KzSsk0u1yhYU5RUrnV5T2O75KeIUUXicbXXOD2eUxnRxvc4DB";

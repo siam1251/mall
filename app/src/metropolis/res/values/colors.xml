@@ -8,7 +8,7 @@
 
 
     <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#72231E1B</color> <!--status bar-->
+    <color name="colorPrimaryDark">#f37021</color> <!--status bar-->
     <color name="textColorPrimary">#000000</color>
     <color name="hamburger_menu">#212121</color>
     <color name="active_mall_off_state">#000000</color>

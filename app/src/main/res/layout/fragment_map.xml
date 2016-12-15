@@ -15,6 +15,7 @@
         android:layout_centerInParent="true"
         />
 
+
     <ProgressBar
         android:visibility="gone"
         android:layout_centerInParent="true"
@@ -113,10 +114,9 @@
                         android:layout_marginRight="60dp"
                         android:maxLines="1"
                         android:ellipsize="end"
-
                         android:textColor="#ddffffff"
                         android:layout_marginBottom="2dp"
-                        android:text="Holt Renfrew"/>
+                        android:text="Take Escalator 1 down to P2 and Wal kStraight"/>
 
                     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                         app:fontFamily="@string/fontFamily_roboto_regular"
