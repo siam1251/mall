@@ -51,7 +51,7 @@
             android:gravity="center"
             android:text="@string/action_done"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/intrstd_cat_next_btn_height"
             />

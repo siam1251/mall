@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="18dp"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:text="Andrew Cherwenka"/>
@@ -86,7 +86,7 @@
                 android:background="@drawable/btn_style_corner_radius_with_selected_state"
                 android:gravity="center"
                 android:text="@string/drawer_sign_in"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 />
 
         </LinearLayout>
@@ -116,7 +116,7 @@
                 app:fontFamily="@string/fontFamily_roboto_light"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:textColor="@color/place_txt"
                 android:text="@string/drawer_my_favourites"
                 />
@@ -219,7 +219,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:textColor="@color/place_txt"
                 android:text="@string/drawer_my_gift_card"
                 />
@@ -284,7 +284,7 @@
                         app:fontFamily="@string/fontFamily_roboto_medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="10sp"
+                        android:textSize="10dp"
                         android:text="@string/privacy_policy"
                         android:textColor="@color/privacy_policy_text_color"
                         />
@@ -296,7 +296,7 @@
                         app:fontFamily="@string/fontFamily_roboto_medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="10sp"
+                        android:textSize="10dp"
                         android:text="•"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
@@ -311,7 +311,7 @@
                         app:fontFamily="@string/fontFamily_roboto_medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="10sp"
+                        android:textSize="10dp"
                         android:text="@string/terms_of_service"
                         android:textColor="@color/privacy_policy_text_color"
                         />
@@ -328,7 +328,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
-                    android:textSize="10sp"
+                    android:textSize="10dp"
                     android:text="@string/privacy_policy"
                     android:textColor="@color/privacy_policy_text_color"
                     />-->
@@ -340,7 +340,7 @@
                     app:fontFamily="@string/fontFamily_roboto_regular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="10sp"
+                    android:textSize="10dp"
                     android:text="1.0.0"
                     android:textColor="@color/insta_desc_color"
                     android:layout_marginBottom="13dp"

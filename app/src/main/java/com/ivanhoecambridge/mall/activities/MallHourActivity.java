@@ -29,6 +29,7 @@ import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -102,6 +103,7 @@ public class MallHourActivity extends AppCompatActivity {
             TextView tvHolidayhoursList = (TextView) findViewById(R.id.tvHolidayhoursList);
 
             List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(Constants.NUMB_OF_DAYS);
+            KcpUtility.sortHoursList((ArrayList) comingHolidays);
 
             if(comingHolidays.size() != 0){
                 llHolidayHours.setVisibility(View.VISIBLE);

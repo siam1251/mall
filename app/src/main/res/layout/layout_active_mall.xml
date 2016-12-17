@@ -20,7 +20,7 @@
         android:layout_height="90dp"
         android:text="@string/active_mall_welcome_msg"
         android:textColor="#fafafa"
-        android:textSize="19sp"
+        android:textSize="19dp"
         android:textAlignment="center"
         />
 
@@ -58,7 +58,7 @@
         android:layout_height="130dp"
         android:text="@string/warning_no_deal_for_today"
         android:textColor="@color/active_mall_empty_placeholder_text"
-        android:textSize="14sp"
+        android:textSize="14dp"
         />
 
     <android.support.v7.widget.RecyclerView
@@ -101,7 +101,7 @@
         android:layout_height="130dp"
         android:text="@string/warning_no_event_for_today"
         android:textColor="@color/active_mall_empty_placeholder_text"
-        android:textSize="14sp"
+        android:textSize="14dp"
         />
 
     <android.support.v7.widget.RecyclerView

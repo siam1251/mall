@@ -1120,7 +1120,9 @@ public class MainActivity extends BaseActivity
                                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                             Amenities.saveToggle(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, isChecked);
                                             if(amenity.getExternalIds() == null || amenity.getExternalIds().length == 0) return;
-                                            if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(isChecked, amenity.getExternalIds()[0], false, null);
+                                            for(String externalId : amenity.getExternalIds()) {
+                                                if(mOnAmenityClickListener != null) mOnAmenityClickListener.onAmenityClick(isChecked, externalId, false, null);
+                                            }
                                         }
                                     }
                             )

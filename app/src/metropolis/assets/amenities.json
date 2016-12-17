@@ -62,7 +62,8 @@
       "enabled":true,
       "title": "Bus Loop",
       "externalIds":[
-        "shuttle"
+        "shuttle",
+        "subway"
       ]
     }
   ]

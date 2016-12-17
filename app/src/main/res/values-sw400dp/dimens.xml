@@ -1,7 +1,7 @@
 <resources>
 
     <!--ONBOARDING-->
-    <dimen name="onboarding_first_title">26sp</dimen>
-    <dimen name="onboarding_second_title">23sp</dimen>
+    <dimen name="onboarding_first_title">26dp</dimen>
+    <dimen name="onboarding_second_title">23dp</dimen>
 
 </resources>

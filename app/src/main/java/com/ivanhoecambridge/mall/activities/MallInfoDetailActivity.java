@@ -120,6 +120,12 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_tourist_info);
             } else if(mMallInfoType.contains(getResources().getString(R.string.mall_info_accessibility))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_accessibility);
+            } else {
+                String imageFileName = "";
+                if(info.getImageURLs() != null && info.getImageURLs().size() > 0) imageFileName = info.getImageURLs().get(0);
+                int id = getResources().getIdentifier(imageFileName, "drawable", getPackageName());
+                ivMallInfoBanner.setImageResource(id);
+
             }
 
             ExpandableTextView etvMallInfoDetail = (ExpandableTextView) findViewById(R.id.etvMallInfoDetail);
@@ -229,6 +235,20 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                         }
                     }, true);
 
+
+            CTA hour = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_hours,
+                    info.getHours() == null ? null : info.getHours(),
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            return;
+                        }
+                    }, true);
+
             if(mMallInfoType.equals(getResources().getString(R.string.mall_info_gift_card))){
                 addLocationCTA(cTAList, info);
 //                cTAList.add(location);
@@ -323,6 +343,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 cTAList.add(youtube);
                 cTAList.add(pinterest);
             } else {
+//                cTAList.add(hour);
                 addLocationCTA(cTAList, info);
                 addWebpages(cTAList, info);
                 cTAList.add(phone);

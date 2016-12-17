@@ -150,12 +150,14 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     public MenuItem mSearchItem;
     private MenuItem mFilterItem;
     public CategoryStoreRecyclerViewAdapter mPlaceRecyclerViewAdapter;
-    private ArrayList<String> mRecommendedDealsExternalCodeList;
+//    private ArrayList<String> mRecommendedDealsExternalCodeList;
+    private ArrayList<KcpContentPage> mRecommendedDealsContentPageList;
     private Drawable mAmeityDrawable;
 
     //MAPPED IN
     //when using getOverlayImageWithPadding
-    private final int PIN_AMENITY_IMAGE_SIZE_DP = 30; //ends up 64 px
+    private final int PIN_AMENITY_IMAGE_SIZE_DP = 24; //ends up 64 px
+    private final int PIN_VORTEX_IMAGE_SIZE_DP = 24; //ends up 64 px
     private final int PIN_PARKING_IMAGE_SIZE_DP = 30; //ends up 64 px
 
     /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 60;
@@ -452,7 +454,17 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                         } else stopNavigation();
                     }
 
-                    ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocationWithExternalCode(externalCode);
+
+                    Polygon placePolygon = getPolygonWithPlaceExternalId(externalCode);
+                    if(placePolygon != null) {
+                        mapView.getCamera().focusOn(placePolygon);
+                        didTapPolygon(placePolygon);
+                        zoomInOut();
+                    } else {
+                        showDirectionCard(true, IdType.ID, storeId, storeName, categoryName, null);
+                    }
+
+                    /*ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocationWithExternalCode(externalCode);
                     if(polygons != null && polygons.size() > 0) {
                         //TODO: loop through to highlight all the polygons found in getPolygons()
                         //todo: highlight the polygon that's on the current map level
@@ -463,7 +475,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 //                        mapView.getCamera().setZoomTo(200);
                     } else {
                         showDirectionCard(true, IdType.ID, storeId, storeName, categoryName, null);
-                    }
+                    }*/
 
                     if(!mSearchMode.equals(SearchMode.STORE)) mMainActivity.moveFocusToNextEditText();
 
@@ -509,6 +521,13 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         mMainActivity.rvMap.setAdapter(mSectionedAdapter);
     }
 
+    private Polygon getPolygonWithPlaceExternalId(String placeExternalCode){
+        ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocationWithExternalCode(placeExternalCode);
+        if(polygons != null && polygons.size() > 0) {
+            return polygons.get(0);
+        }
+        return null;
+    }
 
     // Get the basic info for all Venues we have access to
     private class GetVenuesCallback implements MappedinCallback<Venue[]> {
@@ -596,8 +615,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL, false));
         for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
             Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
-            final String externalID = amenity.getExternalIds()[0];
-            onAmenityClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_AMENITY + externalID, amenity.isEnabled()), amenity.getExternalIds()[0], false, null);
+            for(String externalID : amenity.getExternalIds()) {
+                onAmenityClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_AMENITY + externalID, amenity.isEnabled()), externalID, false, null);
+            }
         }
 
         if(ParkingManager.isParkingLotSaved(getActivity())) {
@@ -899,8 +919,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     }
 
     private void dropVortexPin(VortexPin vortexPin){
-//        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), vortexPin.getVortexPinDrawable());
-        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), vortexPin.getVortexPinDrawable());
+        Overlay2DImage label = new Overlay2DImage(getVortexAndDestinationPinSize(), getVortexAndDestinationPinSize(), vortexPin.getVortexPinDrawable());
         label.setPosition(vortexPin.getVortexCoordinate());
         vortexPin.setVortexPin(new Pin(vortexPin.getVortexCoordinate(), label));
         mapView.addMarker(label, false);
@@ -1350,7 +1369,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.MULTIPLY); //change white colors
 //        clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.SRC_ATOP); //change the entire colors
         Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), clone);
-//        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), clone);
         label.setPosition(coordinate);
 //        LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         //if I remove the lable at the same spot and add another label with new LocationLabelClicker,
@@ -1362,26 +1380,40 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
 
     private int getImagePinSize(){
-//        return KcpUtility.dpToPx(getActivity(), PIN_AMENITY_IMAGE_SIZE_DP);
         return PIN_AMENITY_IMAGE_SIZE_DP;
+    }
+
+    private int getVortexAndDestinationPinSize(){
+        return PIN_VORTEX_IMAGE_SIZE_DP;
     }
 
     public void dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable){
         //TODO: only add pins to the current floor
         Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable);
         if(mLocationClickersMap != null && mLocationClickersMap.containsKey(coordinate)) return;
-//        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), pinDrawable);
         label.setPosition(coordinate);
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         overlays.put(label, clicker);
         mLocationClickersMap.put(coordinate, clicker);
         mapView.addMarker(label, false);
-
     }
 
-    private void dropDestinationPin(final Coordinate coordinate, final Drawable pinDrawable){
-//        Overlay2DImage label = MapUtility.getOverlayImageWithPadding(getActivity(), pinDrawable);
+    public void dropDealsPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable, String externalId) {
+        //TODO: only add pins to the current floor
         Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable);
+        label.setPosition(coordinate);
+
+        LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate, externalId);
+        overlays.put(label, clicker);
+        mLocationClickersMap.put(coordinate, clicker);
+
+        mapView.addMarker(label, false);
+    }
+
+
+
+    private void dropDestinationPin(final Coordinate coordinate, final Drawable pinDrawable){
+        Overlay2DImage label = new Overlay2DImage(getVortexAndDestinationPinSize(), getVortexAndDestinationPinSize(), pinDrawable);
         label.setPosition(coordinate);
         mDestinationPin = new Pin(coordinate, label);
         mapView.addMarker(label, false);
@@ -1475,7 +1507,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         //TODO: when deals list's refreshed, this mRecommendedDealsExternalCodeList should be set to null to refresh this list too
 
 //          ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true); //ALL DEALS
-        ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS
+        /*ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS
         if(mRecommendedDealsExternalCodeList == null) {
             if(dealContentPages == null) return;
             mRecommendedDealsExternalCodeList = new ArrayList<String>();
@@ -1497,10 +1529,43 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     List<Coordinate> coords = location.getNavigatableCoordinates();
                     for(Coordinate coordinate : coords) {
                         Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_deals, 0);
-                        dropPin(coordinate, location, amenityDrawable);
+//                        dropPin(coordinate, location, amenityDrawable);
+                        dropDealsPin(coordinate, location, amenityDrawable);
                     }
                 }
                 mRecommendedDealsExternalCodeList.add(kcpContentPage.getExternalCode());
+            }
+        }*/
+
+        //          ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true); //ALL DEALS
+        ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS
+        if(mRecommendedDealsContentPageList == null) {
+            if(dealContentPages == null) return;
+            mRecommendedDealsContentPageList = new ArrayList<KcpContentPage>();
+            for(KcpContentPage kcpContentPage : dealContentPages) {
+                mRecommendedDealsContentPageList.add(kcpContentPage);
+            }
+        }
+
+        for( KcpContentPage kcpContentPage: mRecommendedDealsContentPageList) {
+            Location location = CustomLocation.getLocationWithExternalCode(kcpContentPage.getExternalCode());
+            if(location != null) removePin(location);
+        }
+
+        if(enabled && dealContentPages != null) {
+            mRecommendedDealsContentPageList = new ArrayList<KcpContentPage>();
+            for(KcpContentPage kcpContentPage : dealContentPages) {
+                Location location = CustomLocation.getLocationWithExternalCode(kcpContentPage.getExternalCode());
+                if(location != null){
+                    List<Coordinate> coords = location.getNavigatableCoordinates();
+                    for(Coordinate coordinate : coords) {
+                        Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_deals, 0);
+//                        dropPin(coordinate, location, amenityDrawable);
+                        KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                        dropDealsPin(coordinate, location, amenityDrawable, kcpPlace.getExternalCode());
+                    }
+                }
+                mRecommendedDealsContentPageList.add(kcpContentPage);
             }
         }
     }
@@ -1680,10 +1745,21 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
             this.coordinate = coordinate;
         }
 
+        //if there is store associated with this location label
+        public LocationLabelClicker(Location location, Drawable pinDrawable, Overlay2DImage label, Coordinate coordinate, String placeExternalId){
+            this.location = (CustomLocation) location;
+            this.drawable = pinDrawable;
+            this.label = label;
+            this.coordinate = coordinate;
+            this.placeExternalId = placeExternalId;
+        }
+
         public CustomLocation location = null;
         public Drawable drawable = null;
         public Overlay2DImage label = null;
         public Coordinate coordinate = null;
+        public String placeExternalId = null;
+
         public void onClick() {
             if(path != null || coordinate.getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) return; //map shouldn't be clicakble when the paths drawn
             if(location != null) {
@@ -1692,8 +1768,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
                     String parkingNote = ParkingManager.getParkingNotes(getActivity());
                     showParkingDetail(location, false, parkingLotName, entranceName, parkingNote, -1, -1);
+                } else if(placeExternalId != null) { //if deal's clicked, tab the polygon instead
+                    didTapPolygon(getPolygonWithPlaceExternalId(placeExternalId));
+                    return;
                 }
-
 
                 mapView.getCamera().focusOn(coordinate);
                 zoomInOut();

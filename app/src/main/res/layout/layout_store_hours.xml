@@ -15,7 +15,7 @@
         app:fontFamily="@string/fontFamily_roboto_medium"
         android:text="@string/hours_of_operation"
         android:gravity="center_horizontal"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:layout_width="match_parent"
         android:layout_height="19dp"
         android:layout_marginTop="20dp"
@@ -43,7 +43,7 @@
         <TextView
             android:id="@+id/tvHolidayName"
             android:gravity="center_horizontal"
-            android:textSize="14sp"
+            android:textSize="14dp"
             android:text="Holiday Names"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

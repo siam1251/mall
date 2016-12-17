@@ -52,7 +52,7 @@
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
                         android:textColor="@color/place_txt"
-                        android:textSize="16sp"
+                        android:textSize="16dp"
                         android:text="@string/map_filter_see_deal"/>
 
                     <View
@@ -86,7 +86,7 @@
                         android:gravity="center_vertical"
                         android:layout_marginLeft="35dp"
                         android:layout_height="match_parent"
-                        android:textSize="16sp"
+                        android:textSize="16dp"
                         android:textColor="@color/place_txt"
                         android:layout_width="wrap_content"
                         android:text="@string/map_filter_save_parking"/>
@@ -115,7 +115,7 @@
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:id="@+id/tvHolidayName"
                     android:gravity="center_vertical"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:text="@string/map_view_amenities_on_map"
                     android:textColor="@color/place_txt"
                     android:layout_width="match_parent"

@@ -136,7 +136,7 @@
       "menuTitle": "Metropolis Express",
       "title": "Metropolis Express Train",
       "subtitle": "Ride the trackless train that runs through Metropolis",
-      "imageURLs": ["mallinfo-banner-metropolisexpress"],
+      "imageURLs": ["img_mallinfo_express_train"],
       "phoneNumber": "(604) 438-4715",
       "phoneURL": "tel://+16044384715",
       "details": "Take a ride on the trackless train that runs through Metropolis!\n\nPick up station in the The Bay Atrium under the Food Court on the Ground Level. The train's disembarkation area is located at the Bus Loop. Adults ride the train for $1 and youth age 12 and under ride for free.\n\nAll proceeds go to local charities.\n\nClosed (Lunch Break): 2 pm to 3:15 pm."
@@ -144,7 +144,7 @@
     {
       "title": "Free EV Charging Stations",
       "subtitle": "Recharge your vehicle at one of our 6 stations",
-      "imageURLs": ["mallinfo-banner-freeevcharging"],
+      "imageURLs": ["img_mallinfo_ev_station"],
       "hours": "7 AM to 11 PM",
       "phoneNumber": "(604) 438-4715",
       "phoneURL": "tel://+16044384715",
@@ -153,7 +153,7 @@
     {
       "title": "Lockers",
       "subtitle": "Free up your hands while you shop",
-      "imageURLs": ["mallinfo-banner-GENERIC"],
+      "imageURLs": ["img_mallinfo_lockers"],
       "phoneNumber": "(604) 438-4715",
       "phoneURL": "tel://+16044384715",
       "details": "Need to free up your hands during your visit?\n\nThe lockers are located in these three locations:\nUpper Level, Food Court (near Burger King)\nUpper Level (near Old Navy)\nGround level (near Real Canadian Superstore)\n\nPlease note that lockers are cleaned out each evening as they are not meant to be used for long-term storage. Lockers are accessible during mall hours.\n\nCost: $1.00 / day."
@@ -161,7 +161,7 @@
     {
       "title": "Free WiFi Access",
       "subtitle": "Surf the web with our free complementary WiFi",
-      "imageURLs": ["mallinfo-banner-freewifi"],
+      "imageURLs": ["img_mallinfo_wifi"],
       "phoneNumber": "(604) 438-4715",
       "phoneURL": "tel://+16044384715",
       "details": "Enjoy complimentary WiFi at one of the following locations:\n\nGrand Court\nAtrium Court\nFood Court\nCustomer Service areas\nUpper Level Seating area (near Zara)\n\nTo connect, log on to the network\n\"Metropolis at Metrotown\""
@@ -169,12 +169,18 @@
     {
       "title": "Bus and SkyTrain",
       "subtitle": "See public transit information and schedules",
-      "imageURLs": ["mallinfo-banner-busskytrain"],
+      "imageURLs": ["img_mallinfo_bus_skytrain"],
       "locations": [
         {
           "name": "Bus Loop, Ground Level",
           "locationID": "574da3d0ec5f2d16f000000f",
           "mapName": "Ground Level",
+          "locationType": "amenity"
+        },
+        {
+          "name": "Skytrain Station, Upper Level",
+          "locationID": "582e0698124ae57889000000",
+          "mapName": "Upper Level & UP2",
           "locationType": "amenity"
         }
       ],

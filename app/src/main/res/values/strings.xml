@@ -126,8 +126,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="title_activity_scrolling">ScrollingActivity</string>
 
     <!--interested category-->
-    <string name="intrstd_cat_help_us">To help us determine your preferences,\nhighlight categories below that interest you</string>
-    <string name="intrstd_cat_recommended_section_header">Here are the stores we think you will like!\nSelect which are your favourite:</string>
+    <string name="intrstd_cat_help_us">Highlight your preferred categories to get deals and stores recommendations</string>
+    <string name="intrstd_cat_recommended_section_header">Based on your selections, here are some stores we think you’ll like.\nAdd them to your favourites to get exclusive deals!</string>
     <string name="intrstd_cat_other_section_header">... and if we missed any, make sure to\ncapture them below:</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="intrstd_store_desc">Here are the stores we think you will like!\nSelect which are your favourite:</string>

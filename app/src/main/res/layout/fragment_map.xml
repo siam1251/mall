@@ -110,7 +110,7 @@
                         android:id="@+id/tvStoreName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
+                        android:textSize="18dp"
                         android:layout_marginRight="60dp"
                         android:maxLines="1"
                         android:ellipsize="end"
@@ -125,7 +125,7 @@
                         android:id="@+id/tvCategoryName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textSize="14dp"
                         android:textColor="#89ffffff"
                         android:text="Department Store"/>
 
@@ -140,7 +140,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvCategoryName"
                         android:id="@+id/tvParkingNote"
-                        android:textSize="14sp"
+                        android:textSize="14dp"
                         android:textColor="#89ffffff"
                         android:text="Pillar 15F near stairs"
                         />
@@ -183,7 +183,7 @@
                     android:ellipsize="end"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:textColor="#ffffff"
                     android:text="Save Now, Wear Now"/>
 
@@ -198,7 +198,7 @@
                     android:ellipsize="end"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:textColor="#a8a8a8"
                     android:text="+2 More Deals"/>
 

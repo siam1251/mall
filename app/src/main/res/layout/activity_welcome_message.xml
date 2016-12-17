@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/welcome_title"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:textColor="@color/toolbar_text"
             />
 
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/welcome_message_ask"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:textColor="@color/detail_title_text"
             android:lineSpacingMultiplier="1.2"
             />
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="13dp"
-            android:textSize="14sp"
+            android:textSize="14dp"
             android:textColor="@color/welcome_btn_color"
             android:text="@string/welcome_yes"
             />
@@ -65,7 +65,7 @@
             android:id="@+id/tvWelcomeNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="14dp"
             android:textColor="@color/welcome_btn_color"
             android:text="@string/welcome_no"
             />
@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:text="@string/welcome_message"
         android:textColor="@color/white"
-        android:textSize="27sp"
+        android:textSize="27dp"
         />
 
 

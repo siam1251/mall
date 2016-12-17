@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/intrstd_txt_off"
         android:text="Surface Lot"
-        android:textSize="16sp"/>
+        android:textSize="16dp"/>
 
     <View
         style="@style/separater"

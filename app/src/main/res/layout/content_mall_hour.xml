@@ -33,8 +33,8 @@
             android:paddingTop="21dp"
             android:paddingBottom="21dp"
             android:layout_marginBottom="23dp"
-            android:paddingLeft="26dp"
-            android:paddingRight="26dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:background="@drawable/rectangle_mall_hour_holiday"
             android:layout_height="wrap_content">
 
@@ -42,7 +42,7 @@
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 android:id="@+id/tvHolidayName"
                 android:gravity="center_horizontal"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:text="Holiday Hours"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginBottom="18dp"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:textColor="@color/intrstd_cat_desc"
                 android:text="December 1 - January 6"
                 />
@@ -68,7 +68,7 @@
                 android:lineSpacingMultiplier="@dimen/detail_line_spacing_multiplier"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:layout_marginBottom="4dp"
                 android:text="Extended Holiday Hours from 10 AM to 11 PM, and from 10 AM to 8 PM on weekends."
                 />
@@ -81,7 +81,7 @@
                 android:lineSpacingMultiplier="@dimen/detail_line_spacing_multiplier"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:text="Extended Holiday Hours from 10 AM to 11 PM, and from 10 AM to 8 PM on weekends."
                 />
 

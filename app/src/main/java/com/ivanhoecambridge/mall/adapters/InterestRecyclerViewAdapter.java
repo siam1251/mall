@@ -176,7 +176,6 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public void resetLikedList() {
-//        mRemovedStoreFavs = new HashMap<String, KcpContentPage>(mTempStoreFav);
         mRemovedStoreFavs.putAll(mTempStoreFav);
         mTempStoreFav.clear();
         notifyDataSetChanged();
@@ -184,7 +183,6 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public void resetFavCatList() {
         mRemovedCatFavs.putAll(mTempCatFav);
-//        mRemovedCatFavs = new HashMap<String, KcpCategories>(mTempCatFav);
         mTempCatFav.clear();
         notifyDataSetChanged();
     }

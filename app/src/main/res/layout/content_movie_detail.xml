@@ -26,7 +26,7 @@
                 android:id="@+id/tvShowtimesTitle"
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 android:gravity="center"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:textColor="@color/sub_category_txt"
@@ -41,7 +41,7 @@
                 android:id="@+id/tvShowtimes"
                 app:fontFamily="@string/fontFamily_roboto_regular"
                 android:gravity="center"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:textColor="#787a86"
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/movie_watch_trailer"
                 android:layout_marginLeft="14dp"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:textColor="@color/black"
                 />
 
@@ -97,7 +97,7 @@
                 android:paddingRight="14dp"
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 android:text="@string/movie_synopsis"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:textColor="@color/sub_category_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -108,7 +108,7 @@
                 android:paddingLeft="14dp"
                 android:paddingRight="14dp"
                 app:fontFamily="@string/fontFamily_roboto_regular"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="18dp"
                 android:text="In the midst of veteran con man Nicky’s latest scheme, a woman from his past - now an accomplished femme fatale - shows up and throws his plans for a loop."
@@ -131,7 +131,7 @@
 
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     app:fontFamily="@string/fontFamily_roboto_medium"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:layout_width="90dp"
                     android:textColor="@color/sub_category_txt"
                     android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvMovieStarring"
                     app:fontFamily="@string/fontFamily_roboto_regular"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:text="Will Smith, Margot Robbie, Rodrigo Santoro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -158,7 +158,7 @@
 
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     app:fontFamily="@string/fontFamily_roboto_medium"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:layout_width="90dp"
                     android:textColor="@color/sub_category_txt"
                     android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvMovieDirectors"
                     app:fontFamily="@string/fontFamily_roboto_regular"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:text="Glenn Ficarra, John Requa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -185,7 +185,7 @@
 
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     app:fontFamily="@string/fontFamily_roboto_medium"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:layout_width="90dp"
                     android:textColor="@color/sub_category_txt"
                     android:layout_height="wrap_content"
@@ -194,7 +194,7 @@
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvMovieAdvisory"
                     app:fontFamily="@string/fontFamily_roboto_regular"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:text="PG - Violence, Not Recommended for Young Children, Tobacco Use"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>

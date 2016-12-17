@@ -59,7 +59,7 @@
 
             <TextView
                 android:id="@+id/tvPlaceHolderTitle"
-                android:textSize="22sp"
+                android:textSize="22dp"
                 android:textColor="@color/empty_placeholder_title_text"
                 android:gravity="center"
                 android:text="@string/empty_placeholder_title"
@@ -70,7 +70,7 @@
             <TextView
                 android:lineSpacingMultiplier="1.1"
                 android:id="@+id/tvPlaceholderDesc"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:textColor="@color/empty_placeholder_desc_text"
                 android:layout_marginLeft="26dp"
                 android:layout_marginRight="26dp"

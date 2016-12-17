@@ -11,7 +11,7 @@
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textColor="@color/detail_title_text"
         android:gravity="center_vertical"
         android:text="Fri. Dec 3"
@@ -25,7 +25,7 @@
         android:id="@+id/tvHour"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textColor="@color/detail_title_text"
         android:text="10:00 AM - 11:00 PM"
         />

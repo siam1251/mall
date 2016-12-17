@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textColor="@color/place_txt"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:text="Customer Service"
         android:gravity="center_vertical"
         />
