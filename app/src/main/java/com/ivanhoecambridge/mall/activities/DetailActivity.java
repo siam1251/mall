@@ -331,8 +331,12 @@ public class DetailActivity extends AppCompatActivity {
                 KcpPlaces kcpPlaces = kcpContentPage.getStore();
                 if(kcpPlaces != null){
                     todaysHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+
+
                     List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(Constants.NUMB_OF_DAYS);
                     if(comingHolidays == null || comingHolidays.size() == 0) comingHolidays = KcpPlacesRoot.getInstance().getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL).getHolidaysWithin(7);
+                    KcpUtility.sortHoursList((ArrayList) comingHolidays);
+
                     String overrideHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, Calendar.getInstance());
                     if(!overrideHour.equals("")) todaysHour = overrideHour;
                     todaysHour = todaysHour.replace("-", "to");
@@ -529,6 +533,7 @@ public class DetailActivity extends AppCompatActivity {
 
     public View getMallHourListItem(int daysPastToday, List<KcpOverrides.ContinuousOverride> comingHolidays){
         View v = getLayoutInflater().inflate(R.layout.list_item_store_hour, null, false);
+//        v.getLayoutParams().height = KcpUtility.dpToPx(this, 50);
         try {
             TextView tvDate = (TextView) v.findViewById(R.id.tvDate);
             TextView tvMallHour = (TextView) v.findViewById(R.id.tvHour);
@@ -866,5 +871,11 @@ public class DetailActivity extends AppCompatActivity {
         } catch (Exception e) {
             logger.error(e);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        http://stackoverflow.com/questions/31367599/how-to-update-recyclerview-adapter-data
     }
 }

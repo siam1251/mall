@@ -62,6 +62,8 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
 
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setNestedScrollingEnabled(true);
+
+        setUpRecyclerView();
     }
 
 
@@ -278,7 +280,8 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
     @Override
     protected void onResume() {
         super.onResume();
-        setUpRecyclerView();
+        if(mAdapter != null) mAdapter.notifyDataSetChanged();
+//        setUpRecyclerView();
     }
 
     public void onFinish(int resultCode){

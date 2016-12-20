@@ -836,9 +836,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 } else if(destinationPolygon instanceof CustomLocation){
                     arriveAt = ((CustomLocation) destinationPolygon).getName();
                     arriveAtLocation = ((CustomLocation) destinationPolygon);
+                } else if (destinationPolygon instanceof  Coordinate) {
+
                 }
-//                directions = destinationPolygon.directionsFrom(activeVenue, startPolygon, departFrom, arriveAt);
                 directions = destinationPolygon.directionsFrom(activeVenue, startPolygon, ((Polygon) startPolygon).getLocations().get(0), arriveAtLocation);
+
                 if (directions != null) {
                     path = new Path(directions.getPath(), 1.5f, 1.5f, getResources().getColor(R.color.map_destination_store));
                     mapView.addPath(path);
@@ -849,11 +851,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 if(destinationPolygon instanceof Polygon) {
                     highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
                     destinationPolygonCoordinate = ((Polygon) destinationPolygon).getAnchor();
-
-
                 } else if(destinationPolygon instanceof CustomLocation && !((CustomLocation) destinationPolygon).getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) {
                     //when path's drawn to amenity from store (ex. a&w to washroom), route's drawn to the nearest amenity. so that nearest amenity pin needs to be highlighted
-                    ArrayList<Coordinate> navigatableCoords = ((CustomLocation) destinationPolygon).getNavigatableCoordinates() ;
+                    /*ArrayList<Coordinate> navigatableCoords = ((CustomLocation) destinationPolygon).getNavigatableCoordinates() ;
                     Coordinate startPolygonCoord = ((Polygon) startPolygon).getLocations().get(0).getNavigatableCoordinates().get(0);
                     if(navigatableCoords != null && startPolygonCoord != null) {
                         int nearestCoordinatePosition = MapUtility.getNearestCoordinatePositionFromStore(navigatableCoords, startPolygonCoord);
@@ -863,7 +863,15 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                             destinationPolygonCoordinate = navigatableCoords.get(nearestCoordinatePosition);
                             locationLabelClicker.highlightThisLabel();
                         }
-                    }
+                    }*/
+                } else if (destinationPolygon instanceof Coordinate){
+                    Coordinate startPolygonCoord = ((Polygon) startPolygon).getLocations().get(0).getNavigatableCoordinates().get(0);
+                        clearHighlightedColours();
+                        LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(destinationPolygon);
+                        if(locationLabelClicker != null) {
+                            destinationPolygonCoordinate = (Coordinate) destinationPolygon;
+                            locationLabelClicker.highlightThisLabel();
+                        }
                 } else {
                     destinationPolygonCoordinate = ((CustomLocation) destinationPolygon).getNavigatableCoordinates().get(0);
                 }
@@ -1776,8 +1784,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 mapView.getCamera().focusOn(coordinate);
                 zoomInOut();
 
-                destinationPolygon = location;
                 if(location == mSavedParkingLocation) return;
+//                destinationPolygon = location; //if location's set as destinationPolygon, it will automatically choose the closest amenity, in which case, the closest amenity has to be manually highlighted in didTapPolygon
+                destinationPolygon = coordinate;
 
                 if(mSelectedPin == null) {
                     highlightThisLabel();

@@ -7,42 +7,54 @@
 
     <RelativeLayout
         android:layout_centerInParent="true"
-        android:layout_width="@dimen/store_hour_list_width"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_height="24dp">
 
         <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_bold"
             android:layout_alignParentLeft="true"
             android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
             android:textSize="14dp"
             android:textColor="@color/detail_title_text"
-            android:gravity="center_vertical"
-            android:text="Fri. Dec 3"
+            android:gravity="center"
+            android:text="FRI"
             />
+        android:gravity="center_vertical"
 
         <TextView
-            android:layout_alignParentRight="true"
-            android:gravity="right|center_vertical"
             android:id="@+id/tvHour"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
+            android:layout_width="180dp"
+            android:layout_height="match_parent"
             android:textSize="14dp"
             android:textColor="@color/detail_title_text"
-            android:text="10:00 AM - 11:00 PM"
+            android:layout_toRightOf="@+id/tvDate"
+            android:text="CLOSED"
+            android:gravity="center"
             />
+        android:layout_alignParentRight="true"
+        android:gravity="right|center_vertical"
+
     </RelativeLayout>
 
     <com.ivanhoecambridge.mall.views.ThemeColorImageView
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
         ThemedImageView:filterColor="@color/info_mall_hour_holiday_stroke"
-        android:visibility="gone"
         android:id="@+id/ivHolidayIndicator"
+        android:src="@drawable/icn_holidayflag"
         android:layout_width="@dimen/hour_holiday_indicator_width"
         android:layout_height="@dimen/hour_holiday_indicator_width"
-        android:src="@drawable/icn_holidayflag"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"/>
+        android:visibility="invisible"
+        />
+
+    <!--<View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        style="@style/separater"
+        />-->
 
 </RelativeLayout>

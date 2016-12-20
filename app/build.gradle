@@ -72,7 +72,7 @@ android {
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
 
 
-            versionName "0.0.6"
+            versionName "0.0.7"
         }
 
         tsawwassenmills {
@@ -85,7 +85,7 @@ android {
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
 
 
-            versionName "0.0.5"
+            versionName "0.0.6"
         }
 
         crossironmills {
@@ -97,7 +97,7 @@ android {
             buildConfigField 'Boolean', 'WHITE_FAV', 'false'
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
 
-            versionName "0.0.4"
+            versionName "0.0.5"
         }
 
     }
