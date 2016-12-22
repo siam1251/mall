@@ -59,20 +59,20 @@ android {
             buildConfigField 'Boolean', 'MOVIE', 'true'
             buildConfigField 'Boolean', 'WHITE_FAV', 'true' //show white fav icon in case the selected fav's same as the toolbar bg color
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'true'
-            versionName "0.0.7"
+            versionName "0.0.9"
         }
 
         vaughanmills {
             applicationId "com.ivanhoecambridge.mall.vaughanmills"
             buildConfigField 'String', 'MALL', '"vaughan-mills"'
             buildConfigField 'Boolean', 'PUSH', 'true'
-            buildConfigField 'Boolean', 'PARKING_POLYGON', 'false'
+            buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
             buildConfigField 'Boolean', 'MOVIE', 'false'
             buildConfigField 'Boolean', 'WHITE_FAV', 'false'
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
 
 
-            versionName "0.0.7"
+            versionName "0.0.8"
         }
 
         tsawwassenmills {

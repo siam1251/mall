@@ -892,8 +892,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 //                    zoomInOut();
                     try {
                         if(mSavedParkingPolygon != null && destinationPolygon == mSavedParkingPolygon) {
-//                            mapView.getCamera().focusOn(polygon);
-//                            showSavedParkingDetail();
+                            mapView.getCamera().focusOn(polygon);
+                            zoomInOut();
+                            showSavedParkingDetail();
                         } else {
                             showLocationDetails((CustomLocation) ((Polygon) destinationPolygon).getLocations().get(0));
 //                            if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName(), null);
@@ -1628,14 +1629,16 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                     if(parkingHashMap.containsKey(parkingId)){
                         CustomLocation parkingLocation = parkingHashMap.get(parkingId);
                         List<Coordinate> coords = parkingLocation.getNavigatableCoordinates();
-                        Coordinate parkingLotCoordinate = coords.get(0);
-                        Coordinate storeCoordinate = polygon.getLocations().get(0).getNavigatableCoordinates().get(0);
-                        double distance = storeCoordinate.metersFrom(parkingLotCoordinate);
-                        if(currentDistanceFromParkingToStore == 0.0 || distance < currentDistanceFromParkingToStore) {
-                            currentNearestParkingLocation = parkingLocation;
-                            currentDistanceFromParkingToStore = distance;
-                            currentNearestChildParking = childParking;
-                            entrancePosition = childParkingPosition;
+                        if(coords.size() > 0) {
+                            Coordinate parkingLotCoordinate = coords.get(0);
+                            Coordinate storeCoordinate = polygon.getLocations().get(0).getNavigatableCoordinates().get(0);
+                            double distance = storeCoordinate.metersFrom(parkingLotCoordinate);
+                            if(currentDistanceFromParkingToStore == 0.0 || distance < currentDistanceFromParkingToStore) {
+                                currentNearestParkingLocation = parkingLocation;
+                                currentDistanceFromParkingToStore = distance;
+                                currentNearestChildParking = childParking;
+                                entrancePosition = childParkingPosition;
+                            }
                         }
                     }
                 }
@@ -1784,9 +1787,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 mapView.getCamera().focusOn(coordinate);
                 zoomInOut();
 
-                if(location == mSavedParkingLocation) return;
 //                destinationPolygon = location; //if location's set as destinationPolygon, it will automatically choose the closest amenity, in which case, the closest amenity has to be manually highlighted in didTapPolygon
                 destinationPolygon = coordinate;
+                if(location == mSavedParkingLocation) return;
 
                 if(mSelectedPin == null) {
                     highlightThisLabel();

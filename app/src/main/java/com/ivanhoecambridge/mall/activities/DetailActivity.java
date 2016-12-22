@@ -68,32 +68,37 @@ public class DetailActivity extends AppCompatActivity {
     private View mLayoutStoreHours;
 
     private int mContentPageType;
+    private DealsRecyclerViewAdapter mDealsRecyclerViewAdapter;
+    private DealsRecyclerViewAdapter mEventsRecyclerViewAdapter;
+    private KcpContentPage mKcpContentPage;
+    private ImageView ivFav;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        KcpContentPage kcpContentPage = (KcpContentPage) getIntent().getSerializableExtra(Constants.ARG_CONTENT_PAGE);
+        mKcpContentPage = (KcpContentPage) getIntent().getSerializableExtra(Constants.ARG_CONTENT_PAGE);
 
-        mContentPageType = KcpContentTypeFactory.getContentType(kcpContentPage);
-        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE || kcpContentPage.getStoreId() != 0){
+        mContentPageType = KcpContentTypeFactory.getContentType(mKcpContentPage);
+        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE || mKcpContentPage.getStoreId() != 0){
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
-            KcpPlaces kcpPlace = kcpPlacesRoot.getPlaceById(kcpContentPage.getStoreId());
+            KcpPlaces kcpPlace = kcpPlacesRoot.getPlaceById(mKcpContentPage.getStoreId());
             if(kcpPlace != null) { //there's a store detail already downloaded
 //                kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
-                kcpContentPage.setPlaceList(null, kcpPlace);
+                mKcpContentPage.setPlaceList(null, kcpPlace);
             }
 
-            ArrayList<KcpContentPage> kcpContentPages = kcpPlacesRoot.getContentPagesById(kcpContentPage.getStoreId());
+            ArrayList<KcpContentPage> kcpContentPages = kcpPlacesRoot.getContentPagesById(mKcpContentPage.getStoreId());
             if(kcpContentPages != null) { //there's a store content pages (events/deals/ancmt) already downloaded
-                kcpContentPage.setContentPageList(kcpContentPages);
+                mKcpContentPage.setContentPageList(kcpContentPages);
             }
         }
 
-        init(kcpContentPage);
-        showContentsWithCTL(kcpContentPage);
-        setUpCTA(kcpContentPage);
-        setUpDealsAndEvents(kcpContentPage);
-        downloadIfNecessary(kcpContentPage);
+        init(mKcpContentPage);
+        showContentsWithCTL(mKcpContentPage);
+        setUpCTA(mKcpContentPage);
+        setUpDealsAndEvents(mKcpContentPage);
+        downloadIfNecessary(mKcpContentPage);
     }
 
     public void init(final KcpContentPage kcpContentPage){
@@ -111,35 +116,40 @@ public class DetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
 
-            mLikeLink = kcpContentPage.getLikeLink();
-            if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){ //the like links should be given from place if the type is ITEM_TYPE_STORE
-                mLikeLink = kcpContentPage.getStore().getLikeLink();
-            }
-
-            final ImageView ivFav = (ImageView) toolbar.findViewById(R.id.ivFav);
+            ivFav = (ImageView) toolbar.findViewById(R.id.ivFav);
             if(BuildConfig.WHITE_FAV){
                 ivFav.setImageResource(R.drawable.btn_fav_white);
             }
-            ivFav.setSelected(FavouriteManager.getInstance(DetailActivity.this).isLiked(mLikeLink, kcpContentPage));
-            ivFav.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
-                        @Override
-                        public void OnSqueezeAnimationDone() {
-                            ivFav.setSelected(!ivFav.isSelected());
-                            FavouriteManager.getInstance(DetailActivity.this).addOrRemoveFavContent(mLikeLink, kcpContentPage);
-                        }
-                    }, DetailActivity.this, ivFav);
-                }
-            });
 
             if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
                 ivFav.setVisibility(View.GONE);
             }
+            setFav();
         } catch (Exception e) {
             logger.error(e);
         }
+    }
+
+    private void setFav(){
+        if(mKcpContentPage == null) return;
+        mLikeLink = mKcpContentPage.getLikeLink();
+        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){ //the like links should be given from place if the type is ITEM_TYPE_STORE
+            mLikeLink = mKcpContentPage.getStore().getLikeLink();
+        }
+
+        ivFav.setSelected(FavouriteManager.getInstance(DetailActivity.this).isLiked(mLikeLink, mKcpContentPage));
+        ivFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
+                    @Override
+                    public void OnSqueezeAnimationDone() {
+                        ivFav.setSelected(!ivFav.isSelected());
+                        FavouriteManager.getInstance(DetailActivity.this).addOrRemoveFavContent(mLikeLink, mKcpContentPage);
+                    }
+                }, DetailActivity.this, ivFav);
+            }
+        });
     }
 
     public void downloadIfNecessary(final KcpContentPage kcpContentPage) {
@@ -803,16 +813,16 @@ public class DetailActivity extends AppCompatActivity {
             //Set up RecyclerView for DEAL
             LinearLayout llStoreDeals = (LinearLayout) findViewById(R.id.llStoreDeals);
             RecyclerView rvStoreDeals = (RecyclerView) findViewById(R.id.rvStoreDeals);
-            setUpRecyclerView(llStoreDeals, rvStoreDeals, dealContentpages);
+            mDealsRecyclerViewAdapter = setUpRecyclerView(llStoreDeals, rvStoreDeals, dealContentpages);
 
             //Set up RecyclerView for EVENT
             LinearLayout llStoreEvents = (LinearLayout) findViewById(R.id.llStoreEvents);
             RecyclerView rvStoreEvents = (RecyclerView) findViewById(R.id.rvStoreEvents);
-            setUpRecyclerView(llStoreEvents, rvStoreEvents, eventContentpages);
+            mEventsRecyclerViewAdapter = setUpRecyclerView(llStoreEvents, rvStoreEvents, eventContentpages);
         }
     }
 
-    private void setUpRecyclerView(LinearLayout rvLinearLayout, RecyclerView rv, ArrayList<KcpContentPage> rvItems){
+    private DealsRecyclerViewAdapter setUpRecyclerView(LinearLayout rvLinearLayout, RecyclerView rv, ArrayList<KcpContentPage> rvItems){
         if(rvItems.size() > 0 ) rvLinearLayout.setVisibility(View.VISIBLE);
         LinearLayoutManager staggeredGridLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rv.setLayoutManager(staggeredGridLayoutManager);
@@ -825,6 +835,8 @@ public class DetailActivity extends AppCompatActivity {
         rv.setAdapter(dealsRecyclerViewAdapter);
         SpacesItemDecoration itemDecoration = new SpacesItemDecoration(this, R.dimen.card_horizontal_margin);
         rv.addItemDecoration(itemDecoration);
+        return dealsRecyclerViewAdapter;
+
     }
 
     @Override
@@ -876,6 +888,9 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if(mDealsRecyclerViewAdapter != null) mDealsRecyclerViewAdapter.notifyDataSetChanged();
+        if(mEventsRecyclerViewAdapter != null) mEventsRecyclerViewAdapter.notifyDataSetChanged();
+        setFav();
 //        http://stackoverflow.com/questions/31367599/how-to-update-recyclerview-adapter-data
     }
 }
