@@ -18,20 +18,20 @@ import static com.ivanhoecambridge.mall.constants.Constants.HEADER_KEY_DATAHUB_L
 public class HeaderFactory {
 
     //------------------------------ END POINT ------------------------------
-    public static String HEADER_VALUE_DATAHUB_CATALOG = "crossiron-mills";
+    public static String HEADER_VALUE_DATAHUB_CATALOG = "metropolis-at-metrotown";
     //------------------------------ END POINT ------------------------------
 
-    public static String MALL_NAME = "CrossIron Mills";
-    public static String MAP_VENUE_NAME = "CrossIron Mills";
-    private final static String SEARCH_INDEX_VM_STAGING = "indexes/staging/crossiron-mills-index.msgpack";
-    private final static String SEARCH_INDEX_VM_PRODUCTION = "indexes/production/crossiron-mills-index.msgpack";
+    public static String MALL_NAME = "Senion Demo";
+    public static String MAP_VENUE_NAME = "Kinetic Cafe Office";
+    private final static String SEARCH_INDEX_MP_STAGING = "indexes/staging/metropolis-at-metrotown-index.msgpack";
+    private final static String SEARCH_INDEX_MP_PRODUCTION = "indexes/production/metropolis-at-metrotown-index.msgpack";
 
-    public static String MALL_INFO_URL = "bins/ipqy3";
-    public static String AMENITIES_URL = "bins/5bea9";
-//    public static String PARKING_URL = "bins/2nhk7"; //testing crash
-    public static String PARKING_URL = "bins/231an";
+    public static String MALL_INFO_URL = "bins/16cyj9";
+    public static String AMENITIES_URL = "bins/mexrp"; //externalIds for Stairs & Escalators were manually changed
+    public static String PARKING_URL = "bins/2gidf";
 
     public final static String HEADER_VALUE_ACCEPT = "application/json, application/vnd.kcp.place+json; version=1.0, application/vnd.kcp.view-all-content+json; version=1.0, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.icmp-event+json; version=1.0, application/vnd.kcp.icmp-announcement+json; version=1.0, application/vnd.kcp.blog-post+json; version=1.0, application/vnd.kcp.icmp-twitter+json; version=1.0, application/vnd.kcp.icmp-instagram+json; version=1.0, application/vnd.kcp.icmp-set-interests+json; version=1.0, application/vnd.kcp.icmp-movie+json; version=1.0";
+
 
 
     private static HashMap<String, String> mHeaders;
@@ -66,7 +66,7 @@ public class HeaderFactory {
     }
 
     public static String getSearchIndexUrl(){
-        if(Constants.IS_APP_IN_PRODUCTION) return SEARCH_INDEX_VM_PRODUCTION;
-        else return SEARCH_INDEX_VM_STAGING;
+        if(Constants.IS_APP_IN_PRODUCTION) return SEARCH_INDEX_MP_PRODUCTION;
+        else return SEARCH_INDEX_MP_STAGING;
     }
 }

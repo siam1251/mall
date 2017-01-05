@@ -96,7 +96,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by Kay on 2016-06-20.
  */
-public class MapFragment extends BaseFragment implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener {
+public class MapFragment extends SLIndoorLocationServiceFragment implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener {
 
     private final String TAG = "MapFragment";
 
@@ -270,11 +270,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
         tvLevel = (TextView) view.findViewById(R.id.tvLevel);
         llLevel = (LinearLayout) view.findViewById(R.id.llLevel);
-//        ivUpper = (ImageView) view.findViewById(R.id.ivUpper);
         ivUpper = (ThemeColorImageView) view.findViewById(R.id.ivUpper);
         ivUpperBg = (ThemeColorImageView) view.findViewById(R.id.ivUpperBg);
         ivLower = (ThemeColorImageView) view.findViewById(R.id.ivLower);
-//        ivLower = (ImageView) view.findViewById(R.id.ivLower);
         ivLowerBg = (ThemeColorImageView) view.findViewById(R.id.ivLowerBg);
         ivAmenity = (ImageView) view.findViewById(R.id.ivAmenity);
         ivShadow = (ImageView) view.findViewById(R.id.ivShadow);
@@ -307,45 +305,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         setViewListener();
         initializeMap();
 
-        /*CoordinatorLayout coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorlayout);
-        NestedScrollView bottom_sheet = (NestedScrollView) coordinatorLayout.findViewById(R.id.bottom_sheet);
-        mBottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet);*/
-//        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
-
-        /*CoordinatorLayout coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorlayout);
-        NestedScrollView bottom_sheet = (NestedScrollView) coordinatorLayout.findViewById(R.id.bottom_sheet);
-        mBottomSheetBehavior = BottomSheetBehaviorGoogleMapsLike.from(bottom_sheet);
-        mBottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehaviorGoogleMapsLike.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED:
-                        Log.d("bottomsheet-", "STATE_COLLAPSED");
-                        break;
-                    case BottomSheetBehaviorGoogleMapsLike.STATE_DRAGGING:
-                        Log.d("bottomsheet-", "STATE_DRAGGING");
-                        break;
-                    case BottomSheetBehaviorGoogleMapsLike.STATE_EXPANDED:
-                        Log.d("bottomsheet-", "STATE_EXPANDED");
-                        break;
-                    case BottomSheetBehaviorGoogleMapsLike.STATE_ANCHOR_POINT:
-                        Log.d("bottomsheet-", "STATE_ANCHOR_POINT");
-                        break;
-                    case BottomSheetBehaviorGoogleMapsLike.STATE_HIDDEN:
-                        Log.d("bottomsheet-", "STATE_HIDDEN");
-                        break;
-                    default:
-                        Log.d("bottomsheet-", "STATE_SETTLING");
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-            }
-        });
-*/
         return view;
     }
 
@@ -358,18 +317,19 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 if((int)mMainActivity.rlDestinationEditor.getTag() != newVis) {
                     mMainActivity.rlDestinationEditor.setTag(mMainActivity.rlDestinationEditor.getVisibility());
                     if(flCompass.getVisibility() == View.VISIBLE) {
-                        if(mMainActivity.rlDestinationEditor.getVisibility() == View.VISIBLE){ //Visibility changed!
-                            flCompass.animate().setStartDelay(100).y((int) getResources().getDimension(R.dimen.map_compass_top_width_expanded));
-//                            slideDownCompass(true);
-                        } else {
-                            flCompass.animate().setStartDelay(100).y((int) getResources().getDimension(R.dimen.map_compass_top_width));
-//                            slideDownCompass(false);
-                        }
+                        animateCompass();
                     }
-
                 }
             }
         });
+    }
+
+    private void animateCompass(){
+        if(mMainActivity.rlDestinationEditor.getVisibility() == View.VISIBLE){ //Visibility changed!
+            flCompass.animate().setStartDelay(100).y((int) getResources().getDimension(R.dimen.map_compass_top_width_expanded));
+        } else {
+            flCompass.animate().setStartDelay(100).y((int) getResources().getDimension(R.dimen.map_compass_top_width));
+        }
     }
 
     public void initializeMap() {
@@ -399,18 +359,9 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
         ArrayList<KcpPlaces> kcpPlacesFiltered;
 
-
-
         if(mSearchString.equals("")) kcpPlacesFiltered = new ArrayList<>(kcpPlaces);
         else {
             kcpPlacesFiltered = KcpPlacesRoot.getInstance().getPlaceByName(mSearchString.toLowerCase());
-            /*kcpPlacesFiltered = new ArrayList<>();
-            for(int i = 0; i < kcpPlaces.size(); i++){
-
-                if(kcpPlaces.get(i).getPlaceName().toLowerCase().contains(mSearchString.toLowerCase())) {
-                    kcpPlacesFiltered.add(kcpPlaces.get(i));
-                }
-            }*/
         }
 
         mPlaceRecyclerViewAdapter = new CategoryStoreRecyclerViewAdapter(
@@ -1023,6 +974,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
                 if(flCompass.getVisibility() != View.VISIBLE && !mAnimationInProgress && mBearingEntered){
                     flCompass.setAnimation(ProgressBarWhileDownloading.getStartAnimation(null));
                     flCompass.setVisibility(View.VISIBLE);
+                    animateCompass();
                 }
 //                logger.debug("bearing :" + (float)(bearing/Math.PI*180));
                 ivCompass.setRotation((float)(bearing/Math.PI*180));
@@ -2114,5 +2066,4 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
 
     }
-
 }
