@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
@@ -168,6 +169,19 @@ public class MapUtility {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static Location getLocation(double latitude, double longitude){
+        android.location.Location targetLocation = null;//provider name is unecessary
+        try {
+            targetLocation = new android.location.Location("");
+            targetLocation.setLatitude(latitude);//your coords of course
+            targetLocation.setLongitude(longitude);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return targetLocation;
     }
 
 }

@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ivanhoecambridge.mall">
 
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -11,6 +13,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <permission
         android:name="${applicationId}.permission.C2D_MESSAGE"
@@ -18,6 +22,11 @@
 
     <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+
+    <uses-feature
+            android:name="android.hardware.bluetooth_le"
+            android:required="false" />
 
     <application
         tools:replace="android:allowBackup"
@@ -147,20 +156,20 @@
             android:theme="@style/Theme.Transparent" />
 
         <!-- MAPPED IN ICMP-->
-        <meta-data
+        <!--<meta-data
             android:name="com.mappedin.sdk.Username"
             android:value="56f151b2c753ca4c0d000000" />
         <meta-data
             android:name="com.mappedin.sdk.Password"
-            android:value="0a11271a19b109e9211bbcc256f2e35d" />
+            android:value="0a11271a19b109e9211bbcc256f2e35d" />-->
 
         <!-- MAPPED IN KINETIC-->
-        <!--<meta-data
+        <meta-data
             android:name="com.mappedin.sdk.Username"
             android:value="571a61f8c753ca0c5c000001" />
         <meta-data
             android:name="com.mappedin.sdk.Password"
-            android:value="f4a241fc2f4d2b5666d5c322b60d7f7a" />-->
+            android:value="f4a241fc2f4d2b5666d5c322b60d7f7a" />
 
         <!-- FABRIC CRASHLYTICS -->
         <meta-data
@@ -196,6 +205,10 @@
         </receiver>-->
 
         <service
+            android:name="com.senionlab.slutilities.service.SLIndoorLocationService"
+            android:exported="false" />
+
+        <service
             android:name="com.exacttarget.etpushsdk.ETPushService"
             android:enabled="true" />
 
@@ -214,7 +227,6 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

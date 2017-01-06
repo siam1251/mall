@@ -48,6 +48,10 @@ import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.bluedot.BlueDotPosition;
+import com.ivanhoecambridge.mall.bluedot.MapViewWithBlueDot;
+import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenter;
+import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
 import com.ivanhoecambridge.mall.constants.Constants;
 import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
@@ -80,10 +84,12 @@ import com.mappedin.sdk.MappedinCallback;
 import com.mappedin.sdk.Navigatable;
 import com.mappedin.sdk.Overlay;
 import com.mappedin.sdk.Overlay2DImage;
+import com.mappedin.sdk.Overlay2DLabel;
 import com.mappedin.sdk.Path;
 import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.RawData;
 import com.mappedin.sdk.Venue;
+import com.senionlab.slutilities.type.SLPixelPoint2D;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,7 +102,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by Kay on 2016-06-20.
  */
-public class MapFragment extends SLIndoorLocationServiceFragment implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener {
+//public class MapFragment extends SLIndoorLocationServiceFragment implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot {
+public class MapFragment extends BaseFragment implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot {
 
     private final String TAG = "MapFragment";
 
@@ -105,9 +112,6 @@ public class MapFragment extends SLIndoorLocationServiceFragment implements MapV
         if(sMapFragment == null) sMapFragment = new MapFragment();
         return sMapFragment;
     }
-
-
-
 
     enum SearchMode { STORE, ROUTE_START, ROUTE_DESTINATION }
     public SearchMode mSearchMode = SearchMode.STORE;
@@ -133,6 +137,7 @@ public class MapFragment extends SLIndoorLocationServiceFragment implements MapV
     private FrameLayout flCompass;
     private TextView tvLevel;
     private LinearLayout llLevel;
+    private LinearLayout llBlueDot;
     private ThemeColorImageView ivUpper;
     private ThemeColorImageView ivLower;
 //    private ImageView ivUpper;
@@ -212,6 +217,11 @@ public class MapFragment extends SLIndoorLocationServiceFragment implements MapV
     private int mLevelPanelYDistance = 0;
     private int mRootViewHeight = 0;
 
+
+    //BLUE DOT
+    private SLIndoorLocationPresenter slIndoorLocationPresenter;
+    private Pin mBlueDotPin;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -270,6 +280,7 @@ public class MapFragment extends SLIndoorLocationServiceFragment implements MapV
 
         tvLevel = (TextView) view.findViewById(R.id.tvLevel);
         llLevel = (LinearLayout) view.findViewById(R.id.llLevel);
+        llBlueDot = (LinearLayout) view.findViewById(R.id.llBlueDot);
         ivUpper = (ThemeColorImageView) view.findViewById(R.id.ivUpper);
         ivUpperBg = (ThemeColorImageView) view.findViewById(R.id.ivUpperBg);
         ivLower = (ThemeColorImageView) view.findViewById(R.id.ivLower);
@@ -304,6 +315,10 @@ public class MapFragment extends SLIndoorLocationServiceFragment implements MapV
         setHasOptionsMenu(true);
         setViewListener();
         initializeMap();
+
+        if(BuildConfig.BLUEDOT) {
+            slIndoorLocationPresenter = new SLIndoorLocationPresenterImpl(getActivity(), this);
+        }
 
         return view;
     }
@@ -540,6 +555,7 @@ public class MapFragment extends SLIndoorLocationServiceFragment implements MapV
 
             if(pb != null) pb.setVisibility(View.GONE);
             setMapLevelArrowVisibility();
+            setBlueDotIconVisibility();
 
             mMapLoaded = true;
             if(mMapInterface != null) mMapInterface.mapLoaded();
@@ -554,6 +570,14 @@ public class MapFragment extends SLIndoorLocationServiceFragment implements MapV
     private void setMapLevelArrowVisibility(){
         if(maps != null && maps.length > 1) {
             rlSlidingPanel.setVisibility(View.VISIBLE);
+            llLevel.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setBlueDotIconVisibility(){
+        if(BuildConfig.BLUEDOT) {
+            rlSlidingPanel.setVisibility(View.VISIBLE);
+            llBlueDot.setVisibility(View.VISIBLE);
         }
     }
 
@@ -1348,6 +1372,46 @@ public class MapFragment extends SLIndoorLocationServiceFragment implements MapV
         return PIN_VORTEX_IMAGE_SIZE_DP;
     }
 
+
+    @Override
+    public void dropBlueDot(BlueDotPosition blueDotPosition) {
+        if(maps == null) return;
+        if(mBlueDotPin != null) {
+//            return;
+            mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
+            mBlueDotPin = null;
+        }
+
+        android.location.Location targetLocation = MapUtility.getLocation(blueDotPosition.getLatitude(), blueDotPosition.getLongitude());
+        Overlay2DImage label = new Overlay2DImage(getVortexAndDestinationPinSize(), getVortexAndDestinationPinSize(), getResources().getDrawable(R.drawable.icn_directions_bg));
+        Coordinate coordinate = new Coordinate(targetLocation, maps[blueDotPosition.getMappedInFloor()]);
+        label.setPosition(coordinate);
+        mBlueDotPin = new Pin(coordinate, label);
+        mapView.addMarker(label, false);
+    }
+
+    @Override
+    public void translateXBlueDot(float value) {
+    }
+
+    @Override
+    public void translateYBlueDot(float value) {
+    }
+
+    @Override
+    public void translateBlueDot(float x, float y) {
+        if(mBlueDotPin != null) {
+            /*mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
+            android.location.Location targetLocation = MapUtility.getLocation(x, y);
+            Coordinate newCoordinate = new Coordinate(targetLocation, maps[0]);
+            Overlay2DImage label = mBlueDotPin.getOverlay2DImage();
+            label.setPosition(newCoordinate);
+            mBlueDotPin.setCoordinate(newCoordinate);
+            mapView.addMarker(label, false);*/
+        }
+    }
+
+
     public void dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable){
         //TODO: only add pins to the current floor
         Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable);
@@ -2046,6 +2110,19 @@ public class MapFragment extends SLIndoorLocationServiceFragment implements MapV
     @Override
     public void onResume() {
         super.onResume();
+        if(slIndoorLocationPresenter != null) slIndoorLocationPresenter.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(slIndoorLocationPresenter != null) slIndoorLocationPresenter.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(slIndoorLocationPresenter != null) slIndoorLocationPresenter.onDestroy();
     }
 
     @Override
