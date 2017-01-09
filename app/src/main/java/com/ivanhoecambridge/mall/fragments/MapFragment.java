@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableWrapper;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -163,6 +164,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     //when using getOverlayImageWithPadding
     private final int PIN_AMENITY_IMAGE_SIZE_DP = 24; //ends up 64 px
     private final int PIN_VORTEX_IMAGE_SIZE_DP = 24; //ends up 64 px
+    private final int PIN_BLUEDOT = 48; //ends up 64 px
     private final int PIN_PARKING_IMAGE_SIZE_DP = 30; //ends up 64 px
 
     /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 60;
@@ -221,6 +223,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     //BLUE DOT
     private SLIndoorLocationPresenter slIndoorLocationPresenter;
     private Pin mBlueDotPin;
+    private Pin mBlueDotCompass;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1372,44 +1376,55 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         return PIN_VORTEX_IMAGE_SIZE_DP;
     }
 
-
     @Override
-    public void dropBlueDot(BlueDotPosition blueDotPosition) {
+    public void dropBlueDot(double x, double y) {
         if(maps == null) return;
-        if(mBlueDotPin != null) {
-//            return;
-            mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
-            mBlueDotPin = null;
-        }
+        android.location.Location targetLocation = MapUtility.getLocation(x, y);
+        Overlay2DImage label;
+        Coordinate coordinate  = new Coordinate(targetLocation, maps[mCurrentLevelIndex]);
 
-        android.location.Location targetLocation = MapUtility.getLocation(blueDotPosition.getLatitude(), blueDotPosition.getLongitude());
-        Overlay2DImage label = new Overlay2DImage(getVortexAndDestinationPinSize(), getVortexAndDestinationPinSize(), getResources().getDrawable(R.drawable.icn_directions_bg));
-        Coordinate coordinate = new Coordinate(targetLocation, maps[blueDotPosition.getMappedInFloor()]);
+        if(mBlueDotPin == null) {
+            label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluebutton));
+            mBlueDotPin = new Pin(coordinate, label);
+        } else {
+            mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
+            label = mBlueDotPin.getOverlay2DImage();
+            mBlueDotPin.setCoordinate(coordinate);
+        }
         label.setPosition(coordinate);
-        mBlueDotPin = new Pin(coordinate, label);
         mapView.addMarker(label, false);
     }
 
     @Override
-    public void translateXBlueDot(float value) {
+    public void drawHeading(double x, double y, float heading) {
+        if(maps == null) return;
+        /*android.location.Location targetLocation = MapUtility.getLocation(x, y);
+        Overlay2DImage label;
+        Drawable rotatedHeading = MapUtility.getRotatedDrawable(getActivity(), R.drawable.icn_bluedot_orientation_pointer, heading);
+//        Drawable rotatedHeading = MapUtility.rotate(getActivity(), R.drawable.icn_bluedot_orientation_pointer, heading);
+        label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, rotatedHeading);
+        Coordinate coordinate = new Coordinate(targetLocation, maps[mCurrentLevelIndex]);;
+        if(mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
+        mBlueDotCompass = new Pin(coordinate, label);
+        mBlueDotCompass.setCoordinate(coordinate);
+        label.setPosition(coordinate);
+        mapView.addMarker(label, false);*/
     }
 
     @Override
-    public void translateYBlueDot(float value) {
+    public int getCurrentFloor() {
+        return mCurrentLevelIndex;
     }
 
     @Override
-    public void translateBlueDot(float x, float y) {
+    public void removeBlueDot() {
         if(mBlueDotPin != null) {
-            /*mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
-            android.location.Location targetLocation = MapUtility.getLocation(x, y);
-            Coordinate newCoordinate = new Coordinate(targetLocation, maps[0]);
-            Overlay2DImage label = mBlueDotPin.getOverlay2DImage();
-            label.setPosition(newCoordinate);
-            mBlueDotPin.setCoordinate(newCoordinate);
-            mapView.addMarker(label, false);*/
+            mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
+            mBlueDotPin = null;
         }
     }
+
+
 
 
     public void dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable){

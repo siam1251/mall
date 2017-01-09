@@ -27,6 +27,11 @@ public class BlueDotPosition {
         mappedInFloor = SLMapPositions.getMapLevel(floorNr.intValue());
     }
 
+    public BlueDotPosition(double latitude, double longitude){
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public double getLongitude() {
         return longitude;
     }

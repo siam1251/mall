@@ -1,6 +1,7 @@
 package com.ivanhoecambridge.mall.bluedot;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.senionlab.slutilities.geofencing.interfaces.SLGeometry;
@@ -67,11 +68,16 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         @Override
         public void didUpdateLocation(SLCoordinate3D location, double uncertaintyRadius, SLLocationStatus status) {
             synchronized (this) {
-                logger.debug("didUpdateLocation++" + " slCoordinate3D: " + location + " uncertaintyRadius: " + uncertaintyRadius);
-
                 BlueDotPosition blueDotPosition = new BlueDotPosition(location);
-                positionAndHeadingMapVisualization.setPos(blueDotPosition);
-                mapViewWithBlueDot.dropBlueDot(blueDotPosition);
+                if(blueDotPosition.getMappedInFloor() != mapViewWithBlueDot.getCurrentFloor()) {
+                    mapViewWithBlueDot.removeBlueDot();
+                    return;
+                } else {
+                    long dtMili = System.currentTimeMillis();
+                    Log.d("bluedot", "BlueDotPosition RAW: "  + blueDotPosition.getLatitude() + " " + blueDotPosition.getLongitude());
+//                    mapViewWithBlueDot.dropBlueDot(blueDotPosition);
+                    positionAndHeadingMapVisualization.setPos(blueDotPosition);
+                }
             }
         }
 
@@ -83,8 +89,9 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         }
         @Override
         public void didUpdateHeading(double heading, SLHeadingStatus status) {
-//            logger.debug("didUpdateHeading++" + " heading: " + heading + " SLHeadingStatus: " + status);
+            Log.d("bluedot", "BlueDotPosition: "  + " headingRaw: " + heading);
             // Do something with the heading here
+            positionAndHeadingMapVisualization.setHeading((float) heading, status);
         }
 
         @Override

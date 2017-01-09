@@ -7,8 +7,8 @@ import com.senionlab.slutilities.type.SLPixelPoint2D;
  */
 
 public interface MapViewWithBlueDot {
-    void dropBlueDot(BlueDotPosition blueDotPosition);
-    void translateXBlueDot(float value);
-    void translateYBlueDot(float value);
-    void translateBlueDot(float x, float y);
+    void dropBlueDot(double x, double y);
+    int getCurrentFloor();
+    void removeBlueDot();
+    void drawHeading(double x, double y, float heading);
 }
