@@ -5,9 +5,7 @@ package com.ivanhoecambridge.mall.bluedot;
  */
 
 public interface SLIndoorLocationPresenter {
-
     void onResume();
     void onPause();
     void onDestroy();
-
 }

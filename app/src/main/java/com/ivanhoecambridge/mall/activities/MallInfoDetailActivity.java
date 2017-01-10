@@ -18,6 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpOverrides;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.AdditionalInfo;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.InfoList;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.Links;
@@ -35,6 +38,7 @@ import com.ivanhoecambridge.mall.views.ExpandableTextView;
 import com.ivanhoecambridge.mall.views.HtmlTextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -231,7 +235,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                             Utility.openWebPage(MallInfoDetailActivity.this, info.getLinkURL());
+                            Utility.openWebPage(MallInfoDetailActivity.this, info.getLinkURL());
                         }
                     }, true);
 
@@ -241,7 +245,8 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                     mParentView,
                     R.layout.layout_detail_button,
                     R.drawable.icn_hours,
-                    info.getHours() == null ? null : info.getHours(),
+                    getHours()
+                    ,
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -260,6 +265,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
             } else if (mMallInfoType.startsWith(getResources().getString(R.string.mall_info_guest_service)) || mMallInfoType.startsWith(getResources().getString(R.string.mall_info_customer_service))){
                 addLocationCTA(cTAList, info);
 //                cTAList.add(location);
+                cTAList.add(hour);
                 cTAList.add(phone);
                 cTAList.add(email);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_amenities))){
@@ -407,6 +413,27 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 cTAList.add(location);
             }
         }
+    }
+
+    private String getHours(){
+        String todaysHour = "";
+        KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
+        KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
+        try {
+            if(kcpPlaces != null) {
+                todaysHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+                List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(Constants.NUMB_OF_DAYS);
+                if (comingHolidays == null || comingHolidays.size() == 0)
+                    comingHolidays = KcpPlacesRoot.getInstance().getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL).getHolidaysWithin(7);
+                KcpUtility.sortHoursList((ArrayList) comingHolidays);
+
+                String overrideHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, Calendar.getInstance());
+                if (!overrideHour.equals("")) todaysHour = overrideHour;
+                todaysHour = todaysHour.replace("-", "to");
+            }
+        } catch (Exception e){
+        }
+        return todaysHour;
     }
 
     public void setDisclaimer(final InfoList info){

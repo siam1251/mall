@@ -26,8 +26,8 @@ public class HeaderFactory {
     private final static String SEARCH_INDEX_MP_STAGING = "indexes/staging/metropolis-at-metrotown-index.msgpack";
     private final static String SEARCH_INDEX_MP_PRODUCTION = "indexes/production/metropolis-at-metrotown-index.msgpack";
 
-    public static String MALL_INFO_URL = "bins/16cyj9";
-    public static String AMENITIES_URL = "bins/mexrp"; //externalIds for Stairs & Escalators were manually changed
+    public static String MALL_INFO_URL = "bins/tlfbz";
+    public static String AMENITIES_URL = "bins/wzczr"; //externalIds for Stairs & Escalators were manually changed
     public static String PARKING_URL = "bins/2gidf";
 
     public final static String HEADER_VALUE_ACCEPT = "application/json, application/vnd.kcp.place+json; version=1.0, application/vnd.kcp.view-all-content+json; version=1.0, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.icmp-event+json; version=1.0, application/vnd.kcp.icmp-announcement+json; version=1.0, application/vnd.kcp.blog-post+json; version=1.0, application/vnd.kcp.icmp-twitter+json; version=1.0, application/vnd.kcp.icmp-instagram+json; version=1.0, application/vnd.kcp.icmp-set-interests+json; version=1.0, application/vnd.kcp.icmp-movie+json; version=1.0";

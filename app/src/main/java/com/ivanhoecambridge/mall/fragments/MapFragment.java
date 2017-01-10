@@ -7,17 +7,18 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.DrawableWrapper;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -49,12 +50,13 @@ import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
-import com.ivanhoecambridge.mall.bluedot.BlueDotPosition;
+import com.ivanhoecambridge.mall.bluedot.FollowMode;
+import com.ivanhoecambridge.mall.bluedot.MapViewFollowMeImpl;
+import com.ivanhoecambridge.mall.bluedot.MapViewFollowMode;
 import com.ivanhoecambridge.mall.bluedot.MapViewWithBlueDot;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenter;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
 import com.ivanhoecambridge.mall.constants.Constants;
-import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
 import com.ivanhoecambridge.mall.managers.ThemeManager;
@@ -85,26 +87,28 @@ import com.mappedin.sdk.MappedinCallback;
 import com.mappedin.sdk.Navigatable;
 import com.mappedin.sdk.Overlay;
 import com.mappedin.sdk.Overlay2DImage;
-import com.mappedin.sdk.Overlay2DLabel;
 import com.mappedin.sdk.Path;
 import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.RawData;
 import com.mappedin.sdk.Venue;
-import com.senionlab.slutilities.type.SLPixelPoint2D;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import factory.HeaderFactory;
 
 /**
  * Created by Kay on 2016-06-20.
  */
 //public class MapFragment extends SLIndoorLocationServiceFragment implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot {
-public class MapFragment extends BaseFragment implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot {
+public class MapFragment extends BaseFragment
+        implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot {
 
     private final String TAG = "MapFragment";
 
@@ -147,7 +151,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private ThemeColorImageView ivLowerBg;
     private ImageView ivAmenity;
     private ImageView ivShadow;
+    private ThemeColorImageView ivFollowMode;
+    private ImageView ivTest;
     private FrameLayout flMap; ///todo: disabled for testing
+    private FrameLayout flCircle; ///todo: disabled for testing
     private RelativeLayout rlSlidingPanel; ///todo: disabled for testing
 
     private View viewRoute;
@@ -164,7 +171,7 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     //when using getOverlayImageWithPadding
     private final int PIN_AMENITY_IMAGE_SIZE_DP = 24; //ends up 64 px
     private final int PIN_VORTEX_IMAGE_SIZE_DP = 24; //ends up 64 px
-    private final int PIN_BLUEDOT = 48; //ends up 64 px
+    private final int PIN_BLUEDOT = 36; //ends up 64 px
     private final int PIN_PARKING_IMAGE_SIZE_DP = 30; //ends up 64 px
 
     /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 60;
@@ -224,6 +231,8 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     private SLIndoorLocationPresenter slIndoorLocationPresenter;
     private Pin mBlueDotPin;
     private Pin mBlueDotCompass;
+    private FollowMode mFollowMode = FollowMode.NONE;
+    private GestureDetector gestureDetector;
 
 
     @Override
@@ -235,7 +244,6 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_map, container, false);
-
         pb = (ProgressBar) view.findViewById(R.id.pb);
         pb.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.themeColor),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
@@ -291,6 +299,11 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         ivLowerBg = (ThemeColorImageView) view.findViewById(R.id.ivLowerBg);
         ivAmenity = (ImageView) view.findViewById(R.id.ivAmenity);
         ivShadow = (ImageView) view.findViewById(R.id.ivShadow);
+        ivFollowMode = (ThemeColorImageView) view.findViewById(R.id.ivFollowMode);
+        flCircle = (FrameLayout) view.findViewById(R.id.flCircle);
+        flCircle.setOnClickListener(onFollowButton);
+        ivTest = (ImageView) view.findViewById(R.id.ivTest);
+        ivTest.setOnClickListener(onTestButton);
         flMap = (FrameLayout) view.findViewById(R.id.flMap); //todo: disabled for testing
 
         viewRoute = (View) view.findViewById(R.id.viewRoute);
@@ -1236,7 +1249,10 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
 
         String categoryName = "";
         try {
-            categoryName = location.getCategories().get(0).getName();
+            String externalId = location.getExternalID();
+            KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceByExternalCode(externalId);
+            if(kcpPlace != null) categoryName = kcpPlace.getCategoryWithOverride();
+            else categoryName = location.getCategories().get(0).getName();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1376,12 +1392,19 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         return PIN_VORTEX_IMAGE_SIZE_DP;
     }
 
+
     @Override
-    public void dropBlueDot(double x, double y) {
+    public void dropBlueDot(double x, double y, int floor) {
         if(maps == null) return;
+
+//        floor = tempFloor; //testing
+        if(mFollowMode == FollowMode.CENTER) {
+            focusOnBlueDot(floor, null);
+        }
+
         android.location.Location targetLocation = MapUtility.getLocation(x, y);
         Overlay2DImage label;
-        Coordinate coordinate  = new Coordinate(targetLocation, maps[mCurrentLevelIndex]);
+        Coordinate coordinate  = new Coordinate(targetLocation, maps[floor]);
 
         if(mBlueDotPin == null) {
             label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluebutton));
@@ -1393,11 +1416,15 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         }
         label.setPosition(coordinate);
         mapView.addMarker(label, false);
+
+
     }
 
     @Override
     public void drawHeading(double x, double y, float heading) {
         if(maps == null) return;
+
+
         /*android.location.Location targetLocation = MapUtility.getLocation(x, y);
         Overlay2DImage label;
         Drawable rotatedHeading = MapUtility.getRotatedDrawable(getActivity(), R.drawable.icn_bluedot_orientation_pointer, heading);
@@ -1410,6 +1437,81 @@ public class MapFragment extends BaseFragment implements MapViewDelegate, Amenit
         label.setPosition(coordinate);
         mapView.addMarker(label, false);*/
     }
+
+    private View.OnClickListener onTestButton = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            /*if(tempFloor == 0) tempFloor = 1;
+            else tempFloor = 0;*/
+
+//            dropBlueDot(43.64249432344601, -79.37441128178561, 1);
+            Random r = new Random();
+            int randomFloor = r.nextInt(5);
+            dropBlueDot(49.2268235, -123.0004849, randomFloor); //MP
+
+
+            Toast.makeText(getActivity(), "Floor : " + randomFloor, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private View.OnClickListener onFollowButton = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (mFollowMode) {
+                case NONE:
+                    setFollowMode(FollowMode.CENTER);
+                    break;
+                case CENTER:
+                    setFollowMode(FollowMode.NONE);
+                    break;
+            }
+        }
+    };
+
+    private void setFollowMode(FollowMode followMode){
+        try {
+            if(checkIfBlueDotShown()) {
+                mFollowMode = followMode;
+                updateFollowMode();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateFollowMode(){
+        try {
+            switch (mFollowMode) {
+                case NONE:
+                    ivFollowMode.setSelected(false);
+                    break;
+                case CENTER:
+                    ivFollowMode.setSelected(true);
+                    if(mBlueDotPin != null) focusOnBlueDot(-100, mBlueDotPin.getCoordinate().getMap().getName());
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void focusOnBlueDot(int floor, @Nullable String mapName){
+        try {
+            if(mBlueDotPin != null) {
+                if(mCurrentLevelIndex != floor) {
+                    setMapLevel(floor, null, mapName);
+                }
+                mapView.getCamera().focusOn(mBlueDotPin.getCoordinate());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean checkIfBlueDotShown(){
+        return true;
+    }
+
 
     @Override
     public int getCurrentFloor() {

@@ -63,21 +63,25 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         }
     }
 
+    public PositionAndHeadingMapVisualization getPositionAndHeadingMapVisualization(){
+        return positionAndHeadingMapVisualization;
+    }
+
     private SLBroadcastReceiver receiver = new SLBroadcastReceiver() {
 
         @Override
         public void didUpdateLocation(SLCoordinate3D location, double uncertaintyRadius, SLLocationStatus status) {
             synchronized (this) {
                 BlueDotPosition blueDotPosition = new BlueDotPosition(location);
-                if(blueDotPosition.getMappedInFloor() != mapViewWithBlueDot.getCurrentFloor()) {
+                /*if(blueDotPosition.getMappedInFloor() != mapViewWithBlueDot.getCurrentFloor()) {
                     mapViewWithBlueDot.removeBlueDot();
                     return;
-                } else {
-                    long dtMili = System.currentTimeMillis();
-                    Log.d("bluedot", "BlueDotPosition RAW: "  + blueDotPosition.getLatitude() + " " + blueDotPosition.getLongitude());
+                } else {*/
+//                    long dtMili = System.currentTimeMillis();
+//                    Log.d("bluedot", "BlueDotPosition RAW: "  + blueDotPosition.getLatitude() + " " + blueDotPosition.getLongitude());
 //                    mapViewWithBlueDot.dropBlueDot(blueDotPosition);
                     positionAndHeadingMapVisualization.setPos(blueDotPosition);
-                }
+//                }
             }
         }
 

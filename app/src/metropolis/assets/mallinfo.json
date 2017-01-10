@@ -32,6 +32,12 @@
           "locationID": "574da3baec5f2d16f000000e",
           "mapName": "Upper Level & UP2",
           "locationType": "amenity"
+        },
+        {
+          "name": "Ground Level Desk",
+          "locationID": "574da3baec5f2d16f000000e",
+          "mapName": "Ground Level",
+          "locationType": "amenity"
         }
 
       ],

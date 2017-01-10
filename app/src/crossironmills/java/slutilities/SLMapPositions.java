@@ -8,7 +8,6 @@ public class SLMapPositions {
 	private static HashMap<Integer, Integer> mapPositions;
 	public static HashMap<Integer, Integer> getMapPositions(){
 		if(mapPositions == null) {
-			mapPositions = new HashMap<Integer, Integer>();
 			mapPositions.put(0, 0);
 		}
 		return mapPositions;

@@ -14,8 +14,7 @@ import com.senionlab.slutilities.type.SLPixelPoint2D;
  * Created by Kay on 2017-01-06.
  */
 
-//public class PositionAndHeadingMapVisualization extends MapVisualizationBase{
-public class PositionAndHeadingMapVisualization /*extends MapVisualizationBase*/{
+public class PositionAndHeadingMapVisualization {
     private ValueAnimator headingAnimator = ValueAnimator.ofFloat();
     private ValueAnimator mAnimator;
 
@@ -29,7 +28,6 @@ public class PositionAndHeadingMapVisualization /*extends MapVisualizationBase*/
     protected MapViewWithBlueDot mapViewWithBlueDot;
     private SLHeadingStatus headingStatus;
 
-
     public void init(MapViewWithBlueDot mapViewWithBlueDot) {
         this.mapViewWithBlueDot = mapViewWithBlueDot;
     }
@@ -40,7 +38,7 @@ public class PositionAndHeadingMapVisualization /*extends MapVisualizationBase*/
             posX = (startValue.getLatitude() + (endValue.getLatitude() - startValue.getLatitude()) * fraction);
             posY = (startValue.getLongitude() + (endValue.getLongitude() - startValue.getLongitude()) * fraction);
 //            Log.d("bluedot", "BlueDotPosition: "  + (double) posX + " " + (double) posY + " FRACTION: " + fraction);
-            mapViewWithBlueDot.dropBlueDot(posX, posY);
+//            mapViewWithBlueDot.dropBlueDot(posX, posY, endValue.getMappedInFloor());
             return new BlueDotPosition(posX, posY);
         }
     }
@@ -53,7 +51,7 @@ public class PositionAndHeadingMapVisualization /*extends MapVisualizationBase*/
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
 
                 listener.onAnimationUpdate(valueAnimator);
-                Log.d("bluedot", "BlueDotPosition: "  + " heading: " + heading);
+//                Log.d("bluedot", "BlueDotPosition: "  + " heading: " + heading);
                 mapViewWithBlueDot.drawHeading(posX, posY, heading);
             }
         });
@@ -110,7 +108,4 @@ public class PositionAndHeadingMapVisualization /*extends MapVisualizationBase*/
             Log.d("BLUEDOTERROR", e.toString());
         }
     }
-
-
-
 }

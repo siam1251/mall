@@ -27,7 +27,7 @@
     },
     {
       "type":"3",
-      "enabled":true,
+      "enabled":false,
       "title": "Elevators",
       "externalIds":[
         "Elevator"
@@ -35,7 +35,7 @@
     },
     {
       "type":"4",
-      "enabled":true,
+      "enabled":false,
       "title": "Stairs & Escalators",
       "externalIds":[
         "escalator/stairs"

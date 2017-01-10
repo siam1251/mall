@@ -194,17 +194,8 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         storeViewHolder.tvDealStoreName.setText(storename);
 
 
-        final String category = kcpPlace.getCategoryLabelOverride();
-        String display = kcpPlace.getFirstDisplay();
-        String primary = kcpPlace.getPrimaryCategory();
-        if(!display.equals("")) {
-            storeViewHolder.tvDealTitle.setText(display);
-        } else if(!category.equals("")) {
-            storeViewHolder.tvDealTitle.setText(category);
-        } else {
-            storeViewHolder.tvDealTitle.setText(primary);
-            //todo: MP doesn't have display and category name
-        }
+        final String category = kcpPlace.getCategoryWithOverride();
+        storeViewHolder.tvDealTitle.setText(category);
 
         if (getItemViewType(position) == KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE) {
 

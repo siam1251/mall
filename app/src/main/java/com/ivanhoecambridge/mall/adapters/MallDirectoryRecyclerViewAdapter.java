@@ -326,23 +326,9 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
                 storeViewHolder.tvDealStoreName.setText(getStyledCharacters(storename, mKeyword));
             }
 
-            final String category = kcpPlace.getCategoryLabelOverride();
-            String display = kcpPlace.getFirstDisplay();
-            String primary = kcpPlace.getPrimaryCategory();
 
-
-            String categoryToDisplay = "";
-
-            if(!display.equals("")) {
-                categoryToDisplay = display;
-            } else if(!category.equals("")){
-                categoryToDisplay = category;
-            } else {
-                categoryToDisplay = primary;
-                //todo: MP doesn't have display and category name
-            }
-
-            storeViewHolder.tvDealTitle.setText(categoryToDisplay);
+            final String category = kcpPlace.getCategoryWithOverride();
+            storeViewHolder.tvDealTitle.setText(category);
             storeViewHolder.mView.setTag(position);
 
             final KcpPlaces kcpPlaceTemp = kcpPlace;
