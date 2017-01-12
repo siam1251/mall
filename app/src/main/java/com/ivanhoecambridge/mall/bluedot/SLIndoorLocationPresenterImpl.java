@@ -1,9 +1,14 @@
 package com.ivanhoecambridge.mall.bluedot;
 
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
+import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.senionlab.slutilities.geofencing.interfaces.SLGeometry;
 import com.senionlab.slutilities.service.SLBroadcastReceiver;
 import com.senionlab.slutilities.service.SLConsumer;
@@ -19,6 +24,9 @@ import com.senionlab.slutilities.type.SLPixelPoint2D;
 
 import slutilities.SLSettings;
 
+import static com.ivanhoecambridge.mall.activities.MainActivity.VIEWPAGER_PAGE_MAP;
+import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOnBluetooth;
+
 /**
  * Created by Kay on 2017-01-06.
  */
@@ -26,6 +34,7 @@ import slutilities.SLSettings;
 public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter, SLConsumer {
 
     private final PositionAndHeadingMapVisualization positionAndHeadingMapVisualization = new PositionAndHeadingMapVisualization();
+    public static boolean mAskForBluetooth = false;
 
     protected final Logger logger = new Logger(getClass().getName());
     private SLServiceManager serviceManager;
@@ -80,7 +89,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 //                    long dtMili = System.currentTimeMillis();
 //                    Log.d("bluedot", "BlueDotPosition RAW: "  + blueDotPosition.getLatitude() + " " + blueDotPosition.getLongitude());
 //                    mapViewWithBlueDot.dropBlueDot(blueDotPosition);
-                    positionAndHeadingMapVisualization.setPos(blueDotPosition);
+                positionAndHeadingMapVisualization.setPos(blueDotPosition);
 //                }
             }
         }
@@ -88,6 +97,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         @Override
         public void didUpdateLocationAvailability(LocationAvailability locationAvailability) {
             logger.debug("didUpdateLocationAvailability++" + " locationAvailability: " + locationAvailability);
+            if(!locationAvailability.isAvailable()) mapViewWithBlueDot.removeBlueDot();
 
             // Do something with locationAvailability, for instance hide/show location marker.
         }
@@ -112,13 +122,19 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
             logger.debug("didUpdateMotionType++" + " SLMotionType: " + motionType);
             // Do something with the motion type here
         }
+
         @Override
-
-
         public void errorBleNotEnabled() {
-            logger.debug("errorBleNotEnabled++");
-            // Prompt the user to enable BLE
+            BluetoothManager bluetoothManager = new BluetoothManager(context);
+            if (Build.VERSION.SDK_INT >= 18 && !mDidAskToTurnOnBluetooth) {
+                if(((MainActivity) context).getViewerPosition() != VIEWPAGER_PAGE_MAP) {
+                    mAskForBluetooth = true;
+                } else {
+                    bluetoothManager.turnOnBluetooth();
+                }
+            }
         }
+
         @Override
         public void errorWifiNotEnabled() {
             logger.debug("errorWifiNotEnabled++");
@@ -132,6 +148,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         @Override
         public void didLeaveGeometry(SLGeometry geometry) {
             logger.debug("didLeaveGeometry++");
+            mapViewWithBlueDot.removeBlueDot();
             // The user left the area defined by geometry
         }
     };

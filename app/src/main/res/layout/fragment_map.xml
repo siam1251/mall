@@ -252,9 +252,10 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_alignParentBottom="true"
         android:layout_marginBottom="65dp"
+    <RelativeLayout
+        android:layout_marginBottom="55dp"
+        android:layout_alignParentBottom="true"
         android:id="@+id/rlSlidingPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -270,9 +271,9 @@
             android:clickable="true"
             />
 
+            android:visibility="invisible"
         <LinearLayout
             android:layout_below="@+id/ivTest"
-            android:visibility="invisible"
             android:id="@+id/llBlueDot"
             android:layout_alignParentRight="true"
             android:layout_marginRight="16dp"
@@ -292,7 +293,6 @@
                     />
 
                 <com.ivanhoecambridge.mall.views.ThemeColorImageView
-                    android:clickable="false"
                     ThemedImageView:filterColor="@color/map_level_enabled"
                     ThemedImageView:filterColorSelected="@color/map_level_with_path"
                     android:id="@+id/ivFollowMode"
@@ -301,14 +301,11 @@
                     android:layout_gravity="center"
                     android:src="@drawable/icn_current_location"
                     />
-
-
             </FrameLayout>
-
         </LinearLayout>
 
-        <include
             android:visibility="gone"
+        <include
             android:layout_below="@+id/llBlueDot"
             android:id="@+id/llLevel"
             android:layout_marginRight="16dp"

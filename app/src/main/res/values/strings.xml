@@ -8,6 +8,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_reset">Reset</string>
     <string name="action_ok">Ok</string>
+    <string name="action_got_it">GOT IT</string>
     <string name="action_call">Call</string>
     <string name="action_exit">Exit</string>
     <string name="action_do_not_save">DON’T SAVE</string>
@@ -19,6 +20,8 @@
     <string name="action_sure">I\'M SURE</string>
     <string name="action_next">NEXT</string>
     <string name="action_dismiss">DISMISS</string>
+    <string name="action_yes">YES</string>
+    <string name="action_no">NO</string>
 
     <!--ALERT DIALOG TITLE-->
     <string name="title_unsaved_changes">Unsaved Changes</string>
@@ -34,6 +37,8 @@
     <string name="title_map">Map</string>
     <string name="title_directory">Mall Directory</string>
     <string name="title_info">Mall Information</string>
+    <string name="title_enable_bluetooth">Bluetooth</string>
+    <string name="title_current_location_not_available">Current Location Not Available</string>
 
 
     <!--FRAGMENT TITLE-->
@@ -114,6 +119,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="warning_selected_same_store">Sorry, you can’t select the same store</string>
     <string name="warning_remove_my_parking">Are you sure you want to remove your parking spot?</string>
     <string name="warning_change_my_parking_spot">Changing your parking spot will overwrite any previously saved information.</string>
+    <string name="warning_turn_on_bluetooth">Please turn on Bluetooth to find your current location.</string>
+    <string name="warning_current_location_not_available">If you are at the mall, please try again in a few seconds.</string>
 
     <!--section header-->
     <string name="section_header_recommended_deals">Recommended Deals</string>

@@ -32,4 +32,19 @@ public class RecyclerViewFooter {
             }
         }
     }
+
+    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
+        public View mView;
+        public TextView tvFooter;
+
+        public HeaderViewHolder(View v) {
+            super(v);
+            mView = v;
+//            tvFooter = (TextView)  v.findViewById(R.id.tvFooter);
+            /*if(v.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams){
+                StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) v.getLayoutParams();
+                p.setFullSpan(true);
+            }*/
+        }
+    }
 }

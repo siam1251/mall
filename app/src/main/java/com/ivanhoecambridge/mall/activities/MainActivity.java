@@ -80,6 +80,7 @@ import com.ivanhoecambridge.mall.adapters.HomeBottomTapAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.ActiveMallRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.IndexableRecylerView;
 import com.ivanhoecambridge.mall.analytics.FirebaseTracking;
+import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.constants.Constants;
 import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
@@ -111,6 +112,9 @@ import com.mappedin.sdk.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOnBluetooth;
+import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
 
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
@@ -265,6 +269,10 @@ public class MainActivity extends BaseActivity
                 }
 
                 if(position == VIEWPAGER_PAGE_MAP) {
+                    if(mAskForBluetooth && !mDidAskToTurnOnBluetooth) {
+                        BluetoothManager bluetoothManager = new BluetoothManager(MainActivity.this);
+                        bluetoothManager.turnOnBluetooth();
+                    }
 //                    if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING, false)) mOnParkingClickListener.onParkingClick(true, false);
                     if(mOnDealsClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_DEAL, false)) mOnDealsClickListener.onDealsClick(true);
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers

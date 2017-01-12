@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="51dp"
+    card_view:cardCornerRadius="@dimen/card_corner_radius"
+    android:layout_margin="8dp"
+    style="@style/SelectableItemForegroundNormal"
+    >
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            ThemedImageView:filterColor="@color/map_level_with_path"
+            android:id="@+id/ivFollowMode"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:src="@drawable/icn_current_location"
+            />
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                app:fontFamily="@string/fontFamily_roboto_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="14dp"
+                android:text="Use"
+                />
+
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                android:layout_marginLeft="5dp"
+                app:fontFamily="@string/fontFamily_roboto_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="14dp"
+                android:text="Current Location"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>
+
+
+
+
+

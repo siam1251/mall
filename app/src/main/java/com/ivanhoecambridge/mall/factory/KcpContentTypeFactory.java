@@ -32,6 +32,7 @@ public class KcpContentTypeFactory {
     public static final int ITEM_TYPE_DEAL =                                10;
     public static final int ITEM_TYPE_MOVIE =                               11;
     public static final int ITEM_TYPE_FOOTER =                              100;
+    public static final int ITEM_TYPE_HEADER =                              101;
 
     public static final int ITEM_TYPE_SECTION_HEADER_CATEGORY =   11;
     public static final int ITEM_TYPE_SECTION_HEADER_RECOMMENDED_STORES =   12;

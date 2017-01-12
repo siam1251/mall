@@ -51,8 +51,10 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
     private int mContentType;
     private FavouriteInterface mFavouriteInterface;
     private MapFragment.OnStoreClickListener mStoreClickListener;
+    private int mHeaderLayout;
     private int mFooterLayout;
     private boolean mFooterExist = false;
+    private boolean mHeaderExist = false;
     private String mFooterText;
     private View.OnClickListener mOnClickListener;
     private Drawable placeholder;
@@ -114,11 +116,31 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
             case KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE: //A to Z store list
                 return new StoreViewHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_place, parent, false));
+            case KcpContentTypeFactory.ITEM_TYPE_HEADER:
+                return new RecyclerViewFooter.HeaderViewHolder(
+                        LayoutInflater.from(mContext).inflate(R.layout.list_item_my_page_header, parent, false));
             case KcpContentTypeFactory.ITEM_TYPE_FOOTER:
                 return new RecyclerViewFooter.FooterViewHolder(
                         LayoutInflater.from(mContext).inflate(mFooterLayout, parent, false));
         }
         return null;
+    }
+
+    public void addHeader(View.OnClickListener onClickListener){
+        mHeaderExist = true;
+        mOnClickListener = onClickListener;
+        KcpPlaces fakeKcpPlaces = new KcpPlaces();
+        mKcpPlacesList.add(0, fakeKcpPlaces);
+        notifyDataSetChanged();
+    }
+
+    public void removeHeader() {
+        mHeaderExist = false;
+        mOnClickListener = null;
+        if(getItemViewType(0) == KcpContentTypeFactory.ITEM_TYPE_HEADER){
+            mKcpPlacesList.remove(0);
+        }
+        notifyDataSetChanged();
     }
 
     public void addFooter(String footerText, int footerLayout, View.OnClickListener onClickListener){
@@ -140,6 +162,10 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
             footerViewHolder.mView.setOnClickListener(mOnClickListener);
             footerViewHolder.tvFooter.setText(mFooterText);
             return;
+        } else if (getItemViewType(position) == KcpContentTypeFactory.ITEM_TYPE_HEADER){
+            RecyclerViewFooter.HeaderViewHolder headerViewHolder = (RecyclerViewFooter.HeaderViewHolder) holder;
+            headerViewHolder.mView.setOnClickListener(mOnClickListener);
+            return;
         }
 
         final KcpPlaces kcpPlace = (KcpPlaces) mKcpPlacesList.get(position);
@@ -154,40 +180,6 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
                 .placeholder(placeholder)
                 .error(placeholder)
                 .dontAnimate()
-                /*.listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        *//*int resourceWidth = resource.getIntrinsicWidth();
-                        int resourceHeight = resource.getIntrinsicHeight();
-                        placeholder.setBounds(0, 0, resourceWidth, resourceHeight);
-                        storeViewHolder.ivDealLogo.setImageDrawable(placeholder);*//*
-
-                        *//*int resourceWidth = resource.getIntrinsicWidth();
-                        int resourceHeight = resource.getIntrinsicHeight();
-
-                        int width;
-                        int height;
-
-                        float placeHolderRatio = (float) KcpUtility.getFloat(mContext, R.dimen.default_img_ratio);
-                        if(resourceWidth > resourceHeight) {
-                            width = KcpUtility.dpToPx((Activity) mContext, 80);
-                            height = width * resourceHeight / resourceWidth;
-                        } else {
-                            height = (int) (KcpUtility.dpToPx((Activity) mContext, 80) / placeHolderRatio);
-                            width = height * resourceWidth / resourceHeight;
-                        }
-                        placeholder.setBounds(0, 0, width, height);
-                        storeViewHolder.ivDealLogo.setImageDrawable(placeholder);*//*
-
-                        return false;
-                    }
-                })*/
-//                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(storeViewHolder.ivDealLogo);
 
         final String storename = kcpPlace.getPlaceName();
@@ -255,6 +247,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         if(mFooterExist && position == mKcpPlacesList.size() - 1) return KcpContentTypeFactory.ITEM_TYPE_FOOTER;
+        else if(mHeaderExist && position == 0) return KcpContentTypeFactory.ITEM_TYPE_HEADER;
         return mContentType;
     }
 }
