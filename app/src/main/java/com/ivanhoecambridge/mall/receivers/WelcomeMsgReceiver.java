@@ -13,7 +13,7 @@ import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
  * Created by Kay on 2016-10-12.
  */
 
-public class WelcomeMsgReceiver extends BroadcastReceiver{
+public class WelcomeMsgReceiver extends BroadcastReceiver {
 
 
     protected Class<? extends Activity> getActivity(Context context, Intent intent) {

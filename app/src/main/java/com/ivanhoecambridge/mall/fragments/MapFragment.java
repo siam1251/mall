@@ -1464,8 +1464,8 @@ public class MapFragment extends BaseFragment
             if(mBlueDotPin == null) {
                 Random r = new Random();
                 int randomFloor = r.nextInt(5);
-                dropBlueDot(49.2268235, -123.0004849, randomFloor); //MP
-//                dropBlueDot(51.2030627,-113.9956265, randomFloor); //CROSSIRON
+//                dropBlueDot(49.2268235, -123.0004849, randomFloor); //MP
+                dropBlueDot(51.2030627,-113.9956265, randomFloor); //CROSSIRON
                 Toast.makeText(getActivity(), "Floor : " + randomFloor, Toast.LENGTH_SHORT).show();
             } else {
                 removeBlueDot();

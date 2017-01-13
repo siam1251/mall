@@ -351,13 +351,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
 
 
             House house = MovieManager.sTheaters.getHouse();
-            String phoneNumber = "";
-            if(house != null) {
-                Address address = house.getAddress();
-                if(address != null) {
-                    phoneNumber = address.getPhone();
-                }
-            }
+            final String phoneNumber = house.getAddress().getPhone();
 
             //Store Phone number
             CTA phone = new CTA(
@@ -369,6 +363,13 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                                Utility.makeCallWithAlertDialog(
+                                        MoviesActivity.this,
+                                        getResources().getString(R.string.title_make_calls),
+                                        getResources().getString(R.string.warning_make_call) + phoneNumber + "?",
+                                        getResources().getString(R.string.action_call),
+                                        getResources().getString(R.string.action_cancel),
+                                        phoneNumber);
                         }
                     }, false);
 

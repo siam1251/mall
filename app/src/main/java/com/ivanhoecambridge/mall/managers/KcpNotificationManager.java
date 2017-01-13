@@ -1,5 +1,6 @@
 package com.ivanhoecambridge.mall.managers;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.WelcomeMessage;
+import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.receivers.WelcomeMsgReceiver;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -77,7 +79,8 @@ public class KcpNotificationManager{
             if(intent != null) {
                 String btnType = intent.getStringExtra(KcpNotificationManager.INTENT_EXTRA_KEY_BTN);
                 if(btnType != null && btnType.equals(NOTIBTN_SAVE)) {
-                    context.startActivity(new Intent(context, WelcomeMessage.class));
+                    if(context instanceof Activity) ((Activity)context).startActivityForResult(new Intent(context, WelcomeMessage.class), Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
+                    else context.startActivity(new Intent(context, WelcomeMessage.class));
                 }
             }
         } catch (Exception e) {

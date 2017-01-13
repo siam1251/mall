@@ -197,12 +197,15 @@ public class ParkingActivity extends AppCompatActivity {
 
         rvParking.setLayoutManager(linearLayoutManager);
         rvParking.setHasFixedSize(true);
-        ParkingRecyclerViewAdapter parkingRecyclerViewAdapter = new ParkingRecyclerViewAdapter(this, ParkingManager.sParkings.getParkings(), null);
-
-        if(MapFragment.isBlueDotShown()) {
+        ParkingRecyclerViewAdapter parkingRecyclerViewAdapter = new ParkingRecyclerViewAdapter(this, new ArrayList<Parking>(ParkingManager.sParkings.getParkings()), null);
+//        if(MapFragment.isBlueDotShown()) {
+        if(true) { //testing
             parkingRecyclerViewAdapter.addHeader(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+
+
 
                 }
             });
@@ -452,7 +455,7 @@ public class ParkingActivity extends AppCompatActivity {
 
         public ParkingRecyclerViewAdapter(Context context, List<Parking> parkingList, List<ChildParking> childParkingList) {
             mContext = context;
-            mParkingList = new ArrayList<Parking>(parkingList);
+            mParkingList = parkingList;
             mChildParkingList = childParkingList;
         }
 
@@ -499,51 +502,55 @@ public class ParkingActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
-            if(getItemViewType(position) == ITEM_TYPE_USE_MY_LOCATION) {
-                RecyclerViewFooter.HeaderViewHolder headerViewHolder = (RecyclerViewFooter.HeaderViewHolder) holder;
-                headerViewHolder.mView.setOnClickListener(mOnClickListener);
-                return;
-            }
+            try {
+                if(getItemViewType(position) == ITEM_TYPE_USE_MY_LOCATION) {
+                    RecyclerViewFooter.HeaderViewHolder headerViewHolder = (RecyclerViewFooter.HeaderViewHolder) holder;
+                    headerViewHolder.mView.setOnClickListener(mOnClickListener);
+                    return;
+                }
 
-            if(holder.getItemViewType() == ITEM_TYPE_PARKING){
+                if(holder.getItemViewType() == ITEM_TYPE_PARKING){
 
-                final Parking parking = mParkingList.get(position);
-                final PlaceHolder placeHolder = (PlaceHolder) holder;
-                setSelected(mParkingLotSelectedPosition == position, placeHolder.tvParkingLotName, placeHolder.ivCheck);
-                placeHolder.tvParkingLotName.setText(parking.getName());
-                placeHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        v.clearAnimation();
-                        Utility.startSqueezeAnimationForInterestedParking(new Utility.SqueezeListener() {
-                            @Override
-                            public void OnSqueezeAnimationDone() {
-                                mParkingLotSelectedPosition = position;
-                                notifyDataSetChanged();
-                                showDoneBtn(true, rvParking, "NEXT");
-                            }
-                        }, (Activity) mContext, placeHolder.mView);
-                    }
-                });
-            } else if(holder.getItemViewType() == ITEM_TYPE_ENTRANCE) {
-                final ChildParking childParking = mChildParkingList.get(position);
-                final PlaceHolder placeHolder = (PlaceHolder) holder;
-                setSelected(mEntranceSelectedPosition == position, placeHolder.tvParkingLotName, placeHolder.ivCheck);
-                placeHolder.tvParkingLotName.setText(childParking.getName());
-                placeHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        v.clearAnimation();
-                        Utility.startSqueezeAnimationForInterestedParking(new Utility.SqueezeListener() {
-                            @Override
-                            public void OnSqueezeAnimationDone() {
-                                mEntranceSelectedPosition = position;
-                                notifyDataSetChanged();
-                                showDoneBtn(true, rvParkingChild, "DONE");
-                            }
-                        }, (Activity) mContext, placeHolder.mView);
-                    }
-                });
+                    final Parking parking = mParkingList.get(position);
+                    final PlaceHolder placeHolder = (PlaceHolder) holder;
+                    setSelected(mParkingLotSelectedPosition == position, placeHolder.tvParkingLotName, placeHolder.ivCheck);
+                    placeHolder.tvParkingLotName.setText(parking.getName());
+                    placeHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            v.clearAnimation();
+                            Utility.startSqueezeAnimationForInterestedParking(new Utility.SqueezeListener() {
+                                @Override
+                                public void OnSqueezeAnimationDone() {
+                                    mParkingLotSelectedPosition = position;
+                                    notifyDataSetChanged();
+                                    showDoneBtn(true, rvParking, "NEXT");
+                                }
+                            }, (Activity) mContext, placeHolder.mView);
+                        }
+                    });
+                } else if(holder.getItemViewType() == ITEM_TYPE_ENTRANCE) {
+                    final ChildParking childParking = mChildParkingList.get(position);
+                    final PlaceHolder placeHolder = (PlaceHolder) holder;
+                    setSelected(mEntranceSelectedPosition == position, placeHolder.tvParkingLotName, placeHolder.ivCheck);
+                    placeHolder.tvParkingLotName.setText(childParking.getName());
+                    placeHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            v.clearAnimation();
+                            Utility.startSqueezeAnimationForInterestedParking(new Utility.SqueezeListener() {
+                                @Override
+                                public void OnSqueezeAnimationDone() {
+                                    mEntranceSelectedPosition = position;
+                                    notifyDataSetChanged();
+                                    showDoneBtn(true, rvParkingChild, "DONE");
+                                }
+                            }, (Activity) mContext, placeHolder.mView);
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
