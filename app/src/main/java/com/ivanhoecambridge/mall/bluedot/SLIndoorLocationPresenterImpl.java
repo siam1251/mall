@@ -39,6 +39,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
     protected final Logger logger = new Logger(getClass().getName());
     private SLServiceManager serviceManager;
     private Context context;
+    public static LocationAvailability sLocationAvailability = LocationAvailability.NOT_AVAILABLE;
 
 
     private MapViewWithBlueDot mapViewWithBlueDot;
@@ -82,15 +83,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         public void didUpdateLocation(SLCoordinate3D location, double uncertaintyRadius, SLLocationStatus status) {
             synchronized (this) {
                 BlueDotPosition blueDotPosition = new BlueDotPosition(location);
-                /*if(blueDotPosition.getMappedInFloor() != mapViewWithBlueDot.getCurrentFloor()) {
-                    mapViewWithBlueDot.removeBlueDot();
-                    return;
-                } else {*/
-//                    long dtMili = System.currentTimeMillis();
-//                    Log.d("bluedot", "BlueDotPosition RAW: "  + blueDotPosition.getLatitude() + " " + blueDotPosition.getLongitude());
-//                    mapViewWithBlueDot.dropBlueDot(blueDotPosition);
-                positionAndHeadingMapVisualization.setPos(blueDotPosition);
-//                }
+//                positionAndHeadingMapVisualization.setPos(blueDotPosition);
             }
         }
 
@@ -98,6 +91,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         public void didUpdateLocationAvailability(LocationAvailability locationAvailability) {
             logger.debug("didUpdateLocationAvailability++" + " locationAvailability: " + locationAvailability);
             if(!locationAvailability.isAvailable()) mapViewWithBlueDot.removeBlueDot();
+            sLocationAvailability = locationAvailability;
 
             // Do something with locationAvailability, for instance hide/show location marker.
         }

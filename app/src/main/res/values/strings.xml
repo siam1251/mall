@@ -117,6 +117,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <!--<string name="warning_require_location_permission">The app needs device’s location to show deals and events happening around you today.</string>-->
     <string name="warning_require_location_permission">The app requires your device’s location to access connected mall features. Are you sure you want to deny permissions?</string>
     <string name="warning_selected_same_store">Sorry, you can’t select the same store</string>
+    <string name="warning_selected_same_location">Sorry, you can’t select the same location</string>
     <string name="warning_remove_my_parking">Are you sure you want to remove your parking spot?</string>
     <string name="warning_change_my_parking_spot">Changing your parking spot will overwrite any previously saved information.</string>
     <string name="warning_turn_on_bluetooth">Please turn on Bluetooth to find your current location.</string>
@@ -209,9 +210,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <string name="map_filter_see_parking">See My Parking Spot</string>
     <string name="map_filter_hide_parking">Hide My Parking Spot</string>
-
-
     <string name="map_view_amenities_on_map">View Amenities on Map</string>
+
     <string name="hint_search_store">Search a Store</string>
     <string name="hint_search_directory">Search Mall Directory</string>
     <string name="hint_search_start">Directions from...</string>
@@ -219,6 +219,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="hint_search_start_when_not_empty">from</string>
     <string name="hint_search_destination_when_not_empty">to</string>
     <string name="hint_add_notes">Include additional notes to your parking i.e. “Pillar 15F near stairs”</string>
+
+    <string name="bluedot_my_location">Your Location</string>
 
 
     <!--GEOFENCE-->
@@ -317,6 +319,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="terms_of_service"><u>Terms of Service</u></string>
     <string name="version_name_prefix">Version </string>
     <string name="version_name_suffix"> (TESTING) </string>
+
 
 
 </resources>

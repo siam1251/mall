@@ -101,6 +101,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import factory.HeaderFactory;
 
+import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.sLocationAvailability;
+
 /**
  * Created by Kay on 2016-06-20.
  */
@@ -229,11 +231,12 @@ public class MapFragment extends BaseFragment
 
     //BLUE DOT
     private SLIndoorLocationPresenter slIndoorLocationPresenter;
-    private Pin mBlueDotPin;
+    private static Pin mBlueDotPin;
     private Pin mBlueDotCompass;
     private FollowMode mFollowMode = FollowMode.NONE;
     private GestureDetector gestureDetector;
-    private int mSectionStartingIndex = 0;
+    private boolean mShowBlueDotHeader = false; //show whether to 'use Current Location' header in recyclerview when blue dot's available - show in destination editor, don't show in normal search mode
+//    private int mSectionStartingIndex = 0;
 //    private List<Integer> mSectionPosition = new ArrayList<Integer>();
 
 
@@ -266,7 +269,7 @@ public class MapFragment extends BaseFragment
         ivCompass.bringToFront();
         flCompass = (FrameLayout) view.findViewById(R.id.flCompass);
         rlSlidingPanel = (RelativeLayout) view.findViewById(R.id.rlSlidingPanel);
-        rlSlidingPanel.setVisibility(View.GONE); //DELETED FOR TESTING
+//        rlSlidingPanel.setVisibility(View.GONE); //DELETED FOR TESTING
 
         ivCompass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -404,77 +407,7 @@ public class MapFragment extends BaseFragment
 
         mPlaceRecyclerViewAdapter = new CategoryStoreRecyclerViewAdapter(
                 getActivity(),
-                kcpPlacesFiltered, KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE, new OnStoreClickListener() {
-            @Override
-            public void onStoreClick(final int storeId, final String externalCode, final String storeName, final String categoryName) {
-                try {
-
-                    if(!mMapLoaded) {
-                        setMapInterface(new MapInterface() {
-                            @Override
-                            public void mapLoaded() {
-                                onStoreClick(storeId, externalCode, storeName, categoryName);
-                            }
-                        });
-                        return;
-                    }
-
-                    if(mSearchMode.equals(SearchMode.STORE)){
-                        stopNavigation();
-                    } else if(mSearchMode.equals(SearchMode.ROUTE_START)){
-                        if(mMainActivity.getDestStoreName().equals(storeName)) {
-                            Toast.makeText(getActivity(), getString(R.string.warning_selected_same_store), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        mMainActivity.setDestionationNames(storeName, null);
-                        if(!mMainActivity.isEditTextsEmpty()) {
-                            startNavigation();
-                        } else stopNavigation();
-                    } else if(mSearchMode.equals(SearchMode.ROUTE_DESTINATION)){
-                        if(mMainActivity.getStartStoreName().equals(storeName)) {
-                            Toast.makeText(getActivity(), getString(R.string.warning_selected_same_store), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        mMainActivity.setDestionationNames(null, storeName);
-                        if(!mMainActivity.isEditTextsEmpty()) {
-                            startNavigation();
-                        } else stopNavigation();
-                    }
-
-
-                    Polygon placePolygon = getPolygonWithPlaceExternalId(externalCode);
-                    if(placePolygon != null) {
-                        mapView.getCamera().focusOn(placePolygon);
-                        didTapPolygon(placePolygon);
-                        zoomInOut();
-                    } else {
-                        showDirectionCard(true, IdType.ID, storeId, storeName, categoryName, null);
-                    }
-
-                    /*ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocationWithExternalCode(externalCode);
-                    if(polygons != null && polygons.size() > 0) {
-                        //TODO: loop through to highlight all the polygons found in getPolygons()
-                        //todo: highlight the polygon that's on the current map level
-//                        setMapLevel(0, CustomLocation.getLocationHashMap().get(externalCode).getPolygons().get(0).getMap().getShortName()); //for map with multi levels
-                        mapView.getCamera().focusOn(polygons.get(0));
-                        didTapPolygon(polygons.get(0));
-                        zoomInOut();
-//                        mapView.getCamera().setZoomTo(200);
-                    } else {
-                        showDirectionCard(true, IdType.ID, storeId, storeName, categoryName, null);
-                    }*/
-
-                    if(!mSearchMode.equals(SearchMode.STORE)) mMainActivity.moveFocusToNextEditText();
-
-                    mSearchString = "";
-                    setupRecyclerView();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+                kcpPlacesFiltered, KcpContentTypeFactory.PREF_ITEM_TYPE_ALL_PLACE, onStoreClickedListener);
 
         List<SectionedLinearRecyclerViewAdapter.Section> sections =
                 new ArrayList<SectionedLinearRecyclerViewAdapter.Section>();
@@ -482,7 +415,9 @@ public class MapFragment extends BaseFragment
         List<Integer> sectionPosition = new ArrayList<Integer>();
         String startLetter = null;
 
-        for(int i = mSectionStartingIndex; i < kcpPlacesFiltered.size(); i++){
+        int startIndex = isBlueDotShown() && mShowBlueDotHeader ? 1 : 0;
+        if(startIndex == 1) mPlaceRecyclerViewAdapter.addHeader(useMyLocationListener);
+        for(int i = startIndex; i < kcpPlacesFiltered.size(); i++){
             String storeName = kcpPlacesFiltered.get(i).getPlaceName().toUpperCase();
             String currentStoreNameStartLetter = "";
             if(storeName.length() > 0) currentStoreNameStartLetter = String.valueOf(storeName.charAt(0));
@@ -506,6 +441,7 @@ public class MapFragment extends BaseFragment
                 mPlaceRecyclerViewAdapter);
         mSectionedAdapter.setSections(sections.toArray(dummy));
         mMainActivity.rvMap.setAdapter(mSectionedAdapter);
+
     }
 
     private Polygon getPolygonWithPlaceExternalId(String placeExternalCode){
@@ -638,7 +574,7 @@ public class MapFragment extends BaseFragment
                     if(map.getShortName().equals(shortName)){
                         if(i == mCurrentLevelIndex) {
                             setLevelImageView(maps);
-                            return;
+//                            return;
                         }
                         mCurrentLevelIndex = i;
                         break;
@@ -650,7 +586,7 @@ public class MapFragment extends BaseFragment
                     if(map.getName().equals(mapName)){
                         if(i == mCurrentLevelIndex) {
                             setLevelImageView(maps);
-                            return;
+//                            return;
                         }
                         mCurrentLevelIndex = i;
                         break;
@@ -659,7 +595,7 @@ public class MapFragment extends BaseFragment
             } else {
                 if(mapIndex == mCurrentLevelIndex) {
                     setLevelImageView(maps);
-                    return;
+//                    return;
                 }
                 mCurrentLevelIndex = mapIndex;
             }
@@ -743,6 +679,7 @@ public class MapFragment extends BaseFragment
                 rlUpper.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        setFollowMode(FollowMode.NONE);
                         setMapLevel(upperLevel, null, null);
                     }
                 });
@@ -769,6 +706,7 @@ public class MapFragment extends BaseFragment
                 rlLower.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        setFollowMode(FollowMode.NONE);
                         setMapLevel(lowerLevel, null, null);
                     }
                 });
@@ -800,6 +738,65 @@ public class MapFragment extends BaseFragment
         zoomInOut();
     }
 
+
+    private void drawPath(){
+        if (path != null) {
+            didTapNothing();
+            return;
+        }
+
+        //because only destinationPolygon can either be polygon or location
+        Directions directions = null;
+        Location arriveAtLocation = null;
+
+        if(destinationPolygon instanceof Polygon){
+            arriveAtLocation = ((Polygon) destinationPolygon).getLocations().get(0);
+        } else if(destinationPolygon instanceof CustomLocation){
+            arriveAtLocation = ((CustomLocation) destinationPolygon);
+        } else if (destinationPolygon instanceof  Coordinate) {
+
+        }
+
+        String storeName = getString(R.string.bluedot_my_location);
+        if(mMainActivity.getDestStoreName().equals(storeName) && mBlueDotPin != null) {
+            directions = mBlueDotPin.getCoordinate().directionsTo(activeVenue, startPolygon, ((Polygon) startPolygon).getLocations().get(0), null);
+//                    directions = startPolygon.directionsTo(activeVenue, mBlueDotPin.getCoordinate(), null, null);
+        } else if (mMainActivity.getStartStoreName().equals(storeName) && mBlueDotPin != null){
+            directions = destinationPolygon.directionsFrom(activeVenue, mBlueDotPin.getCoordinate(), null, arriveAtLocation); //FROM BLUEDOT
+        }
+
+        if (directions != null) {
+            path = new Path(directions.getPath(), 1.5f, 1.5f, getResources().getColor(R.color.map_destination_store));
+            mapView.addPath(path);
+            setMapLevelsInPath(directions.getPath());
+        }
+
+        Coordinate destinationPolygonCoordinate = null;
+        if(destinationPolygon instanceof Polygon) {
+            highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
+            destinationPolygonCoordinate = ((Polygon) destinationPolygon).getAnchor();
+        } else if(destinationPolygon instanceof CustomLocation && !((CustomLocation) destinationPolygon).getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) {
+        } else if (destinationPolygon instanceof Coordinate){
+            clearHighlightedColours();
+            LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(destinationPolygon);
+            if(locationLabelClicker != null) {
+                destinationPolygonCoordinate = (Coordinate) destinationPolygon;
+                locationLabelClicker.highlightThisLabel();
+            }
+        } else {
+            destinationPolygonCoordinate = ((CustomLocation) destinationPolygon).getNavigatableCoordinates().get(0);
+        }
+
+        showDirectionCard(false, null, 0, null, null, null);
+        if(mBlueDotPin.getCoordinate().getMap() != null) {
+            setMapLevel(-50, mBlueDotPin.getCoordinate().getMap().getShortName(), null);
+        }
+
+        dropDestinationPin(destinationPolygonCoordinate, getResources().getDrawable(R.drawable.icn_wayfinding_destination));
+        dropVortexOnThePath(directions.getInstructions());
+        showInstruction(maps[mCurrentLevelIndex].getElevation());
+    }
+
     public boolean didTapPolygon(Polygon polygon) {
         try {
             if(path != null || polygon == null) return true; //map shouldn't be clicakble when the paths drawn
@@ -809,7 +806,7 @@ public class MapFragment extends BaseFragment
             /*if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName());*/
             replaceSelectedPinWithRemovedPin();
             //tapping the same polygon should dismiss the detail and remove the highlights
-            if(destinationPolygon != null && destinationPolygon == polygon && mSavedParkingPolygon != polygon) {
+            if(mSearchMode.equals(SearchMode.STORE) && destinationPolygon != null && destinationPolygon == polygon && mSavedParkingPolygon != polygon) {
                 destinationPolygon = null;
                 showDirectionCard(false, null, 0, null, null, null);
                 clearHighlightedColours();
@@ -836,24 +833,17 @@ public class MapFragment extends BaseFragment
 
                 //because only destinationPolygon can either be polygon or location
                 Directions directions = null;
-                String departFrom = ((Polygon) startPolygon).getLocations().get(0).getName();
-                String arriveAt = "";
                 Location arriveAtLocation = null;
 
                 if(destinationPolygon instanceof Polygon){
-                    arriveAt = ((Polygon) destinationPolygon).getLocations().get(0).getName();
                     arriveAtLocation = ((Polygon) destinationPolygon).getLocations().get(0);
                 } else if(destinationPolygon instanceof CustomLocation){
-                    arriveAt = ((CustomLocation) destinationPolygon).getName();
                     arriveAtLocation = ((CustomLocation) destinationPolygon);
                 } else if (destinationPolygon instanceof  Coordinate) {
 
                 }
 
-                //CHECK BLUEDOT == NULL
-//                directions = mBlueDotPin.getCoordinate().directionsFrom(activeVenue, startPolygon, ((Polygon) startPolygon).getLocations().get(0), null); //BlUEDOT = DESTINATION
-//                  directions = mBlueDotPin.getCoordinate().directionsTo(activeVenue, destinationPolygon, ((Polygon) destinationPolygon).getLocations().get(0), arriveAtLocation); //BlUEDOT = START
-                directions = destinationPolygon.directionsFrom(activeVenue, mBlueDotPin.getCoordinate(), null, arriveAtLocation); //real use
+                directions = destinationPolygon.directionsFrom(activeVenue, startPolygon, ((Polygon) startPolygon).getLocations().get(0), arriveAtLocation); //real use
 
                 if (directions != null) {
                     path = new Path(directions.getPath(), 1.5f, 1.5f, getResources().getColor(R.color.map_destination_store));
@@ -892,10 +882,13 @@ public class MapFragment extends BaseFragment
 
                 highlightPolygon((Polygon) startPolygon, getResources().getColor(R.color.map_destination_store));
                 showDirectionCard(false, null, 0, null, null, null);
-                if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName(), null);
+                if(((Polygon) startPolygon).getMap().getShortName() != null) {
+                    setMapLevel(-50, ((Polygon) startPolygon).getMap().getShortName(), null);
+                }
                 dropDestinationPin(destinationPolygonCoordinate, getResources().getDrawable(R.drawable.icn_wayfinding_destination));
                 dropVortexOnThePath(directions.getInstructions());
                 showInstruction(maps[mCurrentLevelIndex].getElevation());
+                setFollowMode(FollowMode.NONE);
 
                 return true;
             } else {
@@ -1472,6 +1465,7 @@ public class MapFragment extends BaseFragment
                 Random r = new Random();
                 int randomFloor = r.nextInt(5);
                 dropBlueDot(49.2268235, -123.0004849, randomFloor); //MP
+//                dropBlueDot(51.2030627,-113.9956265, randomFloor); //CROSSIRON
                 Toast.makeText(getActivity(), "Floor : " + randomFloor, Toast.LENGTH_SHORT).show();
             } else {
                 removeBlueDot();
@@ -1483,6 +1477,64 @@ public class MapFragment extends BaseFragment
 
         }
     };
+
+    private OnStoreClickListener onStoreClickedListener = new OnStoreClickListener() {
+        @Override
+        public void onStoreClick(final int storeId, final String externalCode, final String storeName, final String categoryName) {
+            try {
+
+                if(!mMapLoaded) {
+                    setMapInterface(new MapInterface() {
+                        @Override
+                        public void mapLoaded() {
+                            onStoreClick(storeId, externalCode, storeName, categoryName);
+                        }
+                    });
+                    return;
+                }
+
+                if(mSearchMode.equals(SearchMode.STORE)){
+                    stopNavigation();
+                } else if(mSearchMode.equals(SearchMode.ROUTE_START)){
+                    if(mMainActivity.getDestStoreName().equals(storeName)) {
+                        Toast.makeText(getActivity(), getString(R.string.warning_selected_same_store), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    mMainActivity.setDestionationNames(storeName, null);
+                    if(!mMainActivity.isEditTextsEmpty()) {
+                        startNavigation();
+                    } else stopNavigation();
+                } else if(mSearchMode.equals(SearchMode.ROUTE_DESTINATION)){
+                    if(mMainActivity.getStartStoreName().equals(storeName)) {
+                        Toast.makeText(getActivity(), getString(R.string.warning_selected_same_store), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    mMainActivity.setDestionationNames(null, storeName);
+                    if(!mMainActivity.isEditTextsEmpty()) {
+                        startNavigation();
+                    } else stopNavigation();
+                }
+
+
+                Polygon placePolygon = getPolygonWithPlaceExternalId(externalCode);
+                if(placePolygon != null) {
+                    mapView.getCamera().focusOn(placePolygon);
+                    didTapPolygon(placePolygon);
+                    zoomInOut();
+                } else {
+                    showDirectionCard(true, IdType.ID, storeId, storeName, categoryName, null);
+                }
+                if(!mSearchMode.equals(SearchMode.STORE)) mMainActivity.moveFocusToNextEditText();
+                mSearchString = "";
+                setupRecyclerView();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
 
     private View.OnClickListener onFollowButtonListener = new View.OnClickListener() {
         @Override
@@ -1500,6 +1552,7 @@ public class MapFragment extends BaseFragment
 
     private void setFollowMode(FollowMode followMode){
         try {
+            if(followMode == mFollowMode) return;
             if(isBlueDotShown()) {
                 mFollowMode = followMode;
                 updateFollowMode();
@@ -1551,8 +1604,8 @@ public class MapFragment extends BaseFragment
         }
     }
 
-    private boolean isBlueDotShown(){
-        return BluetoothManager.isBluetoothEnabled() && mBlueDotPin != null;
+    public static boolean isBlueDotShown(){
+        return BluetoothManager.isBluetoothEnabled() && mBlueDotPin != null && sLocationAvailability.isAvailable();
     }
 
 
@@ -2054,22 +2107,8 @@ public class MapFragment extends BaseFragment
                         mMainActivity.rvMap.setVisibility(View.VISIBLE);
                         if(btnShowMap != null) btnShowMap.setVisibility(View.GONE);
 
-                        if(isBlueDotShown()) {
-//                            if(mSectionPosition.size() > 0) mSectionPosition.set(0, mSectionPosition.get(0) + 1);
-                            mSectionStartingIndex = 1;
-                            setupRecyclerView();
-                            mPlaceRecyclerViewAdapter.addHeader(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                }
-                            });
-                        } else {
-//                            if(mSectionPosition.size() > 0) mSectionPosition.set(0, mSectionPosition.get(0) - 1);
-                            mSectionStartingIndex = 0;
-                            setupRecyclerView();
-//                            mPlaceRecyclerViewAdapter.removeHeader();
-                        }
+                        mShowBlueDotHeader = false;
+                        setupRecyclerView();
 
                         return true;
                     }
@@ -2086,8 +2125,17 @@ public class MapFragment extends BaseFragment
                 if(btnShowMap != null) btnShowMap.setVisibility(View.GONE);
                 if(v.getId() == R.id.etDestStore) {
                     mSearchMode = SearchMode.ROUTE_DESTINATION;
+                    mShowBlueDotHeader = false;
+                    setupRecyclerView();
                 } else if(v.getId() == R.id.etStartStore) {
                     mSearchMode = SearchMode.ROUTE_START;
+                    if(isBlueDotShown()) {
+                        mShowBlueDotHeader = true;
+                        setupRecyclerView();
+                    } else {
+                        mShowBlueDotHeader = false;
+                        setupRecyclerView();
+                    }
                 }
             } else {
                 mMainActivity.rvMap.setPadding(0, 0, 0, 0);
@@ -2097,6 +2145,61 @@ public class MapFragment extends BaseFragment
         }
     }
 
+    private View.OnClickListener useMyLocationListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View v) {
+
+            try {
+                String storeName = getString(R.string.bluedot_my_location);
+                if(mSearchMode.equals(SearchMode.ROUTE_START)){
+                    if(mMainActivity.getDestStoreName().equals(storeName)) {
+                        Toast.makeText(getActivity(), getString(R.string.warning_selected_same_location), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    mMainActivity.setDestionationNames(storeName, null);
+                    if(!mMainActivity.isEditTextsEmpty()) {
+                        startNavigation();
+                    } else stopNavigation();
+
+//                    destinationPolygon = null;
+//                    mSearchMode = SearchMode.ROUTE_DESTINATION;
+//                    didTapPolygon(mBlueDotPin.getCoordinate());
+                    drawPath();
+
+                } else if(mSearchMode.equals(SearchMode.ROUTE_DESTINATION)){
+                    if(mMainActivity.getStartStoreName().equals(storeName)) {
+                        Toast.makeText(getActivity(), getString(R.string.warning_selected_same_location), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    mMainActivity.setDestionationNames(null, storeName);
+                    if(!mMainActivity.isEditTextsEmpty()) {
+                        startNavigation();
+                    } else stopNavigation();
+
+
+                    didTapPolygon((Polygon) startPolygon);
+                }
+
+
+
+                mMainActivity.moveFocusToNextEditText();
+                mSearchString = "";
+                setupRecyclerView();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+
+
+
+
+
+        }
+    };
 
     public class QueryTextListener implements SearchView.OnQueryTextListener {
         @Override

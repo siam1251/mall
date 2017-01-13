@@ -7,7 +7,8 @@
     android:layout_height="55dp"
     >
 
-    <TextView
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+        app:fontFamily="@string/fontFamily_roboto_regular"
         android:id="@+id/tvParkingLotName"
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"

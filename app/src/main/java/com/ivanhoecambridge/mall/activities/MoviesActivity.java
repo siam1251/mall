@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +25,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpOverrides;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpTimeConverter;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.MoviesRecyclerViewAdapter;
@@ -40,9 +45,11 @@ import com.ivanhoecambridge.mall.movies.models.Movies;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.CTA;
+import com.ivanhoecambridge.mall.views.CustomAnimation;
 import com.ivanhoecambridge.mall.views.MovieRecyclerItemDecoration;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import constants.MallConstants;
@@ -161,9 +168,9 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
             llViewShowtimes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                Intent intent = new Intent(MoviesActivity.this, ShowtimesActivity.class);
-                MoviesActivity.this.startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
-                ActivityAnimation.startActivityAnimation(MoviesActivity.this);
+                    Intent intent = new Intent(MoviesActivity.this, ShowtimesActivity.class);
+                    MoviesActivity.this.startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
+                    ActivityAnimation.startActivityAnimation(MoviesActivity.this);
                 }
             });
 
@@ -248,7 +255,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
                     }, true);
 
 
-            String todaysHour = null;
+            /*String todaysHour = null;
             try {
                     mLayoutStoreHours = getLayoutInflater().inflate(
                             R.layout.layout_store_hours,
@@ -257,8 +264,55 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
 
             } catch (Exception e) {
                 logger.error(e);
-            }
+            }*/
 
+            String todaysHour = null;
+            try {
+                ArrayList<KcpPlaces> kcpPlacesList = KcpPlacesRoot.getInstance().getPlaceByName(MallConstants.CINEMA_NAME);
+                if(kcpPlacesList.size() > 0) {
+                    if(kcpPlacesList != null){
+                        KcpPlaces kcpPlaces = kcpPlacesList.get(0);
+                        todaysHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+
+
+                        List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(Constants.NUMB_OF_DAYS);
+                        if(comingHolidays == null || comingHolidays.size() == 0) comingHolidays = KcpPlacesRoot.getInstance().getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL).getHolidaysWithin(7);
+                        KcpUtility.sortHoursList((ArrayList) comingHolidays);
+
+                        String overrideHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, Calendar.getInstance());
+                        if(!overrideHour.equals("")) todaysHour = overrideHour;
+                        todaysHour = todaysHour.replace("-", "to");
+                        mLayoutStoreHours = getLayoutInflater().inflate(
+                                R.layout.layout_store_hours,
+                                mParentView,
+                                false);
+
+                        LinearLayout llHolidays = (LinearLayout) mLayoutStoreHours.findViewById(R.id.llHolidays);
+
+                        if(comingHolidays.size() != 0){
+                            llHolidays.setVisibility(View.VISIBLE);
+                            TextView tvHolidayName = (TextView) mLayoutStoreHours.findViewById(R.id.tvHolidayName);
+
+                            String holidayNames = "";
+                            for(int i = 0; i < comingHolidays.size(); i++) {
+                                holidayNames = holidayNames + comingHolidays.get(i).getName() + " " + KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.DATE_FORMAT_HOLIDAY_STORE);
+                                if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + "\n";
+                            }
+                            tvHolidayName.setText(holidayNames);
+                        }
+
+                        LinearLayout llMallHour = (LinearLayout) mLayoutStoreHours.findViewById(R.id.llMallHour);
+                        ((ViewGroup) llMallHour).removeAllViews();
+                        for(int i = 0; i < Constants.NUMB_OF_DAYS; i++){
+                            ((ViewGroup) llMallHour).addView(getMallHourListItem(i, comingHolidays));
+                        }
+                    }
+                }
+
+
+            } catch (Exception e) {
+                logger.error(e);
+            }
 
             //Store hours
             CTA storeHours = new CTA(
@@ -266,11 +320,11 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
                     mParentView,
                     R.layout.layout_detail_button,
                     R.drawable.icn_hours,
-                    "",
+                    todaysHour,
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            /*if(mLayoutStoreHours == null) return;
+                            if(mLayoutStoreHours == null) return;
                             Animation animation;
 
                             Display display = getWindowManager().getDefaultDisplay();
@@ -284,9 +338,9 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
 
                             animation.setDuration(300);
                             v.clearAnimation();
-                            v.startAnimation(animation);*/
+                            v.startAnimation(animation);
                         }
-                    }, false);
+                    }, true);
 
             if(mLayoutStoreHours != null) {
                 LinearLayout llSubCTA = (LinearLayout) storeHours.getView().findViewById(R.id.llSubCTA);
@@ -322,7 +376,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
 
             cTAList.add(location);
             cTAList.add(parking);
-//            cTAList.add(storeHours);
+            cTAList.add(storeHours);
             cTAList.add(phone);
 
             View llCTA = findViewById(R.id.llCTA);
@@ -335,6 +389,47 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
         } catch (Exception e){
             logger.error(e);
         }
+    }
+
+    public View getMallHourListItem(int daysPastToday, List<KcpOverrides.ContinuousOverride> comingHolidays){
+        View v = getLayoutInflater().inflate(R.layout.list_item_store_hour, null, false);
+        try {
+            TextView tvDate = (TextView) v.findViewById(R.id.tvDate);
+            TextView tvMallHour = (TextView) v.findViewById(R.id.tvHour);
+            ImageView ivHolidayIndicator = (ImageView) v.findViewById(R.id.ivHolidayIndicator);
+
+            Calendar today = Calendar.getInstance();
+            long todayInMillisPlusDays = daysPastToday * 24 * 60 * 60 * 1000 + today.getTimeInMillis();
+            today.setTimeInMillis(todayInMillisPlusDays);
+
+            ArrayList<KcpPlaces> kcpPlacesList = KcpPlacesRoot.getInstance().getPlaceByName(MallConstants.CINEMA_NAME);
+            if(kcpPlacesList.size() > 0) {
+                KcpPlaces kcpPlaces = kcpPlacesList.get(0);
+
+                String openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(today.get(Calendar.DAY_OF_WEEK));
+                openAndClosingHour = openAndClosingHour.replace("-", "to").replace("AM", "am").replace("PM", "pm");
+                tvMallHour.setText(openAndClosingHour);
+
+                if (daysPastToday == 0) {
+                    v.setBackgroundColor(getResources().getColor(R.color.store_hour_selected_bg));
+                }
+                String mallHourDate = KcpTimeConverter.convertDateFormat(today.getTime(), Constants.DATE_FORMAT_DAY);
+                tvDate.setText(mallHourDate.toUpperCase());
+
+                //overriding holidays
+                openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, today);
+                if (!openAndClosingHour.equals("")) {
+                    openAndClosingHour = openAndClosingHour.replace("-", "to").replace("AM", "am").replace("PM", "pm");
+                    tvMallHour.setText(openAndClosingHour);
+                    ivHolidayIndicator.setVisibility(View.VISIBLE);
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error(e);
+        }
+
+        return v;
     }
 
     private void setRecyclerView(){

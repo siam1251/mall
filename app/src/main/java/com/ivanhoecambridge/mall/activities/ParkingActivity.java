@@ -26,14 +26,19 @@ import android.widget.Toast;
 
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
+import com.ivanhoecambridge.mall.fragments.MapFragment;
 import com.ivanhoecambridge.mall.parking.ChildParking;
 import com.ivanhoecambridge.mall.parking.Parking;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
+import com.ivanhoecambridge.mall.views.RecyclerViewFooter;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.sLocationAvailability;
 
 /**
  * Created by Kay on 2016-08-15.
@@ -43,6 +48,7 @@ public class ParkingActivity extends AppCompatActivity {
     public final int ITEM_TYPE_PARKING = 0;
     public final int ITEM_TYPE_ENTRANCE = 1;
     public final int ITEM_TYPE_FOOTER = 2;
+    public final int ITEM_TYPE_USE_MY_LOCATION = 3;
     private int mParkingLotSelectedPosition = -1;
     private int mEntranceSelectedPosition = -1;
     private String mParkingNote = "";
@@ -192,6 +198,15 @@ public class ParkingActivity extends AppCompatActivity {
         rvParking.setLayoutManager(linearLayoutManager);
         rvParking.setHasFixedSize(true);
         ParkingRecyclerViewAdapter parkingRecyclerViewAdapter = new ParkingRecyclerViewAdapter(this, ParkingManager.sParkings.getParkings(), null);
+
+        if(MapFragment.isBlueDotShown()) {
+            parkingRecyclerViewAdapter.addHeader(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
         rvParking.setAdapter(parkingRecyclerViewAdapter);
 
         try {
@@ -432,11 +447,21 @@ public class ParkingActivity extends AppCompatActivity {
         private Context mContext;
         private List<Parking> mParkingList;
         private List<ChildParking> mChildParkingList;
+        private boolean mUseMyLocationExist = false;
+        private View.OnClickListener mOnClickListener;
 
         public ParkingRecyclerViewAdapter(Context context, List<Parking> parkingList, List<ChildParking> childParkingList) {
             mContext = context;
-            mParkingList = parkingList;
+            mParkingList = new ArrayList<Parking>(parkingList);
             mChildParkingList = childParkingList;
+        }
+
+        public void addHeader(View.OnClickListener onClickListener){
+            mUseMyLocationExist = true;
+            mOnClickListener = onClickListener;
+            Parking fakeParking = new Parking();
+            mParkingList.add(0, fakeParking);
+            notifyDataSetChanged();
         }
 
         public class PlaceHolder extends RecyclerView.ViewHolder {
@@ -461,6 +486,9 @@ public class ParkingActivity extends AppCompatActivity {
                 case ITEM_TYPE_ENTRANCE:
                     return new PlaceHolder(
                             LayoutInflater.from(mContext).inflate(R.layout.list_item_parking, parent, false));
+                case ITEM_TYPE_USE_MY_LOCATION:
+                    return new RecyclerViewFooter.HeaderViewHolder(
+                            LayoutInflater.from(mContext).inflate(R.layout.list_item_parking_use_my_location, parent, false));
                 case ITEM_TYPE_FOOTER:
                     return new PlaceHolder(
                             LayoutInflater.from(mContext).inflate(R.layout.list_item_parking_footer, parent, false));
@@ -470,6 +498,12 @@ public class ParkingActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+
+            if(getItemViewType(position) == ITEM_TYPE_USE_MY_LOCATION) {
+                RecyclerViewFooter.HeaderViewHolder headerViewHolder = (RecyclerViewFooter.HeaderViewHolder) holder;
+                headerViewHolder.mView.setOnClickListener(mOnClickListener);
+                return;
+            }
 
             if(holder.getItemViewType() == ITEM_TYPE_PARKING){
 
@@ -525,7 +559,8 @@ public class ParkingActivity extends AppCompatActivity {
 
         @Override
         public int getItemViewType(int position) {
-            if(mParkingList != null) return ITEM_TYPE_PARKING;
+            if(position == 0 && mUseMyLocationExist) return ITEM_TYPE_USE_MY_LOCATION;
+            else if(mParkingList != null) return ITEM_TYPE_PARKING;
             else if(mChildParkingList != null) return ITEM_TYPE_ENTRANCE;
             return ITEM_TYPE_PARKING;
         }

@@ -579,11 +579,13 @@ public class MainActivity extends BaseActivity
         if(etStartStore.getText() == null || etStartStore.getText().toString().equals("")) {
             etDestStore.clearFocus();
             etStartStore.requestFocus();
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            //open keyboard if closed, leave it open if opened
+            ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         } else if(etDestStore.getText() == null || etDestStore.getText().toString().equals("")) {
             etStartStore.clearFocus();
             etDestStore.requestFocus();
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            //open keyboard if closed, leave it open if opened
+            ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         }
 
     }

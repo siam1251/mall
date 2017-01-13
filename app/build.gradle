@@ -60,7 +60,7 @@ android {
             buildConfigField 'Boolean', 'WHITE_FAV', 'true' //show white fav icon in case the selected fav's same as the toolbar bg color
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'true'
             buildConfigField 'Boolean', 'BLUEDOT', 'true'
-            buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.9"'
+            buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.10"'
 
             versionName "1.0.0"
         }

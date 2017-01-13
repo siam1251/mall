@@ -38,7 +38,7 @@ public class PositionAndHeadingMapVisualization {
             posX = (startValue.getLatitude() + (endValue.getLatitude() - startValue.getLatitude()) * fraction);
             posY = (startValue.getLongitude() + (endValue.getLongitude() - startValue.getLongitude()) * fraction);
 //            Log.d("bluedot", "BlueDotPosition: "  + (double) posX + " " + (double) posY + " FRACTION: " + fraction);
-//            mapViewWithBlueDot.dropBlueDot(posX, posY, endValue.getMappedInFloor());
+            mapViewWithBlueDot.dropBlueDot(posX, posY, endValue.getMappedInFloor());
             return new BlueDotPosition(posX, posY);
         }
     }

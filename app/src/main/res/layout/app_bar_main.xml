@@ -82,6 +82,7 @@
         android:src="@drawable/view_shadow_inverted"
         />
 
+
     <android.support.v7.widget.RecyclerView
         android:layout_marginTop="?attr/actionBarSize"
         android:visibility="gone"
@@ -90,9 +91,9 @@
         android:id="@+id/rvMallDirectory"
         android:isScrollContainer="true"
         android:gravity="center_horizontal"
-        android:background="@color/white"
+        android:background="@color/card_bg"
         />
-
+    android:background="@color/white"
 
     <com.ivanhoecambridge.mall.adapters.adapterHelper.IndexableRecylerView
         android:layout_marginTop="?attr/actionBarSize"
@@ -101,8 +102,9 @@
         android:layout_height="match_parent"
         android:id="@+id/rvMap"
         android:gravity="center_horizontal"
-        android:background="@color/white"
+        android:background="@color/card_bg"
         />
+    android:background="@color/white"
 
 
 

@@ -38,7 +38,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 import com.mappedin.jpct.RGBColor;
 
@@ -333,7 +335,6 @@ public class Utility {
     public static interface SqueezeListener {
         public void OnSqueezeAnimationDone();
     }
-
 
     public static void closeKeybaord(Activity activity){
         View view = activity.getCurrentFocus();
