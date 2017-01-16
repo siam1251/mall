@@ -323,6 +323,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                         .into(dealHolder.ivDealLogo);
             }
 
+//            dealHolder.ivDealLogo.requestLayout();
+
             /*new GlideFactory().glideWithDefaultRatio(
                     mContext,
                     imageUrl,
@@ -391,6 +393,13 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             });
         } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_FOOTER){
             RecyclerViewFooter.FooterViewHolder footerViewHolder = (RecyclerViewFooter.FooterViewHolder) holder;
+
+            int screenWidth = KcpUtility.getScreenWidth(mContext);
+            /*StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) new StaggeredGridLayoutManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            params.width = screenWidth;
+            int margin = KcpUtility.dpToPx((Activity) mContext, 8);
+            params.setMargins(margin, margin, margin, margin);
+            footerViewHolder.mView.setLayoutParams(params);*/
             footerViewHolder.mView.setOnClickListener(mOnClickListener);
             footerViewHolder.tvFooter.setText(mFooterText);
         }

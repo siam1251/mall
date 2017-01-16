@@ -831,6 +831,10 @@ public class MapFragment extends BaseFragment
                     return true;
                 }
 
+                if(((Polygon) startPolygon).getMap().getShortName() != null) {
+                    setMapLevel(-50, ((Polygon) startPolygon).getMap().getShortName(), null);
+                }
+
                 //because only destinationPolygon can either be polygon or location
                 Directions directions = null;
                 Location arriveAtLocation = null;
@@ -882,9 +886,6 @@ public class MapFragment extends BaseFragment
 
                 highlightPolygon((Polygon) startPolygon, getResources().getColor(R.color.map_destination_store));
                 showDirectionCard(false, null, 0, null, null, null);
-                if(((Polygon) startPolygon).getMap().getShortName() != null) {
-                    setMapLevel(-50, ((Polygon) startPolygon).getMap().getShortName(), null);
-                }
                 dropDestinationPin(destinationPolygonCoordinate, getResources().getDrawable(R.drawable.icn_wayfinding_destination));
                 dropVortexOnThePath(directions.getInstructions());
                 showInstruction(maps[mCurrentLevelIndex].getElevation());
@@ -1170,6 +1171,7 @@ public class MapFragment extends BaseFragment
                     }
                 }
             });
+            ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_parking_car_outline));
         } else {
             if(!parkingNote.equals("")) {
                 tvParkingNote.setVisibility(View.VISIBLE);
@@ -1307,6 +1309,7 @@ public class MapFragment extends BaseFragment
                     }
                 }
             });
+            ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_parking_car_outline));
         }  else {
             showDirectionCard(true, idType, Integer.valueOf(location.getExternalID()), storeName, categoryName, null);
         }
@@ -1439,7 +1442,7 @@ public class MapFragment extends BaseFragment
         if(maps == null) return;
 
 
-        /*android.location.Location targetLocation = MapUtility.getLocation(x, y);
+        android.location.Location targetLocation = MapUtility.getLocation(x, y);
         Overlay2DImage label;
         Drawable rotatedHeading = MapUtility.getRotatedDrawable(getActivity(), R.drawable.icn_bluedot_orientation_pointer, heading);
 //        Drawable rotatedHeading = MapUtility.rotate(getActivity(), R.drawable.icn_bluedot_orientation_pointer, heading);
@@ -1449,7 +1452,7 @@ public class MapFragment extends BaseFragment
         mBlueDotCompass = new Pin(coordinate, label);
         mBlueDotCompass.setCoordinate(coordinate);
         label.setPosition(coordinate);
-        mapView.addMarker(label, false);*/
+        mapView.addMarker(label, false);
     }
 
     private View.OnClickListener onTestButtonListener = new View.OnClickListener() {
@@ -1932,8 +1935,10 @@ public class MapFragment extends BaseFragment
             } else {
 //                if(mSavedParkingLocation != null) return;
                 if(BuildConfig.PARKING_POLYGON) {
-                    String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
-                    showMySavedParkingPolygon(enabled, parkingId, focus);
+                    if(ParkingManager.getMyEntrance(getActivity()) != null) {
+                        String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
+                        showMySavedParkingPolygon(enabled, parkingId, focus);
+                    }
                 } /*else {*/
                 HashMap<String, CustomLocation> parkingHashMap = CustomLocation.getParkingHashMap();
                 String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
@@ -2266,7 +2271,20 @@ public class MapFragment extends BaseFragment
 
         ArrayList<KcpContentPage> dealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true);
         ArrayList<KcpContentPage> recommendedDealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true);
+
+
+        dealsList.removeAll(recommendedDealsList);
         dealsList.addAll(recommendedDealsList);
+
+        /*
+
+        for(KcpContentPage kcpContentPageRecommended : recommendedDealsList){
+            if(dealsList.contains(kcpContentPageRecommended)){
+                dealsList.remove(kcpContentPageRecommended);
+            }
+        }
+        dealsList.addAll(recommendedDealsList);*/
+
         final ArrayList<KcpContentPage> dealsForThisStore = new ArrayList<KcpContentPage>();
         if(dealsList != null){
             for(int i = 0 ; i < dealsList.size(); i++){

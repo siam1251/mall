@@ -253,15 +253,16 @@
     </RelativeLayout>
 
         android:visibility="gone"
-    <RelativeLayout
         android:layout_marginBottom="55dp"
+    <RelativeLayout
+        android:layout_marginBottom="65dp"
         android:layout_alignParentBottom="true"
         android:id="@+id/rlSlidingPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-            android:visibility="gone"
         <ImageView
+            android:visibility="gone"
             android:id="@+id/ivTest"
             android:layout_alignParentRight="true"
             android:layout_marginRight="16dp"
@@ -272,8 +273,8 @@
             android:clickable="true"
             />
 
-            android:visibility="invisible"
         <LinearLayout
+            android:visibility="invisible"
             android:layout_below="@+id/ivTest"
             android:id="@+id/llBlueDot"
             android:layout_alignParentRight="true"

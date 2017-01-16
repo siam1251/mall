@@ -8,6 +8,7 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.exacttarget.etpushsdk.ETAnalytics;
 import com.exacttarget.etpushsdk.ETException;
 import com.exacttarget.etpushsdk.ETLogListener;
@@ -71,9 +72,9 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
         KcpConstants.setBaseURL(Constants.IS_APP_IN_PRODUCTION);
         KcpAccount.getInstance().initialize(getApplicationContext());
         HeaderFactory.changeCatalog(HeaderFactory.HEADER_VALUE_DATAHUB_CATALOG);
-        if(Constants.IS_APP_IN_PRODUCTION) {
+
+        if(BuildConfig.REPORT_CRASH) {
             Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
-//            Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         } else {
             Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         }
@@ -116,18 +117,22 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
         }
 
 
+
         //enable below for firebase crash reporting
-        Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler()
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+        //option 2 - but this stops error log from showing in debug mode though
+        /*Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler()
         {
             @Override
             public void uncaughtException (Thread thread, Throwable e)
             {
-                if(BuildConfig.REPORT_CRASH)
-                {
+                if(BuildConfig.REPORT_CRASH) {
                     FirebaseCrash.report( e);
+                } else {
+
                 }
             }
-        });
+        });*/
 
 
 

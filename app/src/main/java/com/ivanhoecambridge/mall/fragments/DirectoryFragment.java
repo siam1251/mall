@@ -42,6 +42,7 @@ import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.managers.ThemeManager;
 import com.ivanhoecambridge.mall.searchIndex.IndexManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
+import com.ivanhoecambridge.mall.views.NewsRecyclerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -334,6 +335,9 @@ public class DirectoryFragment extends BaseFragment {
                         return true;
                     }
                 });
+
+        NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(getActivity(), R.dimen.card_horizontal_margin);
+        mMainActivity.rvMallDirectory.addItemDecoration(itemDecoration);
     }
 
     private void setupRecyclerView(){
@@ -447,6 +451,7 @@ public class DirectoryFragment extends BaseFragment {
                     mMallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), mKcpPlacesFiltered, mPlaceByBrand, mPlaceByTag, mKcpCategories, mSearchString);
 //                    mMallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), new ArrayList<KcpPlaces>(), mPlaceByBrand, mKcpCategories, mSearchString); //testing
                     mMainActivity.rvMallDirectory.setAdapter(mMallDirectoryRecyclerViewAdapter);
+
 //                } else {
 //                    mMallDirectoryRecyclerViewAdapter.updateData(mKcpPlacesFiltered, mPlaceByBrand, mKcpCategories, mSearchString);
 //                    mMallDirectoryRecyclerViewAdapter.updateData(new ArrayList<KcpPlaces>(), mPlaceByBrand, mKcpCategories, mSearchString);

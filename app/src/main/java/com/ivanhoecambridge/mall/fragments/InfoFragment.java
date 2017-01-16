@@ -267,8 +267,6 @@ public class InfoFragment extends BaseFragment {
         }
     }
 
-
-
     public void initializeMallInfoData(){
         if(getActivity() == null){
             setOnFragmentInteractionListener(new OnFragmentInteractionListener() {

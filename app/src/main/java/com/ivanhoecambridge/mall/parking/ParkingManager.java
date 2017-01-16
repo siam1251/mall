@@ -2,10 +2,13 @@ package com.ivanhoecambridge.mall.parking;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
@@ -15,6 +18,10 @@ import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
+import com.ivanhoecambridge.mall.mappedin.MapUtility;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,6 +41,7 @@ public class ParkingManager {
 
     public static String KEY_PARKING_LOT_POSITION= "key_parking_lot_position";
     public static String KEY_ENTRANCE_POSITION = "key_entrance_position";
+    public static String KEY_PARKING_LOT_COORDINATE = "key_parking_lot_coordinate";
     public static String KEY_PARKING_NOTES = "key_parking_notes";
 
 
@@ -102,18 +110,43 @@ public class ParkingManager {
         KcpUtility.cacheToPreferences(context, KEY_ENTRANCE_POSITION, entrancePosition);
         saveParkingNotes(context, note);
         Amenities.saveToggle(context, Amenities.GSON_KEY_PARKING, true);
+        clearParkingSpotCoordinate(context);
         KcpNotificationManager.cancelNotification(context, NOTIFICATION_ID_WELCOME);
     }
 
     public static void saveParkingSpotAndEntrance(final Context context, String parkingId){
-
         int[] parkingPostion = new int[2];
         ParkingManager.sParkings.getParkingPositionById(parkingId, parkingPostion);
         KcpUtility.cacheToPreferences(context, KEY_PARKING_LOT_POSITION, parkingPostion == null ? 0 : parkingPostion[0]);
         KcpUtility.cacheToPreferences(context, KEY_ENTRANCE_POSITION, parkingPostion == null ? 0 : parkingPostion[1]);
         Amenities.saveToggle(context, Amenities.GSON_KEY_PARKING, true);
+        clearParkingSpotCoordinate(context);
         KcpNotificationManager.cancelNotification(context, NOTIFICATION_ID_WELCOME);
     }
+
+    public static void saveParkingSpotAndEntrance(final Context context, double x, double y){
+        KcpUtility.cacheToPreferences(context, KEY_PARKING_LOT_POSITION, -1);
+        KcpUtility.cacheToPreferences(context, KEY_ENTRANCE_POSITION, -1);
+        android.location.Location targetLocation = MapUtility.getLocation(x, y);
+        KcpUtility.saveGson(context, KEY_PARKING_LOT_COORDINATE, targetLocation);
+        Amenities.saveToggle(context, Amenities.GSON_KEY_PARKING, true);
+        KcpNotificationManager.cancelNotification(context, NOTIFICATION_ID_WELCOME);
+    }
+
+    public static void clearParkingSpotCoordinate(final Context context){
+        KcpUtility.saveGson(context, KEY_PARKING_LOT_COORDINATE, null);
+    }
+
+
+    public static Location getSavedParkingCoordinate(final Context context){
+        Gson gson = new Gson();
+        String json = context.getSharedPreferences("PreferenceManager", Context.MODE_PRIVATE).getString(KEY_PARKING_LOT_COORDINATE, "");
+        if(json.equals("")) return null;
+        Type listType = new TypeToken<Location>() {}.getType();
+        Location obj = gson.fromJson(json, listType);
+        return obj;
+    }
+
 
     public static int getSavedParkingLotPosition(final Context context){
         return KcpUtility.loadIntFromCache(context, KEY_PARKING_LOT_POSITION, -1);
@@ -124,7 +157,7 @@ public class ParkingManager {
     }
 
     public static boolean isParkingLotSaved(final Context context){
-        if(KcpUtility.loadIntFromCache(context, KEY_PARKING_LOT_POSITION, -1) != -1) return true;
+        if(getSavedParkingCoordinate(context) != null || KcpUtility.loadIntFromCache(context, KEY_PARKING_LOT_POSITION, -1) != -1) return true;
         else return false;
     }
 
@@ -141,6 +174,7 @@ public class ParkingManager {
     }
 
     public static void removeParkingLot(final Context context){
+        clearParkingSpotCoordinate(context);
         KcpUtility.cacheToPreferences(context, KEY_PARKING_LOT_POSITION, -1);
         KcpUtility.cacheToPreferences(context, KEY_ENTRANCE_POSITION, -1);
         saveParkingNotes(context, "");
@@ -158,13 +192,10 @@ public class ParkingManager {
         message.obj = mode;
         switch (state){
             case DOWNLOAD_STARTED:
-//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, true);
                 break;
             case DOWNLOAD_FAILED:
-//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
                 break;
             case DOWNLOAD_COMPLETE:
-//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
                 break;
             case DATA_ADDED:
                 break;

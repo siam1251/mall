@@ -280,8 +280,8 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
     @Override
     protected void onResume() {
         super.onResume();
-        if(mAdapter != null) mAdapter.notifyDataSetChanged();
-//        setUpRecyclerView();
+//        if(mAdapter != null) mAdapter.notifyDataSetChanged();
+        setUpRecyclerView();
     }
 
     public void onFinish(int resultCode){
