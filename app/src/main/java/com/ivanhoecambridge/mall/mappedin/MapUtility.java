@@ -230,5 +230,18 @@ public class MapUtility {
         return bitmap;
     }
 
+    public static int getIndexWithMapElevation(Map[] maps, double elevation){
+        try {
+            if(maps == null) return 0;
+            for(int i = 0; i < maps.length; i++) {
+                if(maps[i].getElevation() == elevation) return i;
+            }
+            return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 
 }

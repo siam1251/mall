@@ -190,9 +190,14 @@ public class InfoFragment extends BaseFragment {
             tvPark.setText(getString(R.string.info_save_my_parking_spot));
         } else {
             ivPark.setImageResource(R.drawable.icn_car);
-            String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
-            String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
-            String sourceString = getString(R.string.info_my_parking_spot) + " " + "<b>" + parkingLotName + ", " + entranceName + "</b> ";
+            String sourceString;
+            if(ParkingManager.getParkingMode(getActivity()) == ParkingManager.ParkingMode.LOCATION) {
+                String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
+                String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
+                sourceString = getString(R.string.info_my_parking_spot) + " " + "<b>" + parkingLotName + ", " + entranceName + "</b> ";
+            } else {
+                sourceString = "<b>" + getString(R.string.parking_saved_my_parking_spot) + "</b> ";
+            }
             tvPark.setText(Html.fromHtml(sourceString));
         }
     }

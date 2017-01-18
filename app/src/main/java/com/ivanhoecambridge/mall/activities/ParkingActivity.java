@@ -45,6 +45,9 @@ import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.sL
  */
 public class ParkingActivity extends AppCompatActivity {
 
+    public static int PARKING_RESULT_CODE_SPOT_SAVED = 0;
+    public static int PARKING_RESULT_CODE_SPOT_PENDING = 1; //when blue dot's chosen as parking spot, ask for confirmation on map
+
     public final int ITEM_TYPE_PARKING = 0;
     public final int ITEM_TYPE_ENTRANCE = 1;
     public final int ITEM_TYPE_FOOTER = 2;
@@ -68,6 +71,8 @@ public class ParkingActivity extends AppCompatActivity {
 
     private int mTempParkingLotPreviouslySaved = -1;
     private int mTempEntrancePreviouslySaved = -1;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +110,7 @@ public class ParkingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ParkingManager.saveParkingSpotAndEntrance(ParkingActivity.this, mParkingNote, mParkingLotSelectedPosition, mEntranceSelectedPosition);
                 Toast.makeText(ParkingActivity.this, getResources().getString(R.string.parking_saved_my_parking_spot), Toast.LENGTH_SHORT).show();
-                setResult(Activity.RESULT_OK, new Intent());
+                setResult(PARKING_RESULT_CODE_SPOT_SAVED, new Intent());
                 onFinish();
             }
         });
@@ -198,14 +203,13 @@ public class ParkingActivity extends AppCompatActivity {
         rvParking.setLayoutManager(linearLayoutManager);
         rvParking.setHasFixedSize(true);
         ParkingRecyclerViewAdapter parkingRecyclerViewAdapter = new ParkingRecyclerViewAdapter(this, new ArrayList<Parking>(ParkingManager.sParkings.getParkings()), null);
-        if(MapFragment.isBlueDotShown()) {
+//        if(MapFragment.isBlueDotShown()) {
+        if(true) {
             parkingRecyclerViewAdapter.addHeader(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
-
-
+                    setResult(PARKING_RESULT_CODE_SPOT_PENDING, new Intent());
+                    onFinish();
                 }
             });
         }

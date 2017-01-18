@@ -113,6 +113,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESULT_CODE_SPOT_PENDING;
+import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESULT_CODE_SPOT_SAVED;
 import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOnBluetooth;
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
 
@@ -1502,10 +1504,12 @@ public class MainActivity extends BaseActivity
                 }
             } else if(requestCode == Constants.REQUEST_CODE_SAVE_PARKING_SPOT) {
                 mDrawer.closeDrawers();
-                if (resultCode == Activity.RESULT_OK) {
+                if (resultCode == PARKING_RESULT_CODE_SPOT_SAVED) {
                     setUpRightSidePanel();
                     if(mOnParkingClickListener != null && Amenities.isToggled(this, Amenities.GSON_KEY_PARKING, false)) mOnParkingClickListener.onParkingClick(true, true);
                     InfoFragment.getInstance().setParkingSpotCTA();
+                } else if (resultCode == PARKING_RESULT_CODE_SPOT_PENDING){
+                    MapFragment.getInstance().showParkingSpotAtBlueDot();
                 }
             } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
                 //1. show store on the map 2. show nearest parking spot from a store

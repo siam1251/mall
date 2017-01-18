@@ -2,7 +2,6 @@ package com.ivanhoecambridge.mall.parking;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -14,14 +13,14 @@ import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import factory.HeaderFactory;
 
-import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 import com.ivanhoecambridge.mall.mappedin.MapUtility;
+import com.mappedin.sdk.Coordinate;
+import com.mappedin.sdk.Map;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +35,7 @@ import static com.ivanhoecambridge.mall.managers.KcpNotificationManager.NOTIFICA
  */
 public class ParkingManager {
 
+    public enum ParkingMode { NONE, LOCATION, COORDINATE };
     private final String RESPONSE_STATUS_COMPLETE = "complete";
     private ProgressDialog pd;
 
@@ -58,6 +58,28 @@ public class ParkingManager {
     protected int mLoadingLayout;
 
     public static Parkings sParkings = new Parkings();
+
+
+    public static class ParkingSpot{
+
+        double x;
+        double y;
+        double elevation;
+
+        public ParkingSpot(double x, double y, double elevation) {
+            this.x = x;
+            this.y = y;
+            this.elevation = elevation;
+        }
+
+        public Coordinate getCoordinate(Map[] maps){
+            if(maps == null) return null;
+            android.location.Location targetLocation = MapUtility.getLocation(x, y);
+            int index = MapUtility.getIndexWithMapElevation(maps, elevation);
+            Coordinate coordinate  = new Coordinate(targetLocation, maps[index]);
+            return coordinate;
+        }
+    }
 
     public ParkingService getKcpService(){
         ServiceFactory serviceFactory = new ServiceFactory();
@@ -124,11 +146,11 @@ public class ParkingManager {
         KcpNotificationManager.cancelNotification(context, NOTIFICATION_ID_WELCOME);
     }
 
-    public static void saveParkingSpotAndEntrance(final Context context, double x, double y){
+    public static void saveParkingSpotAndEntrance(final Context context, double latitude, double longitude, double elevation){
         KcpUtility.cacheToPreferences(context, KEY_PARKING_LOT_POSITION, -1);
         KcpUtility.cacheToPreferences(context, KEY_ENTRANCE_POSITION, -1);
-        android.location.Location targetLocation = MapUtility.getLocation(x, y);
-        KcpUtility.saveGson(context, KEY_PARKING_LOT_COORDINATE, targetLocation);
+        ParkingSpot parkingSpot = new ParkingSpot(latitude, longitude, elevation);
+        KcpUtility.saveGson(context, KEY_PARKING_LOT_COORDINATE, parkingSpot);
         Amenities.saveToggle(context, Amenities.GSON_KEY_PARKING, true);
         KcpNotificationManager.cancelNotification(context, NOTIFICATION_ID_WELCOME);
     }
@@ -138,12 +160,12 @@ public class ParkingManager {
     }
 
 
-    public static Location getSavedParkingCoordinate(final Context context){
+    public static ParkingSpot getSavedParkingSpot(final Context context){
         Gson gson = new Gson();
         String json = context.getSharedPreferences("PreferenceManager", Context.MODE_PRIVATE).getString(KEY_PARKING_LOT_COORDINATE, "");
         if(json.equals("")) return null;
-        Type listType = new TypeToken<Location>() {}.getType();
-        Location obj = gson.fromJson(json, listType);
+        Type listType = new TypeToken<ParkingSpot>() {}.getType();
+        ParkingSpot obj = gson.fromJson(json, listType);
         return obj;
     }
 
@@ -157,7 +179,7 @@ public class ParkingManager {
     }
 
     public static boolean isParkingLotSaved(final Context context){
-        if(getSavedParkingCoordinate(context) != null || KcpUtility.loadIntFromCache(context, KEY_PARKING_LOT_POSITION, -1) != -1) return true;
+        if(getSavedParkingSpot(context) != null || KcpUtility.loadIntFromCache(context, KEY_PARKING_LOT_POSITION, -1) != -1) return true;
         else return false;
     }
 
@@ -201,6 +223,14 @@ public class ParkingManager {
                 break;
         }
         mHandler.sendMessage(message);
+    }
+
+    public static ParkingMode getParkingMode(Context context){
+        if(!isParkingLotSaved(context)) return ParkingMode.NONE;
+        else {
+            if(KcpUtility.loadIntFromCache(context, KEY_PARKING_LOT_POSITION, -1) != -1) return ParkingMode.LOCATION;
+            else return ParkingMode.COORDINATE;
+        }
     }
 
 }
