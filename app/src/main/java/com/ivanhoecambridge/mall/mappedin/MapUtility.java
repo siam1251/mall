@@ -135,7 +135,7 @@ public class MapUtility {
         pinDrawable.draw(canvas);
 
         // Create an Overlay2DImage using a new drawable derived from the bitmap we made
-        Overlay2DImage label = new Overlay2DImage(maxDimension, maxDimension, new BitmapDrawable(context.getResources(), bitmap));
+        Overlay2DImage label = new Overlay2DImage(maxDimension, maxDimension, new BitmapDrawable(context.getResources(), bitmap), maxDimension/2, maxDimension/2);
         return label;
     }
 
@@ -187,7 +187,7 @@ public class MapUtility {
     }
 
     public static Drawable getRotatedDrawable(Context context, int drawable, float degrees){
-
+        if(context == null) return null;
         Bitmap bmpOriginal = BitmapFactory.decodeResource(context.getResources(), drawable);
         Bitmap bmResult = Bitmap.createBitmap(bmpOriginal.getWidth(), bmpOriginal.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas tempCanvas = new Canvas(bmResult);

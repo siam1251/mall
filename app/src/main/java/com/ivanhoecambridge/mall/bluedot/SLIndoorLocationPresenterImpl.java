@@ -83,7 +83,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         public void didUpdateLocation(SLCoordinate3D location, double uncertaintyRadius, SLLocationStatus status) {
             synchronized (this) {
                 BlueDotPosition blueDotPosition = new BlueDotPosition(location);
-//                positionAndHeadingMapVisualization.setPos(blueDotPosition);
+                positionAndHeadingMapVisualization.setPos(blueDotPosition);
             }
         }
 

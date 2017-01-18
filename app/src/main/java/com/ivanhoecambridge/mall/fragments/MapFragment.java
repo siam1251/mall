@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -91,6 +92,7 @@ import com.mappedin.sdk.Path;
 import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.RawData;
 import com.mappedin.sdk.Venue;
+import com.senionlab.slutilities.type.SLHeadingStatus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -193,7 +195,7 @@ public class MapFragment extends BaseFragment
     //when using getOverlayImageWithPadding
     private final int PIN_AMENITY_IMAGE_SIZE_DP = 24; //ends up 64 px
     private final int PIN_VORTEX_IMAGE_SIZE_DP = 24; //ends up 64 px
-    private final int PIN_BLUEDOT = 36; //ends up 64 px
+    private final int PIN_BLUEDOT = 72; //ends up 64 px
     private final int PIN_PARKING_IMAGE_SIZE_DP = 30; //ends up 64 px
 
     /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 60;
@@ -257,6 +259,8 @@ public class MapFragment extends BaseFragment
     private GestureDetector gestureDetector;
     private boolean mShowBlueDotHeader = false; //show whether to 'use Current Location' header in recyclerview when blue dot's available - show in destination editor, don't show in normal search mode
     private static ParkingPin sParkingPin;
+    private SLHeadingStatus mSLHeadingStatus = SLHeadingStatus.UNDEFINED;
+    private float mHeading;
 
 
 
@@ -333,6 +337,13 @@ public class MapFragment extends BaseFragment
         flCircle.setOnClickListener(onFollowButtonListener);
         ivTest = (ImageView) view.findViewById(R.id.ivTest);
         ivTest.setOnClickListener(onTestButtonListener);
+
+        if(BuildConfig.BLUEDOT && BuildConfig.DEBUG) {
+            ivTest.setVisibility(View.VISIBLE);
+        } else {
+            ivTest.setVisibility(View.GONE);
+        }
+
         flMap = (FrameLayout) view.findViewById(R.id.flMap); //todo: disabled for testing
 
         viewRoute = (View) view.findViewById(R.id.viewRoute);
@@ -958,7 +969,7 @@ public class MapFragment extends BaseFragment
     }
 
     private void dropVortexPin(VortexPin vortexPin){
-        Overlay2DImage label = new Overlay2DImage(getVortexAndDestinationPinSize(), getVortexAndDestinationPinSize(), vortexPin.getVortexPinDrawable());
+        Overlay2DImage label = new Overlay2DImage(getVortexAndDestinationPinSize(), getVortexAndDestinationPinSize(), vortexPin.getVortexPinDrawable(), getVortexAndDestinationPinSize()/2, getVortexAndDestinationPinSize()/2);
         label.setPosition(vortexPin.getVortexCoordinate());
         vortexPin.setVortexPin(new Pin(vortexPin.getVortexCoordinate(), label));
         mapView.addMarker(label, false);
@@ -1515,7 +1526,7 @@ public class MapFragment extends BaseFragment
         clone.mutate(); //prevent all instance of drawables from being affected
         clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.MULTIPLY); //change white colors
 //        clone.setColorFilter(getResources().getColor(R.color.themeColor), PorterDuff.Mode.SRC_ATOP); //change the entire colors
-        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), clone);
+        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), clone, getImagePinSize()/2, getImagePinSize()/2);
         label.setPosition(coordinate);
 //        LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         //if I remove the lable at the same spot and add another label with new LocationLabelClicker,
@@ -1546,38 +1557,103 @@ public class MapFragment extends BaseFragment
         android.location.Location targetLocation = MapUtility.getLocation(x, y);
         Overlay2DImage label;
         Coordinate coordinate  = new Coordinate(targetLocation, maps[floor]);
-
         if(mBlueDotPin == null) {
-            label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluebutton));
+            label = dropPin(coordinate, null, getResources().getDrawable(R.drawable.icn_bluebutton), PIN_BLUEDOT);
             mBlueDotPin = new Pin(coordinate, label, x, y);
         } else {
             mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
             label = mBlueDotPin.getOverlay2DImage();
             mBlueDotPin.setLocation(coordinate, x, y);
+            label.setPosition(coordinate);
+            mapView.addMarker(label, false);
         }
-        label.setPosition(coordinate);
-        mapView.addMarker(label, false);
-
-
     }
 
     @Override
-    public void drawHeading(double x, double y, float heading) {
-        if(maps == null) return;
+    public void drawHeading(double x, double y, float heading, SLHeadingStatus headingStatus) {
+        /*if(maps == null || mBlueDotPin == null) return;
+        mHeading = heading;
+        if(mSLHeadingStatus != headingStatus) { //status changed
+            mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
+            Overlay2DImage label;
+            Drawable blueDotPinDrawable;
+            if(headingStatus == SLHeadingStatus.UNDEFINED) {
+                blueDotPinDrawable = getResources().getDrawable(R.drawable.icn_bluebutton);
+                label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, blueDotPinDrawable, PIN_BLUEDOT/2, PIN_BLUEDOT/2);
+            } else {
+                blueDotPinDrawable = getResources().getDrawable(R.drawable.icn_bluedot_orientation);
+                label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, blueDotPinDrawable, PIN_BLUEDOT/2, PIN_BLUEDOT/2);
+                label.setRotation(heading);
+            }
+            mBlueDotPin.setOverlay2DImage(label);
+            mSLHeadingStatus = headingStatus;
+        }*/
 
 
-        /*android.location.Location targetLocation = MapUtility.getLocation(x, y);
+        /*if(maps == null || mBlueDotPin == null) return;
+        if(headingStatus == SLHeadingStatus.UNDEFINED && mBlueDotCompass != null) {
+            mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
+            return;
+        }
+        if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
+            return;
+        }
+
+        int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getElevation());
+//        android.location.Location targetLocation = MapUtility.getLocation(x, y);
+        android.location.Location targetLocation = MapUtility.getLocation(mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude());
         Overlay2DImage label;
-        Drawable rotatedHeading = MapUtility.getRotatedDrawable(getActivity(), R.drawable.icn_bluedot_orientation_pointer, heading);
-//        Drawable rotatedHeading = MapUtility.rotate(getActivity(), R.drawable.icn_bluedot_orientation_pointer, heading);
-        label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, rotatedHeading);
-        Coordinate coordinate = new Coordinate(targetLocation, maps[mCurrentLevelIndex]);;
+        Coordinate coordinate  = new Coordinate(targetLocation, maps[mapIndex]);
+
+        if(mBlueDotCompass == null) {
+            label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluedot_orientation_pointer), PIN_BLUEDOT/2, PIN_BLUEDOT/2);
+            mBlueDotCompass = new Pin(coordinate, label, x, y);
+        } else {
+            mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
+            label = mBlueDotCompass.getOverlay2DImage();
+            mBlueDotCompass.setLocation(coordinate, x, y);
+        }
+//        label.setRotation(heading);
+        label.setPosition(coordinate);
+        mapView.addMarker(label, true);*/
+
+
+
+
+        /*if(maps == null || mBlueDotPin == null) return;
+        if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
+            return;
+        }
+        int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getElevation());
+
+        android.location.Location targetLocation = MapUtility.getLocation(mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude());
+        Overlay2DImage label;
+        if(mBlueDotCompass == null) {
+            label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluedot_orientation_pointer), PIN_BLUEDOT/2, PIN_BLUEDOT/2);
+        } else {
+            label = mBlueDotCompass.getOverlay2DImage();
+        }
+        Coordinate coordinate = new Coordinate(targetLocation, maps[mapIndex]);
         if(mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
         mBlueDotCompass = new Pin(coordinate, label);
         mBlueDotCompass.setCoordinate(coordinate);
+        label.setRotation((float)Math.toRadians(heading));
+//        label.setRotation(-0.73170525f); //testing
         label.setPosition(coordinate);
-        mapView.addMarker(label, false);*/
+        mapView.addMarker(label, false);
+
+        Log.d(TAG, "degree: " + heading);
+        Log.d(TAG, "rotation in radian " + (float)Math.toRadians(heading));*/
     }
+
+    double x;
+    double y;
+
+    double x1 = 51.2030627;
+    double y1 = -113.9956265;
+
+    double x2 = 51.201866;
+    double y2 = -113.992274;
 
     private View.OnClickListener onTestButtonListener = new View.OnClickListener() {
         @Override
@@ -1588,7 +1664,7 @@ public class MapFragment extends BaseFragment
 
 //            dropBlueDot(43.64249432344601, -79.37441128178561, 1);
 
-            if(mBlueDotPin == null) {
+            /*if(mBlueDotPin == null) {
                 Random r = new Random();
                 int randomFloor = r.nextInt(5);
 //                dropBlueDot(49.2268235, -123.0004849, randomFloor); //MP
@@ -1597,7 +1673,20 @@ public class MapFragment extends BaseFragment
             } else {
                 removeBlueDot();
                 Toast.makeText(getActivity(), "bluedot removed", Toast.LENGTH_SHORT).show();
+            }*/
+
+            Random r = new Random();
+            int randomFloor = r.nextInt(5);
+
+            if(x == 0 || x == x1) {
+                x = x2;
+                y = y2;
+            } else {
+                x = x1;
+                y = y1;
             }
+
+            dropBlueDot(x, y, randomFloor); //CROSSIRON
 
 
 
@@ -1746,13 +1835,12 @@ public class MapFragment extends BaseFragment
         if(mBlueDotPin != null) {
             mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
             mBlueDotPin = null;
+            mSLHeadingStatus = SLHeadingStatus.UNDEFINED;
         }
     }
 
-//    public void dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable){
-    public Overlay2DImage dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable){
-        //TODO: only add pins to the current floor
-        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable);
+    public Overlay2DImage dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable, int pinSize){
+        Overlay2DImage label = new Overlay2DImage(pinSize, pinSize, pinDrawable, pinSize/2, pinSize/2);
         if(mLocationClickersMap != null && mLocationClickersMap.containsKey(coordinate)) return null;
         label.setPosition(coordinate);
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
@@ -1762,9 +1850,13 @@ public class MapFragment extends BaseFragment
         return label;
     }
 
+    public Overlay2DImage dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable){
+        return dropPin(coordinate, location, pinDrawable, getImagePinSize());
+    }
+
     public void dropDealsPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable, String externalId) {
         //TODO: only add pins to the current floor
-        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable);
+        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable, getImagePinSize()/2, getImagePinSize()/2);
         label.setPosition(coordinate);
 
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate, externalId);
@@ -1777,7 +1869,7 @@ public class MapFragment extends BaseFragment
 
 
     private void dropDestinationPin(final Coordinate coordinate, final Drawable pinDrawable){
-        Overlay2DImage label = new Overlay2DImage(getVortexAndDestinationPinSize(), getVortexAndDestinationPinSize(), pinDrawable);
+        Overlay2DImage label = new Overlay2DImage(getVortexAndDestinationPinSize(), getVortexAndDestinationPinSize(), pinDrawable, getVortexAndDestinationPinSize()/2, getVortexAndDestinationPinSize()/2);
         label.setPosition(coordinate);
         mDestinationPin = new Pin(coordinate, label);
         mapView.addMarker(label, false);
@@ -2060,6 +2152,18 @@ public class MapFragment extends BaseFragment
                     mapView.getCamera().focusOn(mSavedParkingPolygon);
                     zoomInOut();
                 }
+                /*Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+//                                slidePanel(true);
+                            }
+                        });
+                    }
+                }, 500);*/
             } else {
                 if(mSavedParkingPolygon != null) mSavedParkingPolygon.setColor(mOriginalColorsForParking);
                 didTapNothing();
@@ -2101,6 +2205,21 @@ public class MapFragment extends BaseFragment
                                 }
                                 break; //prevent it from dropping two pin images in case there is more than one polygon
                             }
+
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            slidePanel(true);
+                                        }
+                                    });
+                                }
+                            }, 100);
+
+
                         } else {
                             removePin(sParkingPin.getParkingLocationPin());
                             didTapNothing();
@@ -2113,20 +2232,30 @@ public class MapFragment extends BaseFragment
                         if(enabled && savedParkingPinCoordinate != null) {
 
                             Drawable parkingDrawable = getDrawableFromView(R.drawable.icn_car, 0);
-                            Overlay2DImage label = dropPin(savedParkingPinCoordinate, sParkingPin.getParkingLocationPin(), parkingDrawable);
-//                            label.setPosition(savedParkingPinCoordinate);
+                            Overlay2DImage label = dropPin(savedParkingPinCoordinate, null, parkingDrawable);
                             Pin parkingSpotPin = new Pin(savedParkingPinCoordinate, label);
-
                             sParkingPin.setParkingCoordinatePin(parkingSpotPin);
-
-
-
                             destinationPolygon = sParkingPin.getParkingCoordinatePin().getCoordinate();
                             if(focus) {
                                 mapView.getCamera().focusOn(sParkingPin.getParkingCoordinatePin().getCoordinate());
                                 zoomInOut();
                                 showSavedParkingDetail();
                             }
+
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            slidePanel(true);
+                                        }
+                                    });
+                                }
+                            }, 100);
+
+
                         } else {
                             removePin(sParkingPin.getParkingCoordinatePin().getOverlay2DImage(), sParkingPin.getParkingCoordinatePin().getCoordinate());
                             didTapNothing();
@@ -2164,51 +2293,61 @@ public class MapFragment extends BaseFragment
         public String placeExternalId = null;
 
         public void onClick() {
-            if(path != null || coordinate.getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) return; //map shouldn't be clicakble when the paths drawn or this indicates the pin clicked is not on the floor you are looking at
-            if(location != null) {
-                if(location == sParkingPin.getParkingLocationPin()) {
-                    String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
-                    String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
-                    String parkingNote = ParkingManager.getParkingNotes(getActivity());
-                    showParkingDetail(location, false, parkingLotName, entranceName, parkingNote, -1, -1);
-                } else if(placeExternalId != null) { //if deal's clicked, tab the polygon instead
-                    didTapPolygon(getPolygonWithPlaceExternalId(placeExternalId));
-                    return;
-                }
-
-                mapView.getCamera().focusOn(coordinate);
-                zoomInOut();
-
-//                destinationPolygon = location; //if location's set as destinationPolygon, it will automatically choose the closest amenity, in which case, the closest amenity has to be manually highlighted in didTapPolygon
-                destinationPolygon = coordinate;
-                if(location == sParkingPin.getParkingLocationPin()) return;
-
-                if(mSelectedPin == null) {
-                    highlightThisLabel();
-                    showAmenityDetail((CustomLocation) location, drawable);
-                } else {
-                    Coordinate removeableMarkerCoordinate = mSelectedPin.getCoordinate();
-                    replaceSelectedPinWithRemovedPin();
-                    if(removeableMarkerCoordinate != coordinate) {
-                        highlightThisLabel();
-                        showAmenityDetail((CustomLocation) location, drawable);
+            try {
+                if(path != null || coordinate.getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) return; //map shouldn't be clicakble when the paths drawn or this indicates the pin clicked is not on the floor you are looking at
+                if(location != null) {
+                    if(location == sParkingPin.getParkingLocationPin()) {
+                        String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
+                        String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
+                        String parkingNote = ParkingManager.getParkingNotes(getActivity());
+                        showParkingDetail(location, false, parkingLotName, entranceName, parkingNote, -1, -1);
+                    } else if(placeExternalId != null) { //if deal's clicked, tab the polygon instead
+                        didTapPolygon(getPolygonWithPlaceExternalId(placeExternalId));
+                        return;
                     }
 
+                    mapView.getCamera().focusOn(coordinate);
+                    zoomInOut();
 
+                    //                destinationPolygon = location; //if location's set as destinationPolygon, it will automatically choose the closest amenity, in which case, the closest amenity has to be manually highlighted in didTapPolygon
+                    destinationPolygon = coordinate;
+                    if(location == sParkingPin.getParkingLocationPin()) return;
+
+                    if(mSelectedPin == null) {
+                        highlightThisLabel();
+                        showAmenityDetail((CustomLocation) location, drawable);
+                    } else {
+                        Coordinate removeableMarkerCoordinate = mSelectedPin.getCoordinate();
+                        replaceSelectedPinWithRemovedPin();
+                        if(removeableMarkerCoordinate != coordinate) {
+                            highlightThisLabel();
+                            showAmenityDetail((CustomLocation) location, drawable);
+                        }
+
+
+                    }
+                } else {
+                    if(label == sParkingPin.getParkingCoordinatePin().getOverlay2DImage()) {
+                        showParkingDetail(false);
+                        mapView.getCamera().focusOn(coordinate);
+                        zoomInOut();
+                        destinationPolygon = coordinate;
+                    } else if (label == mBlueDotPin.getOverlay2DImage()) { //user's clicking on blue dot that's above the parking lot pin
+
+
+                    }
                 }
-            } else {
-
-                String a = "ewfsdf";
-
-
-
+            } catch (Exception e) {
+                Log.e(TAG, "error in overlay image onClick");
             }
         }
 
         public void highlightThisLabel(){
 //            destinationPolygon = location;
             dropPinWithColor(coordinate, drawable);
-            if(!location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) mRemovedPin = new Pin(coordinate, label); //parking pin is temporary - shouldn'be be readded
+            if(location == null || !location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) { //parking pin is temporary - shouldn'be be readded
+                mRemovedPin = new Pin(coordinate, label);
+            }
             mapView.removeMarker(label);
         }
     }
@@ -2518,6 +2657,14 @@ public class MapFragment extends BaseFragment
     }
 
     private void slidePanel(final boolean up){
+
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
         final RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
         View rootView = getActivity().findViewById(android.R.id.content);
         if(mRootViewHeight == 0) mRootViewHeight = rootView.getHeight();
@@ -2539,6 +2686,14 @@ public class MapFragment extends BaseFragment
             rlDirection.startAnimation(slideUpAnimation);
             rlSlidingPanel.animate().setStartDelay(100).y(mRootViewHeight - rlSlidingPanel.getHeight() - (int) getResources().getDimension(R.dimen.map_level_panel_bot_margin));
         }
+//                    }
+//                });
+//            }
+//        }, 100);
+
+
+
+
     }
 
 

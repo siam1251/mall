@@ -23,7 +23,8 @@ public class PositionAndHeadingMapVisualization {
     private double posY;
     private float heading;
 
-    protected static final int ANIMATION_TIME_MILLIS = 400;
+//    protected static final int ANIMATION_TIME_MILLIS = 400;
+    protected static final int ANIMATION_TIME_MILLIS = 1000;
 
     protected MapViewWithBlueDot mapViewWithBlueDot;
     private SLHeadingStatus headingStatus;
@@ -52,7 +53,7 @@ public class PositionAndHeadingMapVisualization {
 
                 listener.onAnimationUpdate(valueAnimator);
 //                Log.d("bluedot", "BlueDotPosition: "  + " heading: " + heading);
-                mapViewWithBlueDot.drawHeading(posX, posY, heading);
+                mapViewWithBlueDot.drawHeading(posX, posY, heading, headingStatus);
             }
         });
     }
