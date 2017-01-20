@@ -19,11 +19,13 @@ public class ParkingPin {
 
     public void setParkingCoordinatePin(Pin parkingPin) {
 //        removeExistingPin();
+        this.parkingLocationPin = null;
         this.parkingCoordinatePin = parkingPin;
     }
 
     public void setParkingLocationPin(CustomLocation savedParkingLocation) {
         removeExistingPin();
+        this.parkingCoordinatePin = null;
         this.parkingLocationPin = savedParkingLocation;
     }
 

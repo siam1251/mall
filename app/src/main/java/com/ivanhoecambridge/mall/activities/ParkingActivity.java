@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.fragments.MapFragment;
@@ -203,8 +204,7 @@ public class ParkingActivity extends AppCompatActivity {
         rvParking.setLayoutManager(linearLayoutManager);
         rvParking.setHasFixedSize(true);
         ParkingRecyclerViewAdapter parkingRecyclerViewAdapter = new ParkingRecyclerViewAdapter(this, new ArrayList<Parking>(ParkingManager.sParkings.getParkings()), null);
-        if(MapFragment.isBlueDotShown()) {
-//        if(true) {
+        if(BuildConfig.DEBUG || MapFragment.isBlueDotShown()) {
             parkingRecyclerViewAdapter.addHeader(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

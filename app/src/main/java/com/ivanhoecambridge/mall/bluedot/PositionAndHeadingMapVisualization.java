@@ -53,7 +53,7 @@ public class PositionAndHeadingMapVisualization {
 
                 listener.onAnimationUpdate(valueAnimator);
 //                Log.d("bluedot", "BlueDotPosition: "  + " heading: " + heading);
-                mapViewWithBlueDot.drawHeading(posX, posY, heading, headingStatus);
+                mapViewWithBlueDot.dropHeading(posX, posY, heading, headingStatus);
             }
         });
     }

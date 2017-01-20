@@ -19,6 +19,7 @@ import com.exacttarget.etpushsdk.ETRequestStatus;
 import com.exacttarget.etpushsdk.util.EventBus;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
@@ -74,8 +75,10 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
         HeaderFactory.changeCatalog(HeaderFactory.HEADER_VALUE_DATAHUB_CATALOG);
 
         if(BuildConfig.REPORT_CRASH) {
+            FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
             Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
         } else {
+            FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(false);
             Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         }
 

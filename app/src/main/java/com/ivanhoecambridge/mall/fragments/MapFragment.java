@@ -102,10 +102,15 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 
 import factory.HeaderFactory;
 
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.sLocationAvailability;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * Created by Kay on 2016-06-20.
@@ -338,7 +343,7 @@ public class MapFragment extends BaseFragment
         ivTest = (ImageView) view.findViewById(R.id.ivTest);
         ivTest.setOnClickListener(onTestButtonListener);
 
-        if(BuildConfig.BLUEDOT && BuildConfig.DEBUG) {
+        if(/*BuildConfig.BLUEDOT || */BuildConfig.DEBUG) {
             ivTest.setVisibility(View.VISIBLE);
         } else {
             ivTest.setVisibility(View.GONE);
@@ -1558,19 +1563,21 @@ public class MapFragment extends BaseFragment
         Overlay2DImage label;
         Coordinate coordinate  = new Coordinate(targetLocation, maps[floor]);
         if(mBlueDotPin == null) {
-            label = dropPin(coordinate, null, getResources().getDrawable(R.drawable.icn_bluebutton), PIN_BLUEDOT);
+//            label = dropPin(coordinate, null, getResources().getDrawable(R.drawable.icn_bluebutton), PIN_BLUEDOT);
+            label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluebutton), PIN_BLUEDOT/2, PIN_BLUEDOT/2);
             mBlueDotPin = new Pin(coordinate, label, x, y);
         } else {
             mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
             label = mBlueDotPin.getOverlay2DImage();
             mBlueDotPin.setLocation(coordinate, x, y);
-            label.setPosition(coordinate);
-            mapView.addMarker(label, false);
         }
+
+        label.setPosition(coordinate);
+        mapView.addMarker(label, false);
     }
 
     @Override
-    public void drawHeading(double x, double y, float heading, SLHeadingStatus headingStatus) {
+    public void dropHeading(double x, double y, final float heading, SLHeadingStatus headingStatus) {
         /*if(maps == null || mBlueDotPin == null) return;
         mHeading = heading;
         if(mSLHeadingStatus != headingStatus) { //status changed
@@ -1618,7 +1625,7 @@ public class MapFragment extends BaseFragment
         mapView.addMarker(label, true);*/
 
 
-
+        tempHeading = heading;
 
         /*if(maps == null || mBlueDotPin == null) return;
         if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
@@ -1637,14 +1644,17 @@ public class MapFragment extends BaseFragment
         if(mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
         mBlueDotCompass = new Pin(coordinate, label);
         mBlueDotCompass.setCoordinate(coordinate);
-        label.setRotation((float)Math.toRadians(heading));
-//        label.setRotation(-0.73170525f); //testing
+        float rotationBy = tempHeading - heading;
+        label.setRotation((float)Math.toRadians(rotationBy));
         label.setPosition(coordinate);
         mapView.addMarker(label, false);
+        Log.d(TAG, "heading: " + rotationBy);
+        tempHeading = heading;
+        headingDropped = true;*/
 
-        Log.d(TAG, "degree: " + heading);
-        Log.d(TAG, "rotation in radian " + (float)Math.toRadians(heading));*/
     }
+    boolean headingDropped = false;
+    float tempHeading = 0f;
 
     double x;
     double y;
@@ -1675,7 +1685,10 @@ public class MapFragment extends BaseFragment
                 Toast.makeText(getActivity(), "bluedot removed", Toast.LENGTH_SHORT).show();
             }*/
 
-            Random r = new Random();
+
+
+            //change between two locations at CM
+            /*Random r = new Random();
             int randomFloor = r.nextInt(5);
 
             if(x == 0 || x == x1) {
@@ -1686,13 +1699,37 @@ public class MapFragment extends BaseFragment
                 y = y1;
             }
 
-            dropBlueDot(x, y, randomFloor); //CROSSIRON
+            dropBlueDot(x, y, randomFloor); //CROSSIRON*/
 
 
+            if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
+                return;
+            }
+            int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getElevation());
+            android.location.Location targetLocation = MapUtility.getLocation(mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude());
+            final Overlay2DImage label;
+            if(mBlueDotCompass == null) {
+                label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluedot_orientation_pointer), PIN_BLUEDOT/2, PIN_BLUEDOT/2);
+            } else {
+                label = mBlueDotCompass.getOverlay2DImage();
+            }
+            Coordinate coordinate = new Coordinate(targetLocation, maps[mapIndex]);
+            if(mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
+            mBlueDotCompass = new Pin(coordinate, label);
+            mBlueDotCompass.setCoordinate(coordinate);
+            label.setRotation((float)Math.toRadians(tempHeading)); //testing
+            label.setPosition(coordinate);
+            mapView.addMarker(label, false);
+
+            Log.d(TAG, "heading: " + tempHeading);
+            headingDrawn = tempHeading;
 
 
         }
     };
+    float headingDrawn;
+
+
 
     private OnStoreClickListener onStoreClickedListener = new OnStoreClickListener() {
         @Override
@@ -1841,7 +1878,9 @@ public class MapFragment extends BaseFragment
 
     public Overlay2DImage dropPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable, int pinSize){
         Overlay2DImage label = new Overlay2DImage(pinSize, pinSize, pinDrawable, pinSize/2, pinSize/2);
-        if(mLocationClickersMap != null && mLocationClickersMap.containsKey(coordinate)) return null;
+        if(mLocationClickersMap != null && mLocationClickersMap.containsKey(coordinate)) {
+            return null;
+        }
         label.setPosition(coordinate);
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         overlays.put(label, clicker);
@@ -1937,8 +1976,13 @@ public class MapFragment extends BaseFragment
     }
 
     public void removePin(Overlay overlay, Coordinate coordinate) {
-        mapView.removeMarker(overlay);
-        if(mLocationClickersMap.containsKey(coordinate)) mLocationClickersMap.remove(coordinate);
+        try {
+            mapView.removeMarker(overlay);
+            if(mLocationClickersMap.containsKey(coordinate)) mLocationClickersMap.remove(coordinate);
+            if(overlays.containsKey(overlay)) overlays.remove(overlay);
+        } catch (Exception e) {
+            logger.error(e);
+        }
     }
 
     public void removePin(final Location location) {
@@ -2292,6 +2336,7 @@ public class MapFragment extends BaseFragment
         public Coordinate coordinate = null;
         public String placeExternalId = null;
 
+        //TODO: if there are two pins, only one that overlaps the other one receives touch (it should pass it to other ones from SDK level)
         public void onClick() {
             try {
                 if(path != null || coordinate.getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) return; //map shouldn't be clicakble when the paths drawn or this indicates the pin clicked is not on the floor you are looking at

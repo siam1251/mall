@@ -554,7 +554,7 @@ public class DetailActivity extends AppCompatActivity {
             today.setTimeInMillis(todayInMillisPlusDays);
 
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
-            KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
+            KcpPlaces kcpPlaces = mKcpContentPage.getStore() != null ? mKcpContentPage.getStore() : kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
 
             String openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(today.get(Calendar.DAY_OF_WEEK));
             openAndClosingHour = openAndClosingHour.replace("-", "to").replace("AM", "am").replace("PM","pm");

@@ -188,18 +188,32 @@ public class MapUtility {
 
     public static Drawable getRotatedDrawable(Context context, int drawable, float degrees){
         if(context == null) return null;
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
         Bitmap bmpOriginal = BitmapFactory.decodeResource(context.getResources(), drawable);
         Bitmap bmResult = Bitmap.createBitmap(bmpOriginal.getWidth(), bmpOriginal.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas tempCanvas = new Canvas(bmResult);
         tempCanvas.rotate(degrees, bmpOriginal.getWidth()/16, bmpOriginal.getHeight()/16);
         tempCanvas.drawBitmap(bmpOriginal, 0, 0, null);
 
+
         return new BitmapDrawable(context.getResources(), bmResult);
     }
 
     public static Drawable rotate(Context context, int drawable, float degrees) {
         Drawable d = context.getResources().getDrawable(drawable);
-        Bitmap iconBitmap = ((BitmapDrawable)d).getBitmap();
+
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inJustDecodeBounds = false;
+        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+        opts.inDither = true;
+
+
+//        Bitmap iconBitmap = ((BitmapDrawable)d).getBitmap();
+        Bitmap iconBitmap = BitmapFactory.decodeResource(context.getResources(), drawable, opts);
+
 
         Matrix matrix = new Matrix();
         matrix.postRotate(degrees);
