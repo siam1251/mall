@@ -1717,7 +1717,8 @@ public class MapFragment extends BaseFragment
             if(mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
             mBlueDotCompass = new Pin(coordinate, label);
             mBlueDotCompass.setCoordinate(coordinate);
-            label.setRotation((float)Math.toRadians(tempHeading)); //testing
+//            label.setRotation((float)Math.toRadians(tempHeading)); //testing
+            label.setRotation((float)Math.toRadians(90)); //testing
             label.setPosition(coordinate);
             mapView.addMarker(label, false);
 

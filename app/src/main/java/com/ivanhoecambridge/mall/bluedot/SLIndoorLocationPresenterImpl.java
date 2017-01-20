@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.mall.activities.MainActivity;
+import com.senionlab.slutilities.geofencing.geometries.SLCircle;
+import com.senionlab.slutilities.geofencing.geometries.SLGeometryId;
 import com.senionlab.slutilities.geofencing.interfaces.SLGeometry;
 import com.senionlab.slutilities.service.SLBroadcastReceiver;
 import com.senionlab.slutilities.service.SLConsumer;
 import com.senionlab.slutilities.service.SLServiceManager;
+import com.senionlab.slutilities.type.FloorNr;
 import com.senionlab.slutilities.type.LocationAvailability;
 import com.senionlab.slutilities.type.SLCoordinate3D;
 import com.senionlab.slutilities.type.SLHeadingStatus;
@@ -22,10 +26,15 @@ import com.senionlab.slutilities.type.SLLocationStatus;
 import com.senionlab.slutilities.type.SLMotionType;
 import com.senionlab.slutilities.type.SLPixelPoint2D;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import geofence.GeofenceConstants;
 import slutilities.SLSettings;
 
 import static com.ivanhoecambridge.mall.activities.MainActivity.VIEWPAGER_PAGE_MAP;
 import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOnBluetooth;
+import static slutilities.SLSettings.GEOFENCE_LOCATIONS;
 
 /**
  * Created by Kay on 2017-01-06.
@@ -35,14 +44,49 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
     private final PositionAndHeadingMapVisualization positionAndHeadingMapVisualization = new PositionAndHeadingMapVisualization();
     public static boolean mAskForBluetooth = false;
+    private boolean firstTimeBound = true;
 
     protected final Logger logger = new Logger(getClass().getName());
     private SLServiceManager serviceManager;
     private Context context;
     public static LocationAvailability sLocationAvailability = LocationAvailability.NOT_AVAILABLE;
-
-
     private MapViewWithBlueDot mapViewWithBlueDot;
+    private static CoordinateListener sCoordinateListener;
+
+
+    public static class GeofenceLocation {
+        String name;
+        double latitude;
+        double longitude;
+        double radius;
+        int floor;
+        private boolean didEnterGeofence = false;
+
+        public GeofenceLocation(String name, double latitude, double longitude, double radius, int floor) {
+            this.name = name;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.radius = radius;
+            this.floor = floor;
+        }
+
+        private SLCoordinate3D getSLCoordinate3D(){
+            return new SLCoordinate3D(latitude, longitude, new FloorNr(floor));
+        }
+
+        public SLCircle getSLCircle(){
+            return new SLCircle(new SLGeometryId(name), getSLCoordinate3D(), radius);
+        }
+
+        public boolean getDidEnterGeofence() {
+            return didEnterGeofence;
+        }
+
+        public void setDidEnterGeofence(boolean didEnterGeometry) {
+            this.didEnterGeofence = didEnterGeometry;
+        }
+    }
+
 
     public SLIndoorLocationPresenterImpl(Context context, MapViewWithBlueDot mapViewWithBlueDot) {
         this.context = context;
@@ -89,21 +133,27 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
         @Override
         public void didUpdateLocationAvailability(LocationAvailability locationAvailability) {
-            logger.debug("didUpdateLocationAvailability++" + " locationAvailability: " + locationAvailability);
-            if(!locationAvailability.isAvailable()) mapViewWithBlueDot.removeBlueDot();
+//            logger.debug("didUpdateLocationAvailability++" + " locationAvailability: " + locationAvailability);
+//            if(!locationAvailability.isAvailable()) mapViewWithBlueDot.removeBlueDot();
             sLocationAvailability = locationAvailability;
 
-            // Do something with locationAvailability, for instance hide/show location marker.
+
+            if(!locationAvailability.isAvailable() && sCoordinateListener == null) {
+                sCoordinateListener = new CoordinateListener(positionAndHeadingMapVisualization);
+            } else {
+                sCoordinateListener = null;
+            }
+
         }
         @Override
         public void didUpdateHeading(double heading, SLHeadingStatus status) {
             Log.d("bluedot", "BlueDotPosition: "  + " headingRaw: " + heading);
-            // Do something with the heading here
             positionAndHeadingMapVisualization.setHeading((float) heading, status);
         }
 
         @Override
-        public void didFinishLoadingManager() {}
+        public void didFinishLoadingManager() {
+        }
         @Override
         public void errorWhileLoadingManager(String errorMsg) {
             logger.debug("errorWhileLoadingManager++" + " errorMsg: " + errorMsg);
@@ -137,16 +187,27 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         @Override
         public void didEnterGeometry(SLGeometry geometry) {
             logger.debug("didEnterGeometry++");
-            // The user entered the area defined by geometry
+            GEOFENCE_LOCATIONS.get(geometry.getGeometryId()).setDidEnterGeofence(true);
+
+
         }
         @Override
         public void didLeaveGeometry(SLGeometry geometry) {
             logger.debug("didLeaveGeometry++");
-            mapViewWithBlueDot.removeBlueDot();
-            // The user left the area defined by geometry
+            GEOFENCE_LOCATIONS.get(geometry.getGeometryId()).setDidEnterGeofence(false);
+//            mapViewWithBlueDot.removeBlueDot();
+
+
+
         }
     };
 
+    private boolean isWithinGeofence(HashMap<String, GeofenceLocation> geofenceLocations){
+        for (Map.Entry<String, GeofenceLocation> entry : geofenceLocations.entrySet()) {
+            if(entry.getValue().getDidEnterGeofence()) return true;
+        }
+        return false;
+    }
 
     @Override
     public void onPause() {
@@ -167,6 +228,19 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
     }
 
+    private void didBindAndLoad() {
+        try {
+            for (Map.Entry<String, GeofenceLocation> entry : GEOFENCE_LOCATIONS.entrySet()) {
+                serviceManager.addGeometry(entry.getValue().getSLCircle());
+            }
+        } catch (SLIndoorLocationException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
     @Override
     public Context getContext() {
         return context;
@@ -174,16 +248,9 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
     @Override
     public void didBindToService() {
-        // Do things that require you to be bound to the positioning service.
-        // For instance, register regions to be monitored for geofencing.
-
-        // Define a circle and add to the list of monitored regions
-        /*SLCoordinate3D origin = new SLCoordinate3D(58.39341485, 15.56097329, new FloorNr(3));
-        SLCircle circle = new SLCircle(new SLGeometryId("circle"), origin, 5.0);
-        try {
-            serviceManager.addGeometry(circle);
-        } catch (SLIndoorLocationException e) {
-            e.printStackTrace();
-        }*/
+        if (firstTimeBound) {
+            didBindAndLoad();
+        }
+        firstTimeBound = false;
     }
 }

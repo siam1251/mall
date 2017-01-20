@@ -21,4 +21,13 @@ public class SLSettings {
 
     public static final SLGeofencingArea[] GEOFENCING_ARRAY = {};
 
+    public static HashMap<String, SLIndoorLocationPresenterImpl.GeofenceLocation> GEOFENCE_LOCATIONS = new HashMap<String, SLIndoorLocationPresenterImpl.GeofenceLocation>();
+    static {
+        GEOFENCE_LOCATIONS.put("KineticCafe", new SLIndoorLocationPresenterImpl.GeofenceLocation("KineticCafe", 43.642069, -79.374585, 200, 0));
+        GEOFENCE_LOCATIONS.put("IvanhoeCambridge", new SLIndoorLocationPresenterImpl.GeofenceLocation("IvanhoeCambridge", 45.502519, -73.562517, 200, 0));
+
+        GEOFENCE_LOCATIONS.put("Metropolis At Metrotown", new SLIndoorLocationPresenterImpl.GeofenceLocation("IvanhoeCambridge", 49.226278, -122.999439, 1000, 1));
+        GEOFENCE_LOCATIONS.put("zone7", new SLIndoorLocationPresenterImpl.GeofenceLocation("IvanhoeCambridge", 49.224738, -122.999029, 50, 7));
+        GEOFENCE_LOCATIONS.put("zone8", new SLIndoorLocationPresenterImpl.GeofenceLocation("IvanhoeCambridge", 49.225178, -122.998364, 15, 8));
+    }
 }

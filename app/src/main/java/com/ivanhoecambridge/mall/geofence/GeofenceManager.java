@@ -38,7 +38,6 @@ import geofence.GeofenceConstants;
  * Created by Kay on 2016-08-23.
  */
 public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
-
     public static final String[] INITIAL_PERMS = {
             Manifest.permission.ACCESS_FINE_LOCATION,
     };

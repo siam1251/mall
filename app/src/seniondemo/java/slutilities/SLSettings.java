@@ -1,7 +1,15 @@
 package slutilities;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.ivanhoecambridge.mall.BuildConfig;
+import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
+import com.senionlab.slutilities.geofencing.geometries.SLCircle;
+import com.senionlab.slutilities.geofencing.geometries.a;
 import com.senionlab.slutilities.type.FloorNr;
 import com.senionlab.slutilities.type.SLCoordinate3D;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SLSettings {
 
@@ -19,6 +27,13 @@ public class SLSettings {
 
     public static final SLPointOfInterest[] POINTS_ARRAY = {};
 
-    public static final SLGeofencingArea[] GEOFENCING_ARRAY = {};
+    public static SLGeofencingArea[] GEOFENCING_ARRAY = {};
+
+    public static HashMap<String, SLIndoorLocationPresenterImpl.GeofenceLocation> GEOFENCE_LOCATIONS = new HashMap<String, SLIndoorLocationPresenterImpl.GeofenceLocation>();
+    static {
+        GEOFENCE_LOCATIONS.put("KineticCafe", new SLIndoorLocationPresenterImpl.GeofenceLocation("KineticCafe", 43.642069, -79.374585, 200, 0));
+        GEOFENCE_LOCATIONS.put("IvanhoeCambridge", new SLIndoorLocationPresenterImpl.GeofenceLocation("IvanhoeCambridge", 45.502519, -73.562517, 200, 0));
+    }
+
 
 }
