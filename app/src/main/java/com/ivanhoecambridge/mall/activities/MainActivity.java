@@ -1565,7 +1565,6 @@ public class MainActivity extends BaseActivity
                 if (mGeofenceManager.canAccessLocation()) {
                     mGeofenceManager.setGeofence(true);
                 } else {
-
                     if (Build.VERSION.SDK_INT >= 23) {
                         for (int i = 0, len = permissions.length; i < len; i++) {
                             String permission = permissions[i];
@@ -1578,7 +1577,8 @@ public class MainActivity extends BaseActivity
 
                                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                                     builder.setTitle(getString(R.string.title_permission_denied));
-                                    tvAlertDialogInterest.setText(getString(R.string.warning_require_location_permission));
+                                    if(BuildConfig.BLUEDOT) tvAlertDialogInterest.setText(getString(R.string.warning_require_location_permission_for_blue_dot));
+                                    else tvAlertDialogInterest.setText(getString(R.string.warning_require_location_permission));
                                     builder.setPositiveButton(getString(R.string.action_sure), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {

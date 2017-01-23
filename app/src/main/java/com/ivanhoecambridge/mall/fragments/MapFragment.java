@@ -1702,7 +1702,8 @@ public class MapFragment extends BaseFragment
             dropBlueDot(x, y, randomFloor); //CROSSIRON*/
 
 
-            if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
+
+            /*if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
                 return;
             }
             int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getElevation());
@@ -1723,11 +1724,12 @@ public class MapFragment extends BaseFragment
             mapView.addMarker(label, false);
 
             Log.d(TAG, "heading: " + tempHeading);
-            headingDrawn = tempHeading;
+            headingDrawn = tempHeading;*/
 
 
         }
     };
+
     float headingDrawn;
 
 

@@ -1,5 +1,7 @@
 package com.ivanhoecambridge.mall.bluedot;
 
+import android.location.Location;
+
 import com.senionlab.slutilities.type.FloorNr;
 import com.senionlab.slutilities.type.SLCoordinate2D;
 import com.senionlab.slutilities.type.SLCoordinate3D;
@@ -25,6 +27,13 @@ public class BlueDotPosition {
         longitude = slCoordinate2D.getLongitude();
         floorNr = location.getFloorNr();
         mappedInFloor = SLMapPositions.getMapLevel(floorNr.intValue());
+    }
+
+    public BlueDotPosition(Location location, int floorIndex){
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        floorNr = null;
+        mappedInFloor = SLMapPositions.getMapLevel(floorIndex);
     }
 
     public BlueDotPosition(double latitude, double longitude){

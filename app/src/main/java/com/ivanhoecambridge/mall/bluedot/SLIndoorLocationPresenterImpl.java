@@ -1,13 +1,12 @@
 package com.ivanhoecambridge.mall.bluedot;
 
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.senionlab.slutilities.geofencing.geometries.SLCircle;
@@ -24,16 +23,15 @@ import com.senionlab.slutilities.type.SLIndoorLocationException;
 import com.senionlab.slutilities.type.SLJsonProcessingException;
 import com.senionlab.slutilities.type.SLLocationStatus;
 import com.senionlab.slutilities.type.SLMotionType;
-import com.senionlab.slutilities.type.SLPixelPoint2D;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import geofence.GeofenceConstants;
 import slutilities.SLSettings;
 
 import static com.ivanhoecambridge.mall.activities.MainActivity.VIEWPAGER_PAGE_MAP;
 import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOnBluetooth;
+import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sLocationFindingMode;
 import static slutilities.SLSettings.GEOFENCE_LOCATIONS;
 
 /**
@@ -48,10 +46,11 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
     protected final Logger logger = new Logger(getClass().getName());
     private SLServiceManager serviceManager;
-    private Context context;
+    private Context mContext;
     public static LocationAvailability sLocationAvailability = LocationAvailability.NOT_AVAILABLE;
     private MapViewWithBlueDot mapViewWithBlueDot;
     private static CoordinateListener sCoordinateListener;
+    private static LocationManager sLocationManager;
 
 
     public static class GeofenceLocation {
@@ -89,16 +88,18 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
 
     public SLIndoorLocationPresenterImpl(Context context, MapViewWithBlueDot mapViewWithBlueDot) {
-        this.context = context;
+        this.mContext = context;
         this.mapViewWithBlueDot = mapViewWithBlueDot;
         positionAndHeadingMapVisualization.init(mapViewWithBlueDot);
+        sLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+        sCoordinateListener = new CoordinateListener(positionAndHeadingMapVisualization);
     }
 
 
     @Override
     public void onResume() {
         try {
-            serviceManager = SLServiceManager.getInstance(context);
+            serviceManager = SLServiceManager.getInstance(mContext);
             serviceManager.registerReceiver(receiver);
             serviceManager.start(SLSettings.MAP_KEY, SLSettings.CUSTOMER_ID);
             serviceManager.bindService(this);
@@ -127,27 +128,18 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         public void didUpdateLocation(SLCoordinate3D location, double uncertaintyRadius, SLLocationStatus status) {
             synchronized (this) {
                 BlueDotPosition blueDotPosition = new BlueDotPosition(location);
-                positionAndHeadingMapVisualization.setPos(blueDotPosition);
+                if(sLocationFindingMode.equals(PositionAndHeadingMapVisualization.LocationFindingMode.BEACON)) positionAndHeadingMapVisualization.setPos(blueDotPosition);
             }
         }
 
         @Override
         public void didUpdateLocationAvailability(LocationAvailability locationAvailability) {
-//            logger.debug("didUpdateLocationAvailability++" + " locationAvailability: " + locationAvailability);
-//            if(!locationAvailability.isAvailable()) mapViewWithBlueDot.removeBlueDot();
             sLocationAvailability = locationAvailability;
-
-
-            if(!locationAvailability.isAvailable() && sCoordinateListener == null) {
-                sCoordinateListener = new CoordinateListener(positionAndHeadingMapVisualization);
-            } else {
-                sCoordinateListener = null;
-            }
-
+            updateFromGPS();
         }
         @Override
         public void didUpdateHeading(double heading, SLHeadingStatus status) {
-            Log.d("bluedot", "BlueDotPosition: "  + " headingRaw: " + heading);
+//            Log.d("bluedot", "BlueDotPosition: "  + " headingRaw: " + heading);
             positionAndHeadingMapVisualization.setHeading((float) heading, status);
         }
 
@@ -163,15 +155,15 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
         @Override
         public void didUpdateMotionType(SLMotionType motionType) {
-            logger.debug("didUpdateMotionType++" + " SLMotionType: " + motionType);
+//            logger.debug("didUpdateMotionType++" + " SLMotionType: " + motionType);
             // Do something with the motion type here
         }
 
         @Override
         public void errorBleNotEnabled() {
-            BluetoothManager bluetoothManager = new BluetoothManager(context);
+            BluetoothManager bluetoothManager = new BluetoothManager(mContext);
             if (Build.VERSION.SDK_INT >= 18 && !mDidAskToTurnOnBluetooth) {
-                if(((MainActivity) context).getViewerPosition() != VIEWPAGER_PAGE_MAP) {
+                if(((MainActivity) mContext).getViewerPosition() != VIEWPAGER_PAGE_MAP) {
                     mAskForBluetooth = true;
                 } else {
                     bluetoothManager.turnOnBluetooth();
@@ -187,9 +179,8 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         @Override
         public void didEnterGeometry(SLGeometry geometry) {
             logger.debug("didEnterGeometry++");
-            GEOFENCE_LOCATIONS.get(geometry.getGeometryId()).setDidEnterGeofence(true);
-
-
+            GEOFENCE_LOCATIONS.get(geometry.getGeometryId().getGeometryId()).setDidEnterGeofence(true);
+            updateFromGPS();
         }
         @Override
         public void didLeaveGeometry(SLGeometry geometry) {
@@ -201,6 +192,48 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
         }
     };
+
+    private void updateFromGPS(){
+        if(sLocationAvailability.isAvailable()) {
+            sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.BEACON;
+            sCoordinateListener.setUpdating(false);
+            sLocationManager.removeUpdates(sCoordinateListener);
+        } else {
+            if(isWithinGeofence(GEOFENCE_LOCATIONS)) {
+                if (   (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) || Build.VERSION.SDK_INT < 23) {
+                    if(!sCoordinateListener.isUpdating()){
+                        sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.GPS;
+                        sCoordinateListener.setUpdating(true);
+                        sLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
+                        sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
+                    }
+                }
+            } else {
+//                Toast.makeText(mContext, "using GPS STOPPEDDDDDDDDDDDDDD", Toast.LENGTH_SHORT).show();
+                sCoordinateListener.setUpdating(false);
+                sLocationManager.removeUpdates(sCoordinateListener);
+//                sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.BEACON;
+            }
+        }
+
+
+/*        if(!sLocationAvailability.isAvailable() && isWithinGeofence(GEOFENCE_LOCATIONS)) {
+            if (   (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) || Build.VERSION.SDK_INT < 23) {
+                Toast.makeText(mContext, "using GPS", Toast.LENGTH_SHORT).show();
+                if(!sCoordinateListener.isUpdating()){
+                    sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.GPS;
+                    sCoordinateListener.setUpdating(true);
+                    sLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
+                    sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
+                }
+            }
+        } else {
+            Toast.makeText(mContext, "using GPS STOPPEDDDDDDDDDDDDDD", Toast.LENGTH_SHORT).show();
+            sCoordinateListener.setUpdating(false);
+            sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.BEACON;
+//            sLocationManager.removeUpdates(sCoordinateListener);
+        }*/
+    }
 
     private boolean isWithinGeofence(HashMap<String, GeofenceLocation> geofenceLocations){
         for (Map.Entry<String, GeofenceLocation> entry : geofenceLocations.entrySet()) {
@@ -243,7 +276,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
     @Override
     public Context getContext() {
-        return context;
+        return mContext;
     }
 
     @Override

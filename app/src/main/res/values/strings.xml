@@ -116,6 +116,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="warning_no_event_for_today">There are no events happening today. Please check back later.</string>
     <!--<string name="warning_require_location_permission">The app needs device’s location to show deals and events happening around you today.</string>-->
     <string name="warning_require_location_permission">The app requires your device’s location to access connected mall features. Are you sure you want to deny permissions?</string>
+    <string name="warning_require_location_permission_for_blue_dot">The app requires this permission to find your location and access connected mall features. Are you sure you want to deny permissions?</string>
     <string name="warning_selected_same_store">Sorry, you can’t select the same store</string>
     <string name="warning_selected_same_location">Sorry, you can’t select the same location</string>
     <string name="warning_remove_my_parking">Are you sure you want to remove your parking spot?</string>

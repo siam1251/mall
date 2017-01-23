@@ -18,17 +18,20 @@ public class PositionAndHeadingMapVisualization {
     private ValueAnimator headingAnimator = ValueAnimator.ofFloat();
     private ValueAnimator mAnimator;
 
-
     private double posX;
     private double posY;
     private float heading;
 
 //    protected static final int ANIMATION_TIME_MILLIS = 400;
-    protected static final int ANIMATION_TIME_MILLIS = 1000;
+    protected static final int ANIMATION_TIME_MILLIS = 1000; //animator finishes before its gets updated - more instant update but it can stop and go stop and go
+//    protected static final int ANIMATION_TIME_MILLIS = 2000; //animator resets before it's over - more smooth but can lag
+
+
+    enum LocationFindingMode { BEACON, GPS };
+    public static LocationFindingMode sLocationFindingMode = LocationFindingMode.BEACON;
 
     protected MapViewWithBlueDot mapViewWithBlueDot;
     private SLHeadingStatus headingStatus;
-
     public void init(MapViewWithBlueDot mapViewWithBlueDot) {
         this.mapViewWithBlueDot = mapViewWithBlueDot;
     }
@@ -38,7 +41,7 @@ public class PositionAndHeadingMapVisualization {
         public BlueDotPosition evaluate(float fraction, BlueDotPosition startValue, BlueDotPosition endValue) {
             posX = (startValue.getLatitude() + (endValue.getLatitude() - startValue.getLatitude()) * fraction);
             posY = (startValue.getLongitude() + (endValue.getLongitude() - startValue.getLongitude()) * fraction);
-//            Log.d("bluedot", "BlueDotPosition: "  + (double) posX + " " + (double) posY + " FRACTION: " + fraction);
+            Log.d("bluedot", "BlueDotPosition: "  + (double) posX + " " + (double) posY + " FRACTION: " + fraction);
             mapViewWithBlueDot.dropBlueDot(posX, posY, endValue.getMappedInFloor());
             return new BlueDotPosition(posX, posY);
         }
@@ -91,6 +94,7 @@ public class PositionAndHeadingMapVisualization {
     public void setPos(final BlueDotPosition blueDotPosition) {
         if(mAnimator == null) return;
         try {
+            Log.d("bluedot", " --------------------------------- UPATED : BlueDotPosition: "  + blueDotPosition.getLatitude() + " " + blueDotPosition.getLongitude());
             mAnimator.cancel();
             mAnimator.setObjectValues(new BlueDotPosition(posX, posY), blueDotPosition);
             mAnimator.start();
