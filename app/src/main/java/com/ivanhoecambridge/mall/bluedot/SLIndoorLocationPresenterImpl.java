@@ -186,6 +186,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         public void didLeaveGeometry(SLGeometry geometry) {
             logger.debug("didLeaveGeometry++");
             GEOFENCE_LOCATIONS.get(geometry.getGeometryId()).setDidEnterGeofence(false);
+            updateFromGPS();
 //            mapViewWithBlueDot.removeBlueDot();
 
 
@@ -194,45 +195,29 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
     };
 
     private void updateFromGPS(){
-        if(sLocationAvailability.isAvailable()) {
-            sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.BEACON;
-            sCoordinateListener.setUpdating(false);
-            sLocationManager.removeUpdates(sCoordinateListener);
-        } else {
-            if(isWithinGeofence(GEOFENCE_LOCATIONS)) {
-                if (   (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) || Build.VERSION.SDK_INT < 23) {
-                    if(!sCoordinateListener.isUpdating()){
-                        sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.GPS;
-                        sCoordinateListener.setUpdating(true);
-                        sLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
-                        sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
-                    }
-                }
-            } else {
-//                Toast.makeText(mContext, "using GPS STOPPEDDDDDDDDDDDDDD", Toast.LENGTH_SHORT).show();
+        synchronized (this) {
+            if(sLocationAvailability.isAvailable()) {
+                sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.BEACON;
                 sCoordinateListener.setUpdating(false);
                 sLocationManager.removeUpdates(sCoordinateListener);
+            } else {
+                if(isWithinGeofence(GEOFENCE_LOCATIONS)) {
+                    if (   (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) || Build.VERSION.SDK_INT < 23) {
+                        if(!sCoordinateListener.isUpdating()){
+                            sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.GPS;
+                            sCoordinateListener.setUpdating(true);
+                            sLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
+                            sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
+                        }
+                    }
+                } else {
+//                Toast.makeText(mContext, "using GPS STOPPEDDDDDDDDDDDDDD", Toast.LENGTH_SHORT).show();
+                    sCoordinateListener.setUpdating(false);
+                    sLocationManager.removeUpdates(sCoordinateListener);
 //                sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.BEACON;
-            }
-        }
-
-
-/*        if(!sLocationAvailability.isAvailable() && isWithinGeofence(GEOFENCE_LOCATIONS)) {
-            if (   (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) || Build.VERSION.SDK_INT < 23) {
-                Toast.makeText(mContext, "using GPS", Toast.LENGTH_SHORT).show();
-                if(!sCoordinateListener.isUpdating()){
-                    sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.GPS;
-                    sCoordinateListener.setUpdating(true);
-                    sLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
-                    sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
                 }
             }
-        } else {
-            Toast.makeText(mContext, "using GPS STOPPEDDDDDDDDDDDDDD", Toast.LENGTH_SHORT).show();
-            sCoordinateListener.setUpdating(false);
-            sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.BEACON;
-//            sLocationManager.removeUpdates(sCoordinateListener);
-        }*/
+        }
     }
 
     private boolean isWithinGeofence(HashMap<String, GeofenceLocation> geofenceLocations){

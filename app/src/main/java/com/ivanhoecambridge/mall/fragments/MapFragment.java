@@ -1578,6 +1578,8 @@ public class MapFragment extends BaseFragment
 
     @Override
     public void dropHeading(double x, double y, final float heading, SLHeadingStatus headingStatus) {
+
+
         /*if(maps == null || mBlueDotPin == null) return;
         mHeading = heading;
         if(mSLHeadingStatus != headingStatus) { //status changed
@@ -1625,16 +1627,16 @@ public class MapFragment extends BaseFragment
         mapView.addMarker(label, true);*/
 
 
-        tempHeading = heading;
+//        tempHeading = heading;
 
-        /*if(maps == null || mBlueDotPin == null) return;
+        if(maps == null || mBlueDotPin == null) return;
         if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
             return;
         }
         int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getElevation());
 
         android.location.Location targetLocation = MapUtility.getLocation(mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude());
-        Overlay2DImage label;
+        final Overlay2DImage label;
         if(mBlueDotCompass == null) {
             label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluedot_orientation_pointer), PIN_BLUEDOT/2, PIN_BLUEDOT/2);
         } else {
@@ -1644,13 +1646,27 @@ public class MapFragment extends BaseFragment
         if(mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
         mBlueDotCompass = new Pin(coordinate, label);
         mBlueDotCompass.setCoordinate(coordinate);
-        float rotationBy = tempHeading - heading;
-        label.setRotation((float)Math.toRadians(rotationBy));
+//        float rotationBy = tempHeading - heading;
+//        label.setRotation((float)Math.toRadians(rotationBy));
+
+        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        final Runnable task = new Runnable() {
+            public void run() {
+                label.setRotation((float)Math.toRadians( 1.8 ));
+            }
+        };
+        final ScheduledFuture<?> handle =
+                scheduler.scheduleAtFixedRate(task, 0, 10, MILLISECONDS);
+        scheduler.schedule(new Runnable() {
+            public void run() { handle.cancel(true); }
+        }, 1, SECONDS);
+
+
         label.setPosition(coordinate);
         mapView.addMarker(label, false);
-        Log.d(TAG, "heading: " + rotationBy);
+//        Log.d(TAG, "heading: " + rotationBy);
         tempHeading = heading;
-        headingDropped = true;*/
+        headingDropped = true;
 
     }
     boolean headingDropped = false;
@@ -1688,18 +1704,22 @@ public class MapFragment extends BaseFragment
 
 
             //change between two locations at CM
-            /*Random r = new Random();
-            int randomFloor = r.nextInt(5);
+            if(mBlueDotPin == null) {
+                Random r = new Random();
+                int randomFloor = r.nextInt(5);
 
-            if(x == 0 || x == x1) {
-                x = x2;
-                y = y2;
-            } else {
-                x = x1;
-                y = y1;
+                if(x == 0 || x == x1) {
+                    x = x2;
+                    y = y2;
+                } else {
+                    x = x1;
+                    y = y1;
+                }
+
+                dropBlueDot(x, y, randomFloor); //CROSSIRON
             }
 
-            dropBlueDot(x, y, randomFloor); //CROSSIRON*/
+            dropHeading(0,0,0, null);
 
 
 
