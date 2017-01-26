@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:background="#454545"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_marginBottom="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scene_root">
+
+        <include
+            layout="@layout/transition_sign_in_one" />
+
+    </FrameLayout>
+
+    <com.ivanhoecambridge.mall.views.ThemeColorImageView
+        xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+        ThemedImageView:filterColor="@color/white"
+        android:id="@+id/ivDismiss"
+        android:onClick="onClickDismiss"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:padding="15dp"
+        android:layout_margin="5dp"
+        android:src="@drawable/icn_exit"
+        />
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:id="@+id/llSignIn"
+        android:background="@color/black"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_height="48dp">
+
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_regular"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/signin_already_have_account"
+            android:textSize="16sp"
+            />
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            android:onClick="onClickSignIn"
+            android:id="@+id/tvSignIn"
+            style="@style/SelectableItemForeground"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            app:fontFamily="@string/fontFamily_roboto_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/signin_signin_with_underline"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+</RelativeLayout>
+

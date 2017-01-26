@@ -725,11 +725,12 @@ public class MainActivity extends BaseActivity
 
     private void setUpLeftSidePanel(){
         //ACCOUNT
-        TextView tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
-        tvDetailDate.setOnClickListener(new View.OnClickListener() {
+        TextView tvSignIn = (TextView) findViewById(R.id.tvSignIn);
+        tvSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(MainActivity.this, "clicked", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, SignInAfterOnBoarding.class));
+                ActivityAnimation.startActivityAnimation(MainActivity.this);
             }
         });
 
@@ -1015,7 +1016,7 @@ public class MainActivity extends BaseActivity
             tvEvents.setTextColor(generalTextColor);
             tvStores.setTextColor(generalTextColor);
             tvInterests.setTextColor(generalTextColor);
-            ivDrawerLayoutBg.setImageDrawable(drawerLayoutBgDrawable);
+//            ivDrawerLayoutBg.setImageDrawable(drawerLayoutBgDrawable);
             tvPrivacyPolicy.setTextColor(privacyTextColor);
             tvTermsOfService.setTextColor(privacyTextColor);
             tvDot.setTextColor(privacyTextColor);

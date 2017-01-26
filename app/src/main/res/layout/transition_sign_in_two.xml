@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="#454545"
+    android:layout_width="match_parent"
+    android:id="@+id/llTransition"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_horizontal"
+    android:layout_height="match_parent">
+
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+        android:layout_marginTop="140dp"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/tvDesc"
+        android:layout_marginBottom="20dp"
+        app:fontFamily="@string/fontFamily_roboto_medium"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:text="@string/signin_use_existing_profile"
+        />
+
+
+    <FrameLayout
+        style="@style/SelectableItemForegroundNormal"
+        android:onClick="onClickFb"
+        android:layout_below="@+id/tvDesc"
+        android:id="@+id/flFb"
+        android:layout_marginBottom="11dp"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_fb"
+        android:layout_width="326dp"
+        android:layout_height="50dp">
+
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            android:layout_marginLeft="21dp"
+            android:layout_gravity="center_vertical"
+            ThemedImageView:filterColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:src="@drawable/icn_facebook"
+            />
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/signin_connect_with_fb"
+            android:textSize="16dp"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        style="@style/SelectableItemForegroundNormal"
+        android:onClick="onClickGoogle"
+        android:layout_below="@+id/flFb"
+        android:id="@+id/flGoogle"
+        android:layout_marginBottom="11dp"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_google"
+        android:layout_width="326dp"
+        android:layout_height="50dp">
+
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            android:layout_marginLeft="21dp"
+            android:layout_gravity="center_vertical"
+            ThemedImageView:filterColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:src="@drawable/icn_googleplus"
+            />
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/signin_connect_with_google"
+            android:textSize="16dp"
+            />
+
+    </FrameLayout>
+
+        android:onClick="onClickSignUp"
+    <FrameLayout
+        style="@style/SelectableItemForegroundNormal"
+        android:layout_below="@+id/flGoogle"
+        android:id="@+id/tvSignUp"
+        android:layout_marginBottom="11dp"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_email"
+        android:layout_width="326dp"
+        android:layout_height="50dp">
+
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            android:layout_marginLeft="21dp"
+            android:layout_gravity="center_vertical"
+            ThemedImageView:filterColor="#ee3f33"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:src="@drawable/icn_email"
+            />
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:textColor="#ee3f33"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/signin_signup_with_email"
+            android:textSize="16dp"
+            />
+
+    </FrameLayout>
+
+
+</RelativeLayout>

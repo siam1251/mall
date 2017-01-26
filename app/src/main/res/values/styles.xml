@@ -26,7 +26,14 @@
         <item name="actionMenuTextColor">@color/themeColor</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="android:textColorSecondary">@color/hamburger_menu</item>
+        <item name="buttonBarButtonStyle">@style/MyButtonStyle</item>
     </style>
+
+    <style name="MyButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/welcome_btn_color</item>
+    </style>
+
+
 
     <style name="Theme.Transparent" parent="Theme.AppCompat.Light.NoActionBar">
 

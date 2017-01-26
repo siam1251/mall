@@ -42,12 +42,12 @@ import java.util.Vector;
  */
 public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends CoordinatorLayout.Behavior<V> {
 
-    /**
+   /* *//**
      * Callback for monitoring events about bottom sheets.
-     */
+     *//*
     public abstract static class BottomSheetCallback {
 
-        /**
+        *//**
          * Called when the bottom sheet changes its state.
          *
          * @param bottomSheet The bottom sheet view.
@@ -55,50 +55,50 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
          *                    {@link #STATE_SETTLING}, {@link #STATE_ANCHOR_POINT},
          *                    {@link #STATE_EXPANDED},
          *                    {@link #STATE_COLLAPSED}, or {@link #STATE_HIDDEN}.
-         */
+         *//*
         public abstract void onStateChanged(@NonNull View bottomSheet, @State int newState);
 
-        /**
+        *//**
          * Called when the bottom sheet is being dragged.
          *
          * @param bottomSheet The bottom sheet view.
          * @param slideOffset The new offset of this bottom sheet within its range, from 0 to 1
          *                    when it is moving upward, and from 0 to -1 when it moving downward.
-         */
+         *//*
         public abstract void onSlide(@NonNull View bottomSheet, float slideOffset);
     }
 
-    /**
+    *//**
      * The bottom sheet is dragging.
-     */
+     *//*
     public static final int STATE_DRAGGING = 1;
 
-    /**
+    *//**
      * The bottom sheet is settling.
-     */
+     *//*
     public static final int STATE_SETTLING = 2;
 
-    /**
+    *//**
      * The bottom sheet is expanded_half_way.
-     */
+     *//*
     public static final int STATE_ANCHOR_POINT = 3;
 
-    /**
+    *//**
      * The bottom sheet is expanded.
-     */
+     *//*
     public static final int STATE_EXPANDED = 4;
 
-    /**
+    *//**
      * The bottom sheet is collapsed.
-     */
+     *//*
     public static final int STATE_COLLAPSED = 5;
 
-    /**
+    *//**
      * The bottom sheet is hidden.
-     */
+     *//*
     public static final int STATE_HIDDEN = 6;
 
-    /** @hide */
+    *//** @hide *//*
     @IntDef({STATE_EXPANDED, STATE_COLLAPSED, STATE_DRAGGING, STATE_ANCHOR_POINT, STATE_SETTLING, STATE_HIDDEN})
     @Retention(RetentionPolicy.SOURCE)
     public @interface State {}
@@ -147,18 +147,18 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
 
     private boolean mTouchingScrollingChild;
 
-    /**
+    *//**
      * Default constructor for instantiating BottomSheetBehaviors.
-     */
+     *//*
     public BottomSheetBehaviorGoogleMapsLike() {
     }
 
-    /**
+    *//**
      * Default constructor for inflating BottomSheetBehaviors from layout.
      *
      * @param context The {@link Context}.
      * @param attrs   The {@link AttributeSet}.
-     */
+     *//*
     public BottomSheetBehaviorGoogleMapsLike(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs,
@@ -168,9 +168,9 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
         setHideable(a.getBoolean(android.support.design.R.styleable.BottomSheetBehavior_Params_behavior_hideable, false));
         a.recycle();
 
-        /**
+        *//**
          * Getting the anchorPoint...
-         */
+         *//*
         mAnchorPoint = DEFAULT_ANCHOR_POINT;
         a = context.obtainStyledAttributes(attrs, R.styleable.CustomBottomSheetBehavior);
         if (attrs != null)
@@ -214,15 +214,15 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
         mMinOffset = Math.max(0, mParentHeight - child.getHeight());
         mMaxOffset = Math.max(mParentHeight - mPeekHeight, mMinOffset);
 
-        /**
+        *//**
          * Old behavior
-         */
+         *//*
 //        if (mState == STATE_EXPANDED) {
 //            ViewCompat.offsetTopAndBottom(child, mMinOffset);
 //        } else if (mHideable && mState == STATE_HIDDEN...
-        /**
+        *//**
          * New behavior
-         */
+         *//*
         if (mState == STATE_ANCHOR_POINT) {
             ViewCompat.offsetTopAndBottom(child, mAnchorPoint);
         } else if (mState == STATE_EXPANDED) {
@@ -380,14 +380,14 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
         int top;
         int targetState;
         if (mLastNestedScrollDy > 0) {
-            /**
+            *//**
              * Old behavior
-             */
+             *//*
 //            top = mMinOffset;
 //            targetState = STATE_EXPANDED;
-            /**
+            *//**
              * New behavior
-             */
+             *//*
             int currentTop = child.getTop();
             if (currentTop > mAnchorPoint) {
                 top = mAnchorPoint;
@@ -410,14 +410,14 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
                 targetState = STATE_COLLAPSED;
             }
         } else {
-            /**
+            *//**
              * Old behavior
-             */
+             *//*
 //            top = mMaxOffset;
 //            targetState = STATE_COLLAPSED;
-            /**
+            *//**
              * New behavior
-             */
+             *//*
             int currentTop = child.getTop();
             if (currentTop > mAnchorPoint) {
                 top = mMaxOffset;
@@ -446,52 +446,52 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
                                 velocityX, velocityY));
     }
 
-    /**
+    *//**
      * Sets the height of the bottom sheet when it is collapsed.
      *
      * @param peekHeight The height of the collapsed bottom sheet in pixels.
      * @attr ref android.support.design.R.styleable#BottomSheetBehavior_Params_behavior_peekHeight
-     */
+     *//*
     public final void setPeekHeight(int peekHeight) {
         mPeekHeight = Math.max(0, peekHeight);
         mMaxOffset = mParentHeight - peekHeight;
     }
 
-    /**
+    *//**
      * Gets the height of the bottom sheet when it is collapsed.
      *
      * @return The height of the collapsed bottom sheet.
      * @attr ref android.support.design.R.styleable#BottomSheetBehavior_Params_behavior_peekHeight
-     */
+     *//*
     public final int getPeekHeight() {
         return mPeekHeight;
     }
 
-    /**
+    *//**
      * Sets whether this bottom sheet can hide when it is swiped down.
      *
      * @param hideable {@code true} to make this bottom sheet hideable.
      * @attr ref android.support.design.R.styleable#BottomSheetBehavior_Params_behavior_hideable
-     */
+     *//*
     public void setHideable(boolean hideable) {
         mHideable = hideable;
     }
 
-    /**
+    *//**
      * Gets whether this bottom sheet can hide when it is swiped down.
      *
      * @return {@code true} if this bottom sheet can hide.
      * @attr ref android.support.design.R.styleable#BottomSheetBehavior_Params_behavior_hideable
-     */
+     *//*
     public boolean isHideable() {
         return mHideable;
     }
 
-    /**
+    *//**
      * Adds a callback to be notified of bottom sheet events.
      *
      * @param callback The callback to notify when bottom sheet events occur.
-     */
+     *//*
     public void addBottomSheetCallback(BottomSheetCallback callback) {
         if (mCallback == null)
             mCallback = new Vector<>();
@@ -499,22 +499,22 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
         mCallback.add(callback);
     }
 
-    /**
+    *//**
      * Sets the state of the bottom sheet. The bottom sheet will transition to that state with
      * animation.
      *
      * @param state One of {@link #STATE_COLLAPSED}, {@link #STATE_ANCHOR_POINT},
      *              {@link #STATE_EXPANDED} or {@link #STATE_HIDDEN}.
-     */
+     *//*
     public final void setState(@State int state) {
         if (state == mState) {
             return;
         }
         if (mViewRef == null) {
             // The view is not laid out yet; modify mState and let onLayoutChild handle it later
-            /**
+            *//**
              * New behavior (added: state == STATE_ANCHOR_POINT ||)
-             */
+             *//*
             if (state == STATE_COLLAPSED || state == STATE_EXPANDED ||
                     state == STATE_ANCHOR_POINT ||
                     (mHideable && state == STATE_HIDDEN)) {
@@ -544,12 +544,12 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
         }
     }
 
-    /**
+    *//**
      * Gets the current state of the bottom sheet.
      *
      * @return One of {@link #STATE_EXPANDED}, {@link #STATE_ANCHOR_POINT}, {@link #STATE_COLLAPSED},
      * {@link #STATE_DRAGGING}, and {@link #STATE_SETTLING}.
-     */
+     *//*
     @State
     public final int getState() {
         return mState;
@@ -777,12 +777,12 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
                 };
     }
 
-    /**
+    *//**
      * A utility function to get the {@link BottomSheetBehaviorGoogleMapsLike} associated with the {@code view}.
      *
      * @param view The {@link View} with {@link BottomSheetBehaviorGoogleMapsLike}.
      * @return The {@link BottomSheetBehaviorGoogleMapsLike} associated with the {@code view}.
-     */
+     *//*
     @SuppressWarnings("unchecked")
     public static <V extends View> BottomSheetBehaviorGoogleMapsLike<V> from(V view) {
         ViewGroup.LayoutParams params = view.getLayoutParams();
@@ -797,5 +797,5 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
         }
         return (BottomSheetBehaviorGoogleMapsLike<V>) behavior;
     }
-
+*/
 }

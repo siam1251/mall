@@ -35,7 +35,7 @@
     </declare-styleable>
 
     <declare-styleable name="AlphaTextView">
-        <attr name="alpha" format="integer"/>
+        <attr name="textAlpha" format="integer"/>
     </declare-styleable>
 
     <declare-styleable name="CustomFontTextView">

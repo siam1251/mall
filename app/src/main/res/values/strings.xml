@@ -316,6 +316,16 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="movie_directed_by">Directed by:</string>
     <string name="movie_advisory">Advisory:</string>
 
+    <!-- SIGNIN -->
+    <string name="signin_create_account">Create an account to save all your preferences in one place.</string>
+    <string name="signin_sign_up">Sign Up</string>
+    <string name="signin_already_have_account">Already have an account?</string>
+    <string name="signin_signin_with_underline"><u>Sign In</u></string>
+    <string name="signin_use_existing_profile">Use an existing profile by siging up with your Facebook or Google account.</string>
+    <string name="signin_connect_with_fb">Connect with Facebook</string>
+    <string name="signin_connect_with_google">Connect with Google+</string>
+    <string name="signin_signup_with_email">Sign Up With Email</string>
+
     <!---->
 
     <string name="privacy_policy"><u>Privacy Policy</u></string>

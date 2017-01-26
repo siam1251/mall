@@ -142,6 +142,10 @@
         <activity
             android:name=".onboarding.TutorialActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base"/>
+        <activity
+            android:name=".activities.SignInAfterOnBoarding"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base"
             />
             android:theme="@style/Theme.Transparent"
@@ -182,7 +186,7 @@
 
         <!-- ETPushReceiver and Service -->
         <!--<receiver
-            android:name="com.exacttarget.etpushsdk.ETPushReceiver"
+            android:name="com.e xacttarget.etpushsdk.ETPushReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.ivanhoecambridge.mall.MESSAGE_OPENED" />

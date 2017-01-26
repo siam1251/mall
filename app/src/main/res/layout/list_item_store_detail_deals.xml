@@ -42,7 +42,7 @@
                 android:background="@color/themeColor"
                 android:transitionName="@string/transition_news_expiry_date"
                 android:textSize="@dimen/deal_expiry_date_text"
-                textAlpha:alpha="@integer/detail_expiry_date_alpha"
+                textAlpha:textAlpha="@integer/detail_expiry_date_alpha"
                 android:layout_width="match_parent"
                 />
 
