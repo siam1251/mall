@@ -27,6 +27,11 @@
         <item name="android:textCursorDrawable">@null</item>
         <item name="android:textColorSecondary">@color/hamburger_menu</item>
         <item name="buttonBarButtonStyle">@style/MyButtonStyle</item>
+
+        <!--For TextInputLayout Underline Color-->
+        <item name="colorControlNormal">@color/transparent</item>
+        <item name="colorControlActivated">@color/transparent</item>
+
     </style>
 
     <style name="MyButtonStyle" parent="Widget.AppCompat.Button.Borderless">
@@ -249,6 +254,47 @@
         <item name="android:layout_marginRight">@dimen/activity_horizontal_margin</item>
     </style>
 
+
+
+    <!--<style name="TextInputLayoutSignIn" parent="@android:style/TextAppearance">-->
+    <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/intrstd_cat_desc</item>
+        <item name="hintTextAppearance">@style/AppTheme.TextFloatLabelAppearance</item>
+        <item name="errorTextAppearance">@style/AppTheme.TextErrorAppearance</item>
+    </style>
+
+    <style name="AppTheme.TextFloatLabelAppearance" parent="TextAppearance.Design.Hint">
+        <item name="android:textColor">@color/intrstd_cat_desc</item>
+        <item name="android:textSize">13dp</item>
+    </style>
+
+    <style name="AppTheme.TextErrorAppearance" parent="TextAppearance.Design.Error">
+        <item name="android:textColor">#ee3f33</item>
+        <item name="android:textSize">13dp</item>
+    </style>
+
+
+    <style name="EditTextSignIn" parent="@android:style/Widget.EditText">
+        <item name="android:inputType">textNoSuggestions</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginLeft">@dimen/activity_horizontal_margin</item>
+    </style>
+
+
+    <style name="CardViewSignIn" parent="@style/CardView">
+        <item name="android:layout_width">326dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="cardCornerRadius">@dimen/sign_in_card_corner_radius</item>
+        <item name="cardElevation">@dimen/sign_in_card_elevation</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
 
 </resources>
 

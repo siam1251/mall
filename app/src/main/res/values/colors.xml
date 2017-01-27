@@ -172,6 +172,9 @@
     <!--LEFT PANEL-->
     <color name="privacy_policy_text_color">#101010</color>
 
+    <!--SIGN -->
+    <color name="sign_in_red">#ee3f33</color>
+
 
 
 

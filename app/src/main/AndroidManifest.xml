@@ -144,11 +144,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base"/>
         <activity
-            android:name=".activities.SignInAfterOnBoarding"
+            android:name=".activities.SignInAfterOnBoardingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base"
             />
-            android:theme="@style/Theme.Transparent"
+        <activity
+            android:name=".activities.SignInActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base"
+            />
 
         <receiver android:name=".receivers.WelcomeMsgReceiver" />
 

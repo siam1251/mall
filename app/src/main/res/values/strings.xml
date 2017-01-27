@@ -220,6 +220,11 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="hint_search_start_when_not_empty">from</string>
     <string name="hint_search_destination_when_not_empty">to</string>
     <string name="hint_add_notes">Include additional notes to your parking i.e. “Pillar 15F near stairs”</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="hint_Birthday">Birthday</string>
 
     <string name="bluedot_my_location">Your Location</string>
 
@@ -317,7 +322,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="movie_advisory">Advisory:</string>
 
     <!-- SIGNIN -->
-    <string name="signin_create_account">Create an account to save all your preferences in one place.</string>
+    <string name="signin_create_account_to_save">Create an account to save all your preferences in one place.</string>
     <string name="signin_sign_up">Sign Up</string>
     <string name="signin_already_have_account">Already have an account?</string>
     <string name="signin_signin_with_underline"><u>Sign In</u></string>
@@ -325,6 +330,13 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="signin_connect_with_fb">Connect with Facebook</string>
     <string name="signin_connect_with_google">Connect with Google+</string>
     <string name="signin_signup_with_email">Sign Up With Email</string>
+    <string name="signin_sign_in">Sign In</string>
+    <string name="signin_dont_have_account">Don’t have an account?</string>
+    <string name="signin_forgot_password">Forgot your password?</string>
+    <string name="signin_other_sign_in_method">You can also sign in with a Facebook or Google account.</string>
+    <string name="signin_create_account">Create Account</string>
+    <string name="signin_send_me_promos">Send Me Promos &amp; Deals</string>
+
 
     <!---->
 

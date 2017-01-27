@@ -729,7 +729,7 @@ public class MainActivity extends BaseActivity
         tvSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SignInAfterOnBoarding.class));
+                startActivity(new Intent(MainActivity.this, SignInAfterOnBoardingActivity.class));
                 ActivityAnimation.startActivityAnimation(MainActivity.this);
             }
         });
