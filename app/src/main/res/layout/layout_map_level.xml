@@ -6,10 +6,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
-    android:layout_gravity="center"
-    android:background="@color/white"
-    tools:showIn="@layout/fragment_map"
-
 
     <RelativeLayout
         android:id="@+id/rlUpper"
@@ -37,8 +33,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/btn_level_arrow_up"
             />
-
-
 
     </RelativeLayout>
 
@@ -85,12 +79,6 @@
             ThemedImageView:filterColorSelected="@color/map_level_with_path"
             />
 
-        android:background="?selectableItemBackgroundBorderless"
-        style="@style/SelectableItemForegroundCircle"
-        android:src="@drawable/icn_multilevel_arrow_down"
-        <!--<com.ivanhoecambridge.mall.views.ThemeColorImageView-->
-        ThemedImageView:filterColor="@color/map_level_disabled"
-        ThemedImageView:filterColorSelected="@color/map_level_enabled"
         <com.ivanhoecambridge.mall.views.ThemeColorImageView
             android:layout_centerHorizontal="true"
             android:id="@+id/ivLower"
@@ -100,9 +88,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/btn_level_arrow_down"
             />
-
-        android:layout_width="@dimen/map_level_arrow_width"
-        android:layout_height="@dimen/map_level_arrow_height"
 
     </RelativeLayout>
 

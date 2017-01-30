@@ -58,7 +58,6 @@ import javax.net.ssl.X509TrustManager;
  */
 public class Utility {
 
-
     public static void makeCall(Context context, String number){
         if(number == null || number.equals("")) return;
         Intent callIntent = new Intent(Intent.ACTION_DIAL);

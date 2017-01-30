@@ -197,6 +197,4 @@ public class KcpAnimatedViewPager extends ViewPager /*implements ViewPager.OnPag
 
         return false;
     }
-
-
 }

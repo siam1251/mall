@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<android.support.v7.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    android:id="@+id/toolbar"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >-->
-
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -110,9 +100,6 @@
                 android:layout_width="@dimen/info_direction_height"
                 android:layout_height="match_parent"
                 android:src="@drawable/icn_walk"/>
-
-
-
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
@@ -146,9 +133,6 @@
                 android:layout_height="17dp"
                 android:adjustViewBounds="true"
                 />
-                android:padding="17dp"
-                android:layout_width="@dimen/info_direction_height"
-                android:layout_height="@dimen/info_direction_height"
 
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 app:fontFamily="@string/fontFamily_roboto_regular"
@@ -164,7 +148,6 @@
                 android:ellipsize="end"
                 android:text="@string/info_save_my_parking_spot"
                 />
-                android:text="info_save_my_parking_spotinfo_save_my_parking_spotinfo_save_my_parking_spotinfo_save_my_parking_spotinfo_save_my_parking_spot"
 
             <com.ivanhoecambridge.mall.views.ThemeColorImageView
                 android:layout_alignParentRight="true"
@@ -174,10 +157,6 @@
                 android:layout_width="@dimen/info_direction_height"
                 android:layout_height="@dimen/info_direction_height"
                 android:src="@drawable/icn_arrow"/>
-
-
         </RelativeLayout>
-
     </android.support.v7.widget.CardView>
 </RelativeLayout>
-    <!--</android.support.v7.widget.Toolbar>-->

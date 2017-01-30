@@ -44,7 +44,6 @@ public class ParkingManager {
     public static String KEY_PARKING_LOT_COORDINATE = "key_parking_lot_coordinate";
     public static String KEY_PARKING_NOTES = "key_parking_notes";
 
-
     public static final int DOWNLOAD_FAILED = -1;
     public static final int DOWNLOAD_STARTED = 1;
     public static final int DOWNLOAD_COMPLETE = 2;
@@ -202,7 +201,6 @@ public class ParkingManager {
         saveParkingNotes(context, "");
     }
 
-
     private void handleState(int state){
         handleState(state, null);
     }
@@ -232,5 +230,4 @@ public class ParkingManager {
             else return ParkingMode.COORDINATE;
         }
     }
-
 }

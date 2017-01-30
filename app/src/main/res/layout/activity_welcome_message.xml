@@ -73,8 +73,6 @@
 
     </RelativeLayout>
 
-
-
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:paddingLeft="20dp"
         android:paddingBottom="25dp"

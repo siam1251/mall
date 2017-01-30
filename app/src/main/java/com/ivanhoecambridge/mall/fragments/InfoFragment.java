@@ -50,12 +50,6 @@ import java.util.List;
  * Created by Kay on 2016-06-20.
  */
 public class InfoFragment extends BaseFragment {
-    private static InfoFragment sInfoFragment;
-    public static InfoFragment getInstance(){
-        if(sInfoFragment == null) sInfoFragment = new InfoFragment();
-        return sInfoFragment;
-    }
-
 
     private View mView;
     private InfoRecyclerViewAdapter mInfoRecyclerViewAdapter;
@@ -64,6 +58,13 @@ public class InfoFragment extends BaseFragment {
     private TextView tvInfoHoursBold;
     private TextView tvInfoHoursLight;
     private Toolbar toolbar;
+
+    private static InfoFragment sInfoFragment;
+    public static InfoFragment getInstance(){
+        if(sInfoFragment == null) sInfoFragment = new InfoFragment();
+        return sInfoFragment;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,19 +114,14 @@ public class InfoFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 if(!ParkingManager.isParkingLotSaved(getActivity())){
-//                    Utility.addBlurredBitmapToMemoryCache(mView, Constants.KEY_PARKING_BLURRED);
                     final Intent intent = new Intent (getActivity(), ParkingActivity.class);
                     getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
                 } else {
-
                     mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_MAP);
                     MapFragment.getInstance().onParkingClick(true, true);
-
-//                    getActivity().startActivityForResult(new Intent(getActivity(), ParkingActivity.class), Constants.REQUEST_CODE_SAVE_PARKING_SPOT); //is startActivityForResult necessary?
                 }
             }
         });
-
 
         ImageView ivCar = (ImageView) mView.findViewById(R.id.ivCar);
         ivCar.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +147,6 @@ public class InfoFragment extends BaseFragment {
             }
         });
 
-
         //when recyclerview's placed under collapsed, it sometimes fails to set its height properly - last items cannot be scrolled to so manually setting the height
         final ViewTreeObserver viewTreeObserver = rvInfo.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
@@ -164,7 +159,6 @@ public class InfoFragment extends BaseFragment {
                     lp.height = (int) (KcpUtility.getScreenHeight(getActivity())
                             - KcpUtility.getStatusBarHeight(getActivity())
                             - getActivity().getResources().getDimension(R.dimen.abc_action_bar_default_height_material)
-//                            - getResources().getDimension(R.dimen.info_collapsed_height) //decided to leave only hours section at top when scrolled down
                             - getResources().getDimension(R.dimen.info_hours_height)
                             - getResources().getDimension(R.dimen.vpMain_padding_bottom));
                     rvInfo.setLayoutParams(lp);
@@ -320,11 +314,6 @@ public class InfoFragment extends BaseFragment {
                 } else if (infoLists.get(position).getMenuTitle() != null && infoLists.get(position).getMenuTitle().contains(getString(R.string.mall_info_cinema))){
                     Intent intent = new Intent(getActivity(), MoviesActivity.class);
                     intent.putExtra(Constants.ARG_TRANSITION_ENABLED, false);
-                    /*String transitionNameImage = getActivity().getResources().getString(R.string.transition_news_image);
-                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            getActivity(),
-                            Pair.create((View)ancmtHolder.ivAnnouncementLogo, transitionNameImage));*/
-//                    ActivityCompat.startActivityForResult((Activity) getActivity(), intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP, null);
                     getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
                     ActivityAnimation.startActivityAnimation(getActivity());
                 } else {
@@ -335,7 +324,6 @@ public class InfoFragment extends BaseFragment {
                 ActivityAnimation.startActivityAnimation(getActivity());
             }
         };
-
 
         KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
         kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), Constants.MALL_INFO_OFFLINE_TEXT);

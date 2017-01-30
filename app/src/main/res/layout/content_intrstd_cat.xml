@@ -29,8 +29,6 @@
             android:textColor="@color/intrstd_cat_desc"
             android:layout_height="@dimen/intrstd_cat_txt_height" />
 
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
         <android.support.v7.widget.RecyclerView
             android:paddingBottom="@dimen/intrstd_cat_next_btn_height"
             android:layout_below="@+id/tvIntrstdCatDesc"
@@ -38,7 +36,6 @@
             android:layout_height="match_parent"
             android:id="@+id/rvIntrstCat"
             />
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

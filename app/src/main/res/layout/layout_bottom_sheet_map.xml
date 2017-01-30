@@ -31,7 +31,6 @@
 
 
             <LinearLayout
-
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
@@ -199,13 +198,5 @@
                 android:src="@drawable/icn_routes"/>
 
         </RelativeLayout>
-
-        <!--<include
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            layout="@layout/activity_movie"
-            />-->
-
     </RelativeLayout>
-
 </LinearLayout>

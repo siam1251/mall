@@ -56,6 +56,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     private FavouriteInterface mFavouriteInterface;
     private boolean showInstagramFeed = false;
 
+
     public NewsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> news) {
         mContext = context;
         mKcpContentPagesNews = news == null ? new ArrayList<KcpContentPage>() : news;
@@ -108,7 +109,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-
     private int mFooterLayout;
     private boolean mFooterExist = false;
     private String mFooterText;
@@ -124,8 +124,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         mKcpContentPagesNews.add(fakeKcpContentPageForFooter);
         notifyDataSetChanged();
     }
-
-
 
     public void prepareLoadingImage(){
         mKcpContentPagesNews.add(null);
@@ -336,7 +334,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                     .placeholder(R.drawable.placeholder)
                     .into(ancmtHolder.ivAnnouncementLogo);
 
-
             ancmtHolder.ivSymbol.setVisibility(View.VISIBLE);
             ancmtHolder.tvAnnouncementTitle.setText(mContext.getString(R.string.movie_title));
             ancmtHolder.tvAnnouncementDate.setText(mContext.getString(R.string.movie_desc));
@@ -356,7 +353,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                     ActivityAnimation.startActivityAnimation(mContext);
                 }
             });
-
 
         } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST){
             SetMyInterestViewHolder intrstHolder = (SetMyInterestViewHolder) holder;
@@ -413,9 +409,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         holder.vpTw.setAdapter(pagerAdapter);
         holder.vpTw.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
@@ -471,6 +465,4 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
 
         if(holder.dots.length > 0) holder.dots[0].setImageDrawable(mContext.getResources().getDrawable(R.drawable.viewpager_circle_page_incdicator_dot_selected));
     }
-
-
 }

@@ -91,7 +91,6 @@ public class AlertDialogForInterest {
 
             @Override
             public void afterTextChanged(Editable s) {
-//                tvCharacterLeft.setText(50 - s.toString().length() + "/50");
                 tvCharacterLeft.setText(50 - s.toString().length() + "");
             }
         });

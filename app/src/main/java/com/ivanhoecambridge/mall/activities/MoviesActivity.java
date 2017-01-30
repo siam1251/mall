@@ -68,7 +68,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
     private ImageView ivDetailImage;
     private ImageView ivDetailImageBg;
     private MoviesRecyclerViewAdapter mMoviesRecyclerViewAdapter;
-    private boolean mHasTransitionStarted = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,6 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
 
     private void showContentsWithCTL(){
         try {
-
             //TOOLBAR
             final CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.ctlDetail);
             final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -142,7 +141,6 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
                     public void onTransitionStart(Transition transition) {
                         System.out.println("#¤ ActivityB.onTransitionStart - Enter");
                         fadeOutTransitionImage();
-                        mHasTransitionStarted = true;
                     }
 
                     @Override
@@ -183,10 +181,6 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
     @Override
     protected void onStart() {
         super.onStart();
-        /*if(!mHasTransitionStarted) {
-            ivDetailImage.setVisibility(View.GONE);
-//            fadeOutTransitionImage();
-        }*/
     }
 
     private void fadeOutTransitionImage(){
@@ -253,18 +247,6 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
                             }
                         }
                     }, true);
-
-
-            /*String todaysHour = null;
-            try {
-                    mLayoutStoreHours = getLayoutInflater().inflate(
-                            R.layout.layout_store_hours,
-                            mParentView,
-                            false);
-
-            } catch (Exception e) {
-                logger.error(e);
-            }*/
 
             String todaysHour = null;
             try {
@@ -493,7 +475,6 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
         try {
             if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
                 if(data == null) {
-//                    onFinish(resultCode);
                 } else {
                     int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
                     if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){

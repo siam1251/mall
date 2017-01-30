@@ -18,6 +18,7 @@ import com.ivanhoecambridge.mall.views.ActivityAnimation;
  */
 public class WelcomeMessage extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

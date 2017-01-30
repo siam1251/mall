@@ -7,6 +7,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
  */
 public class KcpContentTypeFactory {
 
+
     public static final String CONTENT_TYPE_ANNOUNCEMENT = "announcement";
     public static final String CONTENT_TYPE_EVENT = "event";
     public static final String CONTENT_TYPE_DEAL = "deal";
@@ -17,6 +18,7 @@ public class KcpContentTypeFactory {
     public static final String CONTENT_TYPE_CATEGORY = "category";
     public static final String CONTENT_TYPE_FOOTER = "footer";
     public static final String CONTENT_TYPE_MOVIE = "movie";
+
 
     //NEWS & DEAL ADAPTER ITEM TYPE
     public static final int ITEM_TYPE_LOADING =                             0;
@@ -38,13 +40,12 @@ public class KcpContentTypeFactory {
     public static final int ITEM_TYPE_SECTION_HEADER_RECOMMENDED_STORES =   12;
     public static final int ITEM_TYPE_SECTION_HEADER_OTHER_STORES =         13;
 
+
     //PREFERENCE ADAPTER ITEM TYPE
     public static final int PREF_ITEM_TYPE_CAT =        0;
     public static final int PREF_ITEM_TYPE_PLACE =      1;
     public static final int PREF_ITEM_TYPE_SUB_CAT =    2;
     public static final int PREF_ITEM_TYPE_ALL_PLACE =      3;
-
-
 
     public static final String TYPE_LOADING_TITLE =         "";
     public static final String TYPE_ANNOUNCEMENT_TITLE =    "Announcement";
@@ -103,5 +104,4 @@ public class KcpContentTypeFactory {
             return ITEM_TYPE_ANNOUNCEMENT;
         }
     }
-
 }

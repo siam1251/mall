@@ -24,7 +24,6 @@
             android:layout_height="wrap_content">
 
 
-            <!--<ImageView-->
             <com.ivanhoecambridge.mall.views.KCPSetRatioImageView
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"

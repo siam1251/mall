@@ -42,12 +42,12 @@ public class HomeFragment extends BaseFragment {
     public static ArrayList<TwitterTweet> sTwitterFeedList = new ArrayList<>();
     public static ArrayList<InstagramFeed> sInstaFeedList = new ArrayList<>();
 
-
     private static HomeFragment sHomeFragment;
     public static HomeFragment getInstance(){
         if(sHomeFragment == null) sHomeFragment = new HomeFragment();
         return sHomeFragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -193,9 +193,6 @@ public class HomeFragment extends BaseFragment {
         kcpCategoryManager.downloadFingerPrintingCategories();
     }
 
-
-
-
     private void setupViewPager(ViewPager viewPager) {
         HomeTopViewPagerAdapter homeTopViewPagerAdapter = new HomeTopViewPagerAdapter(getChildFragmentManager());
         if(mNewsFragment == null) mNewsFragment = NewsFragment.newInstance();
@@ -270,7 +267,6 @@ public class HomeFragment extends BaseFragment {
     public void selectPage(int pageIndex){
         mViewPager.setCurrentItem(pageIndex);
     }
-
 
     @Override
     public void onResume() {

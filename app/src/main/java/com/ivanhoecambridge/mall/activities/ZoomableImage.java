@@ -21,6 +21,8 @@ public class ZoomableImage extends AppCompatActivity {
 
 	private Toolbar mToolbar;
     private boolean mIsToolbarHidden;
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,7 +60,6 @@ public class ZoomableImage extends AppCompatActivity {
 								Glide.with(ZoomableImage.this)
 										.load(imageUrlLarge)
 										.crossFade()
-	//									.centerCrop()
 										.into(ivDetailImage);
 							}
 							return false;
@@ -73,7 +74,6 @@ public class ZoomableImage extends AppCompatActivity {
 					.error(R.drawable.placeholder)
 					.into(ivDetailImage);
 		}
-
 
 		initActionBar();
 		hideSystemUi();
@@ -105,10 +105,8 @@ public class ZoomableImage extends AppCompatActivity {
     public void animateToolbar(boolean hide){
         if(hide){
             getSupportActionBar().hide();
-//            mToolbar.animate().translationY(-mToolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
         } else {
             getSupportActionBar().show();
-//            mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
         }
         mIsToolbarHidden = hide;
     }
@@ -119,20 +117,11 @@ public class ZoomableImage extends AppCompatActivity {
 		boolean isImmersiveModeEnabled =
 				((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
 		if (isImmersiveModeEnabled) {
-		} else {
 		}
 
-		if (Build.VERSION.SDK_INT >= 14) {
-			newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-		}
-
-		if (Build.VERSION.SDK_INT >= 16) {
-			newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-		}
-
-		if (Build.VERSION.SDK_INT >= 18) {
-			newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-		}
+		if (Build.VERSION.SDK_INT >= 14) newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+		if (Build.VERSION.SDK_INT >= 16) newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+		if (Build.VERSION.SDK_INT >= 18) newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
 		getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
 	}
@@ -141,7 +130,6 @@ public class ZoomableImage extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                /*NavUtils.navigateUpFromSameTask(this);*/
                 this.onBackPressed();
                 return true;
         }

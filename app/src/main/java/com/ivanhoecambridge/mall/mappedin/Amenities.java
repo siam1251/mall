@@ -21,7 +21,6 @@ import java.util.List;
  */
 public class Amenities {
 
-
     public static String GSON_KEY_AMENITY = "gson_key_amenity";
     public static String GSON_KEY_DEAL = "gson_key_deal";
     public static String GSON_KEY_PARKING = "gson_key_parking";
@@ -137,11 +136,4 @@ public class Amenities {
     public interface OnParkingClickListener {
         public void onParkingClick(boolean enabled, boolean focus);
     }
-
-
-
-
-
-
-
 }

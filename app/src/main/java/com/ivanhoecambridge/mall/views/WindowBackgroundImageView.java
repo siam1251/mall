@@ -97,5 +97,4 @@ public class WindowBackgroundImageView extends ImageView {
         ((Activity)mContext).getWindowManager().getDefaultDisplay().getMetrics(metrics);
         return (float) metrics.heightPixels / metrics.widthPixels;
     }
-
 }

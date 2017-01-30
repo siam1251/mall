@@ -8,17 +8,15 @@ public class Constants {
 //	public final static boolean IS_APP_IN_PRODUCTION = false;
 
 	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				1000;
-//	public final static int DURATION_MINIMUM_SPLASH_ANIMATION = 				500;
 	public final static int DURATION_SPLASH_ANIMATION = 						7000;
-//	public final static int DURATION_SPLASH_ANIMATION = 						10000;
 	public final static long DURATION_MAIN_BOT_TAB_ICON_SLIDE_UP_ANIMATION = 	100;
 	public final static long DURATION_MAIN_BOT_TAB_TITLE_ALPHA_ANIMATION = 		100;
 	public final static long DURATION_DETAIL_EXPIRY_DATE_TEXT = 				800;
 	public final static long DURATION_MAIN_DRAWER_ACTIVE_MALL_DOT = 			1300;
 
-
 	public enum DetailType { DEAL, STORE }
 	public final static String KEY_BUNDLE_DEAL_TYPE = "key_bundle_deal_type";
+
 
 	//HEADER
 	public final static String HEADER_VALUE_DATAHUB_CATALOG_VM = 	"vaughan-mills";
@@ -27,8 +25,6 @@ public class Constants {
 	public final static String HEADER_VALUE_CLIENT_TOKEN_PRODUCTION = 	"NTJlMWFiZjEtOTg5Ni00YmQyLTg2YWEtZDNlYzE3N2MwYWE1OmUzYzQ4ZWVkNDM2ZDA2MWNmMzA1Y2U3NzhmNTdlZjkzMWJkYWJhN2UwNjM1ZTBmMWFkYjdlYTdlOTgwYWI4NjM2NGI3NzdhYzQ0OTBiOWJlMmU0MDdhNjUyZDNmNmIwMWQyMjI0NzIxNjJkODY0NzZkMWM3NjAzZDQzNGQ5ZjA3"; //PRODUCTION
 	public final static String HEADER_VALUE_CLIENT_TOKEN_STAGING 	= 	"OTVhZWMxMTEtNGJiNC00ZDk1LWEwYzAtNTE0ZjhhNDRkOWVkOmQ5ODY5YjIyZDE2NDY1NmZmM2M2N2ZhYjBhYzhlZGIwZDc2YzRiYWRlNWQwZGRmMmJkYzhhYjcyM2M3YTIyYjc2OTgxMTg2YmI1YTFjNTIzMjMyNzUxMzJlMzI0YTJlODU3OTZlMGRkZWQwM2RmZmVkNmQ5ZDBhYjlkOTEzNjU5"; //STAGING
 	public final static String HEADER_VALUE_CONTENT_TYPE = 		"application/json";
-//	public final static String HEADER_VALUE_ACCEPT = 			"application/json";
-//	public final static String HEADER_VALUE_ACCEPT = 			"application/json, application/vnd.kcp.place+json; version=1.0, application/vnd.kcp.view-all-content+json; version=1.0, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.icmp-event+json; version=1.0, application/vnd.kcp.icmp-announcement+json; version=1.0, application/vnd.kcp.blog-post+json; version=1.0, application/vnd.kcp.icmp-twitter+json; version=1.0, application/vnd.kcp.icmp-instagram+json; version=1.0, application/vnd.kcp.icmp-set-interests+json; version=1.0, application/vnd.kcp.icmp-movie+json; version=1.0";
 	public final static String HEADER_VALUE_CONTENT_TYPE_MESSAGE_PACK = 		"application/octet-stream";
 
 
@@ -73,6 +69,7 @@ public class Constants {
 	//DETAIL
 	public final static int DAYS_LEFT_TO_SHOW_IN_EXPIRY_DATE = 3; //if date left until (effective date) is equal or less than this number, show it
 
+
 	//ARG_KEY
 	public final static String ARG_CONTENT_PAGE = 			"arg_content_page";
 	public final static String ARG_IMAGE_URL = 				"arg_image_url";
@@ -108,20 +105,19 @@ public class Constants {
 	public final static int RESULT_EVENTS = 2;
 	public final static int RESULT_STORES = 3;
 
+
 	//OTHERS
 	public final static int NUMB_OF_DAYS = 7;
 	public final static String PREF_KEY_WELCOME_MSG_TIME_SAVER = "welcome_message_time_saver";
 	public final static String PREF_KEY_WELCOME_MSG_DID_APPEAR = "welcome_message_did_appear";
 	public final static String PREF_KEY_ONBOARDING_DID_APPEAR = "onboarding_did_appear";
-
-
 	public final static long DURATION_DAY = 1000*60*60*24;
+
 
 	//PARKING
 	public final static String KEY_GUEST_SERVICE = "information-counter";
 
+
 	//BITMAP KEY
 	public final static String KEY_PARKING_BLURRED = "parking_image";
-
-
 }

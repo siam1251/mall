@@ -27,7 +27,6 @@
             android:layout_height="match_parent">
             android:background="?android:attr/selectableItemBackground"
 
-            <!--<ImageView-->
             <com.ivanhoecambridge.mall.views.KCPSetRatioImageView
                 android:layout_centerVertical="true"
                 android:src="@drawable/placeholder_square"
@@ -37,10 +36,6 @@
                 android:transitionName="@string/transition_news_logo"
                 android:scaleType="centerCrop"
                 />
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:scaleType="centerCrop"
-            android:transitionName="@string/transition_news_image"
 
             <LinearLayout
                 android:orientation="vertical"

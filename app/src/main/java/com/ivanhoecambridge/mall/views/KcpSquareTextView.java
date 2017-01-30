@@ -20,7 +20,6 @@ public class KcpSquareTextView extends TextView {
         super(context, attrs, defStyleAttr);
     }
 
-
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         try {
             int width = MeasureSpec.getSize(widthMeasureSpec);

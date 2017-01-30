@@ -41,7 +41,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
     //TODO: should imeplemtn the filtering method so other deals don't have duplicates from recommended deals
     private Context mContext;
 
-
     private ArrayList<KcpContentPage> mKcpContentPagesOtherDeals;
     private ArrayList<KcpContentPage> mKcpContentPagesRecommendedDeals;
     private boolean mhasSectionHeaders = true;
@@ -49,6 +48,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
     private FavouriteInterface mFavouriteInterface;
 
     private ArrayList<Object> mItems;
+
 
     public DealsRecyclerViewAdapter(Context context, boolean hasSectionHeaders, ArrayList<KcpContentPage> recommendedDeals, ArrayList<KcpContentPage> otherDeals) {
         mContext = context;
@@ -125,7 +125,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-
     private int mFooterLayout;
     private boolean mFooterExist = false;
     private String mFooterText;
@@ -139,7 +138,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         mItems.add("FOOTER");
         notifyDataSetChanged();
     }
-
 
     public class MainViewHolder extends RecyclerView.ViewHolder {
         public View mView;
@@ -170,9 +168,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-
-    private int mWidth;
-    private int mHeight;
     public class DealsViewHolder extends MainViewHolder {
         public RelativeLayout rlDeal;
         public ImageView ivDealLogo;
@@ -213,7 +208,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             p.setFullSpan(true);
         }
     }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -295,8 +289,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             if(imageUrl.equals("")) {
                 imageUrl = kcpContentPage.getHighestResFallbackImageUrl();
                 placeHolderDrawable = R.drawable.placeholder_logo;
-//                dealHolder.ivDealLogo.setImageRatio(KcpUtility.getFloat(mContext, R.dimen.default_img_ratio));
-
 
                 Glide.with(mContext)
                         .load(imageUrl)
@@ -323,20 +315,11 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                         .into(dealHolder.ivDealLogo);
             }
 
-//            dealHolder.ivDealLogo.requestLayout();
-
-            /*new GlideFactory().glideWithDefaultRatio(
-                    mContext,
-                    imageUrl,
-                    dealHolder.ivDealLogo,
-                    placeHolderDrawable);*/
-
             String storename = kcpContentPage.getStoreName();
             dealHolder.tvDealStoreName.setText(storename);
 
             String title = kcpContentPage.getTitle();
             dealHolder.tvDealTitle.setText(title);
-
 
             final String likeLink = kcpContentPage.getLikeLink();
             dealHolder.ivFav.setSelected(FavouriteManager.getInstance(mContext).isLiked(likeLink, kcpContentPage));
@@ -353,7 +336,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 }
             });
 
-
             int daysLeftUntilEffectiveDate = KcpUtility.getDaysLeftUntil(kcpContentPage.effectiveEndTime, KcpConstants.EFFECTIVE_DATE_FORMAT);
             final String daysLeft = kcpContentPage.getDaysLeftText(daysLeftUntilEffectiveDate, Constants.DAYS_LEFT_TO_SHOW_IN_EXPIRY_DATE);
 
@@ -363,7 +345,6 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 dealHolder.tvExpiryDate.setVisibility(View.VISIBLE);
                 dealHolder.tvExpiryDate.setText(daysLeft); //setAnimation(new ExpiryDateAnimation().getAnimation());
             }
-
 
             dealHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -393,9 +374,9 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             });
         } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_FOOTER){
             RecyclerViewFooter.FooterViewHolder footerViewHolder = (RecyclerViewFooter.FooterViewHolder) holder;
-
-            int screenWidth = KcpUtility.getScreenWidth(mContext);
-            /*StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) new StaggeredGridLayoutManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            //todo: manually setting the width instead of changing it dyanmically which causes cardview shift on layout change
+            /*int screenWidth = KcpUtility.getScreenWidth(mContext);
+            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) new StaggeredGridLayoutManager.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
             params.width = screenWidth;
             int margin = KcpUtility.dpToPx((Activity) mContext, 8);
             params.setMargins(margin, margin, margin, margin);

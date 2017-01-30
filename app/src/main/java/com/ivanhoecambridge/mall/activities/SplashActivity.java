@@ -13,7 +13,9 @@ import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.onboarding.TutorialActivity;
 
 public class SplashActivity extends AppCompatActivity {
+
     private Thread mSplashThread;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,59 +23,16 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         ImageView ivSplash = (ImageView) findViewById(R.id.ivSplash);
 
-
-        /*Intent intent = new Intent();
-        intent.setClass(SplashActivity.this, MainActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.splash_fake, R.anim.splash_fake);
-        finish();*/
-
-
-        /*
-        Animation animation = new AlphaAnimation( 1.0f, 1.0f );
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationEnd(Animation arg0) {
-                Intent intent = new Intent();
-                intent.setClass(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.splash_fake, R.anim.splash_fake);
-                finish();
-            }
-
-            public void onAnimationRepeat(Animation animation) {}
-
-            public void onAnimationStart(Animation animation) {}
-
-        });
-        animation.setDuration(1200);
-        ivSplash.startAnimation(animation);*/
-
-
         Animation animation = new AlphaAnimation( 0.0f, 1.0f );
         animation.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationEnd(Animation arg0) {
-                /*boolean didOnboardingAppear = KcpUtility.loadFromSharedPreferences(SplashActivity.this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, false);
-                    Intent intent = new Intent();
-                if(didOnboardingAppear) {
-                    intent.setClass(SplashActivity.this, MainActivity.class);
-                } else {
-                    KcpUtility.saveToSharedPreferences(SplashActivity.this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, true);
-                    intent.setClass(SplashActivity.this, TutorialActivity.class);
-                }
-
-                startActivity(intent);
-                overridePendingTransition(R.anim.splash_fake, R.anim.splash_fake);
-                finish();*/
-
                 Intent intent = new Intent();
                 intent.setClass(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.splash_fake, R.anim.splash_fake);
                 finish();
             }
-
             public void onAnimationRepeat(Animation animation) {
-
             }
 
             public void onAnimationStart(Animation animation) {
@@ -82,27 +41,5 @@ public class SplashActivity extends AppCompatActivity {
         });
         animation.setDuration(Constants.DURATION_MINIMUM_SPLASH_ANIMATION);
         ivSplash.startAnimation(animation);
-
-        /*mSplashThread =  new Thread(){
-            @Override
-            public void run(){
-                try {
-                    synchronized(this){
-                        wait(Constants.DURATION_SPLASH_ANIMATION); // 1700 + 500 + 500
-                    }
-                }
-                catch(InterruptedException ex){
-                }
-                Intent intent = new Intent();
-                intent.setClass(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.splash_fake, R.anim.splash_fake);
-                finish();
-            }
-        };
-
-        mSplashThread.start();*/
-
-
     }
 }

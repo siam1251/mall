@@ -20,6 +20,7 @@ public class BluetoothManager {
         this.mContext = context;
     }
 
+
     private boolean isBluetoothSupported() {
         return BluetoothAdapter.getDefaultAdapter() != null ? true : false;
     }

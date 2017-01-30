@@ -21,10 +21,8 @@ public class GlideFactory {
         if(imageView == null) return;
         Glide.with(context)
                 .load(drawable)
-//                .override(KcpUtility.getScreenWidth(context), (int) (KcpUtility.getScreenWidth(context) / KcpUtility.getFloat(context, R.dimen.ancmt_image_ratio)))
                 .crossFade() //TODO: necessary?
                 .into(imageView);
-
     }
 
     public void glideWithNoDefaultRatio(Context context, String url, ImageView imageView){

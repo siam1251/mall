@@ -53,8 +53,13 @@ public class ParkingActivity extends AppCompatActivity {
     public final int ITEM_TYPE_ENTRANCE = 1;
     public final int ITEM_TYPE_FOOTER = 2;
     public final int ITEM_TYPE_USE_MY_LOCATION = 3;
+
+    private int mTempParkingLotPreviouslySaved = -1;
+    private int mTempEntrancePreviouslySaved = -1;
     private int mParkingLotSelectedPosition = -1;
     private int mEntranceSelectedPosition = -1;
+    private boolean mDoneBtnShown = false;
+
     private String mParkingNote = "";
     private TextView tvFooter;
     private TextView tvNote;
@@ -70,11 +75,6 @@ public class ParkingActivity extends AppCompatActivity {
     private TextView tvSaveParkingLot;
 
 
-    private int mTempParkingLotPreviouslySaved = -1;
-    private int mTempEntrancePreviouslySaved = -1;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +82,6 @@ public class ParkingActivity extends AppCompatActivity {
 
         mTempParkingLotPreviouslySaved = ParkingManager.getSavedParkingLotPosition(this);
         mTempEntrancePreviouslySaved = ParkingManager.getSavedEntrancePosition(this);
-
 
         ImageView ivBlur = (ImageView) findViewById(R.id.ivBlur);
         Bitmap blurred = Utility.getBitmapFromMemCache(Constants.KEY_PARKING_BLURRED, true);
@@ -169,7 +168,6 @@ public class ParkingActivity extends AppCompatActivity {
     }
 
     private void checkForUnsavedAndShowAlertBeforeExit(){
-        //                if(mParkingLotSelectedPosition != -1 && !ParkingManager.isParkingLotSaved(ParkingActivity.this)) {
         if(mParkingLotSelectedPosition != mTempParkingLotPreviouslySaved || mEntranceSelectedPosition != mTempEntrancePreviouslySaved) {
             AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
             alertDialogForInterest.getAlertDialog(
@@ -278,8 +276,6 @@ public class ParkingActivity extends AppCompatActivity {
                 rlParkingIcon.startAnimation(slideDownAnimation);
 
                 rvParkingChild.startAnimation(slideOutToRightAnimation);
-//                mEntranceSelectedPosition = -1;
-//                showDoneBtn(false, rvParking);
                 if(mParkingLotSelectedPosition != - 1) showDoneBtn(true, rvParking, "NEXT");
                 else showDoneBtn(false, rvParking, "");
 
@@ -306,25 +302,8 @@ public class ParkingActivity extends AppCompatActivity {
                 rvParkingChild.setVisibility(View.VISIBLE);
                 rvParkingChild.startAnimation(slideInFromRightAnimation);
 
-                try {
-                    //select previously saved parking lot
-                    /*if(mEntranceSelectedPosition != -1) {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                rvParkingChild.findViewHolderForAdapterPosition(mEntranceSelectedPosition).itemView.performClick();
-                            }
-                        },1);
-                    }*/
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-//                showDoneBtn(true, rvParkingChild);
                 if(mEntranceSelectedPosition != -1) showDoneBtn(true, rvParkingChild, "DONE");
                 else showDoneBtn(true, rvParkingChild, "BACK");
-
 
                 tvQuestionOne.startAnimation(fadeOutAnim);
                 tvQuestionOne.setVisibility(View.GONE);
@@ -335,7 +314,6 @@ public class ParkingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
     private void showSaveParkingSpotScreen(boolean enable){
         mDoneBtnShown = false;
@@ -359,7 +337,6 @@ public class ParkingActivity extends AppCompatActivity {
 
             rvParking.startAnimation(slideDownAnimation);
             rvParkingChild.startAnimation(slideDownAnimation);
-//            showDoneBtn(true, rvParking);
             showDoneBtn(false, rvParking, "");
 
             tvEditSelection.setVisibility(View.VISIBLE);
@@ -380,7 +357,6 @@ public class ParkingActivity extends AppCompatActivity {
 
             rvParking.startAnimation(slideUpAnimation);
             rvParkingChild.startAnimation(slideUpAnimation);
-//            showDoneBtn(false, rvParkingChild);
             showDoneBtn(true, rvParkingChild, "NEXT");
 
             tvEditSelection.setVisibility(View.GONE);
@@ -389,28 +365,6 @@ public class ParkingActivity extends AppCompatActivity {
         }
     }
 
-
-    /*private void showDoneBtn(boolean forceHide, RecyclerView rv) {
-        if(forceHide) {
-            tvFooter.setVisibility(View.GONE);
-            Animation slideUpAnimation = AnimationUtils.loadAnimation(this,
-                    R.anim.anim_slide_down_out_of_screen);
-            slideUpAnimation.reset();
-            tvFooter.startAnimation(slideUpAnimation);
-            rv.setPadding(0, 0, 0, 0);
-        } else {
-            if(tvFooter.getVisibility() != View.VISIBLE) {
-                tvFooter.setVisibility(View.VISIBLE);
-                Animation slideUpAnimation = AnimationUtils.loadAnimation(this,
-                        R.anim.anim_slide_up_from_out_of_screen);
-                slideUpAnimation.reset();
-                tvFooter.startAnimation(slideUpAnimation);
-                rv.setPadding(0, 0, 0, (int) getResources().getDimension(R.dimen.parking_footer_height));
-            }
-        }
-    }*/
-
-    private boolean mDoneBtnShown = false;
     private void showDoneBtn(boolean show, RecyclerView rv, String text) {
         if(!show) {
             mDoneBtnShown = true;
@@ -611,7 +565,6 @@ public class ParkingActivity extends AppCompatActivity {
             setupChildRecyclerView();
         } else {
             checkForUnsavedAndShowAlertBeforeExit();
-//            onFinish();
         }
     }
 

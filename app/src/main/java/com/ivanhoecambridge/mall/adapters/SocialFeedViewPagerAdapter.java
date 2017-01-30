@@ -35,6 +35,7 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
         void onSocialFeedClicked();
     }
 
+
     public SocialFeedViewPagerAdapter(){}
 
     public SocialFeedViewPagerAdapter getTwitterViewPagerAdapter(Context context, List<TwitterTweet> twitterFeedList, OnSocialFeedClickListener onSocialFeedClickListener) {
@@ -55,7 +56,6 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
         mSocialFeedType = SocialFeedType.INSTA;
         mActualTitleListSize = mInstaFeedList.size();
         mSocialFeedClickListener = onSocialFeedClickListener;
-
 
         return this;
     }
@@ -84,7 +84,6 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
-
         int virtualPosition = position % mActualTitleListSize;
         position = virtualPosition;
 
@@ -101,7 +100,6 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
             TextView tvTwDesc = (TextView) itemView.findViewById(R.id.tvTwDesc);
             TextView tvTwDate = (TextView) itemView.findViewById(R.id.tvTwDate);
 
-//            tvTwDesc.setText(mTwitterFeedList.get(position).getText());
             tvTwDesc.setText(Html.fromHtml(mTwitterFeedList.get(position).getText()));
             tvTwDate.setText(mTwitterFeedList.get(position).getCreatedAt());
 
@@ -145,11 +143,5 @@ public class SocialFeedViewPagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
-
-//        int virtualPosition = position % mActualTitleListSize;
-//        super.destroyItem(container, virtualPosition, object);
-
     }
-
-
 }

@@ -38,6 +38,7 @@ import java.util.ArrayList;
  * Created by Kay on 2016-07-05.
  */
 public class MyPagesActivity extends AppCompatActivity implements FavouriteInterface {
+
     protected final Logger logger = new Logger(getClass().getName());
 
     private final int COLUMN_COUNT = 2;
@@ -45,6 +46,7 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
     private RecyclerView rv;
     private RecyclerView.Adapter mAdapter;
     private boolean mIsDecorationAdded = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,6 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
 
         setUpRecyclerView();
     }
-
 
     private void setUpRecyclerView() {
         runOnUiThread(new Runnable() {
@@ -169,7 +170,6 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                         rv.addItemDecoration(itemDecoration);
                     }
 
-
                     mAdapter = categoryStoreRecyclerViewAdapter;
                 } else if(mPageTitle.equals(getResources().getString(R.string.my_page_deals_for_today))) {
 
@@ -192,7 +192,6 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                             todaysDealList,
                             null);
 
-//                    dealsRecyclerViewAdapter.setFavouriteListener(MyPagesActivity.this);
                     rv.setAdapter(dealsRecyclerViewAdapter);
                     dealsRecyclerViewAdapter.addFooter(getString(R.string.explore_more_deals), R.layout.list_item_my_page_footer, new View.OnClickListener() {
                         @Override
@@ -223,7 +222,6 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                             MyPagesActivity.this,
                             todaysEventList);
 
-//                    newsRecyclerViewAdapter.setFavouriteListener(MyPagesActivity.this);
                     rv.setAdapter(newsRecyclerViewAdapter);
                     newsRecyclerViewAdapter.addFooter(getString(R.string.explore_more_events), R.layout.list_item_my_page_footer, new View.OnClickListener() {
                         @Override
@@ -280,7 +278,6 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
     @Override
     protected void onResume() {
         super.onResume();
-//        if(mAdapter != null) mAdapter.notifyDataSetChanged();
         setUpRecyclerView();
     }
 
@@ -288,7 +285,6 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
         setResult(resultCode, new Intent());
         onBackPressed();
     }
-
 
     @Override
     public void onBackPressed() {
@@ -307,10 +303,6 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
         try {
             if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
                 if(data == null) {
-//                    onFinish(resultCode);
-//                    onFinish(Activity.RESULT_OK);
-//                    setResult(Activity.RESULT_OK, null);
-//                    onBackPressed();
                 } else {
                     int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
                     if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
@@ -332,5 +324,4 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
             logger.error(e);
         }
     }
-
 }

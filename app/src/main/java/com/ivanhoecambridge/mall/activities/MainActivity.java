@@ -118,7 +118,6 @@ import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESUL
 import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOnBluetooth;
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
 
-//public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, KcpApplication.EtPushListener{
 
@@ -165,12 +164,12 @@ public class MainActivity extends BaseActivity
     private ETPush etPush;
     public static MovieManager sMovieManager;
 
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         KcpNotificationManager.onWelcomeNotiClick(this, intent);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,11 +230,6 @@ public class MainActivity extends BaseActivity
         mSplashThread.start();
         initializeToolbar();
 
-        //disabling the default navigation drawer
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
-
-
         rvMallDirectory = (RecyclerView) findViewById(R.id.rvMallDirectory);
         rvMap = (IndexableRecylerView) findViewById(R.id.rvMap);
 
@@ -275,7 +269,7 @@ public class MainActivity extends BaseActivity
                         BluetoothManager bluetoothManager = new BluetoothManager(MainActivity.this);
                         bluetoothManager.turnOnBluetooth();
                     }
-//                    if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING, false)) mOnParkingClickListener.onParkingClick(true, false);
+
                     if(mOnDealsClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_DEAL, false)) mOnDealsClickListener.onDealsClick(true);
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
@@ -283,7 +277,6 @@ public class MainActivity extends BaseActivity
                     if(MapFragment.getInstance().mSearchItem != null) MapFragment.getInstance().mSearchItem.collapseActionView();
                 } else {
                     if(rlDestinationEditor.getVisibility() == View.VISIBLE) MapFragment.getInstance().didTapNothing();
-//                    toggleDestinationEditor(true, null, null, null);
                     mViewPager.setPagingEnabled(true);
                     setToolbarElevation(false);
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
@@ -531,10 +524,7 @@ public class MainActivity extends BaseActivity
                     @Override
                     public void onAnimationRepeat(Animation animation) {}
                 });
-//                MapFragment.getInstance().slideDownCompass(false);
             }
-            //TODO: 12/08 it was uncommented - clicked amenity detail is hidden when changing the tab and when coming back to it, there's not way to reshow it
-//            MapFragment.getInstance().showDirectionCard(false, null, 0, null, null, null);
         } else {
             etStartStore.setOnFocusChangeListener(focusListener);
             etDestStore.setOnFocusChangeListener(focusListener);
@@ -563,11 +553,6 @@ public class MainActivity extends BaseActivity
 
             setDestionationNames(start, dest); //set destination names - ex) start : A&W , destionation : Club Monaco
             moveFocusToNextEditText();
-//            MapFragment.getInstance().slideDownCompass(true);
-
-//            if(start == null || start.equals("")) etStartStore.requestFocus(); //if start name is empty, request focus to destination
-//            else etDestStore.requestFocus();
-//            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
     }
 
@@ -725,16 +710,14 @@ public class MainActivity extends BaseActivity
 
     private void setUpLeftSidePanel(){
         //ACCOUNT
-        TextView tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
-        tvDetailDate.setOnClickListener(new View.OnClickListener() {
+        TextView tvSignIn = (TextView) findViewById(R.id.tvSignIn);
+        tvSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(MainActivity.this, "clicked", Toast.LENGTH_SHORT).show();
             }
         });
 
         ImageView ivDrawerLayoutUser = (ImageView) findViewById(R.id.ivDrawerLayoutUser);
-//        ivDrawerLayoutUser.setImageResource(R.drawable.test_profile);
         ivDrawerLayoutUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -795,7 +778,6 @@ public class MainActivity extends BaseActivity
             }
         });
 
-
         //GC
         FrameLayout flAddGC = (FrameLayout) findViewById(R.id.flAddGC);
         flAddGC.setOnClickListener(new View.OnClickListener() {
@@ -807,7 +789,7 @@ public class MainActivity extends BaseActivity
 
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
 
-        //version
+        //version handling
         TextView tvVersionNumber = (TextView) findViewById(R.id.tvVersionNumber);
         String suffx = BuildConfig.DEBUG ? " " + getString(R.string.version_name_suffix) : "";
         String versionNumber = BuildConfig.DEBUG ? " " + BuildConfig.VERSION_NAME_STAGING : BuildConfig.VERSION_NAME;
@@ -844,7 +826,6 @@ public class MainActivity extends BaseActivity
             RecyclerView rvTodaysDeals = (RecyclerView) findViewById(R.id.rvTodaysDeals);
             RecyclerView rvTodaysEvents = (RecyclerView) findViewById(R.id.rvTodaysEvents);
             flActiveMallDot = (FrameLayout) findViewById(R.id.flActiveMallDot);
-//            flActiveMallDot = (FrameLayout) mToolbar.findViewById(R.id.flActiveMallDot);
 
             TextView tvMyFav = (TextView) findViewById(R.id.tvMyFav);
             TextView tvMyGC = (TextView) findViewById(R.id.tvMyGC);
@@ -972,7 +953,6 @@ public class MainActivity extends BaseActivity
 
                 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
                 if(mGeofenceManager != null) mGeofenceManager.setGeofence(false); //now it has detected the geofence, turn off the monitoring to save battery power
-//                v.vibrate(500);
 
             } else {
                 Log.v("Geofence", "Active Mall Set FALSE");
@@ -980,24 +960,12 @@ public class MainActivity extends BaseActivity
                 llActiveMall.setVisibility(View.GONE);
                 setActiveMallDot(false);
                 panelBackgroundColor = Color.WHITE;
-//                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.black)));
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.active_mall_off_state)));
                 badgeTextColor = Color.WHITE;
                 generalTextColor = Color.BLACK;
                 drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_bg_inactive);
                 privacyTextColor = getResources().getColor(R.color.privacy_policy_text_color);
                 versionNumberTextColor = getResources().getColor(R.color.insta_desc_color);
-
-
-                if (mOfflineSnackbar != null){
-//                    mOfflineSnackbar.dismiss();
-//                    mOfflineSnackbar = null; //TESTING - why setting it to null?
-                }
-
-
-                Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-//                v.vibrate(500);
-//                Toast.makeText(MainActivity.this, " TEST - Exited Geofence ", Toast.LENGTH_SHORT).show();
             }
 
             scLeftPanel.setBackgroundColor(panelBackgroundColor);
@@ -1117,7 +1085,6 @@ public class MainActivity extends BaseActivity
         if(AmenitiesManager.sAmenities == null) return;
         for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
             final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
-//            if(amenity.isEnabled()) {
                 if(amenity.getExternalIds() != null && amenity.getExternalIds().length > 0){
                     final String externalID = amenity.getExternalIds()[0];
                     amenityList.add(new Amenities.AmenityLayout(
@@ -1140,7 +1107,6 @@ public class MainActivity extends BaseActivity
                     );
 
                 }
-//            }
         }
 
         ((ViewGroup)llAmenitySwitch).removeAllViews();
@@ -1203,7 +1169,6 @@ public class MainActivity extends BaseActivity
         View snackbarView = mOfflineSnackbar.getView();
 
         CoordinatorLayout.LayoutParams param = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
-//        param.bottomMargin = (int) getResources().getDimension(R.dimen.main_app_bar_layout_height);
         snackbarView.setLayoutParams(param);
         snackbarView.setBackgroundColor(Color.DKGRAY);
 
@@ -1314,8 +1279,6 @@ public class MainActivity extends BaseActivity
             if (fragmentManager.getBackStackEntryCount() < 1) {
                 super.onBackPressed();
             } else {
-//                fragmentManager.executePendingTransactions();
-//                fragmentManager.popBackStack();
                 fragmentManager.popBackStackImmediate();
                 fragmentManager.executePendingTransactions();
                 if (fragmentManager.getBackStackEntryCount() < 1) {
@@ -1350,7 +1313,6 @@ public class MainActivity extends BaseActivity
         } else if (id == android.R.id.home){
             onBackPressed();
         } else if (id == R.id.action_test) {
-//            throw new RuntimeException("This is a crash");
             setActiveMall(true, !mActiveMall);
         } else if (id == R.id.action_geofence_test) {
             mGeofenceManager.setGeofence(true);
@@ -1362,8 +1324,6 @@ public class MainActivity extends BaseActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -1380,7 +1340,6 @@ public class MainActivity extends BaseActivity
     }
 
     public void selectPage(int pageIndex){
-//        tabLayout.setScrollPosition(pageIndex, 0f, true);
         mDrawer.closeDrawers();
         mViewPager.setCurrentItem(pageIndex);
     }
@@ -1513,11 +1472,7 @@ public class MainActivity extends BaseActivity
                 }
             } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
                 //1. show store on the map 2. show nearest parking spot from a store
-                //data == null : backpressed
-                //data != null  && !externalCode.equals("0") : locate store
-                //data != null && data.getIntExtra(Constants.REQUEST_CODE_KEY, 0) == Constants.REQUEST_CODE_SHOW_PARKING_SPOT : parking spot
-                if(data == null) {
-                    //backpressed
+                if(data == null) { //backpressed
                 } else {
                     handleActivityResult(requestCode, resultCode, data);
                 }

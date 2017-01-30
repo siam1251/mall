@@ -32,10 +32,12 @@ import constants.MallConstants;
  * Created by Kay on 2016-07-05.
  */
 public class SocialDetailActivity extends AppCompatActivity {
+
     protected final Logger logger = new Logger(getClass().getName());
     private int mItemType;
     private RecyclerView rv;
     private RecyclerView.Adapter mAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +85,6 @@ public class SocialDetailActivity extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
         getSupportActionBar().setTitle(pageTitle);
-
 
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setNestedScrollingEnabled(true);

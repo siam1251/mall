@@ -21,7 +21,6 @@
 
         </android.support.design.widget.AppBarLayout>
 
-
         <android.support.v7.widget.RecyclerView
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
@@ -33,8 +32,6 @@
             />
 
     </android.support.design.widget.CoordinatorLayout>
-
-
 
     <FrameLayout
         android:background="@color/themeColor"
@@ -52,8 +49,6 @@
             android:visibility="gone"
             />
 
-        android:indeterminateDrawable="@drawable/pb_indeterminate_theme_color"
-
         <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_medium"
             android:id="@+id/tvIntrstd"
@@ -66,7 +61,6 @@
             />
 
     </FrameLayout>
-
 
     <ImageView
         android:layout_above="@+id/flIntrstdBot"

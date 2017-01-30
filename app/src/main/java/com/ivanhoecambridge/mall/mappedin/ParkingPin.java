@@ -18,7 +18,6 @@ public class ParkingPin {
     }
 
     public void setParkingCoordinatePin(Pin parkingPin) {
-//        removeExistingPin();
         this.parkingLocationPin = null;
         this.parkingCoordinatePin = parkingPin;
     }
@@ -43,7 +42,6 @@ public class ParkingPin {
     }
 
     public void setTempParkingCoordinatePin(Pin tempParkingCoordinatePin) {
-//        if(tempParkingCoordinatePin != null) mapFragment.removeTempParkingPinAtCoordinate(tempParkingCoordinatePin);
         this.tempParkingCoordinatePin = tempParkingCoordinatePin;
     }
 

@@ -40,6 +40,7 @@ public class MallHourActivity extends AppCompatActivity {
 
     protected final Logger logger = new Logger(getClass().getName());
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +52,7 @@ public class MallHourActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         showContentsWithCTL();
-
-
     }
-
 
     public void showContentsWithCTL(){
         try {
@@ -114,7 +112,6 @@ public class MallHourActivity extends AppCompatActivity {
                 for(int i = 0; i < comingHolidays.size(); i++) {
 
                     holidayNames = holidayNames + comingHolidays.get(i).getName();
-//                    if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + "\n";
                     if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + " • ";
 
                     String holidayStartDate = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getStartDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.DATE_FORMAT_HOLIDAY_DATE);
@@ -210,7 +207,6 @@ public class MallHourActivity extends AppCompatActivity {
             //overriding holidays
             openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, today);
             if(!openAndClosingHour.equals("")){
-//                tvDate.setTextColor(getResources().getColor(R.color.info_mall_hour_holiday_stroke));
                 tvMallHour.setText(openAndClosingHour);
                 ivHolidayIndicator.setVisibility(View.VISIBLE);
             }
@@ -229,10 +225,6 @@ public class MallHourActivity extends AppCompatActivity {
 
         return v;
     }
-
-
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

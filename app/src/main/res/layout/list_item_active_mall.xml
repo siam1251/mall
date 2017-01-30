@@ -10,7 +10,6 @@
     android:layout_marginBottom="@dimen/card_horizontal_margin"
     style="@style/SelectableItemForeground"
     android:layout_height="wrap_content">
-    style="@style/SelectableItemForegroundWhite"
 
     <ImageView
         android:layout_centerVertical="true"

@@ -47,6 +47,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     private ViewGroup mParentView;
     private ImageView ivDetailImage;
     private String mMovieId;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +71,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private void showContentsWithCTL(){
         try {
-
             //TOOLBAR
             final CollapsingToolbarLayout ctlDetail = (CollapsingToolbarLayout) findViewById(R.id.ctlDetail);
             final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

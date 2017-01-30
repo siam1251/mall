@@ -13,6 +13,7 @@ import java.util.HashMap;
  * Created by paul on 2016-06-14.
  */
 public class CustomLocation extends Location {
+
     public String description;
     public ImageCollection logo;
     private String externalID;
@@ -31,10 +32,8 @@ public class CustomLocation extends Location {
     private final String TYPE_ESCALATOR_STAIRS = "escalator/stairs";
 
 
-
     private static HashMap<String, ArrayList<CustomLocation>> amenityHashmap = new HashMap<>();
     private static HashMap<String, CustomLocation> locationHashmapByExternalId = new HashMap<>(); //used to find polygons for stores - that use external iD
-//    private static HashMap<String, CustomLocation> locationHashmapById = new HashMap<>(); //used to find polygons for parking lots - that use ID
     private static HashMap<String, CustomLocation> parkingHashMap = new HashMap<>();
 
     public CustomLocation(RawData rawData) throws Exception {
@@ -51,10 +50,7 @@ public class CustomLocation extends Location {
 
             if(rawData.string(TYPE_ID) != null) {
                 id = rawData.stringForce(TYPE_ID);
-//                locationHashmapById.put(id, this);
             }
-
-
 
             //2016. 11. 10 - https://api.mappedin.com/1/location?venue=vaughan-mills doesn't give 'parking' and i don't know where the 'parking' data comes from for vaughan mills
             //wherever 'parking' data comes for VM, it receives this data from type: "amenity", amenity: "parking"
@@ -94,8 +90,6 @@ public class CustomLocation extends Location {
 
         //2016. 11. 10 - noticed that parking polygons for Tsawwassen's under type: "amenity", amenity: "parking" so rawData.string(TYPE).equals(TYPE_AMENITIES) gives "amenity" NOT "amenities"
 
-
-
         } catch (Exception var3) {
             Logger.log("create location failed");
         }
@@ -119,7 +113,6 @@ public class CustomLocation extends Location {
             return null;
         }
     }
-
 
     public static Location getLocationWithExternalCode(String externalCode){
         if(locationHashmapByExternalId.containsKey(externalCode)) return locationHashmapByExternalId.get(externalCode);

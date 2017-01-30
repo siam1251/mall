@@ -15,7 +15,6 @@ import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
 
 public class WelcomeMsgReceiver extends BroadcastReceiver {
 
-
     protected Class<? extends Activity> getActivity(Context context, Intent intent) {
         String packageName = context.getPackageName();
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
@@ -39,14 +38,6 @@ public class WelcomeMsgReceiver extends BroadcastReceiver {
         if(btnType != null) {
             if(btnType.equals(KcpNotificationManager.NOTIBTN_SAVE)) {
                 Intent activityIntent = new Intent(context, MainActivity.class);
-                /*Class<? extends Activity> cls = getActivity(context, intent);
-                activityIntent.putExtra(KcpNotificationManager.INTENT_EXTRA_KEY_BTN, NOTIBTN_SAVE);
-
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                stackBuilder.addParentStack(cls);
-                stackBuilder.addNextIntent(activityIntent);
-                stackBuilder.startActivities();*/
-
                 activityIntent.putExtra(KcpNotificationManager.INTENT_EXTRA_KEY_BTN, KcpNotificationManager.NOTIBTN_SAVE);
                 activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 activityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

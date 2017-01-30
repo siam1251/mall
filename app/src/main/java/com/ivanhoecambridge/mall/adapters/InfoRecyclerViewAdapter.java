@@ -18,9 +18,11 @@ import java.util.List;
  * Created by Kay on 2016-05-05.
  */
 public class InfoRecyclerViewAdapter extends RecyclerView.Adapter {
+
     private Context mContext;
     private List<InfoList> mInfoList;
     private final InfoFragment.OnListFragmentInteractionListener mListener;
+
 
     public InfoRecyclerViewAdapter(Context context, List<InfoList> infoList, InfoFragment.OnListFragmentInteractionListener listener) {
         mContext = context;

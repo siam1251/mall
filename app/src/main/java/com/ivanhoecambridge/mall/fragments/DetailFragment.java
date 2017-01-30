@@ -14,6 +14,7 @@ public class DetailFragment extends Fragment {
     private Constants.DetailType mDetailType;
     private View mView;
 
+
     public DetailFragment() {
     }
 
@@ -44,7 +45,4 @@ public class DetailFragment extends Fragment {
         return mView;
 
     }
-
-
-
 }

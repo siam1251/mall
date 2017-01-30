@@ -10,12 +10,6 @@
     app:layout_scrollFlags="scroll|enterAlways"
     android:background="@color/colorPrimary"
     android:theme="@style/MainToolbarStyle"
-
-
     >
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
-    android:theme="@style/ToolbarStyle"
-
 
 </android.support.v7.widget.Toolbar>

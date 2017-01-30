@@ -33,6 +33,7 @@ public class NewsFragment extends BaseFragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,12 +60,10 @@ public class NewsFragment extends BaseFragment {
                         mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                /*if(mMainActivity.mIsDataLoaded) HomeFragment.getInstance().initializeHomeData();
-                else*/ mMainActivity.initializeKcpData(srl);
+                mMainActivity.initializeKcpData(srl);
                 mEndlessRecyclerViewScrollListener.onLoadDone();
             }
         });
-
         return view;
     }
 
@@ -90,6 +89,5 @@ public class NewsFragment extends BaseFragment {
 
         NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(getActivity(), R.dimen.card_vertical_margin);
         recyclerView.addItemDecoration(itemDecoration);
-
     }
 }

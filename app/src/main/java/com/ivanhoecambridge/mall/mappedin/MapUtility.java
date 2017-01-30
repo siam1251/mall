@@ -82,12 +82,6 @@ public class MapUtility {
 
     public static Map[] sortMapLevelByElevetaion(Map[] map){
         try {
-            /*Arrays.sort(map, new Comparator<Map>() {
-                @Override
-                public int compare(Map a, Map b) {
-                    return (int) (a.getElevation() - b.getElevation());
-                }
-            });*/
             List<Map> mapList = new ArrayList<Map>(Arrays.asList(map));
             Collections.sort(mapList, new MapElevationComparator());
             return (Map[]) mapList.toArray(new Map[map.length]);
@@ -159,12 +153,6 @@ public class MapUtility {
                         nearestDistance = distance;
                     }
                 }
-                /*Coordinate parkingLotCoord = parkingLocation.getNavigatableCoordinates().get(0);
-                double distance = parkingLotCoord.metersFrom(storeCoordinate);
-                if(nearestDistance == 0 || nearestDistance > distance) {
-                    nearestParkingPolygon = parkingLocation.getPolygons().get(0);
-                    nearestDistance = distance;
-                }*/
             }
 
             return nearestParkingPolygon;
@@ -198,7 +186,6 @@ public class MapUtility {
         tempCanvas.rotate(degrees, bmpOriginal.getWidth()/16, bmpOriginal.getHeight()/16);
         tempCanvas.drawBitmap(bmpOriginal, 0, 0, null);
 
-
         return new BitmapDrawable(context.getResources(), bmResult);
     }
 
@@ -210,10 +197,7 @@ public class MapUtility {
         opts.inPreferredConfig = Bitmap.Config.RGB_565;
         opts.inDither = true;
 
-
-//        Bitmap iconBitmap = ((BitmapDrawable)d).getBitmap();
         Bitmap iconBitmap = BitmapFactory.decodeResource(context.getResources(), drawable, opts);
-
 
         Matrix matrix = new Matrix();
         matrix.postRotate(degrees);
@@ -256,6 +240,4 @@ public class MapUtility {
         }
         return 0;
     }
-
-
 }

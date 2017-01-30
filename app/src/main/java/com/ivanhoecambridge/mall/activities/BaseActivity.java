@@ -30,7 +30,6 @@ public class BaseActivity extends AppCompatActivity implements ComponentCallback
             Log.d("OnTrimMembyer", "OnTrimMembyer");
             FirebaseTracking.getInstance(this).logAppPutBackground();
         }
-        // you might as well implement some memory cleanup here and be a nice Android dev.
     }
 
     @Override
