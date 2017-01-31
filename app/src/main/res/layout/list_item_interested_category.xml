@@ -4,12 +4,7 @@
     android:layout_gravity="center"
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
-    android:layout_margin="3dp"
-    android:layout_margin="0.1dp"
-    android:layout_width="match_parent"
 
-        android:layout_margin="3dp"
-        android:layout_margin="1dp"
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -22,10 +17,7 @@
         android:layout_width="wrap_content"
         card_view:cardUseCompatPadding="true"
         >
-        android:layout_width="match_parent"
-        style="@style/SelectableItemForegroundOpaque"
 
-            app:fontFamily="@string/fontFamily_roboto_regular"
         <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             android:layout_gravity="center"
             android:lines="1"
@@ -39,6 +31,5 @@
             android:layout_marginLeft="@dimen/intrst_card_txt_horizontal_margin"
             android:layout_marginRight="@dimen/intrst_card_txt_horizontal_margin"
             />
-            android:layout_width="wrap_content"
     </android.support.v7.widget.CardView>
 </RelativeLayout>

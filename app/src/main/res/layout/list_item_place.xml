@@ -1,66 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+<android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_marginLeft="@dimen/card_horizontal_margin"
-    android:layout_marginRight="@dimen/card_horizontal_margin"
-    android:background="@color/white"
-    android:layout_height="@dimen/place_item_height">
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    style="@style/SelectableItemForegroundNormal"
+    android:layout_marginTop="-1dp"
+    android:layout_marginBottom="-1dp"
+    >
 
 
-    <RelativeLayout
-        style="@style/SelectableItemBackground"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        android:background="?android:attr/selectableItemBackground"
+        android:background="@color/white"
+        android:layout_height="@dimen/place_item_height">
+        android:layout_marginLeft="@dimen/card_horizontal_margin"
+        android:layout_marginRight="@dimen/card_horizontal_margin"
 
-        <!--<ImageView-->
-        <com.ivanhoecambridge.mall.views.KCPSetRatioImageView
-            android:layout_centerVertical="true"
-            android:src="@drawable/placeholder_square"
-            android:id="@+id/ivDealLogo"
-            android:layout_width="@dimen/place_image_width"
-            android:layout_height="wrap_content"
-            android:transitionName="@string/transition_news_logo"
-            android:scaleType="centerCrop"
-            />
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:scaleType="centerCrop"
-        android:transitionName="@string/transition_news_image"
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_toRightOf="@+id/ivDealLogo"
-            android:layout_marginLeft="@dimen/place_txt_left_margin"
+        <RelativeLayout
+            style="@style/SelectableItemBackground"
             android:layout_width="match_parent"
-            android:gravity="center"
             android:layout_height="match_parent">
+            android:background="?android:attr/selectableItemBackground"
 
-            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                app:fontFamily="@string/fontFamily_roboto_medium"
-                android:textColor="@color/place_txt"
-                android:textSize="@dimen/place_txt"
-                android:text="ALDO Shoes"
-                android:id="@+id/tvDealStoreName"
-                android:layout_width="match_parent"
+            <com.ivanhoecambridge.mall.views.KCPSetRatioImageView
+                android:layout_centerVertical="true"
+                android:src="@drawable/placeholder_square"
+                android:id="@+id/ivDealLogo"
+                android:layout_width="@dimen/place_image_width"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
+                android:transitionName="@string/transition_news_logo"
+                android:scaleType="centerCrop"
                 />
 
-            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                app:fontFamily="@string/fontFamily_roboto_regular"
-                android:layout_marginTop="3dp"
-                android:textColor="@color/place_category_txt"
-                android:textSize="@dimen/place_category_txt"
-                android:text="Footwear - Unisex"
-                android:id="@+id/tvDealTitle"
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_toRightOf="@+id/ivDealLogo"
+                android:layout_marginLeft="@dimen/place_txt_left_margin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:gravity="center"
+                android:layout_height="match_parent">
 
-        </LinearLayout>
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:textColor="@color/place_txt"
+                    android:textSize="@dimen/place_txt"
+                    android:text="ALDO Shoes"
+                    android:id="@+id/tvDealStoreName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    />
+
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@color/place_category_txt"
+                    android:textSize="@dimen/place_category_txt"
+                    android:text="Footwear - Unisex"
+                    android:id="@+id/tvDealTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </LinearLayout>
+        </RelativeLayout>
+
     </RelativeLayout>
-
-</RelativeLayout>
+</android.support.v7.widget.CardView>

@@ -24,7 +24,7 @@
 
     <declare-styleable name="ThemeColorImageView">
         <attr name="filterColor" format="color"/>
-        <attr name="filterColorUnselected" format="color"/>
+        <attr name="filterColorSelected" format="color"/>
         <!--<attr name="finalYPosition" format="dimension"/>-->
     </declare-styleable>
 

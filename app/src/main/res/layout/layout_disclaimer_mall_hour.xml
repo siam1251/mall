@@ -12,6 +12,7 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:textColor="@color/ancmt_title_color"
         android:textSize="@dimen/info_detail_disclaimer_title_text"
+        android:layout_marginBottom="10dp"
         android:text="@string/mall_info_disclaimer_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

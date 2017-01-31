@@ -18,11 +18,12 @@ public class ThemeColorImageView extends ImageView {
         this(context, null);
     }
 
+
     public ThemeColorImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ThemeColorImageView);
         mFilterColor = a.getColor(R.styleable.ThemeColorImageView_filterColor, context.getResources().getColor(R.color.transparent));
-        mSelectedFilterColor = a.getColor(R.styleable.ThemeColorImageView_filterColorUnselected, context.getResources().getColor(R.color.transparent));
+        mSelectedFilterColor = a.getColor(R.styleable.ThemeColorImageView_filterColorSelected, context.getResources().getColor(R.color.transparent));
         setColorFilter(mFilterColor);
     }
 
@@ -32,13 +33,21 @@ public class ThemeColorImageView extends ImageView {
 
     /**
      *
-     * @param filterColor normal state color
-     * @param selectedFilterColor selected color
+     * @param filterColor normal state color (setSelected(false))
+     * @param selectedFilterColor selected color (setSelected(true))
      */
     public void setColor(int filterColor, int selectedFilterColor){
         mFilterColor = filterColor;
         mSelectedFilterColor = selectedFilterColor;
         setColorFilter(mFilterColor);
+    }
+
+    public int getFilterColor(){
+        return mFilterColor;
+    }
+
+    public int getSelectedFilterColor(){
+        return mSelectedFilterColor;
     }
 
     @Override

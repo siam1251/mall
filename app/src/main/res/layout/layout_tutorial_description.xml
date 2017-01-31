@@ -6,18 +6,17 @@
     android:paddingLeft="28dp"
     android:paddingRight="28dp"
     android:orientation="vertical">
-    android:background="@drawable/view_gradient_onboarding"
 
 
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="@dimen/onboarding_desc_top_margin"
         android:textSize="@dimen/onboarding_first_title"
         android:id="@+id/tvOnbdTitle"
         app:fontFamily="@string/fontFamily_roboto_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="Welcome to Vaughan Mills new companion app"
+        android:text="Welcome to Metropolis at Metrotown's new companion app"
         android:lineSpacingMultiplier="1.2"
         android:textColor="@color/white"
         />
@@ -33,7 +32,7 @@
         android:layout_marginTop="8dp"
         android:textColor="@color/white"
         android:textAlignment="center"
-        android:textSize="17sp"
+        android:textSize="17dp"
         android:lineSpacingMultiplier="1.35"
         android:text="Get smart deal recommendations from your favourite stores and shopping interests"/>
 

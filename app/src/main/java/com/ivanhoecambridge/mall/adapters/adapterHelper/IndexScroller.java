@@ -44,6 +44,7 @@ public class IndexScroller {
 
     private static final long FADING_DELAY = 2000;
 
+
     public IndexScroller(Context context, RecyclerView lv) {
         mDensity = context.getResources().getDisplayMetrics().density;
         mScaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
@@ -96,12 +97,10 @@ public class IndexScroller {
 
                 int extraBotPaddingWhenKeyboardAppears;
                 if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
-                    String a = "wef";
                     // keyboard is opened
                     extraBotPaddingWhenKeyboardAppears = (mListViewHeight - keypadHeight);
                 }
                 else {
-                    String a = "wef";
                     // keyboard is closed
                     extraBotPaddingWhenKeyboardAppears = 0;
                 }
@@ -134,9 +133,6 @@ public class IndexScroller {
             float sectionHeight = (mIndexbarRect.height() - 2 * mIndexbarMargin) / mSections.size();
             float paddingTop = (sectionHeight - (indexPaint.descent() - indexPaint.ascent())) / 2;
             for (int i = 0; i < mSections.size(); i++) {
-                /*float paddingLeft = (mIndexbarWidth - indexPaint.measureText(mSections.get(i))) / 2;
-                canvas.drawText(mSections.get(i), mIndexbarRect.left + paddingLeft
-                        , mIndexbarRect.top + mIndexbarMargin + sectionHeight * i + paddingTop - indexPaint.ascent(), indexPaint);*/
                 //only show the first letter
                 float paddingLeft = (mIndexbarWidth - indexPaint.measureText(String.valueOf(mSections.get(i).charAt(0)))) / 2;
                 canvas.drawText(String.valueOf(mSections.get(i).charAt(0)), mIndexbarRect.left + paddingLeft
@@ -300,9 +296,7 @@ public class IndexScroller {
 
 
     public void notifyChanges(List<String> sectionName, List<Integer> sectionPosition) {
-
-// Pre-calculate and pass your section header and position
-
+    // Pre-calculate and pass your section header and position
         mSections = sectionName;
         mSectionPosition = sectionPosition;
 

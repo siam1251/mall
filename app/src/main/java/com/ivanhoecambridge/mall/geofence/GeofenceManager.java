@@ -26,8 +26,10 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.MainActivity;
+import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -55,8 +57,8 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     private SharedPreferences mSharedPreferences;
     private MyWebRequestReceiver mMyWebRequestReceiver;
 
-    public GeofenceManager(Context context) {
 
+    public GeofenceManager(Context context) {
         mContext = context;
         //geofence
         mGeofenceList = new ArrayList<Geofence>();
@@ -98,8 +100,8 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
         if(!gps_enabled && !network_enabled) {
             // notify user
             AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-            dialog.setMessage("gps turned offfffffffffffffff");
-            dialog.setPositiveButton("turn on right now", new DialogInterface.OnClickListener() {
+            dialog.setMessage("gps turned off");
+            dialog.setPositiveButton("Turn on", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                     // TODO Auto-generated method stub
@@ -151,9 +153,19 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     }
 
     public void addGeofencesButtonHandler() {
-
         if (!canAccessLocation()) {
-            ActivityCompat.requestPermissions((MainActivity) mContext, INITIAL_PERMS, LOCATION_REQUEST);
+            /*if(BuildConfig.BLUEDOT) { //testing
+                if (ActivityCompat.shouldShowRequestPermissionRationale((MainActivity) mContext,
+                        Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    AlertDialogForInterest.getAlertDialog(mContext, mContext.getString(R.string.title_enable_bluetooth))
+                    // Display UI and wait for user interaction
+                } else {
+                    ActivityCompat.requestPermissions((MainActivity) mContext, INITIAL_PERMS, LOCATION_REQUEST);
+                }
+            } else {*/
+                ActivityCompat.requestPermissions((MainActivity) mContext, INITIAL_PERMS, LOCATION_REQUEST);
+//            }
+
             return;
         }
 
@@ -175,7 +187,6 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
 
     public void removeGeofencesButtonHandler() {
         if (!mGoogleApiClient.isConnected()) {
-//            Toast.makeText(mContext, mContext.getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
             return;
         }
         try {
@@ -283,8 +294,4 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
             }
         }
     }
-
-
-
-
 }

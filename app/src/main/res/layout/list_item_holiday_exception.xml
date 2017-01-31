@@ -15,7 +15,5 @@
         android:textColor="@color/detail_disclaimer_text"
         android:textSize="@dimen/detail_disclaimer_text"
         />
-        android:textSize="13sp"
-        android:textColor="@color/detail_title_text"
 
 </LinearLayout>

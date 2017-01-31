@@ -14,8 +14,6 @@
         android:layout_height="@dimen/detail_button_image_height"
         android:adjustViewBounds="true"
         />
-        android:layout_width="@dimen/detail_button_image_width"
-
 
     <TextView
         android:layout_marginLeft="@dimen/detail_button_text_left_margin"

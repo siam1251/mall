@@ -26,6 +26,5 @@
         app:fontFamily="@string/fontFamily_roboto_light"
         android:paddingBottom="@dimen/main_app_bar_layout_height"
         />
-        android:paddingBottom="@dimen/vpMain_padding_bottom"
 
 </RelativeLayout>

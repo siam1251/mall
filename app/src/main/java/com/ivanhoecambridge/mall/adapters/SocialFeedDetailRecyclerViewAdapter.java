@@ -30,6 +30,7 @@ public class SocialFeedDetailRecyclerViewAdapter extends RecyclerView.Adapter {
     private List<InstagramFeed> mInstaFeedList = new ArrayList<>();
     private List<TwitterTweet> mTwitterFeedList = new ArrayList<>();
 
+
     public SocialFeedDetailRecyclerViewAdapter(Context context, ArrayList<InstagramFeed> instagramFeeds, ArrayList<TwitterTweet> twitterTweets) {
         mContext = context;
         mInstaFeedList = instagramFeeds;
@@ -72,6 +73,7 @@ public class SocialFeedDetailRecyclerViewAdapter extends RecyclerView.Adapter {
             case KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM:
                 return new InstagraFeedHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_insta_detail, parent, false));
+            //TWITTER DISABLED
             /*case KcpContentTypeFactory.ITEM_TYPE_TWITTER:
                 return new InstagraFeedHolder(
                         LayoutInflater.from(mContext).inflate(R.layout.list_item_tw_detail, parent, false));*/

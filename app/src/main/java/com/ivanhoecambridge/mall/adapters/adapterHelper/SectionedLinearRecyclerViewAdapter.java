@@ -16,6 +16,7 @@ import java.util.Comparator;
  * Created by KayShin on 6/29/2015.
  */
 public class SectionedLinearRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     private final Context mContext;
     private static final int SECTION_TYPE = 0;
 

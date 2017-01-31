@@ -27,8 +27,10 @@ public class HeaderFactory {
     private final static String SEARCH_INDEX_VM_PRODUCTION = "indexes/production/tsawwassen-mills-index.msgpack";
 
     public static String MALL_INFO_URL = "bins/2iu4o";
-    public static String AMENITIES_URL = "bins/4da3s";
+    public static String AMENITIES_URL = "bins/18towh";
     public static String PARKING_URL = "bins/141i4";
+
+    public final static String HEADER_VALUE_ACCEPT = 			"application/json";
 
     private static HashMap<String, String> mHeaders;
     public static HashMap<String, String> getHeaders(){
@@ -53,7 +55,7 @@ public class HeaderFactory {
 
         //below two headers are specially needed for view_all_content
         mHeaders.put(HEADER_KEY_CONTENT_TYPE,       Constants.HEADER_VALUE_CONTENT_TYPE);
-        mHeaders.put(HEADER_KEY_ACCEPT,             Constants.HEADER_VALUE_ACCEPT);
+        mHeaders.put(HEADER_KEY_ACCEPT,             HEADER_VALUE_ACCEPT);
     }
 
     public static String getClientToken(){

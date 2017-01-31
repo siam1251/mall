@@ -10,6 +10,7 @@ import com.ivanhoecambridge.mall.R;
  * Created by Kay on 2016-05-02.
  */
 public class ThemedTextView extends TextView {
+
     public ThemedTextView(Context context) {
         this(context, null);
         init();

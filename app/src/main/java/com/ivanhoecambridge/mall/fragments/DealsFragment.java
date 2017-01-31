@@ -23,6 +23,7 @@ import com.ivanhoecambridge.mall.widget.EndlessRecyclerViewScrollListener;
 import java.util.ArrayList;
 
 public class DealsFragment extends BaseFragment {
+
     private final int COLUMN_COUNT = 2;
     public DealsRecyclerViewAdapter mDealsRecyclerViewAdapter;
     public EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
@@ -34,6 +35,7 @@ public class DealsFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,8 +64,7 @@ public class DealsFragment extends BaseFragment {
                         mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                if(mMainActivity.mIsDataLoaded) HomeFragment.getInstance().initializeHomeData();
-                else mMainActivity.initializeKcpData();
+                mMainActivity.initializeKcpData(srl);
                 mEndlessRecyclerViewScrollListener.onLoadDone();
             }
         });
@@ -77,6 +78,7 @@ public class DealsFragment extends BaseFragment {
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(COLUMN_COUNT, StaggeredGridLayoutManager.VERTICAL);
+        staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
 

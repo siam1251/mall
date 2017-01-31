@@ -27,6 +27,7 @@ import com.ivanhoecambridge.mall.adapters.InterestRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
+import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
@@ -37,6 +38,7 @@ import java.util.HashMap;
  * Created by Kay on 2016-05-31.
  */
 public class InterestedStoreActivity extends AppCompatActivity {
+
     private final int MAX_SPAN = 3;
     protected final Logger logger = new Logger(getClass().getName());
     private InterestRecyclerViewAdapter mInterestRecyclerViewAdapter;
@@ -66,43 +68,12 @@ public class InterestedStoreActivity extends AppCompatActivity {
                 final ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
                 pb.setVisibility(View.VISIBLE);
                 tvIntrstd.setVisibility(View.GONE);
-                /*KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(InterestedStoreActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
-                    @Override
-                    public void handleMessage(Message inputMessage) {
-                        tvIntrstd.setVisibility(View.VISIBLE);
-                        pb.setVisibility(View.GONE);
-
-                        switch (inputMessage.arg1) {
-                            case KcpCategoryManager.DOWNLOAD_FAILED:
-                                pb.setVisibility(View.GONE);
-
-                                break;
-                            case KcpCategoryManager.DOWNLOAD_COMPLETE:
-
-                                ArrayList<String> savedStoreLikeList = FavouriteManager.getInstance(InterestedStoreActivity.this).getInterestedStoreList();
-                                ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();
-
-                                if(!KcpUtility.isTwoStringListsEqual(savedStoreLikeList, newStoreLikeList)){
-                                    FavouriteManager.getInstance(InterestedStoreActivity.this).cacheInterestedStoreList(mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
-                                    setResult(Constants.RESULT_DONE_PRESSED_WITH_CHANGE, new Intent());
-                                } else {
-                                    setResult(Constants.RESULT_DONE_PRESSED_WITHOUT_CHANGE, new Intent());
-                                }
-                                onFinish();
-                                break;
-                            default:
-                                super.handleMessage(inputMessage);
-                        }
-                    }
-                });*/
-
-//                kcpCategoryManager.postInterestedStores(mInterestRecyclerViewAdapter.getFavStoreLikeLinkList());
-
                 FavouriteManager.getInstance(InterestedStoreActivity.this).updateFavStore(mInterestRecyclerViewAdapter.getTempStoreMap(), mInterestRecyclerViewAdapter.getRemovedStoreMap(), true, new Handler(Looper.getMainLooper()) {
                     @Override
                     public void handleMessage(Message inputMessage) {
                         switch (inputMessage.arg1) {
                             case KcpCategoryManager.DOWNLOAD_FAILED:
+                                if(NetworkManager.isConnected(InterestedStoreActivity.this)) return;
                                 break;
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
                                 setResult(Constants.RESULT_DONE_PRESSED_WITH_CHANGE, new Intent());
@@ -113,8 +84,6 @@ public class InterestedStoreActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
             }
         });
         setupRecyclerView(rvIntrstCat);
@@ -145,7 +114,6 @@ public class InterestedStoreActivity extends AppCompatActivity {
             }
         });
         recyclerView.setAdapter(mInterestRecyclerViewAdapter);
-//        InterestedCategoryActivity.setUpCTA(InterestedStoreActivity.this, kcpPlacesArrayList.size() == 0, flIntrstdBot, tvIntrstd);
     }
 
     @Override
@@ -185,12 +153,6 @@ public class InterestedStoreActivity extends AppCompatActivity {
 
 
     public void checkIfNotSaved(final AlertDialogForInterest.DialogAnsweredListener dialogAnsweredListener){
-        /*ArrayList<String> savedStoreLikeList = FavouriteManager.getInstance(this).getInterestedStoreList();
-        ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getFavStoreLikeLinkList();*/
-
-        /*ArrayList<String> savedStoreLikeList = LikeManager.getInstance(this).getLocalLikeListCopy();
-        ArrayList<String> newStoreLikeList = mInterestRecyclerViewAdapter.getTempLikeList();*/
-
         HashMap<String, KcpContentPage> savedStoreLikeMap = FavouriteManager.getInstance(this).getFavStoreMap();
         HashMap<String, KcpContentPage> newStoreLikeMap = mInterestRecyclerViewAdapter.getTempStoreMap();
 

@@ -32,4 +32,14 @@ public class RecyclerViewFooter {
             }
         }
     }
+
+    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
+        public View mView;
+        public TextView tvFooter;
+
+        public HeaderViewHolder(View v) {
+            super(v);
+            mView = v;
+        }
+    }
 }

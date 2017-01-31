@@ -8,7 +8,7 @@
         android:id="@+id/tvAlertDialogInterest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:lineSpacingMultiplier="1.3"
         android:textColor="@color/alert_dialog_desc_text"
         android:paddingLeft="8dp"/>

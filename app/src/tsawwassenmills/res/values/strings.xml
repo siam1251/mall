@@ -11,4 +11,7 @@
     <!--ONBOARDING-->
     <string name="onbd_one_title">Welcome to\nTsawwassen Mills new\ncompanion app</string>
 
+    <!--PRIVACY-->
+    <string name="url_privacy_policy">https://www.tsawwassenmills.com/privacy-policy/</string>
+    <string name="url_terms">https://www.tsawwassenmills.com/terms-conditions/</string>
 </resources>

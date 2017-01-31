@@ -48,9 +48,8 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
     private HashMap<String, KcpContentPage> mRemovedStoreFavs;
     private HashMap<String, KcpContentPage> mTempStoreFav;
 
-//    private ArrayList<String> mRemovedLikeList;
-
     private ArrayList<Object> mItems;
+
 
     public InterestRecyclerViewAdapter(Context context, ArrayList<KcpCategories> news, ArrayList<InterestedCategoryActivity.GridLayoutItem> gridLayoutItemArrayList, InterestedCategoryActivity.ItemClickListener itemClickListener) {
         mContext = context;
@@ -176,13 +175,13 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public void resetLikedList() {
-        mRemovedStoreFavs = new HashMap<String, KcpContentPage>(mTempStoreFav);
+        mRemovedStoreFavs.putAll(mTempStoreFav);
         mTempStoreFav.clear();
         notifyDataSetChanged();
     }
 
     public void resetFavCatList() {
-        mRemovedCatFavs = new HashMap<String, KcpCategories>(mTempCatFav);
+        mRemovedCatFavs.putAll(mTempCatFav);
         mTempCatFav.clear();
         notifyDataSetChanged();
     }
@@ -222,22 +221,11 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public void setSelectedCategory(CardView cardView, TextView textView, boolean selected){
         if(selected){
-
-            /*cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.white));
-            textView.setTextColor(mContext.getResources().getColor(R.color.intrstd_txt_on)); *///TODO: new theme but it's not as visible so...
-
             cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.themeColor));
             textView.setTextColor(mContext.getResources().getColor(R.color.white));
-
-//            textView.setTypeface(null, Typeface.BOLD); //1. AFFECTS THE WIDTH and sometimes the texts don't fit, Typeface.BOLD doesn't affect fonts on Samsung devices
-            /*((CustomFontTextView) textView).setFont(mContext, mContext.getString(R.string.fontFamily_roboto_bold));
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.intrstd_name_selected));*/
         } else {
             cardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.intrstd_card_bg));
             textView.setTextColor(mContext.getResources().getColor(R.color.intrstd_txt_off));
-//            textView.setTypeface(null, Typeface.NORMAL);
-            /*((CustomFontTextView) textView).setFont(mContext, mContext.getString(R.string.fontFamily_roboto_regular));
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.intrstd_name));*/
         }
     }
 
@@ -277,7 +265,7 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                         setSelectedCategory(interestedCategoryHolder.cvIntrst, interestedCategoryHolder.tvIntrstd, true);
                     }
 
-                    if(mItemClickListener != null) {
+                    if(mItemClickListener != null) { //implement click listener
 //                        if(mFavCatTempList.size() > 0) mItemClickListener.onItemClick(false);
 //                        else mItemClickListener.onItemClick(true);
                     }
@@ -335,7 +323,7 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
                         setSelectedStore(interestedStoreHolder.cvIntrst, interestedStoreHolder.ivFav, true);
                     }
 
-                    if(mItemClickListener != null) {
+                    if(mItemClickListener != null) { //implement click listener
 //                        if(mFavStoreLikeLinkList.size() > 0) mItemClickListener.onItemClick(false);
 //                        else mItemClickListener.onItemClick(true);
                     }

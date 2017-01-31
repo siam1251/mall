@@ -33,6 +33,7 @@ public class SubStoreActivity extends AppCompatActivity {
     private String mExternalCode = "";
     private String mCategoryName = "";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,16 +122,7 @@ public class SubStoreActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
-            /*if (resultCode != 0) {
-                setResult(resultCode, new Intent());
-                finish();
-            }*/
-
             if(data == null) {
-//                setResult(resultCode, new Intent());
-//                onBackPressed();
-//                finish();
-//                onFinish(resultCode);
             } else {
                 int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
                 if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
@@ -139,13 +131,11 @@ public class SubStoreActivity extends AppCompatActivity {
                     intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_SHOW_PARKING_SPOT);
                     intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, parkingName);
                     setResult(Integer.valueOf(resultCode), intent);
-//                    finish();
                     onBackPressed();
                 } else if(code == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP){
                     Intent intent = new Intent();
                     intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
                     setResult(Integer.valueOf(resultCode), intent);
-//                    finish();
                     onBackPressed();
                 }
             }

@@ -18,8 +18,10 @@ import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 
 
 public class CategoriesFragment extends BaseFragment {
+
     public CategoryRecyclerViewAdapter mCategoryRecyclerViewAdapter;
     private TextView tvEmptyState;
+
 
     public static CategoriesFragment newInstance() {
         CategoriesFragment fragment = new CategoriesFragment();
@@ -53,8 +55,7 @@ public class CategoriesFragment extends BaseFragment {
                         mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                if(mMainActivity.mIsDataLoaded) DirectoryFragment.getInstance().downloadCategories();
-                else mMainActivity.initializeKcpData();
+                mMainActivity.initializeKcpData(srl);
             }
         });
         return view;
@@ -68,5 +69,4 @@ public class CategoriesFragment extends BaseFragment {
                 CategoryIconFactory.getFilteredKcpCategoryList(KcpCategoryRoot.getInstance().getCategoriesList()), KcpContentTypeFactory.PREF_ITEM_TYPE_CAT);
         recyclerView.setAdapter(mCategoryRecyclerViewAdapter);
     }
-
 }

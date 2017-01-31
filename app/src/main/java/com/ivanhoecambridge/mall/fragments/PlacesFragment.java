@@ -33,6 +33,7 @@ public class PlacesFragment extends BaseFragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +61,7 @@ public class PlacesFragment extends BaseFragment {
                         mMainActivity.showSnackBar(msg, 0, null);
                     }
                 });
-                if(mMainActivity.mIsDataLoaded) DirectoryFragment.getInstance().downloadPlaces();
-                else mMainActivity.initializeKcpData();
+                mMainActivity.initializeKcpData(srl);
             }
         });
         return view;

@@ -2,6 +2,7 @@ package com.ivanhoecambridge.mall.mappedin;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,6 @@ import java.util.List;
  */
 public class Amenities {
 
-
     public static String GSON_KEY_AMENITY = "gson_key_amenity";
     public static String GSON_KEY_DEAL = "gson_key_deal";
     public static String GSON_KEY_PARKING = "gson_key_parking";
@@ -32,6 +32,19 @@ public class Amenities {
     public List<Amenity> getAmenityList (){
         if(amenityList == null) return new ArrayList<Amenity>();
         return amenityList;
+    }
+
+    public Amenity getAmenityWithExternalId(String exteralId){
+        List<Amenity> amenities = getAmenityList();
+        if(amenities == null) return null;
+        for(Amenity amenity : amenities){
+
+            String[] externalIds = amenity.getExternalIds();
+            for(String id : externalIds) {
+                if(id.equals(exteralId)) return amenity;
+            }
+        }
+        return null;
     }
 
     public class Amenity {
@@ -75,8 +88,8 @@ public class Amenities {
         KcpUtility.saveToSharedPreferences(context, key, isToggled);
     }
 
-    public static boolean isToggled(Context context, String key){
-        return KcpUtility.loadFromSharedPreferences(context, key, false);
+    public static boolean isToggled(Context context, String key, boolean defaultValue){
+        return KcpUtility.loadFromSharedPreferences(context, key, defaultValue);
     }
 
     public static class AmenityLayout {
@@ -113,7 +126,7 @@ public class Amenities {
     }
 
     public interface OnAmenityClickListener {
-        public void onAmenityClick(boolean enabled, String externalCode, boolean focusPin);
+        public void onAmenityClick(boolean enabled, String externalCode, boolean focusPin, @Nullable String mapName);
     }
 
     public interface OnDealsClickListener {
@@ -123,11 +136,4 @@ public class Amenities {
     public interface OnParkingClickListener {
         public void onParkingClick(boolean enabled, boolean focus);
     }
-
-
-
-
-
-
-
 }

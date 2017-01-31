@@ -34,6 +34,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpTimeConverter;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
+import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.GlideFactory;
@@ -41,6 +42,7 @@ import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.adapters.DealsRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
+import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.CTA;
 import com.ivanhoecambridge.mall.views.CustomAnimation;
@@ -56,7 +58,6 @@ import java.util.Date;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
-//public class DetailActivity extends SwipeBackActivity {
 
     protected final Logger logger = new Logger(getClass().getName());
     private ViewGroup mParentView;
@@ -66,55 +67,75 @@ public class DetailActivity extends AppCompatActivity {
     private View mLayoutStoreHours;
 
     private int mContentPageType;
+    private DealsRecyclerViewAdapter mDealsRecyclerViewAdapter;
+    private DealsRecyclerViewAdapter mEventsRecyclerViewAdapter;
+    private KcpContentPage mKcpContentPage;
+    private ImageView ivFav;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        KcpContentPage kcpContentPage = (KcpContentPage) getIntent().getSerializableExtra(Constants.ARG_CONTENT_PAGE);
+        mKcpContentPage = (KcpContentPage) getIntent().getSerializableExtra(Constants.ARG_CONTENT_PAGE);
 
-        mContentPageType = KcpContentTypeFactory.getContentType(kcpContentPage);
-        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE || kcpContentPage.getStoreId() != 0){
+        mContentPageType = KcpContentTypeFactory.getContentType(mKcpContentPage);
+        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE || mKcpContentPage.getStoreId() != 0){
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
-            KcpPlaces kcpPlace = kcpPlacesRoot.getPlaceById(kcpContentPage.getStoreId());
+            KcpPlaces kcpPlace = kcpPlacesRoot.getPlaceById(mKcpContentPage.getStoreId());
             if(kcpPlace != null) { //there's a store detail already downloaded
-//                kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
-                kcpContentPage.setPlaceList(null, kcpPlace);
+                mKcpContentPage.setPlaceList(null, kcpPlace);
             }
 
-            ArrayList<KcpContentPage> kcpContentPages = kcpPlacesRoot.getContentPagesById(kcpContentPage.getStoreId());
+            ArrayList<KcpContentPage> kcpContentPages = kcpPlacesRoot.getContentPagesById(mKcpContentPage.getStoreId());
             if(kcpContentPages != null) { //there's a store content pages (events/deals/ancmt) already downloaded
-                kcpContentPage.setContentPageList(kcpContentPages);
+                mKcpContentPage.setContentPageList(kcpContentPages);
             }
         }
 
-        init(kcpContentPage);
-        showContentsWithCTL(kcpContentPage);
-        setUpCTA(kcpContentPage);
-        setUpDealsAndEvents(kcpContentPage);
-        downloadIfNecessary(kcpContentPage);
+        init(mKcpContentPage);
+        showContentsWithCTL(mKcpContentPage);
+        setUpCTA(mKcpContentPage);
+        setUpDealsAndEvents(mKcpContentPage);
+        downloadIfNecessary(mKcpContentPage);
     }
 
     public void init(final KcpContentPage kcpContentPage){
-        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT) {
-            setContentView(R.layout.activity_detail_with_ctl_ancmt);
-        } else {
-            setContentView(R.layout.activity_detail_with_ctl);
+        try {
+            if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT) {
+                setContentView(R.layout.activity_detail_with_ctl_ancmt);
+            } else {
+                setContentView(R.layout.activity_detail_with_ctl);
+            }
+
+            mParentView = (ViewGroup) findViewById(R.id.svDetail);
+
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+
+            ivFav = (ImageView) toolbar.findViewById(R.id.ivFav);
+            if(BuildConfig.WHITE_FAV){
+                ivFav.setImageResource(R.drawable.btn_fav_white);
+            }
+
+            if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
+                ivFav.setVisibility(View.GONE);
+            }
+            setFav();
+        } catch (Exception e) {
+            logger.error(e);
         }
+    }
 
-        mParentView = (ViewGroup) findViewById(R.id.svDetail);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-
-        mLikeLink = kcpContentPage.getLikeLink();
+    private void setFav(){
+        if(mKcpContentPage == null) return;
+        mLikeLink = mKcpContentPage.getLikeLink();
         if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){ //the like links should be given from place if the type is ITEM_TYPE_STORE
-            mLikeLink = kcpContentPage.getStore().getLikeLink();
+            mLikeLink = mKcpContentPage.getStore().getLikeLink();
         }
 
-        final ImageView ivFav = (ImageView) toolbar.findViewById(R.id.ivFav);
-        ivFav.setSelected(FavouriteManager.getInstance(DetailActivity.this).isLiked(mLikeLink, kcpContentPage));
+        ivFav.setSelected(FavouriteManager.getInstance(DetailActivity.this).isLiked(mLikeLink, mKcpContentPage));
         ivFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,15 +143,11 @@ public class DetailActivity extends AppCompatActivity {
                     @Override
                     public void OnSqueezeAnimationDone() {
                         ivFav.setSelected(!ivFav.isSelected());
-                        FavouriteManager.getInstance(DetailActivity.this).addOrRemoveFavContent(mLikeLink, kcpContentPage);
+                        FavouriteManager.getInstance(DetailActivity.this).addOrRemoveFavContent(mLikeLink, mKcpContentPage);
                     }
                 }, DetailActivity.this, ivFav);
             }
         });
-
-        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
-            ivFav.setVisibility(View.GONE);
-        }
     }
 
     public void downloadIfNecessary(final KcpContentPage kcpContentPage) {
@@ -174,7 +191,7 @@ public class DetailActivity extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                            setResult(Integer.valueOf(kcpContentPage.getExternalCode()), new Intent());
+                            setResult(Integer.valueOf(kcpContentPage.getExternalCode()), new Intent());
                             Intent intent = new Intent();
                             intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
                             setResult(Integer.valueOf(kcpContentPage.getExternalCode()), intent);
@@ -182,23 +199,33 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     }, true);
 
+            String neartParkingCTA = getResources().getString(R.string.parking_nearest_spot);
+            if(BuildConfig.NEAREST_PARKING_IMG) {
+                neartParkingCTA = kcpContentPage.getStoreParking();
+            }
+
             //Store Parking
             CTA parking = new CTA(
                     this,
                     mParentView,
                     R.layout.layout_detail_button,
                     R.drawable.icn_parking,
-//                    kcpContentPage.getStoreParking(),
-                    getResources().getString(R.string.parking_nearest_spot),
+                    neartParkingCTA,
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
-                            Intent intent = new Intent();
-                            intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_SHOW_PARKING_SPOT);
-                            intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, kcpContentPage.getStoreParking());
-                            setResult(Integer.valueOf(kcpContentPage.getExternalCode()), intent);
-                            onBackPressed();
+                            if(BuildConfig.NEAREST_PARKING_IMG){
+                                Intent intent = new Intent(DetailActivity.this, ZoomableImage.class);
+                                intent.putExtra(Constants.ARG_IMAGE_RESOURCE, R.drawable.ic_nearestparking);
+                                DetailActivity.this.startActivity(intent);
+                                DetailActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                            } else {
+                                Intent intent = new Intent();
+                                intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_SHOW_PARKING_SPOT);
+                                intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, kcpContentPage.getStoreParking());
+                                setResult(Integer.valueOf(kcpContentPage.getExternalCode()), intent);
+                                onBackPressed();
+                            }
                         }
                     }, true);
 
@@ -222,7 +249,7 @@ public class DetailActivity extends AppCompatActivity {
                                     kcpContentPage.getStoreNumber()
                             );
                         }
-                    }, false);
+                    }, true);
 
             //Store Info
             CTA info = new CTA(
@@ -312,8 +339,12 @@ public class DetailActivity extends AppCompatActivity {
                 KcpPlaces kcpPlaces = kcpContentPage.getStore();
                 if(kcpPlaces != null){
                     todaysHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+
+
                     List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(Constants.NUMB_OF_DAYS);
                     if(comingHolidays == null || comingHolidays.size() == 0) comingHolidays = KcpPlacesRoot.getInstance().getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL).getHolidaysWithin(7);
+                    KcpUtility.sortHoursList((ArrayList) comingHolidays);
+
                     String overrideHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, Calendar.getInstance());
                     if(!overrideHour.equals("")) todaysHour = overrideHour;
                     todaysHour = todaysHour.replace("-", "to");
@@ -520,7 +551,7 @@ public class DetailActivity extends AppCompatActivity {
             today.setTimeInMillis(todayInMillisPlusDays);
 
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
-            KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
+            KcpPlaces kcpPlaces = mKcpContentPage.getStore() != null ? mKcpContentPage.getStore() : kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
 
             String openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(today.get(Calendar.DAY_OF_WEEK));
             openAndClosingHour = openAndClosingHour.replace("-", "to").replace("AM", "am").replace("PM","pm");
@@ -553,6 +584,7 @@ public class DetailActivity extends AppCompatActivity {
             public void handleMessage(Message inputMessage) {
                 switch (inputMessage.arg1) {
                     case KcpCategoryManager.DOWNLOAD_FAILED:
+                        if(NetworkManager.isConnected(DetailActivity.this)) return;
                         break;
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:
                         KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
@@ -576,6 +608,7 @@ public class DetailActivity extends AppCompatActivity {
             public void handleMessage(Message inputMessage) {
                 switch (inputMessage.arg1) {
                     case KcpCategoryManager.DOWNLOAD_FAILED:
+                        if(NetworkManager.isConnected(DetailActivity.this)) return;
                         break;
                     case KcpCategoryManager.DOWNLOAD_COMPLETE:
                         KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
@@ -604,9 +637,14 @@ public class DetailActivity extends AppCompatActivity {
             final String toolbarTitle = KcpContentTypeFactory.getContentTypeTitle(kcpContentPage);
             TextView tvExpiryDate = (TextView) findViewById(R.id.tvExpiryDate);
 
+            ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
             //MAIN IMAGE AT TOP
+            int placeHolderDrawable = R.drawable.placeholder;
             String imageUrlTemp = kcpContentPage.getHighestResImageUrl();
-            if(imageUrlTemp.equals("")) imageUrlTemp = kcpContentPage.getHighestResFallbackImageUrl();
+            if(imageUrlTemp.equals("")) {
+                imageUrlTemp = kcpContentPage.getHighestResFallbackImageUrl();
+                placeHolderDrawable = R.drawable.placeholder_logo;
+            }
             final String imageUrl = imageUrlTemp;
             if(imageUrl.equals("")){
                 //TODO: if it's necessary to have toolbar in white, change the theme here (now it's in themeColor)
@@ -624,7 +662,6 @@ public class DetailActivity extends AppCompatActivity {
                 lp.height = height;
                 backdrop.setLayoutParams(lp);
 
-                ivDetailImage = (ImageView) findViewById(R.id.ivDetailImage);
                 ivDetailImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -639,7 +676,7 @@ public class DetailActivity extends AppCompatActivity {
                         ivDetailImage.getContext(),
                         imageUrl,
                         ivDetailImage,
-                        R.drawable.placeholder);
+                        placeHolderDrawable);
 
                 if(toolbarTitle.equals(KcpContentTypeFactory.TYPE_DEAL_STORE)) tvToolbar.setText(kcpContentPage.getStoreName());
                 else tvToolbar.setText(toolbarTitle);
@@ -657,7 +694,6 @@ public class DetailActivity extends AppCompatActivity {
                         Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
                         int alpha = 255 - Math.round(f);
                         backdrop.getBackground().setAlpha(alpha);
-//                        tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
                         tvToolbar.setTextColor(Utility.getColorWithAlpha(DetailActivity.this, R.color.toolbarTextColor, alpha));
                         toolbar.getBackground().setAlpha(255 - alpha);
                     }
@@ -693,8 +729,7 @@ public class DetailActivity extends AppCompatActivity {
                 new GlideFactory().glideWithNoDefaultRatio(
                         ivDetailLogo.getContext(),
                         logoUrl,
-                        ivDetailLogo/*,
-                        R.drawable.placeholder*/);
+                        ivDetailLogo);
             }
 
             //TITLE
@@ -772,16 +807,16 @@ public class DetailActivity extends AppCompatActivity {
             //Set up RecyclerView for DEAL
             LinearLayout llStoreDeals = (LinearLayout) findViewById(R.id.llStoreDeals);
             RecyclerView rvStoreDeals = (RecyclerView) findViewById(R.id.rvStoreDeals);
-            setUpRecyclerView(llStoreDeals, rvStoreDeals, dealContentpages);
+            mDealsRecyclerViewAdapter = setUpRecyclerView(llStoreDeals, rvStoreDeals, dealContentpages);
 
             //Set up RecyclerView for EVENT
             LinearLayout llStoreEvents = (LinearLayout) findViewById(R.id.llStoreEvents);
             RecyclerView rvStoreEvents = (RecyclerView) findViewById(R.id.rvStoreEvents);
-            setUpRecyclerView(llStoreEvents, rvStoreEvents, eventContentpages);
+            mEventsRecyclerViewAdapter = setUpRecyclerView(llStoreEvents, rvStoreEvents, eventContentpages);
         }
     }
 
-    private void setUpRecyclerView(LinearLayout rvLinearLayout, RecyclerView rv, ArrayList<KcpContentPage> rvItems){
+    private DealsRecyclerViewAdapter setUpRecyclerView(LinearLayout rvLinearLayout, RecyclerView rv, ArrayList<KcpContentPage> rvItems){
         if(rvItems.size() > 0 ) rvLinearLayout.setVisibility(View.VISIBLE);
         LinearLayoutManager staggeredGridLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rv.setLayoutManager(staggeredGridLayoutManager);
@@ -794,13 +829,14 @@ public class DetailActivity extends AppCompatActivity {
         rv.setAdapter(dealsRecyclerViewAdapter);
         SpacesItemDecoration itemDecoration = new SpacesItemDecoration(this, R.dimen.card_horizontal_margin);
         rv.addItemDecoration(itemDecoration);
+        return dealsRecyclerViewAdapter;
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-//                NavUtils.navigateUpFromSameTask(this);
                 onBackPressed();
                 return true;
         }
@@ -812,11 +848,6 @@ public class DetailActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         try {
             if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
-                /*if (resultCode != 0) {
-                    setResult(resultCode, new Intent());
-                    onBackPressed();
-                }*/
-
                 if(data == null) {
                 } else {
                     int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
@@ -834,11 +865,17 @@ public class DetailActivity extends AppCompatActivity {
                         onBackPressed();
                     }
                 }
-
-
             }
         } catch (Exception e) {
             logger.error(e);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mDealsRecyclerViewAdapter != null) mDealsRecyclerViewAdapter.notifyDataSetChanged();
+        if(mEventsRecyclerViewAdapter != null) mEventsRecyclerViewAdapter.notifyDataSetChanged();
+        setFav();
     }
 }

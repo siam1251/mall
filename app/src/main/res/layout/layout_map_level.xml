@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/map_level_width"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:id="@+id/rlUpper"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        >
+        android:layout_height="@dimen/map_level_arrow_bg_height"
+
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            android:id="@+id/ivUpperBg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            ThemedImageView:filterColorSelected="@color/map_level_with_path"
+            ThemedImageView:filterColor="@color/transparent"
+            android:src="@drawable/btn_level_up"
+            />
+            android:src="@drawable/img_bttn_multilevel_top"
+
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/ivUpper"
+            android:layout_marginTop="15dp"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_level_arrow_up"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <ImageView
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/img_bttn_multilevel_middle"
+            android:scaleType="fitXY"
+            />
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_centerInParent="true"
+            app:fontFamily="@string/fontFamily_roboto_bold"
+            android:gravity="center"
+            android:id="@+id/tvLevel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="#787a86"
+            android:textSize="10dp"
+            android:text="SC, OG N UP3"
+            android:lines="2"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlLower"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            android:adjustViewBounds="true"
+            android:id="@+id/ivLowerBg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_level_down"
+            ThemedImageView:filterColor="@color/transparent"
+            ThemedImageView:filterColorSelected="@color/map_level_with_path"
+            />
+
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/ivLower"
+            android:layout_marginTop="3dp"
+            android:padding="5dp"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_level_arrow_down"
+            />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

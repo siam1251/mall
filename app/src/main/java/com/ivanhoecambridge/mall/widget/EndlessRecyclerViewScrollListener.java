@@ -56,8 +56,6 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
 //    private int visibleThreshold = 1; // The minimum amount of items to have below your current scroll position before loading more.
 //    int firstVisibleItem, visibleItemCount, totalItemCount;
 //
-//    private int current_page = 1;
-
     private boolean mIsLoading;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
@@ -86,64 +84,8 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
             mIsLoading = true;
             onLoadMore();
         }
-
-
-
-        /*visibleItemCount = view.getChildCount();
-        totalItemCount = mLayoutManager.getItemCount();
-        firstVisibleItem = ((LinearLayoutManager)mLayoutManager).findFirstVisibleItemPosition();
-
-        if (loading) {
-//            if (totalItemCount > previousTotal + 1) {
-            if (totalItemCount > previousTotal) {
-                loading = false;
-                previousTotal = totalItemCount;
-            }
-        }
-        if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-            // End has been reached
-            // Do something
-            current_page++;
-            onLoadMore(current_page);
-            loading = true;
-        }*/
-
-
-
-        /*int lastVisibleItemPosition = 0;
-        int totalItemCount = mLayoutManager.getItemCount();
-
-        if (mLayoutManager instanceof StaggeredGridLayoutManager) {
-            int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) mLayoutManager).findLastVisibleItemPositions(null);
-            // get maximum element within the list
-            lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions);
-        } else if (mLayoutManager instanceof LinearLayoutManager) {
-            lastVisibleItemPosition = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
-        } else if (mLayoutManager instanceof GridLayoutManager) {
-            lastVisibleItemPosition = ((GridLayoutManager) mLayoutManager).findLastVisibleItemPosition();
-        }
-
-        if (totalItemCount < previousTotalItemCount) {
-            this.currentPage = this.startingPageIndex;
-            this.previousTotalItemCount = totalItemCount;
-            if (totalItemCount == 0) {
-                this.loading = true;
-            }
-        }
-        if (loading && (totalItemCount > previousTotalItemCount)) {
-            loading = false;
-            previousTotalItemCount = totalItemCount;
-        }
-
-        if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
-            currentPage++;
-            onLoadMore(currentPage, totalItemCount);
-            loading = true;
-        }*/
     }
 
     // Defines the process for actually loading more data based on page
-//    public abstract void onLoadMore(int page);
     public abstract void onLoadMore();
-
 }

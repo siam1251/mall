@@ -174,7 +174,7 @@ public class KcpAnimatedViewPager extends ViewPager /*implements ViewPager.OnPag
             ivTabIcon.animate().translationY((int) getResources().getDimension(R.dimen.home_tab_icon_top_margin_when_selected)).setDuration(Constants.DURATION_MAIN_BOT_TAB_ICON_SLIDE_UP_ANIMATION).start();
             tvTabTitle.startAnimation(faceInAnim);
         } else {
-            ivTabIcon.animate().translationY((int) getResources().getDimension(R.dimen.home_tab_icon_top_margin_when_not_selected)).setDuration(100).start();
+            ivTabIcon.animate().translationY((int) getResources().getDimension(R.dimen.home_tab_icon_top_margin_when_not_selected)).setDuration(Constants.DURATION_MAIN_BOT_TAB_ICON_SLIDE_UP_ANIMATION).start();
             tvTabTitle.startAnimation(faceOutAnim);
         }
     }
@@ -197,6 +197,4 @@ public class KcpAnimatedViewPager extends ViewPager /*implements ViewPager.OnPag
 
         return false;
     }
-
-
 }

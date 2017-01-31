@@ -16,6 +16,7 @@ public class IndexableRecylerView extends RecyclerView implements RecyclerView.O
 
     public IndexScroller mScroller = null;
 
+
     public IndexableRecylerView(Context context) {
         super(context);
         init();

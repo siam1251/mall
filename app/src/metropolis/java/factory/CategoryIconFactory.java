@@ -15,25 +15,20 @@ public class CategoryIconFactory {
     private static final String[] mCategoryExclusion = {"Parking", "ANC", "Common Area", "Common Areas"};
 
     //metropolitan
-    private static final String EXTERNAL_CODE_BEAUTY_AND_HEALTH           = "32";
-    private static final String EXTERNAL_BOOKS_CARDS_AND_SPECIALTY        = "40";
-    private static final String EXTERNAL_CODE_DEPARTMENT_AND_VARIETY      = "60";
-    private static final String EXTERNAL_ELECTRONICS                      = "63";
-    private static final String EXTERNAL_ENTERTAINMENT                    = "68";
-    private static final String EXTERNAL_FOOD                             = "73";
-    private static final String EXTERNAL_CODE_HOME                        = "80";
-    private static final String EXTERNAL_CODE_JEWELERY_AND_ACCESSORIES    = "88";
-    private static final String EXTERNAL_CODE_KIDS_AND_BABY               = "96";
-    private static final String EXTERNAL_CODE_MENS_CLOTHING               = "46";
-    private static final String EXTERNAL_SERVICES                         = "101";
-    private static final String EXTERNAL_CODE_SHEOS_AND_BAGS              = "115";
-    private static final String EXTERNAL_CODE_SPORTS_AND_FITNESS          = "120";
-    private static final String EXTERNAL_CODE_WOMENS_CLOTHING             = "51";
-
-    /*private static final String EXTERNAL_PARKING                          = "108";
-    private static final String EXTERNAL_COMMON_AREA                      = "109";
-    private static final String EXTERNAL_AND                              = "110";*/
-
+    private static final String EXTERNAL_BOOKS_CARDS_AND_SPECIALTY        = "38";
+    private static final String EXTERNAL_CODE_DEPARTMENT_AND_VARIETY      = "91";
+    private static final String EXTERNAL_ELECTRONICS                      = "1";
+    private static final String EXTERNAL_ENTERTAINMENT                    = "11";
+    private static final String EXTERNAL_FOOD                             = "44";
+    private static final String EXTERNAL_CODE_HOME                        = "15";
+    private static final String EXTERNAL_CODE_JEWELERY_AND_ACCESSORIES    = "70";
+    private static final String EXTERNAL_CODE_KIDS_AND_BABY               = "6";
+    private static final String EXTERNAL_CODE_MENS_CLOTHING               = "51";
+    private static final String EXTERNAL_SERVICES                         = "16";
+    private static final String EXTERNAL_CODE_SHEOS_AND_BAGS              = "64";
+    private static final String EXTERNAL_CODE_SPORTS_AND_FITNESS          = "77";
+    private static final String EXTERNAL_CODE_BEAUTY_AND_HEALTH           = "30";
+    private static final String EXTERNAL_CODE_WOMENS_CLOTHING             = "82";
 
     private static HashMap<String, Integer> mCategoryMap;
     private static HashMap<String, Integer> getCategoryMap(){
@@ -60,9 +55,6 @@ public class CategoryIconFactory {
         mCategoryMap.put(EXTERNAL_CODE_SHEOS_AND_BAGS,              R.drawable.icn_shoes);
         mCategoryMap.put(EXTERNAL_CODE_SPORTS_AND_FITNESS,          R.drawable.icn_sports);
         mCategoryMap.put(EXTERNAL_CODE_WOMENS_CLOTHING,             R.drawable.icn_womens);
-        /*mCategoryMap.put(EXTERNAL_PARKING,                          getDefaultCategoryIcon());
-        mCategoryMap.put(EXTERNAL_COMMON_AREA,                      getDefaultCategoryIcon());
-        mCategoryMap.put(EXTERNAL_AND,                              getDefaultCategoryIcon());*/
     }
 
     public static int getCategoryIcon(String externalCode){
@@ -70,23 +62,12 @@ public class CategoryIconFactory {
         else return getDefaultCategoryIcon();
     }
 
-    /*private static int getDefaultCategoryIcon(){
-        return R.drawable.icn_fav_selected;
-    }*/
-
     private static int getDefaultCategoryIcon(){
-        return 0;
+        return R.drawable.icn_home;
     }
 
     public static ArrayList<KcpCategories> getFilteredKcpCategoryList(ArrayList<KcpCategories> categoriesArrayList){
         ArrayList<KcpCategories> filteredCategoriesList = new ArrayList<>();
-
-        //filter the categorylist to exclude ANC, Common Area, Common Areas, Parking that are not defined in CategoryHashMap in CategoryIconFactory
-        /*for(KcpCategories kcpCategory : categoriesArrayList){
-            String externalCode = kcpCategory.getExternalCode();
-            int drawableId = CategoryIconFactory.getCategoryIcon(externalCode);
-            if(drawableId != 0) filteredCategoriesList.add(kcpCategory);
-        }*/
 
         for(KcpCategories kcpCategory : categoriesArrayList){
             String name = kcpCategory.getCategoryName();

@@ -18,6 +18,7 @@ public class HomeTopViewPagerAdapter extends FragmentPagerAdapter {
         super(manager);
     }
 
+
     @Override
     public Fragment getItem(int position) {
         return mFragmentList.get(position);

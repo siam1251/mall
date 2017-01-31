@@ -2,6 +2,8 @@ package com.ivanhoecambridge.mall.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,10 +32,12 @@ import constants.MallConstants;
  * Created by Kay on 2016-07-05.
  */
 public class SocialDetailActivity extends AppCompatActivity {
+
     protected final Logger logger = new Logger(getClass().getName());
     private int mItemType;
     private RecyclerView rv;
     private RecyclerView.Adapter mAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +79,12 @@ public class SocialDetailActivity extends AppCompatActivity {
         } else if(mItemType == KcpContentTypeFactory.ITEM_TYPE_TWITTER) {
             pageTitle = "@" + MallConstants.TWITTER_SCREEN_NAME;
             toolbar.setBackgroundColor(getResources().getColor(R.color.twitter_theme_color));
+            toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+            final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+            upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
         getSupportActionBar().setTitle(pageTitle);
-
 
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setNestedScrollingEnabled(true);

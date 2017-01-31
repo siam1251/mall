@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -14,10 +16,10 @@
         android:layout_height="28dp"
         android:layout_centerVertical="true"
         android:gravity="center_vertical"
-        android:background="@color/colorPrimary"
+        android:background="@color/black"
         style="@style/SelectableItemForeground"
         android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textSize="12dp"
         android:paddingLeft="18dp"
         android:paddingRight="18dp"
         android:lines="1"

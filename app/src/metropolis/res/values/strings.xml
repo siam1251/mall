@@ -9,6 +9,9 @@
     <string name="active_mall_welcome_msg">Welcome to Metropolis, here’s what’s happening today!</string>
 
     <!--ONBOARDING-->
-    <string name="onbd_one_title">Welcome to\nMetropolis’s new\ncompanion app</string>
+    <string name="onbd_one_title">Welcome to\nMetropolis at Metrotown’s new companion app</string>
 
+    <!--PRIVACY-->
+    <string name="url_privacy_policy">https://metropolisatmetrotown.com/privacy-policy/</string>
+    <string name="url_terms">https://metropolisatmetrotown.com/terms-conditions/</string>
 </resources>

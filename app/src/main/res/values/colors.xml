@@ -4,8 +4,9 @@
 
     <!--% to HEX
     87% - dd/de/df
-    54% - 89
     80% - cb
+    45% - 72
+    54% - 89
     30% - 4c
     -->
 
@@ -158,6 +159,18 @@
     <color name="welcome_btn_color">#009688</color>
     <color name="emptySearchResults">#FFFFFF</color>
     <color name="darkTransparentBackground">#cd000000</color>
+    <color name="parkingSaveBtnTextColor">#FFFFFF</color>
+
+    <!--MAP-->
+
+    <color name="map_level_enabled">#787a86</color>
+    <color name="map_level_disabled">#c8c8cc</color>
+
+    <color name="map_level_with_path">#007aff</color>
+    <color name="map_level_without_path">#FFFFFF</color>
+
+    <!--LEFT PANEL-->
+    <color name="privacy_policy_text_color">#101010</color>
 
 
 

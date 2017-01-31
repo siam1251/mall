@@ -23,8 +23,6 @@
             android:layout_centerVertical="true"
             />
 
-
-
         <TextView
             android:layout_marginLeft="@dimen/detail_button_text_left_margin"
             android:layout_toRightOf="@+id/ivDetailBtnImage"

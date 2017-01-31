@@ -13,13 +13,13 @@ import com.ivanhoecambridge.mall.R;
  * Created by Kay on 2016-06-28.
  */
 public class CTA {
+
     private View mView;
     private ProgressBar pb;
     private View.OnClickListener mOnClickListener;
     public String title;
     private TextView tvDetailBtnTitle;
     private ImageView ivDetailBtnImage;
-
 
     /**
      *

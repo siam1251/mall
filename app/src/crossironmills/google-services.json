@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "952040034121",
+    "firebase_url": "https://ci-android-push-notifications.firebaseio.com",
+    "project_id": "ci-android-push-notifications",
+    "storage_bucket": "ci-android-push-notifications.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952040034121:android:b68ef117ea803534",
+        "android_client_info": {
+          "package_name": "com.ivanhoecambridge.mall.crossironmills"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "952040034121-33t6qok8hehn4emc3qs214bprsnq5j96.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBs3mdzGXQWuO9PwEG3qFUZvcvp6FCqMws"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

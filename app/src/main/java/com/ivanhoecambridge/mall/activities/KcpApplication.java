@@ -8,6 +8,7 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.exacttarget.etpushsdk.ETAnalytics;
 import com.exacttarget.etpushsdk.ETException;
 import com.exacttarget.etpushsdk.ETLogListener;
@@ -18,6 +19,7 @@ import com.exacttarget.etpushsdk.ETRequestStatus;
 import com.exacttarget.etpushsdk.util.EventBus;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
@@ -71,10 +73,12 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
         KcpConstants.setBaseURL(Constants.IS_APP_IN_PRODUCTION);
         KcpAccount.getInstance().initialize(getApplicationContext());
         HeaderFactory.changeCatalog(HeaderFactory.HEADER_VALUE_DATAHUB_CATALOG);
-        if(Constants.IS_APP_IN_PRODUCTION) {
-//            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
-            Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
+
+        if(BuildConfig.REPORT_CRASH) {
+            FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
+            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
         } else {
+            FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(false);
             Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         }
 
@@ -115,22 +119,15 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
             }
         }
 
-
-        //enable below for firebase crash reporting
-        Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler()
-        {
+        //disable Fabric crashlytics for staging
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+        //disable Firebase crashlytics for staging but this stops error log from showing in debug mode
+        /*Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler() {
             @Override
-            public void uncaughtException (Thread thread, Throwable e)
-            {
-                if(BuildConfig.REPORT_CRASH)
-                {
-                    FirebaseCrash.report( e);
-                }
+            public void uncaughtException (Thread thread, Throwable e) {
+                if(BuildConfig.REPORT_CRASH) FirebaseCrash.report( e);
             }
-        });
-
-
-
+        });*/
     }
 
     @Override

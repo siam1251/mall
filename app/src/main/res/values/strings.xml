@@ -8,6 +8,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_reset">Reset</string>
     <string name="action_ok">Ok</string>
+    <string name="action_got_it">GOT IT</string>
     <string name="action_call">Call</string>
     <string name="action_exit">Exit</string>
     <string name="action_do_not_save">DON’T SAVE</string>
@@ -19,6 +20,8 @@
     <string name="action_sure">I\'M SURE</string>
     <string name="action_next">NEXT</string>
     <string name="action_dismiss">DISMISS</string>
+    <string name="action_yes">YES</string>
+    <string name="action_no">NO</string>
 
     <!--ALERT DIALOG TITLE-->
     <string name="title_unsaved_changes">Unsaved Changes</string>
@@ -26,10 +29,16 @@
     <string name="title_testing">INSERT MSG</string>
     <string name="title_open_instagram_app">Open in Instagram App</string>
     <string name="title_open_instagram_website">View on Instagram Website</string>
-    <string name="title_map">Map</string>
-    <string name="title_do_not_save_parking">Don’t Save My Parking</string>
+    <string name="title_do_not_save_parking">Close Without Saving</string>
+    <string name="title_remove_my_parking">Remove My Parking</string>
     <string name="title_add_notes">Add Notes</string>
     <string name="title_permission_denied">Location Access Denied</string>
+    <string name="title_change_parking_spot">Change Parking Spot</string>
+    <string name="title_map">Map</string>
+    <string name="title_directory">Mall Directory</string>
+    <string name="title_info">Mall Information</string>
+    <string name="title_enable_bluetooth">Bluetooth</string>
+    <string name="title_current_location_not_available">Current Location Not Available</string>
 
 
     <!--FRAGMENT TITLE-->
@@ -101,13 +110,19 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="warning_open_instagram_app">Would you like to view this in the Instagram App?</string>
     <string name="warning_open_instagram_website">Would you like to view this on the Instagram website?</string>
     <string name="warning_no_recommended_deals">There are no matches for Recommended Deals at this time.</string>
-    <string name="warning_no_parking_saved">Closing this window will remove all saved information about your parking spot.</string>
+    <string name="warning_no_parking_saved">Closing this window will clear any unsaved changes you have made to your parking spot.</string>
     <string name="warning_active_mall_activated">You are now connected to the mall!</string>
     <string name="warning_no_deal_for_today">There are no deals happening today. Please check back later.</string>
     <string name="warning_no_event_for_today">There are no events happening today. Please check back later.</string>
     <!--<string name="warning_require_location_permission">The app needs device’s location to show deals and events happening around you today.</string>-->
     <string name="warning_require_location_permission">The app requires your device’s location to access connected mall features. Are you sure you want to deny permissions?</string>
+    <string name="warning_require_location_permission_for_blue_dot">The app requires this permission to find your location and access connected mall features. Are you sure you want to deny permissions?</string>
     <string name="warning_selected_same_store">Sorry, you can’t select the same store</string>
+    <string name="warning_selected_same_location">Sorry, you can’t select the same location</string>
+    <string name="warning_remove_my_parking">Are you sure you want to remove your parking spot?</string>
+    <string name="warning_change_my_parking_spot">Changing your parking spot will overwrite any previously saved information.</string>
+    <string name="warning_turn_on_bluetooth">Please turn on Bluetooth to find your current location.</string>
+    <string name="warning_current_location_not_available">If you are at the mall, please try again in a few seconds.</string>
 
     <!--section header-->
     <string name="section_header_recommended_deals">Recommended Deals</string>
@@ -120,8 +135,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="title_activity_scrolling">ScrollingActivity</string>
 
     <!--interested category-->
-    <string name="intrstd_cat_help_us">To help us determine your preferences,\nhighlight categories below that interest you</string>
-    <string name="intrstd_cat_recommended_section_header">Here are the stores we think you will like!\nSelect which are your favourite:</string>
+    <string name="intrstd_cat_help_us">Highlight your preferred categories to get deals and stores recommendations</string>
+    <string name="intrstd_cat_recommended_section_header">Based on your selections, here are some stores we think you’ll like.\nAdd them to your favourites to get exclusive deals!</string>
     <string name="intrstd_cat_other_section_header">... and if we missed any, make sure to\ncapture them below:</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="intrstd_store_desc">Here are the stores we think you will like!\nSelect which are your favourite:</string>
@@ -135,7 +150,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <!--INFO-->
     <string name="info_get_directions">Get Directions</string>
     <string name="info_save_my_parking_spot">Save My Parking Spot</string>
-    <string name="info_my_parking_spot">You parked in </string>
+    <string name="info_my_parking_spot">You are parked in </string>
 
     <!--MALL INFO TITLE-->
     <string name="mall_info_mall_hours">Mall Hours</string>
@@ -148,6 +163,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="mall_info_public_transportation">Public Transportation</string>
     <string name="mall_info_tourist_information">Tourist Information</string>
     <string name="mall_info_accessibility">Accessibility</string>
+    <string name="mall_info_customer_service">Customer Service</string>
+    <string name="mall_info_cinema">Cinema</string>
 
     <!--CTA-->
     <string name="cta_find_on_map">Find on Map</string>
@@ -194,9 +211,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <string name="map_filter_see_parking">See My Parking Spot</string>
     <string name="map_filter_hide_parking">Hide My Parking Spot</string>
-
-
     <string name="map_view_amenities_on_map">View Amenities on Map</string>
+
     <string name="hint_search_store">Search a Store</string>
     <string name="hint_search_directory">Search Mall Directory</string>
     <string name="hint_search_start">Directions from...</string>
@@ -204,6 +220,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="hint_search_start_when_not_empty">from</string>
     <string name="hint_search_destination_when_not_empty">to</string>
     <string name="hint_add_notes">Include additional notes to your parking i.e. “Pillar 15F near stairs”</string>
+
+    <string name="bluedot_my_location">Your Location</string>
 
 
     <!--GEOFENCE-->
@@ -236,18 +254,20 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
 
     <!--PARKING-->
-    <string name="parking_which_parking_lot">Which parking lot did you park in?</string>
-    <string name="parking_which_entrance">Which entrance did you park at?</string>
+    <string name="parking_question_one">Which entrance did you park at?</string>
+    <string name="parking_question_two">Which pillar did you park at?</string>
     <string name="parking_btn_save_parking_spot">Save Parking Spot</string>
     <string name="parking_btn_edit_selection">Edit Selection</string>
     <string name="parking_add_note">Add Notes</string>
     <string name="parking_polygon_store_name">My Parked Car</string>
     <string name="parking_polygon_store_name_temporary">Nearest Parking Lot</string>
+    <string name="parking_polygon_blue_dot_temporary">Parking Spot</string>
     <string name="parking_polygon_parking_lot">Parking Spot</string>
     <string name="parking_remove_my_spot">Remove My Parking Spot</string>
     <string name="parking_save_as_my_parking_spot">Set as My Parking Spot</string>
     <string name="parking_nearest_spot">Nearest Parking Spot</string>
     <string name="parking_saved_my_parking_spot">My Parking Spot is Saved</string>
+    <string name="parking_pinned_at_current_location">Pinned at current location</string>
 
     <!--SEARCH-->
     <string name="search_store_that_contains">Stores that carry : </string>
@@ -298,8 +318,11 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <!---->
 
+    <string name="privacy_policy"><u>Privacy Policy</u></string>
+    <string name="terms_of_service"><u>Terms of Service</u></string>
+    <string name="version_name_prefix">Version </string>
+    <string name="version_name_suffix"> (TESTING) </string>
 
-    <string name="BottomSheetBehaviorGoogleMapsLike">com.ivanhoecambridge.mall.views.BottomSheetBehaviorGoogleMapsLike</string>
 
 
 </resources>

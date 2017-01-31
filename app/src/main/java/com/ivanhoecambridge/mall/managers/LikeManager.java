@@ -99,7 +99,6 @@ public class LikeManager {
 
     private HashMap<String, Object> getDeltaMultiLikeBatch(){
         long currentTimeStamp = getCurrentTimeStamp();
-//        return new MultiLike(mDeltaLikeList, mDeltaUnLikeList).getMultiLikeBody();
         return new MultiLike(mLocalLikeList, mDeltaUnLikeList).getMultiLikeBody();
     }
 
@@ -112,12 +111,10 @@ public class LikeManager {
         mDeltaUnLikeList.clear();
     }
 
-
     public synchronized void postLikeListToServer(Handler handler){
         KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, new HeaderFactory().getHeaders(), new LikeListHandler(handler));
         kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch());
     }
-
 
     public class LikeListHandler extends Handler {
         private Handler handler;

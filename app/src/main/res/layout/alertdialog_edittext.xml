@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_add_notes"
-        android:textSize="14sp"
+        android:textSize="14dp"
         android:maxLength="50"
         />
         android:cursorVisible="false"
@@ -25,7 +25,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/etAlertDialog"
         android:textColor="#787a86"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:text="50"/>
 
 

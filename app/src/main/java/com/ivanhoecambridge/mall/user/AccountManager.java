@@ -30,8 +30,6 @@ import retrofit2.http.Url;
  */
 public class AccountManager {
 
-
-
     private static final String TAG = "AccountManager";
     private static final String KEY_TOKEN = "token";
     private static final String KEY_USER = "user";
@@ -40,9 +38,6 @@ public class AccountManager {
     private static final String KEY_ID = "identifier";
     private static final String KEY_PASSWORD = "password";
     private static final String VALUE_DEVICE_CREDENTIAL = "DeviceCredential";
-
-//    public final static String PREFS_KEY_USER_TOKEN = 	"prefs_key_user_token";
-
 
     public static final int DOWNLOAD_FAILED = -1;
     public static final int DOWNLOAD_STARTED = 1;
@@ -54,8 +49,6 @@ public class AccountManager {
     protected Logger logger = null;
     protected Context mContext;
     protected HashMap<String, String> mHeadersMap;
-
-//    public static String mUserToken = "";
 
     /**
      *
@@ -80,14 +73,6 @@ public class AccountManager {
     public void downloadUserToken() {
         postToCreateToken();
     }
-
-    /*public void saveGsonUserToken(String token){
-        KcpUtility.cacheToPreferences(mContext, PREFS_KEY_USER_TOKEN, token);
-    }
-
-    public String loadUserToken(){
-        return KcpUtility.loadFromCache(mContext, PREFS_KEY_USER_TOKEN, "");
-    }*/
 
     protected void postToCreateToken(){
         String identifier = UUID.randomUUID().toString();
@@ -191,5 +176,4 @@ public class AccountManager {
             kcpTokenMap.put(KEY_PASSWORD, password);
         }
     }
-
 }

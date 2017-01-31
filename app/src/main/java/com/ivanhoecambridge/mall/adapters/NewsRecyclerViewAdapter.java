@@ -36,6 +36,7 @@ import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.HomeFragment;
 import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
+import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.RecyclerViewFooter;
@@ -54,6 +55,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     private SocialFeedViewPagerAdapter mSocialFeedViewPagerAdapter;
     private FavouriteInterface mFavouriteInterface;
     private boolean showInstagramFeed = false;
+
 
     public NewsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> news) {
         mContext = context;
@@ -107,7 +109,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-
     private int mFooterLayout;
     private boolean mFooterExist = false;
     private String mFooterText;
@@ -123,8 +124,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         mKcpContentPagesNews.add(fakeKcpContentPageForFooter);
         notifyDataSetChanged();
     }
-
-
 
     public void prepareLoadingImage(){
         mKcpContentPagesNews.add(null);
@@ -335,7 +334,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                     .placeholder(R.drawable.placeholder)
                     .into(ancmtHolder.ivAnnouncementLogo);
 
-
             ancmtHolder.ivSymbol.setVisibility(View.VISIBLE);
             ancmtHolder.tvAnnouncementTitle.setText(mContext.getString(R.string.movie_title));
             ancmtHolder.tvAnnouncementDate.setText(mContext.getString(R.string.movie_desc));
@@ -344,6 +342,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, MoviesActivity.class);
+                    intent.putExtra(Constants.ARG_TRANSITION_ENABLED, true);
                     String transitionNameImage = mContext.getResources().getString(R.string.transition_news_image);
 
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -354,7 +353,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                     ActivityAnimation.startActivityAnimation(mContext);
                 }
             });
-
 
         } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST){
             SetMyInterestViewHolder intrstHolder = (SetMyInterestViewHolder) holder;
@@ -375,6 +373,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 mSocialFeedViewPagerAdapter.getTwitterViewPagerAdapter(mContext, HomeFragment.sTwitterFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
+                        if(!NetworkManager.isConnected(mContext)) return;
                         Intent intent = new Intent(mContext, SocialDetailActivity.class);
                         intent.putExtra(Constants.ARG_ACTIVITY_TYPE, KcpContentTypeFactory.ITEM_TYPE_TWITTER);
                         mContext.startActivity(intent);
@@ -386,6 +385,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 mSocialFeedViewPagerAdapter.getInstaViewPagerAdapter(mContext, HomeFragment.sInstaFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
+                        if(!NetworkManager.isConnected(mContext)) return;
                         Intent intent = new Intent(mContext, SocialDetailActivity.class);
                         intent.putExtra(Constants.ARG_ACTIVITY_TYPE, KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM);
                         mContext.startActivity(intent);
@@ -409,9 +409,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         holder.vpTw.setAdapter(pagerAdapter);
         holder.vpTw.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
@@ -467,6 +465,4 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
 
         if(holder.dots.length > 0) holder.dots[0].setImageDrawable(mContext.getResources().getDrawable(R.drawable.viewpager_circle_page_incdicator_dot_selected));
     }
-
-
 }

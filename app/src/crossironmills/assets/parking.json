@@ -1,0 +1,194 @@
+{
+  "parkings": [
+  {
+    "parkingId": "",
+    "name": "Entry 1",
+    "childParkings": [
+      {
+        "parkingId": "5808e9d1f516a00e4600017d",
+        "name": "Pillar 1A",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808e9eef516a00e4600017e",
+        "name": "Pillar 1B",
+        "childParkings": []
+      }
+    ]
+  },
+
+  {
+    "parkingId": "",
+    "name": "Entry 2",
+    "childParkings": [
+      {
+        "parkingId": "5808e9fef516a00e4600017f",
+        "name": "Pillar 2A",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808ea38f516a00e46000180",
+        "name": "Pillar 2B",
+        "childParkings": []
+      }
+    ]
+  },
+
+  {
+    "parkingId": "",
+    "name": "Entry 3",
+    "childParkings": [
+      {
+        "parkingId": "5808ea4ef516a00e46000181",
+        "name": "Pillar 3A",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808ea71f516a00e46000182",
+        "name": "Pillar 3B",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808fb16f516a06c56000000",
+        "name": "Pillar 3C",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808fb3af516a06c56000001",
+        "name": "Pillar 3D",
+        "childParkings": []
+      }
+    ]
+  },
+
+  {
+    "parkingId": "",
+    "name": "Entry 4",
+    "childParkings": [
+      {
+        "parkingId": "5808fb54f516a06c56000002",
+        "name": "Pillar 4A",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808fbbaf516a06c56000003",
+        "name": "Pillar 4B",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808fbfcf516a06c56000004",
+        "name": "Pillar 4C",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808fc3ff516a06c56000005",
+        "name": "Pillar 4D",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808fc83f516a06c56000006",
+        "name": "Pillar 4E",
+        "childParkings": []
+      }
+    ]
+  },
+
+  {
+    "parkingId": "",
+    "name": "Entry 5",
+    "childParkings": [
+      {
+        "parkingId": "5808e85cf516a00e46000174",
+        "name": "Pillar 5A",
+        "childParkings": []
+      },
+      {
+        "parkingId": "5808e830f516a00e46000173",
+        "name": "Pillar 5B",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808e872f516a00e46000175",
+        "name": "Pillar 5C",
+        "childParkings": []
+      }
+    ]
+  },
+
+  {
+    "parkingId": "",
+    "name": "Entry 6",
+    "childParkings": [
+      {
+        "parkingId": "5808e890f516a00e46000176",
+        "name": "Pillar 6A",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808e8abf516a00e46000177",
+        "name": "Pillar 6B",
+        "childParkings": []
+      }
+    ]
+  },
+
+  {
+    "parkingId": "",
+    "name": "Bass Pro Shops",
+    "childParkings": [
+      {
+        "parkingId": "5808e8edf516a00e46000178",
+        "name": "Pillar 7A",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808e92af516a00e46000179",
+        "name": "Pillar 7B",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808e944f516a00e4600017a",
+        "name": "Pillar 7C",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808e965f516a00e4600017b",
+        "name": "Pillar 7D",
+        "childParkings": []
+      },
+
+      {
+        "parkingId": "5808e985f516a00e4600017c",
+        "name": "Pillar 7E",
+        "childParkings": []
+      }
+    ]
+  },
+
+  {
+    "parkingId": "",
+    "name": "Food Hall",
+    "childParkings": [
+      {
+        "parkingId": "5808e80bf516a00e46000172",
+        "name": "Pillar FC/FCA",
+        "childParkings": []
+      }
+    ]
+  }
+  ]
+}

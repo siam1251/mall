@@ -20,15 +20,11 @@
         card_view:cardCornerRadius="@dimen/card_corner_radius"
         style="@style/SelectableItemForeground"
         >
-        card_view:contentPadding="@dimen/card_content_padding"
-        card_view:cardPreventCornerOverlap="true"
-        card_view:cardCornerRadius="20dp"
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!--<ImageView-->
             <com.ivanhoecambridge.mall.views.KCPSetRatioImageView
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"

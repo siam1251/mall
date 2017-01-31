@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -37,7 +38,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 import com.mappedin.jpct.RGBColor;
 
@@ -54,7 +57,6 @@ import javax.net.ssl.X509TrustManager;
  * Created by Kay on 2016-05-02.
  */
 public class Utility {
-
 
     public static void makeCall(Context context, String number){
         if(number == null || number.equals("")) return;
@@ -332,7 +334,6 @@ public class Utility {
     public static interface SqueezeListener {
         public void OnSqueezeAnimationDone();
     }
-
 
     public static void closeKeybaord(Activity activity){
         View view = activity.getCurrentFocus();
@@ -767,6 +768,18 @@ public class Utility {
     public static int getColorWithAlpha(Context context, @ColorRes int colorResource, int alpha){
         int color = context.getResources().getColor(colorResource);
         return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
+    }
+
+    public static float getFloatValue(Context context, int floatResource){
+        try {
+            TypedValue outValue = new TypedValue();
+            context.getResources().getValue(floatResource, outValue, true);
+            float value = outValue.getFloat();
+            return value;
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0.0f;
     }
 
 }

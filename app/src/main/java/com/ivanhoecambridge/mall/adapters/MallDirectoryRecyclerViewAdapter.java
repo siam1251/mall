@@ -41,8 +41,6 @@ import java.util.ArrayList;
  */
 public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
 
-
-
     private static final int ITEM_TYPE_PLACE_BY_NAME =  0;
 
     private static final int ITEM_TYPE_FOOTER_PLACE_BRAND =  10;
@@ -60,7 +58,6 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
     private static final int ITEM_TYPE_PLACE_BY_TAG =  8;
     private static final int ITEM_TYPE_FOOTER_TAG =  9;
 
-
     private Context mContext;
     private ArrayList<KcpPlaces> mPlacesByName;
     private ArrayList<Integer> mPlacesByBrand;
@@ -71,6 +68,7 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
     private String mFooterText;
     private ArrayList<Object> mItems;
     private String mKeyword;
+
 
     public MallDirectoryRecyclerViewAdapter(Context context,
                                             ArrayList<KcpPlaces> placesByName,
@@ -100,7 +98,6 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
         createItems(keyword);
         notifyDataSetChanged();
     }
-
 
     //When the arrayList is null - meaning it's loading so insert progressbar
     public void createItems(String keyword){
@@ -253,7 +250,6 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
         return null;
     }
 
-
     public CharSequence getStyledCharacters(String storename, String keyword){
         String storeNameInLowerCase = storename.toLowerCase();
         String keywordInLowerCase = keyword.toLowerCase();
@@ -326,23 +322,8 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
                 storeViewHolder.tvDealStoreName.setText(getStyledCharacters(storename, mKeyword));
             }
 
-            final String category = kcpPlace.getCategoryLabelOverride();
-            String display = kcpPlace.getFirstDisplay();
-            String primary = kcpPlace.getPrimaryCategory();
-
-
-            String categoryToDisplay = "";
-
-            if(!display.equals("")) {
-                categoryToDisplay = display;
-            } else if(!category.equals("")){
-                categoryToDisplay = category;
-            } else {
-                categoryToDisplay = primary;
-                //todo: MP doesn't have display and category name
-            }
-
-            storeViewHolder.tvDealTitle.setText(categoryToDisplay);
+            final String category = kcpPlace.getCategoryWithOverride();
+            storeViewHolder.tvDealTitle.setText(category);
             storeViewHolder.mView.setTag(position);
 
             final KcpPlaces kcpPlaceTemp = kcpPlace;
@@ -369,55 +350,28 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
         else if (holder.getItemViewType() == ITEM_TYPE_FOOTER_PLACE_BRAND || holder.getItemViewType() == ITEM_TYPE_FOOTER_PLACE_TAG){
 
             final RecyclerViewFooter.FooterViewHolder footerViewHolder = (RecyclerViewFooter.FooterViewHolder) holder;
-
             String hintInBracket = holder.getItemViewType() == ITEM_TYPE_FOOTER_PLACE_BRAND ? mContext.getString(R.string.search_type_brand) : mContext.getString(R.string.search_type_tag);
             String footerText = mContext.getString(R.string.search_store_that_contains) + " @@" + mKeyword + "@@ " + hintInBracket;
-//            CharSequence cs = Utility.setSpanBetweenTokens((CharSequence)footerText, "@@", new RelativeSizeSpan(1.3f), new ForegroundColorSpan(mContext.getResources().getColor(R.color.themeColor)));
             CharSequence cs = Utility.setSpanBetweenTokens((CharSequence)footerText, "@@", new RelativeSizeSpan(1.3f), new ForegroundColorSpan(mContext.getResources().getColor(R.color.themeColor)));
             ((RecyclerViewFooter.FooterViewHolder) holder).tvFooter.setText(cs);
-
-            //below only applies color NOT BOLD
-            /*final SpannableStringBuilder sb = new SpannableStringBuilder(prefix + " " + mKeyword + " " + mContext.getString(R.string.search_type_keyword));
-            final ForegroundColorSpan fcs = new ForegroundColorSpan(mContext.getResources().getColor(R.color.themeColor));
-            final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
-            sb.setSpan(fcs, prefix.length(), prefix.length() + mKeyword.length() + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            sb.setSpan(bss, prefix.length(), prefix.length() + mKeyword.length() + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            ((RecyclerViewFooter.FooterViewHolder) holder).tvFooter.setText(sb);*/
-
-
 
         } else if (holder.getItemViewType() == ITEM_TYPE_FOOTER_CATEGORY){
 
             final RecyclerViewFooter.FooterViewHolder footerViewHolder = (RecyclerViewFooter.FooterViewHolder) holder;
-
             String footerText = mContext.getString(R.string.search_cat_that_contains) + " @@" + mKeyword + "@@ " + mContext.getString(R.string.search_type_cat);
             CharSequence cs = Utility.setSpanBetweenTokens((CharSequence)footerText, "@@", new RelativeSizeSpan(1.3f), new ForegroundColorSpan(mContext.getResources().getColor(R.color.themeColor)));
             ((RecyclerViewFooter.FooterViewHolder) holder).tvFooter.setText(cs);
 
-
-            /*String prefix = mContext.getString(R.string.search_cat_that_contains);
-            String end = mContext.getString(R.string.search_type_cat);
-
-            final SpannableStringBuilder sb = new SpannableStringBuilder(prefix + " " + mKeyword + " " + end);
-            final ForegroundColorSpan fcs = new ForegroundColorSpan(mContext.getResources().getColor(R.color.themeColor));
-            final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
-            sb.setSpan(bss, prefix.length(), prefix.length() + mKeyword.length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            sb.setSpan(fcs, prefix.length(), prefix.length() + mKeyword.length() + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            ((RecyclerViewFooter.FooterViewHolder) holder).tvFooter.setText(sb, TextView.BufferType.SPANNABLE);*/
-
         } else if (holder.getItemViewType() == ITEM_TYPE_CATEGORY){
             final CategoryHolder categoryHolder = (CategoryHolder) holder;
             final KcpCategories kcpCategory = (KcpCategories) mItems.get(position);;
-
             final String categoryName = kcpCategory.getCategoryName();
-
 
             if(categoryName.equals("")){
                 categoryHolder.tvCategory.setText(categoryName);
             } else {
                 categoryHolder.tvCategory.setText(getStyledCharacters(categoryName, mKeyword));
             }
-
 
             final String externalCode = kcpCategory.getExternalCode();
 
@@ -427,16 +381,13 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
                     String subCategoriesUrl = kcpCategory.getSubCategoriesLink();
                     if(!subCategoriesUrl.equals("")){
                         //instead of expanding to subcategories, it always attemps to show all the stores under (whether there's L2, L3...)
-//                        DirectoryFragment.getInstance().tryDownloadSubCategories(mContext, externalCode, categoryName, subCategoriesUrl, position, categoryHolder.tvCategory);
                         String placeUrl = kcpCategory.getPlacesLink();
                         DirectoryFragment.getInstance().tryDownloadPlacesForThisCategory(mContext, categoryName, externalCode, placeUrl, categoryHolder.tvCategory);
                     }
                 }
             });
         } else if(holder.getItemViewType() == ITEM_TYPE_LOADING_PLACE) {
-            String a = "ewfs";
         }  else if(holder.getItemViewType() == ITEM_TYPE_LOADING_CATEGORY) {
-            String a = "ewfs";
         }
     }
 

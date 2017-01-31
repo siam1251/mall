@@ -18,9 +18,11 @@ import java.util.List;
  * Created by Kay on 2016-05-05.
  */
 public class InfoRecyclerViewAdapter extends RecyclerView.Adapter {
+
     private Context mContext;
     private List<InfoList> mInfoList;
     private final InfoFragment.OnListFragmentInteractionListener mListener;
+
 
     public InfoRecyclerViewAdapter(Context context, List<InfoList> infoList, InfoFragment.OnListFragmentInteractionListener listener) {
         mContext = context;
@@ -61,7 +63,9 @@ public class InfoRecyclerViewAdapter extends RecyclerView.Adapter {
         final InfoList info = (InfoList) mInfoList.get(position);
         final InfoViewHolder infoViewHolder = (InfoViewHolder) holder;
 
-        infoViewHolder.tvInfoTitle.setText(info.getTitle());
+        String menuTitle = info.getMenuTitle();
+        if(menuTitle == null || menuTitle.equals("")) menuTitle = info.getTitle();
+        infoViewHolder.tvInfoTitle.setText(menuTitle);
         infoViewHolder.tvInfoSubTitle.setText(info.getSubtitle());
 
         infoViewHolder.mView.setOnClickListener(new View.OnClickListener() {

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/rlMap"
-    android:layout_marginBottom="55dp"
     android:background="@color/card_bg">
-    android:paddingBottom="55dp"
 
     <FrameLayout
         android:id="@+id/flMap"
@@ -35,7 +34,7 @@
     <FrameLayout
         android:visibility="invisible"
         android:id="@+id/flCompass"
-        android:layout_margin="14dp"
+        android:layout_margin="@dimen/map_compass_margin"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_width="40dp"
@@ -44,8 +43,10 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/icn_compass_frame"
+            android:src="@drawable/btn_map_circle"
+            android:clickable="true"
             />
+        android:src="@drawable/btn_map_circle"
 
         <ImageView
             android:id="@+id/ivCompass"
@@ -58,262 +59,256 @@
     </FrameLayout>
 
 
-    <com.ivanhoecambridge.mall.views.ThemeColorImageView
-        android:visibility="gone"
-        ThemedImageView:filterColor="@color/themeColorTransparent"
-        ThemedImageView:filterColorUnselected="@color/themeColor"
-        style="@style/SelectableItemForeground"
-        android:id="@+id/ivUpper"
-        android:layout_marginTop="14dp"
-        android:layout_marginLeft="14dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@android:drawable/arrow_up_float"
-        />
-
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/tvLevel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivUpper"
-        android:layout_alignParentLeft="true"
-        android:textColor="@color/themeColor"
-
-        />
-
-    <com.ivanhoecambridge.mall.views.ThemeColorImageView
-        android:visibility="gone"
-        ThemedImageView:filterColor="@color/themeColorTransparent"
-        ThemedImageView:filterColorUnselected="@color/themeColor"
-        style="@style/SelectableItemForeground"
-        android:id="@+id/ivLower"
-        android:layout_marginLeft="14dp"
-        android:layout_below="@+id/tvLevel"
-        android:layout_alignParentLeft="true"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@android:drawable/arrow_down_float"
-        />
-
-
-    <!--<android.support.design.widget.CoordinatorLayout
-        android:id="@+id/coordinatorlayout"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout
+        android:id="@+id/rlDirection"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
-        app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
-        app:layout_behavior="@string/bottom_sheet_behavior"
+        android:layout_height="@dimen/bottom_sheet_height_normal"
+        android:layout_marginBottom="@dimen/main_bot_padding"
+        android:visibility="invisible"
+        >
 
-
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <LinearLayout
+            style="@style/SelectableItemBackgroundOpaque"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/llDirection"
             android:orientation="vertical"
-            app:behavior_peekHeight="@dimen/bottom_sheet_peek_height_normal"
-            android:id="@+id/bottom_sheet"
-            android:fitsSystemWindows="true"
-            app:layout_behavior="@string/BottomSheetBehaviorGoogleMapsLike"
-            >-->
-            app:anchorPoint="300dp"
-            app:layout_behavior="@string/bottom_sheet_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-                <RelativeLayout
-                    android:id="@+id/rlDirection"
+            <LinearLayout
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#cb272626"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:visibility="gone"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:id="@+id/ivAmenity"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp" />
+
+                <LinearLayout
+                    android:layout_weight="1"
                     android:layout_alignParentBottom="true"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/bottom_sheet_height_normal"
-                    android:visibility="invisible"
-                    android:layout_marginBottom="55dp"
+                    android:gravity="center_vertical"
+                    android:layout_height="82dp"
+                    android:paddingLeft="17dp"
                     >
 
-                    <LinearLayout
-                        style="@style/SelectableItemBackgroundOpaque"
-                        android:layout_alignParentBottom="true"
-                        android:id="@+id/llDirection"
-                        android:orientation="vertical"
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                        app:fontFamily="@string/fontFamily_roboto_regular"
+                        android:id="@+id/tvStoreName"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:textSize="18dp"
+                        android:layout_marginRight="60dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="#ddffffff"
+                        android:layout_marginBottom="2dp"
+                        android:text="Take Escalator 1 down to P2 and Wal kStraight"/>
 
-
-                        <LinearLayout
-
-                            android:layout_alignParentBottom="true"
-                            android:layout_gravity="center_vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="#cb272626"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:visibility="gone"
-                                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                android:id="@+id/ivAmenity"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="0"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp" />
-
-                            <LinearLayout
-                                android:layout_weight="1"
-                                android:layout_alignParentBottom="true"
-                                android:orientation="vertical"
-                                android:layout_width="match_parent"
-                                android:gravity="center_vertical"
-                                android:layout_height="82dp"
-                                android:paddingLeft="17dp"
-                                >
-                                android:background="#cb272626"
-
-                                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                                    app:fontFamily="@string/fontFamily_roboto_regular"
-                                    android:id="@+id/tvStoreName"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="18sp"
-                                    android:layout_marginRight="60dp"
-                                    android:maxLines="1"
-                                    android:ellipsize="end"
-
-                                    android:textColor="#ddffffff"
-                                    android:layout_marginBottom="2dp"
-                                    android:text="Holt Renfrew"/>
-
-                                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                                    app:fontFamily="@string/fontFamily_roboto_regular"
-                                    android:layout_marginTop="2dp"
-                                    android:layout_below="@id/tvStoreName"
-                                    android:id="@+id/tvCategoryName"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="14sp"
-                                    android:textColor="#89ffffff"
-                                    android:text="Department Store"/>
-
-                                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                                    android:visibility="gone"
-                                    app:fontFamily="@string/fontFamily_roboto_lightitalic"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                                    android:maxLines="1"
-                                    android:ellipsize="end"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@id/tvCategoryName"
-                                    android:id="@+id/tvParkingNote"
-                                    android:textSize="14sp"
-                                    android:textColor="#89ffffff"
-                                    android:text="Pillar 15F near stairs"
-                                    />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-
-
-
-                        <LinearLayout
-                            android:background="#272626"
-                            android:id="@+id/llDeals"
-                            android:layout_alignParentBottom="true"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="17dp"
-                            android:paddingRight="17dp"
-                            android:visibility="gone"
-                            android:orientation="horizontal">
-
-                            <com.ivanhoecambridge.mall.views.ThemeColorImageView
-                                ThemedImageView:filterColor="@color/white"
-                                android:id="@+id/ivDeal"
-                                android:layout_weight="0"
-                                android:layout_width="17dp"
-                                android:layout_height="17dp"
-                                android:layout_marginRight="10dp"
-                                android:src="@drawable/icn_deals"/>
-
-                            android:layout_marginLeft="10dp"
-                            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                                android:gravity="center_vertical"
-                                android:layout_weight="1"
-                                app:fontFamily="@string/fontFamily_roboto_regular"
-                                android:id="@+id/tvDealName"
-                                android:lines="1"
-                                android:ellipsize="end"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:textSize="14sp"
-                                android:textColor="#ffffff"
-                                android:text="Save Now, Wear Now"/>
-
-
-                            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                                style="@style/SelectableItemForeground"
-                                android:gravity="center_vertical"
-                                android:layout_weight="0"
-                                app:fontFamily="@string/fontFamily_roboto_regular"
-                                android:id="@+id/tvNumbOfDeals"
-                                android:lines="1"
-                                android:ellipsize="end"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:textSize="14sp"
-                                android:textColor="#a8a8a8"
-                                android:text="+2 More Deals"/>
-
-                        </LinearLayout>
-                    </LinearLayout>
-
-
-                    <ImageView
-                        android:layout_above="@+id/llDirection"
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                        app:fontFamily="@string/fontFamily_roboto_regular"
+                        android:layout_marginTop="2dp"
+                        android:layout_below="@id/tvStoreName"
+                        android:id="@+id/tvCategoryName"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/shadow_inverted_height"
-                        android:src="@drawable/view_shadow_inverted"/>
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:textColor="#89ffffff"
+                        android:text="Department Store"/>
 
-                    <RelativeLayout
-                        android:id="@+id/rlRoute"
-                        android:layout_marginRight="14dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                        android:visibility="gone"
+                        app:fontFamily="@string/fontFamily_roboto_lightitalic"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvCategoryName"
+                        android:id="@+id/tvParkingNote"
+                        android:textSize="14dp"
+                        android:textColor="#89ffffff"
+                        android:text="Pillar 15F near stairs"
+                        />
 
-                        <ImageView
-                            android:layout_centerInParent="true"
-                            android:layout_width="66dp"
-                            android:layout_height="66dp"
-                            android:src="@drawable/icn_current_location_shadow"
-                            />
+                </LinearLayout>
 
-                        <View
-                            android:layout_centerInParent="true"
-                            android:id="@+id/viewRoute"
-                            android:layout_width="54dp"
-                            android:layout_height="54dp"
-                            android:background="@drawable/view_circle_theme"
-                            />
+            </LinearLayout>
 
-                        <com.ivanhoecambridge.mall.views.ThemeColorImageView
-                            ThemedImageView:filterColor="@color/white"
-                            android:layout_centerInParent="true"
-                            android:id="@+id/ivDirection"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/icn_routes"/>
+            <LinearLayout
+                android:background="#272626"
+                android:id="@+id/llDeals"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="17dp"
+                android:paddingRight="17dp"
+                android:visibility="gone"
+                android:orientation="horizontal">
 
-                    </RelativeLayout>
+                <com.ivanhoecambridge.mall.views.ThemeColorImageView
+                    ThemedImageView:filterColor="@color/white"
+                    android:id="@+id/ivDeal"
+                    android:layout_weight="0"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/icn_deals"/>
+
+                android:layout_marginLeft="10dp"
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    android:gravity="center_vertical"
+                    android:layout_weight="1"
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    android:id="@+id/tvDealName"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="14dp"
+                    android:textColor="#ffffff"
+                    android:text="Save Now, Wear Now"/>
 
 
-            </RelativeLayout>
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    style="@style/SelectableItemForeground"
+                    android:gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:id="@+id/tvNumbOfDeals"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="14dp"
+                    android:textColor="#a8a8a8"
+                    android:text="+2 More Deals"/>
 
-        <!--</android.support.v4.widget.NestedScrollView>-->
-    <!--</android.support.design.widget.CoordinatorLayout>-->
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/ivShadow"
+            android:layout_above="@+id/llDirection"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/shadow_inverted_height"
+            android:src="@drawable/view_shadow_inverted"/>
+
+        <RelativeLayout
+            android:id="@+id/rlRoute"
+            android:layout_marginRight="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+            android:layout_alignParentTop="true"
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:src="@drawable/icn_current_location_shadow"
+                />
+
+            <View
+                android:layout_centerInParent="true"
+                android:id="@+id/viewRoute"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:background="@drawable/view_circle_theme"
+                />
+
+            <com.ivanhoecambridge.mall.views.ThemeColorImageView
+                ThemedImageView:filterColor="@color/white"
+                android:layout_centerInParent="true"
+                android:id="@+id/ivDirection"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/icn_routes"/>
+
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+        android:visibility="gone"
+        android:layout_marginBottom="55dp"
+    <RelativeLayout
+        android:layout_marginBottom="65dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/rlSlidingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/ivTest"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_map_circle"
+            android:clickable="true"
+            />
+
+        <LinearLayout
+            android:visibility="invisible"
+            android:layout_below="@+id/ivTest"
+            android:id="@+id/llBlueDot"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/flCircle"
+                android:layout_width="@dimen/map_level_width"
+                android:layout_height="@dimen/map_level_width">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/btn_map_circle"
+                    />
+
+                <com.ivanhoecambridge.mall.views.ThemeColorImageView
+                    ThemedImageView:filterColor="@color/map_level_enabled"
+                    ThemedImageView:filterColorSelected="@color/map_level_with_path"
+                    android:id="@+id/ivFollowMode"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/icn_current_location"
+                    />
+            </FrameLayout>
+        </LinearLayout>
+
+        <include
+            android:visibility="gone"
+            android:layout_below="@+id/llBlueDot"
+            android:id="@+id/llLevel"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentRight="true"
+            layout="@layout/layout_map_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
 </RelativeLayout>

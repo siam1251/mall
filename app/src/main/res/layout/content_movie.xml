@@ -25,7 +25,7 @@
                 android:id="@+id/tvNowPlaying"
                 app:fontFamily="@string/fontFamily_roboto_bold"
                 android:gravity="center"
-                android:textSize="17.5sp"
+                android:textSize="17.5dp"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:textColor="@color/sub_category_txt"
@@ -70,7 +70,7 @@
                     android:layout_marginLeft="3dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:text="@string/movie_showtime"
                     android:textColor="@color/white"
                     />
@@ -87,13 +87,6 @@
 
         </RelativeLayout>
 
-
-        <!--<View
-            android:layout_marginTop="20dp"
-            style="@style/separater"
-            />-->
-
-
         <!-- CTA -->
         <LinearLayout
             android:id="@+id/llCTA"
@@ -105,7 +98,6 @@
             android:layout_alignParentBottom="true"
             style="@style/separater"
             />
-
 
         <!-- SOCIAL SHARING -->
     </LinearLayout>

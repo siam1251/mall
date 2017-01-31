@@ -17,13 +17,9 @@
         card_view:cardCornerRadius="@dimen/card_corner_radius"
         style="@style/SelectableItemForegroundWhite"
         >
-        style="@style/SelectableItemForeground"
-        android:foreground="?android:attr/selectableItemBackground"
-        card_view:contentPadding="@dimen/card_content_padding"
-        card_view:cardUseCompatPadding="true"
 
         <RelativeLayout
-            android:background="@color/intrst_bg"
+            android:background="@color/themeColor"
             android:paddingLeft="@dimen/card_desc_horizontal_padding"
             android:paddingRight="@dimen/card_desc_horizontal_padding"
             android:layout_width="match_parent"

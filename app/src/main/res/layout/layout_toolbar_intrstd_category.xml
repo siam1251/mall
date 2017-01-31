@@ -8,11 +8,9 @@
     android:layout_height="?attr/actionBarSize"
     android:transitionName="@string/transition_category_name"
     app:layout_scrollFlags="scroll|enterAlways"
-    android:background="@color/colorPrimary"
+    android:background="@color/detailActivityToolbarColor"
     android:theme="@style/ToolbarStyle"
     >
-    app:layout_collapseMode="parallax"
-
 
     <com.ivanhoecambridge.mall.views.ThemeColorImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
@@ -25,7 +23,5 @@
         android:src="@drawable/icn_share"
         android:layout_width="24dp"
         />
-
-
 
 </android.support.v7.widget.Toolbar>

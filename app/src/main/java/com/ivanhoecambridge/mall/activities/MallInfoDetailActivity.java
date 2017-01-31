@@ -9,6 +9,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpOverrides;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.AdditionalInfo;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.InfoList;
+import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.Links;
+import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.Location;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
@@ -32,15 +38,18 @@ import com.ivanhoecambridge.mall.views.ExpandableTextView;
 import com.ivanhoecambridge.mall.views.HtmlTextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by Kay on 2016-06-28.
  */
 public class MallInfoDetailActivity extends AppCompatActivity{
+
     protected final Logger logger = new Logger(getClass().getName());
     private ViewGroup mParentView;
     private String mMallInfoType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +70,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
         setUpCTA(info);
         setDisclaimer(info);
     }
-
 
     public void showContentsWithCTL(final InfoList info){
         try {
@@ -92,7 +100,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                     Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
                     int alpha = 255 - Math.round(f);
                     backdrop.getBackground().setAlpha(alpha);
-//                    tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
                     tvToolbar.setTextColor(Utility.getColorWithAlpha(MallInfoDetailActivity.this, R.color.toolbarTextColor, alpha));
                     toolbar.getBackground().setAlpha(255 - alpha);
                 }
@@ -103,7 +110,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_giftcard);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_about))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_main);
-            } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_guest_service))){
+            } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_guest_service)) || mMallInfoType.startsWith(getResources().getString(R.string.mall_info_customer_service))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_guest);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_amenities))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_amenities);
@@ -117,14 +124,19 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_tourist_info);
             } else if(mMallInfoType.contains(getResources().getString(R.string.mall_info_accessibility))){
                 ivMallInfoBanner.setImageResource(R.drawable.img_mallinfo_accessibility);
+            } else {
+                String imageFileName = "";
+                if(info.getImageURLs() != null && info.getImageURLs().size() > 0) imageFileName = info.getImageURLs().get(0);
+                int id = getResources().getIdentifier(imageFileName, "drawable", getPackageName());
+                ivMallInfoBanner.setImageResource(id);
+
             }
 
             ExpandableTextView etvMallInfoDetail = (ExpandableTextView) findViewById(R.id.etvMallInfoDetail);
-            etvMallInfoDetail.setText(info.getDetails());
-
+            String infoDetail = info.getDetails() == null ? "" : info.getDetails().replaceAll("\n", "<br>");
+            etvMallInfoDetail.setText(infoDetail);
             TextView expandable_text = (TextView) findViewById(R.id.expandable_text);
-            HtmlTextView.setHtmlTextView(this, expandable_text, info.getDetails(), R.color.html_link_text_color);
-
+            HtmlTextView.setHtmlTextView(this, expandable_text, infoDetail, R.color.html_link_text_color); // /n doesn't work
             TextView tvMallInfoDetailTitle = (TextView) findViewById(R.id.tvMallInfoDetailTitle);
             tvMallInfoDetailTitle.setText(mMallInfoType);
 
@@ -134,24 +146,9 @@ public class MallInfoDetailActivity extends AppCompatActivity{
         }
     }
 
-
     public void setUpCTA(final InfoList info){
         try {
             List<CTA> cTAList = new ArrayList<>();
-            CTA location = new CTA(
-                    this,
-                    mParentView,
-                    R.layout.layout_detail_button,
-                    R.drawable.icn_menu_map,
-                    getResources().getString(R.string.cta_find_on_map),
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            setResult(Activity.RESULT_OK, new Intent());
-                            finish();
-                        }
-                    }, false);
-
             CTA phone = new CTA(
                     this,
                     mParentView,
@@ -212,7 +209,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                         public void onClick(View v) {
                             Utility.sendEmail(MallInfoDetailActivity.this, info.getEmail().getTitle(), "");
                         }
-                    }, false);
+                    }, true);
 
             CTA webpage = new CTA(
                     this,
@@ -223,20 +220,35 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                             Utility.openWebPage(MallInfoDetailActivity.this, info.getLinkURL());
+                            Utility.openWebPage(MallInfoDetailActivity.this, info.getLinkURL());
                         }
-                    }, false);
+                    }, true);
+
+
+            CTA hour = new CTA(
+                    this,
+                    mParentView,
+                    R.layout.layout_detail_button,
+                    R.drawable.icn_hours,
+                    getHours()
+                    ,
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            return;
+                        }
+                    }, true);
 
             if(mMallInfoType.equals(getResources().getString(R.string.mall_info_gift_card))){
-                cTAList.add(location);
+                addLocationCTA(cTAList, info);
                 cTAList.add(phone);
                 cTAList.add(checkBalance);
             } else if (mMallInfoType.startsWith(getResources().getString(R.string.mall_info_about))){
                 cTAList.add(googleMap);
                 cTAList.add(phone);
-            } else if (mMallInfoType.startsWith(getResources().getString(R.string.mall_info_guest_service))){
-                cTAList.add(location);
-//                cTAList.add(phone);
+            } else if (mMallInfoType.startsWith(getResources().getString(R.string.mall_info_guest_service)) || mMallInfoType.startsWith(getResources().getString(R.string.mall_info_customer_service))){
+                addLocationCTA(cTAList, info);
+                cTAList.add(hour);
                 cTAList.add(phone);
                 cTAList.add(email);
             } else if(mMallInfoType.startsWith(getResources().getString(R.string.mall_info_amenities))){
@@ -245,21 +257,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
 
                 cTAList.add(googleMap);
                 cTAList.add(phone);
-
-                webpage = new CTA(
-                        this,
-                        mParentView,
-                        R.layout.layout_detail_button,
-                        R.drawable.icn_web,
-                        info.getLinkTitle(),
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Utility.openWebPage(MallInfoDetailActivity.this, info.getLinkURL());
-                            }
-                        }, true);
-
-                cTAList.add(webpage);
+                addWebpages(cTAList, info);
 
             } else if(mMallInfoType.contains(getResources().getString(R.string.mall_info_social))){
                 CTA facebook = new CTA(
@@ -333,8 +331,11 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 cTAList.add(twiter);
                 cTAList.add(youtube);
                 cTAList.add(pinterest);
-
-
+            } else {
+                addLocationCTA(cTAList, info);
+                addWebpages(cTAList, info);
+                cTAList.add(phone);
+                cTAList.add(webpage);
             }
 
             View llCTA = findViewById(R.id.llCTA);
@@ -347,6 +348,74 @@ public class MallInfoDetailActivity extends AppCompatActivity{
         } catch (Exception e){
             logger.error(e);
         }
+    }
+
+    private void addLocationCTA(List<CTA> cTAList, final InfoList info){
+        List<Location> locations = info.getLocations();
+        if(locations != null) {
+            for(final Location loc : locations) {
+                CTA location = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_button,
+                        R.drawable.icn_menu_map,
+                        loc.getName(),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent();
+                                intent.putExtra(Constants.ARG_LOCATION_ID, loc.getLocationID());
+                                intent.putExtra(Constants.ARG_LOCATION_MAP_NAME, loc.getMapName());
+                                setResult(Activity.RESULT_OK, intent);
+                                finish();
+                            }
+                        }, false);
+                cTAList.add(location);
+            }
+        }
+    }
+
+    private void addWebpages(List<CTA> cTAList, final InfoList info){
+        List<Links> links = info.getLinks();
+        if(links != null) {
+            for(final Links link : links) {
+                CTA location = new CTA(
+                        this,
+                        mParentView,
+                        R.layout.layout_detail_button,
+                        R.drawable.icn_web,
+                        link.getLinkTitle(),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Utility.openWebPage(MallInfoDetailActivity.this, link.getLinkURL());
+
+                            }
+                        }, false);
+                cTAList.add(location);
+            }
+        }
+    }
+
+    private String getHours(){
+        String todaysHour = "";
+        KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
+        KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
+        try {
+            if(kcpPlaces != null) {
+                todaysHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+                List<KcpOverrides.ContinuousOverride> comingHolidays = kcpPlaces.getHolidaysWithin(Constants.NUMB_OF_DAYS);
+                if (comingHolidays == null || comingHolidays.size() == 0)
+                    comingHolidays = KcpPlacesRoot.getInstance().getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL).getHolidaysWithin(7);
+                KcpUtility.sortHoursList((ArrayList) comingHolidays);
+
+                String overrideHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, Calendar.getInstance());
+                if (!overrideHour.equals("")) todaysHour = overrideHour;
+                todaysHour = todaysHour.replace("-", "to");
+            }
+        } catch (Exception e){
+        }
+        return todaysHour;
     }
 
     public void setDisclaimer(final InfoList info){
@@ -368,7 +437,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
         }
     }
 
-
     public View getAdditionalInfoListItem(String title, String detail){
         View v = getLayoutInflater().inflate(R.layout.list_item_mall_info_additional, null, false);
 
@@ -380,10 +448,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
 
         return v;
     }
-
-
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

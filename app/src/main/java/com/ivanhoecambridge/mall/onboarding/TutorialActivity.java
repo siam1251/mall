@@ -1,6 +1,7 @@
 package com.ivanhoecambridge.mall.onboarding;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -28,6 +29,8 @@ import android.widget.VideoView;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.BaseActivity;
+import com.ivanhoecambridge.mall.activities.MainActivity;
+import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 
 import java.util.ArrayList;
@@ -55,7 +58,7 @@ public class TutorialActivity extends BaseActivity {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         if(mHasFakeAlphaPage) setTheme(R.style.Theme_Transparent);
-
+        setTheme(R.style.Theme_Onboarding);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
 
@@ -68,8 +71,8 @@ public class TutorialActivity extends BaseActivity {
         tvOnbdSkip.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                ActivityAnimation.exitActivityAnimation(TutorialActivity.this);
+                startMainActivity();
+
             }
         });
         tvOnbd = (TextView) findViewById(R.id.tvOnbd);
@@ -111,8 +114,6 @@ public class TutorialActivity extends BaseActivity {
                 if(mHasFakeAlphaPage && position == NUMB_ONBRD_SCREENS){
                     finish();
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    /*if(mHasFakeAlphaPage) overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    else ActivityAnimation.exitActivityAnimation(TutorialActivity.this);*/
                 }
             }
 
@@ -280,10 +281,6 @@ public class TutorialActivity extends BaseActivity {
 
             if(position == 0) {
                 tvOnbdTitle.setTextSize(COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.onboarding_first_title));
-                /*RelativeLayout.LayoutParams pr = (RelativeLayout.LayoutParams) tvOnbdTitle.getLayoutParams();
-                int marginLeft = (int) getResources().getDimension(R.dimen.onboarding_first_title_margin);
-                pr.setMargins(marginLeft, KcpUtility.dpToPx(getActivity(), 43), marginLeft, 0);;
-                tvOnbdTitle.setLayoutParams(pr);*/
             } else {
                 tvOnbdTitle.setTextSize(COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.onboarding_second_title));
             }
@@ -316,7 +313,6 @@ public class TutorialActivity extends BaseActivity {
             vvOnbrd = (VideoView) v.findViewById(R.id.vvOnbrd);
             if(imageId == 0) {
                 vvOnbrd.setVisibility(View.GONE);
-//                return v;
             }
             getActivity().getWindow().setFormat(PixelFormat.TRANSLUCENT);
             Uri video = Uri.parse("android.resource://" + getActivity().getPackageName() + "/"
@@ -352,4 +348,13 @@ public class TutorialActivity extends BaseActivity {
         }
     }
 
+    private void startMainActivity(){
+        finish();
+        ActivityAnimation.exitActivityAnimation(TutorialActivity.this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        startMainActivity();
+    }
 }

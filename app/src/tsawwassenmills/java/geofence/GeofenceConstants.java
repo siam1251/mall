@@ -1,6 +1,8 @@
 package geofence;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.ivanhoecambridge.mall.BuildConfig;
+import com.ivanhoecambridge.mall.R;
 
 import java.util.HashMap;
 
@@ -38,7 +40,11 @@ public final class GeofenceConstants {
      */
     public static final HashMap<String, LatLng> GEOFENCE_AREA_LAT_LONG = new HashMap<String, LatLng>();
     static {
-        GEOFENCE_AREA_LAT_LONG.put("Kinetic Cafe", new LatLng(43.642848, -79.375370));//kinetic cafe building
+        GEOFENCE_AREA_LAT_LONG.put("Kinetic Cafe", new LatLng(43.642069, -79.374585));//kinetic cafe building
         GEOFENCE_AREA_LAT_LONG.put("Tsawwassen Mills Mall", new LatLng(49.0369205, -123.0921104));//real location
+        GEOFENCE_AREA_LAT_LONG.put("Home", new LatLng(43.782455, -79.441867));
+        if(BuildConfig.DEBUG){
+            GEOFENCE_AREA_LAT_LONG.put("IvanhoeCambridge", new LatLng(45.502519, -73.562517));
+        }
     }
 }

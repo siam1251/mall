@@ -21,12 +21,15 @@ public class ZoomableImage extends AppCompatActivity {
 
 	private Toolbar mToolbar;
     private boolean mIsToolbarHidden;
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_zoomable_image);
 
 		String imageUrl = (String) getIntent().getSerializableExtra(Constants.ARG_IMAGE_URL);
+		int imageResource = getIntent().getIntExtra(Constants.ARG_IMAGE_RESOURCE, 0);
 		final String imageUrlLarge = (String) getIntent().getSerializableExtra(Constants.ARG_IMAGE_URL_LARGE);
 		final TouchImageView ivDetailImage = (TouchImageView) findViewById(R.id.ivDetailImage);
         ivDetailImage.setOnClickListener(new View.OnClickListener() {
@@ -38,34 +41,39 @@ public class ZoomableImage extends AppCompatActivity {
         });
 
 		final ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
-        Glide.with(this)
-                .load(imageUrl)
-                .crossFade()
-                .error(R.drawable.placeholder)
-				.listener(new RequestListener<String, GlideDrawable>() {
-					@Override
-					public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-						return false;
-					}
 
-					@Override
-					public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-						pb.setVisibility(View.GONE);
-						if(imageUrlLarge != null){
-							Glide.with(ZoomableImage.this)
-									.load(imageUrlLarge)
-									.crossFade()
-//									.centerCrop()
-									.into(ivDetailImage);
-
+		if(imageUrl != null){
+			Glide.with(this)
+					.load(imageUrl)
+					.crossFade()
+					.error(R.drawable.placeholder)
+					.listener(new RequestListener<String, GlideDrawable>() {
+						@Override
+						public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+							return false;
 						}
 
-
-
-						return false;
-					}
-				})
-                .into(ivDetailImage);
+						@Override
+						public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+							pb.setVisibility(View.GONE);
+							if(imageUrlLarge != null){
+								Glide.with(ZoomableImage.this)
+										.load(imageUrlLarge)
+										.crossFade()
+										.into(ivDetailImage);
+							}
+							return false;
+						}
+					})
+					.into(ivDetailImage);
+		} else {
+			pb.setVisibility(View.GONE);
+			Glide.with(this)
+					.load(imageResource)
+					.crossFade()
+					.error(R.drawable.placeholder)
+					.into(ivDetailImage);
+		}
 
 		initActionBar();
 		hideSystemUi();
@@ -97,10 +105,8 @@ public class ZoomableImage extends AppCompatActivity {
     public void animateToolbar(boolean hide){
         if(hide){
             getSupportActionBar().hide();
-//            mToolbar.animate().translationY(-mToolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
         } else {
             getSupportActionBar().show();
-//            mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
         }
         mIsToolbarHidden = hide;
     }
@@ -111,20 +117,11 @@ public class ZoomableImage extends AppCompatActivity {
 		boolean isImmersiveModeEnabled =
 				((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
 		if (isImmersiveModeEnabled) {
-		} else {
 		}
 
-		if (Build.VERSION.SDK_INT >= 14) {
-			newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-		}
-
-		if (Build.VERSION.SDK_INT >= 16) {
-			newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-		}
-
-		if (Build.VERSION.SDK_INT >= 18) {
-			newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-		}
+		if (Build.VERSION.SDK_INT >= 14) newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+		if (Build.VERSION.SDK_INT >= 16) newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+		if (Build.VERSION.SDK_INT >= 18) newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
 		getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
 	}
@@ -133,7 +130,6 @@ public class ZoomableImage extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                /*NavUtils.navigateUpFromSameTask(this);*/
                 this.onBackPressed();
                 return true;
         }

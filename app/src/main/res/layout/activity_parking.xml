@@ -54,7 +54,7 @@
             style="@style/SelectableItemForeground"
             android:textColor="@color/white"
             android:gravity="center"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:text="@string/action_done"
             android:layout_alignParentBottom="true"
             />
@@ -62,25 +62,25 @@
         <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_regular"
             android:layout_above="@+id/rvParking"
-            android:id="@+id/tvParkingLotQuestion"
+            android:id="@+id/tvQuestionOne"
             android:layout_margin="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="18dp"
             android:textColor="@color/white"
-            android:text="@string/parking_which_parking_lot"/>
+            android:text="@string/parking_question_one"/>
 
         <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
             app:fontFamily="@string/fontFamily_roboto_regular"
             android:visibility="gone"
             android:layout_above="@+id/rvParking"
-            android:id="@+id/tvEntranceQuestion"
+            android:id="@+id/tvQuestionTwo"
             android:layout_margin="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="18dp"
             android:textColor="@color/white"
-            android:text="@string/parking_which_entrance"/>
+            android:text="@string/parking_question_two"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -117,7 +117,7 @@
                 android:id="@+id/tvParkingLotName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:textColor="@color/white"/>
 
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
@@ -130,7 +130,7 @@
                 android:id="@+id/tvEntrancename"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:textColor="@color/white"/>
 
 
@@ -171,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:text="Add Notes"
                     android:textColor="@color/white"
-                    android:textSize="14sp"/>
+                    android:textSize="14dp"/>
                     android:maxWidth="200dp"
 
 
@@ -186,12 +186,12 @@
             app:fontFamily="@string/fontFamily_roboto_medium"
             android:id="@+id/tvSaveParkingLot"
             android:layout_margin="@dimen/card_horizontal_margin"
-            android:textColor="@color/white"
+            android:textColor="@color/parkingSaveBtnTextColor"
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:gravity="center"
             android:text="@string/parking_btn_save_parking_spot"
-            android:textSize="16sp"
+            android:textSize="16dp"
             style="@style/SelectableItemForegroundWhite"
             android:elevation="1dp"
             android:background="@drawable/btn_style_corner_radius_primary"
@@ -213,7 +213,7 @@
             style="@style/SelectableItemForeground"
             android:gravity="center"
             android:text="@string/parking_btn_edit_selection"
-            android:textSize="16sp"
+            android:textSize="16dp"
             />
     </RelativeLayout>
 

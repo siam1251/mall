@@ -37,15 +37,17 @@ import com.ivanhoecambridge.mall.adapters.MallDirectoryRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
 import factory.HeaderFactory;
+
+import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.managers.ThemeManager;
 import com.ivanhoecambridge.mall.searchIndex.IndexManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
+import com.ivanhoecambridge.mall.views.NewsRecyclerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 public class DirectoryFragment extends BaseFragment {
-
     private CategoriesFragment mCategoriesFragment;
     private PlacesFragment mPlacesFragment;
     private ViewPager mViewPager;
@@ -62,7 +64,6 @@ public class DirectoryFragment extends BaseFragment {
     private Thread mBrandThread;
     private Thread mTagThread;
     private Thread mCategoryThread;
-
 
 
     private static DirectoryFragment sDirectoryFragment;
@@ -108,7 +109,6 @@ public class DirectoryFragment extends BaseFragment {
         }
     }
 
-
     private void setupViewPager(ViewPager viewPager) {
         HomeTopViewPagerAdapter homeTopViewPagerAdapter = new HomeTopViewPagerAdapter(getChildFragmentManager());
         if(mCategoriesFragment == null) mCategoriesFragment = CategoriesFragment.newInstance();
@@ -128,7 +128,6 @@ public class DirectoryFragment extends BaseFragment {
 
     private void updatePlacesAdapter(){
         try {
-//            if(mPlacesFragment != null && mPlacesFragment.mPlaceRecyclerViewAdapter != null) mPlacesFragment.mPlaceRecyclerViewAdapter.updateData(KcpPlacesRoot.getInstance().getPlacesList());
             if(mPlacesFragment != null && mPlacesFragment.mPlaceRecyclerViewAdapter != null) mPlacesFragment.setupRecyclerView();
         } catch (Exception e) {
             logger.error(e);
@@ -171,8 +170,6 @@ public class DirectoryFragment extends BaseFragment {
                 getActivity(),
                 Pair.create(view, ""));
 
-//        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
-//        ((Activity) context).startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
         getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
         ActivityAnimation.startActivityAnimation(getActivity());
     }
@@ -185,6 +182,7 @@ public class DirectoryFragment extends BaseFragment {
                 public void handleMessage(Message inputMessage) {
                     switch (inputMessage.arg1) {
                         case KcpCategoryManager.DOWNLOAD_FAILED:
+                            if(NetworkManager.isConnected(context)) return;
                             break;
                         case KcpCategoryManager.DOWNLOAD_COMPLETE:
                             expandLevelOnCategory(context, externalCode, categoryName, position, view);
@@ -220,6 +218,7 @@ public class DirectoryFragment extends BaseFragment {
                 public void handleMessage(Message inputMessage) {
                     switch (inputMessage.arg1) {
                         case KcpCategoryManager.DOWNLOAD_FAILED:
+                            if(NetworkManager.isConnected(context)) return;
                             ProgressBarWhileDownloading.showProgressDialog(getActivity(), R.layout.layout_loading_item, false);
                             break;
                         case KcpCategoryManager.DOWNLOAD_COMPLETE:
@@ -239,7 +238,6 @@ public class DirectoryFragment extends BaseFragment {
 
     public void showStores(Context context, String externalCode, String categoryName, View view) {
         //SEPARATE ACTIVITY
-//        Intent intent = new Intent(context, SubCategoryActivity.class);
         Intent intent = new Intent(context, SubStoreActivity.class);
         intent.putExtra(Constants.ARG_CATEGORY_ACTIVITY_TYPE, Constants.CategoryActivityType.STORE.toString());
         intent.putExtra(Constants.ARG_EXTERNAL_CODE, externalCode);
@@ -251,10 +249,8 @@ public class DirectoryFragment extends BaseFragment {
                 Pair.create(view, ""));
 
         ((Activity) context).startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
-//        getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
         ActivityAnimation.startActivityAnimation(context);
     }
-
 
     public void downloadPlaces(){
         KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(getActivity(), R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
@@ -281,7 +277,6 @@ public class DirectoryFragment extends BaseFragment {
         mViewPager.setCurrentItem(pageIndex);
     }
 
-
     public class QueryTextListener implements SearchView.OnQueryTextListener {
         @Override
         public boolean onQueryTextSubmit(String query) {
@@ -299,7 +294,6 @@ public class DirectoryFragment extends BaseFragment {
         mSearchString = s.toString();
         setupRecyclerView();
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -330,10 +324,12 @@ public class DirectoryFragment extends BaseFragment {
                         return true;
                     }
                 });
+
+        NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(getActivity(), R.dimen.card_horizontal_margin);
+        mMainActivity.rvMallDirectory.addItemDecoration(itemDecoration);
     }
 
     private void setupRecyclerView(){
-
         //initialize
         if(mBrandThread != null) mBrandThread.interrupt();
         if(mTagThread != null) mTagThread.interrupt();
@@ -399,7 +395,6 @@ public class DirectoryFragment extends BaseFragment {
         });
         mTagThread.start();
 
-
         mCategoryThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -438,15 +433,8 @@ public class DirectoryFragment extends BaseFragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                if(mMallDirectoryRecyclerViewAdapter == null) {
-
                     mMallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), mKcpPlacesFiltered, mPlaceByBrand, mPlaceByTag, mKcpCategories, mSearchString);
-//                    mMallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), new ArrayList<KcpPlaces>(), mPlaceByBrand, mKcpCategories, mSearchString); //testing
                     mMainActivity.rvMallDirectory.setAdapter(mMallDirectoryRecyclerViewAdapter);
-//                } else {
-//                    mMallDirectoryRecyclerViewAdapter.updateData(mKcpPlacesFiltered, mPlaceByBrand, mKcpCategories, mSearchString);
-//                    mMallDirectoryRecyclerViewAdapter.updateData(new ArrayList<KcpPlaces>(), mPlaceByBrand, mKcpCategories, mSearchString);
-//                }
             }
         });
     }
@@ -458,5 +446,4 @@ public class DirectoryFragment extends BaseFragment {
     private void sortKcpCategories(ArrayList<KcpCategories> listToSort){
         KcpUtility.sortCategoryListById(listToSort);
     }
-
 }

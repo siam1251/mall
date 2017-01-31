@@ -15,7 +15,6 @@ public class AlphaTextView  extends TextView {
     private int mAlpha;
     public AlphaTextView(Context context) {
         super(context);
-//        init();
     }
 
     public AlphaTextView(Context context, AttributeSet attrs) {

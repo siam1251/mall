@@ -7,9 +7,10 @@
     android:layout_height="?attr/actionBarSize"
     app:layout_collapseMode="pin"
     android:background="@drawable/view_toolbar_shadow"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     >
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"    <!--opaque white-->
+    android:theme="@style/ThemeOverlay.AppCompat.Dark" <!--transparent white-->
 
     <TextView
         android:id="@+id/tvToolbar"

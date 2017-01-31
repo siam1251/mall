@@ -1,5 +1,6 @@
 package com.ivanhoecambridge.mall.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,6 +8,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +33,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.KcpMallInfoRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.MainActivity;
+import com.ivanhoecambridge.mall.activities.MoviesActivity;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.activities.MallHourActivity;
 import com.ivanhoecambridge.mall.activities.MallInfoDetailActivity;
@@ -45,12 +50,6 @@ import java.util.List;
  * Created by Kay on 2016-06-20.
  */
 public class InfoFragment extends BaseFragment {
-    private static InfoFragment sInfoFragment;
-    public static InfoFragment getInstance(){
-        if(sInfoFragment == null) sInfoFragment = new InfoFragment();
-        return sInfoFragment;
-    }
-
 
     private View mView;
     private InfoRecyclerViewAdapter mInfoRecyclerViewAdapter;
@@ -59,6 +58,13 @@ public class InfoFragment extends BaseFragment {
     private TextView tvInfoHoursBold;
     private TextView tvInfoHoursLight;
     private Toolbar toolbar;
+
+    private static InfoFragment sInfoFragment;
+    public static InfoFragment getInstance(){
+        if(sInfoFragment == null) sInfoFragment = new InfoFragment();
+        return sInfoFragment;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,19 +114,14 @@ public class InfoFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 if(!ParkingManager.isParkingLotSaved(getActivity())){
-//                    Utility.addBlurredBitmapToMemoryCache(mView, Constants.KEY_PARKING_BLURRED);
                     final Intent intent = new Intent (getActivity(), ParkingActivity.class);
                     getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
                 } else {
-
                     mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_MAP);
                     MapFragment.getInstance().onParkingClick(true, true);
-
-//                    getActivity().startActivityForResult(new Intent(getActivity(), ParkingActivity.class), Constants.REQUEST_CODE_SAVE_PARKING_SPOT); //is startActivityForResult necessary?
                 }
             }
         });
-
 
         ImageView ivCar = (ImageView) mView.findViewById(R.id.ivCar);
         ivCar.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +147,6 @@ public class InfoFragment extends BaseFragment {
             }
         });
 
-
         //when recyclerview's placed under collapsed, it sometimes fails to set its height properly - last items cannot be scrolled to so manually setting the height
         final ViewTreeObserver viewTreeObserver = rvInfo.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
@@ -159,7 +159,6 @@ public class InfoFragment extends BaseFragment {
                     lp.height = (int) (KcpUtility.getScreenHeight(getActivity())
                             - KcpUtility.getStatusBarHeight(getActivity())
                             - getActivity().getResources().getDimension(R.dimen.abc_action_bar_default_height_material)
-//                            - getResources().getDimension(R.dimen.info_collapsed_height) //decided to leave only hours section at top when scrolled down
                             - getResources().getDimension(R.dimen.info_hours_height)
                             - getResources().getDimension(R.dimen.vpMain_padding_bottom));
                     rvInfo.setLayoutParams(lp);
@@ -185,9 +184,14 @@ public class InfoFragment extends BaseFragment {
             tvPark.setText(getString(R.string.info_save_my_parking_spot));
         } else {
             ivPark.setImageResource(R.drawable.icn_car);
-            String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
-            String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
-            String sourceString = getString(R.string.info_my_parking_spot) + " " + "<b>" + parkingLotName + ", " + entranceName + "</b> ";
+            String sourceString;
+            if(ParkingManager.getParkingMode(getActivity()) == ParkingManager.ParkingMode.LOCATION) {
+                String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
+                String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
+                sourceString = getString(R.string.info_my_parking_spot) + " " + "<b>" + parkingLotName + ", " + entranceName + "</b> ";
+            } else {
+                sourceString = "<b>" + getString(R.string.parking_saved_my_parking_spot) + "</b> ";
+            }
             tvPark.setText(Html.fromHtml(sourceString));
         }
     }
@@ -262,8 +266,6 @@ public class InfoFragment extends BaseFragment {
         }
     }
 
-
-
     public void initializeMallInfoData(){
         if(getActivity() == null){
             setOnFragmentInteractionListener(new OnFragmentInteractionListener() {
@@ -309,6 +311,11 @@ public class InfoFragment extends BaseFragment {
                 List<InfoList> infoLists = kcpMallInfoRoot.getKcpMallInfo().getInfoList();
                 if(infoLists.get(position).getTitle().contains(getResources().getString(R.string.mall_info_mall_hours))){
                     getActivity().startActivity(new Intent(getActivity(), MallHourActivity.class));
+                } else if (infoLists.get(position).getMenuTitle() != null && infoLists.get(position).getMenuTitle().contains(getString(R.string.mall_info_cinema))){
+                    Intent intent = new Intent(getActivity(), MoviesActivity.class);
+                    intent.putExtra(Constants.ARG_TRANSITION_ENABLED, false);
+                    getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
+                    ActivityAnimation.startActivityAnimation(getActivity());
                 } else {
                     Intent intent = new Intent(getActivity(), MallInfoDetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, infoList);
@@ -317,7 +324,6 @@ public class InfoFragment extends BaseFragment {
                 ActivityAnimation.startActivityAnimation(getActivity());
             }
         };
-
 
         KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
         kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), Constants.MALL_INFO_OFFLINE_TEXT);

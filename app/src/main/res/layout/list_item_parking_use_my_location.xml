@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    style="@style/SelectableItemForeground"
+    android:layout_height="55dp">
+
+
+    <com.ivanhoecambridge.mall.views.ThemeColorImageView
+        ThemedImageView:filterColor="@color/map_level_with_path"
+        android:layout_centerVertical="true"
+        android:id="@+id/ivFollowMode"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/icn_current_location"
+        />
+
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+        app:fontFamily="@string/fontFamily_roboto_regular"
+        android:layout_toRightOf="@+id/ivFollowMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/intrstd_txt_off"
+        android:textSize="16dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:text="Use Current Location"
+        android:gravity="center_vertical"
+        />
+
+    <View
+        style="@style/separater"
+        />
+</RelativeLayout>

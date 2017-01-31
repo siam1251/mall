@@ -13,7 +13,7 @@ public class ThemeManager {
 
     public static Drawable getThemedMenuDrawable(Context context, int drawable){
         final Drawable menuDrawable = context.getResources().getDrawable(drawable);
-        menuDrawable.setColorFilter(context.getResources().getColor(R.color.tabSelectedTextColor), PorterDuff.Mode.SRC_ATOP);
+        menuDrawable.setColorFilter(context.getResources().getColor(R.color.active_mall_off_state), PorterDuff.Mode.SRC_ATOP);
         return menuDrawable;
     }
 }
