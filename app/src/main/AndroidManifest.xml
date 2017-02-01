@@ -153,6 +153,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base"
             />
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:windowSoftInputMode="adjustNothing"
+            android:windowSoftInputMode="adjustPan"
 
         <receiver android:name=".receivers.WelcomeMsgReceiver" />
 

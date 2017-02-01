@@ -1,222 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     android:background="@color/card_bg"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:id="@+id/rlTransition"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:id="@+id/llSign"
-        android:layout_width="match_parent"
-        android:gravity="center_horizontal"
-        android:layout_height="60dp">
-
-        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-            app:fontFamily="@string/fontFamily_roboto_regular"
-            android:gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textColor="@color/black"
-            android:text="@string/signin_dont_have_account"
-            android:textSize="16dp"
-            />
-
-        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-            android:id="@+id/tvSignIn"
-            style="@style/SelectableItemForeground"
-            android:layout_marginLeft="5dp"
-            android:gravity="center_vertical"
-            app:fontFamily="@string/fontFamily_roboto_bold"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:text="@string/signin_sign_up"
-            android:textColor="@color/sign_in_red"
-            android:onClick="onClickSignIn"
-            android:textSize="16dp"
-            />
-    </LinearLayout>
+    android:layout_height="match_parent"
+    android:id="@+id/scSign"
+    android:fillViewport="true"
+    >
 
     <LinearLayout
         android:orientation="vertical"
-        android:id="@+id/llEdittext"
-        android:layout_below="@+id/llSign"
+        android:background="@color/card_bg"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_height="wrap_content"
-        >
-        android:layout_height="110dp"
+        android:id="@+id/rlTransition"
+        android:layout_height="match_parent">
 
-        <View
-            android:id="@+id/separatorFirst"
-            style="@style/separater"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/llSign"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_height="60dp">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/tilFirst"
-            style="@style/TextAppearence.App.TextInputLayout"
-            android:layout_height="52dp"
-            >
-
-            <android.support.v7.widget.AppCompatEditText
-                style="@style/EditTextSignIn"
-                android:id="@+id/etFirst"
-                android:hint="@string/hint_email"
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                app:fontFamily="@string/fontFamily_roboto_regular"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:text="@string/signin_dont_have_account"
+                android:textSize="16dp"
                 />
-        </android.support.design.widget.TextInputLayout>
 
-        <View
-            android:id="@+id/separatorSecond"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            style="@style/separater"/>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_height="52dp"
-            style="@style/TextAppearence.App.TextInputLayout"
-            android:id="@+id/tilSecond"
-            >
-
-            <android.support.v7.widget.AppCompatEditText
-                style="@style/EditTextSignIn"
-                android:id="@+id/etSecond"
-                android:hint="@string/hint_password"
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                android:id="@+id/tvSignIn"
+                style="@style/SelectableItemForeground"
+                android:layout_marginLeft="5dp"
+                android:gravity="center_vertical"
+                app:fontFamily="@string/fontFamily_roboto_bold"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:text="@string/signin_sign_up"
+                android:textColor="@color/sign_in_red"
+                android:textSize="16dp"
                 />
-        </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
 
-        <View
-            android:id="@+id/separatorLast"
-            style="@style/separater"
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/llEdittext"
+            android:layout_below="@+id/llSign"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_height="wrap_content"
+            >
+            android:layout_height="110dp"
+
+            <View
+                android:id="@+id/separatorFirst"
+                style="@style/separater"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilFirst"
+                style="@style/TextAppearence.App.TextInputLayout"
+                >
+
+                <com.ivanhoecambridge.mall.views.TextInputLayoutListener
+                    style="@style/EditTextSignIn"
+                    android:id="@+id/etFirst"
+                    android:hint="@string/hint_email"
+                    android:inputType="textEmailAddress"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_height="52dp"
+                style="@style/TextAppearence.App.TextInputLayout"
+                android:id="@+id/tilSecond"
+                >
+
+                <com.ivanhoecambridge.mall.views.TextInputLayoutListener
+                    style="@style/EditTextSignIn"
+                    android:id="@+id/etSecond"
+                    android:hint="@string/hint_password"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:id="@+id/separatorLast"
+                style="@style/separater"
+                />
+
+        </LinearLayout>
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            android:layout_below="@+id/llEdittext"
+            app:fontFamily="@string/fontFamily_roboto_bold"
+            android:layout_width="match_parent"
+            android:text="@string/signin_forgot_password"
+            android:textColor="@color/sign_in_red"
+            android:textSize="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="60dp"
+            android:gravity="center"
             />
-
-    </LinearLayout>
-
-    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/llEdittext"
-        app:fontFamily="@string/fontFamily_roboto_bold"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:text="@string/signin_forgot_password"
-        android:textColor="@color/sign_in_red"
-        android:textSize="16dp"
-        />
-
-    <LinearLayout
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:id="@+id/llSignIn"
-        android:background="#939393"
-        android:layout_width="match_parent"
-        android:gravity="center_horizontal"
-        android:layout_height="48dp">
 
 
         <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-            android:id="@+id/tvSign"
-            style="@style/SelectableItemForeground"
-            android:layout_marginLeft="5dp"
-            android:gravity="center_vertical"
-            app:fontFamily="@string/fontFamily_roboto_bold"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/signin_sign_in"
-            android:textColor="@color/white"
+            android:layout_marginTop="40dp"
+            android:layout_above="@+id/cvFb"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/tvDesc"
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:textSize="16dp"
+            android:textColor="@color/map_level_enabled"
+            android:textAlignment="center"
+            android:text="@string/signin_other_sign_in_method"
             />
+
+        <android.support.v7.widget.CardView
+            android:onClick="onFbClicked"
+            android:id="@+id/cvFb"
+            style="@style/CardViewSignIn"
+            android:layout_above="@+id/cvGoogle"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="11dp"
+            card_view:cardBackgroundColor="#39579b"
+            >
+
+            <FrameLayout
+                android:id="@+id/flFb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.ivanhoecambridge.mall.views.ThemeColorImageView
+                    android:layout_marginLeft="21dp"
+                    android:layout_gravity="center_vertical"
+                    ThemedImageView:filterColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:src="@drawable/icn_facebook"
+                    />
+
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:textColor="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/signin_connect_with_fb"
+                    android:textSize="16dp"
+                    />
+
+            </FrameLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:onClick="onGoogleClicked"
+            android:clickable="false"
+            android:id="@+id/cvGoogle"
+            style="@style/CardViewSignIn"
+            android:layout_above="@+id/llSignInCreateAccount"
+            android:layout_marginBottom="22dp"
+            card_view:cardBackgroundColor="#df4a32"
+            >
+
+            <FrameLayout
+                android:id="@+id/flGoogle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.ivanhoecambridge.mall.views.ThemeColorImageView
+                    android:layout_marginLeft="21dp"
+                    android:layout_gravity="center_vertical"
+                    ThemedImageView:filterColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:src="@drawable/icn_googleplus"
+                    />
+
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    android:textColor="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/signin_connect_with_google"
+                    android:textSize="16dp"
+                    />
+
+            </FrameLayout>
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            style="@style/SelectableItemForegroundWhite"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:id="@+id/llSignInCreateAccount"
+            android:background="@color/sign_in_disabled"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_height="48dp"
+            >
+
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                android:id="@+id/tvSign"
+                style="@style/SelectableItemForeground"
+                android:layout_marginLeft="5dp"
+                android:gravity="center_vertical"
+                app:fontFamily="@string/fontFamily_roboto_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/signin_sign_in"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                />
+        </LinearLayout>
     </LinearLayout>
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/cvFb"
-        style="@style/CardViewSignIn"
-        android:layout_above="@+id/cvGoogle"
-        android:layout_marginBottom="11dp"
-        card_view:cardBackgroundColor="#39579b"
-        >
-
-        <FrameLayout
-            android:id="@+id/flFb"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.ivanhoecambridge.mall.views.ThemeColorImageView
-                android:layout_marginLeft="21dp"
-                android:layout_gravity="center_vertical"
-                ThemedImageView:filterColor="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="26dp"
-                android:src="@drawable/icn_facebook"
-                />
-
-            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                app:fontFamily="@string/fontFamily_roboto_medium"
-                android:textColor="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/signin_connect_with_fb"
-                android:textSize="16dp"
-                />
-
-        </FrameLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/cvGoogle"
-        style="@style/CardViewSignIn"
-        android:layout_above="@+id/llSignIn"
-        android:layout_marginBottom="22dp"
-        card_view:cardBackgroundColor="#df4a32"
-        >
-
-        <FrameLayout
-            android:id="@+id/flGoogle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.ivanhoecambridge.mall.views.ThemeColorImageView
-                android:layout_marginLeft="21dp"
-                android:layout_gravity="center_vertical"
-                ThemedImageView:filterColor="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="26dp"
-                android:src="@drawable/icn_googleplus"
-                />
-
-            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                app:fontFamily="@string/fontFamily_roboto_medium"
-                android:textColor="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/signin_connect_with_google"
-                android:textSize="16dp"
-                />
-
-        </FrameLayout>
-    </android.support.v7.widget.CardView>
-
-
-    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-        android:layout_marginBottom="24dp"
-        android:layout_above="@+id/cvFb"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/tvDesc"
-        app:fontFamily="@string/fontFamily_roboto_medium"
-        android:layout_width="277dp"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:textColor="@color/map_level_enabled"
-        android:textAlignment="center"
-        android:text="@string/signin_other_sign_in_method"
-        />
-    android:layout_above="@+id/flFb"
-
-
-
-</RelativeLayout>
+</ScrollView>

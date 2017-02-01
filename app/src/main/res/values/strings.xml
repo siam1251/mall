@@ -123,6 +123,9 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="warning_change_my_parking_spot">Changing your parking spot will overwrite any previously saved information.</string>
     <string name="warning_turn_on_bluetooth">Please turn on Bluetooth to find your current location.</string>
     <string name="warning_current_location_not_available">If you are at the mall, please try again in a few seconds.</string>
+    <string name="warning_not_valid_address">Not a valid Email address.</string>
+    <string name="warning_must_be_longer">Password must be 7 or longer.</string>
+    <string name="warning_two_passwords_not_equal">Two passwords must be the same.</string>
 
     <!--section header-->
     <string name="section_header_recommended_deals">Recommended Deals</string>
