@@ -1,25 +1,32 @@
 package com.ivanhoecambridge.mall.activities;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.transition.Scene;
 import android.support.transition.TransitionManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.util.Util;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.fragments.BirthDayPickerFragment;
 import com.ivanhoecambridge.mall.signin.FormFillChecker;
 import com.ivanhoecambridge.mall.signin.FormFillInterface;
 import com.ivanhoecambridge.mall.signin.FormValidation;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
-import com.ivanhoecambridge.mall.views.TextInputLayoutListener;
+import com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -29,7 +36,7 @@ import butterknife.Optional;
  * Created by Kay on 2017-01-27.
  */
 
-public class SignInActivity extends BaseActivity implements FormFillInterface {
+public class SignInActivity extends BaseActivity implements FormFillInterface, BirthDayPickerFragment.DateSelectedListener {
 
 
     /*@BindView(R.id.tilFirst) TextInputLayout tilFirst;
@@ -41,8 +48,6 @@ public class SignInActivity extends BaseActivity implements FormFillInterface {
     private Scene mScene;
     private FormFillChecker formFillCheckerOne;
     private FormFillChecker formFillCheckerTwo;
-
-
 
     //SCENE COMMON
     TextView tvSignIn;
@@ -65,6 +70,11 @@ public class SignInActivity extends BaseActivity implements FormFillInterface {
 
     //SET ERROR TO ET - LITTLE DOT ON THE RIGHT
     //SET ERROR TO TIL - ERROR MSG
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
 
     @Override
@@ -124,15 +134,14 @@ public class SignInActivity extends BaseActivity implements FormFillInterface {
 
             //EMAIL
             final TextInputLayout tilSignInEmail = (TextInputLayout) findViewById(R.id.tilFirst);
-            final TextInputLayoutListener etSignInEmail = (TextInputLayoutListener) findViewById(R.id.etFirst);
+            final AppcompatEditTextWithWatcher etSignInEmail = (AppcompatEditTextWithWatcher) findViewById(R.id.etFirst);
             etSignInEmail.setOnFieldFilledListener(formFillCheckerOne);
-            etSignInEmail.setOnValidateListener(new TextInputLayoutListener.OnValidateListener() {
+            etSignInEmail.setOnValidateListener(new AppcompatEditTextWithWatcher.OnValidateListener() {
                 @Override
                 public void validate() {
                     String inputString = etSignInEmail.getTag().toString();
                     if(!inputString.equals("") && !FormValidation.isEmailValid(inputString.toString())) {
-//                        tilSignInEmail.setError(getString(R.string.warning_not_valid_address));
-                        etSignInEmail.setError(getString(R.string.warning_not_valid_address));
+                        tilSignInEmail.setError(getString(R.string.warning_not_valid_address));
                         etSignInEmail.getOnFieldFilledListener().isFieldFilled(etSignInEmail, false);
                     } else {
                         tilSignInEmail.setErrorEnabled(false);
@@ -141,7 +150,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface {
             });
 
             //PASSWORD
-            final TextInputLayoutListener etSignInPassword = (TextInputLayoutListener) findViewById(R.id.etSecond);
+            final AppcompatEditTextWithWatcher etSignInPassword = (AppcompatEditTextWithWatcher) findViewById(R.id.etSecond);
             etSignInPassword.setOnFieldFilledListener(formFillCheckerOne);
 
             formFillCheckerOne.addEditText(etSignInEmail, etSignInPassword);
@@ -168,14 +177,14 @@ public class SignInActivity extends BaseActivity implements FormFillInterface {
             });
 
             //FULL NAME
-            final TextInputLayoutListener etCreateAccountFullName = (TextInputLayoutListener) findViewById(R.id.etFirst);
+            final AppcompatEditTextWithWatcher etCreateAccountFullName = (AppcompatEditTextWithWatcher) findViewById(R.id.etFirst);
             etCreateAccountFullName.setOnFieldFilledListener(formFillCheckerOne);
 
             //EMAIL
             final TextInputLayout tilCreateAccountEmail = (TextInputLayout) findViewById(R.id.tilSecond);
-            final TextInputLayoutListener etCreateAccountEmail = (TextInputLayoutListener) findViewById(R.id.etSecond);
+            final AppcompatEditTextWithWatcher etCreateAccountEmail = (AppcompatEditTextWithWatcher) findViewById(R.id.etSecond);
             etCreateAccountEmail.setOnFieldFilledListener(formFillCheckerTwo);
-            etCreateAccountEmail.setOnValidateListener(new TextInputLayoutListener.OnValidateListener() {
+            etCreateAccountEmail.setOnValidateListener(new AppcompatEditTextWithWatcher.OnValidateListener() {
                 @Override
                 public void validate() {
                     String inputString = etCreateAccountEmail.getTag().toString();
@@ -191,14 +200,14 @@ public class SignInActivity extends BaseActivity implements FormFillInterface {
 
             //PASSWORD
             final TextInputLayout tilCreateAccountPassword = (TextInputLayout) findViewById(R.id.tilThird);
-            final TextInputLayoutListener etCreateAccountPassword = (TextInputLayoutListener) findViewById(R.id.etThird);
+            final AppcompatEditTextWithWatcher etCreateAccountPassword = (AppcompatEditTextWithWatcher) findViewById(R.id.etThird);
 
             final TextInputLayout tilCreateAccountConfirm = (TextInputLayout) findViewById(R.id.tilFourth);
-            final TextInputLayoutListener etCreateAccountConfirm = (TextInputLayoutListener) findViewById(R.id.etFourth);
+            final AppcompatEditTextWithWatcher etCreateAccountConfirm = (AppcompatEditTextWithWatcher) findViewById(R.id.etFourth);
 
 
             etCreateAccountPassword.setOnFieldFilledListener(formFillCheckerTwo);
-            etCreateAccountPassword.setOnValidateListener(new TextInputLayoutListener.OnValidateListener() {
+            etCreateAccountPassword.setOnValidateListener(new AppcompatEditTextWithWatcher.OnValidateListener() {
                 @Override
                 public void validate() {
                     String inputString = etCreateAccountPassword.getTag().toString();
@@ -224,7 +233,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface {
 
             //CONFIRM PASSWORD
             etCreateAccountConfirm.setOnFieldFilledListener(formFillCheckerTwo);
-            etCreateAccountConfirm.setOnValidateListener(new TextInputLayoutListener.OnValidateListener() {
+            etCreateAccountConfirm.setOnValidateListener(new AppcompatEditTextWithWatcher.OnValidateListener() {
                 @Override
                 public void validate() {
 
@@ -249,6 +258,28 @@ public class SignInActivity extends BaseActivity implements FormFillInterface {
                 }
             });
 
+
+            //DATE OF BIRTH
+            final TextInputLayout tilCreateAccountBirth = (TextInputLayout) findViewById(R.id.tilFifth);
+            final AppcompatEditTextWithWatcher etCreateAccountBirth = (AppcompatEditTextWithWatcher) findViewById(R.id.etFifth);
+            etCreateAccountBirth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if(b) {
+                        DialogFragment newFragment = new BirthDayPickerFragment();
+                        newFragment.show(getSupportFragmentManager(), "datePicker");
+                    }
+                }
+            });
+            etCreateAccountBirth.setOnFieldFilledListener(formFillCheckerTwo);
+            etCreateAccountBirth.setOnValidateListener(new AppcompatEditTextWithWatcher.OnValidateListener() {
+                @Override
+                public void validate() {
+
+                }
+            });
+
+
             formFillCheckerOne.addEditText(etCreateAccountFullName, etCreateAccountEmail);
         }
     }
@@ -267,7 +298,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface {
             if(filled) {
                 llSignInCreateAccount.setBackgroundColor(getResources().getColor(R.color.sign_in_red));
                 llSignInCreateAccount.setClickable(true);
-                for (TextInputLayoutListener textInputLayoutListener : formFillCheckerOne.getEditTextmap().keySet()) {
+                for (AppcompatEditTextWithWatcher textInputLayoutListener : formFillCheckerOne.getEditTextmap().keySet()) {
                     if(textInputLayoutListener.getOnValidateListener() != null) textInputLayoutListener.getOnValidateListener().validate();
                 }
             } else {
@@ -290,6 +321,17 @@ public class SignInActivity extends BaseActivity implements FormFillInterface {
         Toast.makeText(this, "Google Clicked", Toast.LENGTH_SHORT).show();
     }
 
+    @Optional
+    @OnClick(R.id.tvTerms) void onClickTerms(View v) {
+        Toast.makeText(this, "Terms", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBirthdaySelected(GregorianCalendar birthday) {
+
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -309,6 +351,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface {
     public void onBackPressed() {
         finishActivity();
     }
+
 
 
 }

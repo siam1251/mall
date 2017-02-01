@@ -74,7 +74,7 @@
                 style="@style/TextAppearence.App.TextInputLayout"
                 >
 
-                <com.ivanhoecambridge.mall.views.TextInputLayoutListener
+                <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
                     android:id="@+id/etFirst"
                     android:hint="@string/hint_email"
@@ -88,7 +88,7 @@
                 android:id="@+id/tilSecond"
                 >
 
-                <com.ivanhoecambridge.mall.views.TextInputLayoutListener
+                <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
                     android:id="@+id/etSecond"
                     android:hint="@string/hint_password"

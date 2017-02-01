@@ -28,10 +28,15 @@
         <item name="android:textColorSecondary">@color/hamburger_menu</item>
         <item name="buttonBarButtonStyle">@style/MyButtonStyle</item>
 
+
         <!--For TextInputLayout Underline Color-->
         <item name="colorControlNormal">@color/detail_separator_color</item>
         <item name="colorControlActivated">@color/detail_separator_color</item>
 
+    </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/welcome_btn_color</item>
     </style>
 
     <style name="MyButtonStyle" parent="Widget.AppCompat.Button.Borderless">

@@ -1,8 +1,6 @@
 package com.ivanhoecambridge.mall.signin;
 
-import android.support.v7.widget.AppCompatEditText;
-
-import com.ivanhoecambridge.mall.views.TextInputLayoutListener;
+import com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,25 +11,25 @@ import java.util.Map;
 
 public class FormFillChecker implements FormFillInterface.OnFieldFilledListener {
 
-    private Map<TextInputLayoutListener, Boolean> editTextmap = new HashMap<TextInputLayoutListener, Boolean>();
+    private Map<AppcompatEditTextWithWatcher, Boolean> editTextmap = new HashMap<AppcompatEditTextWithWatcher, Boolean>();
     private FormFillInterface formFillInterface;
 
     public FormFillChecker(FormFillInterface formFillInterface) {
         this.formFillInterface = formFillInterface;
     }
 
-    public Map<TextInputLayoutListener, Boolean> getEditTextmap() {
+    public Map<AppcompatEditTextWithWatcher, Boolean> getEditTextmap() {
         return editTextmap;
     }
 
-    public void addEditText(TextInputLayoutListener... appCompatEditTexts){
-        for(TextInputLayoutListener appCompatEditText : appCompatEditTexts){
+    public void addEditText(AppcompatEditTextWithWatcher... appCompatEditTexts){
+        for(AppcompatEditTextWithWatcher appCompatEditText : appCompatEditTexts){
             editTextmap.put(appCompatEditText, false);
         }
     }
 
     @Override
-    public void isFieldFilled(TextInputLayoutListener aet, boolean filled) {
+    public void isFieldFilled(AppcompatEditTextWithWatcher aet, boolean filled) {
         if(editTextmap.containsKey(aet)) editTextmap.put(aet, filled);
         for (boolean value : editTextmap.values()) {
             if(!value) {

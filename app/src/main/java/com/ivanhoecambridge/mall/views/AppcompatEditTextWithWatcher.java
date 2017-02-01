@@ -15,7 +15,7 @@ import com.ivanhoecambridge.mall.signin.FormValidation;
  * Created by Kay on 2017-01-31.
  */
 
-public class TextInputLayoutListener extends AppCompatEditText implements TextWatcher {
+public class AppcompatEditTextWithWatcher extends AppCompatEditText implements TextWatcher {
 
     private OnValidateListener onValidateListener;
 
@@ -25,17 +25,17 @@ public class TextInputLayoutListener extends AppCompatEditText implements TextWa
         void validate();
     }
 
-    public TextInputLayoutListener(Context context) {
+    public AppcompatEditTextWithWatcher(Context context) {
         super(context);
         this.setOnFocusChangeListener(onFocusChangeListener);
     }
 
-    public TextInputLayoutListener(Context context, AttributeSet attrs) {
+    public AppcompatEditTextWithWatcher(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setOnFocusChangeListener(onFocusChangeListener);
     }
 
-    public TextInputLayoutListener(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AppcompatEditTextWithWatcher(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.setOnFocusChangeListener(onFocusChangeListener);
     }

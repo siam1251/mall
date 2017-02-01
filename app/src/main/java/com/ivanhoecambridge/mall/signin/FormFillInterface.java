@@ -1,8 +1,6 @@
 package com.ivanhoecambridge.mall.signin;
 
-import android.support.v7.widget.AppCompatEditText;
-
-import com.ivanhoecambridge.mall.views.TextInputLayoutListener;
+import com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher;
 
 /**
  * Created by Kay on 2017-01-31.
@@ -11,7 +9,7 @@ import com.ivanhoecambridge.mall.views.TextInputLayoutListener;
 public interface FormFillInterface {
 
     interface OnFieldFilledListener{
-        void isFieldFilled(TextInputLayoutListener aet, boolean filled);
+        void isFieldFilled(AppcompatEditTextWithWatcher aet, boolean filled);
     }
 
     void isFieldsCompletelyFilled(boolean filled);

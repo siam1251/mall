@@ -71,7 +71,7 @@
                 style="@style/TextAppearence.App.TextInputLayout"
                 >
 
-                <com.ivanhoecambridge.mall.views.TextInputLayoutListener
+                <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
                     android:id="@+id/etFirst"
                     android:hint="@string/hint_full_name"
@@ -83,7 +83,7 @@
                 android:id="@+id/tilSecond"
                 >
 
-                <com.ivanhoecambridge.mall.views.TextInputLayoutListener
+                <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
                     android:id="@+id/etSecond"
                     android:hint="@string/hint_email"
@@ -96,7 +96,7 @@
                 android:id="@+id/tilThird"
                 >
 
-                <com.ivanhoecambridge.mall.views.TextInputLayoutListener
+                <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
                     android:id="@+id/etThird"
                     android:hint="@string/hint_password"
@@ -108,7 +108,7 @@
                 android:id="@+id/tilFourth"
                 >
 
-                <com.ivanhoecambridge.mall.views.TextInputLayoutListener
+                <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
                     android:id="@+id/etFourth"
                     android:hint="@string/hint_confirm_password"
@@ -120,7 +120,7 @@
                 android:id="@+id/tilFifth"
                 >
 
-                <com.ivanhoecambridge.mall.views.TextInputLayoutListener
+                <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
                     android:id="@+id/etFifth"
                     android:hint="@string/hint_Birthday"
@@ -180,21 +180,54 @@
 
         </LinearLayout>
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
+        <LinearLayout
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content">
+
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                app:fontFamily="@string/fontFamily_roboto_regular"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:text="@string/signin_by_signing_up"
+                android:textSize="14dp"
+                />
+
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                android:onClick="onClickTerms"
+                android:id="@+id/tvTerms"
+                app:fontFamily="@string/fontFamily_roboto_medium"
+                style="@style/SelectableItemForeground"
+                android:layout_marginLeft="4dp"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/signin_terms_and_conditions"
+                android:textColor="@color/sign_in_red"
+                android:textSize="14dp"
+                />
+        </LinearLayout>
+
 
         <LinearLayout
-            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
             android:layout_gravity="bottom"
             android:id="@+id/llSignInCreateAccount"
             android:background="#939393"
             android:layout_width="match_parent"
             android:gravity="center_horizontal"
-            android:layout_height="48dp">
-
+            android:layout_height="48dp"
+            >
 
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 android:id="@+id/tvSign"
