@@ -1,7 +1,10 @@
-package com.senionlab.sldemo.slutilities;
+package slutilities;
 
+import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
 import com.senionlab.slutilities.type.FloorNr;
 import com.senionlab.slutilities.type.SLCoordinate3D;
+
+import java.util.HashMap;
 
 public class SLSettings {
 

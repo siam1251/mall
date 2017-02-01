@@ -1,4 +1,4 @@
-package com.senionlab.sldemo.slutilities;
+package slutilities;
 
 import com.senionlab.slutilities.type.SLCoordinate3D;
 
