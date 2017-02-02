@@ -136,7 +136,6 @@ dependencies {
     compile 'com.google.firebase:firebase-ads:9.2.1'
     compile 'com.google.firebase:firebase-messaging:9.2.1'
     compile 'com.google.firebase:firebase-crash:9.2.1'
-    //    compile 'com.google.android.gms:play-services:9.2.1'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile project(path: ':kcpandroidsdk')
@@ -158,7 +157,6 @@ dependencies {
     compile 'org.msgpack:msgpack-core:0.8.9'
     compile 'com.exacttarget.etpushsdk:etsdk:4.5.0@aar'
     compile 'com.google.android.gms:play-services-gcm:9.2.1'
-    compile project(':Jump')
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }

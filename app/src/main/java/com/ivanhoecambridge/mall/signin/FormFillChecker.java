@@ -30,7 +30,9 @@ public class FormFillChecker implements FormFillInterface.OnFieldFilledListener 
 
     @Override
     public void isFieldFilled(AppcompatEditTextWithWatcher aet, boolean filled) {
-        if(editTextmap.containsKey(aet)) editTextmap.put(aet, filled);
+        if(editTextmap.containsKey(aet)) {
+            editTextmap.put(aet, filled);
+        }
         for (boolean value : editTextmap.values()) {
             if(!value) {
                 formFillInterface.isFieldsCompletelyFilled(false);

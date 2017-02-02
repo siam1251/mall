@@ -1,6 +1,5 @@
 package com.ivanhoecambridge.mall.activities;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.transition.Scene;
@@ -8,10 +7,8 @@ import android.support.transition.TransitionManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,11 +19,13 @@ import com.ivanhoecambridge.mall.fragments.BirthDayPickerFragment;
 import com.ivanhoecambridge.mall.signin.FormFillChecker;
 import com.ivanhoecambridge.mall.signin.FormFillInterface;
 import com.ivanhoecambridge.mall.signin.FormValidation;
+import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -45,9 +44,11 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     ViewGroup rootContainer;
     private Scene mScene1;
     private Scene mScene2;
+    private Scene mScene3;
     private Scene mScene;
     private FormFillChecker formFillCheckerOne;
     private FormFillChecker formFillCheckerTwo;
+    private FormFillChecker formFillCheckerThree;
 
     //SCENE COMMON
     TextView tvSignIn;
@@ -55,13 +56,14 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 //    TextInputLayout tilSecond;
 //    TextInputLayoutListener etFirst;
 //    TextInputLayoutListener etSecond;
-    LinearLayout llSignInCreateAccount;
+    LinearLayout llSignInCreateAccountReset;
 
     //SCENE 1
 //    CardView cvFb;
 //    CardView cvGoogle;
 
     //SCENE2
+    private AppcompatEditTextWithWatcher etCreateAccountBirth;
 
 
     EditText etThird;
@@ -97,6 +99,9 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
         mScene2 = Scene.getSceneForLayout(rootContainer,
                 R.layout.transition_sign_in_two, this);
 
+        mScene3 = Scene.getSceneForLayout(rootContainer,
+                R.layout.transition_sign_in_three, this);
+
         mScene = mScene1;
         mScene.enter();
 
@@ -115,8 +120,8 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             getSupportActionBar().setTitle(getString(R.string.signin_sign_in));
             formFillCheckerOne = new FormFillChecker(this);
 
-            llSignInCreateAccount = (LinearLayout) findViewById(R.id.llSignInCreateAccount);
-            llSignInCreateAccount.setOnClickListener(new View.OnClickListener() {
+            llSignInCreateAccountReset = (LinearLayout) findViewById(R.id.llSignInCreateAccount);
+            llSignInCreateAccountReset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(SignInActivity.this, "SIGNING IN", Toast.LENGTH_SHORT).show();
@@ -127,7 +132,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             tvSignIn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    changeScene();
+                    changeScene(mScene2);
                 }
             });
 
@@ -138,13 +143,14 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             etSignInEmail.setOnFieldFilledListener(formFillCheckerOne);
             etSignInEmail.setOnValidateListener(new AppcompatEditTextWithWatcher.OnValidateListener() {
                 @Override
-                public void validate() {
+                public boolean validate(boolean showErrorMsg) {
                     String inputString = etSignInEmail.getTag().toString();
                     if(!inputString.equals("") && !FormValidation.isEmailValid(inputString.toString())) {
-                        tilSignInEmail.setError(getString(R.string.warning_not_valid_address));
-                        etSignInEmail.getOnFieldFilledListener().isFieldFilled(etSignInEmail, false);
+                        if(showErrorMsg) tilSignInEmail.setError(getString(R.string.warning_not_valid_address));
+                        return false;
                     } else {
                         tilSignInEmail.setErrorEnabled(false);
+                        return true;
                     }
                 }
             });
@@ -159,8 +165,8 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             getSupportActionBar().setTitle(getString(R.string.signin_sign_up));
             formFillCheckerTwo = new FormFillChecker(this);
 
-            llSignInCreateAccount = (LinearLayout) findViewById(R.id.llSignInCreateAccount);
-            llSignInCreateAccount.setOnClickListener(new View.OnClickListener() {
+            llSignInCreateAccountReset = (LinearLayout) findViewById(R.id.llSignInCreateAccount);
+            llSignInCreateAccountReset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(SignInActivity.this, "CREATING ACCOUNT", Toast.LENGTH_SHORT).show();
@@ -172,13 +178,13 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             tvSignIn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    changeScene();
+                    changeScene(mScene1);
                 }
             });
 
             //FULL NAME
             final AppcompatEditTextWithWatcher etCreateAccountFullName = (AppcompatEditTextWithWatcher) findViewById(R.id.etFirst);
-            etCreateAccountFullName.setOnFieldFilledListener(formFillCheckerOne);
+            etCreateAccountFullName.setOnFieldFilledListener(formFillCheckerTwo);
 
             //EMAIL
             final TextInputLayout tilCreateAccountEmail = (TextInputLayout) findViewById(R.id.tilSecond);
@@ -186,13 +192,15 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             etCreateAccountEmail.setOnFieldFilledListener(formFillCheckerTwo);
             etCreateAccountEmail.setOnValidateListener(new AppcompatEditTextWithWatcher.OnValidateListener() {
                 @Override
-                public void validate() {
+                public boolean validate(boolean showErrorMsg) {
                     String inputString = etCreateAccountEmail.getTag().toString();
                     if(!inputString.equals("") && !FormValidation.isEmailValid(inputString)) {
-                        tilCreateAccountEmail.setError(getString(R.string.warning_not_valid_address));
-                        etCreateAccountEmail.getOnFieldFilledListener().isFieldFilled(etCreateAccountEmail, false);
+                        if(showErrorMsg) tilCreateAccountEmail.setError(getString(R.string.warning_not_valid_address));
+                        return false;
                     } else {
                         tilCreateAccountEmail.setErrorEnabled(false);
+
+                        return true;
                     }
                 }
             });
@@ -209,24 +217,29 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             etCreateAccountPassword.setOnFieldFilledListener(formFillCheckerTwo);
             etCreateAccountPassword.setOnValidateListener(new AppcompatEditTextWithWatcher.OnValidateListener() {
                 @Override
-                public void validate() {
+                public boolean validate(boolean showErrorMsg) {
                     String inputString = etCreateAccountPassword.getTag().toString();
                     String inputStringConfirm = etCreateAccountConfirm.getTag().toString();
 
                     if(!inputString.equals("")) {
                         if(!FormValidation.isNameLongEnough(inputString)) {
-                            tilCreateAccountPassword.setError(getString(R.string.warning_must_be_longer));
-                            etCreateAccountPassword.getOnFieldFilledListener().isFieldFilled(etCreateAccountPassword, false);
+                            if(showErrorMsg)tilCreateAccountPassword.setError(getString(R.string.warning_must_be_longer));
+                            return false;
                         } else if(!inputStringConfirm.equals("") && !inputString.equals(inputStringConfirm)) {
-                            tilCreateAccountPassword.setError(getString(R.string.warning_two_passwords_not_equal));
-                            etCreateAccountPassword.getOnFieldFilledListener().isFieldFilled(etCreateAccountPassword, false);
+                            if(showErrorMsg)tilCreateAccountPassword.setError(getString(R.string.warning_two_passwords_not_equal));
+                            return false;
                         } else {
+                            if(inputString.equals(inputStringConfirm)) etCreateAccountConfirm.getOnFieldFilledListener().isFieldFilled(etCreateAccountConfirm, true);
                             tilCreateAccountPassword.setErrorEnabled(false);
+                            tilCreateAccountConfirm.setErrorEnabled(false);
+                            return true;
                         }
                     } else {
                         tilCreateAccountPassword.setErrorEnabled(false);
+                        tilCreateAccountConfirm.setErrorEnabled(false);
+                        etCreateAccountConfirm.getOnFieldFilledListener().isFieldFilled(etCreateAccountConfirm, true);
+                        return true;
                     }
-//                    if(etCreateAccountConfirm.getOnValidateListener() != null) etCreateAccountConfirm.getOnValidateListener().validate();
                 }
             });
 
@@ -235,58 +248,133 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             etCreateAccountConfirm.setOnFieldFilledListener(formFillCheckerTwo);
             etCreateAccountConfirm.setOnValidateListener(new AppcompatEditTextWithWatcher.OnValidateListener() {
                 @Override
-                public void validate() {
+                public boolean validate(boolean showErrorMsg) {
 
                     String inputString = etCreateAccountConfirm.getTag().toString();
                     String inputStringPassword = etCreateAccountPassword.getTag().toString();
 
-
                     if(!inputString.equals("")) {
                         if(!FormValidation.isNameLongEnough(inputString)) {
-                            tilCreateAccountConfirm.setError(getString(R.string.warning_must_be_longer));
-                            etCreateAccountConfirm.getOnFieldFilledListener().isFieldFilled(etCreateAccountConfirm, false);
+                            if(showErrorMsg)tilCreateAccountConfirm.setError(getString(R.string.warning_must_be_longer));
+                            return false;
                         } else if(!inputStringPassword.equals("") && !inputString.equals(inputStringPassword)) {
-                            tilCreateAccountConfirm.setError(getString(R.string.warning_two_passwords_not_equal));
-                            etCreateAccountConfirm.getOnFieldFilledListener().isFieldFilled(etCreateAccountConfirm, false);
+                            if(showErrorMsg)tilCreateAccountConfirm.setError(getString(R.string.warning_two_passwords_not_equal));
+                            return false;
                         } else {
+                            if(inputString.equals(inputStringPassword)) etCreateAccountPassword.getOnFieldFilledListener().isFieldFilled(etCreateAccountPassword, true);
                             tilCreateAccountConfirm.setErrorEnabled(false);
+                            tilCreateAccountPassword.setErrorEnabled(false);
+                            return true;
                         }
                     } else {
                         tilCreateAccountConfirm.setErrorEnabled(false);
+                        tilCreateAccountPassword.setErrorEnabled(false);
+                        etCreateAccountPassword.getOnFieldFilledListener().isFieldFilled(etCreateAccountPassword, true);
+                        return true;
                     }
-                    if(etCreateAccountPassword.getOnValidateListener() != null) etCreateAccountPassword.getOnValidateListener().validate();
                 }
             });
 
 
             //DATE OF BIRTH
             final TextInputLayout tilCreateAccountBirth = (TextInputLayout) findViewById(R.id.tilFifth);
-            final AppcompatEditTextWithWatcher etCreateAccountBirth = (AppcompatEditTextWithWatcher) findViewById(R.id.etFifth);
+            etCreateAccountBirth = (AppcompatEditTextWithWatcher) findViewById(R.id.etFifth);
             etCreateAccountBirth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if(b) {
                         DialogFragment newFragment = new BirthDayPickerFragment();
                         newFragment.show(getSupportFragmentManager(), "datePicker");
+                    } else {
+                        etCreateAccountBirth.getOnValidateListener().validate(true);
                     }
                 }
             });
             etCreateAccountBirth.setOnFieldFilledListener(formFillCheckerTwo);
             etCreateAccountBirth.setOnValidateListener(new AppcompatEditTextWithWatcher.OnValidateListener() {
                 @Override
-                public void validate() {
+                public boolean validate(boolean showErrorMsg) {
+                    if(etCreateAccountBirth.getTag().toString().equals("")) {
+                        tilCreateAccountBirth.setErrorEnabled(false);
+                        etCreateAccountBirth.getOnFieldFilledListener().isFieldFilled(etCreateAccountBirth, true);
+                        return true;
+                    } else if(etCreateAccountBirth.getTag() instanceof GregorianCalendar) {
+                        Calendar datePicked = (GregorianCalendar) etCreateAccountBirth.getTag(); // calendar
+                        if(FormValidation.isDateBeforeToday(datePicked)) {
+                            tilCreateAccountBirth.setErrorEnabled(false);
+                            etCreateAccountBirth.getOnFieldFilledListener().isFieldFilled(etCreateAccountBirth, true);
+                            return true;
+                        } else {
+                            if(showErrorMsg)tilCreateAccountBirth.setError(getString(R.string.warning_pick_earlier_date));
+                            etCreateAccountBirth.getOnFieldFilledListener().isFieldFilled(etCreateAccountBirth, false);
+                            return false;
+                        }
+
+                    } else {
+                        if(showErrorMsg) tilCreateAccountBirth.setError(getString(R.string.warning_wrong_date_format));
+                        etCreateAccountBirth.getOnFieldFilledListener().isFieldFilled(etCreateAccountBirth, false);
+                        return false;
+                    }
+
 
                 }
             });
 
+            formFillCheckerTwo.addEditText(etCreateAccountFullName, etCreateAccountEmail, etCreateAccountPassword, etCreateAccountConfirm, etCreateAccountBirth);
+            etCreateAccountBirth.getOnFieldFilledListener().isFieldFilled(etCreateAccountBirth, true); //because birthday's optional, set the default to true
+        } else if (mScene == mScene3){
 
-            formFillCheckerOne.addEditText(etCreateAccountFullName, etCreateAccountEmail);
+
+
+            //SIGN IN SCENE
+            getSupportActionBar().setTitle(getString(R.string.signin_password_reset));
+            formFillCheckerThree = new FormFillChecker(this);
+
+            llSignInCreateAccountReset = (LinearLayout) findViewById(R.id.llSignInCreateAccount);
+            llSignInCreateAccountReset.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(SignInActivity.this, "Send Reset Instruction", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            tvSignIn = (TextView) findViewById(R.id.tvSignIn);
+            tvSignIn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    changeScene(mScene2);
+                }
+            });
+
+
+            //EMAIL
+            final TextInputLayout tilSignInEmail = (TextInputLayout) findViewById(R.id.tilFirst);
+            final AppcompatEditTextWithWatcher etSignInEmail = (AppcompatEditTextWithWatcher) findViewById(R.id.etFirst);
+
+            etSignInEmail.setOnFieldFilledListener(formFillCheckerThree);
+            etSignInEmail.setOnValidateListener(new AppcompatEditTextWithWatcher.OnValidateListener() {
+                @Override
+                public boolean validate(boolean showErrorMsg) {
+                    String inputString = etSignInEmail.getTag().toString();
+                    if(!inputString.equals("") && !FormValidation.isEmailValid(inputString.toString())) {
+                        if(showErrorMsg) tilSignInEmail.setError(getString(R.string.warning_not_valid_address));
+                        return false;
+                    } else {
+                        tilSignInEmail.setErrorEnabled(false);
+                        return true;
+                    }
+                }
+            });
+
+            formFillCheckerThree.addEditText(etSignInEmail);
         }
     }
 
-    private void changeScene(){
-        if(mScene == mScene1) mScene = mScene2;
+    private void changeScene(Scene scene){
+        /*if(mScene == mScene1) mScene = mScene2;
         else if(mScene == mScene2) mScene = mScene1;
+        else if(mScene == mScene3) mScene = mScene2;*/
+        mScene = scene;
         TransitionManager.go(mScene);
         ButterKnife.bind(this);
         validateView();
@@ -296,18 +384,28 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     public void isFieldsCompletelyFilled(boolean filled) {
         if(mScene == mScene1) {
             if(filled) {
-                llSignInCreateAccount.setBackgroundColor(getResources().getColor(R.color.sign_in_red));
-                llSignInCreateAccount.setClickable(true);
-                for (AppcompatEditTextWithWatcher textInputLayoutListener : formFillCheckerOne.getEditTextmap().keySet()) {
-                    if(textInputLayoutListener.getOnValidateListener() != null) textInputLayoutListener.getOnValidateListener().validate();
-                }
+                llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_red));
+                llSignInCreateAccountReset.setClickable(true);
             } else {
-                llSignInCreateAccount.setBackgroundColor(getResources().getColor(R.color.sign_in_disabled));
-                llSignInCreateAccount.setClickable(false);
+                llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_disabled));
+                llSignInCreateAccountReset.setClickable(false);
             }
-
         } else if(mScene == mScene2) {
-
+            if(filled) {
+                llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_red));
+                llSignInCreateAccountReset.setClickable(true);
+            } else {
+                llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_disabled));
+                llSignInCreateAccountReset.setClickable(false);
+            }
+        }  else if(mScene == mScene3) {
+            if(filled) {
+                llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_red));
+                llSignInCreateAccountReset.setClickable(true);
+            } else {
+                llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_disabled));
+                llSignInCreateAccountReset.setClickable(false);
+            }
         }
     }
 
@@ -323,11 +421,26 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
     @Optional
     @OnClick(R.id.tvTerms) void onClickTerms(View v) {
-        Toast.makeText(this, "Terms", Toast.LENGTH_SHORT).show();
+        Utility.openWebPage(this, getString(R.string.url_terms));
+    }
+
+    @Optional
+    @OnClick(R.id.tvForgotPassword) void onClickForgotPassword(View v) {
+        changeScene(mScene3);
     }
 
     @Override
-    public void onBirthdaySelected(GregorianCalendar birthday) {
+    public void onBirthdaySelected(GregorianCalendar date) {
+        String birthdayString = date.getDisplayName(GregorianCalendar.MONTH, GregorianCalendar.LONG,
+                Locale.getDefault()) + " " + date.get(GregorianCalendar.DAY_OF_MONTH) + ", "
+                + date.get(GregorianCalendar.YEAR);
+
+        etCreateAccountBirth.setText(birthdayString);
+        etCreateAccountBirth.setTag(date);
+        etCreateAccountBirth.getOnValidateListener().validate(true);
+        /*birthdateView.setText(birthdayString);
+        birthdateView.setTag(date); //Store the entered date with the view so we can use it later
+        birthDate = date;   //temp fix for Select Info frag blowing away birthday*/
 
     }
 

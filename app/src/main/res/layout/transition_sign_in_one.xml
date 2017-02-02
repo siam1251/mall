@@ -112,6 +112,8 @@
             android:layout_centerHorizontal="true"
             android:layout_height="60dp"
             android:gravity="center"
+            android:id="@+id/tvForgotPassword"
+            android:onClick="onClickForgotPassword"
             />
 
 

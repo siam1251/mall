@@ -22,7 +22,7 @@ public class AppcompatEditTextWithWatcher extends AppCompatEditText implements T
     private FormFillInterface.OnFieldFilledListener onFieldFilledListener;
 
     public interface OnValidateListener {
-        void validate();
+        boolean validate(boolean showErrorMsg);
     }
 
     public AppcompatEditTextWithWatcher(Context context) {
@@ -65,8 +65,13 @@ public class AppcompatEditTextWithWatcher extends AppCompatEditText implements T
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         this.setTag(charSequence);
         if(onFieldFilledListener != null) {
-            if(!charSequence.toString().equals("")) onFieldFilledListener.isFieldFilled(this, true);
-            else onFieldFilledListener.isFieldFilled(this, false);
+            if(!charSequence.toString().equals("")) {
+                boolean isFieldValidated = true;
+                if(onValidateListener != null) isFieldValidated = onValidateListener.validate(false);
+                onFieldFilledListener.isFieldFilled(this, true && isFieldValidated);
+            } else {
+                onFieldFilledListener.isFieldFilled(this, false);
+            }
         }
     }
 
@@ -78,8 +83,10 @@ public class AppcompatEditTextWithWatcher extends AppCompatEditText implements T
     private OnFocusChangeListener onFocusChangeListener = new OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean b) {
-            if(onValidateListener != null && !b) {
-                onValidateListener.validate();
+            if(onValidateListener != null){
+                if(!b) {
+                    onValidateListener.validate(true);
+                }
             }
         }
     };

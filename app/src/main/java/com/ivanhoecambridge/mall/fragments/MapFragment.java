@@ -1646,25 +1646,9 @@ public class MapFragment extends BaseFragment
         if(mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
         mBlueDotCompass = new Pin(coordinate, label);
         mBlueDotCompass.setCoordinate(coordinate);
-//        float rotationBy = tempHeading - heading;
-//        label.setRotation((float)Math.toRadians(rotationBy));
-
-        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        final Runnable task = new Runnable() {
-            public void run() {
-                label.setRotation((float)Math.toRadians( 1.8 ));
-            }
-        };
-        final ScheduledFuture<?> handle =
-                scheduler.scheduleAtFixedRate(task, 0, 10, MILLISECONDS);
-        scheduler.schedule(new Runnable() {
-            public void run() { handle.cancel(true); }
-        }, 1, SECONDS);
-
-
+        label.setRotation((float)Math.toRadians(heading));
         label.setPosition(coordinate);
         mapView.addMarker(label, false);
-//        Log.d(TAG, "heading: " + rotationBy);
         tempHeading = heading;
         headingDropped = true;
 
