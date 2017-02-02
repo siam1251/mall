@@ -231,11 +231,6 @@ public class MainActivity extends BaseActivity
         mSplashThread.start();
         initializeToolbar();
 
-        //disabling the default navigation drawer
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
-
-
         rvMallDirectory = (RecyclerView) findViewById(R.id.rvMallDirectory);
         rvMap = (IndexableRecylerView) findViewById(R.id.rvMap);
 
@@ -275,7 +270,6 @@ public class MainActivity extends BaseActivity
                         BluetoothManager bluetoothManager = new BluetoothManager(MainActivity.this);
                         bluetoothManager.turnOnBluetooth();
                     }
-//                    if(mOnParkingClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING, false)) mOnParkingClickListener.onParkingClick(true, false);
                     if(mOnDealsClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_DEAL, false)) mOnDealsClickListener.onDealsClick(true);
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
@@ -283,7 +277,6 @@ public class MainActivity extends BaseActivity
                     if(MapFragment.getInstance().mSearchItem != null) MapFragment.getInstance().mSearchItem.collapseActionView();
                 } else {
                     if(rlDestinationEditor.getVisibility() == View.VISIBLE) MapFragment.getInstance().didTapNothing();
-//                    toggleDestinationEditor(true, null, null, null);
                     mViewPager.setPagingEnabled(true);
                     setToolbarElevation(false);
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
@@ -531,10 +524,7 @@ public class MainActivity extends BaseActivity
                     @Override
                     public void onAnimationRepeat(Animation animation) {}
                 });
-//                MapFragment.getInstance().slideDownCompass(false);
             }
-            //TODO: 12/08 it was uncommented - clicked amenity detail is hidden when changing the tab and when coming back to it, there's not way to reshow it
-//            MapFragment.getInstance().showDirectionCard(false, null, 0, null, null, null);
         } else {
             etStartStore.setOnFocusChangeListener(focusListener);
             etDestStore.setOnFocusChangeListener(focusListener);
@@ -547,27 +537,17 @@ public class MainActivity extends BaseActivity
             rlDestinationEditor.startAnimation(slideDownAnimation);
             slideDownAnimation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
+                public void onAnimationStart(Animation animation) {}
 
                 @Override
-                public void onAnimationEnd(Animation animation) {
-                }
+                public void onAnimationEnd(Animation animation) {}
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
+                public void onAnimationRepeat(Animation animation) {}
             });
 
             setDestionationNames(start, dest); //set destination names - ex) start : A&W , destionation : Club Monaco
             moveFocusToNextEditText();
-//            MapFragment.getInstance().slideDownCompass(true);
-
-//            if(start == null || start.equals("")) etStartStore.requestFocus(); //if start name is empty, request focus to destination
-//            else etDestStore.requestFocus();
-//            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
     }
 
@@ -735,7 +715,6 @@ public class MainActivity extends BaseActivity
         });
 
         ImageView ivDrawerLayoutUser = (ImageView) findViewById(R.id.ivDrawerLayoutUser);
-//        ivDrawerLayoutUser.setImageResource(R.drawable.test_profile);
         ivDrawerLayoutUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -845,7 +824,6 @@ public class MainActivity extends BaseActivity
             RecyclerView rvTodaysDeals = (RecyclerView) findViewById(R.id.rvTodaysDeals);
             RecyclerView rvTodaysEvents = (RecyclerView) findViewById(R.id.rvTodaysEvents);
             flActiveMallDot = (FrameLayout) findViewById(R.id.flActiveMallDot);
-//            flActiveMallDot = (FrameLayout) mToolbar.findViewById(R.id.flActiveMallDot);
 
             TextView tvMyFav = (TextView) findViewById(R.id.tvMyFav);
             TextView tvMyGC = (TextView) findViewById(R.id.tvMyGC);
@@ -973,7 +951,6 @@ public class MainActivity extends BaseActivity
 
                 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
                 if(mGeofenceManager != null) mGeofenceManager.setGeofence(false); //now it has detected the geofence, turn off the monitoring to save battery power
-//                v.vibrate(500);
 
             } else {
                 Log.v("Geofence", "Active Mall Set FALSE");
@@ -988,17 +965,6 @@ public class MainActivity extends BaseActivity
                 drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_bg_inactive);
                 privacyTextColor = getResources().getColor(R.color.privacy_policy_text_color);
                 versionNumberTextColor = getResources().getColor(R.color.insta_desc_color);
-
-
-                if (mOfflineSnackbar != null){
-//                    mOfflineSnackbar.dismiss();
-//                    mOfflineSnackbar = null; //TESTING - why setting it to null?
-                }
-
-
-                Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-//                v.vibrate(500);
-//                Toast.makeText(MainActivity.this, " TEST - Exited Geofence ", Toast.LENGTH_SHORT).show();
             }
 
             scLeftPanel.setBackgroundColor(panelBackgroundColor);
@@ -1016,7 +982,6 @@ public class MainActivity extends BaseActivity
             tvEvents.setTextColor(generalTextColor);
             tvStores.setTextColor(generalTextColor);
             tvInterests.setTextColor(generalTextColor);
-//            ivDrawerLayoutBg.setImageDrawable(drawerLayoutBgDrawable);
             tvPrivacyPolicy.setTextColor(privacyTextColor);
             tvTermsOfService.setTextColor(privacyTextColor);
             tvDot.setTextColor(privacyTextColor);
@@ -1315,8 +1280,6 @@ public class MainActivity extends BaseActivity
             if (fragmentManager.getBackStackEntryCount() < 1) {
                 super.onBackPressed();
             } else {
-//                fragmentManager.executePendingTransactions();
-//                fragmentManager.popBackStack();
                 fragmentManager.popBackStackImmediate();
                 fragmentManager.executePendingTransactions();
                 if (fragmentManager.getBackStackEntryCount() < 1) {
@@ -1381,7 +1344,6 @@ public class MainActivity extends BaseActivity
     }
 
     public void selectPage(int pageIndex){
-//        tabLayout.setScrollPosition(pageIndex, 0f, true);
         mDrawer.closeDrawers();
         mViewPager.setCurrentItem(pageIndex);
     }

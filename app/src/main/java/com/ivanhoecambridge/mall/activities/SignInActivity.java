@@ -37,10 +37,6 @@ import butterknife.Optional;
 
 public class SignInActivity extends BaseActivity implements FormFillInterface, BirthDayPickerFragment.DateSelectedListener {
 
-
-    /*@BindView(R.id.tilFirst) TextInputLayout tilFirst;
-    @BindView(R.id.tilSecond) TextInputLayout tilSecond;*/
-
     ViewGroup rootContainer;
     private Scene mScene1;
     private Scene mScene2;
@@ -52,26 +48,16 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
     //SCENE COMMON
     TextView tvSignIn;
-    //    TextInputLayout tilFirst;
-//    TextInputLayout tilSecond;
-//    TextInputLayoutListener etFirst;
-//    TextInputLayoutListener etSecond;
     LinearLayout llSignInCreateAccountReset;
 
     //SCENE 1
-//    CardView cvFb;
-//    CardView cvGoogle;
 
     //SCENE2
     private AppcompatEditTextWithWatcher etCreateAccountBirth;
 
-
     EditText etThird;
     EditText etFourth;
     EditText etFifth;
-
-    //SET ERROR TO ET - LITTLE DOT ON THE RIGHT
-    //SET ERROR TO TIL - ERROR MSG
 
     @Override
     protected void onResume() {
@@ -108,6 +94,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
         initializeView();
         validateView();
     }
+
 
     private void initializeView() {
 
@@ -275,7 +262,6 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
                 }
             });
 
-
             //DATE OF BIRTH
             final TextInputLayout tilCreateAccountBirth = (TextInputLayout) findViewById(R.id.tilFifth);
             etCreateAccountBirth = (AppcompatEditTextWithWatcher) findViewById(R.id.etFifth);
@@ -371,9 +357,6 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     }
 
     private void changeScene(Scene scene){
-        /*if(mScene == mScene1) mScene = mScene2;
-        else if(mScene == mScene2) mScene = mScene1;
-        else if(mScene == mScene3) mScene = mScene2;*/
         mScene = scene;
         TransitionManager.go(mScene);
         ButterKnife.bind(this);
@@ -438,10 +421,6 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
         etCreateAccountBirth.setText(birthdayString);
         etCreateAccountBirth.setTag(date);
         etCreateAccountBirth.getOnValidateListener().validate(true);
-        /*birthdateView.setText(birthdayString);
-        birthdateView.setTag(date); //Store the entered date with the view so we can use it later
-        birthDate = date;   //temp fix for Select Info frag blowing away birthday*/
-
     }
 
 
@@ -464,7 +443,4 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     public void onBackPressed() {
         finishActivity();
     }
-
-
-
 }

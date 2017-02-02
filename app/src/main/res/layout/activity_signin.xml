@@ -33,7 +33,5 @@
                 layout="@layout/transition_sign_in_one" />
 
         </FrameLayout>
-
-
     </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>

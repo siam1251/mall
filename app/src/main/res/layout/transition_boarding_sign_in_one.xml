@@ -61,23 +61,6 @@
         </FrameLayout>
     </android.support.v7.widget.CardView>
 
-    <!--<com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-        style="@style/SelectableItemForegroundNormal"
-        android:layout_marginBottom="48dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        app:fontFamily="@string/fontFamily_roboto_bold"
-        android:id="@+id/tvSignUp"
-        android:textColor="@color/themeColor"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:background="@drawable/btn_style_corner_radius_white_with_selected_state_signin"
-        android:text="@string/signin_sign_up"
-        android:textSize="16dp"
-        />-->
-
-
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:layout_marginBottom="20dp"
         android:layout_above="@+id/cvSignUp"

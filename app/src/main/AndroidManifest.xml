@@ -110,10 +110,6 @@
                 android:value="com.ivanhoecambridge.mall.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.ProfileInformationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base" />
-        <activity
             android:name=".activities.MyPagesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
@@ -193,7 +189,7 @@
 
         <!-- ETPushReceiver and Service -->
         <!--<receiver
-            android:name="com.e xacttarget.etpushsdk.ETPushReceiver"
+            android:name="com.exacttarget.etpushsdk.ETPushReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.ivanhoecambridge.mall.MESSAGE_OPENED" />
