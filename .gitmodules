@@ -1,0 +1,4 @@
+[submodule "submodules/kclib-android-kcpservice"]
+	path = submodules/kclib-android-kcpservice
+	url = git@bitbucket.org:halogenmobile/kclib-android-kcpservice.git
+	branch = master

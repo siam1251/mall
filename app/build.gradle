@@ -112,7 +112,7 @@ android {
             versionName "1.0.0"
         }
 
-        senionDemo {
+        seniondemo {
             applicationId "com.ivanhoecambridge.mall.seniondemo"
             buildConfigField 'String', 'MALL', '"Kinetic Cafe Office"'
             buildConfigField 'Boolean', 'PUSH', 'false'
