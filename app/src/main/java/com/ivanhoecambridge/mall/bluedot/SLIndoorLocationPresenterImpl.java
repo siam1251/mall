@@ -86,7 +86,6 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         }
     }
 
-
     public SLIndoorLocationPresenterImpl(Context context, MapViewWithBlueDot mapViewWithBlueDot) {
         this.mContext = context;
         this.mapViewWithBlueDot = mapViewWithBlueDot;
@@ -94,7 +93,6 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         sLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         sCoordinateListener = new CoordinateListener(positionAndHeadingMapVisualization);
     }
-
 
     @Override
     public void onResume() {
@@ -139,7 +137,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         }
         @Override
         public void didUpdateHeading(double heading, SLHeadingStatus status) {
-//            Log.d("bluedot", "BlueDotPosition: "  + " headingRaw: " + heading);
+//            Log.d("bluedot", "BlueDotPosition: "  + " headingRaw: " + heading); //testing
             positionAndHeadingMapVisualization.setHeading((float) heading, status);
         }
 
@@ -149,14 +147,11 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         @Override
         public void errorWhileLoadingManager(String errorMsg) {
             logger.debug("errorWhileLoadingManager++" + " errorMsg: " + errorMsg);
-
-            // Handle error here
         }
 
         @Override
         public void didUpdateMotionType(SLMotionType motionType) {
-//            logger.debug("didUpdateMotionType++" + " SLMotionType: " + motionType);
-            // Do something with the motion type here
+//            logger.debug("didUpdateMotionType++" + " SLMotionType: " + motionType); //testing
         }
 
         @Override
@@ -174,7 +169,6 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         @Override
         public void errorWifiNotEnabled() {
             logger.debug("errorWifiNotEnabled++");
-            // Prompt the user to enable WiFi
         }
         @Override
         public void didEnterGeometry(SLGeometry geometry) {
@@ -187,10 +181,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
             logger.debug("didLeaveGeometry++");
             GEOFENCE_LOCATIONS.get(geometry.getGeometryId()).setDidEnterGeofence(false);
             updateFromGPS();
-//            mapViewWithBlueDot.removeBlueDot();
-
-
-
+//            mapViewWithBlueDot.removeBlueDot(); //todo: remove blue dots here?
         }
     };
 
@@ -211,10 +202,10 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
                         }
                     }
                 } else {
-//                Toast.makeText(mContext, "using GPS STOPPEDDDDDDDDDDDDDD", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "using GPS STOPPEDDDDDDDDDDDDDD", Toast.LENGTH_SHORT).show(); //testing
                     sCoordinateListener.setUpdating(false);
                     sLocationManager.removeUpdates(sCoordinateListener);
-//                sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.BEACON;
+//                sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.BEACON; //testing
                 }
             }
         }
@@ -229,12 +220,10 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
     @Override
     public void onPause() {
-
     }
 
     @Override
     public void onDestroy() {
-
         if (serviceManager != null) {
             serviceManager.unregisterReceiver(receiver);
             try {
@@ -243,7 +232,6 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
                 e.printStackTrace();
             }
         }
-
     }
 
     private void didBindAndLoad() {
@@ -254,10 +242,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         } catch (SLIndoorLocationException e) {
             e.printStackTrace();
         }
-
     }
-
-
 
     @Override
     public Context getContext() {

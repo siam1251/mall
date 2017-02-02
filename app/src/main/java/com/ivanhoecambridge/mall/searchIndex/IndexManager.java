@@ -39,7 +39,6 @@ import retrofit2.http.Url;
  */
 public class IndexManager {
 
-
     protected Handler mHandler;
     protected Logger logger = null;
     protected Context mContext;
@@ -62,7 +61,6 @@ public class IndexManager {
     public static Map<String, ArrayList<Integer>> sTagsMap = new HashMap<>();
 
     private static final String HEADER_KEY_CONTENT_TYPE     = "Content-Type";
-
 
 
     public IndexService getKcpService(){
@@ -101,10 +99,8 @@ public class IndexManager {
                 ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, true);
                 break;
             case DOWNLOAD_FAILED:
-//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
                 break;
             case DOWNLOAD_COMPLETE:
-//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
                 break;
             case DATA_ADDED:
                 break;
@@ -174,7 +170,6 @@ public class IndexManager {
 
     }
 
-
     public void prepareIndexes(byte[] result){
         try {
             if(result == null) return;
@@ -213,9 +208,6 @@ public class IndexManager {
             e.printStackTrace();
         }
     }
-
-
-
 }
 
 

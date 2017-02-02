@@ -17,8 +17,6 @@ import android.view.View;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class BlurBuilder {
-    /*private static final float BITMAP_SCALE = 0.4f;
-    private static final float BLUR_RADIUS = 7.5f;*/
 
     private static final float BITMAP_SCALE = 0.1f;
     private static final float BLUR_RADIUS = 25f;

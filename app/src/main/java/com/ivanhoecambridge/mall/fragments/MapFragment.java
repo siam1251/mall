@@ -115,35 +115,15 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 /**
  * Created by Kay on 2016-06-20.
  */
-//public class MapFragment extends SLIndoorLocationServiceFragment implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot {
 public class MapFragment extends BaseFragment
         implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot, ParkingPinInterface {
 
     private final String TAG = "MapFragment";
-
     private static MapFragment sMapFragment;
     public static MapFragment getInstance(){
         if(sMapFragment == null) sMapFragment = new MapFragment();
         return sMapFragment;
     }
-
-    @Override
-    public void removeParkingPinAtLocation(CustomLocation parkingLocationPin) {
-        removePin(parkingLocationPin);
-    }
-
-    @Override
-    public void removeParkingPinAtCoordinate(Pin parkingCoordinatePin) {
-        if(parkingCoordinatePin != null) {
-            removePin(parkingCoordinatePin.getOverlay2DImage(), parkingCoordinatePin.getCoordinate());
-        }
-    }
-
-    @Override
-    public void removeTempParkingPinAtCoordinate(Pin parkingCoordinatePin) {
-        mapView.removeMarker(parkingCoordinatePin.getOverlay2DImage());
-    }
-
 
     enum SearchMode { STORE, ROUTE_START, ROUTE_DESTINATION }
     public SearchMode mSearchMode = SearchMode.STORE;
@@ -153,7 +133,6 @@ public class MapFragment extends BaseFragment
     private ProgressBar pb;
     private View view;
     private SearchView mSearchView;
-    //    private IndexableRecylerView rvMap;
     private RelativeLayout rlDirection;
     private TextView tvStoreName;
     private TextView tvCategoryName;
@@ -174,8 +153,6 @@ public class MapFragment extends BaseFragment
     private RelativeLayout rlLower;
     private ThemeColorImageView ivUpper;
     private ThemeColorImageView ivLower;
-    //    private ImageView ivUpper;
-//    private ImageView ivLower;
     private ThemeColorImageView ivUpperBg;
     private ThemeColorImageView ivLowerBg;
     private ImageView ivAmenity;
@@ -192,28 +169,21 @@ public class MapFragment extends BaseFragment
     public MenuItem mSearchItem;
     private MenuItem mFilterItem;
     public CategoryStoreRecyclerViewAdapter mPlaceRecyclerViewAdapter;
-    //    private ArrayList<String> mRecommendedDealsExternalCodeList;
     private ArrayList<KcpContentPage> mRecommendedDealsContentPageList;
     private Drawable mAmeityDrawable;
 
+    private int upperLevel;
+    private int lowerLevel;
+
     //MAPPED IN
-    //when using getOverlayImageWithPadding
     private final int PIN_AMENITY_IMAGE_SIZE_DP = 24; //ends up 64 px
     private final int PIN_VORTEX_IMAGE_SIZE_DP = 24; //ends up 64 px
     private final int PIN_BLUEDOT = 72; //ends up 64 px
     private final int PIN_PARKING_IMAGE_SIZE_DP = 30; //ends up 64 px
 
-    /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 60;
-    private final int PIN_PARKING_IMAGE_SIZE_DP = 60;*/
-
-    /*private final int PIN_AMENITY_IMAGE_SIZE_DP = 97;
-    private final int PIN_PARKING_IMAGE_SIZE_DP = 97;*/ //use with Overlay2DImage but the pin size varies a bit depending on the device resolution as of 0.4.5
-
 
     private final int CAMERA_ZOOM_LEVEL_NEAREST_PARKING = 90; //
-    //    private final int CAMERA_ZOOM_LEVEL_DEFAULT = 40; //BIGGER - farther, SMALLER - closer
     private final int CAMERA_ZOOM_LEVEL_DEFAULT = 25; //BIGGER - farther, SMALLER - closer
-    private final int CAMERA_ZOOM_LEVEL_ZOOMED_IN = 2; //BIGGER - farther, SMALLER - closer
     private final int BLUR_RADIUS = 20;
     private boolean accessibleDirections = false;
     private MapViewDelegate delegate = this;
@@ -234,12 +204,8 @@ public class MapFragment extends BaseFragment
     private Polygon mSavedParkingPolygon = null;
     private int mOriginalColorsForParking; //original colors for parking used to clear its highlights on polygon
     private int mCurrentLevelIndex = -50;
-    //    private CustomLocation mSavedParkingLocation;
     private CustomLocation mTemporaryParkingLocation; //used to show the temporary parking spot from detail activity
-
     public String mPendingExternalCode;
-    /*private Overlay2DImage mSelectedPin = null;//to keep track of highlited amenity drawable to set back to the original state in clearHighlighted
-    private Overlay2DImage mRemovedPin = null; //overlayImage that was replaced by mSelectedOverlayImage*/
 
     private Pin mSelectedPin;
     private Pin mRemovedPin;
@@ -266,9 +232,6 @@ public class MapFragment extends BaseFragment
     private static ParkingPin sParkingPin;
     private SLHeadingStatus mSLHeadingStatus = SLHeadingStatus.UNDEFINED;
     private float mHeading;
-
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -343,7 +306,7 @@ public class MapFragment extends BaseFragment
         ivTest = (ImageView) view.findViewById(R.id.ivTest);
         ivTest.setOnClickListener(onTestButtonListener);
 
-        if(/*BuildConfig.BLUEDOT || */BuildConfig.DEBUG) {
+        if(/*BuildConfig.BLUEDOT || */BuildConfig.DEBUG) { //testing
             ivTest.setVisibility(View.VISIBLE);
         } else {
             ivTest.setVisibility(View.GONE);
@@ -369,7 +332,6 @@ public class MapFragment extends BaseFragment
             }
         });
 
-        //todo: disabled for testing
         mMainActivity.setOnAmenityClickListener(MapFragment.this);
         mMainActivity.setOnDealsClickListener(MapFragment.this);
         mMainActivity.setOnParkingClickListener(MapFragment.this);
@@ -610,7 +572,6 @@ public class MapFragment extends BaseFragment
                     if(map.getShortName().equals(shortName)){
                         if(i == mCurrentLevelIndex) {
                             setLevelImageView(maps);
-//                            return;
                         }
                         mCurrentLevelIndex = i;
                         break;
@@ -622,7 +583,6 @@ public class MapFragment extends BaseFragment
                     if(map.getName().equals(mapName)){
                         if(i == mCurrentLevelIndex) {
                             setLevelImageView(maps);
-//                            return;
                         }
                         mCurrentLevelIndex = i;
                         break;
@@ -631,12 +591,10 @@ public class MapFragment extends BaseFragment
             } else {
                 if(mapIndex == mCurrentLevelIndex) {
                     setLevelImageView(maps);
-//                    return;
                 }
                 mCurrentLevelIndex = mapIndex;
             }
 
-//            logger.debug("setting map level: " + mCurrentLevelIndex);
             mapView.setMap(maps[mCurrentLevelIndex]);
             tvLevel.setText(maps[mCurrentLevelIndex].getShortName());
             setLevelImageView(maps);
@@ -650,26 +608,10 @@ public class MapFragment extends BaseFragment
                     showStoreOnTheMapFromDetailActivity(polygons.get(0));
                 }
             }
-
-            /*if(destinationPolygon != null) {
-                Coordinate coordinate = null;
-                if(destinationPolygon instanceof Polygon){
-                    coordinate = ((Polygon) destinationPolygon).getLocations().get(0).getNavigatableCoordinates().get(0);
-                } else if(destinationPolygon instanceof CustomLocation){
-                    List<Coordinate> coords = ((CustomLocation) destinationPolygon).getNavigatableCoordinates();
-                    coordinate = coords.get(0);
-                }
-                mapView.getCamera().focusOn(coordinate);
-                zoomInOut();
-            }*/
-
         } catch (Exception e) {
             logger.error(e);
         }
     }
-
-    private int upperLevel;
-    private int lowerLevel;
 
     private void setLevelImageView(final Map[] maps) {
         try {
@@ -709,7 +651,6 @@ public class MapFragment extends BaseFragment
             if(upperLevel >= maps.length && ivUpper.getSelectedFilterColor() != getResources().getColor(R.color.white)) {
                 ivUpper.setSelected(false);
                 rlUpper.setOnClickListener(null);
-//                ivUpper.setOnClickListener(null);
             } else {
                 ivUpper.setSelected(true);
                 rlUpper.setOnClickListener(new View.OnClickListener() {
@@ -719,26 +660,13 @@ public class MapFragment extends BaseFragment
                         setMapLevel(upperLevel, null, null);
                     }
                 });
-//                ivUpper.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        setMapLevel(upperLevel, null, null);
-//                    }
-//                });
             }
 
             if(lowerLevel < 0 && ivLower.getSelectedFilterColor() != getResources().getColor(R.color.white)) {
                 ivLower.setSelected(false);
-//                ivLower.setOnClickListener(null);
                 rlLower.setOnClickListener(null);
             } else {
                 ivLower.setSelected(true);
-                /*ivLower.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setMapLevel(lowerLevel, null, null);
-                    }
-                });*/
                 rlLower.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -795,10 +723,9 @@ public class MapFragment extends BaseFragment
 
         String storeName = getString(R.string.bluedot_my_location);
         if(mMainActivity.getDestStoreName().equals(storeName) && mBlueDotPin != null) {
-            directions = mBlueDotPin.getCoordinate().directionsTo(activeVenue, startPolygon, ((Polygon) startPolygon).getLocations().get(0), null);
-//                    directions = startPolygon.directionsTo(activeVenue, mBlueDotPin.getCoordinate(), null, null);
+            directions = mBlueDotPin.getCoordinate().directionsTo(activeVenue, startPolygon, ((Polygon) startPolygon).getLocations().get(0), null); //FROM BLUEDOT
         } else if (mMainActivity.getStartStoreName().equals(storeName) && mBlueDotPin != null){
-            directions = destinationPolygon.directionsFrom(activeVenue, mBlueDotPin.getCoordinate(), null, arriveAtLocation); //FROM BLUEDOT
+            directions = destinationPolygon.directionsFrom(activeVenue, mBlueDotPin.getCoordinate(), null, arriveAtLocation);
         }
 
         if (directions != null) {
@@ -839,7 +766,6 @@ public class MapFragment extends BaseFragment
             if (polygon.getLocations().size() == 0) { //TODO: clearHighlightedColours() used to be above this line - polygon.getLocationWithExternalCode().size() was sometimes 0 resulting in skipping highlightPolygon (it returned)
                 return true;
             }
-            /*if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName());*/
             replaceSelectedPinWithRemovedPin();
             //tapping the same polygon should dismiss the detail and remove the highlights
             if(mSearchMode.equals(SearchMode.STORE) && destinationPolygon != null && destinationPolygon == polygon && mSavedParkingPolygon != polygon) {
@@ -892,18 +818,6 @@ public class MapFragment extends BaseFragment
                     highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
                     destinationPolygonCoordinate = ((Polygon) destinationPolygon).getAnchor();
                 } else if(destinationPolygon instanceof CustomLocation && !((CustomLocation) destinationPolygon).getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) {
-                    //when path's drawn to amenity from store (ex. a&w to washroom), route's drawn to the nearest amenity. so that nearest amenity pin needs to be highlighted
-                    /*ArrayList<Coordinate> navigatableCoords = ((CustomLocation) destinationPolygon).getNavigatableCoordinates() ;
-                    Coordinate startPolygonCoord = ((Polygon) startPolygon).getLocations().get(0).getNavigatableCoordinates().get(0);
-                    if(navigatableCoords != null && startPolygonCoord != null) {
-                        int nearestCoordinatePosition = MapUtility.getNearestCoordinatePositionFromStore(navigatableCoords, startPolygonCoord);
-                        clearHighlightedColours();
-                        LocationLabelClicker locationLabelClicker = getLabelClicker(((CustomLocation) destinationPolygon).getAmenityType(), nearestCoordinatePosition);
-                        if(locationLabelClicker != null) {
-                            destinationPolygonCoordinate = navigatableCoords.get(nearestCoordinatePosition);
-                            locationLabelClicker.highlightThisLabel();
-                        }
-                    }*/
                 } else if (destinationPolygon instanceof Coordinate){
                     Coordinate startPolygonCoord = ((Polygon) startPolygon).getLocations().get(0).getNavigatableCoordinates().get(0);
                     clearHighlightedColours();
@@ -931,8 +845,6 @@ public class MapFragment extends BaseFragment
                 clearHighlightedColours();
                 if(destinationPolygon instanceof Polygon){
                     highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
-//                    mapView.getCamera().focusOn(polygon);
-//                    zoomInOut();
                     try {
                         if(mSavedParkingPolygon != null && destinationPolygon == mSavedParkingPolygon) {
                             mapView.getCamera().focusOn(polygon);
@@ -940,7 +852,6 @@ public class MapFragment extends BaseFragment
                             showSavedParkingDetail();
                         } else {
                             showLocationDetails((CustomLocation) ((Polygon) destinationPolygon).getLocations().get(0));
-//                            if(polygon.getMap().getShortName() != null) setMapLevel(-50, polygon.getMap().getShortName(), null);
                         }
                     } catch (Exception e) {
                         logger.error(e);
@@ -1078,7 +989,7 @@ public class MapFragment extends BaseFragment
                     flCompass.setVisibility(View.VISIBLE);
                     animateCompass();
                 }
-//                logger.debug("bearing :" + (float)(bearing/Math.PI*180));
+//                logger.debug("bearing :" + (float)(bearing/Math.PI*180)); //testing
                 ivCompass.setRotation((float)(bearing/Math.PI*180));
                 mBearingEntered = true;
             }
@@ -1107,8 +1018,6 @@ public class MapFragment extends BaseFragment
                 public void onAnimationRepeat(Animation animation) {}
             });
             flCompass.startAnimation(anim);
-
-
         } else {
             Animation anim = new TranslateAnimation(0, 0, 0, -yBy);
             anim.setDuration(100);
@@ -1153,17 +1062,6 @@ public class MapFragment extends BaseFragment
         }
 
         originalColors.clear();
-
-        /*if(mRemovedPin != null) {
-            mapView.addMarker(mRemovedPin, false);
-            mRemovedPin = null;
-        }
-
-        if(mSelectedPin != null) {
-            mapView.removeMarker(mSelectedPin);
-            mSelectedPin = null;
-        }*/
-
         if(mTemporaryParkingLocation != null) removePin(mTemporaryParkingLocation);
         if(sParkingPin.getTempParkingCoordinatePin() != null) {
             removePin(sParkingPin.getTempParkingCoordinatePin().getOverlay2DImage(), sParkingPin.getTempParkingCoordinatePin().getCoordinate());
@@ -1243,9 +1141,6 @@ public class MapFragment extends BaseFragment
                 getActivity().startActivityForResult(new Intent(getActivity(), ParkingActivity.class), Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
             }
         });
-
-//        ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_remove_parking));
-//        clearHighlightedColours();
     }
 
     /**
@@ -1352,7 +1247,6 @@ public class MapFragment extends BaseFragment
 
     private void setAsParkingSpot(final CustomLocation location){
         String parkingId;
-//        if(ParkingManager.isParkingLotSaved(getActivity())){
         if(ParkingManager.getParkingMode(getActivity()) == ParkingManager.ParkingMode.LOCATION){
             parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
             showMySavedParkingPolygon(false, parkingId, true);
@@ -1497,7 +1391,6 @@ public class MapFragment extends BaseFragment
                                     .with(getActivity())
                                     .load(location.logo.get(getImagePinSize()))
                                     .asBitmap()
-//                                    .into(new SimpleTarget<Bitmap>(getImagePinSize(), getImagePinSize()) {
                                     .into(new SimpleTarget<Bitmap>(MapUtility.getDp(getActivity(), PIN_AMENITY_IMAGE_SIZE_DP), MapUtility.getDp(getActivity(), PIN_AMENITY_IMAGE_SIZE_DP)) {
                                         @Override
                                         public void onResourceReady(final Bitmap resource, GlideAnimation glideAnimation) {
@@ -1514,7 +1407,6 @@ public class MapFragment extends BaseFragment
                         if(mAmenityClicked.equals(amenityName)){
                             showDirectionCard(false, null, 0, null, null, null);
                         }
-//                        mRemovedPin = null;
                         removePin(location);
                     }
                 }
@@ -1541,7 +1433,6 @@ public class MapFragment extends BaseFragment
         mapView.addMarker(label, false);
     }
 
-
     private int getImagePinSize(){
         return PIN_AMENITY_IMAGE_SIZE_DP;
     }
@@ -1550,6 +1441,22 @@ public class MapFragment extends BaseFragment
         return PIN_VORTEX_IMAGE_SIZE_DP;
     }
 
+    @Override
+    public void removeParkingPinAtLocation(CustomLocation parkingLocationPin) {
+        removePin(parkingLocationPin);
+    }
+
+    @Override
+    public void removeParkingPinAtCoordinate(Pin parkingCoordinatePin) {
+        if(parkingCoordinatePin != null) {
+            removePin(parkingCoordinatePin.getOverlay2DImage(), parkingCoordinatePin.getCoordinate());
+        }
+    }
+
+    @Override
+    public void removeTempParkingPinAtCoordinate(Pin parkingCoordinatePin) {
+        mapView.removeMarker(parkingCoordinatePin.getOverlay2DImage());
+    }
 
     @Override
     public void dropBlueDot(double x, double y, int floor) {
@@ -1563,7 +1470,6 @@ public class MapFragment extends BaseFragment
         Overlay2DImage label;
         Coordinate coordinate  = new Coordinate(targetLocation, maps[floor]);
         if(mBlueDotPin == null) {
-//            label = dropPin(coordinate, null, getResources().getDrawable(R.drawable.icn_bluebutton), PIN_BLUEDOT);
             label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluebutton), PIN_BLUEDOT/2, PIN_BLUEDOT/2);
             mBlueDotPin = new Pin(coordinate, label, x, y);
         } else {
@@ -1579,7 +1485,7 @@ public class MapFragment extends BaseFragment
     @Override
     public void dropHeading(double x, double y, final float heading, SLHeadingStatus headingStatus) {
 
-
+        //HEADING TESTING
         /*if(maps == null || mBlueDotPin == null) return;
         mHeading = heading;
         if(mSLHeadingStatus != headingStatus) { //status changed
@@ -1653,6 +1559,8 @@ public class MapFragment extends BaseFragment
         headingDropped = true;
 
     }
+
+    //TESTING
     boolean headingDropped = false;
     float tempHeading = 0f;
 
@@ -1668,7 +1576,7 @@ public class MapFragment extends BaseFragment
     private View.OnClickListener onTestButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
+        //TESTING
             /*if(tempFloor == 0) tempFloor = 1;
             else tempFloor = 0;*/
 
@@ -1684,8 +1592,6 @@ public class MapFragment extends BaseFragment
                 removeBlueDot();
                 Toast.makeText(getActivity(), "bluedot removed", Toast.LENGTH_SHORT).show();
             }*/
-
-
 
             //change between two locations at CM
             if(mBlueDotPin == null) {
@@ -1704,8 +1610,6 @@ public class MapFragment extends BaseFragment
             }
 
             dropHeading(0,0,0, null);
-
-
 
             /*if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
                 return;
@@ -1729,8 +1633,6 @@ public class MapFragment extends BaseFragment
 
             Log.d(TAG, "heading: " + tempHeading);
             headingDrawn = tempHeading;*/
-
-
         }
     };
 
@@ -1777,7 +1679,6 @@ public class MapFragment extends BaseFragment
                     } else stopNavigation();
                 }
 
-
                 Polygon placePolygon = getPolygonWithPlaceExternalId(externalCode);
                 if(placePolygon != null) {
                     mapView.getCamera().focusOn(placePolygon);
@@ -1794,7 +1695,6 @@ public class MapFragment extends BaseFragment
             }
         }
     };
-
 
     private View.OnClickListener onFollowButtonListener = new View.OnClickListener() {
         @Override
@@ -1912,8 +1812,6 @@ public class MapFragment extends BaseFragment
         mapView.addMarker(label, false);
     }
 
-
-
     private void dropDestinationPin(final Coordinate coordinate, final Drawable pinDrawable){
         Overlay2DImage label = new Overlay2DImage(getVortexAndDestinationPinSize(), getVortexAndDestinationPinSize(), pinDrawable, getVortexAndDestinationPinSize()/2, getVortexAndDestinationPinSize()/2);
         label.setPosition(coordinate);
@@ -1921,8 +1819,6 @@ public class MapFragment extends BaseFragment
         mapView.addMarker(label, false);
     }
 
-
-    //    public void clickOverlayWithNameAndPosition(String amenityName, Coordinate amenityCoordinate){
     public void clickOverlayWithNameAndPosition(String amenityName, String mapName){
         ArrayList<CustomLocation> amenityList = CustomLocation.getAmenityHashMap().get(amenityName);
         if(amenityList != null){
@@ -1932,8 +1828,6 @@ public class MapFragment extends BaseFragment
                     if(mapName == null || (mapName != null && coordinate.getMap().getName().equals(mapName))) {
                         //if the map's already has the pin selected then return
                         if(mSelectedPin != null && mSelectedPin.getCoordinate() == coordinate) {
-
-
                             return;
                         }
                         LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(coordinate);
@@ -1966,7 +1860,6 @@ public class MapFragment extends BaseFragment
     }
 
     public Overlay getOverlayFromMap(Location location){
-
         try {
             if(location == null) return null;
             for (HashMap.Entry<Overlay, LocationLabelClicker> entry : overlays.entrySet()) {
@@ -2012,39 +1905,6 @@ public class MapFragment extends BaseFragment
     @Override
     public void onDealsClick(boolean enabled) {
         //TODO: when deals list's refreshed, this mRecommendedDealsExternalCodeList should be set to null to refresh this list too
-
-//          ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true); //ALL DEALS
-        /*ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS
-        if(mRecommendedDealsExternalCodeList == null) {
-            if(dealContentPages == null) return;
-            mRecommendedDealsExternalCodeList = new ArrayList<String>();
-            for(KcpContentPage kcpContentPage : dealContentPages) {
-                mRecommendedDealsExternalCodeList.add(kcpContentPage.getExternalCode());
-            }
-        }
-
-        for( String externalCode: mRecommendedDealsExternalCodeList) {
-            Location location = CustomLocation.getLocationWithExternalCode(externalCode);
-            if(location != null) removePin(location);
-        }
-
-        if(enabled && dealContentPages != null) {
-            mRecommendedDealsExternalCodeList = new ArrayList<String>();
-            for(KcpContentPage kcpContentPage : dealContentPages) {
-                Location location = CustomLocation.getLocationWithExternalCode(kcpContentPage.getExternalCode());
-                if(location != null){
-                    List<Coordinate> coords = location.getNavigatableCoordinates();
-                    for(Coordinate coordinate : coords) {
-                        Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_deals, 0);
-//                        dropPin(coordinate, location, amenityDrawable);
-                        dropDealsPin(coordinate, location, amenityDrawable);
-                    }
-                }
-                mRecommendedDealsExternalCodeList.add(kcpContentPage.getExternalCode());
-            }
-        }*/
-
-        //          ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true); //ALL DEALS
         ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS
         if(mRecommendedDealsContentPageList == null) {
             if(dealContentPages == null) return;
@@ -2067,7 +1927,6 @@ public class MapFragment extends BaseFragment
                     List<Coordinate> coords = location.getNavigatableCoordinates();
                     for(Coordinate coordinate : coords) {
                         Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_deals, 0);
-//                        dropPin(coordinate, location, amenityDrawable);
                         KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
                         dropDealsPin(coordinate, location, amenityDrawable, kcpPlace.getExternalCode());
                     }
@@ -2098,23 +1957,14 @@ public class MapFragment extends BaseFragment
 
     public void showParkingSpotAtBlueDot(){
         if(mBlueDotPin == null) return;
-//        if(sParkingPin.getTempParkingCoordinatePin() != null) removeTempParkingPinAtCoordinate(sParkingPin.getTempParkingCoordinatePin());
-
         Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car, R.drawable.circle_imageview_background_black);
         Overlay2DImage label = dropPin(mBlueDotPin.getCoordinate(), null, amenityDrawable);
-
-//        Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), amenityDrawable);
-//        label.setPosition(mBlueDotPin.getCoordinate());
-//        mapView.addMarker(label, false);
         sParkingPin.setTempParkingCoordinatePin(new Pin(mBlueDotPin.getCoordinate(), label, mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude()));
         showParkingDetail(true);
-
         mapView.getCamera().focusOn(mBlueDotPin.getCoordinate());
         mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_NEAREST_PARKING);
-
         destinationPolygon = sParkingPin.getTempParkingCoordinatePin().getCoordinate();
     }
-
 
     /**
      *
@@ -2173,13 +2023,7 @@ public class MapFragment extends BaseFragment
                 mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_NEAREST_PARKING);
 
                 destinationPolygon = mTemporaryParkingLocation;
-//
             }
-
-
-
-
-
         } catch (Exception e) {
             logger.error(e);
         }
@@ -2189,9 +2033,6 @@ public class MapFragment extends BaseFragment
         ArrayList<Polygon> polygons = CustomLocation.getParkingPolygonsFromLocationWithId(parkingId);
         if(polygons != null && polygons.size() > 0) {
             if(showParkingSpot) {
-                /*if(mSavedParkingLocation != null) {
-                    removePin(mSavedParkingLocation);
-                }*/
                 if(mSavedParkingPolygon != null && mOriginalColorsForParking != 0) {
                     mSavedParkingPolygon.setColor(mOriginalColorsForParking);
                     mOriginalColorsForParking = 0;
@@ -2203,18 +2044,6 @@ public class MapFragment extends BaseFragment
                     mapView.getCamera().focusOn(mSavedParkingPolygon);
                     zoomInOut();
                 }
-                /*Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-//                                slidePanel(true);
-                            }
-                        });
-                    }
-                }, 500);*/
             } else {
                 if(mSavedParkingPolygon != null) mSavedParkingPolygon.setColor(mOriginalColorsForParking);
                 didTapNothing();
@@ -2269,8 +2098,6 @@ public class MapFragment extends BaseFragment
                                     });
                                 }
                             }, 100);
-
-
                         } else {
                             removePin(sParkingPin.getParkingLocationPin());
                             didTapNothing();
@@ -2305,8 +2132,6 @@ public class MapFragment extends BaseFragment
                                     });
                                 }
                             }, 100);
-
-
                         } else {
                             removePin(sParkingPin.getParkingCoordinatePin().getOverlay2DImage(), sParkingPin.getParkingCoordinatePin().getCoordinate());
                             didTapNothing();
@@ -2361,7 +2186,7 @@ public class MapFragment extends BaseFragment
                     mapView.getCamera().focusOn(coordinate);
                     zoomInOut();
 
-                    //                destinationPolygon = location; //if location's set as destinationPolygon, it will automatically choose the closest amenity, in which case, the closest amenity has to be manually highlighted in didTapPolygon
+                    //destinationPolygon = location; //if location's set as destinationPolygon, it will automatically choose the closest amenity, in which case, the closest amenity has to be manually highlighted in didTapPolygon
                     destinationPolygon = coordinate;
                     if(location == sParkingPin.getParkingLocationPin()) return;
 
@@ -2375,8 +2200,6 @@ public class MapFragment extends BaseFragment
                             highlightThisLabel();
                             showAmenityDetail((CustomLocation) location, drawable);
                         }
-
-
                     }
                 } else {
                     if(label == sParkingPin.getParkingCoordinatePin().getOverlay2DImage()) {
@@ -2385,8 +2208,6 @@ public class MapFragment extends BaseFragment
                         zoomInOut();
                         destinationPolygon = coordinate;
                     } else if (label == mBlueDotPin.getOverlay2DImage()) { //user's clicking on blue dot that's above the parking lot pin
-
-
                     }
                 }
             } catch (Exception e) {
@@ -2395,7 +2216,6 @@ public class MapFragment extends BaseFragment
         }
 
         public void highlightThisLabel(){
-//            destinationPolygon = location;
             dropPinWithColor(coordinate, drawable);
             if(location == null || !location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) { //parking pin is temporary - shouldn'be be readded
                 mRemovedPin = new Pin(coordinate, label);
@@ -2416,7 +2236,6 @@ public class MapFragment extends BaseFragment
             showDirectionCard(false, null, 0, null, null, null);
         }
     }
-
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
@@ -2525,12 +2344,7 @@ public class MapFragment extends BaseFragment
                     if(!mMainActivity.isEditTextsEmpty()) {
                         startNavigation();
                     } else stopNavigation();
-
-//                    destinationPolygon = null;
-//                    mSearchMode = SearchMode.ROUTE_DESTINATION;
-//                    didTapPolygon(mBlueDotPin.getCoordinate());
                     drawPath();
-
                 } else if(mSearchMode.equals(SearchMode.ROUTE_DESTINATION)){
                     if(mMainActivity.getStartStoreName().equals(storeName)) {
                         Toast.makeText(getActivity(), getString(R.string.warning_selected_same_location), Toast.LENGTH_SHORT).show();
@@ -2541,12 +2355,8 @@ public class MapFragment extends BaseFragment
                     if(!mMainActivity.isEditTextsEmpty()) {
                         startNavigation();
                     } else stopNavigation();
-
-
                     didTapPolygon((Polygon) startPolygon);
                 }
-
-
 
                 mMainActivity.moveFocusToNextEditText();
                 mSearchString = "";
@@ -2554,13 +2364,6 @@ public class MapFragment extends BaseFragment
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
-
-
-
-
-
         }
     };
 
@@ -2581,7 +2384,6 @@ public class MapFragment extends BaseFragment
         mSearchString = s.toString();
         setupRecyclerView();
     }
-
 
     public boolean isDirectionCardVisible() {
         return rlDirection.getVisibility() == View.VISIBLE;
@@ -2626,13 +2428,11 @@ public class MapFragment extends BaseFragment
             ivAmenity.setVisibility(View.GONE);
         }
 
-
         ArrayList<KcpContentPage> dealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true);
         ArrayList<KcpContentPage> recommendedDealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true);
 
         dealsList.removeAll(recommendedDealsList);
         dealsList.addAll(recommendedDealsList);
-
 
         final ArrayList<KcpContentPage> dealsForThisStore = new ArrayList<KcpContentPage>();
         if(dealsList != null){
@@ -2709,14 +2509,6 @@ public class MapFragment extends BaseFragment
     }
 
     private void slidePanel(final boolean up){
-
-//        Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
         final RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
         View rootView = getActivity().findViewById(android.R.id.content);
         if(mRootViewHeight == 0) mRootViewHeight = rootView.getHeight();
@@ -2738,16 +2530,7 @@ public class MapFragment extends BaseFragment
             rlDirection.startAnimation(slideUpAnimation);
             rlSlidingPanel.animate().setStartDelay(100).y(mRootViewHeight - rlSlidingPanel.getHeight() - (int) getResources().getDimension(R.dimen.map_level_panel_bot_margin));
         }
-//                    }
-//                });
-//            }
-//        }, 100);
-
-
-
-
     }
-
 
     public void showDirectionEditor(String start, String dest){
         mMainActivity.toggleDestinationEditor(false, start, dest, new FocusListener());
@@ -2760,7 +2543,6 @@ public class MapFragment extends BaseFragment
             mMainActivity.openRightDrawerLayout();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -2787,17 +2569,13 @@ public class MapFragment extends BaseFragment
         super.onStop();
     }
 
-
     @Override
     public void onDetach() {
         super.onDetach();
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
-
     }
 }

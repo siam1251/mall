@@ -28,8 +28,6 @@
         />
 
 
-    android:paddingLeft="40dp"
-    <!--<EditText-->
     <com.ivanhoecambridge.mall.utility.ClearableEditText
         android:longClickable="false"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
@@ -48,7 +46,6 @@
         android:lines="1"
         android:ellipsize="end"
         />
-        android:inputType="textVisiblePassword"
 
     <TextView
         android:id="@+id/tvStartStore"
@@ -108,5 +105,4 @@
         android:layout_marginTop="5dp"
         android:textSize="14dp"
         android:layout_height="28dp" />
-
 </RelativeLayout>

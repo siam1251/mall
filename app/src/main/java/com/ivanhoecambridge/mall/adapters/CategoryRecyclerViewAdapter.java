@@ -26,6 +26,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter {
     private ArrayList<KcpCategories> mKcpCategoriesList;
     private int mCategoryType;
 
+
     public CategoryRecyclerViewAdapter(Context context, ArrayList<KcpCategories> kcpCategories, int categoryType) {
         mContext = context;
         mKcpCategoriesList = kcpCategories;
@@ -40,14 +41,12 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public class CategoryHolder extends RecyclerView.ViewHolder {
         public View mView;
-//        public CardView cvAncmt;
         public ImageView  ivCategory;
         public TextView  tvCategory;
 
         public CategoryHolder(View v) {
             super(v);
             mView = v;
-//            cvAncmt = (CardView)  v.findViewById(R.id.cvAncmt);
             ivCategory = (ImageView)  v.findViewById(R.id.ivCategory);
             tvCategory = (TextView)  v.findViewById(R.id.tvCategory);
         }

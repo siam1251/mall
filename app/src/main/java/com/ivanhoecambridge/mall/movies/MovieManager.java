@@ -41,7 +41,6 @@ public class MovieManager {
     public static String KEY_ENTRANCE_POSITION = "key_entrance_position";
     public static String KEY_PARKING_NOTES = "key_parking_notes";
 
-
     public static final int DOWNLOAD_FAILED = -1;
     public static final int DOWNLOAD_STARTED = 1;
     public static final int DOWNLOAD_COMPLETE = 2;
@@ -176,15 +175,12 @@ public class MovieManager {
         message.obj = mode;
         switch (state){
             case DOWNLOAD_STARTED:
-//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, true);
                 break;
             case DOWNLOAD_FAILED:
                 mIsDownloadFailed = true;
-//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
                 break;
             case DOWNLOAD_COMPLETE:
                 mIsDownloadFailed = false;
-//                ProgressBarWhileDownloading.showProgressDialog(mContext, mLoadingLayout, false);
                 break;
             case DATA_ADDED:
                 break;

@@ -153,10 +153,8 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-
         if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_FOOTER){
             RecyclerViewFooter.FooterViewHolder footerViewHolder = (RecyclerViewFooter.FooterViewHolder) holder;
             footerViewHolder.mView.setOnClickListener(mOnClickListener);
@@ -236,7 +234,6 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
 
             }
         });
-
     }
 
     @Override

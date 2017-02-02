@@ -6,7 +6,6 @@
     android:paddingLeft="28dp"
     android:paddingRight="28dp"
     android:orientation="vertical">
-    android:background="@drawable/view_gradient_onboarding"
 
 
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView

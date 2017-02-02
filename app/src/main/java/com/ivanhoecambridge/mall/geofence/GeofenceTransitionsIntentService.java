@@ -28,6 +28,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         super(TAG);
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -54,9 +55,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
             );
 
             // Send notification and log the transition details.
-//            sendNotification(geofenceTransitionDetails);
+//           sendNotification(geofenceTransitionDetails);
             Log.i(TAG, geofenceTransitionDetails);
-
 
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(GeofenceManager.MyWebRequestReceiver.PROCESS_RESPONSE);

@@ -21,7 +21,7 @@ android {
         release {
             keyAlias 'Android'
             keyPassword 'KineticCafe16'
-            storeFile file('C:/Users/Kay/workspace/Kinetic Cafe/Key/vaughanmills.jks')
+            storeFile file('vaughanmills.jks')
             storePassword 'KineticCafe16'
         }
     }

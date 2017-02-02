@@ -13,6 +13,4 @@
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
         android:clickable="false"/>
-
-        tools:src="@mipmap/abc1"
 </LinearLayout>

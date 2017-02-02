@@ -10,8 +10,11 @@ import com.ivanhoecambridge.mall.activities.MainActivity;
  * Created by Kay on 2016-05-19.
  */
 public class BaseFragment extends Fragment {
+
     protected final Logger logger = new Logger(getClass().getName());
     protected MainActivity mMainActivity;
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

@@ -12,6 +12,7 @@ import java.util.Date;
  */
 public class FirebaseUtility {
 
+
     public static String getDeviceId(Context context){
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }

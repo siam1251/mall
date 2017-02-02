@@ -15,7 +15,6 @@
         android:layout_centerInParent="true"
         />
 
-
     <ProgressBar
         android:visibility="gone"
         android:layout_centerInParent="true"
@@ -77,9 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <LinearLayout
-
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
@@ -105,7 +102,6 @@
                     android:layout_height="82dp"
                     android:paddingLeft="17dp"
                     >
-                    android:background="#cb272626"
 
                     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                         app:fontFamily="@string/fontFamily_roboto_regular"
@@ -150,9 +146,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
-
-
 
             <LinearLayout
                 android:background="#272626"
@@ -316,8 +309,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
-
-
     </RelativeLayout>
 
 </RelativeLayout>

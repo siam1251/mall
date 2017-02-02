@@ -9,8 +9,6 @@
     android:background="@color/active_mall_bg"
     android:layout_height="wrap_content"
     >
-    android:visibility="gone"
-
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:layout_marginLeft="@dimen/activity_margin_big"
         android:layout_marginRight="@dimen/activity_margin_big"
@@ -110,8 +108,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_margin_tiny"/>
 
-
-
     <View
         android:id="@+id/separator"
         android:layout_alignParentBottom="true"
@@ -120,5 +116,4 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:background="#33fafafa"
         />
-
 </LinearLayout>

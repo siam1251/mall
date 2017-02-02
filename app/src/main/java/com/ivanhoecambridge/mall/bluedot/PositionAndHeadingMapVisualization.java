@@ -15,6 +15,7 @@ import com.senionlab.slutilities.type.SLPixelPoint2D;
  */
 
 public class PositionAndHeadingMapVisualization {
+
     private ValueAnimator headingAnimator = ValueAnimator.ofFloat();
     private ValueAnimator mAnimator;
 
@@ -22,10 +23,8 @@ public class PositionAndHeadingMapVisualization {
     private double posY;
     private float heading;
 
-//    protected static final int ANIMATION_TIME_MILLIS = 400;
     protected static final int ANIMATION_TIME_MILLIS = 1000; //animator finishes before its gets updated - more instant update but it can stop and go stop and go
 //    protected static final int ANIMATION_TIME_MILLIS = 2000; //animator resets before it's over - more smooth but can lag
-
 
     enum LocationFindingMode { BEACON, GPS };
     public static LocationFindingMode sLocationFindingMode = LocationFindingMode.BEACON;
@@ -53,17 +52,14 @@ public class PositionAndHeadingMapVisualization {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-
                 listener.onAnimationUpdate(valueAnimator);
-//                Log.d("bluedot", "BlueDotPosition: "  + " heading: " + heading);
+//                Log.d("bluedot", "BlueDotPosition: "  + " heading: " + heading); //testing
                 mapViewWithBlueDot.dropHeading(posX, posY, heading, headingStatus);
             }
         });
     }
 
-
     public PositionAndHeadingMapVisualization() {
-
         if(mAnimator == null) {
             mAnimator = ValueAnimator.ofObject(new PositionTypeEvaluator(), new BlueDotPosition(0, 0),
                     new BlueDotPosition(posX, posY));
@@ -80,7 +76,6 @@ public class PositionAndHeadingMapVisualization {
         });
 
     }
-
 
     public void setHeading(float heading, SLHeadingStatus headingStatus) {
         this.headingStatus = headingStatus;

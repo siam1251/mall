@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,12 +49,13 @@ import java.util.HashMap;
  */
 public class InterestedCategoryActivity extends AppCompatActivity {
 
+    protected static final String TAG = "InterestedCategory";
     protected final Logger logger = new Logger(getClass().getName());
     private InterestRecyclerViewAdapter mInterestRecyclerViewAdapter;
     private RecyclerView rvIntrstCat;
     private FrameLayout flIntrstdBot;
     private TextView tvIntrstd;
-    private boolean mSpanSizeSet = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,15 +102,10 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 });
                 kcpCategoryManager.downloadPlacesForTheseCategoryIds(mInterestRecyclerViewAdapter.getCatIdsFromMap());
                 FavouriteManager.getInstance(InterestedCategoryActivity.this).updateFavCat(mInterestRecyclerViewAdapter.getTempCatMap(), mInterestRecyclerViewAdapter.getRemovedCatMap(), true, null);
-
-
             }
         });
         setupRecyclerView(rvIntrstCat);
     }
-
-
-
 
     public static class GridLayoutItem {
         public int spanCount;
@@ -119,7 +116,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
             this.relativeLayoutRule = relativelayoutRule;
         }
     }
-
 
     public static class nameComparator implements Comparator<KcpCategories> {
         @Override
@@ -132,7 +128,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         }
     }
 
-
     private void setupRecyclerView(RecyclerView recyclerView) {
         final int maxSpanCount = KcpUtility.getScreenWidth(this);
         ArrayList<KcpCategories> kcpCategoriesArrayList = CategoryIconFactory.getFilteredKcpCategoryList(KcpCategoryRoot.getInstance().getFingerPrintCategoriesList());
@@ -144,7 +139,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         int secondSpanSize;
         int thirdSpanSize;
 
-//        float compatPadding = - KcpUtility.dpToPx(this, 5);
         float compatPadding = 0;
 
         for(int position = 0 ; position < kcpCategoriesArrayList.size(); position++) {
@@ -164,7 +158,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 spaceLeft = getSpaceLeftFromOneSide(firstItemWidth + compatPadding + secondItemWidth);
 
                 if(spaceLeft > 0) {
-//                    spaceLeft = 0;
                     totalSize = spaceLeft + firstItemWidth + compatPadding + secondItemWidth + spaceLeft;
                     firstSpanSize = (int) ((float) (spaceLeft + firstItemWidth + compatPadding / 2) / totalSize * maxSpanCount);
                     secondSpanSize = maxSpanCount - firstSpanSize;
@@ -178,7 +171,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                         spaceLeft = getSpaceLeftFromOneSide(firstItemWidth + compatPadding + secondItemWidth + compatPadding + thirdItemWidth);
 
                         if(spaceLeft > 0) { //meaning we can fit in 3 items
-//                            spaceLeft = 0;
                             totalSize = spaceLeft + firstItemWidth + compatPadding + secondItemWidth + compatPadding + thirdItemWidth + spaceLeft;
 
                             firstSpanSize = (int) ((float) (spaceLeft + firstItemWidth + compatPadding / 2) / totalSize * maxSpanCount);
@@ -252,7 +244,6 @@ public class InterestedCategoryActivity extends AppCompatActivity {
         }
     }
 
-
     public void replaceIfExist(ArrayList<GridLayoutItem> list, int position, GridLayoutItem gridLayoutItem){
         if(position < list.size() ) list.set(position, gridLayoutItem);
         else list.add(position, gridLayoutItem);
@@ -320,9 +311,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 setResult(Activity.RESULT_OK, new Intent());
                 onFinish();
             } else if (resultCode == Constants.RESULT_DONE_PRESSED_WITHOUT_CHANGE) {
-                //should never be here
-                /*setResult(Activity.RESULT_CANCELED, new Intent());
-                onFinish();*/
+                Log.e(TAG, "SHOULD NEVER ENTER HERE");
             } else if (resultCode == Constants.RESULT_EXIT){
                 setResult(Activity.RESULT_OK, new Intent());
             } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {

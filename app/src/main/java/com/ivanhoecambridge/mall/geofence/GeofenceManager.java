@@ -40,6 +40,7 @@ import geofence.GeofenceConstants;
  * Created by Kay on 2016-08-23.
  */
 public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
+
     public static final String[] INITIAL_PERMS = {
             Manifest.permission.ACCESS_FINE_LOCATION,
     };
@@ -56,8 +57,8 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     private SharedPreferences mSharedPreferences;
     private MyWebRequestReceiver mMyWebRequestReceiver;
 
-    public GeofenceManager(Context context) {
 
+    public GeofenceManager(Context context) {
         mContext = context;
         //geofence
         mGeofenceList = new ArrayList<Geofence>();
@@ -152,10 +153,8 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     }
 
     public void addGeofencesButtonHandler() {
-
         if (!canAccessLocation()) {
-
-            /*if(BuildConfig.BLUEDOT) {
+            /*if(BuildConfig.BLUEDOT) { //testing
                 if (ActivityCompat.shouldShowRequestPermissionRationale((MainActivity) mContext,
                         Manifest.permission.ACCESS_FINE_LOCATION)) {
                     AlertDialogForInterest.getAlertDialog(mContext, mContext.getString(R.string.title_enable_bluetooth))
@@ -188,7 +187,6 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
 
     public void removeGeofencesButtonHandler() {
         if (!mGoogleApiClient.isConnected()) {
-//            Toast.makeText(mContext, mContext.getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
             return;
         }
         try {
@@ -296,8 +294,4 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
             }
         }
     }
-
-
-
-
 }

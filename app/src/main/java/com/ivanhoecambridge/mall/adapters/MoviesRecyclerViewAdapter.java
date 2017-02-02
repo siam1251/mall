@@ -43,6 +43,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
     private ArrayList<MovieDetail> mMovieDetails;
     private House mHouse;
 
+
     public MoviesRecyclerViewAdapter(Context context, @Nullable House house, ArrayList<MovieDetail> movieDetails, int recyclerType) {
         mContext = context;
         mHouse = house == null ? new House() : house;
@@ -97,7 +98,6 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         switch (viewType){
             case ITEM_TYPE_THEATER_VIEWER:
                 return new TheaterViewer(LayoutInflater.from(mContext).inflate(R.layout.list_item_movie, parent, false));
@@ -141,7 +141,6 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
                             .placeholder(R.drawable.icn_movies_placeholder)
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                             .into(theaterViewer.ivMoviePoster);
-
                 }
 
                 //Title
@@ -187,7 +186,6 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
                                     return false;
                                 }
                             })
-//                            .crossFade()
                             .centerCrop()
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                             .placeholder(R.drawable.icn_movies_placeholder)
@@ -229,7 +227,6 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public void startMovieDetailActivity(View v, String movieId){
-
         Intent intent = new Intent(mContext, MovieDetailActivity.class);
         intent.putExtra(Constants.ARG_MOVIE_ID, movieId);
 
@@ -242,8 +239,6 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
         ActivityCompat.startActivityForResult((Activity) mContext, intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP, options.toBundle());
         ActivityAnimation.startActivityAnimation(mContext);
     }
-
-
 
     @Override
     public int getItemCount() {

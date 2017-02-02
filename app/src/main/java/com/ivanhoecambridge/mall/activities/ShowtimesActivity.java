@@ -31,6 +31,7 @@ public class ShowtimesActivity extends AppCompatActivity {
     protected final Logger logger = new Logger(getClass().getName());
     private MoviesRecyclerViewAdapter mMoviesRecyclerViewAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,5 +109,4 @@ public class ShowtimesActivity extends AppCompatActivity {
             logger.error(e);
         }
     }
-
 }

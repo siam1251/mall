@@ -329,22 +329,6 @@
 
                 </LinearLayout>
 
-
-
-
-                <!--<com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                    android:id="@+id/tvPrivacyPolicy"
-                    android:layout_gravity="center_horizontal"
-                    app:fontFamily="@string/fontFamily_roboto_medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:textSize="10dp"
-                    android:text="@string/privacy_policy"
-                    android:textColor="@color/privacy_policy_text_color"
-                    />-->
-                    android:layout_marginBottom="5dp"
-
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvVersionNumber"
                     android:gravity="center_horizontal"
@@ -358,8 +342,6 @@
                     />
 
             </LinearLayout>
-
-
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

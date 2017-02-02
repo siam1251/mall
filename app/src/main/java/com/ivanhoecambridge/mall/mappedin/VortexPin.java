@@ -30,7 +30,6 @@ public class VortexPin {
     double fromMapElevation;
     double toMapElevation;
 
-
     static enum VortexDirection {
         DOWN,
         UP,

@@ -32,7 +32,6 @@ public class KCPSetRatioImageView extends ImageView implements ImageView.OnClick
         if(!this.isInEditMode()) {
             if (attrs != null) {
                 float imageRatio = KcpUtility.getFloat(context, R.dimen.ancmt_image_ratio);
-//                float imageRatio = KcpUtility.getFloat(context, R.dimen.default_img_ratio);
                 TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KCPSetRatioImageView);
                 mImageRatio = a.getFloat(R.styleable.KCPSetRatioImageView_imageRatio, imageRatio);
                 mZoomable = a.getBoolean(R.styleable.KCPSetRatioImageView_zoomable, false);

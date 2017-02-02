@@ -29,6 +29,7 @@ public class ExpandableCategoryRecyclerViewAdapter extends RecyclerView.Adapter 
     private ArrayList<KcpCategories> mKcpCategoriesList;
     private ArrayList<String> mExpandedExternalCode = new ArrayList<>(); //to track items that are expanded/shrinked
 
+
     public ExpandableCategoryRecyclerViewAdapter(Context context, ArrayList<KcpCategories> kcpCategories) {
         mContext = context;
         mKcpCategoriesList = kcpCategories;
@@ -131,7 +132,6 @@ public class ExpandableCategoryRecyclerViewAdapter extends RecyclerView.Adapter 
                         }
                     }
                     // NOTE : position is from the original list
-//                    Toast.makeText(mContext, "clicked : " + position, Toast.LENGTH_SHORT).show();
                 }
             });
         } else if (holder.getItemViewType() == KcpContentTypeFactory.PREF_ITEM_TYPE_SUB_CAT) {
@@ -150,7 +150,6 @@ public class ExpandableCategoryRecyclerViewAdapter extends RecyclerView.Adapter 
                         DirectoryFragment.getInstance().tryDownloadPlacesForThisCategory(mContext, categoryName, externalCode, placeUrl, categoryHolder.tvCategory);
                     }
                     // NOTE : position is from the current list
-//                    Toast.makeText(mContext, "clicked : " + position, Toast.LENGTH_SHORT).show();
                 }
             });
         }

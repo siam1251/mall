@@ -33,6 +33,7 @@ public class ActiveMallRecyclerViewAdapter extends RecyclerView.Adapter {
     private ArrayList<KcpContentPage> mKcpContentPages;
     private int mContentType;
 
+
     public ActiveMallRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> kcpContentPages, int contentType) {
         mContext = context;
         mKcpContentPages = kcpContentPages == null ? new ArrayList<KcpContentPage>() : new ArrayList<KcpContentPage>(kcpContentPages);
@@ -128,7 +129,6 @@ public class ActiveMallRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-//        return mKcpContentPages == null ? 0 : mKcpContentPages.size();
         return mKcpContentPages == null ? 0 : mKcpContentPages.size() > 2 ? 3 : mKcpContentPages.size();
     }
 

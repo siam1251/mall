@@ -50,10 +50,6 @@ public class BlurTransformation implements Transformation<Bitmap> {
         this(context, Glide.get(context).getBitmapPool(), radius, DEFAULT_DOWN_SAMPLING);
     }
 
-//    public BlurTransformation(Context context, int radius, int sampling) {
-//        this(context, Glide.get(context).getBitmapPool(), radius, sampling);
-//    }
-
     public BlurTransformation(Context context, BitmapPool pool, int radius, int sampling) {
         mContext = context.getApplicationContext();
         mBitmapPool = pool;
@@ -91,8 +87,6 @@ public class BlurTransformation implements Transformation<Bitmap> {
         paint.setFlags(Paint.FILTER_BITMAP_FLAG);
         canvas.drawBitmap(source, 0, 0, paint);
 
-
-//        bitmap = Utility.getBlurredImage(mContext, bitmap, mRadius);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             try {
                 bitmap = RSBlur.blur(mContext, bitmap, mRadius);

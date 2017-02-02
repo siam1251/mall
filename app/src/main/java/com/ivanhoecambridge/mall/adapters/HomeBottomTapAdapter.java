@@ -11,11 +11,12 @@ import java.util.List;
 /**
  * Created by Kay on 2016-04-29.
  */
-//public class HomeBottomTapAdapter extends FragmentPagerAdapter implements SlidingTabLayout.TabIconProvider{
 public class HomeBottomTapAdapter extends FragmentPagerAdapter {
+
     private List<Fragment> mFragmentList = new ArrayList<>();
     private List<String> mFragmentTitleList = new ArrayList<>();
     private List<Integer> mFragmentIconList = new ArrayList<>();
+
 
     public HomeBottomTapAdapter(AppCompatActivity activity,
                                 List<Fragment> fragmentList,
@@ -36,13 +37,6 @@ public class HomeBottomTapAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         return mFragmentList.get(position);
     }
-
-
-//    @Override
-//    public int getPageIconResId(int position) {
-//        return mFragmentIconList.get(position);
-//    }
-
 
     @Override
     public int getCount() {

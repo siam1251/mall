@@ -16,10 +16,12 @@ import static slutilities.SLSettings.GEOFENCE_LOCATIONS;
  */
 
 public class CoordinateListener implements LocationListener {
+
     private WeakReference<PositionAndHeadingMapVisualization> mPositionAndHeadingMapVisualization;
     private boolean isUpdating = false;
     static long UPDATE_INTERVAL_TIME = 100;
     static float UPDATE_DISTANCE_IN_BETWEEN = 0f;
+
 
     public CoordinateListener(PositionAndHeadingMapVisualization positionAndHeadingMapVisualization) {
         mPositionAndHeadingMapVisualization = new WeakReference<PositionAndHeadingMapVisualization>(positionAndHeadingMapVisualization);

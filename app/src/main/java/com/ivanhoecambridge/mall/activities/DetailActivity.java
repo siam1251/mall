@@ -58,7 +58,6 @@ import java.util.Date;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
-//public class DetailActivity extends SwipeBackActivity {
 
     protected final Logger logger = new Logger(getClass().getName());
     private ViewGroup mParentView;
@@ -84,7 +83,6 @@ public class DetailActivity extends AppCompatActivity {
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
             KcpPlaces kcpPlace = kcpPlacesRoot.getPlaceById(mKcpContentPage.getStoreId());
             if(kcpPlace != null) { //there's a store detail already downloaded
-//                kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlace);
                 mKcpContentPage.setPlaceList(null, kcpPlace);
             }
 
@@ -198,7 +196,6 @@ public class DetailActivity extends AppCompatActivity {
                             intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
                             setResult(Integer.valueOf(kcpContentPage.getExternalCode()), intent);
                             onBackPressed();
-//
                         }
                     }, true);
 
@@ -206,6 +203,7 @@ public class DetailActivity extends AppCompatActivity {
             if(BuildConfig.NEAREST_PARKING_IMG) {
                 neartParkingCTA = kcpContentPage.getStoreParking();
             }
+
             //Store Parking
             CTA parking = new CTA(
                     this,
@@ -543,7 +541,6 @@ public class DetailActivity extends AppCompatActivity {
 
     public View getMallHourListItem(int daysPastToday, List<KcpOverrides.ContinuousOverride> comingHolidays){
         View v = getLayoutInflater().inflate(R.layout.list_item_store_hour, null, false);
-//        v.getLayoutParams().height = KcpUtility.dpToPx(this, 50);
         try {
             TextView tvDate = (TextView) v.findViewById(R.id.tvDate);
             TextView tvMallHour = (TextView) v.findViewById(R.id.tvHour);
@@ -647,7 +644,6 @@ public class DetailActivity extends AppCompatActivity {
             if(imageUrlTemp.equals("")) {
                 imageUrlTemp = kcpContentPage.getHighestResFallbackImageUrl();
                 placeHolderDrawable = R.drawable.placeholder_logo;
-//                ivDetailImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
             }
             final String imageUrl = imageUrlTemp;
             if(imageUrl.equals("")){
@@ -698,7 +694,6 @@ public class DetailActivity extends AppCompatActivity {
                         Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
                         int alpha = 255 - Math.round(f);
                         backdrop.getBackground().setAlpha(alpha);
-//                        tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
                         tvToolbar.setTextColor(Utility.getColorWithAlpha(DetailActivity.this, R.color.toolbarTextColor, alpha));
                         toolbar.getBackground().setAlpha(255 - alpha);
                     }
@@ -734,8 +729,7 @@ public class DetailActivity extends AppCompatActivity {
                 new GlideFactory().glideWithNoDefaultRatio(
                         ivDetailLogo.getContext(),
                         logoUrl,
-                        ivDetailLogo/*,
-                        R.drawable.placeholder*/);
+                        ivDetailLogo);
             }
 
             //TITLE
@@ -843,7 +837,6 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-//                NavUtils.navigateUpFromSameTask(this);
                 onBackPressed();
                 return true;
         }
@@ -855,11 +848,6 @@ public class DetailActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         try {
             if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
-                /*if (resultCode != 0) {
-                    setResult(resultCode, new Intent());
-                    onBackPressed();
-                }*/
-
                 if(data == null) {
                 } else {
                     int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
@@ -877,8 +865,6 @@ public class DetailActivity extends AppCompatActivity {
                         onBackPressed();
                     }
                 }
-
-
             }
         } catch (Exception e) {
             logger.error(e);
@@ -891,6 +877,5 @@ public class DetailActivity extends AppCompatActivity {
         if(mDealsRecyclerViewAdapter != null) mDealsRecyclerViewAdapter.notifyDataSetChanged();
         if(mEventsRecyclerViewAdapter != null) mEventsRecyclerViewAdapter.notifyDataSetChanged();
         setFav();
-//        http://stackoverflow.com/questions/31367599/how-to-update-recyclerview-adapter-data
     }
 }

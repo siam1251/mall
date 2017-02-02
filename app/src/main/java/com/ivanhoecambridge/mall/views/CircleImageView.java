@@ -70,9 +70,6 @@ public class CircleImageView extends ImageView {
             return null;
         }
 
-        /*final int width = bitmap.getWidth() + borderWidth / 4;
-        final int height = bitmap.getHeight() + borderWidth / 4;*/
-
         final int width = bitmap.getWidth();
         final int height = bitmap.getHeight();
 
@@ -121,10 +118,6 @@ public class CircleImageView extends ImageView {
                 radius / 2 + 0.7f, radius / 2 + 0.1f, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(sbmp, rect, rect, paint);
-
-
-
-
 
         return output;
     }

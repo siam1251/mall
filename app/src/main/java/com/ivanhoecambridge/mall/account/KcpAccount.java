@@ -18,10 +18,6 @@ public class KcpAccount {
 
     public KcpAccount() {}
 
-    /*public void setContext(Context context){
-        mContext = context;
-    }*/
-
     public static KcpAccount getInstance(){
         if(sKcpAccount == null) sKcpAccount = new KcpAccount();
         return sKcpAccount;

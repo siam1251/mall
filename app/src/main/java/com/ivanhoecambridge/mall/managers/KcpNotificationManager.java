@@ -91,7 +91,5 @@ public class KcpNotificationManager{
     public static void cancelNotification(Context context, int notificationId){
         NotificationManager mNM = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         mNM.cancel(notificationId);
-
     }
-
 }

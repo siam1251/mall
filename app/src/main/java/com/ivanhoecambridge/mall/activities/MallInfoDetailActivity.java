@@ -45,9 +45,11 @@ import java.util.List;
  * Created by Kay on 2016-06-28.
  */
 public class MallInfoDetailActivity extends AppCompatActivity{
+
     protected final Logger logger = new Logger(getClass().getName());
     private ViewGroup mParentView;
     private String mMallInfoType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
         setUpCTA(info);
         setDisclaimer(info);
     }
-
 
     public void showContentsWithCTL(final InfoList info){
         try {
@@ -99,7 +100,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                     Float f = ((((float) mAppBarHeight - mToolBarHeight) + verticalOffset) / ( (float) mAppBarHeight - mToolBarHeight)) * 255;
                     int alpha = 255 - Math.round(f);
                     backdrop.getBackground().setAlpha(alpha);
-//                    tvToolbar.setTextColor(Color.argb(alpha, 255, 255, 255));
                     tvToolbar.setTextColor(Utility.getColorWithAlpha(MallInfoDetailActivity.this, R.color.toolbarTextColor, alpha));
                     toolbar.getBackground().setAlpha(255 - alpha);
                 }
@@ -146,24 +146,9 @@ public class MallInfoDetailActivity extends AppCompatActivity{
         }
     }
 
-
     public void setUpCTA(final InfoList info){
         try {
             List<CTA> cTAList = new ArrayList<>();
-            /*CTA location = new CTA(
-                    this,
-                    mParentView,
-                    R.layout.layout_detail_button,
-                    R.drawable.icn_menu_map,
-                    getResources().getString(R.string.cta_find_on_map),
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            setResult(Activity.RESULT_OK, new Intent());
-                            finish();
-                        }
-                    }, false);*/
-
             CTA phone = new CTA(
                     this,
                     mParentView,
@@ -256,7 +241,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
 
             if(mMallInfoType.equals(getResources().getString(R.string.mall_info_gift_card))){
                 addLocationCTA(cTAList, info);
-//                cTAList.add(location);
                 cTAList.add(phone);
                 cTAList.add(checkBalance);
             } else if (mMallInfoType.startsWith(getResources().getString(R.string.mall_info_about))){
@@ -264,7 +248,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 cTAList.add(phone);
             } else if (mMallInfoType.startsWith(getResources().getString(R.string.mall_info_guest_service)) || mMallInfoType.startsWith(getResources().getString(R.string.mall_info_customer_service))){
                 addLocationCTA(cTAList, info);
-//                cTAList.add(location);
                 cTAList.add(hour);
                 cTAList.add(phone);
                 cTAList.add(email);
@@ -349,7 +332,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
                 cTAList.add(youtube);
                 cTAList.add(pinterest);
             } else {
-//                cTAList.add(hour);
                 addLocationCTA(cTAList, info);
                 addWebpages(cTAList, info);
                 cTAList.add(phone);
@@ -455,7 +437,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
         }
     }
 
-
     public View getAdditionalInfoListItem(String title, String detail){
         View v = getLayoutInflater().inflate(R.layout.list_item_mall_info_additional, null, false);
 
@@ -467,10 +448,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
 
         return v;
     }
-
-
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

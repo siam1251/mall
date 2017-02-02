@@ -22,8 +22,6 @@ import com.ivanhoecambridge.mall.R;
 public class ExpandableTextView extends LinearLayout implements View.OnClickListener {
 
     private static final String TAG = ExpandableTextView.class.getSimpleName();
-
-//    private static final int MAX_COLLAPSED_LINES = 8;
     private static final int MAX_COLLAPSED_LINES = 3;
     private static final int DEFAULT_ANIM_DURATION = 300;
     private static final float DEFAULT_ANIM_ALPHA_START = 0.7f;
@@ -129,8 +127,6 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
                     new int[]{mTextColor, Color.TRANSPARENT},
                     null, TileMode.CLAMP);
             mTv.getPaint().setShader(mTextShader);
-
-
         }
     }
 
@@ -153,7 +149,6 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
 
     private void findViews() {
         mTv = (TextView) findViewById(R.id.expandable_text);
-//        mTv.setOnClickListener(this);
         mButton = (TextView) findViewById(R.id.expand_collapse);
         mButton.setText(mCollapsed ? mExpandString : mCollapseString);
         mButton.setOnClickListener(this);

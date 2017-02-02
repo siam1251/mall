@@ -18,6 +18,7 @@ public class ThemeColorImageView extends ImageView {
         this(context, null);
     }
 
+
     public ThemeColorImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ThemeColorImageView);
