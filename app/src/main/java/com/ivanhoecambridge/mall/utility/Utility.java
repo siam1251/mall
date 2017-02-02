@@ -25,6 +25,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -781,5 +782,4 @@ public class Utility {
         }
         return 0.0f;
     }
-
 }

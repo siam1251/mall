@@ -25,18 +25,22 @@ android {
             storePassword 'KineticCafe16'
         }
     }
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.ivanhoecambridge.mall"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
 
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
+
+        manifestPlaceholders = [
+                'appAuthRedirectScheme': 'com.googleusercontent.apps.169582807084-bk8a4jintrtka452cj1v610s588riapp'
+        ]
     }
     buildTypes {
         release {
@@ -132,19 +136,18 @@ dependencies {
     compile 'com.google.firebase:firebase-ads:9.2.1'
     compile 'com.google.firebase:firebase-messaging:9.2.1'
     compile 'com.google.firebase:firebase-crash:9.2.1'
-    //    compile 'com.google.android.gms:play-services:9.2.1'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile project(path: ':kcpandroidsdk')
     compile files('libs/twitter4j-core-4.0.4.jar')
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:design:23.3.0'
-    compile 'com.android.support:support-v4:23.3.0'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:support-v4:25.1.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.android.support:cardview-v7:23.3.0'
+    compile 'com.android.support:cardview-v7:25.1.0'
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
-    compile 'com.android.support:recyclerview-v7:23.3.0'
-    compile 'com.mappedin.sdk:mappedin:0.6.1'
+    compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile 'com.mappedin.sdk:mappedin:0.7.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
@@ -154,6 +157,8 @@ dependencies {
     compile 'org.msgpack:msgpack-core:0.8.9'
     compile 'com.exacttarget.etpushsdk:etsdk:4.5.0@aar'
     compile 'com.google.android.gms:play-services-gcm:9.2.1'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

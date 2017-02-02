@@ -56,7 +56,7 @@
                     android:transitionName="@string/transition_news_expiry_date"
                     android:textSize="@dimen/detail_expiry_date_text"
                     android:layout_alignBottom="@+id/ivDetailImage"
-                    textAlpha:alpha="@integer/detail_expiry_date_alpha"
+                    textAlpha:textAlpha="@integer/detail_expiry_date_alpha"
                     />
 
             </RelativeLayout>

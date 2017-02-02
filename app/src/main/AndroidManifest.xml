@@ -110,10 +110,6 @@
                 android:value="com.ivanhoecambridge.mall.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.ProfileInformationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base" />
-        <activity
             android:name=".activities.MyPagesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
@@ -142,9 +138,20 @@
         <activity
             android:name=".onboarding.TutorialActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base"/>
+        <activity
+            android:name=".activities.SignInAfterOnBoardingActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base"
             />
-            android:theme="@style/Theme.Transparent"
+        <activity
+            android:name=".activities.SignInActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base"
+            />
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:windowSoftInputMode="adjustNothing"
+            android:windowSoftInputMode="adjustPan"
 
         <receiver android:name=".receivers.WelcomeMsgReceiver" />
 

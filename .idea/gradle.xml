@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$/../kclib-android-kcpservice" />
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Jump" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

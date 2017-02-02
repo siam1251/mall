@@ -21,7 +21,7 @@ public class AlphaTextView  extends TextView {
         super(context, attrs);
         if(!this.isInEditMode()) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AlphaTextView);
-            mAlpha = a.getColor(R.styleable.AlphaTextView_alpha, 133);
+            mAlpha = a.getColor(R.styleable.AlphaTextView_textAlpha, 133);
             getBackground().setAlpha(mAlpha);
         }
     }

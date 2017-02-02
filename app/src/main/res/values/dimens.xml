@@ -261,4 +261,9 @@
     <dimen name="map_compass_top_width">14dp</dimen>
     <dimen name="map_compass_top_width_expanded">55dp</dimen>
 
+    <!--SIGN IN-->
+    <dimen name="sign_in_card_corner_radius">3dp</dimen>
+    <dimen name="sign_in_card_elevation">2dp</dimen>
+
+
 </resources>
