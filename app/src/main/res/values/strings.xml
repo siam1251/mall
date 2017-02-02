@@ -123,6 +123,11 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="warning_change_my_parking_spot">Changing your parking spot will overwrite any previously saved information.</string>
     <string name="warning_turn_on_bluetooth">Please turn on Bluetooth to find your current location.</string>
     <string name="warning_current_location_not_available">If you are at the mall, please try again in a few seconds.</string>
+    <string name="warning_not_valid_address">Not a valid Email address.</string>
+    <string name="warning_must_be_longer">Password must be 7 or longer.</string>
+    <string name="warning_two_passwords_not_equal">Two passwords must be the same.</string>
+    <string name="warning_wrong_date_format">Wrong date format.</string>
+    <string name="warning_pick_earlier_date">Date of birth has to be earlier than today</string>
 
     <!--section header-->
     <string name="section_header_recommended_deals">Recommended Deals</string>
@@ -220,6 +225,11 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="hint_search_start_when_not_empty">from</string>
     <string name="hint_search_destination_when_not_empty">to</string>
     <string name="hint_add_notes">Include additional notes to your parking i.e. “Pillar 15F near stairs”</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="hint_Birthday">Date of Birth (Optional)</string>
 
     <string name="bluedot_my_location">Your Location</string>
 
@@ -315,6 +325,29 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="movie_starring">Starring:</string>
     <string name="movie_directed_by">Directed by:</string>
     <string name="movie_advisory">Advisory:</string>
+
+    <!-- SIGNIN -->
+    <string name="signin_create_account_to_save">Create an account to save all your preferences in one place.</string>
+    <string name="signin_sign_up">Sign Up</string>
+    <string name="signin_already_have_account">Already have an account?</string>
+    <string name="signin_signin_with_underline"><u>Sign In</u></string>
+    <string name="signin_use_existing_profile">Use an existing profile by siging up with your Facebook or Google account.</string>
+    <string name="signin_connect_with_fb">Connect with Facebook</string>
+    <string name="signin_connect_with_google">Connect with Google+</string>
+    <string name="signin_signup_with_email">Sign Up With Email</string>
+    <string name="signin_sign_in">Sign In</string>
+    <string name="signin_password_reset">Password Reset</string>
+    <string name="signin_dont_have_account">Don’t have an account?</string>
+    <string name="signin_forgot_password">Forgot your password?</string>
+    <string name="signin_other_sign_in_method">You can also sign in with a Facebook or Google account.</string>
+    <string name="signin_create_account">Create Account</string>
+    <string name="signin_send_me_promos">Send Me Promos &amp; Deals</string>
+    <string name="signin_by_signing_up">By signing up, you agree to the</string>
+    <string name="signin_terms_and_conditions">Terms &amp; Conditions</string>
+    <string name="signin_forgot_your_password">Forgot your password?</string>
+    <string name="signin_let_us_know">Let us know the email address you used to set up your account, and we’ll send you reset password instructions</string>
+    <string name="signin_send_reset_instructions">Send Reset Instructions</string>
+
 
     <!---->
 

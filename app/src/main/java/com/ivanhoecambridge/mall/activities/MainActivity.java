@@ -118,6 +118,7 @@ import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESUL
 import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOnBluetooth;
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
 
+//public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, KcpApplication.EtPushListener{
 
@@ -164,12 +165,12 @@ public class MainActivity extends BaseActivity
     private ETPush etPush;
     public static MovieManager sMovieManager;
 
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         KcpNotificationManager.onWelcomeNotiClick(this, intent);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -269,7 +270,6 @@ public class MainActivity extends BaseActivity
                         BluetoothManager bluetoothManager = new BluetoothManager(MainActivity.this);
                         bluetoothManager.turnOnBluetooth();
                     }
-
                     if(mOnDealsClickListener != null && Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_DEAL, false)) mOnDealsClickListener.onDealsClick(true);
                     mViewPager.setPagingEnabled(false); //disable swiping between pagers
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.scRightDrawerLayout)); //enable the right drawerlayout
@@ -537,18 +537,13 @@ public class MainActivity extends BaseActivity
             rlDestinationEditor.startAnimation(slideDownAnimation);
             slideDownAnimation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
+                public void onAnimationStart(Animation animation) {}
 
                 @Override
-                public void onAnimationEnd(Animation animation) {
-                }
+                public void onAnimationEnd(Animation animation) {}
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
+                public void onAnimationRepeat(Animation animation) {}
             });
 
             setDestionationNames(start, dest); //set destination names - ex) start : A&W , destionation : Club Monaco
@@ -714,6 +709,8 @@ public class MainActivity extends BaseActivity
         tvSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SignInAfterOnBoardingActivity.class));
+                ActivityAnimation.startActivityAnimation(MainActivity.this);
             }
         });
 
@@ -778,6 +775,7 @@ public class MainActivity extends BaseActivity
             }
         });
 
+
         //GC
         FrameLayout flAddGC = (FrameLayout) findViewById(R.id.flAddGC);
         flAddGC.setOnClickListener(new View.OnClickListener() {
@@ -789,7 +787,7 @@ public class MainActivity extends BaseActivity
 
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
 
-        //version handling
+        //version
         TextView tvVersionNumber = (TextView) findViewById(R.id.tvVersionNumber);
         String suffx = BuildConfig.DEBUG ? " " + getString(R.string.version_name_suffix) : "";
         String versionNumber = BuildConfig.DEBUG ? " " + BuildConfig.VERSION_NAME_STAGING : BuildConfig.VERSION_NAME;
@@ -960,6 +958,7 @@ public class MainActivity extends BaseActivity
                 llActiveMall.setVisibility(View.GONE);
                 setActiveMallDot(false);
                 panelBackgroundColor = Color.WHITE;
+//                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.black)));
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.active_mall_off_state)));
                 badgeTextColor = Color.WHITE;
                 generalTextColor = Color.BLACK;
@@ -983,7 +982,6 @@ public class MainActivity extends BaseActivity
             tvEvents.setTextColor(generalTextColor);
             tvStores.setTextColor(generalTextColor);
             tvInterests.setTextColor(generalTextColor);
-            ivDrawerLayoutBg.setImageDrawable(drawerLayoutBgDrawable);
             tvPrivacyPolicy.setTextColor(privacyTextColor);
             tvTermsOfService.setTextColor(privacyTextColor);
             tvDot.setTextColor(privacyTextColor);
@@ -1085,6 +1083,7 @@ public class MainActivity extends BaseActivity
         if(AmenitiesManager.sAmenities == null) return;
         for(int i = 0; i < AmenitiesManager.sAmenities.getAmenityList().size(); i++){
             final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityList().get(i);
+//            if(amenity.isEnabled()) {
                 if(amenity.getExternalIds() != null && amenity.getExternalIds().length > 0){
                     final String externalID = amenity.getExternalIds()[0];
                     amenityList.add(new Amenities.AmenityLayout(
@@ -1107,6 +1106,7 @@ public class MainActivity extends BaseActivity
                     );
 
                 }
+//            }
         }
 
         ((ViewGroup)llAmenitySwitch).removeAllViews();
@@ -1169,6 +1169,7 @@ public class MainActivity extends BaseActivity
         View snackbarView = mOfflineSnackbar.getView();
 
         CoordinatorLayout.LayoutParams param = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
+//        param.bottomMargin = (int) getResources().getDimension(R.dimen.main_app_bar_layout_height);
         snackbarView.setLayoutParams(param);
         snackbarView.setBackgroundColor(Color.DKGRAY);
 
@@ -1313,6 +1314,7 @@ public class MainActivity extends BaseActivity
         } else if (id == android.R.id.home){
             onBackPressed();
         } else if (id == R.id.action_test) {
+//            throw new RuntimeException("This is a crash");
             setActiveMall(true, !mActiveMall);
         } else if (id == R.id.action_geofence_test) {
             mGeofenceManager.setGeofence(true);
@@ -1324,6 +1326,8 @@ public class MainActivity extends BaseActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -1472,7 +1476,11 @@ public class MainActivity extends BaseActivity
                 }
             } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
                 //1. show store on the map 2. show nearest parking spot from a store
-                if(data == null) { //backpressed
+                //data == null : backpressed
+                //data != null  && !externalCode.equals("0") : locate store
+                //data != null && data.getIntExtra(Constants.REQUEST_CODE_KEY, 0) == Constants.REQUEST_CODE_SHOW_PARKING_SPOT : parking spot
+                if(data == null) {
+                    //backpressed
                 } else {
                     handleActivityResult(requestCode, resultCode, data);
                 }
