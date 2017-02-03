@@ -91,7 +91,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         this.mapViewWithBlueDot = mapViewWithBlueDot;
         positionAndHeadingMapVisualization.init(mapViewWithBlueDot);
         sLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        sCoordinateListener = new CoordinateListener(positionAndHeadingMapVisualization);
+        sCoordinateListener = new CoordinateListener(positionAndHeadingMapVisualization); //method 1
     }
 
     @Override
@@ -132,8 +132,10 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
         @Override
         public void didUpdateLocationAvailability(LocationAvailability locationAvailability) {
-            sLocationAvailability = locationAvailability;
-            updateFromGPS();
+            if(sLocationAvailability != locationAvailability) {
+                sLocationAvailability = locationAvailability;
+                updateFromGPS();
+            }
         }
         @Override
         public void didUpdateHeading(double heading, SLHeadingStatus status) {
@@ -151,7 +153,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
         @Override
         public void didUpdateMotionType(SLMotionType motionType) {
-//            logger.debug("didUpdateMotionType++" + " SLMotionType: " + motionType); //testing
+            logger.debug("didUpdateMotionType++" + " SLMotionType: " + motionType); //testing
         }
 
         @Override
@@ -181,7 +183,6 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
             logger.debug("didLeaveGeometry++");
             GEOFENCE_LOCATIONS.get(geometry.getGeometryId()).setDidEnterGeofence(false);
             updateFromGPS();
-//            mapViewWithBlueDot.removeBlueDot(); //todo: remove blue dots here?
         }
     };
 
@@ -191,21 +192,40 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
                 sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.BEACON;
                 sCoordinateListener.setUpdating(false);
                 sLocationManager.removeUpdates(sCoordinateListener);
+
+                //method 2
+                /*if(sCoordinateListener != null) {
+                    sLocationManager.removeUpdates(sCoordinateListener);
+                    sCoordinateListener = null;
+                }*/
+
             } else {
                 if(isWithinGeofence(GEOFENCE_LOCATIONS)) {
-                    if (   (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) || Build.VERSION.SDK_INT < 23) {
+                    if ((Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) || Build.VERSION.SDK_INT < 23) {
                         if(!sCoordinateListener.isUpdating()){
                             sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.GPS;
                             sCoordinateListener.setUpdating(true);
                             sLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
                             sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
                         }
+
+                        //method 2
+                        /*sCoordinateListener = new CoordinateListener(positionAndHeadingMapVisualization);
+                        sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.GPS;
+                        sCoordinateListener.setUpdating(true);
+                        sLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
+                        sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);*/
+
                     }
                 } else {
-//                Toast.makeText(mContext, "using GPS STOPPEDDDDDDDDDDDDDD", Toast.LENGTH_SHORT).show(); //testing
                     sCoordinateListener.setUpdating(false);
                     sLocationManager.removeUpdates(sCoordinateListener);
-//                sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.BEACON; //testing
+
+                    //method 2
+                    /*if(sCoordinateListener != null) {
+                        sLocationManager.removeUpdates(sCoordinateListener);
+                        sCoordinateListener = null;
+                    }*/
                 }
             }
         }

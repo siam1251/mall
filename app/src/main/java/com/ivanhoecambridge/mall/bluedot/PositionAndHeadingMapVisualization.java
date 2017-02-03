@@ -24,9 +24,10 @@ public class PositionAndHeadingMapVisualization {
     private float heading;
 
     protected static final int ANIMATION_TIME_MILLIS = 1000; //animator finishes before its gets updated - more instant update but it can stop and go stop and go
+    protected static final int COMPASS_ANIMATION_TIME_MILLIS = 400;
 //    protected static final int ANIMATION_TIME_MILLIS = 2000; //animator resets before it's over - more smooth but can lag
 
-    enum LocationFindingMode { BEACON, GPS };
+    public enum LocationFindingMode { BEACON, GPS };
     public static LocationFindingMode sLocationFindingMode = LocationFindingMode.BEACON;
 
     protected MapViewWithBlueDot mapViewWithBlueDot;
@@ -47,7 +48,7 @@ public class PositionAndHeadingMapVisualization {
     }
 
     protected final void setupFloatValueAnimation(final ValueAnimator animator, final ValueAnimator.AnimatorUpdateListener listener) {
-        animator.setDuration(ANIMATION_TIME_MILLIS);
+        animator.setDuration(COMPASS_ANIMATION_TIME_MILLIS);
         animator.setInterpolator(new LinearInterpolator());
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -77,15 +78,7 @@ public class PositionAndHeadingMapVisualization {
 
     }
 
-    public void setHeading(float heading, SLHeadingStatus headingStatus) {
-        this.headingStatus = headingStatus;
-        float end = heading % 360;
-        float start = this.heading;
-        float shortestAngle=((((end - start) % 360) + 540) % 360) - 180; // Ensure we don't spin when going from 360-0 or 0-360.
-        float newHeading = this.heading + shortestAngle;
-        restartAnimator(headingAnimator, this.heading, newHeading);
-    }
-
+    //SET BLUEDOT POSITION AND RESTARTING ANIMATION
     public void setPos(final BlueDotPosition blueDotPosition) {
         if(mAnimator == null) return;
         try {
@@ -96,6 +89,16 @@ public class PositionAndHeadingMapVisualization {
         } catch (Exception e) {
             Log.d("BLUEDOTERROR", e.toString());
         }
+    }
+
+    //SET HEADING VALUE AND RESTARTING ANIMATOR
+    public void setHeading(float heading, SLHeadingStatus headingStatus) {
+        this.headingStatus = headingStatus;
+        float end = heading % 360;
+        float start = this.heading;
+        float shortestAngle=((((end - start) % 360) + 540) % 360) - 180; // Ensure we don't spin when going from 360-0 or 0-360.
+        float newHeading = this.heading + shortestAngle;
+        restartAnimator(headingAnimator, this.heading, newHeading);
     }
 
     public void restartAnimator(ValueAnimator animator, double start, double end) {

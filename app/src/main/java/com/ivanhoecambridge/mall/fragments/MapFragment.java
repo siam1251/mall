@@ -53,6 +53,7 @@ import com.ivanhoecambridge.mall.adapters.adapterHelper.SectionedLinearRecyclerV
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.bluedot.FollowMode;
 import com.ivanhoecambridge.mall.bluedot.MapViewWithBlueDot;
+import com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenter;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
 import com.ivanhoecambridge.mall.constants.Constants;
@@ -92,6 +93,7 @@ import com.mappedin.sdk.Path;
 import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.RawData;
 import com.mappedin.sdk.Venue;
+import com.senionlab.slutilities.type.LocationAvailability;
 import com.senionlab.slutilities.type.SLHeadingStatus;
 
 import java.util.ArrayList;
@@ -108,6 +110,7 @@ import java.util.concurrent.ScheduledFuture;
 
 import factory.HeaderFactory;
 
+import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sLocationFindingMode;
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.sLocationAvailability;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -159,6 +162,9 @@ public class MapFragment extends BaseFragment
     private ImageView ivShadow;
     private ThemeColorImageView ivFollowMode;
     private ImageView ivTest;
+    private LinearLayout llTest;
+    private TextView tvTestLocationAvailability;
+    private TextView tvTestLocationFindingMode;
     private FrameLayout flMap; ///todo: disabled for testing
     private FrameLayout flCircle; ///todo: disabled for testing
     private RelativeLayout rlSlidingPanel; ///todo: disabled for testing
@@ -303,14 +309,6 @@ public class MapFragment extends BaseFragment
         ivFollowMode = (ThemeColorImageView) view.findViewById(R.id.ivFollowMode);
         flCircle = (FrameLayout) view.findViewById(R.id.flCircle);
         flCircle.setOnClickListener(onFollowButtonListener);
-        ivTest = (ImageView) view.findViewById(R.id.ivTest);
-        ivTest.setOnClickListener(onTestButtonListener);
-
-        if(/*BuildConfig.BLUEDOT || */BuildConfig.DEBUG) { //testing
-            ivTest.setVisibility(View.VISIBLE);
-        } else {
-            ivTest.setVisibility(View.GONE);
-        }
 
         flMap = (FrameLayout) view.findViewById(R.id.flMap); //todo: disabled for testing
 
@@ -342,6 +340,23 @@ public class MapFragment extends BaseFragment
 
         if(BuildConfig.BLUEDOT) {
             slIndoorLocationPresenter = new SLIndoorLocationPresenterImpl(getActivity(), this);
+        }
+
+
+
+        //--TESTING
+        ivTest = (ImageView) view.findViewById(R.id.ivTest);
+        llTest = (LinearLayout) view.findViewById(R.id.llTest);
+        tvTestLocationAvailability = (TextView) view.findViewById(R.id.tvTestLocationAvailability);
+        tvTestLocationFindingMode = (TextView) view.findViewById(R.id.tvTestLocationFindingMode);
+        ivTest.setOnClickListener(onTestButtonListener);
+
+        if(/*BuildConfig.BLUEDOT || */BuildConfig.DEBUG) { //testing
+            llTest.setVisibility(View.VISIBLE);
+            ivTest.setVisibility(View.VISIBLE);
+        } else {
+            llTest.setVisibility(View.GONE);
+            ivTest.setVisibility(View.GONE);
         }
 
         return view;
@@ -1480,61 +1495,13 @@ public class MapFragment extends BaseFragment
 
         label.setPosition(coordinate);
         mapView.addMarker(label, false);
+
+        tvTestLocationAvailability.setText(sLocationAvailability == LocationAvailability.NOT_AVAILABLE ? "NOT AVAILABLE" : "AVAILABLE");
+        tvTestLocationFindingMode.setText(sLocationFindingMode == PositionAndHeadingMapVisualization.LocationFindingMode.GPS ? "GPS" : "BEACON");
     }
 
     @Override
     public void dropHeading(double x, double y, final float heading, SLHeadingStatus headingStatus) {
-
-        //HEADING TESTING
-        /*if(maps == null || mBlueDotPin == null) return;
-        mHeading = heading;
-        if(mSLHeadingStatus != headingStatus) { //status changed
-            mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
-            Overlay2DImage label;
-            Drawable blueDotPinDrawable;
-            if(headingStatus == SLHeadingStatus.UNDEFINED) {
-                blueDotPinDrawable = getResources().getDrawable(R.drawable.icn_bluebutton);
-                label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, blueDotPinDrawable, PIN_BLUEDOT/2, PIN_BLUEDOT/2);
-            } else {
-                blueDotPinDrawable = getResources().getDrawable(R.drawable.icn_bluedot_orientation);
-                label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, blueDotPinDrawable, PIN_BLUEDOT/2, PIN_BLUEDOT/2);
-                label.setRotation(heading);
-            }
-            mBlueDotPin.setOverlay2DImage(label);
-            mSLHeadingStatus = headingStatus;
-        }*/
-
-
-        /*if(maps == null || mBlueDotPin == null) return;
-        if(headingStatus == SLHeadingStatus.UNDEFINED && mBlueDotCompass != null) {
-            mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
-            return;
-        }
-        if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
-            return;
-        }
-
-        int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getElevation());
-//        android.location.Location targetLocation = MapUtility.getLocation(x, y);
-        android.location.Location targetLocation = MapUtility.getLocation(mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude());
-        Overlay2DImage label;
-        Coordinate coordinate  = new Coordinate(targetLocation, maps[mapIndex]);
-
-        if(mBlueDotCompass == null) {
-            label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluedot_orientation_pointer), PIN_BLUEDOT/2, PIN_BLUEDOT/2);
-            mBlueDotCompass = new Pin(coordinate, label, x, y);
-        } else {
-            mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
-            label = mBlueDotCompass.getOverlay2DImage();
-            mBlueDotCompass.setLocation(coordinate, x, y);
-        }
-//        label.setRotation(heading);
-        label.setPosition(coordinate);
-        mapView.addMarker(label, true);*/
-
-
-//        tempHeading = heading;
-
         if(maps == null || mBlueDotPin == null) return;
         if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
             return;
@@ -1557,7 +1524,6 @@ public class MapFragment extends BaseFragment
         mapView.addMarker(label, false);
         tempHeading = heading;
         headingDropped = true;
-
     }
 
     //TESTING
@@ -1573,66 +1539,43 @@ public class MapFragment extends BaseFragment
     double x2 = 51.201866;
     double y2 = -113.992274;
 
+    int tempFloor = 0;
     private View.OnClickListener onTestButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
         //TESTING
-            /*if(tempFloor == 0) tempFloor = 1;
-            else tempFloor = 0;*/
+            if(tempFloor == 0) tempFloor = 1;
+            else tempFloor = 0;
 
-//            dropBlueDot(43.64249432344601, -79.37441128178561, 1);
-
-            /*if(mBlueDotPin == null) {
+//            if(mBlueDotPin == null) {
                 Random r = new Random();
                 int randomFloor = r.nextInt(5);
-//                dropBlueDot(49.2268235, -123.0004849, randomFloor); //MP
-                dropBlueDot(51.2030627,-113.9956265, randomFloor); //CROSSIRON
+                dropBlueDot(49.2268235, -123.0004849, randomFloor); //MP
+//                dropBlueDot(51.2030627,-113.9956265, randomFloor); //CROSSIRON
                 Toast.makeText(getActivity(), "Floor : " + randomFloor, Toast.LENGTH_SHORT).show();
-            } else {
-                removeBlueDot();
-                Toast.makeText(getActivity(), "bluedot removed", Toast.LENGTH_SHORT).show();
-            }*/
+//            } else {
+//
+//                removeBlueDot();
+//                Toast.makeText(getActivity(), "bluedot removed", Toast.LENGTH_SHORT).show();
+//            }
 
             //change between two locations at CM
-            if(mBlueDotPin == null) {
-                Random r = new Random();
-                int randomFloor = r.nextInt(5);
-
-                if(x == 0 || x == x1) {
-                    x = x2;
-                    y = y2;
-                } else {
-                    x = x1;
-                    y = y1;
-                }
-
-                dropBlueDot(x, y, randomFloor); //CROSSIRON
-            }
-
-            dropHeading(0,0,0, null);
-
-            /*if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
-                return;
-            }
-            int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getElevation());
-            android.location.Location targetLocation = MapUtility.getLocation(mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude());
-            final Overlay2DImage label;
-            if(mBlueDotCompass == null) {
-                label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluedot_orientation_pointer), PIN_BLUEDOT/2, PIN_BLUEDOT/2);
-            } else {
-                label = mBlueDotCompass.getOverlay2DImage();
-            }
-            Coordinate coordinate = new Coordinate(targetLocation, maps[mapIndex]);
-            if(mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
-            mBlueDotCompass = new Pin(coordinate, label);
-            mBlueDotCompass.setCoordinate(coordinate);
-//            label.setRotation((float)Math.toRadians(tempHeading)); //testing
-            label.setRotation((float)Math.toRadians(90)); //testing
-            label.setPosition(coordinate);
-            mapView.addMarker(label, false);
-
-            Log.d(TAG, "heading: " + tempHeading);
-            headingDrawn = tempHeading;*/
+//            if(mBlueDotPin == null) {
+//                Random r = new Random();
+//                int randomFloor = r.nextInt(5);
+//
+//                if(x == 0 || x == x1) {
+//                    x = x2;
+//                    y = y2;
+//                } else {
+//                    x = x1;
+//                    y = y1;
+//                }
+//
+//                dropBlueDot(x, y, randomFloor); //CROSSIRON
+//            }
+//
+//            dropHeading(0,0,0, null);
         }
     };
 
@@ -1765,7 +1708,7 @@ public class MapFragment extends BaseFragment
     }
 
     public static boolean isBlueDotShown(){
-        return BluetoothManager.isBluetoothEnabled() && mBlueDotPin != null && sLocationAvailability.isAvailable();
+        return BluetoothManager.isBluetoothEnabled() && mBlueDotPin != null;
     }
 
 
