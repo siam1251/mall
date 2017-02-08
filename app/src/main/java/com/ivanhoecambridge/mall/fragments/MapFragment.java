@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -58,6 +60,7 @@ import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenter;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
+import com.ivanhoecambridge.mall.geofence.GeofenceManager;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
 import com.ivanhoecambridge.mall.managers.ThemeManager;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
@@ -103,6 +106,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -110,6 +115,8 @@ import java.util.concurrent.ScheduledFuture;
 
 import factory.HeaderFactory;
 
+import static android.R.attr.label;
+import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sGeofenceEntered;
 import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sLocationFindingMode;
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.sLocationAvailability;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -162,9 +169,11 @@ public class MapFragment extends BaseFragment
     private ImageView ivShadow;
     private ThemeColorImageView ivFollowMode;
     private ImageView ivTest;
+    private ImageView ivTestGeofence;
     private LinearLayout llTest;
     private TextView tvTestLocationAvailability;
     private TextView tvTestLocationFindingMode;
+    private TextView tvTestGeofence;
     private FrameLayout flMap; ///todo: disabled for testing
     private FrameLayout flCircle; ///todo: disabled for testing
     private RelativeLayout rlSlidingPanel; ///todo: disabled for testing
@@ -237,7 +246,8 @@ public class MapFragment extends BaseFragment
     private boolean mShowBlueDotHeader = false; //show whether to 'use Current Location' header in recyclerview when blue dot's available - show in destination editor, don't show in normal search mode
     private static ParkingPin sParkingPin;
     private SLHeadingStatus mSLHeadingStatus = SLHeadingStatus.UNDEFINED;
-    private float mHeading;
+    private double mBearingFromCamera;
+    private boolean mGreyDotDropped = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -340,16 +350,20 @@ public class MapFragment extends BaseFragment
 
         if(BuildConfig.BLUEDOT) {
             slIndoorLocationPresenter = new SLIndoorLocationPresenterImpl(getActivity(), this);
+            if(mMainActivity.mGeofenceManager != null) mMainActivity.mGeofenceManager.setSLIndoorLocationPresenterImpl((SLIndoorLocationPresenterImpl) slIndoorLocationPresenter);
         }
 
 
 
         //--TESTING
         ivTest = (ImageView) view.findViewById(R.id.ivTest);
+        ivTestGeofence = (ImageView) view.findViewById(R.id.ivTestGeofence);
         llTest = (LinearLayout) view.findViewById(R.id.llTest);
         tvTestLocationAvailability = (TextView) view.findViewById(R.id.tvTestLocationAvailability);
         tvTestLocationFindingMode = (TextView) view.findViewById(R.id.tvTestLocationFindingMode);
+        tvTestGeofence = (TextView) view.findViewById(R.id.tvTestGeofence);
         ivTest.setOnClickListener(onTestButtonListener);
+        ivTestGeofence.setOnClickListener(onTestGeofenceButtonListener);
 
         if(/*BuildConfig.BLUEDOT || */BuildConfig.DEBUG) { //testing
             llTest.setVisibility(View.VISIBLE);
@@ -387,18 +401,26 @@ public class MapFragment extends BaseFragment
     }
 
     public void initializeMap() {
-        if(mMainActivity.mSplashScreenGone){
-            btnShowMap.setVisibility(View.GONE);
-            btnShowMap = null;
-            pb.setVisibility(View.VISIBLE);
-            mappedIn.getVenues(new GetVenuesCallback());
-        } else {
-            mMainActivity.setOnReadyToLoadMapListener(new MainActivity.ReadyToLoadMapListener() {
-                @Override
-                public void onReady() {
-                    initializeMap();
+        try {
+            if(mMainActivity == null) return;
+            if(mMainActivity.mSplashScreenGone){
+                if(btnShowMap != null) {
+                    btnShowMap.setVisibility(View.GONE);
+                    btnShowMap = null;
                 }
-            });
+                pb.setVisibility(View.VISIBLE);
+                mappedIn.getVenues(new GetVenuesCallback());
+            } else {
+                mMainActivity.setOnReadyToLoadMapListener(new MainActivity.ReadyToLoadMapListener() {
+                    @Override
+                    public void onReady() {
+                        initializeMap();
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -798,6 +820,8 @@ public class MapFragment extends BaseFragment
                 destinationPolygon = polygon;
             }
 
+            setFollowMode(FollowMode.NONE);
+
             if (navigationMode) {
                 if (path != null) {
                     didTapNothing();
@@ -853,7 +877,6 @@ public class MapFragment extends BaseFragment
                 dropDestinationPin(destinationPolygonCoordinate, getResources().getDrawable(R.drawable.icn_wayfinding_destination));
                 dropVortexOnThePath(directions.getInstructions());
                 showInstruction(maps[mCurrentLevelIndex].getElevation());
-                setFollowMode(FollowMode.NONE);
 
                 return true;
             } else {
@@ -1004,7 +1027,8 @@ public class MapFragment extends BaseFragment
                     flCompass.setVisibility(View.VISIBLE);
                     animateCompass();
                 }
-//                logger.debug("bearing :" + (float)(bearing/Math.PI*180)); //testing
+                mBearingFromCamera = bearing;
+                Log.d("bearing", "mBearingFromCamera : " + mBearingFromCamera);
                 ivCompass.setRotation((float)(bearing/Math.PI*180));
                 mBearingEntered = true;
             }
@@ -1484,12 +1508,15 @@ public class MapFragment extends BaseFragment
         android.location.Location targetLocation = MapUtility.getLocation(x, y);
         Overlay2DImage label;
         Coordinate coordinate  = new Coordinate(targetLocation, maps[floor]);
-        if(mBlueDotPin == null) {
+        if(mBlueDotPin == null) { //first time dropping blue dot
             label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluebutton), PIN_BLUEDOT/2, PIN_BLUEDOT/2);
             mBlueDotPin = new Pin(coordinate, label, x, y);
+            startPulseAnimation();
+            setFollowMode(FollowMode.CENTER);
         } else {
             mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
-            label = mBlueDotPin.getOverlay2DImage();
+            if(mGreyDotDropped) label = new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_bluebutton), PIN_BLUEDOT/2, PIN_BLUEDOT/2);
+            else label = mBlueDotPin.getOverlay2DImage();
             mBlueDotPin.setLocation(coordinate, x, y);
         }
 
@@ -1498,6 +1525,24 @@ public class MapFragment extends BaseFragment
 
         tvTestLocationAvailability.setText(sLocationAvailability == LocationAvailability.NOT_AVAILABLE ? "NOT AVAILABLE" : "AVAILABLE");
         tvTestLocationFindingMode.setText(sLocationFindingMode == PositionAndHeadingMapVisualization.LocationFindingMode.GPS ? "GPS" : "BEACON");
+        tvTestGeofence.setText(sGeofenceEntered);
+        mGreyDotDropped = false;
+    }
+
+    @Override
+    public void dropGreyBlueDot() {
+        if(mBlueDotPin != null) {
+            android.location.Location targetLocation = MapUtility.getLocation(mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude());
+            int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getElevation());
+            Overlay2DImage label;
+            Coordinate coordinate  = new Coordinate(targetLocation, maps[mapIndex]);
+            mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
+            mBlueDotPin.setOverlay2DImage(new Overlay2DImage(PIN_BLUEDOT, PIN_BLUEDOT, getResources().getDrawable(R.drawable.icn_greybutton), PIN_BLUEDOT/2, PIN_BLUEDOT/2));
+            label = mBlueDotPin.getOverlay2DImage();
+            label.setPosition(coordinate);
+            mapView.addMarker(label, false);
+            mGreyDotDropped = true;
+        }
     }
 
     @Override
@@ -1519,11 +1564,13 @@ public class MapFragment extends BaseFragment
         if(mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
         mBlueDotCompass = new Pin(coordinate, label);
         mBlueDotCompass.setCoordinate(coordinate);
-        label.setRotation((float)Math.toRadians(heading));
+//        label.setRotation((float)Math.toRadians(heading));
+        label.setRotation((float)Math.toRadians(heading) + (float) mBearingFromCamera);
         label.setPosition(coordinate);
         mapView.addMarker(label, false);
         tempHeading = heading;
         headingDropped = true;
+//        Log.d("bearing", "heading : " + heading);
     }
 
     //TESTING
@@ -1540,42 +1587,62 @@ public class MapFragment extends BaseFragment
     double y2 = -113.992274;
 
     int tempFloor = 0;
+
+    boolean greyDropped = false;
     private View.OnClickListener onTestButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-        //TESTING
-            if(tempFloor == 0) tempFloor = 1;
+            //mimicking geofence enter/leave
+            if(!greyDropped){
+
+                Toast.makeText(getActivity(), "manually turning off geofence", Toast.LENGTH_SHORT).show();
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(GeofenceManager.MyWebRequestReceiver.PROCESS_RESPONSE);
+                broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IS_CONNECTED, false);
+                broadcastIntent.putExtra(GeofenceManager.GEOFENCE_INFO, "");
+                broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IDS, "Tsawwassen Mills Mall");
+                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                getActivity().sendBroadcast(broadcastIntent);
+                greyDropped = true;
+            } else {
+
+                Toast.makeText(getActivity(), "manually turning on geofence", Toast.LENGTH_SHORT).show();
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(GeofenceManager.MyWebRequestReceiver.PROCESS_RESPONSE);
+                broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IS_CONNECTED, true);
+                broadcastIntent.putExtra(GeofenceManager.GEOFENCE_INFO, "");
+                broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IDS, "Tsawwassen Mills Mall");
+                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                getActivity().sendBroadcast(broadcastIntent);
+                greyDropped = false;
+            }
+
+            //TESTING MANUAL BLUE DOT
+            /*if(tempFloor == 0) tempFloor = 1;
             else tempFloor = 0;
 
-//            if(mBlueDotPin == null) {
+            if(mBlueDotPin == null) {
                 Random r = new Random();
                 int randomFloor = r.nextInt(5);
-                dropBlueDot(49.2268235, -123.0004849, randomFloor); //MP
+//                dropBlueDot(43.642369, -79.374530, 1); //MP
+//                dropBlueDot(49.2268235, -123.0004849, randomFloor); //CENTER OF MP
+                dropBlueDot(49.228311, -123.001166, randomFloor); //NORTH CORNER OF SUPERSTORE AT MP
 //                dropBlueDot(51.2030627,-113.9956265, randomFloor); //CROSSIRON
                 Toast.makeText(getActivity(), "Floor : " + randomFloor, Toast.LENGTH_SHORT).show();
-//            } else {
-//
-//                removeBlueDot();
-//                Toast.makeText(getActivity(), "bluedot removed", Toast.LENGTH_SHORT).show();
-//            }
+            } else {
+                removeBlueDot();
+                Toast.makeText(getActivity(), "bluedot removed", Toast.LENGTH_SHORT).show();
+            }*/
+        }
+    };
 
-            //change between two locations at CM
-//            if(mBlueDotPin == null) {
-//                Random r = new Random();
-//                int randomFloor = r.nextInt(5);
-//
-//                if(x == 0 || x == x1) {
-//                    x = x2;
-//                    y = y2;
-//                } else {
-//                    x = x1;
-//                    y = y1;
-//                }
-//
-//                dropBlueDot(x, y, randomFloor); //CROSSIRON
-//            }
-//
-//            dropHeading(0,0,0, null);
+    private View.OnClickListener onTestGeofenceButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getActivity(), "SetGeofence(true)", Toast.LENGTH_SHORT).show();
+            mMainActivity.mGeofenceManager.setGeofence(true);
         }
     };
 
@@ -1660,6 +1727,7 @@ public class MapFragment extends BaseFragment
                 mFollowMode = followMode;
                 updateFollowMode();
             } else {
+                slIndoorLocationPresenter.onResume();
                 AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
                 alertDialogForInterest.getAlertDialog(
                         getActivity(),
@@ -1676,6 +1744,29 @@ public class MapFragment extends BaseFragment
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void startPulseAnimation(){
+        if(Build.VERSION.SDK_INT >= 21 ) {
+            ImageView ivCircle = (ImageView) view.findViewById(R.id.ivCircle);
+            ivCircle.setBackground(getActivity().getResources().getDrawable(R.drawable.round_ripple));
+            final RippleDrawable rippleDrawable = (RippleDrawable) ivCircle.getBackground();
+            rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});
+
+            for(int i = 0; i < 6; i++) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+                        rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});
+                        rippleDrawable.setState(new int[]{});
+                    }
+                }, i * 900 + 200);
+            }
+        } else {
+            Animation pulse = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_pulse);
+            ivFollowMode.startAnimation(pulse);
+
         }
     }
 
@@ -1701,6 +1792,7 @@ public class MapFragment extends BaseFragment
                     setMapLevel(floor, null, mapName);
                 }
                 mapView.getCamera().focusOn(mBlueDotPin.getCoordinate());
+                mapView.getCamera().setRotationTo(0, 0);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -2003,6 +2095,7 @@ public class MapFragment extends BaseFragment
                 final Intent intent = new Intent (getActivity(), ParkingActivity.class);
                 getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
             } else {
+                setFollowMode(FollowMode.NONE);
                 if(BuildConfig.PARKING_POLYGON) {
                     if(ParkingManager.getMyEntrance(getActivity()) != null) {
                         String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();

@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.mall.activities.MainActivity;
@@ -58,7 +57,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         double latitude;
         double longitude;
         double radius;
-        int floor;
+        int floorIndex;
         private boolean didEnterGeofence = false;
 
         public GeofenceLocation(String name, double latitude, double longitude, double radius, int floor) {
@@ -66,15 +65,19 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
             this.latitude = latitude;
             this.longitude = longitude;
             this.radius = radius;
-            this.floor = floor;
+            this.floorIndex = floor;
         }
 
         private SLCoordinate3D getSLCoordinate3D(){
-            return new SLCoordinate3D(latitude, longitude, new FloorNr(floor));
+            return new SLCoordinate3D(latitude, longitude, new FloorNr(floorIndex));
         }
 
         public SLCircle getSLCircle(){
             return new SLCircle(new SLGeometryId(name), getSLCoordinate3D(), radius);
+        }
+
+        public double getRadius() {
+            return radius;
         }
 
         public boolean getDidEnterGeofence() {
@@ -83,6 +86,14 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
         public void setDidEnterGeofence(boolean didEnterGeometry) {
             this.didEnterGeofence = didEnterGeometry;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public double getLongitude() {
+            return longitude;
         }
     }
 
@@ -96,6 +107,10 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
     @Override
     public void onResume() {
+        initService();
+    }
+
+    public void initService(){
         try {
             serviceManager = SLServiceManager.getInstance(mContext);
             serviceManager.registerReceiver(receiver);
@@ -104,6 +119,8 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         } catch (SLJsonProcessingException e) {
             e.printStackTrace();
         } catch (SLIndoorLocationException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -126,7 +143,10 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         public void didUpdateLocation(SLCoordinate3D location, double uncertaintyRadius, SLLocationStatus status) {
             synchronized (this) {
                 BlueDotPosition blueDotPosition = new BlueDotPosition(location);
-                if(sLocationFindingMode.equals(PositionAndHeadingMapVisualization.LocationFindingMode.BEACON)) positionAndHeadingMapVisualization.setPos(blueDotPosition);
+                if(sLocationFindingMode.equals(PositionAndHeadingMapVisualization.LocationFindingMode.BEACON)) {
+                    positionAndHeadingMapVisualization.setPos(blueDotPosition);
+                }
+                logger.debug("location++" + location.getLatitude() + " : " + location.getLongitude() );
             }
         }
 
@@ -153,7 +173,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
         @Override
         public void didUpdateMotionType(SLMotionType motionType) {
-            logger.debug("didUpdateMotionType++" + " SLMotionType: " + motionType); //testing
+//            logger.debug("didUpdateMotionType++" + " SLMotionType: " + motionType); //testing
         }
 
         @Override
@@ -176,29 +196,22 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         public void didEnterGeometry(SLGeometry geometry) {
             logger.debug("didEnterGeometry++");
             GEOFENCE_LOCATIONS.get(geometry.getGeometryId().getGeometryId()).setDidEnterGeofence(true);
-            updateFromGPS();
         }
         @Override
         public void didLeaveGeometry(SLGeometry geometry) {
             logger.debug("didLeaveGeometry++");
             GEOFENCE_LOCATIONS.get(geometry.getGeometryId()).setDidEnterGeofence(false);
-            updateFromGPS();
         }
     };
 
-    private void updateFromGPS(){
+
+    //should i updateFromBeacon if I get a signal from beacon even though Availability is set as Not_AVAILABLE??
+    public void updateFromGPS(){
         synchronized (this) {
             if(sLocationAvailability.isAvailable()) {
                 sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.BEACON;
                 sCoordinateListener.setUpdating(false);
                 sLocationManager.removeUpdates(sCoordinateListener);
-
-                //method 2
-                /*if(sCoordinateListener != null) {
-                    sLocationManager.removeUpdates(sCoordinateListener);
-                    sCoordinateListener = null;
-                }*/
-
             } else {
                 if(isWithinGeofence(GEOFENCE_LOCATIONS)) {
                     if ((Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) || Build.VERSION.SDK_INT < 23) {
@@ -208,24 +221,11 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
                             sLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
                             sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
                         }
-
-                        //method 2
-                        /*sCoordinateListener = new CoordinateListener(positionAndHeadingMapVisualization);
-                        sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.GPS;
-                        sCoordinateListener.setUpdating(true);
-                        sLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
-                        sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);*/
-
                     }
                 } else {
                     sCoordinateListener.setUpdating(false);
                     sLocationManager.removeUpdates(sCoordinateListener);
-
-                    //method 2
-                    /*if(sCoordinateListener != null) {
-                        sLocationManager.removeUpdates(sCoordinateListener);
-                        sCoordinateListener = null;
-                    }*/
+                    mapViewWithBlueDot.dropGreyBlueDot();
                 }
             }
         }
@@ -240,6 +240,13 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
     @Override
     public void onPause() {
+        if (serviceManager != null) {
+            try {
+                serviceManager.unbindService(this);
+            } catch (SLIndoorLocationException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

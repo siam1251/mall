@@ -150,11 +150,11 @@ public class MainActivity extends BaseActivity
     private BadgeView badgeEvents;
     private BadgeView badgeStores;
     private BadgeView badgeInterests;
-    public boolean mActiveMall = false;
+    public static boolean mActiveMall = false;
     public boolean mSplashScreenGone = false; //when map initializes it causes lag to splashscreen. Use this variable to see if splash screen's gone
 
     //GEOFENCE
-    private GeofenceManager mGeofenceManager;
+    public GeofenceManager mGeofenceManager;
     private Animation mMenuActiveMallDotAnim;
 
     public RecyclerView rvMallDirectory; //SEARCH RECYCLERVIEW FROM DIRECTORY FRAGMENT
@@ -355,6 +355,7 @@ public class MainActivity extends BaseActivity
             else initializeAccount();
             DirectoryFragment.getInstance().initializeDirectoryData();
             InfoFragment.getInstance().initializeMallInfoData();
+            MapFragment.getInstance().initializeMap();
             initializeMapData();
             initializeParkingData();
             initializeSeachIndex();

@@ -32,8 +32,12 @@ public class CoordinateListener implements LocationListener {
         Log.d("CoordinateListener", "Location changed: Lat: " + loc.getLatitude() + " Lng: " + loc.getLongitude());
 
         int floorIndex = 0;
+        double radius = 100000;
         for (Map.Entry<String, SLIndoorLocationPresenterImpl.GeofenceLocation> entry : GEOFENCE_LOCATIONS.entrySet()) {
-            if(entry.getValue().getDidEnterGeofence()) floorIndex = entry.getValue().floor;
+            if(entry.getValue().getDidEnterGeofence() && radius > entry.getValue().radius) {
+                floorIndex = entry.getValue().floorIndex;
+                radius = entry.getValue().radius;
+            }
         }
 
         BlueDotPosition blueDotPosition = new BlueDotPosition(loc, floorIndex);

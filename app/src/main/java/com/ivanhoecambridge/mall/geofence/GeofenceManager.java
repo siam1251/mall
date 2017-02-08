@@ -29,12 +29,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.MainActivity;
+import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 import geofence.GeofenceConstants;
+
+import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sGeofenceEntered;
+import static slutilities.SLSettings.GEOFENCE_LOCATIONS;
 
 /**
  * Created by Kay on 2016-08-23.
@@ -47,6 +51,8 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
 
     public static final int LOCATION_REQUEST = 1337;
     public static final String GEOFENCE_IS_CONNECTED = "geofence_is_connected";
+    public static final String GEOFENCE_INFO = "geofence_info";
+    public static final String GEOFENCE_IDS = "geofence_id";
 
     private Context mContext;
     protected static final String TAG = "GeofenceManager";
@@ -56,6 +62,7 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     private PendingIntent mGeofencePendingIntent;
     private SharedPreferences mSharedPreferences;
     private MyWebRequestReceiver mMyWebRequestReceiver;
+    private SLIndoorLocationPresenterImpl mSLIndoorLocationPresenterImpl;
 
 
     public GeofenceManager(Context context) {
@@ -69,6 +76,10 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
         mGeofencesAdded = mSharedPreferences.getBoolean(GeofenceConstants.GEOFENCES_ADDED_KEY, false);
 
         initialize();
+    }
+
+    public void setSLIndoorLocationPresenterImpl(SLIndoorLocationPresenterImpl slIndoorLocationPresenterImpl){
+        mSLIndoorLocationPresenterImpl = slIndoorLocationPresenterImpl;
     }
 
     private void initialize() {
@@ -128,7 +139,7 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
         if(enableGeofence) {
             addGeofencesButtonHandler();
         } else {
-            removeGeofencesButtonHandler();
+//            removeGeofencesButtonHandler();
         }
     }
 
@@ -148,6 +159,7 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     private GeofencingRequest getGeofencingRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
         builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+//        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL); //https://developer.android.com/training/location/geofencing.html
         builder.addGeofences(mGeofenceList);
         return builder.build();
     }
@@ -241,14 +253,13 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     }
 
     public void populateGeofenceList() {
-        for (Map.Entry<String, LatLng> entry : GeofenceConstants.GEOFENCE_AREA_LAT_LONG.entrySet()) {
-
+        for (Map.Entry<String, SLIndoorLocationPresenterImpl.GeofenceLocation> entry : GEOFENCE_LOCATIONS.entrySet()) {
             mGeofenceList.add(new Geofence.Builder()
                     .setRequestId(entry.getKey())
                     .setCircularRegion(
-                            entry.getValue().latitude,
-                            entry.getValue().longitude,
-                            GeofenceConstants.GEOFENCE_RADIUS_IN_METERS
+                            entry.getValue().getLatitude(),
+                            entry.getValue().getLongitude(),
+                            (float) entry.getValue().getRadius()
                     )
 
                     .setExpirationDuration(GeofenceConstants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
@@ -281,17 +292,33 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            boolean response = intent.getBooleanExtra(GeofenceManager.GEOFENCE_IS_CONNECTED, false);
+            boolean isGeofenceEntered = intent.getBooleanExtra(GeofenceManager.GEOFENCE_IS_CONNECTED, false);
+            String geofenceDetail = intent.getStringExtra(GeofenceManager.GEOFENCE_INFO);
+            String geofenceOfInterest = intent.getStringExtra(GeofenceManager.GEOFENCE_IDS);
+            sGeofenceEntered = geofenceDetail;
             if(mContext != null) {
-                if(response) {
+                if(isGeofenceEntered) {
                     Log.v("Geofence", "Entered");
                     ((MainActivity) mContext).setActiveMall(false, true);
+                    setGeofenceStatus(geofenceOfInterest, true);
                 } else {
+                    setGeofenceStatus(geofenceOfInterest, false);
                     Log.v("Geofence", "Exited");
                     ((MainActivity) mContext).setActiveMall(false, false);
                 }
             }
+            if(mSLIndoorLocationPresenterImpl != null) mSLIndoorLocationPresenterImpl.updateFromGPS();
+        }
+    }
+
+    public void setGeofenceStatus(String geofenceOfInterest, boolean isEntered){
+        if(geofenceOfInterest == null) return;
+        String[] geofences = geofenceOfInterest.split(", ");
+
+        String prefix = isEntered ? "ENTERED" : "EXITED";
+        for (String geofence : geofences) {
+            if(GEOFENCE_LOCATIONS.containsKey(geofence)) GEOFENCE_LOCATIONS.get(geofence).setDidEnterGeofence(isEntered);
+            System.out.println(prefix + " : " + geofence);
         }
     }
 }

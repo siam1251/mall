@@ -10,6 +10,8 @@ import android.view.animation.LinearInterpolator;
 import com.senionlab.slutilities.type.SLHeadingStatus;
 import com.senionlab.slutilities.type.SLPixelPoint2D;
 
+import slutilities.SLSettings;
+
 /**
  * Created by Kay on 2017-01-06.
  */
@@ -29,6 +31,7 @@ public class PositionAndHeadingMapVisualization {
 
     public enum LocationFindingMode { BEACON, GPS };
     public static LocationFindingMode sLocationFindingMode = LocationFindingMode.BEACON;
+    public static String sGeofenceEntered = "";
 
     protected MapViewWithBlueDot mapViewWithBlueDot;
     private SLHeadingStatus headingStatus;
@@ -62,7 +65,7 @@ public class PositionAndHeadingMapVisualization {
 
     public PositionAndHeadingMapVisualization() {
         if(mAnimator == null) {
-            mAnimator = ValueAnimator.ofObject(new PositionTypeEvaluator(), new BlueDotPosition(0, 0),
+            mAnimator = ValueAnimator.ofObject(new PositionTypeEvaluator(), new BlueDotPosition(SLSettings.latitude, SLSettings.longitude),
                     new BlueDotPosition(posX, posY));
 
         }

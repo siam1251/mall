@@ -9,6 +9,7 @@ import com.senionlab.slutilities.type.SLPixelPoint2D;
 
 public interface MapViewWithBlueDot {
     void dropBlueDot(double x, double y, int floor);
+    void dropGreyBlueDot();
     int getCurrentFloor();
     void removeBlueDot();
     void dropHeading(double x, double y, float heading, SLHeadingStatus headingStatus);

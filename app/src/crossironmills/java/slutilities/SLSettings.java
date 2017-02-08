@@ -17,6 +17,11 @@ public class SLSettings {
     public static final SLPointOfInterest[] POINTS_ARRAY = {};
 
     public static final SLGeofencingArea[] GEOFENCING_ARRAY = {};
+
+    private static double latitude = 49.226117;
+    private static double longitude = -122.999353;
+
+
     public static HashMap<String, SLIndoorLocationPresenterImpl.GeofenceLocation> GEOFENCE_LOCATIONS = new HashMap<String, SLIndoorLocationPresenterImpl.GeofenceLocation>();
     static {
         GEOFENCE_LOCATIONS.put("KineticCafe", new SLIndoorLocationPresenterImpl.GeofenceLocation("KineticCafe", 43.642069, -79.374585, 200, 0));

@@ -165,6 +165,7 @@
 
     <color name="map_level_enabled">#787a86</color>
     <color name="map_level_disabled">#c8c8cc</color>
+    <color name="map_pulse">#AA007aff</color>
 
     <color name="map_level_with_path">#007aff</color>
     <color name="map_level_without_path">#FFFFFF</color>
