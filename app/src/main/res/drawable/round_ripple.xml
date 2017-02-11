@@ -6,7 +6,7 @@
         <shape >
             <!--<solid android:color="@android:color/white" />-->
             <solid android:color="@color/map_pulse" />
-            <corners android:radius="50dp" />
+            <corners android:radius="43dp" />
         </shape>
     </item>
     <!--<item android:drawable="@drawable/icn_compass_frame" />-->

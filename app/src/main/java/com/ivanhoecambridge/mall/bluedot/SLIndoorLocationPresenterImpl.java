@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.mall.activities.MainActivity;
+import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
 import com.senionlab.slutilities.geofencing.geometries.SLCircle;
 import com.senionlab.slutilities.geofencing.geometries.SLGeometryId;
 import com.senionlab.slutilities.geofencing.interfaces.SLGeometry;
@@ -60,12 +61,26 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         int floorIndex;
         private boolean didEnterGeofence = false;
 
+        /**
+         * @isForActiveMallDetection when set true, this geofence's only used for active mall mode and NOT for detecting location.
+         */
+        private boolean isForActiveMallDetection = false;
+
         public GeofenceLocation(String name, double latitude, double longitude, double radius, int floor) {
             this.name = name;
             this.latitude = latitude;
             this.longitude = longitude;
             this.radius = radius;
             this.floorIndex = floor;
+        }
+
+        public GeofenceLocation(String name, double latitude, double longitude, double radius, int floor, boolean isForActiveMallDetection) {
+            this.name = name;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.radius = radius;
+            this.floorIndex = floor;
+            this.isForActiveMallDetection = isForActiveMallDetection;
         }
 
         private SLCoordinate3D getSLCoordinate3D(){
@@ -82,6 +97,10 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
         public boolean getDidEnterGeofence() {
             return didEnterGeofence;
+        }
+
+        public boolean isForActiveMallDetection() {
+            return isForActiveMallDetection;
         }
 
         public void setDidEnterGeofence(boolean didEnterGeometry) {
@@ -107,6 +126,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
     @Override
     public void onResume() {
+        mapViewWithBlueDot.dropGreyBlueDot();
         initService();
     }
 
@@ -143,10 +163,10 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         public void didUpdateLocation(SLCoordinate3D location, double uncertaintyRadius, SLLocationStatus status) {
             synchronized (this) {
                 BlueDotPosition blueDotPosition = new BlueDotPosition(location);
-                if(sLocationFindingMode.equals(PositionAndHeadingMapVisualization.LocationFindingMode.BEACON)) {
+                if(sLocationFindingMode == PositionAndHeadingMapVisualization.LocationFindingMode.BEACON) {
                     positionAndHeadingMapVisualization.setPos(blueDotPosition);
                 }
-                logger.debug("location++" + location.getLatitude() + " : " + location.getLongitude() );
+//                logger.debug("location++" + location.getLatitude() + " : " + location.getLongitude() );
             }
         }
 
@@ -194,13 +214,23 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         }
         @Override
         public void didEnterGeometry(SLGeometry geometry) {
-            logger.debug("didEnterGeometry++");
-            GEOFENCE_LOCATIONS.get(geometry.getGeometryId().getGeometryId()).setDidEnterGeofence(true);
+            /*logger.debug("didEnterGeometry++");
+            try {
+                GEOFENCE_LOCATIONS.get(geometry.getGeometryId().getGeometryId()).setDidEnterGeofence(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+                CustomizedExceptionHandler.writeToFile(mContext, e.toString());
+            }*/
         }
         @Override
         public void didLeaveGeometry(SLGeometry geometry) {
-            logger.debug("didLeaveGeometry++");
-            GEOFENCE_LOCATIONS.get(geometry.getGeometryId()).setDidEnterGeofence(false);
+            /*logger.debug("didLeaveGeometry++");
+            try {
+                GEOFENCE_LOCATIONS.get(geometry.getGeometryId()).setDidEnterGeofence(false);
+            } catch (Exception e) {
+                e.printStackTrace();
+                CustomizedExceptionHandler.writeToFile(mContext, e.toString());
+            }*/
         }
     };
 
@@ -215,14 +245,15 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
             } else {
                 if(isWithinGeofence(GEOFENCE_LOCATIONS)) {
                     if ((Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) || Build.VERSION.SDK_INT < 23) {
-                        if(!sCoordinateListener.isUpdating()){
+//                        if(!sCoordinateListener.isUpdating()){
                             sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.GPS;
                             sCoordinateListener.setUpdating(true);
                             sLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
                             sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
-                        }
+//                        }
                     }
                 } else {
+                    sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.NONE;
                     sCoordinateListener.setUpdating(false);
                     sLocationManager.removeUpdates(sCoordinateListener);
                     mapViewWithBlueDot.dropGreyBlueDot();

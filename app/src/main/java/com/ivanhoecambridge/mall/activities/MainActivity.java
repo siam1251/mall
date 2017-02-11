@@ -83,6 +83,8 @@ import com.ivanhoecambridge.mall.analytics.FirebaseTracking;
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.constants.Constants;
 import factory.HeaderFactory;
+
+import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.DirectoryFragment;
 import com.ivanhoecambridge.mall.fragments.HomeFragment;
@@ -322,6 +324,12 @@ public class MainActivity extends BaseActivity
                 this.onReadyForPush(etPush);
             }
         }
+
+        if(BuildConfig.DEBUG) {
+            // Sets the default uncaught exception handler. This handler is invoked
+            // in case any Thread dies due to an unhandled exception.
+            Thread.setDefaultUncaughtExceptionHandler(new CustomizedExceptionHandler(this, "/mnt/sdcard/"));
+        }
     }
 
     public int getViewerPosition(){
@@ -354,8 +362,8 @@ public class MainActivity extends BaseActivity
             if(KcpAccount.getInstance().isTokenAvailable()) HomeFragment.getInstance().initializeHomeData();
             else initializeAccount();
             DirectoryFragment.getInstance().initializeDirectoryData();
-            InfoFragment.getInstance().initializeMallInfoData();
             MapFragment.getInstance().initializeMap();
+            InfoFragment.getInstance().initializeMallInfoData();
             initializeMapData();
             initializeParkingData();
             initializeSeachIndex();
@@ -951,7 +959,7 @@ public class MainActivity extends BaseActivity
                 showSnackBar(R.string.warning_active_mall_activated, R.string.action_ok, getResources().getColor(R.color.white), null);
 
                 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-                if(mGeofenceManager != null) mGeofenceManager.setGeofence(false); //now it has detected the geofence, turn off the monitoring to save battery power
+//                if(mGeofenceManager != null) mGeofenceManager.setGeofence(false); //now it has detected the geofence, turn off the monitoring to save battery power
 
             } else {
                 Log.v("Geofence", "Active Mall Set FALSE");

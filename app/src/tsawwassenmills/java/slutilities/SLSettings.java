@@ -8,8 +8,8 @@ import java.util.HashMap;
 
 public class SLSettings {
 
-    public static final String MAP_KEY = "b77166cc-760d-4490-8647-f060dbd8b95c";
-    public static final String CUSTOMER_ID = "a22c56a4-51bb-4f8d-9c82-66d52aa205e5";
+    public static final String MAP_KEY = "958cbe96-2940-42c5-ad5d-085ee1ae0c50";
+    public static final String CUSTOMER_ID = "D7881A02-138F-4159-A642-8E4F9C76669F";
 
     public static boolean ENABLE_GEOFENCING = true;
     public static boolean ENABLE_GEOMESSENGER = true;

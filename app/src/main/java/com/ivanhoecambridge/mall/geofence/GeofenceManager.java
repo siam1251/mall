@@ -30,6 +30,7 @@ import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
+import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
 import java.util.ArrayList;
@@ -139,7 +140,7 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
         if(enableGeofence) {
             addGeofencesButtonHandler();
         } else {
-//            removeGeofencesButtonHandler();
+            removeGeofencesButtonHandler();
         }
     }
 
@@ -279,6 +280,9 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+        if(BuildConfig.DEBUG) {
+            CustomizedExceptionHandler.writeToFile(mContext, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+        }
     }
 
     @Override
@@ -295,7 +299,6 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
             boolean isGeofenceEntered = intent.getBooleanExtra(GeofenceManager.GEOFENCE_IS_CONNECTED, false);
             String geofenceDetail = intent.getStringExtra(GeofenceManager.GEOFENCE_INFO);
             String geofenceOfInterest = intent.getStringExtra(GeofenceManager.GEOFENCE_IDS);
-            sGeofenceEntered = geofenceDetail;
             if(mContext != null) {
                 if(isGeofenceEntered) {
                     Log.v("Geofence", "Entered");
@@ -317,7 +320,8 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
 
         String prefix = isEntered ? "ENTERED" : "EXITED";
         for (String geofence : geofences) {
-            if(GEOFENCE_LOCATIONS.containsKey(geofence)) GEOFENCE_LOCATIONS.get(geofence).setDidEnterGeofence(isEntered);
+            //change the status of geofence ONLY IF this geofence's used for locating gps coordinate
+            if(GEOFENCE_LOCATIONS.containsKey(geofence) && !GEOFENCE_LOCATIONS.get(geofence).isForActiveMallDetection()) GEOFENCE_LOCATIONS.get(geofence).setDidEnterGeofence(isEntered);
             System.out.println(prefix + " : " + geofence);
         }
     }

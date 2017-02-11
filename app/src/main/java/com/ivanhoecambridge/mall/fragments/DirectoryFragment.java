@@ -46,6 +46,7 @@ import com.ivanhoecambridge.mall.views.NewsRecyclerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DirectoryFragment extends BaseFragment {
     private CategoriesFragment mCategoriesFragment;
@@ -56,10 +57,10 @@ public class DirectoryFragment extends BaseFragment {
     private String mSearchString = "";
     private MallDirectoryRecyclerViewAdapter mMallDirectoryRecyclerViewAdapter;
 
-    private ArrayList<KcpPlaces> mKcpPlacesFiltered;
-    private ArrayList<Integer> mPlaceByBrand;
-    private ArrayList<Integer> mPlaceByTag;
-    private ArrayList<KcpCategories> mKcpCategories;
+    private CopyOnWriteArrayList<KcpPlaces> mKcpPlacesFiltered;
+    private CopyOnWriteArrayList <Integer> mPlaceByBrand;
+    private CopyOnWriteArrayList <Integer> mPlaceByTag;
+    private CopyOnWriteArrayList <KcpCategories> mKcpCategories;
 
     private Thread mBrandThread;
     private Thread mTagThread;
@@ -340,9 +341,9 @@ public class DirectoryFragment extends BaseFragment {
 
         //PLACE
         ArrayList<KcpPlaces> kcpPlaces = KcpPlacesRoot.getInstance().getPlacesList(KcpPlaces.PLACE_TYPE_STORE);
-        if(mSearchString.equals("")) mKcpPlacesFiltered = new ArrayList<>();
+        if(mSearchString.equals("")) mKcpPlacesFiltered = new CopyOnWriteArrayList <>();
         else {
-            mKcpPlacesFiltered = new ArrayList<>();
+            mKcpPlacesFiltered = new CopyOnWriteArrayList <>();
             for(int i = 0; i < kcpPlaces.size(); i++){
                 if(kcpPlaces.get(i).getPlaceName().toLowerCase().contains(mSearchString.toLowerCase())) {
                     mKcpPlacesFiltered.add(kcpPlaces.get(i));
@@ -354,13 +355,13 @@ public class DirectoryFragment extends BaseFragment {
             @Override
             public void run() {
                 //KEYWORD
-                mPlaceByBrand = new ArrayList<>();
+                mPlaceByBrand = new CopyOnWriteArrayList <>();
                 if(!mSearchString.equals("")) {
                     for (Map.Entry<String, ArrayList<Integer>> entry : IndexManager.sBrandsMap.entrySet()) {
                         String keyword = entry.getKey();
                         ArrayList<Integer> value = entry.getValue();
                         if(keyword.toLowerCase().contains(mSearchString.toLowerCase())) {
-                            if(mPlaceByBrand == null) mPlaceByBrand = new ArrayList<>();
+                            if(mPlaceByBrand == null) mPlaceByBrand = new CopyOnWriteArrayList <>();
                             mPlaceByBrand.removeAll(value);
                             mPlaceByBrand.addAll(value);
                         }
@@ -377,13 +378,13 @@ public class DirectoryFragment extends BaseFragment {
             @Override
             public void run() {
                 //KEYWORD
-                mPlaceByTag = new ArrayList<>();
+                mPlaceByTag = new CopyOnWriteArrayList <>();
                 if(!mSearchString.equals("")) {
                     for (Map.Entry<String, ArrayList<Integer>> entry : IndexManager.sTagsMap.entrySet()) {
                         String keyword = entry.getKey();
                         ArrayList<Integer> value = entry.getValue();
                         if(keyword.toLowerCase().contains(mSearchString.toLowerCase())) {
-                            if(mPlaceByTag == null) mPlaceByTag = new ArrayList<>();
+                            if(mPlaceByTag == null) mPlaceByTag = new CopyOnWriteArrayList <>();
                             mPlaceByTag.removeAll(value);
                             mPlaceByTag.addAll(value);
                         }
@@ -413,11 +414,11 @@ public class DirectoryFragment extends BaseFragment {
                 }
 
                 //Making sure the categories exist within the kcp data
-                mKcpCategories = new ArrayList<KcpCategories>();
+                mKcpCategories = new CopyOnWriteArrayList<KcpCategories>();
                 for(int categoryId : categoryByName) {
                     KcpCategories categoryFound = KcpCategoryRoot.getInstance().getCategoryWithId(categoryId);
                     if(categoryFound != null) {
-                        if(mKcpCategories == null) mKcpCategories = new ArrayList<KcpCategories>();
+                        if(mKcpCategories == null) mKcpCategories = new CopyOnWriteArrayList<KcpCategories>();
                         mKcpCategories.add(categoryFound);
                     }
                 }
@@ -433,17 +434,17 @@ public class DirectoryFragment extends BaseFragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                    mMallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), mKcpPlacesFiltered, mPlaceByBrand, mPlaceByTag, mKcpCategories, mSearchString);
+                    mMallDirectoryRecyclerViewAdapter = new MallDirectoryRecyclerViewAdapter(getActivity(), new ArrayList(mKcpPlacesFiltered), new ArrayList(mPlaceByBrand), new ArrayList(mPlaceByTag), new ArrayList(mKcpCategories), mSearchString);
                     mMainActivity.rvMallDirectory.setAdapter(mMallDirectoryRecyclerViewAdapter);
             }
         });
     }
 
-    private void sortKcpPlaces(ArrayList<Integer> listToSort){
-        KcpUtility.sortPlaceListById(listToSort);
+    private void sortKcpPlaces(CopyOnWriteArrayList<Integer> listToSort){
+        KcpUtility.sortPlaceListById(new ArrayList(listToSort));
     }
 
-    private void sortKcpCategories(ArrayList<KcpCategories> listToSort){
-        KcpUtility.sortCategoryListById(listToSort);
+    private void sortKcpCategories(CopyOnWriteArrayList<KcpCategories> listToSort){
+        KcpUtility.sortCategoryListById(new ArrayList(listToSort));
     }
 }
