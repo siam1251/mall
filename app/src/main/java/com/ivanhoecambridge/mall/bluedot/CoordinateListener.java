@@ -3,11 +3,15 @@ package com.ivanhoecambridge.mall.bluedot;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+
+import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
 
 import java.lang.ref.WeakReference;
 import java.util.Map;
 
+import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sGeofenceEntered;
 import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sLocationFindingMode;
 import static slutilities.SLSettings.GEOFENCE_LOCATIONS;
 
@@ -29,16 +33,30 @@ public class CoordinateListener implements LocationListener {
 
     @Override
     public void onLocationChanged(Location loc) {
-        Log.d("CoordinateListener", "Location changed: Lat: " + loc.getLatitude() + " Lng: " + loc.getLongitude());
-
         int floorIndex = 0;
+        double radius = 100000;
+        String geofence = "";
+        String geofences = "";
         for (Map.Entry<String, SLIndoorLocationPresenterImpl.GeofenceLocation> entry : GEOFENCE_LOCATIONS.entrySet()) {
-            if(entry.getValue().getDidEnterGeofence()) floorIndex = entry.getValue().floor;
+            if(entry.getValue().getDidEnterGeofence()) {
+                geofences = geofences + ", " + entry.getValue().name;
+                if (radius > entry.getValue().radius) {
+                    floorIndex = entry.getValue().floorIndex;
+                    radius = entry.getValue().radius;
+                    geofence = entry.getValue().name;
+                }
+            }
         }
 
+        if(floorIndex != 1) {
+            Log.e("FLOORINDEX", geofence + " " +  floorIndex);
+        }
         BlueDotPosition blueDotPosition = new BlueDotPosition(loc, floorIndex);
         PositionAndHeadingMapVisualization positionAndHeadingMapVisualization = mPositionAndHeadingMapVisualization.get();
-        if(sLocationFindingMode.equals(PositionAndHeadingMapVisualization.LocationFindingMode.GPS)) positionAndHeadingMapVisualization.setPos(blueDotPosition);
+        if(sLocationFindingMode == PositionAndHeadingMapVisualization.LocationFindingMode.GPS) {
+            sGeofenceEntered = geofence;
+            positionAndHeadingMapVisualization.setPos(blueDotPosition);
+        }
     }
 
     @Override

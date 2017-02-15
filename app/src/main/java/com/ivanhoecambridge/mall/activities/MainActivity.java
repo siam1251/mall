@@ -83,6 +83,8 @@ import com.ivanhoecambridge.mall.analytics.FirebaseTracking;
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.constants.Constants;
 import factory.HeaderFactory;
+
+import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.DirectoryFragment;
 import com.ivanhoecambridge.mall.fragments.HomeFragment;
@@ -150,11 +152,11 @@ public class MainActivity extends BaseActivity
     private BadgeView badgeEvents;
     private BadgeView badgeStores;
     private BadgeView badgeInterests;
-    public boolean mActiveMall = false;
+    public static boolean mActiveMall = false;
     public boolean mSplashScreenGone = false; //when map initializes it causes lag to splashscreen. Use this variable to see if splash screen's gone
 
     //GEOFENCE
-    private GeofenceManager mGeofenceManager;
+    public GeofenceManager mGeofenceManager;
     private Animation mMenuActiveMallDotAnim;
 
     public RecyclerView rvMallDirectory; //SEARCH RECYCLERVIEW FROM DIRECTORY FRAGMENT
@@ -322,6 +324,13 @@ public class MainActivity extends BaseActivity
                 this.onReadyForPush(etPush);
             }
         }
+
+        if(BuildConfig.DEBUG) {
+            PackageManager pm = getPackageManager();
+            int hasPerm = pm.checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, getPackageName());
+            if (hasPerm != PackageManager.PERMISSION_GRANTED) Thread.setDefaultUncaughtExceptionHandler(new CustomizedExceptionHandler(this, "/mnt/sdcard/"));
+            else Toast.makeText(this, "CustomizedExceptionHandler is turned off", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public int getViewerPosition(){
@@ -354,6 +363,7 @@ public class MainActivity extends BaseActivity
             if(KcpAccount.getInstance().isTokenAvailable()) HomeFragment.getInstance().initializeHomeData();
             else initializeAccount();
             DirectoryFragment.getInstance().initializeDirectoryData();
+            MapFragment.getInstance().initializeMap();
             InfoFragment.getInstance().initializeMallInfoData();
             initializeMapData();
             initializeParkingData();
@@ -950,7 +960,6 @@ public class MainActivity extends BaseActivity
                 showSnackBar(R.string.warning_active_mall_activated, R.string.action_ok, getResources().getColor(R.color.white), null);
 
                 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-                if(mGeofenceManager != null) mGeofenceManager.setGeofence(false); //now it has detected the geofence, turn off the monitoring to save battery power
 
             } else {
                 Log.v("Geofence", "Active Mall Set FALSE");
@@ -958,7 +967,6 @@ public class MainActivity extends BaseActivity
                 llActiveMall.setVisibility(View.GONE);
                 setActiveMallDot(false);
                 panelBackgroundColor = Color.WHITE;
-//                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.black)));
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.active_mall_off_state)));
                 badgeTextColor = Color.WHITE;
                 generalTextColor = Color.BLACK;

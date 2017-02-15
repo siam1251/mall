@@ -91,7 +91,7 @@ android {
             buildConfigField 'Boolean', 'MOVIE', 'false'
             buildConfigField 'Boolean', 'WHITE_FAV', 'false'
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
-            buildConfigField 'Boolean', 'BLUEDOT', 'true'
+            buildConfigField 'Boolean', 'BLUEDOT', 'false'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.6"'
 
 

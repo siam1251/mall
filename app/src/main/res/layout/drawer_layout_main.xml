@@ -20,8 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="147dp"
             android:background="@color/black"
-            />
             android:src="@drawable/img_profile_activemall"
+            />
 
         <View
             android:visibility="gone"
@@ -32,8 +32,8 @@
             />
 
 
-            android:visibility="gone"
         <com.ivanhoecambridge.mall.views.CircleImageView
+            android:visibility="gone"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:id="@+id/ivDrawerLayoutUser"
@@ -43,6 +43,7 @@
 
 
         <LinearLayout
+            android:visibility="gone"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:layout_alignBottom="@+id/ivDrawerLayoutBg"

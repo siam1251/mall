@@ -8,12 +8,18 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.net.Uri;
 import android.os.Build;
 import android.renderscript.Allocation;
@@ -46,6 +52,7 @@ import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 import com.mappedin.jpct.RGBColor;
 
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -782,4 +789,36 @@ public class Utility {
         }
         return 0.0f;
     }
+
+    public static Drawable getAdaptiveRippleDrawable(int normalColor, int pressedColor) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return new RippleDrawable(ColorStateList.valueOf(pressedColor),
+                    null, getRippleMask(normalColor));
+        } else {
+            return getStateListDrawable(normalColor, pressedColor);
+        }
+    }
+
+    private static Drawable getRippleMask(int color) {
+        float[] outerRadii = new float[8];
+        Arrays.fill(outerRadii, 3);// 3 is radius of final ripple, instead of 3 you can give required final radius
+
+        RoundRectShape r = new RoundRectShape(outerRadii, null, null);
+
+        ShapeDrawable shapeDrawable = new ShapeDrawable(r);
+        shapeDrawable.getPaint().setColor(color);
+
+        return shapeDrawable;
+    }
+
+    public static StateListDrawable getStateListDrawable(int normalColor, int pressedColor) {
+        StateListDrawable states = new StateListDrawable();
+        states.addState(new int[]{android.R.attr.state_pressed}, new ColorDrawable(pressedColor));
+        states.addState(new int[]{android.R.attr.state_focused}, new ColorDrawable(pressedColor));
+        states.addState(new int[]{android.R.attr.state_activated}, new ColorDrawable(pressedColor));
+        states.addState(new int[]{}, new ColorDrawable(normalColor));
+        return states;
+    }
+
+
 }

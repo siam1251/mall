@@ -58,6 +58,70 @@
 
     </FrameLayout>
 
+    <LinearLayout
+        android:layout_below="@+id/flCompass"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:id="@+id/llTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="right"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:gravity="right"
+            android:textColor="@color/sign_in_red"
+            android:text="GEOFENCE?"
+            android:id="@+id/tvTestGeofence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"/>
+
+
+        <TextView
+            android:textColor="@color/sign_in_red"
+            android:text="Location?"
+            android:id="@+id/tvTestLocationAvailability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:textColor="@color/welcome_btn_color"
+            android:text="MODE?"
+            android:id="@+id/tvTestLocationFindingMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:visibility="gone"
+            android:textColor="@color/welcome_btn_color"
+            android:text="ANGLE?"
+            android:id="@+id/tvTestAngle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/ivTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_map_circle"
+            android:clickable="true"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/ivTestGeofence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_map_circle"
+            android:clickable="true"
+            />
+
+    </LinearLayout>
+
 
     <RelativeLayout
         android:id="@+id/rlDirection"
@@ -245,8 +309,8 @@
         </RelativeLayout>
     </RelativeLayout>
 
-        android:visibility="gone"
-        android:layout_marginBottom="55dp"
+    android:visibility="gone"
+    android:layout_marginBottom="55dp"
     <RelativeLayout
         android:layout_marginBottom="65dp"
         android:layout_alignParentBottom="true"
@@ -254,21 +318,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/ivTest"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/btn_map_circle"
-            android:clickable="true"
-            />
 
         <LinearLayout
-            android:visibility="invisible"
-            android:layout_below="@+id/ivTest"
+            android:visibility="gone"
             android:id="@+id/llBlueDot"
             android:layout_alignParentRight="true"
             android:layout_marginRight="16dp"
@@ -276,6 +328,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
+
+            style="@style/SelectableItemForeground"
             <FrameLayout
                 android:id="@+id/flCircle"
                 android:layout_width="@dimen/map_level_width"
@@ -294,8 +348,17 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/icn_current_location"
+                    android:src="@drawable/icn_current_location" />
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:id="@+id/ivCircle"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     />
+
+
+
             </FrameLayout>
         </LinearLayout>
 

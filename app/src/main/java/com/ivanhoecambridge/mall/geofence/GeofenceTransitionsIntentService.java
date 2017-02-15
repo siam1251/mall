@@ -54,6 +54,10 @@ public class GeofenceTransitionsIntentService extends IntentService {
                     triggeringGeofences
             );
 
+            String geofenceOfInterests = getGeofenceOfInterest (
+                    triggeringGeofences
+            );
+
             // Send notification and log the transition details.
 //           sendNotification(geofenceTransitionDetails);
             Log.i(TAG, geofenceTransitionDetails);
@@ -61,6 +65,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(GeofenceManager.MyWebRequestReceiver.PROCESS_RESPONSE);
             broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IS_CONNECTED, true);
+            broadcastIntent.putExtra(GeofenceManager.GEOFENCE_INFO, geofenceTransitionDetails);
+            broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IDS, geofenceOfInterests);
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
             sendBroadcast(broadcastIntent);
 
@@ -75,6 +81,10 @@ public class GeofenceTransitionsIntentService extends IntentService {
                     triggeringGeofences
             );
 
+            String geofenceOfInterests = getGeofenceOfInterest (
+                    triggeringGeofences
+            );
+
             // Send notification and log the transition details.
 //            sendNotification(geofenceTransitionDetails);
             Log.i(TAG, geofenceTransitionDetails);
@@ -82,6 +92,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(GeofenceManager.MyWebRequestReceiver.PROCESS_RESPONSE);
             broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IS_CONNECTED, false);
+            broadcastIntent.putExtra(GeofenceManager.GEOFENCE_INFO, geofenceTransitionDetails);
+            broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IDS, geofenceOfInterests);
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
             sendBroadcast(broadcastIntent);
 
@@ -113,6 +125,19 @@ public class GeofenceTransitionsIntentService extends IntentService {
         String triggeringGeofencesIdsString = TextUtils.join(", ",  triggeringGeofencesIdsList);
 
         return geofenceTransitionString + ": " + triggeringGeofencesIdsString;
+    }
+
+    private String getGeofenceOfInterest(
+            List<Geofence> triggeringGeofences) {
+
+        // Get the Ids of each geofence that was triggered.
+        ArrayList triggeringGeofencesIdsList = new ArrayList();
+        for (Geofence geofence : triggeringGeofences) {
+            triggeringGeofencesIdsList.add(geofence.getRequestId());
+        }
+        String triggeringGeofencesIdsString = TextUtils.join(", ",  triggeringGeofencesIdsList);
+
+        return triggeringGeofencesIdsString;
     }
 
     /**
