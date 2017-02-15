@@ -33,8 +33,6 @@ public class CoordinateListener implements LocationListener {
 
     @Override
     public void onLocationChanged(Location loc) {
-//        Log.d("CoordinateListener", "Location changed: Lat: " + loc.getLatitude() + " Lng: " + loc.getLongitude());
-
         int floorIndex = 0;
         double radius = 100000;
         String geofence = "";
@@ -56,7 +54,6 @@ public class CoordinateListener implements LocationListener {
         BlueDotPosition blueDotPosition = new BlueDotPosition(loc, floorIndex);
         PositionAndHeadingMapVisualization positionAndHeadingMapVisualization = mPositionAndHeadingMapVisualization.get();
         if(sLocationFindingMode == PositionAndHeadingMapVisualization.LocationFindingMode.GPS) {
-//            sGeofenceEntered = geofence + " : " + geofences;
             sGeofenceEntered = geofence;
             positionAndHeadingMapVisualization.setPos(blueDotPosition);
         }

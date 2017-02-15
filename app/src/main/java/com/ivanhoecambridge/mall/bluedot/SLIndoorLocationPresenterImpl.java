@@ -74,6 +74,15 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
             this.floorIndex = floor;
         }
 
+        /**
+         *
+         * @param name Name(Key) of geofence
+         * @param latitude latitude of geofence
+         * @param longitude longitude of geofence
+         * @param radius radius of geofence
+         * @param floor senions floor that needs to be mapped to real floor
+         * @param isForActiveMallDetection when set true, this geofence's only used for active mall mode and NOT for detecting location.
+         */
         public GeofenceLocation(String name, double latitude, double longitude, double radius, int floor, boolean isForActiveMallDetection) {
             this.name = name;
             this.latitude = latitude;
@@ -166,7 +175,6 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
                 if(sLocationFindingMode == PositionAndHeadingMapVisualization.LocationFindingMode.BEACON) {
                     positionAndHeadingMapVisualization.setPos(blueDotPosition);
                 }
-//                logger.debug("location++" + location.getLatitude() + " : " + location.getLongitude() );
             }
         }
 
@@ -179,7 +187,6 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         }
         @Override
         public void didUpdateHeading(double heading, SLHeadingStatus status) {
-//            Log.d("bluedot", "BlueDotPosition: "  + " headingRaw: " + heading); //testing
             positionAndHeadingMapVisualization.setHeading((float) heading, status);
         }
 
@@ -193,7 +200,6 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
 
         @Override
         public void didUpdateMotionType(SLMotionType motionType) {
-//            logger.debug("didUpdateMotionType++" + " SLMotionType: " + motionType); //testing
         }
 
         @Override
@@ -214,28 +220,12 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         }
         @Override
         public void didEnterGeometry(SLGeometry geometry) {
-            /*logger.debug("didEnterGeometry++");
-            try {
-                GEOFENCE_LOCATIONS.get(geometry.getGeometryId().getGeometryId()).setDidEnterGeofence(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-                CustomizedExceptionHandler.writeToFile(mContext, e.toString());
-            }*/
         }
         @Override
         public void didLeaveGeometry(SLGeometry geometry) {
-            /*logger.debug("didLeaveGeometry++");
-            try {
-                GEOFENCE_LOCATIONS.get(geometry.getGeometryId()).setDidEnterGeofence(false);
-            } catch (Exception e) {
-                e.printStackTrace();
-                CustomizedExceptionHandler.writeToFile(mContext, e.toString());
-            }*/
         }
     };
 
-
-    //should i updateFromBeacon if I get a signal from beacon even though Availability is set as Not_AVAILABLE??
     public void updateFromGPS(){
         synchronized (this) {
             if(sLocationAvailability.isAvailable()) {
@@ -245,12 +235,12 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
             } else {
                 if(isWithinGeofence(GEOFENCE_LOCATIONS)) {
                     if ((Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( mContext, android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) || Build.VERSION.SDK_INT < 23) {
-//                        if(!sCoordinateListener.isUpdating()){
+                        if(!sCoordinateListener.isUpdating()){
                             sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.GPS;
                             sCoordinateListener.setUpdating(true);
                             sLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
                             sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, CoordinateListener.UPDATE_INTERVAL_TIME, CoordinateListener.UPDATE_DISTANCE_IN_BETWEEN, sCoordinateListener);
-//                        }
+                        }
                     }
                 } else {
                     sLocationFindingMode = PositionAndHeadingMapVisualization.LocationFindingMode.NONE;

@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -60,9 +59,7 @@ import com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenter;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
-import com.ivanhoecambridge.mall.geofence.GeofenceManager;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
 import com.ivanhoecambridge.mall.managers.ThemeManager;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
@@ -101,29 +98,19 @@ import com.mappedin.sdk.Venue;
 import com.senionlab.slutilities.type.LocationAvailability;
 import com.senionlab.slutilities.type.SLHeadingStatus;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 
 import factory.HeaderFactory;
 
-import static android.R.attr.label;
 import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sGeofenceEntered;
 import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sLocationFindingMode;
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.sLocationAvailability;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static slutilities.SLSettings.INITIAL_MAP_SLOPE;
 
 /**
@@ -253,7 +240,8 @@ public class MapFragment extends BaseFragment
     private SLHeadingStatus mSLHeadingStatus = SLHeadingStatus.UNDEFINED;
     private double mBearingFromCamera;
     private boolean mGreyDotDropped = false;
-//    private boolean mMapRotation = false; //map rotates itself
+    boolean headingDropped = false;
+    float tempHeading = 0f;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -370,11 +358,11 @@ public class MapFragment extends BaseFragment
         ivTest.setOnClickListener(onTestButtonListener);
         ivTestGeofence.setOnClickListener(onTestGeofenceButtonListener);
 
-        if(/*BuildConfig.BLUEDOT || */BuildConfig.DEBUG) { //testing
+        /*if(*//*BuildConfig.BLUEDOT || *//*BuildConfig.DEBUG) { //testing
             llTest.setVisibility(View.VISIBLE);
         } else {
             llTest.setVisibility(View.GONE);
-        }
+        }*/
 
         return view;
     }
@@ -1539,10 +1527,6 @@ public class MapFragment extends BaseFragment
         tvTestLocationFindingMode.setText(sLocationFindingMode == PositionAndHeadingMapVisualization.LocationFindingMode.GPS ? "GPS" : "BEACON");
         tvTestGeofence.setText(sGeofenceEntered);
         mGreyDotDropped = false;
-//        if(mBlueDotCompass != null) {
-//            mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
-//            mBlueDotCompass = null;
-//        }
     }
 
     @Override
@@ -1561,7 +1545,6 @@ public class MapFragment extends BaseFragment
 
             if(mBlueDotCompass != null) {
                 mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
-//                mBlueDotCompass = null;
             }
         }
     }
@@ -1597,84 +1580,9 @@ public class MapFragment extends BaseFragment
         headingDropped = true;
     }
 
-    //TESTING
-    boolean headingDropped = false;
-    float tempHeading = 0f;
-
-    double x;
-    double y;
-
-    double x1 = 51.2030627;
-    double y1 = -113.9956265;
-
-    double x2 = 51.201866;
-    double y2 = -113.992274;
-
-    int tempFloor = 0;
-
-    boolean greyDropped = false;
-
     private View.OnClickListener onTestButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            /*if(!mMapRotation) {
-                mMapRotation = true;
-                if(mBlueDotCompass != null) {
-                    mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
-                    Overlay2DImage label = new Overlay2DImage(getBlueDotSize(), getBlueDotSize(), getResources().getDrawable(R.drawable.icn_bluedot_orientation_pointer), getBlueDotSize()/2, getBlueDotSize()/2);
-                    mBlueDotCompass.setOverlay2DImage(label);
-                }
-            } else {
-                mMapRotation = false;
-                if(mBlueDotCompass != null) {
-                    mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
-                    mBlueDotCompass = null;
-                }
-            }*/
-
-            //mimicking geofence enter/leave
-            /*if(!greyDropped){
-
-                Toast.makeText(getActivity(), "manually turning off geofence", Toast.LENGTH_SHORT).show();
-
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(GeofenceManager.MyWebRequestReceiver.PROCESS_RESPONSE);
-                broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IS_CONNECTED, false);
-                broadcastIntent.putExtra(GeofenceManager.GEOFENCE_INFO, "");
-                broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IDS, "Tsawwassen Mills Mall");
-                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                getActivity().sendBroadcast(broadcastIntent);
-                greyDropped = true;
-            } else {
-
-                Toast.makeText(getActivity(), "manually turning on geofence", Toast.LENGTH_SHORT).show();
-
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(GeofenceManager.MyWebRequestReceiver.PROCESS_RESPONSE);
-                broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IS_CONNECTED, true);
-                broadcastIntent.putExtra(GeofenceManager.GEOFENCE_INFO, "");
-                broadcastIntent.putExtra(GeofenceManager.GEOFENCE_IDS, "Tsawwassen Mills Mall");
-                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                getActivity().sendBroadcast(broadcastIntent);
-                greyDropped = false;
-            }*/
-
-            //TESTING MANUAL BLUE DOT
-            /*if(tempFloor == 0) tempFloor = 1;
-            else tempFloor = 0;
-
-            if(mBlueDotPin == null) {
-                Random r = new Random();
-                int randomFloor = r.nextInt(5);
-//                dropBlueDot(43.642369, -79.374530, 1); //MP
-//                dropBlueDot(49.2268235, -123.0004849, randomFloor); //CENTER OF MP
-                dropBlueDot(49.228311, -123.001166, randomFloor); //NORTH CORNER OF SUPERSTORE AT MP
-//                dropBlueDot(51.2030627,-113.9956265, randomFloor); //CROSSIRON
-                Toast.makeText(getActivity(), "Floor : " + randomFloor, Toast.LENGTH_SHORT).show();
-            } else {
-                removeBlueDot();
-                Toast.makeText(getActivity(), "bluedot removed", Toast.LENGTH_SHORT).show();
-            }*/
         }
     };
 
@@ -1686,10 +1594,6 @@ public class MapFragment extends BaseFragment
             mMainActivity.mGeofenceManager.setGeofence(true);
         }
     };
-
-    float headingDrawn;
-
-
 
     private OnStoreClickListener onStoreClickedListener = new OnStoreClickListener() {
         @Override

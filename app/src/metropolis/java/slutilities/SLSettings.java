@@ -28,11 +28,6 @@ public class SLSettings {
         GEOFENCE_LOCATIONS.put("KineticCafe", new SLIndoorLocationPresenterImpl.GeofenceLocation("KineticCafe", 43.642069, -79.374585, 200, 0));
         GEOFENCE_LOCATIONS.put("IvanhoeCambridge", new SLIndoorLocationPresenterImpl.GeofenceLocation("IvanhoeCambridge", 45.502519, -73.562517, 200, 0));
 
-        /*GEOFENCE_LOCATIONS.put("MPTesting2", new SLIndoorLocationPresenterImpl.GeofenceLocation("MPTesting2", latitude, longitude, 900, 1));
-        GEOFENCE_LOCATIONS.put("MPTesting", new SLIndoorLocationPresenterImpl.GeofenceLocation("MPTesting", latitude, longitude, 1000, 1));
-        GEOFENCE_LOCATIONS.put("MPTesting4", new SLIndoorLocationPresenterImpl.GeofenceLocation("MPTesting4", latitude, longitude, 700, 1));
-        GEOFENCE_LOCATIONS.put("MPTesting3", new SLIndoorLocationPresenterImpl.GeofenceLocation("MPTesting3", latitude, longitude, 800, 1));*/
-
         GEOFENCE_LOCATIONS.put("MP", new SLIndoorLocationPresenterImpl.GeofenceLocation("MP", latitude, longitude, 500, 1, true));
 
         GEOFENCE_LOCATIONS.put("SL_SuperStore", new SLIndoorLocationPresenterImpl.GeofenceLocation("SL_SuperStore", 49.228242, -123.000393, 50, 1));
@@ -40,8 +35,6 @@ public class SLSettings {
         GEOFENCE_LOCATIONS.put("SL_Sears", new SLIndoorLocationPresenterImpl.GeofenceLocation("SL_Sears", 49.227377, -122.997474, 40, 1));
         GEOFENCE_LOCATIONS.put("SL_Bay", new SLIndoorLocationPresenterImpl.GeofenceLocation("SL_Bay", 49.226792, -122.995819, 75, 1));
 
-        /*GEOFENCE_LOCATIONS.put("zone7", new SLIndoorLocationPresenterImpl.GeofenceLocation("zone7", 49.224738, -122.999029, 50, 7));
-        GEOFENCE_LOCATIONS.put("zone8", new SLIndoorLocationPresenterImpl.GeofenceLocation("zone8", 49.225178, -122.998364, 15, 8));*/
         GEOFENCE_LOCATIONS.put("zone7", new SLIndoorLocationPresenterImpl.GeofenceLocation("zone7", 49.224738, -122.999029, 150, 7));
         GEOFENCE_LOCATIONS.put("zone8", new SLIndoorLocationPresenterImpl.GeofenceLocation("zone8", 49.225178, -122.998364, 15, 8));
     }

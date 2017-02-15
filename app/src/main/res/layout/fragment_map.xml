@@ -67,8 +67,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="right"
-        >
         android:visibility="gone"
+        >
 
         <TextView
             android:gravity="right"
@@ -320,6 +320,7 @@
 
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/llBlueDot"
             android:layout_alignParentRight="true"
             android:layout_marginRight="16dp"

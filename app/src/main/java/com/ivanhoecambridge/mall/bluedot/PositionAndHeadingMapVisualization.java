@@ -44,7 +44,6 @@ public class PositionAndHeadingMapVisualization {
         public BlueDotPosition evaluate(float fraction, BlueDotPosition startValue, BlueDotPosition endValue) {
             posX = (startValue.getLatitude() + (endValue.getLatitude() - startValue.getLatitude()) * fraction);
             posY = (startValue.getLongitude() + (endValue.getLongitude() - startValue.getLongitude()) * fraction);
-//            Log.d("bluedot", "BlueDotPosition: "  + (double) posX + " " + (double) posY + " FRACTION: " + fraction);
             mapViewWithBlueDot.dropBlueDot(posX, posY, endValue.getMappedInFloor());
             return new BlueDotPosition(posX, posY);
         }
@@ -57,7 +56,6 @@ public class PositionAndHeadingMapVisualization {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 listener.onAnimationUpdate(valueAnimator);
-//                Log.d("bluedot", "BlueDotPosition: "  + " heading: " + heading); //testing
                 mapViewWithBlueDot.dropHeading(posX, posY, heading, headingStatus);
             }
         });
@@ -85,7 +83,6 @@ public class PositionAndHeadingMapVisualization {
     public void setPos(final BlueDotPosition blueDotPosition) {
         if(mAnimator == null) return;
         try {
-//            Log.d("bluedot", " --------------------------------- UPATED : BlueDotPosition: "  + blueDotPosition.getLatitude() + " " + blueDotPosition.getLongitude());
             mAnimator.cancel();
             mAnimator.setObjectValues(new BlueDotPosition(posX, posY), blueDotPosition);
             mAnimator.start();
