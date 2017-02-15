@@ -25,9 +25,8 @@ public class PositionAndHeadingMapVisualization {
     private double posY = SLSettings.longitude;
     private float heading;
 
-    protected static final int ANIMATION_TIME_MILLIS = 1000; //animator finishes before its gets updated - more instant update but it can stop and go stop and go
+    protected static final int ANIMATION_TIME_MILLIS = 1000; //animator finishes before its gets updated - more instant update but it can stop and go stop and go, 2000 makes animator resets before it's over - more smooth but can lag
     protected static final int COMPASS_ANIMATION_TIME_MILLIS = 400;
-//    protected static final int ANIMATION_TIME_MILLIS = 2000; //animator resets before it's over - more smooth but can lag
 
     public enum LocationFindingMode { BEACON, GPS, NONE };
     public static LocationFindingMode sLocationFindingMode = LocationFindingMode.BEACON;

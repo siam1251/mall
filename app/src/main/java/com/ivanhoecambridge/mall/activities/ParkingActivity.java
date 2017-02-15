@@ -203,7 +203,7 @@ public class ParkingActivity extends AppCompatActivity {
         rvParking.setHasFixedSize(true);
         ParkingRecyclerViewAdapter parkingRecyclerViewAdapter = new ParkingRecyclerViewAdapter(this, new ArrayList<Parking>(ParkingManager.sParkings.getParkings()), null);
 
-        if(/*BuildConfig.DEBUG ||*/ MapFragment.isBlueDotShown()) {
+        if(MapFragment.isBlueDotShown()) {
             parkingRecyclerViewAdapter.addHeader(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

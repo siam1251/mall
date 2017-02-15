@@ -326,9 +326,10 @@ public class MainActivity extends BaseActivity
         }
 
         if(BuildConfig.DEBUG) {
-            // Sets the default uncaught exception handler. This handler is invoked
-            // in case any Thread dies due to an unhandled exception.
-            Thread.setDefaultUncaughtExceptionHandler(new CustomizedExceptionHandler(this, "/mnt/sdcard/"));
+            PackageManager pm = getPackageManager();
+            int hasPerm = pm.checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, getPackageName());
+            if (hasPerm != PackageManager.PERMISSION_GRANTED) Thread.setDefaultUncaughtExceptionHandler(new CustomizedExceptionHandler(this, "/mnt/sdcard/"));
+            else Toast.makeText(this, "CustomizedExceptionHandler is turned off", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -959,7 +960,6 @@ public class MainActivity extends BaseActivity
                 showSnackBar(R.string.warning_active_mall_activated, R.string.action_ok, getResources().getColor(R.color.white), null);
 
                 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-//                if(mGeofenceManager != null) mGeofenceManager.setGeofence(false); //now it has detected the geofence, turn off the monitoring to save battery power
 
             } else {
                 Log.v("Geofence", "Active Mall Set FALSE");
@@ -967,7 +967,6 @@ public class MainActivity extends BaseActivity
                 llActiveMall.setVisibility(View.GONE);
                 setActiveMallDot(false);
                 panelBackgroundColor = Color.WHITE;
-//                hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.black)));
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.active_mall_off_state)));
                 badgeTextColor = Color.WHITE;
                 generalTextColor = Color.BLACK;

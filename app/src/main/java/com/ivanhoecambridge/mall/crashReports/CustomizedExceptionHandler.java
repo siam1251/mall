@@ -43,26 +43,16 @@ public class CustomizedExceptionHandler implements Thread.UncaughtExceptionHandl
             writeToFile(mContext, stacktrace);
         }
 
-//Used only to prevent from any code getting executed.
+        //Used only to prevent from any code getting executed.
         // Not needed in this example
         defaultUEH.uncaughtException(t, e);
     }
 
     public static void writeToFile(Context context, String currentStacktrace) {
         try {
-
-
-            //Gets the Android external storage directory & Create new folder Crash_Reports
-            /*File dir = new File(Environment.getExternalStorageDirectory(),
-                    "/Crash_Reports");*/
-
             File dir = new File(context.getExternalCacheDir(),
                     "Crash_Reports");
 
-            /*File dir = Environment.getExternalStorageDirectory();
-            dir = new File(dir.getPath() + "/Android/data/com.ivanhoecambridge.malls/Crash_Reports");*/
-
-//            File dir = new File(Environment.getExternalStorageDirectory() + "Android/data/com.ivanhoecambridge.malls/Crash_Reports");
             boolean success = true;
             if (!dir.exists()) {
                 success = dir.mkdirs();

@@ -1696,6 +1696,8 @@ public class MapFragment extends BaseFragment
     }
 
     private void startPulseAnimation(){
+        final int DURATION_RIPPLE = 900;
+        final int RIPPLE_START_OFFSET = 200;
         if(Build.VERSION.SDK_INT >= 21 ) {
             ImageView ivCircle = (ImageView) view.findViewById(R.id.ivCircle);
             ivCircle.setBackground(getActivity().getResources().getDrawable(R.drawable.round_ripple));
@@ -1709,7 +1711,7 @@ public class MapFragment extends BaseFragment
                         rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});
                         rippleDrawable.setState(new int[]{});
                     }
-                }, i * 900 + 200);
+                }, i * DURATION_RIPPLE + RIPPLE_START_OFFSET);
             }
         } else {
             Animation pulse = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_pulse);

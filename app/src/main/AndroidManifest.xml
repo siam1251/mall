@@ -16,7 +16,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <!--to write crash reports into SD card-->
+    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>--> <!-- allow permission for DEBUG variant to enable crash reports -->
+
+
 
     <permission
         android:name="${applicationId}.permission.C2D_MESSAGE"
