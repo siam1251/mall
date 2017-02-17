@@ -24,7 +24,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.fragments.MapFragment;
@@ -38,8 +37,6 @@ import com.ivanhoecambridge.mall.views.RecyclerViewFooter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.sLocationAvailability;
 
 /**
  * Created by Kay on 2016-08-15.
@@ -120,7 +117,7 @@ public class ParkingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
-                alertDialogForInterest.getEditTextAlertDialog(
+                alertDialogForInterest.showEditTextAlertDialog(
                         ParkingActivity.this,
                         mParkingNote,
                         getResources().getString(R.string.title_add_notes),
@@ -133,7 +130,7 @@ public class ParkingActivity extends AppCompatActivity {
                                 setParkingNoteBtn(mParkingNote);
                                 return;
                             }
-                        }).show();
+                        });
             }
         });
 

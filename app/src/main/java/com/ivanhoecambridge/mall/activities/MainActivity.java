@@ -37,6 +37,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -44,6 +45,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,17 +73,23 @@ import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpDataListener;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
+import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.InfoList;
+import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.KcpMallInfoRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.adapters.HomeBottomTapAdapter;
+import com.ivanhoecambridge.mall.adapters.SocialFeedDetailRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.ActiveMallRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.adapters.adapterHelper.GiftCardRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.IndexableRecylerView;
 import com.ivanhoecambridge.mall.analytics.FirebaseTracking;
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.constants.Constants;
+
+import butterknife.OnClick;
 import factory.HeaderFactory;
 
 import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
@@ -93,6 +101,7 @@ import com.ivanhoecambridge.mall.fragments.MapFragment;
 import com.ivanhoecambridge.mall.geofence.GeofenceManager;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
+import com.ivanhoecambridge.mall.managers.GiftCardManager;
 import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
 import com.ivanhoecambridge.mall.managers.SidePanelManagers;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
@@ -107,8 +116,10 @@ import com.ivanhoecambridge.mall.searchIndex.IndexManager;
 import com.ivanhoecambridge.mall.user.AccountManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
+import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 import com.ivanhoecambridge.mall.views.BadgeView;
 import com.ivanhoecambridge.mall.views.KcpAnimatedViewPager;
+import com.ivanhoecambridge.mall.views.ThemeColorImageView;
 import com.mappedin.sdk.Polygon;
 
 import java.util.ArrayList;
@@ -147,11 +158,13 @@ public class MainActivity extends BaseActivity
     private EditText etDestStore;
     private FrameLayout flActiveMallDot;
     private int mCurrentViewPagerTapPosition = 0;
+    private GiftCardRecyclerViewAdapter mGiftCardRecyclerViewAdapter;
 
     private BadgeView badgeDeals;
     private BadgeView badgeEvents;
     private BadgeView badgeStores;
     private BadgeView badgeInterests;
+    private ThemeColorImageView ivMoreMenu;
     public static boolean mActiveMall = false;
     public boolean mSplashScreenGone = false; //when map initializes it causes lag to splashscreen. Use this variable to see if splash screen's gone
 
@@ -785,16 +798,85 @@ public class MainActivity extends BaseActivity
             }
         });
 
-
-        //GC
-        FrameLayout flAddGC = (FrameLayout) findViewById(R.id.flAddGC);
-        flAddGC.setOnClickListener(new View.OnClickListener() {
+        ivMoreMenu = (ThemeColorImageView) findViewById(R.id.ivMoreMenu);
+        ivMoreMenu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Add a gift card", Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                PopupMenu popup = new PopupMenu(MainActivity.this, ivMoreMenu);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.menu_gc, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.action_remove) {
+                            AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+                            alertDialogForInterest.showGCAlertDialog(MainActivity.this);
+                        } else if (id == R.id.action_faq) {
+                            KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
+                            kcpMallInfoRoot.createOfflineKcpMallInfo(MainActivity.this, Constants.MALL_INFO_OFFLINE_TEXT);
+                            List<InfoList> infoList = kcpMallInfoRoot.getKcpMallInfo().getInfoList();
+                            if(infoList != null) {
+                                for(int i = 0; i < infoList.size(); i++) {
+                                    if( (infoList.get(i).getMenuTitle() != null && infoList.get(i).getMenuTitle().toLowerCase().contains("gift"))
+                                            || (infoList.get(i).getTitle() != null && infoList.get(i).getTitle().toLowerCase().contains("gift")) ) {
+                                        Intent intent = new Intent(MainActivity.this, MallInfoDetailActivity.class);
+                                        intent.putExtra(Constants.ARG_CONTENT_PAGE, infoList.get(i));
+                                        startActivityForResult(intent, Constants.REQUEST_CODE_LOCATE_GUEST_SERVICE);
+                                    }
+                                }
+                            }
+                        }
+
+                        return true;
+                    }
+                });
+                popup.show();
             }
         });
 
+
+        //GC
+        View.OnClickListener footerClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(MainActivity.this, GiftCardActivity.class), Constants.REQUEST_CODE_GIFT_CARD);
+                ActivityAnimation.startActivityAnimation(MainActivity.this);
+            }
+        };
+
+        GiftCardManager.getInstance(this).addCard("1234567891012123", 123.52f);
+        GiftCardManager.getInstance(this).addCard("1234567891012121", 123.0f);
+        GiftCardManager.getInstance(this).addCard("1234567891012122", 123.00f);
+        GiftCardManager.getInstance(this).addCard("1234567891012124", 123.001252f);
+        GiftCardManager.getInstance(this).addCard("1234567891012125", 0);
+        GiftCardManager.getInstance(this).addCard("1234567891012126", 0f);
+        GiftCardManager.getInstance(this).addCard("1234567891012127", 0.0f);
+
+        GiftCardManager.getInstance(this).addCard("1234567891012133", 123.52f);
+        GiftCardManager.getInstance(this).addCard("1234567891012131", 123.0f);
+        GiftCardManager.getInstance(this).addCard("1234567891012132", 123.00f);
+        GiftCardManager.getInstance(this).addCard("1234567891012134", 123.001252f);
+        GiftCardManager.getInstance(this).addCard("1234567891012135", 0);
+        GiftCardManager.getInstance(this).addCard("1234567891012136", 0f);
+        GiftCardManager.getInstance(this).addCard("1234567891012137", 0.0f);
+
+        RecyclerView rvGiftCard = (RecyclerView) findViewById(R.id.rvGiftCard);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rvGiftCard.setLayoutManager(linearLayoutManager);
+        mGiftCardRecyclerViewAdapter = new GiftCardRecyclerViewAdapter(this, GiftCardManager.getInstance(this).getGiftCards(), footerClickListener);
+        rvGiftCard.setAdapter(mGiftCardRecyclerViewAdapter);
+
+        GiftCardManager.getInstance(this).setGiftCardUpdateListener(new GiftCardManager.GiftCardUpdateListener() {
+            @Override
+            public void onGiftCardUpdated() {
+
+
+
+
+            }
+        });
+
+        //SIDE PANEL MANAGER
         SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
 
         //version
@@ -982,6 +1064,7 @@ public class MainActivity extends BaseActivity
             badgeEvents.setBadgeTextColor(badgeTextColor);
             badgeStores.setBadgeTextColor(badgeTextColor);
             badgeInterests.setBadgeTextColor(badgeTextColor);
+            mGiftCardRecyclerViewAdapter.setBadgeColor(generalTextColor, badgeTextColor);
 
 
             tvMyFav.setTextColor(generalTextColor);
@@ -994,6 +1077,7 @@ public class MainActivity extends BaseActivity
             tvTermsOfService.setTextColor(privacyTextColor);
             tvDot.setTextColor(privacyTextColor);
             tvVersionNumber.setTextColor(versionNumberTextColor);
+            ivMoreMenu.setColor(generalTextColor, generalTextColor);
         } catch (Resources.NotFoundException e) {
             logger.error(e);
         } catch (Exception e){
@@ -1299,9 +1383,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        if(Constants.IS_APP_IN_PRODUCTION) {
-        } else {
+        if(BuildConfig.DEBUG) {
             getMenuInflater().inflate(R.menu.menu_main, menu);
         }
 
@@ -1495,6 +1577,11 @@ public class MainActivity extends BaseActivity
             } else if (requestCode == Constants.REQUEST_CODE_TUTORIAL){
                 KcpUtility.saveToSharedPreferences(this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, true);
                 mGeofenceManager = new GeofenceManager(this);
+            } else if(requestCode == Constants.REQUEST_CODE_GIFT_CARD) {
+                if (resultCode == Activity.RESULT_OK) {
+
+                }
+
             }
         } catch (Exception e) {
             logger.error(e);

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/flAddGC"
+    style="@style/DrawerLayoutFavouriteItemsFrameLayout"
+    >
+
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+        android:id="@+id/tvAddGC"
+        style="@style/DrawerLayoutFavouriteItemsTextView"
+        app:fontFamily="@string/fontFamily_roboto_medium"
+        android:text="@string/drawer_add_gc"
+        />
+
+</FrameLayout>
+
+
+
+

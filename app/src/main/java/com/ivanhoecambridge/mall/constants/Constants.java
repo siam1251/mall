@@ -94,6 +94,7 @@ public class Constants {
 	public final static int REQUEST_CODE_SHOW_PARKING_SPOT = 104;
 	public final static int REQUEST_CODE_LOCATE_GUEST_SERVICE = 105;
 	public final static int REQUEST_CODE_TUTORIAL = 106;
+	public final static int REQUEST_CODE_GIFT_CARD = 107;
 	public final static int RESULT_DONE_PRESSED_WITH_CHANGE = 0;
 	public final static int RESULT_DONE_PRESSED_WITHOUT_CHANGE = 1;
 	public final static int RESULT_EXIT = 2;

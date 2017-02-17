@@ -39,6 +39,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.util.ExceptionCatchingInputStream;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
@@ -59,6 +60,7 @@ import com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenter;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
 import com.ivanhoecambridge.mall.constants.Constants;
+import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
 import com.ivanhoecambridge.mall.managers.ThemeManager;
@@ -643,7 +645,10 @@ public class MapFragment extends BaseFragment
 
     private void setLevelImageView(final Map[] maps) {
         try {
-
+            if(ivUpper == null) {
+                CustomizedExceptionHandler.writeToFile(getActivity(), "setLevelImageView - ivUpper is null - fragment is not attached to activity");
+                return;
+            }
             upperLevel = mCurrentLevelIndex + 1;
             lowerLevel = mCurrentLevelIndex - 1;
 

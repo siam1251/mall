@@ -153,9 +153,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base"
             />
-            android:windowSoftInputMode="stateVisible|adjustPan"
-            android:windowSoftInputMode="adjustNothing"
-            android:windowSoftInputMode="adjustPan"
+
+        <activity
+            android:name=".activities.GiftCardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base"
+            />
 
         <receiver android:name=".receivers.WelcomeMsgReceiver" />
 

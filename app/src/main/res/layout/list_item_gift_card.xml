@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/flGC"
+    style="@style/DrawerLayoutFavouriteItemsFrameLayout"
+    >
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:visibility="gone"
+        android:id="@+id/cbGC"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:buttonTint="@color/black"
+        android:layout_centerVertical="true"/>
+
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+        android:layout_toRightOf="@+id/cbGC"
+        android:id="@+id/tvGCNumber"
+        style="@style/DrawerLayoutFavouriteItemsTextView"
+        app:fontFamily="@string/fontFamily_roboto_medium"
+        android:text="2956-3845-2839-6018"
+        />
+
+    <com.ivanhoecambridge.mall.views.BadgeView
+        xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
+        BadgeView:badgeBgColor="@color/themeColor"
+        style="@style/DrawerLayoutFavouriteItemsBadge"
+        BadgeView:badgeTextColor="@color/active_mall_badge_text_color"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/bvGCBalance"/>
+
+</RelativeLayout>

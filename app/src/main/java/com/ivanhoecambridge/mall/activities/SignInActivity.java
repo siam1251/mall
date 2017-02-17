@@ -365,30 +365,11 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
     @Override
     public void isFieldsCompletelyFilled(boolean filled) {
-        if(mScene == mScene1) {
-            if(filled) {
-                llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_red));
-                llSignInCreateAccountReset.setClickable(true);
-            } else {
-                llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_disabled));
-                llSignInCreateAccountReset.setClickable(false);
-            }
-        } else if(mScene == mScene2) {
-            if(filled) {
-                llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_red));
-                llSignInCreateAccountReset.setClickable(true);
-            } else {
-                llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_disabled));
-                llSignInCreateAccountReset.setClickable(false);
-            }
-        }  else if(mScene == mScene3) {
-            if(filled) {
-                llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_red));
-                llSignInCreateAccountReset.setClickable(true);
-            } else {
-                llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_disabled));
-                llSignInCreateAccountReset.setClickable(false);
-            }
+        llSignInCreateAccountReset.setClickable(filled);
+        if(filled) {
+            llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_red));
+        } else {
+            llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_disabled));
         }
     }
 

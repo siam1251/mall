@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -215,15 +216,49 @@
 
 
             <View
-                android:visibility="gone"
                 android:id="@+id/separator"
                 android:layout_alignParentBottom="true"
                 style="@style/separater"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="#33fafafa"
                 />
 
 
-            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                android:visibility="gone"
+            <FrameLayout
+                style="@style/DrawerLayoutFavouriteItemsFrameLayout"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                >
+
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:id="@+id/tvMyGC"
+                    android:gravity="center_vertical"
+                    app:fontFamily="@string/fontFamily_roboto_light"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:textSize="16dp"
+                    android:textColor="@color/place_txt"
+                    android:text="@string/drawer_my_gift_card"
+                    />
+
+                <com.ivanhoecambridge.mall.views.ThemeColorImageView
+                    style="@style/SelectableItemForeground"
+                    android:id="@+id/ivMoreMenu"
+                    ThemedImageView:filterColor="@color/filter_off_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_menu_moreoverflow"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="8dp"
+                    />
+
+            </FrameLayout>
+
+
+            <!--<com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:id="@+id/tvMyGC"
                 android:gravity="center_vertical"
@@ -234,46 +269,14 @@
                 android:textSize="16dp"
                 android:textColor="@color/place_txt"
                 android:text="@string/drawer_my_gift_card"
-                />
-
-            <FrameLayout
-                android:visibility="gone"
-                android:id="@+id/flGC"
-                style="@style/DrawerLayoutFavouriteItemsFrameLayout"
-                >
-
-                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                    android:id="@+id/tvGCNumber"
-                    style="@style/DrawerLayoutFavouriteItemsTextView"
-                    app:fontFamily="@string/fontFamily_roboto_medium"
-                    android:text="2956-3845-2839-6018"
-                    />
-
-                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                    app:fontFamily="@string/fontFamily_roboto_medium"
-                    android:id="@+id/tvGCBalance"
-                    style="@style/DrawerLayoutFavouriteItemsTextView"
-                    android:layout_gravity="right"
-                    android:text="$100.00"
-                    />
+                />-->
 
 
-            </FrameLayout>
-
-            <FrameLayout
-                android:visibility="gone"
-                android:id="@+id/flAddGC"
-                style="@style/DrawerLayoutFavouriteItemsFrameLayout"
-                >
-
-                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                    android:id="@+id/tvAddGC"
-                    style="@style/DrawerLayoutFavouriteItemsTextView"
-                    app:fontFamily="@string/fontFamily_roboto_medium"
-                    android:text="@string/drawer_add_gc"
-                    />
-
-            </FrameLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvGiftCard"
+                android:nestedScrollingEnabled="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <LinearLayout
                 android:layout_marginTop="30dp"

@@ -22,6 +22,8 @@
     <string name="action_dismiss">DISMISS</string>
     <string name="action_yes">YES</string>
     <string name="action_no">NO</string>
+    <string name="action_remove">Remove</string>
+    <string name="action_faq">FAQ</string>
 
     <!--ALERT DIALOG TITLE-->
     <string name="title_unsaved_changes">Unsaved Changes</string>
@@ -39,6 +41,7 @@
     <string name="title_info">Mall Information</string>
     <string name="title_enable_bluetooth">Bluetooth</string>
     <string name="title_current_location_not_available">Current Location Not Available</string>
+    <string name="title_remove_gc">Remove Gift Card</string>
 
 
     <!--FRAGMENT TITLE-->
@@ -230,6 +233,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="hint_password">Password</string>
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="hint_Birthday">Date of Birth (Optional)</string>
+    <string name="hint_card_number">Card Number</string>
 
     <string name="bluedot_my_location">Your Location</string>
 
@@ -348,7 +352,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="signin_let_us_know">Let us know the email address you used to set up your account, and we’ll send you reset password instructions</string>
     <string name="signin_send_reset_instructions">Send Reset Instructions</string>
 
-
+    <!--GIFT CARD-->
+    <string name="gc_add_card">Add Card</string>
     <!---->
 
     <string name="privacy_policy"><u>Privacy Policy</u></string>
