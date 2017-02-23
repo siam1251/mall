@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,9 +17,17 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.constants.Constants;
+import com.ivanhoecambridge.mall.giftcard.GiftCard;
+import com.ivanhoecambridge.mall.giftcard.GiftCardResponse;
+import com.ivanhoecambridge.mall.managers.GiftCardManager;
+import com.ivanhoecambridge.mall.searchIndex.IndexManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
+import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -56,7 +67,7 @@ public class GiftCardActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.signin_sign_in));
+        getSupportActionBar().setTitle(getString(R.string.gc_add_card));
 
         initializeView();
     }
@@ -66,18 +77,43 @@ public class GiftCardActivity extends BaseActivity {
         llSignInCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tvSign.setVisibility(View.GONE);
-                pb.setVisibility(View.VISIBLE);
-
-                ScheduledExecutorService scheduler= Executors.newScheduledThreadPool(1);
-                ScheduledFuture<?> handl = scheduler.schedule(new Runnable() {
+                showProgressBar(true);
+                final String cardNumber = etCard.getText().toString();
+                GiftCardManager giftCardManager = new GiftCardManager(GiftCardActivity.this, new Handler(Looper.getMainLooper()) {
                     @Override
-                    public void run() {
-                        setResult(Activity.RESULT_OK, new Intent());
-                        finishActivity();
+                    public void handleMessage(Message inputMessage) {
+                        showProgressBar(false);
+                        switch (inputMessage.arg1) {
+                            case KcpCategoryManager.DOWNLOAD_FAILED:
+                                String errorMessage = (String) inputMessage.obj;
+                                AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+                                alertDialogForInterest.getAlertDialog(
+                                        GiftCardActivity.this,
+                                        GiftCardActivity.this.getResources().getString(R.string.title_error),
+                                        errorMessage,
+                                        GiftCardActivity.this.getResources().getString(R.string.action_ok),
+                                        null,
+                                        new AlertDialogForInterest.DialogAnsweredListener() {
+                                            @Override
+                                            public void okClicked() {
+                                                return;
+                                            }
+                                        });
+                                break;
+                            case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                                GiftCardResponse giftCardResponse = (GiftCardResponse) inputMessage.obj;
+                                Intent giftCardIntent = new Intent();
+                                giftCardIntent.putExtra(GiftCard.EXTRA_GIFT_CARD_NUMBER, cardNumber);
+                                giftCardIntent.putExtra(GiftCard.EXTRA_GIFT_CARD_BALANCE, giftCardResponse.getAvailableBalance());
+                                setResult(Activity.RESULT_OK, giftCardIntent);
+                                finishActivity();
+                                break;
+                            default:
+                                super.handleMessage(inputMessage);
+                        }
                     }
-                }, 2, SECONDS);
-
+                });
+                giftCardManager.checkCardBalance(cardNumber);
             }
         });
 
@@ -115,6 +151,18 @@ public class GiftCardActivity extends BaseActivity {
                 isFieldsCompletelyFilled(s.length() == TOTAL_DIGITS);
             }
         });
+    }
+
+    private void showProgressBar(boolean enable){
+        if(enable) {
+            llSignInCreateAccount.setClickable(false);
+            tvSign.setVisibility(View.GONE);
+            pb.setVisibility(View.VISIBLE);
+        } else {
+            llSignInCreateAccount.setClickable(true);
+            tvSign.setVisibility(View.VISIBLE);
+            pb.setVisibility(View.GONE);
+        }
     }
 
     public void isFieldsCompletelyFilled(boolean filled) {

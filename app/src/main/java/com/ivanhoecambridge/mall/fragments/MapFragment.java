@@ -1133,7 +1133,7 @@ public class MapFragment extends BaseFragment
                                                 sParkingPin.getTempParkingCoordinatePin().getLongitude(),
                                                 sParkingPin.getTempParkingCoordinatePin().getCoordinate().getMap().getElevation());
                                     }
-                                }).show();
+                                });
                     } else {
                         setAsParkingSpot(sParkingPin.getTempParkingCoordinatePin().getLatitude(),
                                 sParkingPin.getTempParkingCoordinatePin().getLongitude(),
@@ -1164,7 +1164,7 @@ public class MapFragment extends BaseFragment
                                     mMainActivity.setUpRightSidePanel();
                                     Toast.makeText(getActivity(), "Removed Parking Spot", Toast.LENGTH_SHORT).show();
                                 }
-                            }).show();
+                            });
                 }
             });
         }
@@ -1215,7 +1215,7 @@ public class MapFragment extends BaseFragment
                                     public void okClicked() {
                                         setAsParkingSpot(parkingPosition, entrancePosition);
                                     }
-                                }).show();
+                                });
                     } else {
                         setAsParkingSpot(parkingPosition, entrancePosition);
                     }
@@ -1253,7 +1253,7 @@ public class MapFragment extends BaseFragment
                                     mMainActivity.setUpRightSidePanel();
                                     Toast.makeText(getActivity(), "Removed Parking Spot", Toast.LENGTH_SHORT).show();
                                 }
-                            }).show();
+                            });
                 }
             });
         }
@@ -1368,7 +1368,7 @@ public class MapFragment extends BaseFragment
                                         setAsParkingSpot(location);
 
                                     }
-                                }).show();
+                                });
                     } else {
                         if(location == null) {
                             Log.e(TAG, "location clicked is null");
@@ -1556,33 +1556,36 @@ public class MapFragment extends BaseFragment
 
     @Override
     public void dropHeading(double x, double y, final float heading, SLHeadingStatus headingStatus) {
-        if(mFollowMode == FollowMode.COMPASS) {
-            mapView.getCamera().setRotationTo(0, -(float)Math.toRadians(heading - INITIAL_MAP_SLOPE));
-        }
+        try {
+            if(maps == null || mBlueDotPin == null) return;
+            if(mapView.getCamera() != null && mFollowMode == FollowMode.COMPASS) {
+                mapView.getCamera().setRotationTo(0, -(float)Math.toRadians(heading - INITIAL_MAP_SLOPE));
+            }
+            if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
+                return;
+            }
+            int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getElevation());
 
-        if(maps == null || mBlueDotPin == null) return;
-        if(mBlueDotPin.getCoordinate().getMap().getElevation() != maps[mCurrentLevelIndex].getElevation()) {
-            return;
-        }
-        int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getElevation());
+            android.location.Location targetLocation = MapUtility.getLocation(mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude());
+            final Overlay2DImage label;
 
-        android.location.Location targetLocation = MapUtility.getLocation(mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude());
-        final Overlay2DImage label;
-
-        if (mBlueDotCompass == null) {
-            label = new Overlay2DImage(getBlueDotSize(), getBlueDotSize(), getResources().getDrawable(R.drawable.icn_bluedot_orientation_pointer), getBlueDotSize()/2, getBlueDotSize()/2);
-        } else {
-            label = mBlueDotCompass.getOverlay2DImage();
+            if (mBlueDotCompass == null) {
+                label = new Overlay2DImage(getBlueDotSize(), getBlueDotSize(), getResources().getDrawable(R.drawable.icn_bluedot_orientation_pointer), getBlueDotSize()/2, getBlueDotSize()/2);
+            } else {
+                label = mBlueDotCompass.getOverlay2DImage();
+            }
+            Coordinate coordinate = new Coordinate(targetLocation, maps[mapIndex]);
+            if(mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
+            mBlueDotCompass = new Pin(coordinate, label);
+            mBlueDotCompass.setCoordinate(coordinate);
+            if(mFollowMode != FollowMode.COMPASS)  label.setRotation((float)Math.toRadians(heading) + (float) mBearingFromCamera);
+            label.setPosition(coordinate);
+            mapView.addMarker(label, false);
+            tempHeading = heading;
+            headingDropped = true;
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
         }
-        Coordinate coordinate = new Coordinate(targetLocation, maps[mapIndex]);
-        if(mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
-        mBlueDotCompass = new Pin(coordinate, label);
-        mBlueDotCompass.setCoordinate(coordinate);
-        if(mFollowMode != FollowMode.COMPASS)  label.setRotation((float)Math.toRadians(heading) + (float) mBearingFromCamera);
-        label.setPosition(coordinate);
-        mapView.addMarker(label, false);
-        tempHeading = heading;
-        headingDropped = true;
     }
 
     private View.OnClickListener onTestButtonListener = new View.OnClickListener() {
@@ -1693,7 +1696,7 @@ public class MapFragment extends BaseFragment
                             public void okClicked() {
                                 return;
                             }
-                        }).show();
+                        });
             }
         } catch (Exception e) {
             e.printStackTrace();

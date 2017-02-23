@@ -189,12 +189,13 @@
             android:layout_weight="1"/>
 
         <LinearLayout
-            android:layout_gravity=""
-            android:layout_marginBottom="20dp"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:gravity="center_horizontal"
-            android:layout_height="wrap_content">
+            android:layout_height="40dp">
 
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 app:fontFamily="@string/fontFamily_roboto_regular"

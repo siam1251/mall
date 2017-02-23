@@ -67,6 +67,14 @@ public class AlertDialogForInterest {
             }
         });
         builder.setView(v);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.html_link_text_color));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.html_link_text_color));
+
+
         return builder;
     }
 
@@ -128,33 +136,18 @@ public class AlertDialogForInterest {
         return builder;
     }
 
-    public AlertDialog.Builder showGCAlertDialog(final Context context){
+    public AlertDialog.Builder showGCAlertDialog(final Context context, GiftCardRecyclerViewAdapter giftCardRecyclerViewAdapter, DialogInterface.OnClickListener positiveButton, DialogInterface.OnClickListener negativeButton){
         View v = ((Activity)context).getLayoutInflater().inflate(R.layout.alertdialog_gc, null);
 
         RecyclerView rvGiftCard = (RecyclerView) v.findViewById(R.id.rvGiftCard);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         rvGiftCard.setLayoutManager(linearLayoutManager);
-        GiftCardRecyclerViewAdapter giftCardRecyclerViewAdapter = new GiftCardRecyclerViewAdapter(context, GiftCardManager.getInstance(context).getGiftCards());
         rvGiftCard.setAdapter(giftCardRecyclerViewAdapter);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(context.getString(R.string.title_remove_gc));
-        builder.setPositiveButton(context.getString(R.string.action_ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-
-                return;
-            }
-        });
-        builder.setNegativeButton(context.getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-
-                return;
-            }
-        });
+        builder.setPositiveButton(context.getString(R.string.action_ok), positiveButton);
+        builder.setNegativeButton(context.getString(R.string.action_cancel), negativeButton);
         builder.setView(v);
         AlertDialog dialog = builder.create();
         dialog.show();

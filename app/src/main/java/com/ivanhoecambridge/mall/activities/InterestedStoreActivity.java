@@ -167,7 +167,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
                     R.string.warning_exit_interest,
                     R.string.action_exit,
                     R.string.action_cancel,
-                    dialogAnsweredListener).show();
+                    dialogAnsweredListener);
         } else {
             dialogAnsweredListener.okClicked();
         }

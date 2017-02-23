@@ -66,7 +66,6 @@
             android:windowSoftInputMode="adjustPan"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                  <!--<category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
@@ -147,7 +146,25 @@
             android:name=".activities.SignInAfterOnBoardingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base"
-            />
+            >
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+                <data android:scheme="http"
+                    android:host="www.example.com"
+                    android:pathPrefix="/gizmos" />
+                <!-- note that the leading "/" is required for pathPrefix-->
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <data android:scheme="example"
+                    android:host="gizmos" />
+
+            </intent-filter>
+
+
+            </activity>
         <activity
             android:name=".activities.SignInActivity"
             android:screenOrientation="portrait"
@@ -170,20 +187,20 @@
             android:theme="@style/Theme.Transparent" />
 
         <!-- MAPPED IN ICMP-->
-        <meta-data
+        <!--<meta-data
             android:name="com.mappedin.sdk.Username"
             android:value="56f151b2c753ca4c0d000000" />
         <meta-data
             android:name="com.mappedin.sdk.Password"
-            android:value="0a11271a19b109e9211bbcc256f2e35d" />
+            android:value="0a11271a19b109e9211bbcc256f2e35d" />-->
 
         <!-- MAPPED IN KINETIC OFFICE-->
-        <!--<meta-data
+        <meta-data
             android:name="com.mappedin.sdk.Username"
             android:value="571a61f8c753ca0c5c000001" />
         <meta-data
             android:name="com.mappedin.sdk.Password"
-            android:value="f4a241fc2f4d2b5666d5c322b60d7f7a" />-->
+            android:value="f4a241fc2f4d2b5666d5c322b60d7f7a" />
 
 
         <!-- FABRIC CRASHLYTICS -->

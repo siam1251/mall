@@ -10,6 +10,10 @@ public class GiftCard {
     private String cardNumber = "";
     private float cardBalance = 0.0f;
     private static final int GIFT_CARD_DIGITS = 16;
+    public static final String EXTRA_GIFT_CARD_NUMBER = "gift_card_number";
+    public static final String EXTRA_GIFT_CARD_BALANCE = "gift_card_balance";
+
+    private boolean isChecked = false;
 
     public GiftCard(){}
 
@@ -34,6 +38,14 @@ public class GiftCard {
         this.cardBalance = cardBalance;
     }
 
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
     /**
      *
      * @return formatted card number with - in between numbers
@@ -43,6 +55,7 @@ public class GiftCard {
     }
 
     public static String insertDashInNumber(String cardNumber) {
+        cardNumber = cardNumber.replace(" ", "");
         if(cardNumber == null || cardNumber.length() != GIFT_CARD_DIGITS) return "";
         cardNumber =    cardNumber.substring(0, 3) + "-" +
                         cardNumber.substring(3, 6) + "-" +

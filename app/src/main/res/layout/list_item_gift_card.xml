@@ -33,4 +33,17 @@
         android:layout_centerVertical="true"
         android:id="@+id/bvGCBalance"/>
 
+    <View
+        android:visibility="gone"
+        android:id="@+id/separator"
+        android:layout_alignParentBottom="true"
+        style="@style/separater"
+        android:layout_toRightOf="@+id/cbGC"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:background="#e5e5e5"
+        />
+
+
+
 </RelativeLayout>

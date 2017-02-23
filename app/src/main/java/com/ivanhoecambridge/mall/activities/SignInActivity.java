@@ -1,5 +1,7 @@
 package com.ivanhoecambridge.mall.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.transition.Scene;
@@ -14,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.fragments.BirthDayPickerFragment;
 import com.ivanhoecambridge.mall.signin.FormFillChecker;
@@ -26,10 +29,15 @@ import com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * Created by Kay on 2017-01-27.
@@ -111,6 +119,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             llSignInCreateAccountReset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    fakeLoading();
                     Toast.makeText(SignInActivity.this, "SIGNING IN", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -156,6 +165,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             llSignInCreateAccountReset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    fakeLoading();
                     Toast.makeText(SignInActivity.this, "CREATING ACCOUNT", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -320,6 +330,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             llSignInCreateAccountReset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    fakeLoading();
                     Toast.makeText(SignInActivity.this, "Send Reset Instruction", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -356,6 +367,18 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
         }
     }
 
+    private void fakeLoading(){
+        ProgressBarWhileDownloading.showProgressDialog(SignInActivity.this, R.layout.layout_loading_item, true);
+        ScheduledExecutorService scheduler= Executors.newScheduledThreadPool(1);
+        ScheduledFuture<?> handl = scheduler.schedule(new Runnable() {
+            @Override
+            public void run() {
+                ProgressBarWhileDownloading.showProgressDialog(SignInActivity.this, R.layout.layout_loading_item, false);
+                finishActivity();
+            }
+        }, 2, SECONDS);
+    }
+
     private void changeScene(Scene scene){
         mScene = scene;
         TransitionManager.go(mScene);
@@ -367,7 +390,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     public void isFieldsCompletelyFilled(boolean filled) {
         llSignInCreateAccountReset.setClickable(filled);
         if(filled) {
-            llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_red));
+            llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.themeColor));
         } else {
             llSignInCreateAccountReset.setBackgroundColor(getResources().getColor(R.color.sign_in_disabled));
         }

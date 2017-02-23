@@ -24,6 +24,7 @@
     <string name="action_no">NO</string>
     <string name="action_remove">Remove</string>
     <string name="action_faq">FAQ</string>
+    <string name="action_refresh">REFRESH</string>
 
     <!--ALERT DIALOG TITLE-->
     <string name="title_unsaved_changes">Unsaved Changes</string>
@@ -42,6 +43,7 @@
     <string name="title_enable_bluetooth">Bluetooth</string>
     <string name="title_current_location_not_available">Current Location Not Available</string>
     <string name="title_remove_gc">Remove Gift Card</string>
+    <string name="title_error">Error</string>
 
 
     <!--FRAGMENT TITLE-->
@@ -354,6 +356,11 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <!--GIFT CARD-->
     <string name="gc_add_card">Add Card</string>
+    <string name="error_code_404">Invalid Card Number</string>
+    <string name="error_code_500">Server Error</string>
+    <string name="error_code_internet">Please check your internet connection and try again.</string>
+    <string name="gc_added_succesfully">Gift Card Added - Balance is $</string>
+    <string name="gc_refresh">Gift Card Balance has been updated</string>
     <!---->
 
     <string name="privacy_policy"><u>Privacy Policy</u></string>

@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -99,6 +100,7 @@ import com.ivanhoecambridge.mall.fragments.HomeFragment;
 import com.ivanhoecambridge.mall.fragments.InfoFragment;
 import com.ivanhoecambridge.mall.fragments.MapFragment;
 import com.ivanhoecambridge.mall.geofence.GeofenceManager;
+import com.ivanhoecambridge.mall.giftcard.GiftCard;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
@@ -192,6 +194,11 @@ public class MainActivity extends BaseActivity
         setTheme(R.style.Theme_SplashScreen);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        Uri data = intent.getData();
 
         boolean didOnboardingAppear = KcpUtility.loadFromSharedPreferences(this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, false);
         if(!didOnboardingAppear) {
@@ -810,7 +817,24 @@ public class MainActivity extends BaseActivity
                         int id = item.getItemId();
                         if (id == R.id.action_remove) {
                             AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
-                            alertDialogForInterest.showGCAlertDialog(MainActivity.this);
+                            final GiftCardRecyclerViewAdapter giftCardRecyclerViewAdapter = new GiftCardRecyclerViewAdapter(MainActivity.this, GiftCardManager.getInstance(MainActivity.this).getGiftCards());
+                            alertDialogForInterest.showGCAlertDialog(MainActivity.this, giftCardRecyclerViewAdapter, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int j) {
+                                    boolean[] checkedStatus = giftCardRecyclerViewAdapter.getCheckedStatus();
+                                    for(int i = 0; i < checkedStatus.length; i++) {
+                                        if(checkedStatus[i]) GiftCardManager.getInstance(MainActivity.this).removeCard(giftCardRecyclerViewAdapter.getGiftCard(i).getCardNumber());
+                                    }
+                                    mGiftCardRecyclerViewAdapter.updateData();
+                                    mGiftCardRecyclerViewAdapter.notifyDataSetChanged();
+                                    return;
+                                }
+                            }, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            return;
+                                        }
+                                    });
                         } else if (id == R.id.action_faq) {
                             KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
                             kcpMallInfoRoot.createOfflineKcpMallInfo(MainActivity.this, Constants.MALL_INFO_OFFLINE_TEXT);
@@ -825,6 +849,8 @@ public class MainActivity extends BaseActivity
                                     }
                                 }
                             }
+                        } else if (id == R.id.action_refresh) {
+                            GiftCardManager.getInstance(MainActivity.this).updateBalance();
                         }
 
                         return true;
@@ -844,22 +870,6 @@ public class MainActivity extends BaseActivity
             }
         };
 
-        GiftCardManager.getInstance(this).addCard("1234567891012123", 123.52f);
-        GiftCardManager.getInstance(this).addCard("1234567891012121", 123.0f);
-        GiftCardManager.getInstance(this).addCard("1234567891012122", 123.00f);
-        GiftCardManager.getInstance(this).addCard("1234567891012124", 123.001252f);
-        GiftCardManager.getInstance(this).addCard("1234567891012125", 0);
-        GiftCardManager.getInstance(this).addCard("1234567891012126", 0f);
-        GiftCardManager.getInstance(this).addCard("1234567891012127", 0.0f);
-
-        GiftCardManager.getInstance(this).addCard("1234567891012133", 123.52f);
-        GiftCardManager.getInstance(this).addCard("1234567891012131", 123.0f);
-        GiftCardManager.getInstance(this).addCard("1234567891012132", 123.00f);
-        GiftCardManager.getInstance(this).addCard("1234567891012134", 123.001252f);
-        GiftCardManager.getInstance(this).addCard("1234567891012135", 0);
-        GiftCardManager.getInstance(this).addCard("1234567891012136", 0f);
-        GiftCardManager.getInstance(this).addCard("1234567891012137", 0.0f);
-
         RecyclerView rvGiftCard = (RecyclerView) findViewById(R.id.rvGiftCard);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvGiftCard.setLayoutManager(linearLayoutManager);
@@ -869,10 +879,7 @@ public class MainActivity extends BaseActivity
         GiftCardManager.getInstance(this).setGiftCardUpdateListener(new GiftCardManager.GiftCardUpdateListener() {
             @Override
             public void onGiftCardUpdated() {
-
-
-
-
+                mGiftCardRecyclerViewAdapter.updateData();
             }
         });
 
@@ -1261,7 +1268,6 @@ public class MainActivity extends BaseActivity
         View snackbarView = mOfflineSnackbar.getView();
 
         CoordinatorLayout.LayoutParams param = (CoordinatorLayout.LayoutParams) snackbarView.getLayoutParams();
-//        param.bottomMargin = (int) getResources().getDimension(R.dimen.main_app_bar_layout_height);
         snackbarView.setLayoutParams(param);
         snackbarView.setBackgroundColor(Color.DKGRAY);
 
@@ -1404,11 +1410,11 @@ public class MainActivity extends BaseActivity
         } else if (id == android.R.id.home){
             onBackPressed();
         } else if (id == R.id.action_test) {
-//            throw new RuntimeException("This is a crash");
-            setActiveMall(true, !mActiveMall);
+//            throw new RuntimeException("This is a crash"); //force crash
+//            setActiveMall(true, !mActiveMall); //testing geofence toggle
+            GiftCardManager.getInstance(this).updateBalance();
         } else if (id == R.id.action_geofence_test) {
             mGeofenceManager.setGeofence(true);
-            flActiveMallDot.setVisibility(View.VISIBLE);
         } else if (id == R.id.action_geofence_disconnect) {
             mGeofenceManager.setGeofence(false);
             setActiveMall(false, false);
@@ -1579,7 +1585,11 @@ public class MainActivity extends BaseActivity
                 mGeofenceManager = new GeofenceManager(this);
             } else if(requestCode == Constants.REQUEST_CODE_GIFT_CARD) {
                 if (resultCode == Activity.RESULT_OK) {
-
+                    String cardNumber = data.getStringExtra(GiftCard.EXTRA_GIFT_CARD_NUMBER);
+                    int cardBalance = data.getIntExtra(GiftCard.EXTRA_GIFT_CARD_BALANCE, 0);
+                    GiftCardManager.getInstance(this).addCard(cardNumber, cardBalance);
+                    Toast.makeText(this, getString(R.string.gc_added_succesfully) + cardBalance, Toast.LENGTH_LONG).show();
+                    mGiftCardRecyclerViewAdapter.updateData();
                 }
 
             }

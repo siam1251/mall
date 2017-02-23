@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
@@ -39,6 +40,8 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
     private int mGeneralTextColor = Color.BLACK;
     private boolean mShowCheckBox = false;
 
+    private boolean[] checkedStatus;
+
     private final int ITEM_TYPE_GC = 0;
     private final int ITEM_TYPE_FOOTER = 1;
 
@@ -55,6 +58,7 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
         mContext = context;
         mGiftCards = new ArrayList<GiftCard>(giftCards.values());
         mShowCheckBox = true;
+        checkedStatus = new boolean[mGiftCards.size()];
     }
 
     public void addFooter(){
@@ -64,9 +68,9 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
 
-    public void updateData(ArrayList<KcpCategories> kcpContentPages) {
-        /*mGiftCards.clear();
-        mGiftCards.addAll(kcpContentPages);*/
+    public void updateData() {
+        mGiftCards = new ArrayList<GiftCard>(GiftCardManager.getInstance(mContext).getGiftCards().values());
+        if(mFooterOnClickListener != null) addFooter();
         notifyDataSetChanged();
     }
 
@@ -74,6 +78,7 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
         public View mView;
         public TextView  tvGCNumber;
         public BadgeView bvGCBalance;
+        public View separator;
         public CheckBox cbGC;
 
         public GiftCardHolder(View v) {
@@ -81,6 +86,7 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
             mView = v;
             tvGCNumber = (TextView)  v.findViewById(R.id.tvGCNumber);
             bvGCBalance = (BadgeView)  v.findViewById(R.id.bvGCBalance);
+            separator = (View)  v.findViewById(R.id.separator);
             cbGC = (CheckBox)  v.findViewById(R.id.cbGC);
         }
     }
@@ -130,7 +136,15 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
                 gcHolder.bvGCBalance.setBadgeTextColor(mBadgeTextColor);
 
                 if(mShowCheckBox) {
+                    gcHolder.separator.setVisibility(View.VISIBLE);
                     gcHolder.cbGC.setVisibility(View.VISIBLE);
+                    gcHolder.cbGC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            checkedStatus[position] = b;
+                        }
+                    });
+                    gcHolder.cbGC.setChecked(checkedStatus[position]);
                 }
 
                 gcHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -140,17 +154,10 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
                     }
                 });
 
-                /*gcHolder.mView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        gcHolder.cbGC.onTouchEvent(motionEvent);
-                        return false;
-                    }
-                });*/
-
             } else if (getItemViewType(position) == ITEM_TYPE_FOOTER) {
                 GiftCardFooterHolder gcFooterHolder = (GiftCardFooterHolder) holder;
                 gcFooterHolder.mView.setOnClickListener(mFooterOnClickListener);
+                gcFooterHolder.tvAddGC.setTextColor(mGeneralTextColor);
 
             }
         } catch (Exception e) {
@@ -169,5 +176,14 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
             if(mGiftCards.size() == position + 1) return ITEM_TYPE_FOOTER;
             else return ITEM_TYPE_GC;
         } else return ITEM_TYPE_GC;
+    }
+
+    public GiftCard getGiftCard(int position){
+        return mGiftCards.get(position);
+    }
+
+    public boolean[] getCheckedStatus() {
+        if(checkedStatus == null) checkedStatus = new boolean[0];
+        return checkedStatus;
     }
 }

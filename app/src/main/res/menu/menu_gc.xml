@@ -11,4 +11,8 @@
         android:id="@+id/action_faq"
         android:title="@string/action_faq"/>
 
+    <item
+        android:id="@+id/action_refresh"
+        android:title="@string/action_refresh"/>
+
 </menu>

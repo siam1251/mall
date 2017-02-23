@@ -178,7 +178,7 @@ public class ParkingActivity extends AppCompatActivity {
                         public void okClicked() {
                             onFinish();
                         }
-                    }).show();
+                    });
         } else onFinish();
     }
 
