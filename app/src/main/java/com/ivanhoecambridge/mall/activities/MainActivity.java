@@ -186,6 +186,11 @@ public class MainActivity extends BaseActivity
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         KcpNotificationManager.onWelcomeNotiClick(this, intent);
+
+
+//        adb shell am start -W -a android.intent.action.VIEW -d "example://gizmos" com.ivanhoecambridge.mall.seniondemo/com.ivanhoecambridge.mall.activities.MainActivity
+        String action = intent.getAction();  //android.intent.action.VIEW
+        Uri data = intent.getData(); //"example://gizmos"
     }
 
 
@@ -194,11 +199,6 @@ public class MainActivity extends BaseActivity
         setTheme(R.style.Theme_SplashScreen);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        Uri data = intent.getData();
 
         boolean didOnboardingAppear = KcpUtility.loadFromSharedPreferences(this, Constants.PREF_KEY_ONBOARDING_DID_APPEAR, false);
         if(!didOnboardingAppear) {
@@ -1410,8 +1410,8 @@ public class MainActivity extends BaseActivity
         } else if (id == android.R.id.home){
             onBackPressed();
         } else if (id == R.id.action_test) {
-//            throw new RuntimeException("This is a crash"); //force crash
-//            setActiveMall(true, !mActiveMall); //testing geofence toggle
+//            throw new RuntimeException("This is a crash"); //enable to force crash for testing
+//            setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
             GiftCardManager.getInstance(this).updateBalance();
         } else if (id == R.id.action_geofence_test) {
             mGeofenceManager.setGeofence(true);

@@ -3,6 +3,7 @@ package com.ivanhoecambridge.mall.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.transition.Scene;
 import android.support.transition.TransitionManager;

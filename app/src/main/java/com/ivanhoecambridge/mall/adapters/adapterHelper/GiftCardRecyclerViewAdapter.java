@@ -64,7 +64,6 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
     public void addFooter(){
         GiftCard giftCard = new GiftCard();
         mGiftCards.add(giftCard);
-//        notifyDataSetChanged();
     }
 
 

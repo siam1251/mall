@@ -367,6 +367,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
         }
     }
 
+    //the network handling code is not complete for signin. Until then, use below to mock the network processing for UI testing.
     private void fakeLoading(){
         ProgressBarWhileDownloading.showProgressDialog(SignInActivity.this, R.layout.layout_loading_item, true);
         ScheduledExecutorService scheduler= Executors.newScheduledThreadPool(1);

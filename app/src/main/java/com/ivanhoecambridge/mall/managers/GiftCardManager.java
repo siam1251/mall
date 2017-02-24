@@ -162,7 +162,6 @@ public class GiftCardManager {
                         case KcpCategoryManager.DOWNLOAD_COMPLETE:
                             GiftCardResponse giftCardResponse = (GiftCardResponse) inputMessage.obj;
                             addCard(cardNumber, giftCardResponse.getAvailableBalance());
-//                            Toast.makeText(mContext, cardNumber + " - $" + giftCardResponse.getAvailableBalance(), Toast.LENGTH_SHORT).show(); //toast each gc balance
                             Toast.makeText(mContext, mContext.getString(R.string.gc_refresh), Toast.LENGTH_SHORT).show(); //toast each gc balance
                             if(mGiftCardUpdateListener != null) mGiftCardUpdateListener.onGiftCardUpdated();
                             break;
@@ -252,16 +251,6 @@ public class GiftCardManager {
         Message message = new Message();
         message.arg1 = state;
         message.obj = result;
-        switch (state){
-            case DOWNLOAD_STARTED:
-                break;
-            case DOWNLOAD_FAILED:
-                break;
-            case DOWNLOAD_COMPLETE:
-                break;
-            case DATA_ADDED:
-                break;
-        }
         mHandler.sendMessage(message);
     }
 

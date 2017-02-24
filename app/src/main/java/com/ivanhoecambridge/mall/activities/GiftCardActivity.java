@@ -17,28 +17,17 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.mall.R;
-import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.giftcard.GiftCard;
 import com.ivanhoecambridge.mall.giftcard.GiftCardResponse;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
-import com.ivanhoecambridge.mall.searchIndex.IndexManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.R.attr.label;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * Created by Kay on 2017-02-15.
@@ -123,8 +112,7 @@ public class GiftCardActivity extends BaseActivity {
         etCard.addTextChangedListener(new TextWatcher() {
             private final char DIVIDER = ' ';
             private final int TOTAL_DIGITS = 20;
-            private final int NUMB_OF_CHAR_DIVIDER = 3;
-
+            private final int NUM_OF_CHAR_DIVIDER = 3;
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -134,16 +122,14 @@ public class GiftCardActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 0 && (s.length() % (NUMB_OF_CHAR_DIVIDER + 1)) == 0) {
-                    final char c = s.charAt(s.length() - 1);
-                    if (DIVIDER == c) {
+                if (s.length() > 0 && (s.length() % (NUM_OF_CHAR_DIVIDER + 1)) == 0) { //when the cursor's at NUM_OF_CHAR_DIVIDER + 1
+                    final char currentCharacter = s.charAt(s.length() - 1); //last character written
+                    if (DIVIDER == currentCharacter) { //when deleting if the current letter is DIVIDER, delete it
                         s.delete(s.length() - 1, s.length());
                     }
-                }
 
-                if (s.length() > 0 && (s.length() % (NUMB_OF_CHAR_DIVIDER + 1)) == 0) {
-                    char c = s.charAt(s.length() - 1);
-                    if (Character.isDigit(c) && TextUtils.split(s.toString(), String.valueOf(DIVIDER)).length <= 4) {
+                    //if current character is at NUM_OF_CHAR_DIVIDER + 1, insert DIVIDER unless you reach the 5th block (5th block should have 4 digits)
+                    if (Character.isDigit(currentCharacter) && TextUtils.split(s.toString(), String.valueOf(DIVIDER)).length <= 4) {
                         s.insert(s.length() - 1, String.valueOf(DIVIDER));
                     }
                 }

@@ -154,7 +154,6 @@ public class AlertDialogForInterest {
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.html_link_text_color));
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.html_link_text_color));
-//        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, 400);
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());

@@ -51,7 +51,7 @@
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 android:id="@+id/tvSignUp"
                 app:fontFamily="@string/fontFamily_roboto_medium"
-                android:textColor="@color/sign_in_red"
+                android:textColor="@color/themeColor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
