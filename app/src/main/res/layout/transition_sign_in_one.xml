@@ -48,7 +48,7 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:text="@string/signin_sign_up"
-                android:textColor="@color/sign_in_red"
+                android:textColor="@color/themeColor"
                 android:textSize="16dp"
                 />
         </LinearLayout>
@@ -107,7 +107,7 @@
             app:fontFamily="@string/fontFamily_roboto_bold"
             android:layout_width="match_parent"
             android:text="@string/signin_forgot_password"
-            android:textColor="@color/sign_in_red"
+            android:textColor="@color/themeColor"
             android:textSize="16dp"
             android:layout_centerHorizontal="true"
             android:layout_height="60dp"

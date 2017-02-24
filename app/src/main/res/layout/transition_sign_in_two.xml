@@ -47,7 +47,7 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:text="@string/signin_sign_in"
-                android:textColor="@color/sign_in_red"
+                android:textColor="@color/themeColor"
                 android:textSize="16dp"
                 />
         </LinearLayout>
@@ -217,7 +217,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/signin_terms_and_conditions"
-                android:textColor="@color/sign_in_red"
+                android:textColor="@color/themeColor"
                 android:textSize="14dp"
                 />
         </LinearLayout>
