@@ -54,7 +54,7 @@ public class BluetoothManager {
                                 bluetoothAdapter.enable();
                             }
                         }
-                    }).show();
+                    });
 
         }
         return false;

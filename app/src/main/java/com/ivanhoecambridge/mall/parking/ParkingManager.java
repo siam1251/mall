@@ -160,6 +160,7 @@ public class ParkingManager {
 
 
     public static ParkingSpot getSavedParkingSpot(final Context context){
+        if(context == null) return null;
         Gson gson = new Gson();
         String json = context.getSharedPreferences("PreferenceManager", Context.MODE_PRIVATE).getString(KEY_PARKING_LOT_COORDINATE, "");
         if(json.equals("")) return null;

@@ -4,13 +4,14 @@
     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llTransition"
-    android:background="#454545"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
-    <ImageView
+    <com.ivanhoecambridge.mall.views.ThemeColorImageView
+        ThemedImageView:filterColor="@color/white"
         android:layout_centerHorizontal="true"
         android:id="@+id/ivLogo"
         android:layout_width="270dp"
@@ -50,7 +51,7 @@
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 android:id="@+id/tvSignUp"
                 app:fontFamily="@string/fontFamily_roboto_medium"
-                android:textColor="@color/sign_in_red"
+                android:textColor="@color/themeColor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"

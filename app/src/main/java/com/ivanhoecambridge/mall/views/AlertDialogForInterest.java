@@ -3,17 +3,24 @@ package com.ivanhoecambridge.mall.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.adapters.adapterHelper.GiftCardRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.managers.GiftCardManager;
 
 /**
  * Created by Kay on 2016-06-03.
@@ -60,12 +67,19 @@ public class AlertDialogForInterest {
             }
         });
         builder.setView(v);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.html_link_text_color));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.html_link_text_color));
+
+
         return builder;
     }
 
 
-    public AlertDialog.Builder getEditTextAlertDialog (final Context context, String preFillText, String title, String positiveBtn, String negativeBtn, final DialogEditTextLinstener dialogEditTextLinstener){
-
+    public AlertDialog.Builder showEditTextAlertDialog(final Context context, String preFillText, String title, String positiveBtn, String negativeBtn, final DialogEditTextLinstener dialogEditTextLinstener){
         View v = ((Activity)context).getLayoutInflater().inflate(R.layout.alertdialog_edittext, null);
         final EditText etAlertDialog = (EditText) v.findViewById(R.id.etAlertDialog);
         final TextView tvCharacterLeft = (TextView) v.findViewById(R.id.tvCharacterLeft);
@@ -113,6 +127,41 @@ public class AlertDialogForInterest {
             }
         });
         builder.setView(v);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.html_link_text_color));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.html_link_text_color));
+
+        return builder;
+    }
+
+    public AlertDialog.Builder showGCAlertDialog(final Context context, GiftCardRecyclerViewAdapter giftCardRecyclerViewAdapter, DialogInterface.OnClickListener positiveButton, DialogInterface.OnClickListener negativeButton){
+        View v = ((Activity)context).getLayoutInflater().inflate(R.layout.alertdialog_gc, null);
+
+        RecyclerView rvGiftCard = (RecyclerView) v.findViewById(R.id.rvGiftCard);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        rvGiftCard.setLayoutManager(linearLayoutManager);
+        rvGiftCard.setAdapter(giftCardRecyclerViewAdapter);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(context.getString(R.string.title_remove_gc));
+        builder.setPositiveButton(context.getString(R.string.action_ok), positiveButton);
+        builder.setNegativeButton(context.getString(R.string.action_cancel), negativeButton);
+        builder.setView(v);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.html_link_text_color));
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.html_link_text_color));
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = KcpUtility.dpToPx((Activity) context, 400);
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
+
         return builder;
     }
 }

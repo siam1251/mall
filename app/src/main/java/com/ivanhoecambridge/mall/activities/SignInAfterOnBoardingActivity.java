@@ -1,12 +1,18 @@
 package com.ivanhoecambridge.mall.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.transition.Scene;
 import android.support.transition.TransitionManager;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.ivanhoecambridge.mall.R;
@@ -22,6 +28,7 @@ import butterknife.Optional;
 
 public class SignInAfterOnBoardingActivity extends BaseActivity {
 
+    RelativeLayout rlSignIn;
     CardView cvSignUpInFirstScene;
     CardView cvSignUpInSecondScene;
     ViewGroup rootContainer;
@@ -34,6 +41,13 @@ public class SignInAfterOnBoardingActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin_after_on_boarding);
         ButterKnife.bind(this);
+
+        rlSignIn = (RelativeLayout) findViewById(R.id.rlSignIn);
+        int id = getResources().getIdentifier("img_signup_bg", "drawable", getPackageName());
+        if(id != 0 && id != -1) {
+            Drawable bgDrawable = ResourcesCompat.getDrawable(getResources(), id, null);
+            rlSignIn.setBackground(bgDrawable);
+        } else rlSignIn.setBackgroundColor(Color.parseColor("#454545"));
 
         rootContainer = (ViewGroup) findViewById(R.id.scene_root);
 

@@ -87,7 +87,7 @@ public class Utility {
                     public void okClicked() {
                         makeCall(context, number);
                     }
-                }).show();
+                });
     }
 
     public static void makeCallWithAlertDialog(final Context context, final String title, final String msg, final String positiveBtn, final String negativebtn, final String number){
@@ -104,7 +104,7 @@ public class Utility {
                     public void okClicked() {
                         makeCall(context, number);
                     }
-                }).show();
+                });
     }
 
     public static void openWebPage(Context context, String url){
@@ -142,7 +142,7 @@ public class Utility {
                     public void okClicked() {
                         openInstagramWithName(context, userName);
                     }
-                }).show();
+                });
     }
 
     public static void openInstagramWithName(Context context, String userName){

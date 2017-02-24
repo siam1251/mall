@@ -280,9 +280,7 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
-        if(BuildConfig.DEBUG) {
-            CustomizedExceptionHandler.writeToFile(mContext, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
-        }
+        CustomizedExceptionHandler.writeToFile(mContext, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
     }
 
     @Override

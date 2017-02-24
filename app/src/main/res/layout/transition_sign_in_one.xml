@@ -169,14 +169,14 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:onClick="onGoogleClicked"
-            android:clickable="false"
-            android:id="@+id/cvGoogle"
-            style="@style/CardViewSignIn"
-            android:layout_above="@+id/llSignInCreateAccount"
-            android:layout_marginBottom="22dp"
-            card_view:cardBackgroundColor="#df4a32"
-            >
+        android:onClick="onGoogleClicked"
+        android:clickable="false"
+        android:id="@+id/cvGoogle"
+        style="@style/CardViewSignIn"
+        android:layout_above="@+id/llSignInCreateAccount"
+        android:layout_marginBottom="22dp"
+        card_view:cardBackgroundColor="#df4a32"
+        >
 
             <FrameLayout
                 android:id="@+id/flGoogle"

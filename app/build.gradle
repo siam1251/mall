@@ -107,7 +107,7 @@ android {
             buildConfigField 'Boolean', 'WHITE_FAV', 'false'
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
             buildConfigField 'Boolean', 'BLUEDOT', 'false'
-            buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.5"'
+            buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.6"'
 
             versionName "1.0.0"
         }
@@ -121,7 +121,7 @@ android {
             buildConfigField 'Boolean', 'WHITE_FAV', 'true' //show white fav icon in case the selected fav's same as the toolbar bg color
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'true'
             buildConfigField 'Boolean', 'BLUEDOT', 'true'
-            buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.1"'
+            buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.2"'
 
             versionName "1.0.0"
         }

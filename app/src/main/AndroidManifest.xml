@@ -18,8 +18,6 @@
 
     <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>--> <!-- allow permission for DEBUG variant to enable crash reports -->
 
-
-
     <permission
         android:name="${applicationId}.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -49,10 +47,7 @@
             android:theme="@style/Theme.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-
             </intent-filter>
         </activity>
         <activity
@@ -61,14 +56,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.SplashScreen"
             android:windowSoftInputMode="adjustResize">
-            android:windowSoftInputMode="adjustResize|stateHidden"
             <!-- slides up view -->
-            android:windowSoftInputMode="adjustPan"
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
         <activity
@@ -146,16 +138,18 @@
         <activity
             android:name=".activities.SignInAfterOnBoardingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base"
-            />
+            android:theme="@style/AppTheme.Base"/>
         <activity
             android:name=".activities.SignInActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base"
             />
-            android:windowSoftInputMode="stateVisible|adjustPan"
-            android:windowSoftInputMode="adjustNothing"
-            android:windowSoftInputMode="adjustPan"
+
+        <activity
+            android:name=".activities.GiftCardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base"
+            />
 
         <receiver android:name=".receivers.WelcomeMsgReceiver" />
 
@@ -167,20 +161,20 @@
             android:theme="@style/Theme.Transparent" />
 
         <!-- MAPPED IN ICMP-->
-        <meta-data
+        <!--<meta-data
             android:name="com.mappedin.sdk.Username"
             android:value="56f151b2c753ca4c0d000000" />
         <meta-data
             android:name="com.mappedin.sdk.Password"
-            android:value="0a11271a19b109e9211bbcc256f2e35d" />
+            android:value="0a11271a19b109e9211bbcc256f2e35d" />-->
 
         <!-- MAPPED IN KINETIC OFFICE-->
-        <!--<meta-data
+        <meta-data
             android:name="com.mappedin.sdk.Username"
             android:value="571a61f8c753ca0c5c000001" />
         <meta-data
             android:name="com.mappedin.sdk.Password"
-            android:value="f4a241fc2f4d2b5666d5c322b60d7f7a" />-->
+            android:value="f4a241fc2f4d2b5666d5c322b60d7f7a" />
 
 
         <!-- FABRIC CRASHLYTICS -->

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="#454545"
     android:layout_width="match_parent"
     android:id="@+id/llTransition"
     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
@@ -118,7 +117,7 @@
             <com.ivanhoecambridge.mall.views.ThemeColorImageView
                 android:layout_marginLeft="21dp"
                 android:layout_gravity="center_vertical"
-                ThemedImageView:filterColor="@color/sign_in_red"
+                ThemedImageView:filterColor="@color/themeColor"
                 android:layout_width="wrap_content"
                 android:layout_height="26dp"
                 android:src="@drawable/icn_email"
@@ -126,7 +125,7 @@
 
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 app:fontFamily="@string/fontFamily_roboto_medium"
-                android:textColor="@color/sign_in_red"
+                android:textColor="@color/themeColor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"

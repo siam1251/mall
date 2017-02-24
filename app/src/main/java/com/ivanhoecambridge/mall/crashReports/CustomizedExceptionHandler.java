@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import com.ivanhoecambridge.mall.BuildConfig;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -50,6 +52,7 @@ public class CustomizedExceptionHandler implements Thread.UncaughtExceptionHandl
 
     public static void writeToFile(Context context, String currentStacktrace) {
         try {
+            if(!BuildConfig.DEBUG) return;
             File dir = new File(context.getExternalCacheDir(),
                     "Crash_Reports");
 
