@@ -242,7 +242,6 @@ public class HomeFragment extends BaseFragment {
         if(kcpContentPages.size() == 0) mNewsFragment.setEmptyState(getActivity().getResources().getString(R.string.warning_empty_news));
         mNewsFragment.mNewsRecyclerViewAdapter.updateData(kcpContentPages);
         mMainActivity.onDataDownloaded();
-//        ProgressBarWhileDownloading.showProgressDialog(getActivity(), R.layout.layout_loading_item, false);
 
         if (mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null) {
             mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);

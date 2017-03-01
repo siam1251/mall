@@ -32,7 +32,9 @@ import org.apache.http.impl.auth.BasicScheme;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import factory.HeaderFactory;
 import retrofit2.Call;
@@ -118,12 +120,13 @@ public class GiftCardManager {
         KcpUtility.saveGson(mContext, KEY_GSON_GIFT_CARD, giftCards);
     }
 
+    public boolean isCardAdded(String cardNumber){
+        if(giftCards == null || !giftCards.containsKey(cardNumber)) return false;
+        else return true;
+    }
+
     public boolean addCard(String cardNumber, float cardBalance){
-        boolean cardExist = false;
-        if(!giftCards.containsKey(cardNumber)) {
-        } else {
-            cardExist = true;
-        }
+        boolean cardExist = isCardAdded(cardNumber);
         giftCards.put(cardNumber, new GiftCard(cardNumber, cardBalance));
         saveGiftCard();
         return cardExist;
@@ -141,16 +144,18 @@ public class GiftCardManager {
      * update balance of all cards saved
      */
     public void updateBalance(){
-        for (String cardNumber : giftCards.keySet()) {
-            updateBalance(cardNumber);
+        List<String> giftCardList = new ArrayList<String>(giftCards.keySet());
+        for(int i = 0; i < giftCardList.size(); i++) {
+            updateBalance(giftCardList.get(i), i == giftCardList.size() - 1);
         }
     }
 
     /**
      * update balance of a single card
      * @param cardNumber
+     * @param showToast show toast to indicate update's been done ex. when checking the last giftcard blaance
      */
-    private void updateBalance(final String cardNumber){
+    private void updateBalance(final String cardNumber, final boolean showToast){
         if(giftCards.containsKey(cardNumber)) {
 
             GiftCardManager giftCardManager = new GiftCardManager(mContext, new Handler(Looper.getMainLooper()) {
@@ -162,7 +167,7 @@ public class GiftCardManager {
                         case KcpCategoryManager.DOWNLOAD_COMPLETE:
                             GiftCardResponse giftCardResponse = (GiftCardResponse) inputMessage.obj;
                             addCard(cardNumber, giftCardResponse.getAvailableBalance());
-                            Toast.makeText(mContext, mContext.getString(R.string.gc_refresh), Toast.LENGTH_SHORT).show(); //toast each gc balance
+                            if(showToast) Toast.makeText(mContext, mContext.getString(R.string.gc_refresh), Toast.LENGTH_SHORT).show(); //toast each gc balance
                             if(mGiftCardUpdateListener != null) mGiftCardUpdateListener.onGiftCardUpdated();
                             break;
                         default:

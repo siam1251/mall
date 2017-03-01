@@ -106,6 +106,7 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
                                 .setEtAppId(appId)
                                 .setAccessToken(accessToken)
                                 .setGcmSenderId(gcmSenderId)
+                                .setOpenDirectRecipientClass(MainActivity.class) //prevent the SDK from using the default ETLandingPage activity to open the OpenDirect URL sent with the message payload
                                 .setAnalyticsEnabled(ANALYTICS_ENABLED)
                                 .setLocationEnabled(LOCATION_ENABLED)
                                 .setPiAnalyticsEnabled(WAMA_ENABLED)

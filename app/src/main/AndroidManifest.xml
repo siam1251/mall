@@ -151,6 +151,12 @@
             android:theme="@style/AppTheme.Base"
             />
 
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyPreferenceTheme"
+            />
+
         <receiver android:name=".receivers.WelcomeMsgReceiver" />
 
         <!-- single instance creates another 'window' when 'multi tasking button' pressed -->
@@ -161,20 +167,20 @@
             android:theme="@style/Theme.Transparent" />
 
         <!-- MAPPED IN ICMP-->
-        <!--<meta-data
+        <meta-data
             android:name="com.mappedin.sdk.Username"
             android:value="56f151b2c753ca4c0d000000" />
         <meta-data
             android:name="com.mappedin.sdk.Password"
-            android:value="0a11271a19b109e9211bbcc256f2e35d" />-->
+            android:value="0a11271a19b109e9211bbcc256f2e35d" />
 
         <!-- MAPPED IN KINETIC OFFICE-->
-        <meta-data
+        <!--<meta-data
             android:name="com.mappedin.sdk.Username"
             android:value="571a61f8c753ca0c5c000001" />
         <meta-data
             android:name="com.mappedin.sdk.Password"
-            android:value="f4a241fc2f4d2b5666d5c322b60d7f7a" />
+            android:value="f4a241fc2f4d2b5666d5c322b60d7f7a" />-->
 
 
         <!-- FABRIC CRASHLYTICS -->

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -66,8 +67,26 @@ public class GiftCardActivity extends BaseActivity {
         llSignInCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgressBar(true);
                 final String cardNumber = etCard.getText().toString();
+                //check if this gift card has already been added
+                if(GiftCardManager.getInstance(GiftCardActivity.this).isCardAdded(cardNumber)){
+                    AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+                    alertDialogForInterest.getAlertDialog(
+                            GiftCardActivity.this,
+                            GiftCardActivity.this.getResources().getString(R.string.title_oops),
+                            GiftCardActivity.this.getResources().getString(R.string.warning_gift_card_already_exist),
+                            GiftCardActivity.this.getResources().getString(R.string.action_ok),
+                            null,
+                            new AlertDialogForInterest.DialogAnsweredListener() {
+                                @Override
+                                public void okClicked() {
+                                    return;
+                                }
+                            });
+                    return;
+                }
+
+                showProgressBar(true);
                 GiftCardManager giftCardManager = new GiftCardManager(GiftCardActivity.this, new Handler(Looper.getMainLooper()) {
                     @Override
                     public void handleMessage(Message inputMessage) {
@@ -78,7 +97,7 @@ public class GiftCardActivity extends BaseActivity {
                                 AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
                                 alertDialogForInterest.getAlertDialog(
                                         GiftCardActivity.this,
-                                        GiftCardActivity.this.getResources().getString(R.string.title_error),
+                                        GiftCardActivity.this.getResources().getString(R.string.title_oops),
                                         errorMessage,
                                         GiftCardActivity.this.getResources().getString(R.string.action_ok),
                                         null,
