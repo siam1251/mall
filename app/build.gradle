@@ -65,6 +65,7 @@ android {
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'true'
             buildConfigField 'Boolean', 'BLUEDOT', 'false'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.12"'
+            resValue "string", "applicationId", "com.ivanhoecambridge.metropolis"
 
             versionName "1.0.0"
         }
@@ -79,6 +80,7 @@ android {
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
             buildConfigField 'Boolean', 'BLUEDOT', 'false'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.8"'
+            resValue "string", "applicationId", "com.ivanhoecambridge.vaughanmills"
 
             versionName "1.0.0"
         }
@@ -93,7 +95,7 @@ android {
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
             buildConfigField 'Boolean', 'BLUEDOT', 'false'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.6"'
-
+            resValue "string", "applicationId", "com.ivanhoecambridge.tsawwassenmills"
 
             versionName "1.0.0"
         }
@@ -108,6 +110,7 @@ android {
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
             buildConfigField 'Boolean', 'BLUEDOT', 'false'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.6"'
+            resValue "string", "applicationId", "com.ivanhoecambridge.crossironmilss"
 
             versionName "1.0.0"
         }
@@ -122,6 +125,7 @@ android {
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'true'
             buildConfigField 'Boolean', 'BLUEDOT', 'true'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.2"'
+            resValue "string", "applicationId", "com.ivanhoecambridge.senionsdemo"
 
             versionName "1.0.0"
         }

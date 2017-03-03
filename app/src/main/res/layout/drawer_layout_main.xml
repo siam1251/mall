@@ -14,8 +14,8 @@
         android:layout_height="match_parent"
         >
 
-            android:visibility="invisible"
         <ImageView
+            android:visibility="invisible"
             android:id="@+id/ivDrawerLayoutBg"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"

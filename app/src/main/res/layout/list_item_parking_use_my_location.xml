@@ -12,9 +12,9 @@
         ThemedImageView:filterColor="@color/map_level_with_path"
         android:layout_centerVertical="true"
         android:id="@+id/ivFollowMode"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:src="@drawable/icn_current_location"
+        android:layout_width="21dp"
+        android:layout_height="21dp"
+        android:src="@drawable/icn_saveparking_current_location"
         />
 
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView

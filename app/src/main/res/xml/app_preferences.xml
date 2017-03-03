@@ -3,25 +3,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v7.preference.PreferenceCategory
-        android:title="Device Notifications">
+        android:title="Device Notifications"
+        android:layout="@layout/preferences_category">
 
         <android.support.v7.preference.SwitchPreferenceCompat
-            android:key="key1"
-            android:title="Switch Preference"
-            android:summary="Switch Summary"
+            android:key="notification_deals_weekly_digest_enabled"
+            android:title="Weekly Digests"
+            android:summary="Receive digest of your upcoming saved deals and events every Thursday at your preferred time."
             android:defaultValue="true" />
 
-        <android.support.v7.preference.EditTextPreference
-            android:key="key2"
-            android:title="EditText Preference"
-            android:summary="EditText Summary"
-            android:dialogMessage="Dialog Message"
-            android:defaultValue="Default value" />
-        <android.support.v7.preference.CheckBoxPreference
-            android:key="key3"
-            android:title="CheckBox Preference"
-            android:summary="CheckBox Summary"
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:key="notification_deals_daily_reminders_enabled"
+            android:title="Reminder Alerts"
+            android:summary="Get Reminders (maximum once per day) before your saved deals and events expire."
             android:defaultValue="true"/>
+
     </android.support.v7.preference.PreferenceCategory>
 
 </android.support.v7.preference.PreferenceScreen>

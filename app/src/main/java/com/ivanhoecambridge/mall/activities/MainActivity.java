@@ -187,9 +187,6 @@ public class MainActivity extends BaseActivity
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         KcpNotificationManager.onWelcomeNotiClick(this, intent);
-//        adb shell am start -W -a android.intent.action.VIEW -d "example://gizmos" com.ivanhoecambridge.mall.seniondemo/com.ivanhoecambridge.mall.activities.MainActivity
-        String action = intent.getAction();  //android.intent.action.VIEW
-        Uri data = intent.getData(); //"example://gizmos"
         new DeepLinkManager(this).handleDeepLink(intent, deepLinkParseListener);
     }
 
@@ -834,7 +831,10 @@ public class MainActivity extends BaseActivity
                                 public void onClick(DialogInterface dialogInterface, int j) {
                                     boolean[] checkedStatus = giftCardRecyclerViewAdapter.getCheckedStatus();
                                     for(int i = 0; i < checkedStatus.length; i++) {
-                                        if(checkedStatus[i]) GiftCardManager.getInstance(MainActivity.this).removeCard(giftCardRecyclerViewAdapter.getGiftCard(i).getCardNumber());
+                                        if(checkedStatus[i]) {
+                                            GiftCardManager.getInstance(MainActivity.this).removeCard(giftCardRecyclerViewAdapter.getGiftCard(i).getCardNumber());
+                                            Toast.makeText(MainActivity.this, getString(R.string.warning_gift_card_has_been_removed), Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                     mGiftCardRecyclerViewAdapter.updateData();
                                     mGiftCardRecyclerViewAdapter.notifyDataSetChanged();
