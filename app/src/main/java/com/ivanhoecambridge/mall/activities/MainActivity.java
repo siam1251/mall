@@ -73,8 +73,10 @@ import com.google.gson.Gson;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpDataListener;
+import com.ivanhoecambridge.kcpandroidsdk.managers.KcpPlaceManager;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.InfoList;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.KcpMallInfoRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
@@ -105,6 +107,7 @@ import com.ivanhoecambridge.mall.managers.DeepLinkManager;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
 import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
+import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.managers.SidePanelManagers;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
@@ -132,6 +135,10 @@ import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESUL
 import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESULT_CODE_SPOT_SAVED;
 import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOnBluetooth;
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
+import static com.ivanhoecambridge.mall.managers.DeepLinkManager.URI_EXTERNAL_CODE_HOME_DEAL;
+import static com.ivanhoecambridge.mall.managers.DeepLinkManager.URI_EXTERNAL_CODE_HOME_EVENT;
+import static com.ivanhoecambridge.mall.managers.DeepLinkManager.URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACE;
+import static com.ivanhoecambridge.mall.managers.DeepLinkManager.URI_EXTERNAL_CODE_MAP;
 import static com.ivanhoecambridge.mall.managers.DeepLinkManager.URI_EXTERNAL_CODE_PROFILE;
 
 //public class MainActivity extends AppCompatActivity
@@ -354,10 +361,59 @@ public class MainActivity extends BaseActivity
 
     public DeepLinkManager.DeepLinkParseListener deepLinkParseListener = new DeepLinkManager.DeepLinkParseListener() {
         @Override
-        public void onDeepLinkParsed(String externalCode) {
-            if(externalCode.equals(URI_EXTERNAL_CODE_PROFILE)) {
-                if(mDrawer != null) mDrawer.openDrawer(GravityCompat.START);
+        public void openTab(String[] externalData) {
+            //externalData[0] == "tab/"
+            //externalData[1] == "profile" or "malldirectory_placesExternalCode"
+            //externalData[2] == "1078"
+            if(externalData.length == 1) {
+                if(externalData[1].equals(URI_EXTERNAL_CODE_PROFILE)) {
+                    if(mDrawer != null) mDrawer.openDrawer(GravityCompat.START);
+                } else if(externalData[1].equals(URI_EXTERNAL_CODE_MAP)) {
+                    selectPage(MainActivity.VIEWPAGER_PAGE_MAP);
+                }
+            } else if(externalData.length == 2) {
+                String externalCode = externalData[2];
+                if(externalData[1].equals(URI_EXTERNAL_CODE_HOME_DEAL)) {
+
+
+                    /*KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(MainActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
+                        @Override
+                        public void handleMessage(Message inputMessage) {
+                            switch (inputMessage.arg1) {
+                                case KcpCategoryManager.DOWNLOAD_FAILED:
+                                    if(NetworkManager.isConnected(MainActivity.this)) return;
+                                    break;
+                                case KcpCategoryManager.DOWNLOAD_COMPLETE:
+
+                                    break;
+                                default:
+                                    super.handleMessage(inputMessage);
+                            }
+                        }
+                    });
+
+                    kcpPlaceManager.downloadContents(kcpContentPage.getStoreId());*/
+
+
+
+                } else if(externalData[1].equals(URI_EXTERNAL_CODE_HOME_EVENT)) {
+
+
+                } else if(externalData[1].equals(URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACE)) {
+
+
+                }
             }
+        }
+
+        @Override
+        public void openTab(String externalCode) {
+
+        }
+
+        @Override
+        public void openDetailPage(String externalCode) {
+
         }
     };
 
