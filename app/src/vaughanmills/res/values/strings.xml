@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Vaughan Mills</string>
     <string name="mall_name">Vaughan Mills</string>
+    <string name="applicationId">com.ivanhoecambridge.vaughanmills</string>
+
 
     <!--MOVIES-->
     <string name="movie_title">SilverCity Cinema</string>

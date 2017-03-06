@@ -2,6 +2,7 @@
 
     <string name="app_name">CrossIron Mills</string>
     <string name="mall_name">CrossIron Mills</string>
+    <string name="applicationId">com.ivanhoecambridge.crossironmills</string>
 
     <!--MOVIES-->
     <string name="movie_title">SilverCity Cinema</string>

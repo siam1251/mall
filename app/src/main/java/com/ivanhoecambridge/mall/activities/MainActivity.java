@@ -75,6 +75,7 @@ import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpDataListener;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpPlaceManager;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.InfoList;
@@ -362,48 +363,8 @@ public class MainActivity extends BaseActivity
     public DeepLinkManager.DeepLinkParseListener deepLinkParseListener = new DeepLinkManager.DeepLinkParseListener() {
         @Override
         public void openTab(String[] externalData) {
-            //externalData[0] == "tab/"
-            //externalData[1] == "profile" or "malldirectory_placesExternalCode"
-            //externalData[2] == "1078"
-            if(externalData.length == 1) {
-                if(externalData[1].equals(URI_EXTERNAL_CODE_PROFILE)) {
-                    if(mDrawer != null) mDrawer.openDrawer(GravityCompat.START);
-                } else if(externalData[1].equals(URI_EXTERNAL_CODE_MAP)) {
-                    selectPage(MainActivity.VIEWPAGER_PAGE_MAP);
-                }
-            } else if(externalData.length == 2) {
-                String externalCode = externalData[2];
-                if(externalData[1].equals(URI_EXTERNAL_CODE_HOME_DEAL)) {
 
 
-                    /*KcpPlaceManager kcpPlaceManager = new KcpPlaceManager(MainActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
-                        @Override
-                        public void handleMessage(Message inputMessage) {
-                            switch (inputMessage.arg1) {
-                                case KcpCategoryManager.DOWNLOAD_FAILED:
-                                    if(NetworkManager.isConnected(MainActivity.this)) return;
-                                    break;
-                                case KcpCategoryManager.DOWNLOAD_COMPLETE:
-
-                                    break;
-                                default:
-                                    super.handleMessage(inputMessage);
-                            }
-                        }
-                    });
-
-                    kcpPlaceManager.downloadContents(kcpContentPage.getStoreId());*/
-
-
-
-                } else if(externalData[1].equals(URI_EXTERNAL_CODE_HOME_EVENT)) {
-
-
-                } else if(externalData[1].equals(URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACE)) {
-
-
-                }
-            }
         }
 
         @Override
@@ -423,6 +384,10 @@ public class MainActivity extends BaseActivity
 
     public void expandTopNav() {
         ablTopNav.setExpanded(true);
+    }
+
+    public void openLeftDrawerLayout(){
+        mDrawer.openDrawer(GravityCompat.START);
     }
 
     public void openRightDrawerLayout(){
@@ -1468,29 +1433,34 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_backend_vm) {
-            HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_VM);
-            initializeKcpData(null);
-            return true;
-        } else if (id == R.id.action_backend_mp) {
-            HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_MP);
-            initializeKcpData(null);
-            return true;
-        } else if (id == android.R.id.home){
-            onBackPressed();
-        } else if (id == R.id.action_test) {
+        switch(id) {
+            case R.id.action_backend_vm:
+                HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_VM);
+                initializeKcpData(null);
+                break;
+            case R.id.action_backend_mp:
+                HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_MP);
+                initializeKcpData(null);
+                break;
+            case R.id.home:
+                break;
+            case R.id.action_test:
 //            throw new RuntimeException("This is a crash"); //enable to force crash for testing
 //            setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
 //            GiftCardManager.getInstance(this).updateBalance(); //enable to update the gift card balance
-        } else if (id == R.id.action_geofence_test) {
-            mGeofenceManager.setGeofence(true);
-        } else if (id == R.id.action_geofence_disconnect) {
-            mGeofenceManager.setGeofence(false);
-            setActiveMall(false, false);
-            flActiveMallDot.setVisibility(View.GONE);
-        } else if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            ActivityAnimation.startActivityAnimation(MainActivity.this);
+                break;
+            case R.id.action_geofence_test:
+                mGeofenceManager.setGeofence(true);
+                break;
+            case R.id.action_geofence_disconnect:
+                mGeofenceManager.setGeofence(false);
+                setActiveMall(false, false);
+                flActiveMallDot.setVisibility(View.GONE);
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                ActivityAnimation.startActivityAnimation(MainActivity.this);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -1598,19 +1568,19 @@ public class MainActivity extends BaseActivity
             } else if (requestCode == Constants.REQUEST_CODE_MY_PAGE_TYPE) {
                 if(data == null) {
                 } else {
-                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
+                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, VIEWPAGER_PAGE_HOME);
                     if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT || code == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP){
                         handleActivityResult(requestCode, resultCode, data);
                     } else {
                         if (resultCode == Constants.RESULT_DEALS) {
-                            selectPage(0);
-                            HomeFragment.getInstance().selectPage(1);
+                            selectPage(VIEWPAGER_PAGE_HOME);
+                            HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_DEALS);
                         } else if (resultCode == Constants.RESULT_EVENTS) {
-                            selectPage(0);
-                            HomeFragment.getInstance().selectPage(0);
+                            selectPage(VIEWPAGER_PAGE_HOME);
+                            HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_NEWS);
                         } else if (resultCode == Constants.RESULT_STORES) {
-                            selectPage(1);
-                            DirectoryFragment.getInstance().selectPage(1);
+                            selectPage(VIEWPAGER_PAGE_DIRECTORY);
+                            DirectoryFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_DEALS);
                         }
                     }
                 }
