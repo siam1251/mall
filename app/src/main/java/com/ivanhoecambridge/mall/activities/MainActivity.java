@@ -1412,29 +1412,34 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_backend_vm) {
-            HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_VM);
-            initializeKcpData(null);
-            return true;
-        } else if (id == R.id.action_backend_mp) {
-            HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_MP);
-            initializeKcpData(null);
-            return true;
-        } else if (id == android.R.id.home){
-            onBackPressed();
-        } else if (id == R.id.action_test) {
+        switch(id) {
+            case R.id.action_backend_vm:
+                HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_VM);
+                initializeKcpData(null);
+                break;
+            case R.id.action_backend_mp:
+                HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_MP);
+                initializeKcpData(null);
+                break;
+            case R.id.home:
+                break;
+            case R.id.action_test:
 //            throw new RuntimeException("This is a crash"); //enable to force crash for testing
 //            setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
 //            GiftCardManager.getInstance(this).updateBalance(); //enable to update the gift card balance
-        } else if (id == R.id.action_geofence_test) {
-            mGeofenceManager.setGeofence(true);
-        } else if (id == R.id.action_geofence_disconnect) {
-            mGeofenceManager.setGeofence(false);
-            setActiveMall(false, false);
-            flActiveMallDot.setVisibility(View.GONE);
-        } else if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            ActivityAnimation.startActivityAnimation(MainActivity.this);
+                break;
+            case R.id.action_geofence_test:
+                mGeofenceManager.setGeofence(true);
+                break;
+            case R.id.action_geofence_disconnect:
+                mGeofenceManager.setGeofence(false);
+                setActiveMall(false, false);
+                flActiveMallDot.setVisibility(View.GONE);
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                ActivityAnimation.startActivityAnimation(MainActivity.this);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
