@@ -195,9 +195,8 @@ public class MainActivity extends BaseActivity
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         KcpNotificationManager.onWelcomeNotiClick(this, intent);
-        new DeepLinkManager(this).handleDeepLink(intent, deepLinkParseListener);
+        new DeepLinkManager(this).handleDeepLink(intent);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -357,26 +356,8 @@ public class MainActivity extends BaseActivity
             else Toast.makeText(this, "CustomizedExceptionHandler is turned off", Toast.LENGTH_SHORT).show();
         }
 
-        new DeepLinkManager(this).handleDeepLink(getIntent(), deepLinkParseListener);
+        new DeepLinkManager(this).handleDeepLink(getIntent());
     }
-
-    public DeepLinkManager.DeepLinkParseListener deepLinkParseListener = new DeepLinkManager.DeepLinkParseListener() {
-        @Override
-        public void openTab(String[] externalData) {
-
-
-        }
-
-        @Override
-        public void openTab(String externalCode) {
-
-        }
-
-        @Override
-        public void openDetailPage(String externalCode) {
-
-        }
-    };
 
     public int getViewerPosition(){
         return mCurrentViewPagerTapPosition;

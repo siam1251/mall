@@ -1513,7 +1513,7 @@ public class MapFragment extends BaseFragment
             label = new Overlay2DImage(getBlueDotSize(), getBlueDotSize(), getResources().getDrawable(R.drawable.icn_bluebutton), getBlueDotSize()/2, getBlueDotSize()/2);
             mBlueDotPin = new Pin(coordinate, label, x, y);
             startPulseAnimation();
-            setFollowMode(FollowMode.COMPASS); //very first time it's found
+            setFollowMode(FollowMode.CENTER); //very first time it's found
         } else {
             mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
             if(mGreyDotDropped) {
@@ -1664,12 +1664,12 @@ public class MapFragment extends BaseFragment
         public void onClick(View view) {
             switch (mFollowMode) {
                 case NONE:
-                    setFollowMode(FollowMode.COMPASS);
-                    break;
-                case COMPASS:
                     setFollowMode(FollowMode.CENTER);
                     break;
                 case CENTER:
+                    setFollowMode(FollowMode.COMPASS);
+                    break;
+                case COMPASS:
                     setFollowMode(FollowMode.NONE);
                     break;
             }

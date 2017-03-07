@@ -1,42 +1,31 @@
 package com.ivanhoecambridge.mall.managers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
-import android.support.v4.view.GravityCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpContentManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpPlaceManager;
-import com.ivanhoecambridge.kcpandroidsdk.models.KcpContent;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
-import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationPage;
-import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.DetailActivity;
 import com.ivanhoecambridge.mall.activities.MainActivity;
+import com.ivanhoecambridge.mall.activities.MoviesActivity;
+import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.HomeFragment;
 
-import java.util.ArrayList;
-
 import factory.HeaderFactory;
-
-import static com.ivanhoecambridge.mall.activities.MainActivity.VIEWPAGER_PAGE_DIRECTORY;
 
 /**
  * Created by Kay on 2017-02-27.
@@ -49,43 +38,34 @@ public class DeepLinkManager {
     private static Context mContext;
     private final String KEY_OPEN_DIRECT_URL = "_od";
     private final String URI_TAB = "tab";
+    private final String URI_PARKING = "parking";
     public static final String URI_EXTERNAL_CODE_PROFILE = "profile";
     public static final String URI_EXTERNAL_CODE_MAP = "map";
     public static final String URI_EXTERNAL_CODE_HOME_DEAL = "home_dealExternalCode";
     public static final String URI_EXTERNAL_CODE_HOME_EVENT = "home_eventExternalCode";
     public static final String URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACE = "malldirectory_placesExternalCode";
+    public static final String URI_EXTERNAL_CODE_MALL_INFO_CINEMA = "mallinfo_cinema";
 
     public DeepLinkManager(MainActivity mainActivity) {
         mMainActivity = mainActivity;
         mContext = mainActivity.getApplicationContext();
     }
 
-    public DeepLinkManager handleDeepLink(Intent intent, DeepLinkParseListener deepLinkParseListener){
+    public DeepLinkManager handleDeepLink(Intent intent){
         try {
             if(intent == null) return this;
-            this.deepLinkParseListener = deepLinkParseListener;
             //https://developer.android.com/training/app-indexing/deep-linking.html - Android Deep Link Documentation
             //https://halogenmobile.atlassian.net/wiki/display/IC/Deep+Linking - Confluence Deep Link Documentation
-
-
             String scheme = mMainActivity.getResources().getString(R.string.applicationId) + "://";
             //intent delivered from Exact Target Push
+            String deepLinkURL = "";
             if(intent.getExtras() == null && intent.getExtras().getString(KEY_OPEN_DIRECT_URL) != null) {
-                String deepLinkURL = intent.getExtras().getString(KEY_OPEN_DIRECT_URL);
-                if(deepLinkURL.contains(URI_TAB)) {
-                    parseIntentData(TextUtils.split(deepLinkURL, scheme)[1]);
-                }
-            // intent delivered from URI
-            } else {
+                deepLinkURL = intent.getExtras().getString(KEY_OPEN_DIRECT_URL);
+            } else { // intent delivered from URI
                 Uri data = intent.getData();
-                if(data.toString().contains(URI_TAB)){
-//                    if(deepLinkParseListener != null) deepLinkParseListener.openTab(TextUtils.split(data.toString(), URI_TAB));
-                    parseIntentData(TextUtils.split(data.toString(), scheme)[1]);
-                }
-
+                deepLinkURL = data.toString();
             }
-
-
+            parseIntentData(TextUtils.split(deepLinkURL, scheme)[1]);
             return this;
         } catch (Exception e) {
             Log.e(TAG, e.toString());
@@ -94,21 +74,34 @@ public class DeepLinkManager {
         return this;
     }
 
-
+    /**
+     *
+     * @param externalData is the string comes after the scheme ("com.ivanhoecambridge.metropolis://")
+     */
     public void parseIntentData(String externalData) {
 
         String[] dataSplittedBySlash = TextUtils.split(externalData, "/");
+        String tab = dataSplittedBySlash[0];
+        String destinationPage = dataSplittedBySlash.length > 1 ? dataSplittedBySlash[1] : "";
 
-        if(dataSplittedBySlash[0].equals(URI_TAB)) {
-            if(dataSplittedBySlash[1].equals(URI_EXTERNAL_CODE_PROFILE)) {
+        //PARKING
+        if(tab.startsWith(URI_PARKING)) {
+            final Intent intent = new Intent (mMainActivity, ParkingActivity.class);
+            mMainActivity.startActivityForResult(intent, Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
+            return;
+        }
+
+        //OTHER TABS
+        if(tab.equals(URI_TAB)) {
+            if(destinationPage.equals(URI_EXTERNAL_CODE_PROFILE)) {
                 mMainActivity.openLeftDrawerLayout();
-            } else if(dataSplittedBySlash[1].equals(URI_EXTERNAL_CODE_MAP)) {
+            } else if(destinationPage.equals(URI_EXTERNAL_CODE_MAP) || destinationPage.startsWith(URI_EXTERNAL_CODE_MAP)) {
                 mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_MAP);
-            } else if(dataSplittedBySlash[1].equals(URI_EXTERNAL_CODE_HOME_DEAL) || dataSplittedBySlash[1].equals(URI_EXTERNAL_CODE_HOME_EVENT)){
+            } else if(destinationPage.equals(URI_EXTERNAL_CODE_HOME_DEAL) || destinationPage.equals(URI_EXTERNAL_CODE_HOME_EVENT)){
                 mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_HOME);
 
-                if(dataSplittedBySlash[1].equals(URI_EXTERNAL_CODE_HOME_EVENT)) HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_NEWS);
-                else if(dataSplittedBySlash[1].equals(URI_EXTERNAL_CODE_HOME_DEAL)) HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_DEALS);
+                if(destinationPage.equals(URI_EXTERNAL_CODE_HOME_EVENT)) HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_NEWS);
+                else if(destinationPage.equals(URI_EXTERNAL_CODE_HOME_DEAL)) HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_DEALS);
 
                 //TODO: move tab to deal/event first
                 String externalCode = dataSplittedBySlash[2];
@@ -139,7 +132,7 @@ public class DeepLinkManager {
                 });
 
                 kcpContentManager.downloadContents(id);
-            } else if (dataSplittedBySlash[1].equals(URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACE)){
+            } else if (destinationPage.equals(URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACE)){
 
                 mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_DIRECTORY);
                 String externalCode = dataSplittedBySlash[2];
@@ -173,13 +166,12 @@ public class DeepLinkManager {
                 });
                 kcpPlaceManager.downloadPlace(id);
 
+            } else if (destinationPage.equals(URI_EXTERNAL_CODE_MALL_INFO_CINEMA)){
+                Intent intent = new Intent(mMainActivity, MoviesActivity.class);
+                intent.putExtra(Constants.ARG_TRANSITION_ENABLED, false);
+                mMainActivity.startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
             }
         }
-    }
-
-
-    private void handleParking(){
-
     }
 
     private DeepLinkParseListener deepLinkParseListener;
