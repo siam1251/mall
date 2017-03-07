@@ -38,6 +38,7 @@ import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
 import factory.HeaderFactory;
 
+import com.ivanhoecambridge.mall.interfaces.ViewPagerListener;
 import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.managers.ThemeManager;
 import com.ivanhoecambridge.mall.searchIndex.IndexManager;
@@ -48,7 +49,12 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class DirectoryFragment extends BaseFragment {
+public class DirectoryFragment extends BaseFragment implements ViewPagerListener {
+
+    public final static int VIEWPAGER_PAGE_CATEGORIES = 0;
+    public final static int VIEWPAGER_PAGE_STORES = 1;
+
+
     private CategoriesFragment mCategoriesFragment;
     private PlacesFragment mPlacesFragment;
     private ViewPager mViewPager;
@@ -65,6 +71,8 @@ public class DirectoryFragment extends BaseFragment {
     private Thread mBrandThread;
     private Thread mTagThread;
     private Thread mCategoryThread;
+
+    private int mViewPageToLoad = -1;
 
 
     private static DirectoryFragment sDirectoryFragment;
@@ -275,7 +283,14 @@ public class DirectoryFragment extends BaseFragment {
     }
 
     public void selectPage(int pageIndex){
-        mViewPager.setCurrentItem(pageIndex);
+        if(mViewPager == null)  mViewPageToLoad = pageIndex;
+        else mViewPager.setCurrentItem(pageIndex);
+    }
+
+    @Override
+    public void onViewPagerCreated() {
+        if(mViewPageToLoad != -1) mViewPager.setCurrentItem(mViewPageToLoad);
+        mViewPageToLoad = -1;
     }
 
     public class QueryTextListener implements SearchView.OnQueryTextListener {

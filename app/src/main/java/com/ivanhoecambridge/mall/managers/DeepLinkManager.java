@@ -23,6 +23,7 @@ import com.ivanhoecambridge.mall.activities.MoviesActivity;
 import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
+import com.ivanhoecambridge.mall.fragments.DirectoryFragment;
 import com.ivanhoecambridge.mall.fragments.HomeFragment;
 
 import factory.HeaderFactory;
@@ -39,11 +40,27 @@ public class DeepLinkManager {
     private final String KEY_OPEN_DIRECT_URL = "_od";
     private final String URI_TAB = "tab";
     private final String URI_PARKING = "parking";
+
+
     public static final String URI_EXTERNAL_CODE_PROFILE = "profile";
+
+
+    public static final String URI_EXTERNAL_CODE_HOME = "home";
+    public static final String URI_EXTERNAL_CODE_HOME_FEED = "home_feed";
+    public static final String URI_EXTERNAL_CODE_HOME_DEALS = "home_deals";
+    public static final String URI_EXTERNAL_CODE_HOME_DEALS_EXT_CODE = "home_dealExternalCode";
+    public static final String URI_EXTERNAL_CODE_HOME_EVENT_EXT_CODE = "home_eventExternalCode";
+
+
+    public static final String URI_EXTERNAL_CODE_MALL_DIRECTORY = "malldirectory";
+    public static final String URI_EXTERNAL_CODE_MALL_DIRECTORY_CATEGORIES = "malldirectory_categories";
+    public static final String URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACES = "malldirectory_placesAZ ";
+    public static final String URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACES_EXT_CODE = "malldirectory_placesExternalCode";
+
+
     public static final String URI_EXTERNAL_CODE_MAP = "map";
-    public static final String URI_EXTERNAL_CODE_HOME_DEAL = "home_dealExternalCode";
-    public static final String URI_EXTERNAL_CODE_HOME_EVENT = "home_eventExternalCode";
-    public static final String URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACE = "malldirectory_placesExternalCode";
+    public static final String URI_EXTERNAL_CODE_MALL_INFO = "mallinfo";
+
     public static final String URI_EXTERNAL_CODE_MALL_INFO_CINEMA = "mallinfo_cinema";
 
     public DeepLinkManager(MainActivity mainActivity) {
@@ -93,15 +110,21 @@ public class DeepLinkManager {
 
         //OTHER TABS
         if(tab.equals(URI_TAB)) {
-            if(destinationPage.equals(URI_EXTERNAL_CODE_PROFILE)) {
+            if(destinationPage.equals(URI_EXTERNAL_CODE_HOME)) {
+                mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_HOME);
+            } else if(destinationPage.equals(URI_EXTERNAL_CODE_HOME_FEED)) {
+                mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_HOME);
+                HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_NEWS);
+            } else if(destinationPage.equals(URI_EXTERNAL_CODE_HOME_DEALS)) {
+                mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_HOME);
+                HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_DEALS);
+            } else if(destinationPage.equals(URI_EXTERNAL_CODE_PROFILE)) {
                 mMainActivity.openLeftDrawerLayout();
-            } else if(destinationPage.equals(URI_EXTERNAL_CODE_MAP) || destinationPage.startsWith(URI_EXTERNAL_CODE_MAP)) {
-                mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_MAP);
-            } else if(destinationPage.equals(URI_EXTERNAL_CODE_HOME_DEAL) || destinationPage.equals(URI_EXTERNAL_CODE_HOME_EVENT)){
+            } else if(destinationPage.equals(URI_EXTERNAL_CODE_HOME_DEALS_EXT_CODE) || destinationPage.equals(URI_EXTERNAL_CODE_HOME_EVENT_EXT_CODE)){
                 mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_HOME);
 
-                if(destinationPage.equals(URI_EXTERNAL_CODE_HOME_EVENT)) HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_NEWS);
-                else if(destinationPage.equals(URI_EXTERNAL_CODE_HOME_DEAL)) HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_DEALS);
+                if(destinationPage.equals(URI_EXTERNAL_CODE_HOME_EVENT_EXT_CODE)) HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_NEWS);
+                else if(destinationPage.equals(URI_EXTERNAL_CODE_HOME_DEALS_EXT_CODE)) HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_DEALS);
 
                 //TODO: move tab to deal/event first
                 String externalCode = dataSplittedBySlash[2];
@@ -132,7 +155,18 @@ public class DeepLinkManager {
                 });
 
                 kcpContentManager.downloadContents(id);
-            } else if (destinationPage.equals(URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACE)){
+            }
+
+
+            else if(destinationPage.equals(URI_EXTERNAL_CODE_MALL_DIRECTORY)) {
+                mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_DIRECTORY);
+            } else if(destinationPage.equals(URI_EXTERNAL_CODE_MALL_DIRECTORY_CATEGORIES)) {
+                mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_DIRECTORY);
+                DirectoryFragment.getInstance().selectPage(DirectoryFragment.VIEWPAGER_PAGE_CATEGORIES);
+            } else if(destinationPage.equals(URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACES)) {
+                mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_DIRECTORY);
+                DirectoryFragment.getInstance().selectPage(DirectoryFragment.VIEWPAGER_PAGE_STORES);
+            } else if (destinationPage.equals(URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACES_EXT_CODE)){
 
                 mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_DIRECTORY);
                 String externalCode = dataSplittedBySlash[2];
@@ -165,7 +199,12 @@ public class DeepLinkManager {
                     }
                 });
                 kcpPlaceManager.downloadPlace(id);
+            }
 
+            else if(destinationPage.equals(URI_EXTERNAL_CODE_MAP) || destinationPage.startsWith(URI_EXTERNAL_CODE_MAP)) {
+                mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_MAP);
+            } else if (destinationPage.equals(URI_EXTERNAL_CODE_MALL_INFO)) {
+                mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_INFO);
             } else if (destinationPage.equals(URI_EXTERNAL_CODE_MALL_INFO_CINEMA)){
                 Intent intent = new Intent(mMainActivity, MoviesActivity.class);
                 intent.putExtra(Constants.ARG_TRANSITION_ENABLED, false);

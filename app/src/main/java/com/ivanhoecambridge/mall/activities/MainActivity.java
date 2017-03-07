@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,7 +29,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -73,11 +71,8 @@ import com.google.gson.Gson;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpDataListener;
-import com.ivanhoecambridge.kcpandroidsdk.managers.KcpPlaceManager;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
-import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
-import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.InfoList;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.KcpMallInfoRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
@@ -108,7 +103,6 @@ import com.ivanhoecambridge.mall.managers.DeepLinkManager;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
 import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
-import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.managers.SidePanelManagers;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
@@ -136,11 +130,6 @@ import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESUL
 import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESULT_CODE_SPOT_SAVED;
 import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOnBluetooth;
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
-import static com.ivanhoecambridge.mall.managers.DeepLinkManager.URI_EXTERNAL_CODE_HOME_DEAL;
-import static com.ivanhoecambridge.mall.managers.DeepLinkManager.URI_EXTERNAL_CODE_HOME_EVENT;
-import static com.ivanhoecambridge.mall.managers.DeepLinkManager.URI_EXTERNAL_CODE_MALL_DIRECTORY_PLACE;
-import static com.ivanhoecambridge.mall.managers.DeepLinkManager.URI_EXTERNAL_CODE_MAP;
-import static com.ivanhoecambridge.mall.managers.DeepLinkManager.URI_EXTERNAL_CODE_PROFILE;
 
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
@@ -1427,7 +1416,7 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.action_test:
 //            throw new RuntimeException("This is a crash"); //enable to force crash for testing
-//            setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
+            setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
 //            GiftCardManager.getInstance(this).updateBalance(); //enable to update the gift card balance
                 break;
             case R.id.action_geofence_test:
