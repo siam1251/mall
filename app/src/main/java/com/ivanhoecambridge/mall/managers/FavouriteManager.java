@@ -2,8 +2,10 @@ package com.ivanhoecambridge.mall.managers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
@@ -17,12 +19,21 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import factory.HeaderFactory;
+
+import com.ivanhoecambridge.mall.activities.InterestedStoreActivity;
+import com.ivanhoecambridge.mall.activities.MainActivity;
+import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
 import com.ivanhoecambridge.mall.models.MultiLike;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * Created by Kay on 2016-07-05.
@@ -45,6 +56,8 @@ public class FavouriteManager {
     private final static String KEY_GSON_FAV_EVENT_ANOUNCEMENT  = "EVENT_ANNOUNCEMENT";
     private final static String KEY_GSON_FAV_STORE              = "STORE";
     private final static String KEY_GSON_FAV_CAT                = "CAT";
+    private final static String KEY_GSON_FAV_GENERAL            = "FAV_GENERAL";
+    private final static String KEY_GSON_UNFAV_GENERAL            = "UNFAV_GENERAL";
 
     public final static String PREFS_KEY_CATEGORY = 			"prefs_key_category";
     public final static String PREFS_KEY_FAV_STORE_LIKE_LINK = 	"prefs_key_store_like_link";
@@ -54,7 +67,15 @@ public class FavouriteManager {
     private static HashMap<String, KcpContentPage> mStoreFavs;
     private static HashMap<String, KcpCategories> mCatFavs;
 
+
+    private static ArrayList<String> mFavsSynced;
+    private static ArrayList<String> mUnfavsSynced;
+
     private FavouriteInterface mFavouriteInterface;
+
+    //MULTI LIKES SYNCING
+    private static ScheduledExecutorService sScheduler;
+    private final int DELAY_MULTI_LIKE_SYNCING = 5;
 
 
     private static FavouriteManager sFavouriteManager;
@@ -69,6 +90,9 @@ public class FavouriteManager {
         mEventFavs = loadGsonHashMapContentPage(KEY_GSON_FAV_EVENT_ANOUNCEMENT);
         mStoreFavs = loadGsonHashMapContentPage(KEY_GSON_FAV_STORE);
         mCatFavs = loadGsonHashMapCategories(KEY_GSON_FAV_CAT);
+
+        mFavsSynced = KcpUtility.loadGsonArrayListString(mContext, KEY_GSON_FAV_GENERAL);
+        mUnfavsSynced = KcpUtility.loadGsonArrayListString(mContext, KEY_GSON_UNFAV_GENERAL);
     }
 
     public SidePanelManagers.FavouriteListener mFavouriteListener;
@@ -114,6 +138,20 @@ public class FavouriteManager {
                 if(mFavouriteListener != null) mFavouriteListener.onFavouriteChanged();
                 mGsonFavKey = "";
                 if(mFavouriteInterface != null) mFavouriteInterface.didChangeFavourite();
+
+                //TODO: see if there's update to likes/unlikes and decide to sync with server or not
+                //TODO: start / reset the 5 seconds timer which runs updateFavs()
+
+                //why use ExecutorService instead of timer http://stackoverflow.com/questions/409932/java-timer-vs-executorservice
+                //every DELAY_MULTI_LIKE_SYNCING seconds, it tries to sync with the server the likes / unlikes
+                if(sScheduler != null) sScheduler.shutdownNow();
+                sScheduler = Executors.newScheduledThreadPool(1);
+                ScheduledFuture<?> handl = sScheduler.schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateFavs();
+                    }
+                }, DELAY_MULTI_LIKE_SYNCING, SECONDS);
             }
         });
 
@@ -237,6 +275,49 @@ public class FavouriteManager {
         if(postLikeListToServer) {
             KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, new HeaderFactory().getHeaders(), new LikeListHandler(handler));
             kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch( getLikeListFromContentPage(likeList) , getLikeListFromContentPage(unlikeList)));
+        }
+    }
+
+    /**
+     * 1. collect all stored favs.
+     * 2. create unLiked by subtracting favs from lastly synced favs.
+     * 3. temporarily save the stored favs in favsTemp
+     * 4. create likes to sync by subtracting lastly synced favs from store favs.
+     * 5. when multi-like post succeeds, save lastly synced favs as the favsTemp (shouldn't save as favs because you need to keep track of all synced favs, not just the favs just added)
+     */
+    public synchronized void updateFavs() {
+        final ArrayList<String> favs = new ArrayList<>(); //current likes
+        favs.addAll(mDealFavs.keySet());
+        favs.addAll(mEventFavs.keySet());
+        favs.addAll(mStoreFavs.keySet());
+
+        ArrayList<String> unFavs = new ArrayList<>(mFavsSynced);
+        unFavs.removeAll(favs); //get unlikes by comparing lastly synced likes and current likes
+        final ArrayList<String> favsTemp = new ArrayList<>(favs); //save temp entire favs so when multi like post succeeds, save it
+        favs.removeAll(mFavsSynced); //get only likes that weren't synced
+
+        if(favs.size() > 0 || unFavs.size() > 0) { //update likes only if you have one
+            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
+                @Override
+                public void handleMessage(Message inputMessage) {
+                    switch (inputMessage.arg1) {
+                        case KcpCategoryManager.DOWNLOAD_FAILED:
+                            break;
+                        case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                            AsyncTask.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mFavsSynced = favsTemp;
+                                    KcpUtility.saveGson(mContext, KEY_GSON_FAV_GENERAL, favsTemp);
+                                }
+                            });
+                            break;
+                        default:
+                            super.handleMessage(inputMessage);
+                    }
+                }
+            });
+            kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch(favs, unFavs));
         }
     }
 

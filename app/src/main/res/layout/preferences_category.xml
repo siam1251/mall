@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+    app:fontFamily="@string/fontFamily_roboto_bold"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/title"
+    android:textColor="#a5a5a5"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="12dp"
+    android:textStyle="bold"
+    android:textAllCaps="true"
+    android:padding="@dimen/activity_horizontal_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto" />

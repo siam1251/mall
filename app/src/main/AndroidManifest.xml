@@ -61,6 +61,8 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/applicationId"/>
             </intent-filter>
         </activity>
         <activity
@@ -149,6 +151,12 @@
             android:name=".activities.GiftCardActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base"
+            />
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyPreferenceTheme"
             />
 
         <receiver android:name=".receivers.WelcomeMsgReceiver" />

@@ -30,6 +30,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -82,7 +83,6 @@ import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.adapters.HomeBottomTapAdapter;
-import com.ivanhoecambridge.mall.adapters.SocialFeedDetailRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.ActiveMallRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.GiftCardRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.IndexableRecylerView;
@@ -90,7 +90,6 @@ import com.ivanhoecambridge.mall.analytics.FirebaseTracking;
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.constants.Constants;
 
-import butterknife.OnClick;
 import factory.HeaderFactory;
 
 import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
@@ -102,6 +101,7 @@ import com.ivanhoecambridge.mall.fragments.MapFragment;
 import com.ivanhoecambridge.mall.geofence.GeofenceManager;
 import com.ivanhoecambridge.mall.giftcard.GiftCard;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
+import com.ivanhoecambridge.mall.managers.DeepLinkManager;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
 import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
@@ -132,6 +132,7 @@ import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESUL
 import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESULT_CODE_SPOT_SAVED;
 import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOnBluetooth;
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
+import static com.ivanhoecambridge.mall.managers.DeepLinkManager.URI_EXTERNAL_CODE_PROFILE;
 
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
@@ -186,11 +187,7 @@ public class MainActivity extends BaseActivity
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         KcpNotificationManager.onWelcomeNotiClick(this, intent);
-
-
-//        adb shell am start -W -a android.intent.action.VIEW -d "example://gizmos" com.ivanhoecambridge.mall.seniondemo/com.ivanhoecambridge.mall.activities.MainActivity
-        String action = intent.getAction();  //android.intent.action.VIEW
-        Uri data = intent.getData(); //"example://gizmos"
+        new DeepLinkManager(this).handleDeepLink(intent, deepLinkParseListener);
     }
 
 
@@ -351,7 +348,18 @@ public class MainActivity extends BaseActivity
             if (hasPerm != PackageManager.PERMISSION_GRANTED) Thread.setDefaultUncaughtExceptionHandler(new CustomizedExceptionHandler(this, "/mnt/sdcard/"));
             else Toast.makeText(this, "CustomizedExceptionHandler is turned off", Toast.LENGTH_SHORT).show();
         }
+
+        new DeepLinkManager(this).handleDeepLink(getIntent(), deepLinkParseListener);
     }
+
+    public DeepLinkManager.DeepLinkParseListener deepLinkParseListener = new DeepLinkManager.DeepLinkParseListener() {
+        @Override
+        public void onDeepLinkParsed(String externalCode) {
+            if(externalCode.equals(URI_EXTERNAL_CODE_PROFILE)) {
+                if(mDrawer != null) mDrawer.openDrawer(GravityCompat.START);
+            }
+        }
+    };
 
     public int getViewerPosition(){
         return mCurrentViewPagerTapPosition;
@@ -383,7 +391,7 @@ public class MainActivity extends BaseActivity
             if(KcpAccount.getInstance().isTokenAvailable()) HomeFragment.getInstance().initializeHomeData();
             else initializeAccount();
             DirectoryFragment.getInstance().initializeDirectoryData();
-            MapFragment.getInstance().initializeMap();
+//            MapFragment.getInstance().initializeMap(); //TODO: cause int com.mappedin.jpct.Texture.getOpenGLID(int) from MappedIn - investigate
             InfoFragment.getInstance().initializeMallInfoData();
             initializeMapData();
             initializeParkingData();
@@ -823,7 +831,10 @@ public class MainActivity extends BaseActivity
                                 public void onClick(DialogInterface dialogInterface, int j) {
                                     boolean[] checkedStatus = giftCardRecyclerViewAdapter.getCheckedStatus();
                                     for(int i = 0; i < checkedStatus.length; i++) {
-                                        if(checkedStatus[i]) GiftCardManager.getInstance(MainActivity.this).removeCard(giftCardRecyclerViewAdapter.getGiftCard(i).getCardNumber());
+                                        if(checkedStatus[i]) {
+                                            GiftCardManager.getInstance(MainActivity.this).removeCard(giftCardRecyclerViewAdapter.getGiftCard(i).getCardNumber());
+                                            Toast.makeText(MainActivity.this, getString(R.string.warning_gift_card_has_been_removed), Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                     mGiftCardRecyclerViewAdapter.updateData();
                                     mGiftCardRecyclerViewAdapter.notifyDataSetChanged();
@@ -1390,6 +1401,8 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(BuildConfig.DEBUG) {
+            getMenuInflater().inflate(R.menu.menu_main_debug, menu);
+        } else {
             getMenuInflater().inflate(R.menu.menu_main, menu);
         }
 
@@ -1399,26 +1412,34 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_backend_vm) {
-            HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_VM);
-            initializeKcpData(null);
-            return true;
-        } else if (id == R.id.action_backend_mp) {
-            HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_MP);
-            initializeKcpData(null);
-            return true;
-        } else if (id == android.R.id.home){
-            onBackPressed();
-        } else if (id == R.id.action_test) {
+        switch(id) {
+            case R.id.action_backend_vm:
+                HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_VM);
+                initializeKcpData(null);
+                break;
+            case R.id.action_backend_mp:
+                HeaderFactory.changeCatalog(Constants.HEADER_VALUE_DATAHUB_CATALOG_MP);
+                initializeKcpData(null);
+                break;
+            case R.id.home:
+                break;
+            case R.id.action_test:
 //            throw new RuntimeException("This is a crash"); //enable to force crash for testing
 //            setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
-            GiftCardManager.getInstance(this).updateBalance();
-        } else if (id == R.id.action_geofence_test) {
-            mGeofenceManager.setGeofence(true);
-        } else if (id == R.id.action_geofence_disconnect) {
-            mGeofenceManager.setGeofence(false);
-            setActiveMall(false, false);
-            flActiveMallDot.setVisibility(View.GONE);
+//            GiftCardManager.getInstance(this).updateBalance(); //enable to update the gift card balance
+                break;
+            case R.id.action_geofence_test:
+                mGeofenceManager.setGeofence(true);
+                break;
+            case R.id.action_geofence_disconnect:
+                mGeofenceManager.setGeofence(false);
+                setActiveMall(false, false);
+                flActiveMallDot.setVisibility(View.GONE);
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                ActivityAnimation.startActivityAnimation(MainActivity.this);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
