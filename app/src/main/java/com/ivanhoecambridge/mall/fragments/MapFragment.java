@@ -2452,8 +2452,10 @@ public class MapFragment extends BaseFragment
         ArrayList<KcpContentPage> dealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_DEAL).getKcpContentPageList(true);
         ArrayList<KcpContentPage> recommendedDealsList = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true);
 
-        dealsList.removeAll(recommendedDealsList);
-        dealsList.addAll(recommendedDealsList);
+        if(recommendedDealsList != null) {
+            dealsList.removeAll(recommendedDealsList);
+            dealsList.addAll(recommendedDealsList);
+        }
 
         final ArrayList<KcpContentPage> dealsForThisStore = new ArrayList<KcpContentPage>();
         if(dealsList != null){

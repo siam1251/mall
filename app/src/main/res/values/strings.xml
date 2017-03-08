@@ -335,6 +335,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="movie_starring">Starring:</string>
     <string name="movie_directed_by">Directed by:</string>
     <string name="movie_advisory">Advisory:</string>
+    <string name="movie_next_showtime">Next show at</string>
+    <string name="movie_all_showtimes">All Showtimes</string>
 
     <!-- SIGNIN -->
     <string name="signin_create_account_to_save">Create an account to save all your preferences in one place.</string>

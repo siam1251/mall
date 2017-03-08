@@ -59,7 +59,7 @@ public class ZoomableImage extends AppCompatActivity {
 							if(imageUrlLarge != null){
 								Glide.with(ZoomableImage.this)
 										.load(imageUrlLarge)
-										.crossFade()
+//										.crossFade()
 										.into(ivDetailImage);
 							}
 							return false;

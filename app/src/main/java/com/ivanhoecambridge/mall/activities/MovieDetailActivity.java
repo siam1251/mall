@@ -1,10 +1,6 @@
 package com.ivanhoecambridge.mall.activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -13,11 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -29,9 +23,7 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.movies.MovieManager;
-import com.ivanhoecambridge.mall.movies.models.Movie;
 import com.ivanhoecambridge.mall.movies.models.MovieDetail;
-import com.ivanhoecambridge.mall.utility.BlurBuilder;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 
@@ -104,7 +96,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
             MovieDetail movieDetail = MovieManager.sMovies.getMovieDetailWithId(mMovieId);
 
-            String showtimes = MovieManager.sTheaters.getHouse().getShowtimes(movieDetail.getMovie_id());
+            String showtimes = MovieManager.sTheaters.getHouse().getShowtimesInFormat(movieDetail.getMovie_id());
             TextView tvShowtimes = (TextView) findViewById(R.id.tvShowtimes);
             tvShowtimes.setText(showtimes);
 
