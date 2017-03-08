@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,7 +29,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -132,7 +130,6 @@ import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESUL
 import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESULT_CODE_SPOT_SAVED;
 import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOnBluetooth;
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
-import static com.ivanhoecambridge.mall.managers.DeepLinkManager.URI_EXTERNAL_CODE_PROFILE;
 
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends BaseActivity
@@ -187,9 +184,8 @@ public class MainActivity extends BaseActivity
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         KcpNotificationManager.onWelcomeNotiClick(this, intent);
-        new DeepLinkManager(this).handleDeepLink(intent, deepLinkParseListener);
+        new DeepLinkManager(this).handleDeepLink(intent);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -349,17 +345,8 @@ public class MainActivity extends BaseActivity
             else Toast.makeText(this, "CustomizedExceptionHandler is turned off", Toast.LENGTH_SHORT).show();
         }
 
-        new DeepLinkManager(this).handleDeepLink(getIntent(), deepLinkParseListener);
+        new DeepLinkManager(this).handleDeepLink(getIntent());
     }
-
-    public DeepLinkManager.DeepLinkParseListener deepLinkParseListener = new DeepLinkManager.DeepLinkParseListener() {
-        @Override
-        public void onDeepLinkParsed(String externalCode) {
-            if(externalCode.equals(URI_EXTERNAL_CODE_PROFILE)) {
-                if(mDrawer != null) mDrawer.openDrawer(GravityCompat.START);
-            }
-        }
-    };
 
     public int getViewerPosition(){
         return mCurrentViewPagerTapPosition;
@@ -367,6 +354,10 @@ public class MainActivity extends BaseActivity
 
     public void expandTopNav() {
         ablTopNav.setExpanded(true);
+    }
+
+    public void openLeftDrawerLayout(){
+        mDrawer.openDrawer(GravityCompat.START);
     }
 
     public void openRightDrawerLayout(){
@@ -1425,7 +1416,7 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.action_test:
 //            throw new RuntimeException("This is a crash"); //enable to force crash for testing
-//            setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
+            setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
 //            GiftCardManager.getInstance(this).updateBalance(); //enable to update the gift card balance
                 break;
             case R.id.action_geofence_test:
@@ -1547,19 +1538,19 @@ public class MainActivity extends BaseActivity
             } else if (requestCode == Constants.REQUEST_CODE_MY_PAGE_TYPE) {
                 if(data == null) {
                 } else {
-                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
+                    int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, VIEWPAGER_PAGE_HOME);
                     if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT || code == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP){
                         handleActivityResult(requestCode, resultCode, data);
                     } else {
                         if (resultCode == Constants.RESULT_DEALS) {
-                            selectPage(0);
-                            HomeFragment.getInstance().selectPage(1);
+                            selectPage(VIEWPAGER_PAGE_HOME);
+                            HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_DEALS);
                         } else if (resultCode == Constants.RESULT_EVENTS) {
-                            selectPage(0);
-                            HomeFragment.getInstance().selectPage(0);
+                            selectPage(VIEWPAGER_PAGE_HOME);
+                            HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_NEWS);
                         } else if (resultCode == Constants.RESULT_STORES) {
-                            selectPage(1);
-                            DirectoryFragment.getInstance().selectPage(1);
+                            selectPage(VIEWPAGER_PAGE_DIRECTORY);
+                            DirectoryFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_DEALS);
                         }
                     }
                 }

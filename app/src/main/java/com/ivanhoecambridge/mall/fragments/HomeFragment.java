@@ -27,17 +27,25 @@ import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
 
 import constants.MallConstants;
 import factory.HeaderFactory;
+
+import com.ivanhoecambridge.mall.interfaces.ViewPagerListener;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements ViewPagerListener {
+
+
+    public final static int VIEWPAGER_PAGE_NEWS = 0;
+    public final static int VIEWPAGER_PAGE_DEALS = 1;
+
 
     private NewsFragment mNewsFragment;
     private DealsFragment mDealsFragment;
     private KcpNavigationRootManager mKcpNavigationRootManager;
     private KcpSocialFeedManager mKcpSocialFeedManager;
     private ViewPager mViewPager;
+    private int mViewPageToLoad = -1;
 
     public static ArrayList<TwitterTweet> sTwitterFeedList = new ArrayList<>();
     public static ArrayList<InstagramFeed> sInstaFeedList = new ArrayList<>();
@@ -200,6 +208,7 @@ public class HomeFragment extends BaseFragment {
         homeTopViewPagerAdapter.addFrag(mNewsFragment, getResources().getString(R.string.fragment_news));
         homeTopViewPagerAdapter.addFrag(mDealsFragment, getResources().getString(R.string.fragment_deals));
         viewPager.setAdapter(homeTopViewPagerAdapter);
+        onViewPagerCreated();
     }
 
     public void downloadMoreFeeds(String navigationPageType){
@@ -264,7 +273,8 @@ public class HomeFragment extends BaseFragment {
     }
 
     public void selectPage(int pageIndex){
-        mViewPager.setCurrentItem(pageIndex);
+        if(mViewPager == null)  mViewPageToLoad = pageIndex;
+        else mViewPager.setCurrentItem(pageIndex);
     }
 
     @Override
@@ -279,5 +289,11 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onPause(){
         super.onPause();
+    }
+
+    @Override
+    public void onViewPagerCreated() {
+        if(mViewPageToLoad != -1) mViewPager.setCurrentItem(mViewPageToLoad);
+        mViewPageToLoad = -1;
     }
 }

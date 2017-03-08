@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Metropolis at Metrotown</string>
     <string name="mall_name">Metropolis at Metrotown</string>
+    <string name="applicationId">com.ivanhoecambridge.metropolis</string>
 
     <!--MOVIES-->
     <string name="movie_title">SilverCity Cinema</string>
