@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="130dp">
+    android:layout_height="130dp"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:padding="15dp"
@@ -51,13 +52,13 @@
         <LinearLayout
             android:gravity="center_vertical"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="15dp"
             android:orientation="vertical"
-            android:layout_margin="5dp"
             android:layout_toRightOf="@+id/cvMoviePoster"
             android:layout_toLeftOf="@+id/ivArrow"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            android:layout_marginBottom="15dp"
+            android:layout_margin="5dp"
 
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 android:gravity="center_vertical"
@@ -94,7 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvMovieShowtimes"
-                android:text="17:20 19:55 22:30"
+                tools:text="17:20 19:55 22:30 17:20 19:55 22:30 17:20 19:55 22:30 17:20 19:55 22:30"
                 android:textSize="13dp"
                 android:textColor="#787a86"
                 android:maxLines="2"

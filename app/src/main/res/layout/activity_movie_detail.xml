@@ -28,6 +28,7 @@
                     android:id="@+id/ivBlur"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/black"
                     android:scaleType="fitStart"
                     />
 
@@ -39,9 +40,10 @@
                     android:layout_height="@dimen/movie_poster_height_large"
                     app:cardCornerRadius="4dp"
                     style="@style/SelectableItemForegroundNormal"
-                    android:elevation="3dp"
-                    app:cardBackgroundColor="@color/black"
+                    app:cardBackgroundColor="@color/transparent"
+                    app:cardElevation="0.1dp"
                     >
+                    <!--android bug: if cardElevation is 0, the image gets disappeared, if cardElevation is 3, it creates the card frame with elevation from the beginning -->
 
                     <ImageView
                         android:transitionName="@string/transition_movie_poster"

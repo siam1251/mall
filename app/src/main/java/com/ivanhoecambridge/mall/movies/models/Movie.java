@@ -31,8 +31,6 @@ public class Movie
     @Element(required = false)
     private String movie_rating;
 
-
-
     @ElementList(entry = "showtimes", inline = true)
     private List<Showtimes> showtimes; //change all the getters, setters
 
@@ -84,7 +82,6 @@ public class Movie
         return "";
     }
 
-
     public List<String> getShowtimesList(boolean sort){
         List<String> showTimesCombined = null;
         try {
@@ -128,7 +125,7 @@ public class Movie
         List<String> showTimesCombined = getShowtimesList(true);
         for(String showtime : showTimesCombined) {
             showtime = convert24Hrto12Hr(showtime, MOVIE_TIME_FORMAT);
-            if(showtimes.equals("")) showtimesString = showtime;
+            if(showtimesString.equals("")) showtimesString = showtime;
             else showtimesString = showtimesString + "   " + showtime;
         }
         return showtimesString;
@@ -147,23 +144,9 @@ public class Movie
             final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
             final Date dateObj = sdf.parse(time);
             return new SimpleDateFormat(format).format(dateObj);
-//            return new SimpleDateFormat("K:mm").format(dateObj);
         } catch (final ParseException e) {
             e.printStackTrace();
         }
         return "";
     }
-
-    /*public String convert24Hrto12Hr(String time){
-        try {
-            final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
-            final Date dateObj = sdf.parse(time);
-            return new SimpleDateFormat("h:mm aaa").format(dateObj);
-//            return new SimpleDateFormat("K:mm").format(dateObj);
-        } catch (final ParseException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }*/
-
 }

@@ -43,9 +43,9 @@
                 android:gravity="center"
                 android:textSize="16dp"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="wrap_content"
                 android:textColor="#787a86"
-                android:text="12:45 3:45 7:05 10:00 12:45 3:45 7:05 10:00 12:45 3:45 7:05 10:00"
+                tools:text="12:45 3:45 7:05 10:00 12:45 3:45 7:05 10:00 12:45 3:45 7:05 10:00 12:45 3:45 7:05 10:00 12:45 3:45 7:05 10:00 12:45 3:45 7:05 10:00 12:45 3:45 7:05 10:00 12:45 3:45 7:05 10:00 12:45 3:45 7:05 10:00"
                 />
 
         </RelativeLayout>

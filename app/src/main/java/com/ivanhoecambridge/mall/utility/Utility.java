@@ -21,6 +21,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
@@ -690,40 +691,30 @@ public class Utility {
 
     public static void blurImageView(final Context context, final ImageView ivToBlur, final ImageView ivToApplyBlur){
         if(context == null || ivToBlur == null || ivToApplyBlur == null) return;
-        if (ivToBlur.getWidth() > 0) {
-            blurImage(context, ivToBlur, ivToApplyBlur);
-        } else {
+        //ivToBlur.getWidth() > 0 doesn't guarantee the image has been set to the imageView. It's safer to use addOnGlobalLayoutListener for blurBuilder to pick up the image to work on.
+//        if (ivToBlur.getWidth() > 0) {
+//            blurImage(context, ivToBlur, ivToApplyBlur);
+//            BlurBuilder.blur(context, ivToBlur, ivToApplyBlur);
+//        } else {
             ivToBlur.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                    blurImage(context, ivToBlur, ivToApplyBlur);
+                    BlurBuilder.blur(context, ivToBlur, ivToApplyBlur);
                 }
             });
-        }
+//        }
     }
-
-    private static void blurImage(Context context, final ImageView ivToBlur, final ImageView ivToApplyBlur){
-        Bitmap image = BlurBuilder.blur(ivToBlur);
-        if(image != null) ivToApplyBlur.setBackground(new BitmapDrawable(context.getResources(), image));
-    }
-
 
     private static LruCache<String, Bitmap> mMemoryCache;
 
     public static void addBlurredBitmapToMemoryCache(final View v, final String key){
         if( v == null) return;
-        if (v.getWidth() > 0) {
-            Bitmap blurred = BlurBuilder.blur(v);
-            addBitmapToMemoryCache(key, blurred);
-        } else {
             v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                    Bitmap blurred = BlurBuilder.blur(v);
-                    addBitmapToMemoryCache(key, blurred);
+                    //get Bitmap from blurBuilder and call addBitmapToMemoryCache(key, blurred) to cache the blurred image;
                 }
             });
-        }
     }
 
     private static void cacheBitmap(Bitmap bitmap){

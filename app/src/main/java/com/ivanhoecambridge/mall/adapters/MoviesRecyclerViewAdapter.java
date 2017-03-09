@@ -165,7 +165,6 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
                     }
                 });
 
-
                 String nextShowTime = mHouse.getNextShowTime(movieDetail.getMovie_id());
                 if(nextShowTime.equals("")) theaterViewer.llNextShowTime.setVisibility(View.GONE);
                 theaterViewer.tvNextShowTime.setText(nextShowTime);
