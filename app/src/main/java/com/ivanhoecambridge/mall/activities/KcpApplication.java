@@ -20,14 +20,12 @@ import com.exacttarget.etpushsdk.util.EventBus;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.crash.FirebaseCrash;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.tweetui.TweetUi;
@@ -88,9 +86,9 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
             //EXACT TARGET
             EventBus.getInstance().register(this);
             try {
-                String appId = "";
-                String accessToken = "";
-                String gcmSenderId = "";
+                String appId;
+                String accessToken;
+                String gcmSenderId;
 
                 if(Constants.IS_APP_IN_PRODUCTION) {
                     appId = getString(R.string.app_id);
