@@ -691,18 +691,14 @@ public class Utility {
 
     public static void blurImageView(final Context context, final ImageView ivToBlur, final ImageView ivToApplyBlur){
         if(context == null || ivToBlur == null || ivToApplyBlur == null) return;
-        //ivToBlur.getWidth() > 0 doesn't guarantee the image has been set to the imageView. It's safer to use addOnGlobalLayoutListener for blurBuilder to pick up the image to work on.
-//        if (ivToBlur.getWidth() > 0) {
-//            blurImage(context, ivToBlur, ivToApplyBlur);
-//            BlurBuilder.blur(context, ivToBlur, ivToApplyBlur);
-//        } else {
+        //ivToBlur.getWidth() > 0 doesn't guarantee the image has been set to the imageView.
+        // It's safer to use addOnGlobalLayoutListener for blurBuilder to pick up the image to work on.
             ivToBlur.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
                     BlurBuilder.blur(context, ivToBlur, ivToApplyBlur);
                 }
             });
-//        }
     }
 
     private static LruCache<String, Bitmap> mMemoryCache;
