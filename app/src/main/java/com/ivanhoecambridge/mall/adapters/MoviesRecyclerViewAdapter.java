@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -66,6 +67,8 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
         public ImageView ivDetailImageLargePhoto;
         public TextView tvMovieTitle;
         public TextView tvMovieRating;
+        public TextView tvNextShowTime;
+        public LinearLayout llNextShowTime;
 
         public TheaterViewer(View itemView) {
             super(itemView);
@@ -74,6 +77,8 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
             ivDetailImageLargePhoto = (ImageView) itemView.findViewById(R.id.ivDetailImageLargePhoto);
             tvMovieTitle = (TextView) itemView.findViewById(R.id.tvMovieTitle);
             tvMovieRating = (TextView) itemView.findViewById(R.id.tvMovieRating);
+            tvNextShowTime = (TextView) itemView.findViewById(R.id.tvNextShowTime);
+            llNextShowTime = (LinearLayout) itemView.findViewById(R.id.llNextShowTime);
         }
     }
 
@@ -160,6 +165,9 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
                     }
                 });
 
+                String nextShowTime = mHouse.getNextShowTime(movieDetail.getMovie_id());
+                if(nextShowTime.equals("")) theaterViewer.llNextShowTime.setVisibility(View.GONE);
+                theaterViewer.tvNextShowTime.setText(nextShowTime);
 
             } else if(holder instanceof ShowtimesViewer){
                 final ShowtimesViewer showtimesViewer = (ShowtimesViewer) holder;
@@ -209,7 +217,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter {
                 showtimesViewer.tvMovieLengthGenre.setText(runTimeGenre);
 
                 //showtimes
-                String showtimes = mHouse.getShowtimes(movieDetail.getMovie_id());
+                String showtimes = mHouse.getShowtimesInFormat(movieDetail.getMovie_id());
                 if(showtimes.equals("")) showtimesViewer.tvMovieShowtimes.setVisibility(View.GONE);
                 showtimesViewer.tvMovieShowtimes.setText(showtimes);
 

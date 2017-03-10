@@ -11,11 +11,13 @@ import android.widget.TextView;
 
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
 import com.ivanhoecambridge.mall.R;
-import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
+
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.DirectoryFragment;
 
 import java.util.ArrayList;
+
+import factory.CategoryIconFactory;
 
 /**
  * Created by Kay on 2016-05-05.

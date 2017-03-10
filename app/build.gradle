@@ -111,6 +111,21 @@ android {
             versionName "1.0.0"
         }
 
+        eatoncentre {
+            applicationId "com.ivanhoecambridge.mall.eatoncentre"
+            buildConfigField 'String', 'MALL', '"Kinetic Cafe Office"'
+            buildConfigField 'Boolean', 'PUSH', 'true'
+            buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
+            buildConfigField 'Boolean', 'MOVIE', 'true'
+            buildConfigField 'Boolean', 'WHITE_FAV', 'true' //show white fav icon in case the selected fav's same as the toolbar bg color
+            buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'true'
+            buildConfigField 'Boolean', 'BLUEDOT', 'true'
+            buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.1"'
+
+            versionName "1.0.0"
+        }
+
+
         seniondemo {
             applicationId "com.ivanhoecambridge.mall.seniondemo"
             buildConfigField 'String', 'MALL', '"Kinetic Cafe Office"'

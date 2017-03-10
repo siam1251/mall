@@ -425,7 +425,8 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
         ArrayList<MovieDetail> movieDetails = (ArrayList) MovieManager.sMovies.getMovies();
         if(movieDetails.size() != 0) {
             Movies.sortMoviesList(movieDetails);
-            mMoviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(this, null, movieDetails, ITEM_TYPE_THEATER_VIEWER);
+            House house = (House) MovieManager.sTheaters.getHouse();
+            mMoviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(this, house, movieDetails, ITEM_TYPE_THEATER_VIEWER);
             rvMovies.setAdapter(mMoviesRecyclerViewAdapter);
             rvMovies.setNestedScrollingEnabled(false);
 

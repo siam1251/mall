@@ -4,12 +4,15 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.view.View;
+import android.widget.ImageView;
 
 /**
  * Created by Kay on 2016-07-27.
@@ -20,29 +23,50 @@ public class BlurBuilder {
 
     private static final float BITMAP_SCALE = 0.1f;
     private static final float BLUR_RADIUS = 25f;
+    private static ImageView mImageView;
+    private static Context mContext;
 
-    public static Bitmap blur(View v) {
-        return blur(v.getContext(), getScreenshot(v));
+    public static void blur(Context context, View v, ImageView ivToApplyBlur) {
+        mContext = context;
+        mImageView = ivToApplyBlur;
+        new BlurBitmap().execute(v);
     }
 
-    public static Bitmap blur(Context ctx, Bitmap image) {
-        if(image == null) return null;
-        int width = Math.round(image.getWidth() * BITMAP_SCALE);
-        int height = Math.round(image.getHeight() * BITMAP_SCALE);
+    private static class BlurBitmap extends AsyncTask<View, Void, Bitmap> {
 
-        Bitmap inputBitmap = Bitmap.createScaledBitmap(image, width, height, false);
-        Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap);
+        @Override
+        protected Bitmap doInBackground(View... params) {
+            if(params == null) return null;
 
-        RenderScript rs = RenderScript.create(ctx);
-        ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
-        Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap);
-        Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
-        theIntrinsic.setRadius(BLUR_RADIUS);
-        theIntrinsic.setInput(tmpIn);
-        theIntrinsic.forEach(tmpOut);
-        tmpOut.copyTo(outputBitmap);
+            Bitmap image = getScreenshot(params[0]);
+            int width = Math.round(image.getWidth() * BITMAP_SCALE);
+            int height = Math.round(image.getHeight() * BITMAP_SCALE);
 
-        return outputBitmap;
+            Bitmap inputBitmap = Bitmap.createScaledBitmap(image, width, height, false);
+            Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap);
+
+            RenderScript rs = RenderScript.create(mContext);
+            ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+            Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap);
+            Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
+            theIntrinsic.setRadius(BLUR_RADIUS);
+            theIntrinsic.setInput(tmpIn);
+            theIntrinsic.forEach(tmpOut);
+            tmpOut.copyTo(outputBitmap);
+
+            return outputBitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            if(mImageView != null) mImageView.setBackground(new BitmapDrawable(mContext.getResources(), result));
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
     }
 
     public static Bitmap getScreenshot(View v) {

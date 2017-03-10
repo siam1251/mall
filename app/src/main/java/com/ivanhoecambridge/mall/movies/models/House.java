@@ -58,7 +58,11 @@ public class House
         return "";
     }
 
-    public String getShowtimes(String movieId){
-        return getSchedule().getMovie(movieId).getShowtimesString();
+    public String getShowtimesInFormat(String movieId){
+       return getSchedule().getMovie(movieId).getShowtimesInFormat();
+    }
+
+    public String getNextShowTime(String movieId){
+        return getSchedule().getMovie(movieId).getNextShowTime();
     }
 }

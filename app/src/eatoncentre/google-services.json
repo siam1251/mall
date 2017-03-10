@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "479975460982",
+    "firebase_url": "https://ec-android-push-notifications.firebaseio.com",
+    "project_id": "ec-android-push-notifications",
+    "storage_bucket": "ec-android-push-notifications.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479975460982:android:edbef4d9618c4159",
+        "android_client_info": {
+          "package_name": "com.ivanhoecambridge.mall.eatoncentre"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "479975460982-adamu6l7ecsvpa4c5lhp4a3au285mg0q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsjPevWtPbi7uGaSDLroccsaXNgltvIv4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
