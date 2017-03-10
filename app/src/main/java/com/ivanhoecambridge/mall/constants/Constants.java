@@ -53,15 +53,16 @@ public class Constants {
 
 
 	//DATE FORMAT
- 	public final static String DATE_FORMAT_EFFECTIVE 		= "EEEE, MMMM d";
- 	public final static String DATE_FORMAT_HOLIDAY_DATE 	= "MMMM d";
- 	public final static String DATE_FORMAT_HOLIDAY_HOUR 	= "MMMM d";
- 	public final static String DATE_FORMAT_MALL_HOUR_DATE 	= "EEE. MMM d";
- 	public final static String DATE_FORMAT_HOLIDAY 			= "EEEE MMMM d";
- 	public final static String DATE_FORMAT_HOLIDAY_STORE 	= "EEE, MMMM d";
- 	public final static String DATE_FORMAT_DAY 				= "EEE";
- 	public final static String DATE_FORMAT_EVENT_HOUR 		= "h:mm aa";
- 	public final static String DATE_FORMAT_ANNOUNCEMENT 	= "MMMM d, EEEE";
+ 	public final static String DATE_FORMAT_EFFECTIVE 				= "EEEE, MMMM d";
+ 	public final static String DATE_FORMAT_HOLIDAY_DATE 			= "MMMM d";
+ 	public final static String DATE_FORMAT_HOLIDAY_HOUR 			= "MMMM d";
+ 	public final static String DATE_FORMAT_MALL_HOUR_DATE 			= "EEE. MMM d";
+ 	public final static String DATE_FORMAT_HOLIDAY 					= "EEEE MMMM d";
+ 	public final static String DATE_FORMAT_HOLIDAY_STORE 			= "EEE, MMMM d";
+ 	public final static String DATE_FORMAT_DAY 						= "EEE";
+ 	public final static String DATE_FORMAT_EVENT_HOUR 				= "h:mm aa";
+ 	public final static String DATE_FORMAT_ANNOUNCEMENT 			= "MMMM d, EEEE";
+ 	public final static String DATE_FORMAT_ANNOUNCEMENT_GROUPED 	= "MMMM d";
 
 
 	//DETAIL

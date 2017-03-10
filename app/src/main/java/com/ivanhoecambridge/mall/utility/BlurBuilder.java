@@ -1,6 +1,7 @@
 package com.ivanhoecambridge.mall.utility;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -58,8 +59,15 @@ public class BlurBuilder {
         }
 
         @Override
-        protected void onPostExecute(Bitmap result) {
-            if(mImageView != null) mImageView.setBackground(new BitmapDrawable(mContext.getResources(), result));
+        protected void onPostExecute(final Bitmap result) {
+            if(mContext != null) {
+                ((Activity)mContext).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(mImageView != null) mImageView.setBackground(new BitmapDrawable(mContext.getResources(), result));
+                    }
+                });
+            }
         }
 
         @Override

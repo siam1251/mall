@@ -374,6 +374,9 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="version_name_prefix">Version </string>
     <string name="version_name_suffix"> (TESTING) </string>
 
+    <string name="card_title_ancmt">Announcements</string>
+    <string name="card_view_all">View All</string>
+
 
 
 </resources>

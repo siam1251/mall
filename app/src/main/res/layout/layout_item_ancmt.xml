@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/SelectableItemBackground"
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
+
+    <com.ivanhoecambridge.mall.views.KCPSetRatioImageView
+        android:layout_centerVertical="true"
+        android:src="@drawable/placeholder_square"
+        android:id="@+id/ivAncmtLogo"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:transitionName="@string/transition_news_logo"
+        android:scaleType="centerCrop"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_toRightOf="@+id/ivDealLogo"
+        android:layout_marginLeft="@dimen/place_txt_left_margin"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="match_parent">
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:textColor="@color/place_txt"
+            android:textSize="@dimen/place_txt"
+            tools:text="Free Wifi Now Available"
+            android:id="@+id/tvAncmtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            />
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_regular"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/place_category_txt"
+            android:textSize="@dimen/place_category_txt"
+            tools:text="May 21"
+            android:id="@+id/tvAncmtDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+</RelativeLayout>
