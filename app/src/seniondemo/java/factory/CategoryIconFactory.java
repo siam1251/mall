@@ -1,4 +1,4 @@
-package com.ivanhoecambridge.mall.factory;
+package factory;
 
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategoryRoot;

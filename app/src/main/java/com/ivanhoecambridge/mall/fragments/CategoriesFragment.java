@@ -13,8 +13,9 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategoryRoot;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.adapters.CategoryRecyclerViewAdapter;
-import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
+
+import factory.CategoryIconFactory;
 
 
 public class CategoriesFragment extends BaseFragment {

@@ -32,7 +32,8 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.InterestRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
+
+import factory.CategoryIconFactory;
 import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.NetworkManager;
