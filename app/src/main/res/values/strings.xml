@@ -208,6 +208,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <string name="my_page_deals_for_today">Today’s Deals</string>
     <string name="my_page_events_for_today">Today’s Events</string>
+    <string name="my_page_ancmt">All Announcements</string>
 
 
     <string name="explore_more_deals">Explore More Deals</string>
@@ -217,6 +218,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="empty_placeholder_desc_deal">This is where all your favourited deals will appear. Heart a deal to get started.</string>
     <string name="empty_placeholder_desc_event">This is where all your favourited events will appear. Heart an event to get started.</string>
     <string name="empty_placeholder_desc_store">This is where all your favourited stores will appear. Heart a store to get started.</string>
+    <string name="empty_placeholder_ancmt">There are no announcements</string>
+    <string name="empty_placeholder_event">There are no events scheduled</string>
 
     <!--MAP-->
     <string name="map_filter_see_deal">See Recommended Deals</string>
@@ -375,6 +378,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="version_name_suffix"> (TESTING) </string>
 
     <string name="card_title_ancmt">Announcements</string>
+    <string name="card_title_event">Events</string>
     <string name="card_view_all">View All</string>
 
 

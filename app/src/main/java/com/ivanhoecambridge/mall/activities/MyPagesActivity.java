@@ -21,6 +21,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.adapters.AncmtRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.NewsRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
@@ -236,6 +237,19 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                     }
 
                     mAdapter = newsRecyclerViewAdapter;
+                } else if(mPageTitle.equals(getResources().getString(R.string.my_page_ancmt))){
+                    ArrayList<KcpContentPage> todaysEventList = (ArrayList<KcpContentPage>) getIntent().getSerializableExtra(Constants.ARG_CONTENT_PAGE);
+
+                    if(todaysEventList != null) {
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MyPagesActivity.this);
+                        rv.setLayoutManager(linearLayoutManager);
+                        AncmtRecyclerViewAdapter newsRecyclerViewAdapter = new AncmtRecyclerViewAdapter (
+                                MyPagesActivity.this,
+                                todaysEventList,
+                                false);
+                        rv.setAdapter(newsRecyclerViewAdapter);
+                        mAdapter = newsRecyclerViewAdapter;
+                    }
                 }
 
                 if(!mIsDecorationAdded) mIsDecorationAdded = true;

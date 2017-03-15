@@ -143,6 +143,10 @@ android {
     }
 }
 
+//Upgrading android studio to 2.3, it was required to add multidex (com.android.support:multidex:1.0.1) as dependency.
+//After adding multidex dependency it complained about renderscript dependency being at 25.0.2 and that all com.android.support libraries must use the exact same version specification
+//seems like this is currently a bug https://code.google.com/p/android/issues/detail?id=236471
+
 dependencies {
     compile 'com.google.android.gms:play-services-location:9.2.1'
     compile 'com.google.android.gms:play-services-maps:9.2.1'

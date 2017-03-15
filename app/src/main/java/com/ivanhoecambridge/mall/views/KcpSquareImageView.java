@@ -23,6 +23,10 @@ public class KcpSquareImageView extends ImageView {
 
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        /*super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+        int width = getMeasuredWidth();
+        setMeasuredDimension(width, width);*/
+
         try {
             Drawable drawable = getDrawable();
             if (drawable == null) {

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="@dimen/card_vertical_margin"
+    android:layout_marginBottom="@dimen/card_vertical_margin"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="10dp"
+
+    <LinearLayout
+        android:id="@+id/llAncmt"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_height="@dimen/social_feed_user_layout_height">
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            android:id="@+id/tvEmptyTitle"
+            android:layout_weight="1"
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textColor="#de000000"
+            tools:text="@string/card_title_ancmt"
+            />
+
+
+    </LinearLayout>
+
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+        android:id="@+id/tvEmptyState"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/llAncmt"
+        app:fontFamily="@string/fontFamily_roboto_light"
+        android:layout_marginTop="@dimen/activity_margin_medium"
+        android:layout_marginBottom="24dp"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="@color/empty_placeholder_desc_text"
+        android:text="@string/empty_placeholder_ancmt"
+        />
+
+    <View
+        android:layout_marginLeft="@dimen/card_horizontal_margin"
+        android:layout_marginRight="@dimen/card_horizontal_margin"
+        android:id="@+id/separator"
+        android:layout_below="@+id/tvEmptyState"
+        style="@style/separaterNews"
+        />
+
+</RelativeLayout>

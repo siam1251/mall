@@ -111,6 +111,12 @@
         <item name="android:layout_height">1dp</item>
     </style>
 
+    <style name="separaterNews">
+        <item name="android:background">#d7d7dd</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">2dp</item>
+    </style>
+
     <style name="verticalSeparater">
         <item name="android:background">@color/info_vertical_separator_color</item>
         <item name="android:layout_width">1dp</item>
