@@ -19,6 +19,9 @@ public class KcpContentTypeFactory {
     public static final String CONTENT_TYPE_FOOTER = "footer";
     public static final String CONTENT_TYPE_MOVIE = "movie";
 
+    public static final String CONTENT_TYPE_EMPTY_ANNOUNCEMENT = "empty_ancmt";
+    public static final String CONTENT_TYPE_EMPTY_EVENT = "empty_eve";
+
 
     //NEWS & DEAL ADAPTER ITEM TYPE
     public static final int ITEM_TYPE_LOADING =                             0;
@@ -33,6 +36,9 @@ public class KcpContentTypeFactory {
     public static final int ITEM_TYPE_ADJUST_MY_INTEREST =                  9;
     public static final int ITEM_TYPE_DEAL =                                10;
     public static final int ITEM_TYPE_MOVIE =                               11;
+    public static final int ITEM_TYPE_EMPTY_ANNOUNCEMENT =                  12;
+    public static final int ITEM_TYPE_EMPTY_EVENT =                         13;
+
     public static final int ITEM_TYPE_FOOTER =                              100;
     public static final int ITEM_TYPE_HEADER =                              101;
 
@@ -98,6 +104,10 @@ public class KcpContentTypeFactory {
             return ITEM_TYPE_DEAL;
         } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_MOVIE)){
             return ITEM_TYPE_MOVIE;
+        } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_EMPTY_ANNOUNCEMENT)){
+            return ITEM_TYPE_EMPTY_ANNOUNCEMENT;
+        } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_EMPTY_EVENT)){
+            return ITEM_TYPE_EMPTY_EVENT;
         } else if(kcpContentPage.content_type.contains(CONTENT_TYPE_FOOTER)){
             return ITEM_TYPE_FOOTER;
         } else {

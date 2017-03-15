@@ -30,8 +30,8 @@
                 android:id="@+id/llViewShowTimes"
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_height="@dimen/social_feed_user_layout_height">
 
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView

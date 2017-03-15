@@ -76,7 +76,8 @@ public class NewsFragment extends BaseFragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         mNewsRecyclerViewAdapter = new NewsRecyclerViewAdapter(
                 getActivity(),
-                KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED).getKcpContentPageList(true));
+                KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED).getKcpContentPageList(true),
+                true);
         recyclerView.setAdapter(mNewsRecyclerViewAdapter);
 
         mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
