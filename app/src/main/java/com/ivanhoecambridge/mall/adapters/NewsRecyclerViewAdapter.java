@@ -69,7 +69,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     private SocialFeedViewPagerAdapter mSocialFeedViewPagerAdapter;
     private FavouriteInterface mFavouriteInterface;
     private boolean showInstagramFeed = false;
-    private final int NUM_OF_ANCMT = 3;
 
     public NewsRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> news) {
         initAdapter(context, news, false);
@@ -308,7 +307,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public class AncmtViewHolder extends MainViewHolder {
         public CardView cvAncmt;
-//        public LinearLayout llAncmtToAdd;
         public TextView tvViewAll;
         public TextView tvEmptyState;
         public View separator;
@@ -317,7 +315,6 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         public AncmtViewHolder(View v) {
             super(v);
             cvAncmt                 = (CardView)  v.findViewById(R.id.cvAncmt);
-//            llAncmtToAdd            = (LinearLayout)  v.findViewById(R.id.llAncmtToAdd);
             tvViewAll               = (TextView)  v.findViewById(R.id.tvViewAll);
             tvEmptyState            = (TextView)  v.findViewById(R.id.tvEmptyState);
             separator               = (View)  v.findViewById(R.id.separator);

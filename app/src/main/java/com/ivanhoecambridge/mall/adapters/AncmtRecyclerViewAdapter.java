@@ -71,14 +71,12 @@ public class AncmtRecyclerViewAdapter extends RecyclerView.Adapter {
             tvAncmtDate = (TextView) v.findViewById(R.id.tvAncmtDate);
 
             if(mCardView) {
-
                 cvAncmt.setCardElevation(KcpUtility.dpToPx((Activity) mContext, 1));
                 RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) cvAncmt.getLayoutParams();
                 int margin = KcpUtility.dpToPx((Activity) mContext, 0.5f);
                 lp.setMargins(0, margin, 0, margin);
                 lp.height = KcpUtility.dpToPx((Activity) mContext, 110);
                 cvAncmt.setLayoutParams(lp);
-
             }
         }
     }
