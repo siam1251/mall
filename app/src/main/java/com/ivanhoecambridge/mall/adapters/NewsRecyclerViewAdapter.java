@@ -87,7 +87,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
 
         //emptyHolderExist = true meaning announcements are grouped together, empty holder exist for events and announcements
         if(emptyHolderExist) {
-            mKcpContentPagesNews = removeAnnouncements(mKcpContentPagesNews); //remove all announcements, group them together, save in mAnnouncements
+            mKcpContentPagesNews = removeAnnouncements(mKcpContentPagesNews); //return mKcpContentPagesNews after removing all announcements from it and save the removed announcements in mAnnouncements
             mKcpContentPagesNews = insertAnnouncements(mKcpContentPagesNews); //if Announcement's bigger than 0, insert it as CONTENT_TYPE_ANNOUNCEMENT
 
             mKcpContentPagesNews = insertEmptyCards(mKcpContentPagesNews, KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT, KcpContentTypeFactory.CONTENT_TYPE_EMPTY_ANNOUNCEMENT);
