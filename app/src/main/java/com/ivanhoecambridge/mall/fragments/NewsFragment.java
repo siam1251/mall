@@ -1,6 +1,7 @@
 package com.ivanhoecambridge.mall.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ public class NewsFragment extends BaseFragment {
     public NewsRecyclerViewAdapter mNewsRecyclerViewAdapter;
     public EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     private TextView tvEmptyState;
+    private RecyclerView rvNews;
 
     public static NewsFragment newInstance() {
         NewsFragment fragment = new NewsFragment();
@@ -32,7 +34,6 @@ public class NewsFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,9 +45,9 @@ public class NewsFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
-        RecyclerView rvNews = (RecyclerView) view.findViewById(R.id.rv);
+        rvNews = (RecyclerView) view.findViewById(R.id.rv);
         rvNews.setNestedScrollingEnabled(true);
-        setupRecyclerView(rvNews);
+        setupRecyclerView();
         tvEmptyState = (TextView) view.findViewById(R.id.tvEmptyState);
         final SwipeRefreshLayout srl = (SwipeRefreshLayout) view.findViewById(R.id.srl);
         srl.setColorSchemeResources(R.color.themeColor);
@@ -71,14 +72,15 @@ public class NewsFragment extends BaseFragment {
         if(mMainActivity != null) mMainActivity.setEmptyState(tvEmptyState, warningMsg);
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
+    private void setupRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
+        rvNews.setLayoutManager(linearLayoutManager);
+
         mNewsRecyclerViewAdapter = new NewsRecyclerViewAdapter(
                 getActivity(),
                 KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_FEED).getKcpContentPageList(true),
                 true);
-        recyclerView.setAdapter(mNewsRecyclerViewAdapter);
+        rvNews.setAdapter(mNewsRecyclerViewAdapter);
 
         mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
@@ -86,9 +88,9 @@ public class NewsFragment extends BaseFragment {
                 HomeFragment.getInstance().downloadMoreFeeds(Constants.EXTERNAL_CODE_FEED);
             }
         };
-        recyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
+        rvNews.addOnScrollListener(mEndlessRecyclerViewScrollListener);
 
         NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(getActivity(), R.dimen.card_vertical_margin);
-        recyclerView.addItemDecoration(itemDecoration);
+        rvNews.addItemDecoration(itemDecoration);
     }
 }

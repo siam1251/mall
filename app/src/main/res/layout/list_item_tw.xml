@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     style="@style/SelectableItemForeground"
     android:layout_width="match_parent"
@@ -30,7 +31,7 @@
         <TextView
             android:gravity="center_horizontal"
             android:textColor="@color/white"
-            android:text="Apr 25, 2016 at 11:02 AM"
+            tools:text="Apr 25, 2016 at 11:02 AM"
             android:layout_marginTop="@dimen/tw_date_txt_top_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

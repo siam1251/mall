@@ -1,6 +1,5 @@
 package com.ivanhoecambridge.mall.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -23,6 +22,7 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.AncmtRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.CategoryStoreRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.adapters.EventRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.NewsRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
@@ -237,7 +237,7 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                     }
 
                     mAdapter = newsRecyclerViewAdapter;
-                } else if(mPageTitle.equals(getResources().getString(R.string.my_page_ancmt))){
+                } else if(mPageTitle.equals(getResources().getString(R.string.my_page_all_ancmt))){
                     ArrayList<KcpContentPage> todaysEventList = (ArrayList<KcpContentPage>) getIntent().getSerializableExtra(Constants.ARG_CONTENT_PAGE);
 
                     if(todaysEventList != null) {
@@ -248,6 +248,19 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                                 todaysEventList,
                                 false);
                         rv.setAdapter(newsRecyclerViewAdapter);
+                        mAdapter = newsRecyclerViewAdapter;
+                    }
+                } else if(mPageTitle.equals(getResources().getString(R.string.my_page_all_event))){
+                    ArrayList<KcpContentPage> todaysEventList = (ArrayList<KcpContentPage>) getIntent().getSerializableExtra(Constants.ARG_CONTENT_PAGE);
+                    if(todaysEventList != null) {
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MyPagesActivity.this);
+                        rv.setLayoutManager(linearLayoutManager);
+                        EventRecyclerViewAdapter newsRecyclerViewAdapter = new EventRecyclerViewAdapter (
+                                MyPagesActivity.this,
+                                todaysEventList,
+                                true);
+                        rv.setAdapter(newsRecyclerViewAdapter);
+                        newsRecyclerViewAdapter.setFavouriteListener(MyPagesActivity.this);
                         mAdapter = newsRecyclerViewAdapter;
                     }
                 }

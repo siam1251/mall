@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     style="@style/SelectableItemForeground"
-    android:layout_height="55dp"
-    >
+    android:layout_height="55dp">
 
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         app:fontFamily="@string/fontFamily_roboto_regular"
@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/intrstd_txt_off"
-        android:text="Surface Lot"
+        tools:text="Surface Lot"
         android:textSize="16dp"/>
 
     <View

@@ -24,7 +24,7 @@
         android:paddingRight="18dp"
         android:lines="1"
         android:ellipsize="end"
-        android:text="Stores that match"
+        android:text="@string/search_stores_that_match"
         />
 
 </RelativeLayout>

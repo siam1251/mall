@@ -4,8 +4,8 @@
     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/map_level_width"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rlUpper"
@@ -59,7 +59,7 @@
             android:layout_height="match_parent"
             android:textColor="#787a86"
             android:textSize="10dp"
-            android:text="SC, OG N UP3"
+            tools:text="SC, OG N UP3"
             android:lines="2"
             />
     </RelativeLayout>

@@ -30,7 +30,7 @@
                 android:textAlignment="center"
                 android:textSize="@dimen/detail_logo_text"
                 android:textColor="@color/black"
-                android:text="HUDSON's BAY COMPANY"
+                tools:text="HUDSON's BAY COMPANY"
                 android:id="@+id/tvDetailLogoText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,7 +62,6 @@
             android:textColor="@color/detail_title_text"
             android:layout_marginBottom="28dp"
             />
-        android:text="DETAIL TITLE"
 
         <TextView
             android:layout_gravity="center_horizontal"
@@ -87,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/detail_body_text"
-            android:text="Enjoy up to 60% off all selected"
+            tools:text="Enjoy up to 60% off all selected"
             android:layout_marginBottom="28dp"
             android:textColor="@color/detail_body_text"
             />
@@ -120,7 +119,7 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:gravity="center_vertical"
                 android:textSize="@dimen/detail_recyclerview_header_text"
-                android:text="Store Deals"
+                tools:text="Store Deals"
                 android:textColor="@color/detail_title_text"
                 android:layout_marginTop="@dimen/detail_recyclerview_header_top_margin"
                 android:layout_width="match_parent"
@@ -156,7 +155,7 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:gravity="center_vertical"
                 android:textSize="@dimen/detail_recyclerview_header_text"
-                android:text="Store Events"
+                tools:text="Store Events"
                 android:textColor="@color/detail_title_text"
                 android:layout_marginTop="@dimen/detail_recyclerview_header_top_margin"
                 android:layout_width="match_parent"

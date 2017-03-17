@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
@@ -85,7 +84,7 @@ public class AncmtRecyclerViewAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType){
             case KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT:
-                return new AncmtViewHolder(LayoutInflater.from(mContext).inflate(R.layout.layout_item_ancmt, parent, false));
+                return new AncmtViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_ancmt, parent, false));
         }
         return null;
     }

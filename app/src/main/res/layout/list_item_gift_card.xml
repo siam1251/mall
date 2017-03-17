@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/flGC"
-    style="@style/DrawerLayoutFavouriteItemsFrameLayout"
-    >
+    style="@style/DrawerLayoutFavouriteItemsFrameLayout">
 
     <android.support.v7.widget.AppCompatCheckBox
         android:visibility="gone"
@@ -21,7 +20,7 @@
         android:id="@+id/tvGCNumber"
         style="@style/DrawerLayoutFavouriteItemsTextView"
         app:fontFamily="@string/fontFamily_roboto_medium"
-        android:text="2956-3845-2839-6018"
+        tools:text="2956-3845-2839-6018"
         />
 
     <com.ivanhoecambridge.mall.views.BadgeView

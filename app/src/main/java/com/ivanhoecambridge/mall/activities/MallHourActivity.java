@@ -1,5 +1,6 @@
 package com.ivanhoecambridge.mall.activities;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -129,7 +130,7 @@ public class MallHourActivity extends AppCompatActivity {
                     String holidayEndTime = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, KcpPlaces.STORE_HOUR_FORMAT);
 
                     if(isOpen) holidayDay = holidayDay + " (" + holidayStartTime + " - " + holidayEndTime + ")";
-                    else holidayDay = holidayDay + " (CLOSED)";
+                    else holidayDay = holidayDay + " (" + getString(R.string.closed_in_mall_hour) +")";
                     if(i != comingHolidays.size() - 1 ) holidayDay = holidayDay + "\n";
 
                 }
@@ -137,7 +138,8 @@ public class MallHourActivity extends AppCompatActivity {
                 tvHolidayName.setText(holidayNames);
                 tvHolidayHoursPeriod.setText(holidayPeriod);
 
-                String holidayHour = "This is a reminder that " + HeaderFactory.MALL_NAME + " will have adjusted hours on:";
+                Resources res = getResources();
+                String holidayHour = String.format(res.getString(R.string.holiday_reminder_in_mall_hour), HeaderFactory.MALL_NAME);
 
                 tvHolidayhoursDescription.setText(holidayHour);
                 tvHolidayhoursList.setText(holidayDay);
@@ -188,7 +190,7 @@ public class MallHourActivity extends AppCompatActivity {
             tvMallHour.setText(openAndClosingHour);
 
             if(daysPastToday == 0) {
-                tvDate.setText("Today");
+                tvDate.setText(getString(R.string.today_in_mall_hour));
                 v.setBackgroundColor(getResources().getColor(R.color.mall_hour_selected_bg));
                 tvDate.setTextColor(getResources().getColor(R.color.white));
                 tvMallHour.setTextColor(getResources().getColor(R.color.white));

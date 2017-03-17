@@ -257,7 +257,7 @@ public class DetailActivity extends AppCompatActivity {
                     mParentView,
                     R.layout.layout_detail_button,
                     R.drawable.icn_storeinfo,
-                    "Store Information",
+                    getString(R.string.cta_store_information),
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -298,7 +298,7 @@ public class DetailActivity extends AppCompatActivity {
                     mParentView,
                     R.layout.layout_detail_button,
                     R.drawable.icn_addcal,
-                    "Add to Calendar",
+                    getString(R.string.cta_add_to_calendar),
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -347,7 +347,7 @@ public class DetailActivity extends AppCompatActivity {
 
                     String overrideHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, Calendar.getInstance());
                     if(!overrideHour.equals("")) todaysHour = overrideHour;
-                    todaysHour = todaysHour.replace("-", "to");
+                    todaysHour = todaysHour.replace("-", getString(R.string.to_in_time));
                     mLayoutStoreHours = DetailActivity.this.getLayoutInflater().inflate(
                             R.layout.layout_store_hours,
                             mParentView,
@@ -515,7 +515,9 @@ public class DetailActivity extends AppCompatActivity {
                     layoutSocialSharing.setVisibility(View.VISIBLE);
 
                     TextView tvDetailSocialSharingBtnHeader = (TextView) layoutSocialSharing.findViewById(R.id.tvDetailSocialSharingBtnHeader);
-                    tvDetailSocialSharingBtnHeader.setText("Follow " + kcpContentPage.getStoreName() + " on...");
+                    Resources res = getResources();
+                    String followSomeoneOn = String.format(res.getString(R.string.follow_someone_on_in_social_sharing), kcpContentPage.getStoreName());
+                    tvDetailSocialSharingBtnHeader.setText(followSomeoneOn);
 
                     ((ViewGroup) llSharing).removeAllViews();
 
@@ -554,7 +556,7 @@ public class DetailActivity extends AppCompatActivity {
             KcpPlaces kcpPlaces = mKcpContentPage.getStore() != null ? mKcpContentPage.getStore() : kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
 
             String openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(today.get(Calendar.DAY_OF_WEEK));
-            openAndClosingHour = openAndClosingHour.replace("-", "to").replace("AM", "am").replace("PM","pm");
+            openAndClosingHour = openAndClosingHour.replace("-", getString(R.string.to_in_time)).replace("AM", "am").replace("PM","pm");
             tvMallHour.setText(openAndClosingHour);
 
             if(daysPastToday == 0) {
@@ -566,7 +568,7 @@ public class DetailActivity extends AppCompatActivity {
             //overriding holidays
             openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, today);
             if(!openAndClosingHour.equals("")){
-                openAndClosingHour = openAndClosingHour.replace("-", "to").replace("AM", "am").replace("PM","pm");
+                openAndClosingHour = openAndClosingHour.replace("-", getString(R.string.to_in_time)).replace("AM", "am").replace("PM","pm");
                 tvMallHour.setText(openAndClosingHour);
                 ivHolidayIndicator.setVisibility(View.VISIBLE);
             }
@@ -750,7 +752,7 @@ public class DetailActivity extends AppCompatActivity {
                 String[] timeArray = new String[2];
                 time = kcpContentPage.getStoreHourForToday(timeArray, KcpPlacesRoot.getInstance().getMallContinuousOverrides());
                 time = timeArray[0].toUpperCase() + " " + timeArray[1];
-                if(time.toLowerCase().contains("closed")) {
+                if(time.toLowerCase().contains("closed")) { //TODO: change for other languages
                     tvDetailDate.setBackgroundResource(R.drawable.btn_style_corner_radius_gray);
                     tvDetailDate.setTextColor(getResources().getColor(R.color.white));
                 }
@@ -767,7 +769,7 @@ public class DetailActivity extends AppCompatActivity {
                     } else {
                         String eventStartHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EVENT_HOUR);
                         String eventEndingHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EVENT_HOUR);
-                        time = startingTime + " @ " + eventStartHour + " to " + eventEndingHour;
+                        time = startingTime + " @ " + eventStartHour + " " + getString(R.string.to_in_time) + " " + eventEndingHour;
                     }
                 }
             }

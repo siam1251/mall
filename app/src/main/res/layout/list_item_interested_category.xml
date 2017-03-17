@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
@@ -25,7 +26,7 @@
             android:id="@+id/tvIntrstd"
             android:textColor="@color/intrstd_txt_off"
             android:layout_height="@dimen/intrstd_card_height"
-            android:text="Men's everyday fashion"
+            tools:text="Men's everyday fashion"
             android:textSize="@dimen/intrstd_name"
             android:layout_width="match_parent"
             android:layout_marginLeft="@dimen/intrst_card_txt_horizontal_margin"

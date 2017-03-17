@@ -1,10 +1,8 @@
-
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/abInfo"
@@ -78,7 +76,7 @@
                         android:layout_height="match_parent"
                         android:id="@+id/tvInfoHoursBold"
                         android:textSize="@dimen/category_txt"
-                        android:text="Open now"
+                        android:text="@string/open_now"
                         android:textColor="@color/white"
                         android:gravity="center_vertical"
                         />
@@ -89,7 +87,7 @@
                         android:layout_height="match_parent"
                         android:id="@+id/tvInfoHoursLight"
                         android:textSize="@dimen/category_txt"
-                        android:text=" until 00:00 PM"
+                        tools:text=" until 00:00 PM"
                         android:textColor="@color/white"
                         android:gravity="center_vertical"
 

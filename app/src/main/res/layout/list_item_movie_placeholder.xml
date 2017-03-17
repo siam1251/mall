@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    style="@style/SelectableItemForeground"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/card_vertical_margin"
+        android:id="@+id/llViewShowTimes"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="@dimen/card_title_margin"
+        android:layout_marginRight="@dimen/card_title_margin"
+        android:layout_height="@dimen/social_feed_user_layout_height">
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            android:layout_weight="1"
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textColor="#de000000"
+            android:text="@string/movie_now_playing"
+            tools:text="Now Playing"
+            />
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:gravity="right|center_vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textColor="#787a86"
+            android:text="@string/movie_all_showtimes"
+            />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_marginTop="53dp"
+        android:id="@+id/cvAncmt"
+        android:layout_marginLeft="@dimen/card_horizontal_margin"
+        android:layout_marginRight="@dimen/card_horizontal_margin"
+        android:layout_marginBottom="@dimen/card_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/SelectableItemForeground"
+        card_view:cardCornerRadius="@dimen/card_corner_radius"
+        >
+
+        <RelativeLayout
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvMovies"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</android.support.design.widget.CoordinatorLayout>

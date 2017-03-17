@@ -133,8 +133,8 @@ public class MovieDetail {
         this.mp4 = mp4;
     }
 
-    public String getRuntime ()
-    {
+    public String getRuntime () {
+        if(runtime == null) return "";
         return runtime;
     }
 
@@ -153,8 +153,7 @@ public class MovieDetail {
         this.mlang = mlang;
     }
 
-    public String getTitle ()
-    {
+    public String getTitle () {
         if(title == null) return "";
         return title;
     }
@@ -174,8 +173,7 @@ public class MovieDetail {
         this.advisory = advisory;
     }
 
-    public String getName ()
-    {
+    public String getName () {
         if(name == null) return "";
         return name;
     }
@@ -307,7 +305,7 @@ public class MovieDetail {
      */
     public String getRuntimeInFormat(){
         String runTime = getRuntime();
-        if(!runtime.equals("")){
+        if(runtime != null && !runtime.equals("")){
             try {
                 int runTimeInt = Integer.parseInt(runTime);
                 //convert 118 to 1hr 58min

@@ -1,10 +1,9 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darkTransparentBackground"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/darkTransparentBackground">
 
     <ImageView
         android:id="@+id/ivBlur"
@@ -113,7 +112,7 @@
                 android:visibility="gone"
                 android:layout_below="@+id/rlParkingIcon"
                 android:gravity="center"
-                android:text="P1 Underground"
+                tools:text="P1 Underground"
                 android:id="@+id/tvParkingLotName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -126,7 +125,7 @@
                 android:layout_below="@+id/tvParkingLotName"
                 android:layout_marginTop="4dp"
                 android:gravity="center"
-                android:text="Green Zone"
+                tools:text="Green Zone"
                 android:id="@+id/tvEntrancename"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -169,10 +168,9 @@
                     android:maxWidth="230dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Notes"
+                    android:text="@string/parking_add_notes"
                     android:textColor="@color/white"
                     android:textSize="14dp"/>
-                    android:maxWidth="200dp"
 
 
             </RelativeLayout>
