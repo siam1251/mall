@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="148dp"
     android:layout_height="wrap_content">
@@ -68,7 +69,7 @@
                     android:ellipsize="end"
                     android:id="@+id/tvDealStoreName"
                     android:textSize="@dimen/deal_store_txt"
-                    android:text="Deals Store Location"
+                    tools:text="Deals Store Location"
                     android:textColor="@color/ancmt_title_color"
                     />
 
@@ -82,7 +83,7 @@
                     android:maxLines="2"
                     android:ellipsize="end"
                     android:layout_below="@+id/tvDealStoreName"
-                    android:text="Deals title"
+                    tools:text="Deals title"
                     android:textColor="@color/ancmt_date_color"
                     />
             </RelativeLayout>

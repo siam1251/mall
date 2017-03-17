@@ -25,6 +25,7 @@
     <string name="action_remove">Remove</string>
     <string name="action_faq">FAQ</string>
     <string name="action_refresh">REFRESH</string>
+    <string name="action_back">BACK</string>
 
     <!--ALERT DIALOG TITLE-->
     <string name="title_unsaved_changes">Unsaved Changes</string>
@@ -96,6 +97,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_mall_hours">Mall Hours</string>
     <string name="title_mall_information">Mall Information</string>
+    <string name="title_mall_holiday_hours">Holiday Hours</string>
 
 
     <string name="test_disclaimer">* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non ante dictum, tempor orci nec, ultricies urna. Donec a consequat leo. Aliquam commodo venenatis nisi tempor lacinia. </string>
@@ -158,9 +160,6 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <!--ETC-->
-    <string name="see_all_stores">See All Stores</string>
-
     <!--INFO-->
     <string name="info_get_directions">Get Directions</string>
     <string name="info_save_my_parking_spot">Save My Parking Spot</string>
@@ -186,6 +185,10 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="cta_check_your_balance_url">https://getmybalance.com/</string>
     <string name="hours_of_operation">Hours of Operation</string>
     <string name="cta_view_on_map">View On Map</string>
+    <string name="cta_view_more">VIEW MORE</string>
+    <string name="cta_show_map">Show Map</string>
+    <string name="cta_store_information">Store Information</string>
+    <string name="cta_add_to_calendar">Add to Calendar</string>
 
     <!--DRAWER LAYOUT-->
     <string name="drawer_my_favourites">My Favourites</string>
@@ -208,7 +211,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <string name="my_page_deals_for_today">Today’s Deals</string>
     <string name="my_page_events_for_today">Today’s Events</string>
-    <string name="my_page_ancmt">All Announcements</string>
+    <string name="my_page_all_ancmt">All Announcements</string>
+    <string name="my_page_all_event">All Events</string>
 
 
     <string name="explore_more_deals">Explore More Deals</string>
@@ -291,6 +295,10 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="parking_nearest_spot">Nearest Parking Spot</string>
     <string name="parking_saved_my_parking_spot">My Parking Spot is Saved</string>
     <string name="parking_pinned_at_current_location">Pinned at current location</string>
+    <string name="parking_add_notes">Add Notes</string>
+    <string name="parking_use">Use</string>
+    <string name="parking_current_location">Current Location</string>
+    <string name="parking_use_current_location">Use Current Location</string>
 
     <!--SEARCH-->
     <string name="search_store_that_contains">Stores that carry : </string>
@@ -300,6 +308,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="search_type_brand">(Brand)</string>
     <string name="search_type_tag">(Tag)</string>
     <string name="search_empty_results_place_holder">We couldn’t find anything by that name</string>
+    <string name="search_stores_that_match">Stores that match</string>
 
     <!--WELCOME-->
     <string name="welcome_title">Welcome</string>
@@ -381,6 +390,19 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="card_title_event">Events</string>
     <string name="card_view_all">View All</string>
 
+    <!--DETAIL-->
+    <string name="detail_store_deals">Store Deals</string>
+    <string name="detail_store_events">Store Events</string>
+
+
+    <!--ETC-->
+    <string name="see_all_stores">See All Stores</string>
+    <string name="open_now">Open Now</string>
+    <string name="to_in_time">to</string> <!--12:00 TO 3:00 -->
+    <string name="follow_someone_on_in_social_sharing">follow %1$s! on...</string> <!--follow someone on instagram-->
+    <string name="today_in_mall_hour">Today</string>
+    <string name="closed_in_mall_hour">CLOSED</string>
+    <string name="holiday_reminder_in_mall_hour">This is a reminder that %1$s! will have adjusted hours on:</string> <!--This is a reminder that HeaderFactory.MALL_NAME  will have adjusted hours on:-->
 
 
 </resources>

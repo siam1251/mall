@@ -30,7 +30,7 @@
                 android:textAlignment="center"
                 android:textSize="@dimen/detail_logo_text"
                 android:textColor="@color/black"
-                android:text="HUDSON's BAY COMPANY"
+                tools:text="HUDSON's BAY COMPANY"
                 android:id="@+id/tvDetailLogoText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             android:id="@+id/tvDetailTitle"
             android:textColor="@color/themeColor"
             android:layout_marginBottom="28dp"
-            android:text="How to Let Loose and Embrace your Free Spirit Style"
+            tools:text="How to Let Loose and Embrace your Free Spirit Style"
             android:lineSpacingMultiplier="1.25"
             />
 
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
-            android:text="Apr 2, 2016"
+            tools:text="Apr 2, 2016"
             />
 
         <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="15dp"
-            android:text="Spring is in the air, and the Mobile Stylist features some great spring trends. First up: Free Spirit. The trend is a modern take on the flower child from the 60’s, the rebelliousness of the Wild West, and bohemian lifestyle of gypsies translated for day-to-day wear."
+            tools:text="Spring is in the air, and the Mobile Stylist features some great spring trends. First up: Free Spirit. The trend is a modern take on the flower child from the 60’s, the rebelliousness of the Wild West, and bohemian lifestyle of gypsies translated for day-to-day wear."
             android:lineSpacingMultiplier="1.4"
             android:layout_marginBottom="28dp"
             android:textColor="@color/black"
@@ -115,7 +115,7 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:gravity="center_vertical"
                 android:textSize="@dimen/detail_recyclerview_header_text"
-                android:text="Store Deals"
+                android:text="@string/detail_store_deals"
                 android:textColor="@color/detail_title_text"
                 android:layout_marginTop="@dimen/detail_recyclerview_header_top_margin"
                 android:layout_width="match_parent"
@@ -151,7 +151,7 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:gravity="center_vertical"
                 android:textSize="@dimen/detail_recyclerview_header_text"
-                android:text="Store Events"
+                android:text="@string/detail_store_events"
                 android:textColor="@color/detail_title_text"
                 android:layout_marginTop="@dimen/detail_recyclerview_header_top_margin"
                 android:layout_width="match_parent"

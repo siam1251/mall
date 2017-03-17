@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@color/white"
@@ -28,7 +29,7 @@
         android:layout_toRightOf="@+id/ivCategory"
         android:textSize="@dimen/category_txt"
         android:gravity="center_vertical"
-        android:text="Women's clothing"
+        tools:text="Women's clothing"
         android:id="@+id/tvCategory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

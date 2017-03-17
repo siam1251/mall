@@ -71,7 +71,7 @@
                 android:textSize="18dp"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:text="Andrew Cherwenka"/>
+                tools:text="Andrew Cherwenka"/>
 
             <com.ivanhoecambridge.mall.views.ThemeColorImageView
                 xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
@@ -340,7 +340,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
-                    android:text="1.0.0"
+                    tools:text="1.0.0"
                     android:textColor="@color/insta_desc_color"
                     android:layout_marginBottom="13dp"
                     />

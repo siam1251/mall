@@ -19,6 +19,7 @@
 
 
     <!--card in general-->
+    <dimen name="card_title_margin">10dp</dimen>
     <dimen name="card_horizontal_margin">8dp</dimen>
     <dimen name="card_vertical_margin">4dp
     </dimen> <!--divide the space between cards by two and add to top and bottom respectively ancmtCardContentPadding-->
@@ -26,6 +27,7 @@
     <dimen name="card_content_padding">-8dp
     </dimen> <!--remove the the empty top padding coming from radius-->
     <dimen name="card_desc_horizontal_padding">16dp</dimen>
+    <dimen name="card_horizontal_margin_movie">10dp</dimen>
 
     <!--announcement card-->
     <dimen name="ancmt_desc_top_margin">13dp</dimen>

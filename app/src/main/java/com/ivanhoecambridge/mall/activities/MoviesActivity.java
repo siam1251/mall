@@ -263,7 +263,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
 
                         String overrideHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, Calendar.getInstance());
                         if(!overrideHour.equals("")) todaysHour = overrideHour;
-                        todaysHour = todaysHour.replace("-", "to");
+                        todaysHour = todaysHour.replace("-", getString(R.string.to_in_time));
                         mLayoutStoreHours = getLayoutInflater().inflate(
                                 R.layout.layout_store_hours,
                                 mParentView,
@@ -390,7 +390,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
                 KcpPlaces kcpPlaces = kcpPlacesList.get(0);
 
                 String openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDay(today.get(Calendar.DAY_OF_WEEK));
-                openAndClosingHour = openAndClosingHour.replace("-", "to").replace("AM", "am").replace("PM", "pm");
+                openAndClosingHour = openAndClosingHour.replace("-", getString(R.string.to_in_time)).replace("AM", "am").replace("PM", "pm");
                 tvMallHour.setText(openAndClosingHour);
 
                 if (daysPastToday == 0) {
@@ -402,7 +402,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
                 //overriding holidays
                 openAndClosingHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, today);
                 if (!openAndClosingHour.equals("")) {
-                    openAndClosingHour = openAndClosingHour.replace("-", "to").replace("AM", "am").replace("PM", "pm");
+                    openAndClosingHour = openAndClosingHour.replace("-", getString(R.string.to_in_time)).replace("AM", "am").replace("PM", "pm");
                     tvMallHour.setText(openAndClosingHour);
                     ivHolidayIndicator.setVisibility(View.VISIBLE);
                 }

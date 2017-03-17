@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rlMap"
     android:background="@color/card_bg">
 
@@ -26,7 +26,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show Map"
+        android:text="@string/cta_show_map"
         android:id="@+id/btnShowMap"
         android:layout_centerInParent="true"
         />
@@ -178,7 +178,7 @@
                         android:ellipsize="end"
                         android:textColor="#ddffffff"
                         android:layout_marginBottom="2dp"
-                        android:text="Take Escalator 1 down to P2 and Wal kStraight"/>
+                        tools:text="Take Escalator 1 down to P2 and Wal kStraight"/>
 
                     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                         app:fontFamily="@string/fontFamily_roboto_regular"
@@ -189,7 +189,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14dp"
                         android:textColor="#89ffffff"
-                        android:text="Department Store"/>
+                        tools:text="Department Store"/>
 
                     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                         android:visibility="gone"
@@ -204,7 +204,7 @@
                         android:id="@+id/tvParkingNote"
                         android:textSize="14dp"
                         android:textColor="#89ffffff"
-                        android:text="Pillar 15F near stairs"
+                        tools:text="Pillar 15F near stairs"
                         />
 
                 </LinearLayout>
@@ -244,7 +244,7 @@
                     android:layout_height="match_parent"
                     android:textSize="14dp"
                     android:textColor="#ffffff"
-                    android:text="Save Now, Wear Now"/>
+                    tools:text="Save Now, Wear Now"/>
 
 
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
@@ -259,7 +259,7 @@
                     android:layout_height="match_parent"
                     android:textSize="14dp"
                     android:textColor="#a8a8a8"
-                    android:text="+2 More Deals"/>
+                    tools:text="+2 More Deals"/>
 
             </LinearLayout>
         </LinearLayout>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/ablDetail"
@@ -81,7 +81,7 @@
                         android:textColor="@color/white"
                         android:textSize="24dp"
                         android:id="@+id/tvMovieTitle"
-                        android:text="The Amazing Adventures of Focus Man"
+                        tools:text="The Amazing Adventures of Focus Man"
                         android:layout_marginBottom="10dp"
                         />
 
@@ -93,7 +93,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvMovieRating"
-                        android:text="PG"
+                        tools:text="PG"
                         android:padding="3.5dp"
                         android:textSize="11dp"
                         android:textColor="@color/white"
@@ -110,7 +110,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvMovieRuntime"
-                        android:text="2hr 4min"
+                        tools:text="2hr 4min"
                         android:textSize="14dp"
                         android:textColor="@color/white"
                         android:maxLines="1"
@@ -125,7 +125,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvMovieGenre"
-                        android:text="17:20 19:55 22:30"
+                        tools:text="17:20 19:55 22:30"
                         android:textSize="14dp"
                         android:textColor="@color/white"
                         android:maxLines="2"
@@ -139,7 +139,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvMovieLang"
-                        android:text="17:20 19:55 22:30"
+                        tools:text="17:20 19:55 22:30"
                         android:textSize="14dp"
                         android:textColor="@color/white"
                         android:maxLines="1"

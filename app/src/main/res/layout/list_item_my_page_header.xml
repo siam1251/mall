@@ -39,7 +39,7 @@
                 android:textColor="@color/black"
                 android:gravity="center"
                 android:textSize="14dp"
-                android:text="Use"
+                android:text="@string/parking_use"
                 />
 
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
@@ -51,7 +51,7 @@
                 android:textColor="@color/black"
                 android:gravity="center"
                 android:textSize="14dp"
-                android:text="Current Location"
+                android:text="@string/parking_current_location"
                 />
 
         </LinearLayout>

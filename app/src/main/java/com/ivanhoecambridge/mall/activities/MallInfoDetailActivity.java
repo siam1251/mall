@@ -411,7 +411,7 @@ public class MallInfoDetailActivity extends AppCompatActivity{
 
                 String overrideHour = kcpPlaces.getOpeningAndClosingHoursForThisDayWithOverrideHours(comingHolidays, Calendar.getInstance());
                 if (!overrideHour.equals("")) todaysHour = overrideHour;
-                todaysHour = todaysHour.replace("-", "to");
+                todaysHour = todaysHour.replace("-", getString(R.string.to_in_time));
             }
         } catch (Exception e){
         }

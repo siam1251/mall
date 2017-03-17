@@ -53,7 +53,7 @@
             app:fontFamily="@string/fontFamily_roboto_medium"
             android:id="@+id/tvIntrstd"
             android:gravity="center"
-            android:text="Done"
+            android:text="@string/onbd_btn_lets_get_done"
             android:textColor="@color/white"
             android:textSize="16dp"
             android:layout_width="match_parent"

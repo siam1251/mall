@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/clEvent"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:layout_width="291dp"
     android:layout_height="wrap_content"
-    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cvAncmt"
@@ -53,13 +53,12 @@
                     android:layout_height="@dimen/ancmt_title_height"
                     android:id="@+id/tvAncmtTitle"
                     android:textSize="@dimen/ancmt_title_txt"
-                    android:text="Announcement Title"
+                    tools:text="Announcement Title"
                     android:textColor="@color/ancmt_title_color"
                     android:lines="1"
                     android:ellipsize="end"
                     />
 
-                <!--<ImageView-->
                 <com.ivanhoecambridge.mall.views.ThemeColorImageView
                     ThemedImageView:filterColor="@color/filter_off_color"
                     android:visibility="gone"
@@ -81,7 +80,7 @@
                     android:id="@+id/tvAncmtDate"
                     android:textSize="@dimen/ancmt_date_txt"
                     android:layout_below="@+id/tvAncmtTitle"
-                    android:text="Announcement Date"
+                    tools:text="Announcement Date"
                     android:textColor="@color/ancmt_date_color"
                     />
 

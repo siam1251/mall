@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     style="@style/SelectableItemForeground"
     android:background="@color/detail_social_sharing_bg"
     android:layout_height="@dimen/detail_button_height">
@@ -20,7 +22,7 @@
         android:layout_toRightOf="@+id/ivDetailBtnImage"
         android:textColor="@color/detail_title_text"
         android:gravity="center_vertical"
-        android:text="Ground Level (GL)"
+        tools:text="Ground Level (GL)"
         android:id="@+id/tvDetailBtnTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

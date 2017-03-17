@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:layout_height="wrap_content"
@@ -21,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/insta_date_color"
-        android:text="2 days ago"
+        tools:text="2 days ago"
         android:textSize="14dp"
         />
 
@@ -48,7 +49,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/insta_desc_color"
             android:id="@id/expandable_text"
-            android:text="#Gela to haven Visit IL Geloa di Carolltta"
+            tools:text="#Gela to haven Visit IL Geloa di Carolltta"
             />
 
         <TextView
@@ -56,7 +57,7 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:text="VIEW MORE"
+            android:text="@string/cta_view_more"
             android:textColor="@color/themeColor"
             />
     </com.ivanhoecambridge.mall.views.ExpandableTextView>

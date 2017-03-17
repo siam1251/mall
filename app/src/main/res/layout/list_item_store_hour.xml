@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -20,7 +21,7 @@
             android:textSize="14dp"
             android:textColor="@color/detail_title_text"
             android:gravity="center"
-            android:text="FRI"
+            tools:text="FRI"
             />
         android:gravity="center_vertical"
 
@@ -31,7 +32,7 @@
             android:textSize="14dp"
             android:textColor="@color/detail_title_text"
             android:layout_toRightOf="@+id/tvDate"
-            android:text="CLOSED"
+            tools:text="CLOSED"
             android:gravity="center"
             />
         android:layout_alignParentRight="true"

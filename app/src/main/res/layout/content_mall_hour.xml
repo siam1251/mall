@@ -17,7 +17,7 @@
         <TextView
             android:gravity="center"
             android:textSize="@dimen/info_detail_title_txt"
-            android:text="Mall Hours"
+            android:text="@string/title_mall_hours"
             android:layout_width="match_parent"
             android:layout_height="@dimen/info_detail_title_height"
             android:textColor="@color/toolbar_text"
@@ -43,7 +43,7 @@
                 android:id="@+id/tvHolidayName"
                 android:gravity="center_horizontal"
                 android:textSize="16dp"
-                android:text="Holiday Hours"
+                android:text="@string/title_mall_holiday_hours"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
                 android:textColor="@color/intrstd_cat_desc"
-                android:text="December 1 - January 6"
+                tools:text="December 1 - January 6"
                 />
 
             <TextView
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
                 android:layout_marginBottom="4dp"
-                android:text="Extended Holiday Hours from 10 AM to 11 PM, and from 10 AM to 8 PM on weekends."
+                tools:text="Extended Holiday Hours from 10 AM to 11 PM, and from 10 AM to 8 PM on weekends."
                 />
 
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
-                android:text="Extended Holiday Hours from 10 AM to 11 PM, and from 10 AM to 8 PM on weekends."
+                tools:text="Extended Holiday Hours from 10 AM to 11 PM, and from 10 AM to 8 PM on weekends."
                 />
 
         </LinearLayout>
