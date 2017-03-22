@@ -66,7 +66,7 @@
             android:orientation="horizontal">
 
             <com.ivanhoecambridge.mall.views.ThemeColorImageView
-                ThemedImageView:filterColor="#ee3f33"
+                ThemedImageView:filterColor="@color/themeColor"
                 android:src="@drawable/icn_view_trailer"
                 android:layout_width="24dp"
                 android:layout_height="16.5dp"
