@@ -44,7 +44,7 @@
             <LinearLayout
                 android:id="@+id/llNextShowTime"
                 android:layout_alignParentBottom="true"
-                android:background="#ccee3f33"
+                android:background="@color/themeColor"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:gravity="center"

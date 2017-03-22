@@ -645,8 +645,9 @@ public class MapFragment extends BaseFragment
 
     private void setLevelImageView(final Map[] maps) {
         try {
-            if(ivUpper == null) {
+            if(ivUpper == null || getActivity() == null) {
                 CustomizedExceptionHandler.writeToFile(getActivity(), "setLevelImageView - ivUpper is null - fragment is not attached to activity");
+                Log.e("MapFragment", "FRAGMENT NOT ATTACHED TO ACTIVITY");
                 return;
             }
             upperLevel = mCurrentLevelIndex + 1;
