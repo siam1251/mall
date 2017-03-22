@@ -51,7 +51,7 @@
         android:layout_marginRight="@dimen/card_horizontal_margin"
         android:layout_marginBottom="@dimen/card_vertical_margin"
         android:layout_width="match_parent"
-        android:layout_height="305dp"
+        android:layout_height="wrap_content"
         style="@style/SelectableItemForeground"
         card_view:cardCornerRadius="@dimen/card_corner_radius"
         >
