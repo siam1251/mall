@@ -29,6 +29,7 @@ import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
+import com.ivanhoecambridge.mall.views.MovieRecyclerItemDecoration;
 
 import java.util.ArrayList;
 
@@ -42,10 +43,11 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
     private FavouriteInterface mFavouriteInterface;
     private boolean mIsCardFullWidth;
 
-    public EventRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> events, boolean isCardFullWidth) {
+    public EventRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> events, boolean isCardFullWidth, FavouriteInterface favouriteInterface) {
         mContext = context;
         mKcpContentPagesNews = events == null ? new ArrayList<KcpContentPage>() : events;
         mIsCardFullWidth = isCardFullWidth;
+        mFavouriteInterface = favouriteInterface;
     }
 
     public void setFavouriteListener(FavouriteInterface favouriteInterface) {
@@ -85,8 +87,8 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
                 RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) clEvent.getLayoutParams();
                 lp.width = RecyclerView.LayoutParams.MATCH_PARENT;
                 clEvent.setLayoutParams(lp);
-            }
 
+            }
         }
     }
 

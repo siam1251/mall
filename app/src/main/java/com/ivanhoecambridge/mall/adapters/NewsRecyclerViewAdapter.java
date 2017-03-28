@@ -322,6 +322,9 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             if(rvEventChild.getLayoutManager() == null) {
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
                 rvEventChild.setLayoutManager(linearLayoutManager);
+
+                MovieRecyclerItemDecoration itemDecoration = new MovieRecyclerItemDecoration(mContext, R.dimen.card_vertical_margin);
+                rvEventChild.addItemDecoration(itemDecoration);
             }
         }
     }
@@ -458,7 +461,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             loadingViewHolder.progressBar.setIndeterminate(true);
         } else if (getItemViewType(position) == KcpContentTypeFactory.ITEM_TYPE_EVENT) {
             final EventViewHolder eventHolder = (EventViewHolder) holder;
-            mEventRecyclerViewAdapter = new EventRecyclerViewAdapter(mContext, mEvents, false);
+            mEventRecyclerViewAdapter = new EventRecyclerViewAdapter(mContext, mEvents, false, mFavouriteInterface);
             eventHolder.rvEventChild.setAdapter(mEventRecyclerViewAdapter);
             eventHolder.rvEventChild.setNestedScrollingEnabled(false);
             eventHolder.mView.setOnClickListener(new View.OnClickListener() {
