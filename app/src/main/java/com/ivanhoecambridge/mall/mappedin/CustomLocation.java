@@ -9,7 +9,7 @@ import com.mappedin.sdk.RawData;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**z
+/**
  * Created by paul on 2016-06-14.
  */
 public class CustomLocation extends Location {
