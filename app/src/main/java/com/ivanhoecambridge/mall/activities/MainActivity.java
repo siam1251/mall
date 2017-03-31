@@ -985,7 +985,6 @@ public class MainActivity extends BaseActivity
                     if(!didWelcomeMessageAlreadyAppear) {
                         KcpUtility.cacheToPreferences(this, Constants.PREF_KEY_WELCOME_MSG_TIME_SAVER, System.currentTimeMillis());
                         KcpUtility.cacheToPreferences(this, Constants.PREF_KEY_WELCOME_MSG_DID_APPEAR, true);
-                        new KcpNotificationManager(this).sendWelcomeNotification();
                     }
                 }
 

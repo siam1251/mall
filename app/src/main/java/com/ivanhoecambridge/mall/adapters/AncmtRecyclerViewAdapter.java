@@ -33,8 +33,8 @@ public class AncmtRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
     private ArrayList<KcpContentPage> mKcpContentPagesNews;
-    private final int NUM_OF_ANCMT = 3;
     private boolean mCardView = false;
+    public static final int NUM_OF_ANCMT = 3;
 
     public AncmtRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> news, boolean limitAncmt) {
         mContext = context;

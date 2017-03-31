@@ -2,6 +2,7 @@ package com.ivanhoecambridge.mall.activities;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
@@ -47,10 +48,9 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
     public static final boolean CLOUD_PAGES_ENABLED = false;
     public static final boolean WAMA_ENABLED = false;
     public static final boolean PROXIMITY_ENABLED = false;
-    public static final boolean LOCATION_ENABLED = false;
+    public static final boolean LOCATION_ENABLED = true;
     private static final LinkedHashSet<EtPushListener> listeners = new LinkedHashSet<>();
     private static ETPush etPush;
-
 
     @Override
     protected void attachBaseContext(Context newBase) { //http://stackoverflow.com/questions/37045787/java-lang-noclassdeffounderror-retrofit2-utils-in-android/37178366

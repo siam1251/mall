@@ -95,7 +95,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         //emptyHolderExist = true meaning announcements are grouped together, empty holder exist for events and announcements
         if(emptyHolderExist) {
 
-            /**
+            /*
              * 1. remove events, announcements
              * 2. insert place holder for events, announcements
              * 3. reorder the feed by mNewsFeedOrder
@@ -350,8 +350,8 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 rvAncmtChild.addItemDecoration(itemDecoration);
             }
 
-            if(mAnnouncements.size() <= 3) tvViewAll.setVisibility(View.GONE);
-            else tvViewAll.setVisibility(View.VISIBLE);
+            if(mAnnouncements.size() <= AncmtRecyclerViewAdapter.NUM_OF_ANCMT) rvAncmtChild.setVisibility(View.GONE);
+            else rvAncmtChild.setVisibility(View.VISIBLE);
         }
     }
 
