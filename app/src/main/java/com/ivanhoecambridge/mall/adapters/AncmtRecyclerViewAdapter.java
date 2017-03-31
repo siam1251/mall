@@ -40,7 +40,7 @@ public class AncmtRecyclerViewAdapter extends RecyclerView.Adapter {
         mContext = context;
         mCardView = !limitAncmt;
 
-        mKcpContentPagesNews = news == null ? new ArrayList<KcpContentPage>() : news;
+        mKcpContentPagesNews = news == null ? new ArrayList<KcpContentPage>() : new ArrayList<KcpContentPage>(news);
         if(limitAncmt) {
             //todo: test
             if(mKcpContentPagesNews.size() > NUM_OF_ANCMT) mKcpContentPagesNews.subList(NUM_OF_ANCMT , mKcpContentPagesNews.size()).clear();

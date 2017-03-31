@@ -66,7 +66,7 @@ android {
             buildConfigField 'Boolean', 'BLUEDOT', 'false'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.12"'
 
-            versionName "1.0.0"
+            versionName "1.1.0"
         }
 
         vaughanmills {
@@ -80,7 +80,7 @@ android {
             buildConfigField 'Boolean', 'BLUEDOT', 'false'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.8"'
 
-            versionName "1.0.0"
+            versionName "1.1.0"
         }
 
         tsawwassenmills {
@@ -94,7 +94,7 @@ android {
             buildConfigField 'Boolean', 'BLUEDOT', 'false'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.6"'
 
-            versionName "1.0.0"
+            versionName "1.1.0"
         }
 
         crossironmills {
@@ -108,7 +108,7 @@ android {
             buildConfigField 'Boolean', 'BLUEDOT', 'false'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.6"'
 
-            versionName "1.0.0"
+            versionName "1.1.0"
         }
 
         eatoncentre {
