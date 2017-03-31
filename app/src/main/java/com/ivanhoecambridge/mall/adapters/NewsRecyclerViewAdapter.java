@@ -132,9 +132,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         mKcpContentPagesNews.clear();
         mKcpContentPagesNews.addAll(kcpContentPages);
 
-        for(int i = 0; i < getItemCount(); i++) {
-            if(getItemViewType(i) != KcpContentTypeFactory.ITEM_TYPE_MOVIE) notifyItemChanged(i); //excluding movie - to preserve its scroll position
-        }
+        notifyDataSetChanged();
     }
 
     public void setFavouriteListener(FavouriteInterface favouriteInterface){
@@ -351,6 +349,9 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(mContext, R.dimen.card_vertical_margin);
                 rvAncmtChild.addItemDecoration(itemDecoration);
             }
+
+            if(mAnnouncements.size() <= 3) tvViewAll.setVisibility(View.GONE);
+            else tvViewAll.setVisibility(View.VISIBLE);
         }
     }
 
