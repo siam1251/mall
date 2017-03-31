@@ -258,7 +258,8 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                         EventRecyclerViewAdapter newsRecyclerViewAdapter = new EventRecyclerViewAdapter (
                                 MyPagesActivity.this,
                                 todaysEventList,
-                                true);
+                                true,
+                                null);
                         rv.setAdapter(newsRecyclerViewAdapter);
                         newsRecyclerViewAdapter.setFavouriteListener(MyPagesActivity.this);
                         mAdapter = newsRecyclerViewAdapter;

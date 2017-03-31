@@ -111,10 +111,12 @@ public class FavouriteManager {
         mGsonFavKey = getGsonKey(kcpContentPage);
 
         if(mGsonFavKey.equals("")) return false;
-        AsyncTask.execute(new Runnable() {
+
+        //AsyncTask doesn't work here - . You can't have multiple Asynctasks running in parallel up until SDK 11. Check
+        //http://stackoverflow.com/questions/4080808/asynctask-doinbackground-does-not-run
+        Thread favThread = new Thread(new Runnable() {
             @Override
             public void run() {
-
                 HashMap<String, KcpContentPage> favHashMap = null;
                 if(kcpContentPage.content_type.contains(CONTENT_TYPE_DEAL)){
                     favHashMap = mDealFavs;
@@ -154,6 +156,7 @@ public class FavouriteManager {
                 }, DELAY_MULTI_LIKE_SYNCING, SECONDS);
             }
         });
+        favThread.start();
 
         return true;
     }
