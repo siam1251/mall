@@ -350,8 +350,10 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 rvAncmtChild.addItemDecoration(itemDecoration);
             }
 
-            if(mAnnouncements.size() <= AncmtRecyclerViewAdapter.NUM_OF_ANCMT) rvAncmtChild.setVisibility(View.GONE);
-            else rvAncmtChild.setVisibility(View.VISIBLE);
+            if(mAnnouncements.size() <= AncmtRecyclerViewAdapter.NUM_OF_ANCMT)
+                tvViewAll.setVisibility(View.GONE);
+            else
+                tvViewAll.setVisibility(View.VISIBLE);
         }
     }
 
