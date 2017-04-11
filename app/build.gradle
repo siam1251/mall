@@ -126,7 +126,7 @@ android {
             buildConfigField 'Boolean', 'BLUEDOT', 'true'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.1"'
 
-            versionName "1.0.0"
+            versionName "1.1.0"
         }
 
 
@@ -141,7 +141,7 @@ android {
             buildConfigField 'Boolean', 'BLUEDOT', 'true'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.2"'
 
-            versionName "1.0.0"
+            versionName "1.1.0"
         }
 
     }
