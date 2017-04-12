@@ -1561,7 +1561,7 @@ public class MainActivity extends BaseActivity
                     String mapName = data.getStringExtra(Constants.ARG_LOCATION_MAP_NAME);
                     if(mapName != null) MapFragment.getInstance().setMapLevel(-50, null, mapName);
                     CustomLocation customLocation = CustomLocation.getLocationWithLocationId(locationID);
-                    String externalID = customLocation.getAmenityType(); //Amenity Type from MappedIn == ExternalID from amenities.json
+                    String externalID = customLocation.getAmenityType(); //LocationData Type from MappedIn == ExternalID from amenities.json
                     final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityWithExternalId(externalID);
                     boolean isToggled = Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, amenity == null ? false : amenity.isEnabled());
                     if(!isToggled) {

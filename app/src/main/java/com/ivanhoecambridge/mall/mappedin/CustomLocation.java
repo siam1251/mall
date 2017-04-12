@@ -1,10 +1,10 @@
 package com.ivanhoecambridge.mall.mappedin;
 
 import com.mappedin.jpct.Logger;
-import com.mappedin.sdk.ImageCollection;
+import com.mappedin.sdk.ImageSet;
 import com.mappedin.sdk.Location;
 import com.mappedin.sdk.Polygon;
-import com.mappedin.sdk.RawData;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class CustomLocation extends Location {
 
     public String description;
-    public ImageCollection logo;
+    public ImageSet logo;
     private String externalID;
     private String id;
     private String amenityType;
@@ -36,7 +36,7 @@ public class CustomLocation extends Location {
     private static HashMap<String, CustomLocation> locationHashmapByExternalId = new HashMap<>(); //used to find polygons for stores - that use external iD
     private static HashMap<String, CustomLocation> parkingHashMap = new HashMap<>();
 
-    public CustomLocation(RawData rawData) throws Exception {
+    public CustomLocation(LocationData rawData) throws Exception {
         super(rawData);
         try {
             description = rawData.string("description");

@@ -68,6 +68,7 @@ import com.ivanhoecambridge.mall.mappedin.Amenities;
 import com.ivanhoecambridge.mall.mappedin.Amenities.OnParkingClickListener;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
 import com.ivanhoecambridge.mall.mappedin.CustomLocation;
+import com.ivanhoecambridge.mall.mappedin.LocationData;
 import com.ivanhoecambridge.mall.mappedin.MapUtility;
 import com.ivanhoecambridge.mall.mappedin.ParkingPin;
 import com.ivanhoecambridge.mall.mappedin.ParkingPinInterface;
@@ -100,6 +101,7 @@ import com.mappedin.sdk.Venue;
 import com.senionlab.slutilities.type.LocationAvailability;
 import com.senionlab.slutilities.type.SLHeadingStatus;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -715,9 +717,10 @@ public class MapFragment extends BaseFragment
     }
 
     private class CustomLocationGenerator implements LocationGenerator {
+
         @Override
-        public Location locationGenerator(RawData rawData) throws Exception {
-            return new CustomLocation(rawData);
+        public Location locationGenerator(ByteBuffer byteBuffer, int i, Venue venue) {
+            return new LocationData(byteBuffer, i, venue);
         }
     }
 
