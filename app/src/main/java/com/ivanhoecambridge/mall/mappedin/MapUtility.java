@@ -49,7 +49,7 @@ public class MapUtility {
     public static Map getGroundMap(Map[] maps){
         try {
             for(Map map : maps){
-                if(map.getElevation() == 0) return map;
+                if(map.getAltitude() == 0) return map;
             }
             return null;
         } catch (Exception e) {
@@ -62,7 +62,7 @@ public class MapUtility {
         try {
 
             for(int i = 0; i < maps.length; i++){
-                if(maps[i].getElevation() == 0) return i;
+                if(maps[i].getAltitude() == 0) return i;
 
             }
             return -50;
@@ -95,7 +95,7 @@ public class MapUtility {
         @Override
         public int compare(Map o1, Map o2) {
             try {
-                return Integer.valueOf((int)o1.getElevation()).compareTo(Integer.valueOf((int)o2.getElevation()));
+                return Integer.valueOf((int)o1.getAltitude()).compareTo(Integer.valueOf((int)o2.getAltitude()));
             } catch (Exception e) {
                 return 0;
             }
@@ -140,16 +140,16 @@ public class MapUtility {
     public static Polygon getNearestParkingPolygonFromStorePolygon(Polygon polygon){
         try {
             HashMap<String, CustomLocation> parkingHashmap = CustomLocation.getParkingHashMap();
-            Coordinate storeCoordinate = polygon.getLocations().get(0).getNavigatableCoordinates().get(0);
+            Coordinate storeCoordinate = polygon.getLocations()[0].getNavigatableCoordinates()[0];
 
             double nearestDistance = 0;
             Polygon nearestParkingPolygon = null;
             for (CustomLocation parkingLocation : parkingHashmap.values()) {
-                ArrayList<Coordinate> navigatableCoordinates = parkingLocation.getNavigatableCoordinates();
+                ArrayList<Coordinate> navigatableCoordinates = (ArrayList<Coordinate>) Arrays.asList(parkingLocation.getNavigatableCoordinates());
                 for(Coordinate parkingLotCoord : navigatableCoordinates) {
                     double distance = parkingLotCoord.metersFrom(storeCoordinate);
                     if(nearestDistance == 0 || nearestDistance > distance) {
-                        nearestParkingPolygon = parkingLocation.getPolygons().get(0);
+                        nearestParkingPolygon = parkingLocation.getPolygons()[0];
                         nearestDistance = distance;
                     }
                 }
@@ -232,7 +232,7 @@ public class MapUtility {
         try {
             if(maps == null) return 0;
             for(int i = 0; i < maps.length; i++) {
-                if(maps[i].getElevation() == elevation) return i;
+                if(maps[i].getAltitude() == elevation) return i;
             }
             return 0;
         } catch (Exception e) {

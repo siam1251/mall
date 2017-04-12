@@ -55,8 +55,8 @@ public class VortexPin {
         this.context = context;
         textInstruction = instruction.instruction;
         takeVortex = (Instruction.TakeVortex) instruction.action;
-        fromMapElevation = takeVortex.fromMap.getElevation();
-        toMapElevation = takeVortex.toMap.getElevation();
+        fromMapElevation = takeVortex.fromMap.getAltitude();
+        toMapElevation = takeVortex.toMap.getAltitude();
         if(fromMapElevation > toMapElevation) {
             vortexDirection = VortexDirection.DOWN;
         } else {
