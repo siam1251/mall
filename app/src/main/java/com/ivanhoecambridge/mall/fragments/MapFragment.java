@@ -405,7 +405,7 @@ public class MapFragment extends BaseFragment
                     btnShowMap = null;
                 }
                 pb.setVisibility(View.VISIBLE);
-                mappedIn.getVenues((MappedinCallback<List<Venue>>) Arrays.asList(new GetVenuesCallback()));
+                mappedIn.getVenues(new GetVenuesCallback());
             } else {
                 mMainActivity.setOnReadyToLoadMapListener(new MainActivity.ReadyToLoadMapListener() {
                     @Override
@@ -484,12 +484,15 @@ public class MapFragment extends BaseFragment
     }
 
     // Get the basic info for all Venues we have access to
-    private class GetVenuesCallback implements MappedinCallback<Venue[]> {
+    private class GetVenuesCallback implements MappedinCallback<List<Venue>> {
+
         @Override
-        public void onCompleted(final Venue[] venues) {
+        public void onCompleted(List<Venue> venues) {
             //todo: disabled for testing
+            Log.d("test", "Venues dfsdfsf: " + venues);
             for(Venue venue : venues){
                 if(venue.getName().equals(HeaderFactory.MAP_VENUE_NAME)){
+                    Log.d("test", "Venue: " + venue);
                     activeVenue = venue;
                 }
             }
@@ -509,7 +512,8 @@ public class MapFragment extends BaseFragment
             mapView.setDelegate(delegate);
 
             LocationGenerator[] generator = {new CustomLocationGenerator()};
-            mappedIn.getVenue(activeVenue, accessibleDirections, generator, new GetVenueCallback());
+            GetVenueCallback x = new GetVenueCallback();
+            mappedIn.getVenue(activeVenue, accessibleDirections, generator, x);
         }
 
         @Override
@@ -533,7 +537,7 @@ public class MapFragment extends BaseFragment
                 Arrays.sort(maps, new Comparator<Map>() {
                     @Override
                     public int compare(Map a, Map b) {
-                        return (int) (a.getAltitude() - b.getAltitude());
+                        return (int) (a.getFloor() - b.getFloor());
                     }
                 });
             }
@@ -633,7 +637,7 @@ public class MapFragment extends BaseFragment
             mapView.setMap(maps[mCurrentLevelIndex]);
             tvLevel.setText(maps[mCurrentLevelIndex].getShortName());
             setLevelImageView(maps);
-            showInstruction(maps[mCurrentLevelIndex].getAltitude());
+            showInstruction(maps[mCurrentLevelIndex].getFloor());
 
             //highlight the store that has been pending
             if(mPendingExternalCode != null) {
@@ -797,7 +801,7 @@ public class MapFragment extends BaseFragment
 
         dropDestinationPin(destinationPolygonCoordinate, getResources().getDrawable(R.drawable.icn_wayfinding_destination));
         dropVortexOnThePath(directions.getInstructions());
-        showInstruction(maps[mCurrentLevelIndex].getAltitude());
+        showInstruction(maps[mCurrentLevelIndex].getFloor());
     }
 
     public boolean didTapPolygon(Polygon polygon) {
@@ -879,7 +883,7 @@ public class MapFragment extends BaseFragment
                 showDirectionCard(false, null, 0, null, null, null);
                 dropDestinationPin(destinationPolygonCoordinate, getResources().getDrawable(R.drawable.icn_wayfinding_destination));
                 dropVortexOnThePath(directions.getInstructions());
-                showInstruction(maps[mCurrentLevelIndex].getAltitude());
+                showInstruction(maps[mCurrentLevelIndex].getFloor());
 
                 return true;
             } else {
@@ -1139,13 +1143,13 @@ public class MapFragment extends BaseFragment
                                     public void okClicked() {
                                         setAsParkingSpot(sParkingPin.getTempParkingCoordinatePin().getLatitude(),
                                                 sParkingPin.getTempParkingCoordinatePin().getLongitude(),
-                                                sParkingPin.getTempParkingCoordinatePin().getCoordinate().getMap().getAltitude());
+                                                sParkingPin.getTempParkingCoordinatePin().getCoordinate().getMap().getFloor());
                                     }
                                 });
                     } else {
                         setAsParkingSpot(sParkingPin.getTempParkingCoordinatePin().getLatitude(),
                                 sParkingPin.getTempParkingCoordinatePin().getLongitude(),
-                                sParkingPin.getTempParkingCoordinatePin().getCoordinate().getMap().getAltitude());
+                                sParkingPin.getTempParkingCoordinatePin().getCoordinate().getMap().getFloor());
                     }
                 }
             });
@@ -1546,7 +1550,7 @@ public class MapFragment extends BaseFragment
     public void dropGreyBlueDot() {
         if(mBlueDotPin != null) {
             android.location.Location targetLocation = MapUtility.getLocation(mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude());
-            int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getAltitude());
+            int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getFloor());
             Overlay2DImage label;
             Coordinate coordinate  = new Coordinate(targetLocation, maps[mapIndex]);
             mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
@@ -1569,10 +1573,10 @@ public class MapFragment extends BaseFragment
             if(mapView.getCamera() != null && mFollowMode == FollowMode.COMPASS) {
                 mapView.getCamera().setRotationTo(0, -(float)Math.toRadians(heading - INITIAL_MAP_SLOPE));
             }
-            if(mBlueDotPin.getCoordinate().getMap().getAltitude() != maps[mCurrentLevelIndex].getAltitude()) {
+            if(mBlueDotPin.getCoordinate().getMap().getFloor() != maps[mCurrentLevelIndex].getFloor()) {
                 return;
             }
-            int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getAltitude());
+            int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getFloor());
 
             android.location.Location targetLocation = MapUtility.getLocation(mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude());
             final Overlay2DImage label;
@@ -2200,7 +2204,7 @@ public class MapFragment extends BaseFragment
         //TODO: if there are two pins, only one that overlaps the other one receives touch (it should pass it to other ones from SDK level)
         public void onClick() {
             try {
-                if(path != null || coordinate.getMap().getAltitude() != maps[mCurrentLevelIndex].getAltitude()) return; //map shouldn't be clicakble when the paths drawn or this indicates the pin clicked is not on the floor you are looking at
+                if(path != null || coordinate.getMap().getFloor() != maps[mCurrentLevelIndex].getFloor()) return; //map shouldn't be clicakble when the paths drawn or this indicates the pin clicked is not on the floor you are looking at
                 if(location != null) {
                     if(location == sParkingPin.getParkingLocationPin()) {
                         String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
