@@ -1,5 +1,7 @@
 package com.ivanhoecambridge.mall.mappedin;
 
+import android.util.Log;
+
 import com.mappedin.sdk.ImageSet;
 import com.mappedin.sdk.Location;
 import com.mappedin.sdk.Polygon;
@@ -7,6 +9,7 @@ import com.mappedin.sdk.Utils;
 import com.mappedin.sdk.Venue;
 
 
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,11 +46,26 @@ public class CustomLocation extends Location {
     public CustomLocation(ByteBuffer data, int _index, Venue venue) {
         super(data, _index, venue);
 
-        id = Utils.encodingString(data);
-        externalID = Utils.encodingString(data);
-        amenityType = Utils.encodingString(data);
-        description = Utils.encodingString(data);
-        logo = Utils.encodingImageSet(data);
+
+        Log.d("Type location", "" + this.getType());
+
+        if (this.getType().equals("tenant")) {
+            id = Utils.encodingString(data);
+            externalID = Utils.encodingString(data);
+          //  amenityType = Utils.encodingString(data);
+            description = Utils.encodingString(data);
+            logo = Utils.encodingImageSet(data);
+        }else {
+            id = Utils.encodingString(data);
+            externalID = Utils.encodingString(data);
+            amenityType = Utils.encodingString(data);
+            description = Utils.encodingString(data);
+            logo = Utils.encodingImageSet(data);
+        }
+
+
+
+
 
         if(externalID != null) {
             locationHashmapByExternalId.put(externalID, this);

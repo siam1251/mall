@@ -172,10 +172,14 @@
         <!-- MAPPED IN ICMP-->
         <meta-data
             android:name="com.mappedin.sdk.Username"
-            android:value="56f151b2c753ca4c0d000000" />
+            android:value="573dc77e7ee965268a000000" />
         <meta-data
             android:name="com.mappedin.sdk.Password"
-            android:value="0a11271a19b109e9211bbcc256f2e35d" />
+            android:value="19c77f16c6d2af867c7b71e675070e49" />
+
+        <meta-data
+            android:name="com.mappedin.sdk.DataSchema"
+            android:value="f1f6308d"/>
 
         <!-- MAPPED IN KINETIC OFFICE-->
         <!--<meta-data
