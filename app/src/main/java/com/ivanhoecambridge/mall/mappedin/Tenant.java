@@ -12,10 +12,10 @@ import com.mappedin.sdk.Venue;
 import java.nio.ByteBuffer;
 
 public class Tenant extends Location {
-    String id;
-    String externalId;
-    String description;
-    ImageSet logo;
+    public String id;
+    public String externalId;
+    public String description;
+    public ImageSet logo;
 
     public Tenant(ByteBuffer data, int _index, Venue venue) {
         super(data, _index, venue);

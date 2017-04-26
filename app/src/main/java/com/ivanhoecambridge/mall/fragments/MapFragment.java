@@ -482,10 +482,25 @@ public class MapFragment extends BaseFragment
     }
 
     private Polygon getPolygonWithPlaceExternalId(String placeExternalCode){
-        ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocationWithExternalCode(placeExternalCode);
+        ArrayList<Polygon> polygons = getPolygonsFromLocationWithExternalCode(placeExternalCode);
         if(polygons != null && polygons.size() > 0) {
             return polygons.get(0);
         }
+        return null;
+    }
+
+    public static ArrayList<Polygon> getPolygonsFromLocationWithExternalCode(String externalCode){
+
+        if(locationHashmapByExternalId.containsKey(externalCode)){
+            ArrayList<Polygon> polygons = new ArrayList<>();
+
+            if (locationHashmapByExternalId.get(externalCode).getPolygons() != null) {
+                polygons = new ArrayList<Polygon>(Arrays.asList(locationHashmapByExternalId.get(externalCode).getPolygons()));
+            }
+
+            return polygons;
+        }
+
         return null;
     }
 
@@ -551,6 +566,10 @@ public class MapFragment extends BaseFragment
                 @Override
                 public Location locationGenerator(ByteBuffer data, int _index, Venue venue){
                     Tenant tenant = new Tenant(data, _index, venue);
+
+                    if(tenant.externalId != null) {
+                        locationHashmapByExternalId.put(tenant.externalId, tenant);
+                    }
                     return tenant;
                 }
             };
@@ -801,21 +820,33 @@ public class MapFragment extends BaseFragment
         Location arriveAtLocation = null;
 
         if(destinationPolygon instanceof Polygon){
+
             arriveAtLocation = ((Polygon) destinationPolygon).getLocations()[0];
-        } else if(destinationPolygon instanceof CustomLocation){
-            arriveAtLocation = ((CustomLocation) destinationPolygon);
-        } else if (destinationPolygon instanceof  Coordinate) {
+        }
+        else if(destinationPolygon instanceof Tenant){
+
+            arriveAtLocation = ((Tenant) destinationPolygon);
+        }
+        else if (destinationPolygon instanceof Amenity) {
+
+            arriveAtLocation = ((Amenity) destinationPolygon);
+        }
+        else if (destinationPolygon instanceof  Coordinate) {
 
         }
 
         String storeName = getString(R.string.bluedot_my_location);
         if(mMainActivity.getDestStoreName().equals(storeName) && mBlueDotPin != null) {
+
             directions = mBlueDotPin.getCoordinate().directionsTo(activeVenue, startPolygon, ((Polygon) startPolygon).getLocations()[0], null); //FROM BLUEDOT
-        } else if (mMainActivity.getStartStoreName().equals(storeName) && mBlueDotPin != null){
+        }
+        else if (mMainActivity.getStartStoreName().equals(storeName) && mBlueDotPin != null){
+
             directions = destinationPolygon.directionsFrom(activeVenue, mBlueDotPin.getCoordinate(), null, arriveAtLocation);
         }
 
         if (directions != null) {
+
             path = new Path(directions.getPath(), 1.5f, 1.5f, getResources().getColor(R.color.map_destination_store));
             mapView.addPath(path);
             setMapLevelsInPath(directions.getPath());
@@ -823,18 +854,28 @@ public class MapFragment extends BaseFragment
 
         Coordinate destinationPolygonCoordinate = null;
         if(destinationPolygon instanceof Polygon) {
+
             highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
             destinationPolygonCoordinate = ((Polygon) destinationPolygon).getAnchor();
-        } else if(destinationPolygon instanceof CustomLocation && !((CustomLocation) destinationPolygon).getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) {
-        } else if (destinationPolygon instanceof Coordinate){
+        }
+        else if(destinationPolygon instanceof CustomLocation && !((CustomLocation) destinationPolygon).getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING))
+        {
+
+        }
+        else if (destinationPolygon instanceof Coordinate){
+
             clearHighlightedColours();
             LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(destinationPolygon);
             if(locationLabelClicker != null) {
                 destinationPolygonCoordinate = (Coordinate) destinationPolygon;
                 locationLabelClicker.highlightThisLabel();
             }
-        } else {
-            destinationPolygonCoordinate = ((CustomLocation) destinationPolygon).getNavigatableCoordinates()[0];
+        }
+        else if(destinationPolygon instanceof Amenity) {
+            destinationPolygonCoordinate = ((Amenity) destinationPolygon).getNavigatableCoordinates()[0];
+        }
+        else if (destinationPolygon instanceof Tenant) {
+            destinationPolygonCoordinate = ((Tenant) destinationPolygon).getNavigatableCoordinates()[0];
         }
 
         showDirectionCard(false, null, 0, null, null, null);
@@ -939,7 +980,7 @@ public class MapFragment extends BaseFragment
                             zoomInOut();
                             showSavedParkingDetail();
                         } else {
-                            showLocationDetails((CustomLocation) ((Polygon) destinationPolygon).getLocations()[0]);
+                            showLocationDetails((Tenant) ((Polygon) destinationPolygon).getLocations()[0]);
                         }
                     } catch (Exception e) {
                         logger.error(e);
@@ -1362,8 +1403,8 @@ public class MapFragment extends BaseFragment
         InfoFragment.getInstance().setParkingSpotCTA();
     }
 
-    private void showAmenityDetail(final CustomLocation location, final Drawable amenityDrawable){
-        logger.debug("Location: name = " + location.getName() + " externalID = " + location.getExternalID());
+    private void showAmenityDetail(final Amenity location, final Drawable amenityDrawable){
+        logger.debug("Location: name = " + location.getName() + " externalID = " + location.externalId);
         String categoryName = "";
         try {
             if(location.getCategories() != null && location.getCategories().length > 0) categoryName = location.getCategories()[0].getName();
@@ -1371,17 +1412,17 @@ public class MapFragment extends BaseFragment
             e.printStackTrace();
         }
 
-        mAmenityClicked = location.getAmenityType();
-        showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.getExternalID()), location.getName(), categoryName, amenityDrawable);
+        mAmenityClicked = location.amenityType;
+        showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.externalId), location.getName(), categoryName, amenityDrawable);
         clearHighlightedColours();
     }
 
-    private void showLocationDetails(final CustomLocation location) {
-        logger.debug("Location: name = " + location.getName() + " externalID = " + location.getExternalID());
+    private void showLocationDetails(final Tenant location) {
+        logger.debug("Location: name = " + location.getName() + " externalID = " + location.externalId);
 
         String categoryName = "";
         try {
-            String externalId = location.getExternalID();
+            String externalId = location.externalId;
             KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceByExternalCode(externalId);
             if(kcpPlace != null) categoryName = kcpPlace.getCategoryWithOverride();
             else categoryName = location.getCategories()[0].getName();
@@ -1392,51 +1433,51 @@ public class MapFragment extends BaseFragment
         IdType idType = IdType.EXTERNAL_CODE;
         String storeName = location.getName();
         //Below should only be entered if parking polygon's enabled (if(BuildConfig.ParkingPolygonEnabled))
-        if(location.getAmenityType() != null && location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) {
-            idType = IdType.PARKING;
-            storeName = ParkingManager.sParkings.getChildParkingNameById(location.getId());
-
-            String llDealsTitle = getResources().getString(R.string.parking_polygon_parking_lot);
-            showDirectionCard(true, idType, Integer.valueOf(location.getExternalID()), llDealsTitle, storeName, null);
-            ivDeal.setVisibility(View.VISIBLE);
-            slidePanel(true);
-            tvParkingNote.setVisibility(View.GONE);
-            tvDealName.setText(getResources().getString(R.string.parking_save_as_my_parking_spot));
-            llDeals.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(ParkingManager.isParkingLotSaved(getActivity())) {
-                        AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
-                        alertDialogForInterest.getAlertDialog(
-                                getActivity(),
-                                R.string.title_change_parking_spot,
-                                R.string.warning_change_my_parking_spot,
-                                R.string.action_ok,
-                                R.string.action_cancel,
-                                new AlertDialogForInterest.DialogAnsweredListener() {
-                                    @Override
-                                    public void okClicked() {
-                                        if(location == null) {
-                                            Log.e(TAG, "location clicked is null");
-                                            return;
-                                        }
-                                        setAsParkingSpot(location);
-
-                                    }
-                                });
-                    } else {
-                        if(location == null) {
-                            Log.e(TAG, "location clicked is null");
-                            return;
-                        }
-                        setAsParkingSpot(location);
-                    }
-                }
-            });
-            ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_parking_car_outline));
-        }  else {
-            showDirectionCard(true, idType, Integer.valueOf(location.getExternalID()), storeName, categoryName, null);
-        }
+//        if(location.getAmenityType() != null && location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) {
+//            idType = IdType.PARKING;
+//            storeName = ParkingManager.sParkings.getChildParkingNameById(location.getId());
+//
+//            String llDealsTitle = getResources().getString(R.string.parking_polygon_parking_lot);
+//            showDirectionCard(true, idType, Integer.valueOf(location.getExternalID()), llDealsTitle, storeName, null);
+//            ivDeal.setVisibility(View.VISIBLE);
+//            slidePanel(true);
+//            tvParkingNote.setVisibility(View.GONE);
+//            tvDealName.setText(getResources().getString(R.string.parking_save_as_my_parking_spot));
+//            llDeals.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if(ParkingManager.isParkingLotSaved(getActivity())) {
+//                        AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+//                        alertDialogForInterest.getAlertDialog(
+//                                getActivity(),
+//                                R.string.title_change_parking_spot,
+//                                R.string.warning_change_my_parking_spot,
+//                                R.string.action_ok,
+//                                R.string.action_cancel,
+//                                new AlertDialogForInterest.DialogAnsweredListener() {
+//                                    @Override
+//                                    public void okClicked() {
+//                                        if(location == null) {
+//                                            Log.e(TAG, "location clicked is null");
+//                                            return;
+//                                        }
+//                                        setAsParkingSpot(location);
+//
+//                                    }
+//                                });
+//                    } else {
+//                        if(location == null) {
+//                            Log.e(TAG, "location clicked is null");
+//                            return;
+//                        }
+//                        setAsParkingSpot(location);
+//                    }
+//                }
+//            });
+//            ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_parking_car_outline));
+//        }  else {
+            showDirectionCard(true, idType, Integer.valueOf(location.externalId), storeName, categoryName, null);
+        //}
     }
 
     private void clearLocationDetails() {
@@ -2263,16 +2304,18 @@ public class MapFragment extends BaseFragment
         public void onClick() {
             try {
                 if(path != null || coordinate.getMap().getAltitude() != maps[mCurrentLevelIndex].getAltitude()) return; //map shouldn't be clicakble when the paths drawn or this indicates the pin clicked is not on the floor you are looking at
-                if(location != null) {
-                    if(location == sParkingPin.getParkingLocationPin()) {
-                        String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
-                        String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
-                        String parkingNote = ParkingManager.getParkingNotes(getActivity());
-                        showParkingDetail(location, false, parkingLotName, entranceName, parkingNote, -1, -1);
-                    } else if(placeExternalId != null) { //if deal's clicked, tab the polygon instead
-                        didTapPolygon(getPolygonWithPlaceExternalId(placeExternalId));
-                        return;
-                    }
+                if(amenity != null) {
+
+                    //TODO Refactor parking
+//                    if(location == sParkingPin.getParkingLocationPin()) {
+//                        String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
+//                        String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
+//                        String parkingNote = ParkingManager.getParkingNotes(getActivity());
+//                        showParkingDetail(location, false, parkingLotName, entranceName, parkingNote, -1, -1);
+//                    } else if(placeExternalId != null) { //if deal's clicked, tab the polygon instead
+//                        didTapPolygon(getPolygonWithPlaceExternalId(placeExternalId));
+//                        return;
+//                    }
 
                     mapView.getCamera().focusOn(coordinate);
                     zoomInOut();
@@ -2283,13 +2326,13 @@ public class MapFragment extends BaseFragment
 
                     if(mSelectedPin == null) {
                         highlightThisLabel();
-                        showAmenityDetail((CustomLocation) location, drawable);
+                        showAmenityDetail((Amenity) amenity, drawable);
                     } else {
                         Coordinate removeableMarkerCoordinate = mSelectedPin.getCoordinate();
                         replaceSelectedPinWithRemovedPin();
                         if(removeableMarkerCoordinate != coordinate) {
                             highlightThisLabel();
-                            showAmenityDetail((CustomLocation) location, drawable);
+                            showAmenityDetail((Amenity) amenity, drawable);
                         }
                     }
                 } else {
