@@ -531,9 +531,6 @@ public class MapFragment extends BaseFragment
 
             mapView.setDelegate(delegate);
 
-//            LocationGenerator[] generator = {new CustomLocationGenerator()};
-//            GetVenueCallback x = new GetVenueCallback();
-//            mappedIn.getVenue(activeVenue, accessibleDirections, generator, x);
 
             LocationGenerator amenity = new LocationGenerator() {
                 @Override
@@ -1407,7 +1404,8 @@ public class MapFragment extends BaseFragment
         logger.debug("Location: name = " + location.getName() + " externalID = " + location.externalId);
         String categoryName = "";
         try {
-            if(location.getCategories() != null && location.getCategories().length > 0) categoryName = location.getCategories()[0].getName();
+            if(location.getCategories() != null && location.getCategories().length > 0)
+                categoryName = location.getCategories()[0].getName();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2322,7 +2320,7 @@ public class MapFragment extends BaseFragment
 
                     //destinationPolygon = location; //if location's set as destinationPolygon, it will automatically choose the closest amenity, in which case, the closest amenity has to be manually highlighted in didTapPolygon
                     destinationPolygon = coordinate;
-                    if(location == sParkingPin.getParkingLocationPin()) return;
+                    //if(location == sParkingPin.getParkingLocationPin()) return;
 
                     if(mSelectedPin == null) {
                         highlightThisLabel();
@@ -2531,19 +2529,19 @@ public class MapFragment extends BaseFragment
      * @param categoryName
      */
     public void showDirectionCard(final boolean showCard, final IdType idType, final int id, final String storeName, final String categoryName, final Drawable amenityDrawable){
-        if(!showCard){
-            if(isDirectionCardVisible()){ //only do animation if direction card is visible
-                slidePanel(false);
-            }
-            mAmenityClicked = "";
-            return;
-        }
+//        if(!showCard){
+//            if(isDirectionCardVisible()){ //only do animation if direction card is visible
+//                slidePanel(false);
+//            }
+//            mAmenityClicked = "";
+//            return;
+//        }
 
         //if idType is NOT parking && (NOT amenity and id == 0 or -1) return
-        if( !idType.equals(IdType.PARKING) && !idType.equals(IdType.AMENITY) && !idType.equals(IdType.INSTRUCTION)
-                && (id == 0 || id == -1)) {
-            return;
-        }
+//        if( !idType.equals(IdType.PARKING) && !idType.equals(IdType.AMENITY) && !idType.equals(IdType.INSTRUCTION)
+//                && (id == 0 || id == -1)) {
+//            return;
+//        }
 
         tvStoreName.setMaxLines(1);
         tvParkingNote.setVisibility(View.GONE);
