@@ -1403,14 +1403,15 @@ public class MapFragment extends BaseFragment
     private void showAmenityDetail(final Amenity location, final Drawable amenityDrawable){
         logger.debug("Location: name = " + location.getName() + " externalID = " + location.externalId);
         String categoryName = "";
-        try {
+       // try {
             if(location.getCategories() != null && location.getCategories().length > 0)
                 categoryName = location.getCategories()[0].getName();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      //  } catch (Exception e) {
+      //      e.printStackTrace();
+      //  }
 
         mAmenityClicked = location.amenityType;
+        Log.d("Card to show", "Show card : " + true + " type : " + IdType.AMENITY + " id : " + Integer.valueOf(location.externalId) + " storename : " + location.getName() + " categoryname : " + categoryName + " drawable " + amenityDrawable);
         showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.externalId), location.getName(), categoryName, amenityDrawable);
         clearHighlightedColours();
     }
@@ -2324,13 +2325,13 @@ public class MapFragment extends BaseFragment
 
                     if(mSelectedPin == null) {
                         highlightThisLabel();
-                        showAmenityDetail((Amenity) amenity, drawable);
+                        showAmenityDetail(amenity, drawable);
                     } else {
                         Coordinate removeableMarkerCoordinate = mSelectedPin.getCoordinate();
                         replaceSelectedPinWithRemovedPin();
                         if(removeableMarkerCoordinate != coordinate) {
                             highlightThisLabel();
-                            showAmenityDetail((Amenity) amenity, drawable);
+                            showAmenityDetail(amenity, drawable);
                         }
                     }
                 } else {
@@ -2529,19 +2530,21 @@ public class MapFragment extends BaseFragment
      * @param categoryName
      */
     public void showDirectionCard(final boolean showCard, final IdType idType, final int id, final String storeName, final String categoryName, final Drawable amenityDrawable){
-//        if(!showCard){
-//            if(isDirectionCardVisible()){ //only do animation if direction card is visible
-//                slidePanel(false);
-//            }
-//            mAmenityClicked = "";
-//            return;
-//        }
+
+        Log.d("Card to show", "Show card : " + showCard + " type : " + idType + " id : " + id + " storename : " + storeName + " categoryname : " + categoryName + " drawable " + amenityDrawable);
+        if(!showCard){
+            if(isDirectionCardVisible()){ //only do animation if direction card is visible
+                slidePanel(false);
+            }
+            mAmenityClicked = "";
+            return;
+        }
 
         //if idType is NOT parking && (NOT amenity and id == 0 or -1) return
-//        if( !idType.equals(IdType.PARKING) && !idType.equals(IdType.AMENITY) && !idType.equals(IdType.INSTRUCTION)
-//                && (id == 0 || id == -1)) {
-//            return;
-//        }
+        if( !idType.equals(IdType.PARKING) && !idType.equals(IdType.AMENITY) && !idType.equals(IdType.INSTRUCTION)
+                && (id == 0 || id == -1)) {
+            return;
+        }
 
         tvStoreName.setMaxLines(1);
         tvParkingNote.setVisibility(View.GONE);
