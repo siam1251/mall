@@ -39,7 +39,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.util.ExceptionCatchingInputStream;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
@@ -69,7 +68,6 @@ import com.ivanhoecambridge.mall.mappedin.Amenities.OnParkingClickListener;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
 import com.ivanhoecambridge.mall.mappedin.Amenity;
 import com.ivanhoecambridge.mall.mappedin.CustomLocation;
-import com.ivanhoecambridge.mall.mappedin.LocationData;
 import com.ivanhoecambridge.mall.mappedin.MapUtility;
 import com.ivanhoecambridge.mall.mappedin.ParkingPin;
 import com.ivanhoecambridge.mall.mappedin.ParkingPinInterface;
@@ -98,12 +96,10 @@ import com.mappedin.sdk.Overlay;
 import com.mappedin.sdk.Overlay2DImage;
 import com.mappedin.sdk.Path;
 import com.mappedin.sdk.Polygon;
-//import com.mappedin.sdk.RawData;
 import com.mappedin.sdk.Venue;
 import com.senionlab.slutilities.type.LocationAvailability;
 import com.senionlab.slutilities.type.SLHeadingStatus;
 
-import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1401,23 +1397,20 @@ public class MapFragment extends BaseFragment
     }
 
     private void showAmenityDetail(final Amenity location, final Drawable amenityDrawable){
-        logger.debug("Location: name = " + location.getName() + " externalID = " + location.externalId);
+
         String categoryName = "";
-       // try {
-            if(location.getCategories() != null && location.getCategories().length > 0)
-                categoryName = location.getCategories()[0].getName();
-      //  } catch (Exception e) {
-      //      e.printStackTrace();
-      //  }
+
+        if(location.getCategories() != null && location.getCategories().length > 0) {
+            categoryName = location.getCategories()[0].getName();
+        }
 
         mAmenityClicked = location.amenityType;
-        Log.d("Card to show", "Show card : " + true + " type : " + IdType.AMENITY + " id : " + Integer.valueOf(location.externalId) + " storename : " + location.getName() + " categoryname : " + categoryName + " drawable " + amenityDrawable);
         showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.externalId), location.getName(), categoryName, amenityDrawable);
-        clearHighlightedColours();
+
     }
 
     private void showLocationDetails(final Tenant location) {
-        logger.debug("Location: name = " + location.getName() + " externalID = " + location.externalId);
+       // logger.debug("Location: name = " + location.getName() + " externalID = " + location.externalId);
 
         String categoryName = "";
         try {
