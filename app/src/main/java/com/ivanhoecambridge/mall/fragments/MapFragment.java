@@ -1405,7 +1405,8 @@ public class MapFragment extends BaseFragment
         }
 
         mAmenityClicked = location.amenityType;
-        showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.externalId), location.getName(), categoryName, amenityDrawable);
+        Log.d("Test to hit", "hitting this log");
+        showDirectionCard(true, IdType.AMENITY, 5, location.getName(), "name", amenityDrawable);
     }
 
     private void showLocationDetails(final Tenant location) {
