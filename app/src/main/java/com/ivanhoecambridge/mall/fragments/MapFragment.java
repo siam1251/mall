@@ -129,14 +129,13 @@ public class MapFragment extends BaseFragment
         return sMapFragment;
     }
 
-    enum SearchMode { STORE, ROUTE_START, ROUTE_DESTINATION }
+    private enum SearchMode { STORE, ROUTE_START, ROUTE_DESTINATION }
     public SearchMode mSearchMode = SearchMode.STORE;
 
-    enum IdType { ID, EXTERNAL_CODE, AMENITY, PARKING, INSTRUCTION };
+    private enum IdType { ID, EXTERNAL_CODE, AMENITY, PARKING, INSTRUCTION };
 
     private ProgressBar pb;
     private View view;
-    private SearchView mSearchView;
     private RelativeLayout rlDirection;
     private TextView tvStoreName;
     private TextView tvCategoryName;
@@ -160,20 +159,14 @@ public class MapFragment extends BaseFragment
     private ThemeColorImageView ivUpperBg;
     private ThemeColorImageView ivLowerBg;
     private ImageView ivAmenity;
-    private ImageView ivShadow;
     private ThemeColorImageView ivFollowMode;
-    private ImageView ivTest;
-    private ImageView ivTestGeofence;
-    private LinearLayout llTest;
     private TextView tvTestLocationAvailability;
     private TextView tvTestLocationFindingMode;
     private TextView tvTestGeofence;
-    private TextView tvTestAngle;
     private FrameLayout flMap; ///todo: disabled for testing
     private FrameLayout flCircle; ///todo: disabled for testing
     private RelativeLayout rlSlidingPanel; ///todo: disabled for testing
 
-    private View viewRoute;
     private RelativeLayout rlRoute;
     private String mSearchString = "";
     public MenuItem mSearchItem;
@@ -316,14 +309,13 @@ public class MapFragment extends BaseFragment
         ivLower = (ThemeColorImageView) view.findViewById(R.id.ivLower);
         ivLowerBg = (ThemeColorImageView) view.findViewById(R.id.ivLowerBg);
         ivAmenity = (ImageView) view.findViewById(R.id.ivAmenity);
-        ivShadow = (ImageView) view.findViewById(R.id.ivShadow);
         ivFollowMode = (ThemeColorImageView) view.findViewById(R.id.ivFollowMode);
         flCircle = (FrameLayout) view.findViewById(R.id.flCircle);
         flCircle.setOnClickListener(onFollowButtonListener);
 
         flMap = (FrameLayout) view.findViewById(R.id.flMap); //todo: disabled for testing
 
-        viewRoute = (View) view.findViewById(R.id.viewRoute);
+        View viewRoute = (View) view.findViewById(R.id.viewRoute);
         viewRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -355,13 +347,13 @@ public class MapFragment extends BaseFragment
         }
 
         //--TESTING
-        ivTest = (ImageView) view.findViewById(R.id.ivTest);
-        ivTestGeofence = (ImageView) view.findViewById(R.id.ivTestGeofence);
-        llTest = (LinearLayout) view.findViewById(R.id.llTest);
+        ImageView ivTest = (ImageView) view.findViewById(R.id.ivTest);
+        ImageView ivTestGeofence = (ImageView) view.findViewById(R.id.ivTestGeofence);
+        LinearLayout llTest = (LinearLayout) view.findViewById(R.id.llTest);
         tvTestLocationAvailability = (TextView) view.findViewById(R.id.tvTestLocationAvailability);
         tvTestLocationFindingMode = (TextView) view.findViewById(R.id.tvTestLocationFindingMode);
         tvTestGeofence = (TextView) view.findViewById(R.id.tvTestGeofence);
-        tvTestAngle = (TextView) view.findViewById(R.id.tvTestAngle);
+        TextView tvTestAngle = (TextView) view.findViewById(R.id.tvTestAngle);
         ivTest.setOnClickListener(onTestButtonListener);
         ivTestGeofence.setOnClickListener(onTestGeofenceButtonListener);
 
@@ -2391,7 +2383,7 @@ public class MapFragment extends BaseFragment
         mFilterItem = menu.findItem(R.id.action_filter);
         mFilterItem.setIcon(ThemeManager.getThemedMenuDrawable(getActivity(), R.drawable.icn_filter));
         mSearchItem.setIcon(ThemeManager.getThemedMenuDrawable(getActivity(), R.drawable.icn_search));
-        mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
+        SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
         mSearchView.setOnQueryTextListener(new QueryTextListener());
         mSearchView.setQueryHint(getString(R.string.hint_search_store));
         mSearchItem.setShowAsAction(MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW
