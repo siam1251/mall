@@ -354,7 +354,6 @@ public class MapFragment extends BaseFragment
         tvTestLocationFindingMode = (TextView) view.findViewById(R.id.tvTestLocationFindingMode);
         tvTestGeofence = (TextView) view.findViewById(R.id.tvTestGeofence);
         TextView tvTestAngle = (TextView) view.findViewById(R.id.tvTestAngle);
-        ivTest.setOnClickListener(onTestButtonListener);
         ivTestGeofence.setOnClickListener(onTestGeofenceButtonListener);
 
         /*if(*//*BuildConfig.BLUEDOT || *//*BuildConfig.DEBUG) { //testing
@@ -770,14 +769,6 @@ public class MapFragment extends BaseFragment
         }
     }
 
-    private class CustomLocationGenerator implements LocationGenerator {
-
-        @Override
-        public Location locationGenerator(ByteBuffer byteBuffer, int i, Venue venue) {
-            return new CustomLocation(byteBuffer, i, venue);
-        }
-    }
-
     public void showStoreOnTheMapFromDetailActivity(Polygon polygon){
         try {
             mapView.getCamera().focusOn(polygon);
@@ -816,9 +807,6 @@ public class MapFragment extends BaseFragment
 
             arriveAtLocation = ((Amenity) destinationPolygon);
         }
-        else if (destinationPolygon instanceof  Coordinate) {
-
-        }
 
         String storeName = getString(R.string.bluedot_my_location);
         if(mMainActivity.getDestStoreName().equals(storeName) && mBlueDotPin != null) {
@@ -842,10 +830,6 @@ public class MapFragment extends BaseFragment
 
             highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
             destinationPolygonCoordinate = ((Polygon) destinationPolygon).getAnchor();
-        }
-        else if(destinationPolygon instanceof CustomLocation && !((CustomLocation) destinationPolygon).getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING))
-        {
-
         }
         else if (destinationPolygon instanceof Coordinate){
 
@@ -1035,12 +1019,6 @@ public class MapFragment extends BaseFragment
 
 
     private void zoomInOut(){
-       /* float zoomLevel = CAMERA_ZOOM_LEVEL_DEFAULT; //camera's currently too zoomed out
-        //allow the camera to zoom in if it's too far away or keep its current zoom if it's close enough
-        if(mapView.getCamera().getZoom() <= CAMERA_ZOOM_LEVEL_DEFAULT) { //already zoomed in - keep the same zoom
-            zoomLevel = mapView.getCamera().getZoom();
-        }
-        mapView.getCamera().setZoomTo(zoomLevel);*/
         mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_DEFAULT);
     }
 
@@ -1062,8 +1040,6 @@ public class MapFragment extends BaseFragment
         LocationLabelClicker clicker = overlays.get(overlay);
         if (clicker != null) {
             clicker.onClick();
-        } else {
-            Logger.log("No onClick");
         }
         return true;
     }
@@ -1104,54 +1080,10 @@ public class MapFragment extends BaseFragment
                     animateCompass();
                 }
                 mBearingFromCamera = bearing;
-                Log.d("bearing", "mBearingFromCamera : " + mBearingFromCamera);
                 ivCompass.setRotation((float)(bearing/Math.PI*180));
                 mBearingEntered = true;
             }
         });
-    }
-
-    public void slideDownCompass(boolean slideDown){
-        final int yBy = KcpUtility.dpToPx(getActivity(), 40);
-        final int yInitialPosition = KcpUtility.dpToPx(getActivity(), 55);
-        final int yFinalPosition = (int) getResources().getDimension(R.dimen.map_compass_margin);
-        if(slideDown) {
-            Animation anim = new TranslateAnimation(0, 0, 0, yBy);
-            anim.setDuration(100);
-            anim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {}
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) flCompass.getLayoutParams();
-                    lp.topMargin = yInitialPosition; // use topmargin for the y-property, left margin for the x-property of your view
-                    flCompass.setLayoutParams(lp);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
-            flCompass.startAnimation(anim);
-        } else {
-            Animation anim = new TranslateAnimation(0, 0, 0, -yBy);
-            anim.setDuration(100);
-            anim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {}
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) flCompass.getLayoutParams();
-                    lp.topMargin = yFinalPosition; // use topmargin for the y-property, left margin for the x-property of your view
-                    flCompass.setLayoutParams(lp);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
-            flCompass.startAnimation(anim);
-        }
     }
 
     private void highlightPolygon(Polygon polygon, int color) {
@@ -1412,59 +1344,8 @@ public class MapFragment extends BaseFragment
         showDirectionCard(true, IdType.AMENITY, externalId, location.getName(), categoryName, amenityDrawable);
     }
 
-    private void showParkingDetails(final Amenity location) {
-
-        IdType idType = IdType.EXTERNAL_CODE;
-        String storeName = location.getName();
-        if(location.amenityType != null && location.amenityType.equals(CustomLocation.TYPE_AMENITY_PARKING)) {
-            idType = IdType.PARKING;
-            storeName = ParkingManager.sParkings.getChildParkingNameById(location.id);
-
-            String llDealsTitle = getResources().getString(R.string.parking_polygon_parking_lot);
-            showDirectionCard(true, idType, Integer.valueOf(location.externalId), llDealsTitle, storeName, null);
-            ivDeal.setVisibility(View.VISIBLE);
-            slidePanel(true);
-            tvParkingNote.setVisibility(View.GONE);
-            tvDealName.setText(getResources().getString(R.string.parking_save_as_my_parking_spot));
-            llDeals.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(ParkingManager.isParkingLotSaved(getActivity())) {
-                        AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
-                        alertDialogForInterest.getAlertDialog(
-                                getActivity(),
-                                R.string.title_change_parking_spot,
-                                R.string.warning_change_my_parking_spot,
-                                R.string.action_ok,
-                                R.string.action_cancel,
-                                new AlertDialogForInterest.DialogAnsweredListener() {
-                                    @Override
-                                    public void okClicked() {
-                                        if(location == null) {
-                                            Log.e(TAG, "location clicked is null");
-                                            return;
-                                        }
-                                        setAsParkingSpot(location);
-
-                                    }
-                                });
-                    } else {
-                        if(location == null) {
-                            Log.e(TAG, "location clicked is null");
-                            return;
-                        }
-                        setAsParkingSpot(location);
-                    }
-                }
-            });
-            ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_parking_car_outline));
-        }
-    }
-
-
 
     private void showLocationDetails(final Tenant location) {
-       // logger.debug("Location: name = " + location.getName() + " externalID = " + location.externalId);
 
         String categoryName = "";
         try {
@@ -1478,52 +1359,8 @@ public class MapFragment extends BaseFragment
 
         IdType idType = IdType.EXTERNAL_CODE;
         String storeName = location.getName();
-        //Below should only be entered if parking polygon's enabled (if(BuildConfig.ParkingPolygonEnabled))
-//        if(location.getAmenityType() != null && location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) {
-//            idType = IdType.PARKING;
-//            storeName = ParkingManager.sParkings.getChildParkingNameById(location.getId());
-//
-//            String llDealsTitle = getResources().getString(R.string.parking_polygon_parking_lot);
-//            showDirectionCard(true, idType, Integer.valueOf(location.getExternalID()), llDealsTitle, storeName, null);
-//            ivDeal.setVisibility(View.VISIBLE);
-//            slidePanel(true);
-//            tvParkingNote.setVisibility(View.GONE);
-//            tvDealName.setText(getResources().getString(R.string.parking_save_as_my_parking_spot));
-//            llDeals.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if(ParkingManager.isParkingLotSaved(getActivity())) {
-//                        AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
-//                        alertDialogForInterest.getAlertDialog(
-//                                getActivity(),
-//                                R.string.title_change_parking_spot,
-//                                R.string.warning_change_my_parking_spot,
-//                                R.string.action_ok,
-//                                R.string.action_cancel,
-//                                new AlertDialogForInterest.DialogAnsweredListener() {
-//                                    @Override
-//                                    public void okClicked() {
-//                                        if(location == null) {
-//                                            Log.e(TAG, "location clicked is null");
-//                                            return;
-//                                        }
-//                                        setAsParkingSpot(location);
-//
-//                                    }
-//                                });
-//                    } else {
-//                        if(location == null) {
-//                            Log.e(TAG, "location clicked is null");
-//                            return;
-//                        }
-//                        setAsParkingSpot(location);
-//                    }
-//                }
-//            });
-//            ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_parking_car_outline));
-//        }  else {
-            showDirectionCard(true, idType, Integer.valueOf(location.externalId), storeName, categoryName, null);
-        //}
+
+        showDirectionCard(true, idType, Integer.valueOf(location.externalId), storeName, categoryName, null);
     }
 
     private void clearLocationDetails() {
@@ -1729,12 +1566,6 @@ public class MapFragment extends BaseFragment
             e.printStackTrace();
         }
     }
-
-    private View.OnClickListener onTestButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-        }
-    };
 
     private View.OnClickListener onTestGeofenceButtonListener = new View.OnClickListener() {
         @Override
@@ -2001,42 +1832,6 @@ public class MapFragment extends BaseFragment
         }
     }
 
-    public LocationLabelClicker getLabelClicker(String amenityName, int position) {
-        Coordinate coordinate;
-        ArrayList<Amenity> amenityList = amenityHashmap.get(amenityName);
-        if(amenityList != null){
-            for(final Amenity location : amenityList) {
-                List<Coordinate> coords = Arrays.asList(location.getNavigatableCoordinates());
-                coordinate = coords.get(position);
-                return mLocationClickersMap.get(coordinate);
-            }
-        }
-        return null;
-    }
-
-    public void clickOverlayWithCoordinate(Coordinate coordinate, int position){
-        if(coordinate != null){
-            LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(coordinate);
-            locationLabelClicker.onClick();
-        }
-    }
-
-    public Overlay getOverlayFromMap(Location location){
-        try {
-            if(location == null) return null;
-            for (HashMap.Entry<Overlay, LocationLabelClicker> entry : overlays.entrySet()) {
-                Overlay overlay = entry.getKey();
-                LocationLabelClicker locationLabelClicker = entry.getValue();
-                if(locationLabelClicker.location == location){
-                    return overlay;
-                }
-            }
-        } catch (Exception e) {
-            logger.error(e);
-        }
-        return null;
-    }
-
     public void removePin(Overlay overlay, Coordinate coordinate) {
         try {
             mapView.removeMarker(overlay);
@@ -2099,8 +1894,7 @@ public class MapFragment extends BaseFragment
     }
 
     public Drawable getDrawableFromView(int drawable, int backgroundResource){
-//        View amientyView = View.inflate(getActivity(), R.layout.layout_amenity, (ViewGroup) view); //image gets stuck to parentview
-//        View amientyView = getActivity().getLayoutInflater().inflate(R.layout.layout_amenity, null); //image is an overlay and not stuck anywhere
+
         ImageView amientyView = (ImageView) getActivity().getLayoutInflater().inflate(R.layout.layout_amenity, null); //image is an overlay and not stuck anywhere
         if(backgroundResource != 0) amientyView.setBackgroundResource(backgroundResource);
         amientyView.setImageResource(drawable);
@@ -2317,7 +2111,6 @@ public class MapFragment extends BaseFragment
                 this.amenity = (Amenity) location;
             }
 
-            //this.location = (CustomLocation) location;
             this.drawable = pinDrawable;
             this.label = label;
             this.coordinate = coordinate;
@@ -2331,7 +2124,6 @@ public class MapFragment extends BaseFragment
                 this.amenity = (Amenity) location;
             }
 
-            //this.location = (CustomLocation) location;
             this.drawable = pinDrawable;
             this.label = label;
             this.coordinate = coordinate;
@@ -2353,15 +2145,15 @@ public class MapFragment extends BaseFragment
                 if(amenity != null) {
 
                     //TODO Refactor parking
-//                    if(location == sParkingPin.getParkingLocationPin()) {
-//                        String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
-//                        String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
-//                        String parkingNote = ParkingManager.getParkingNotes(getActivity());
-//                        showParkingDetail(location, false, parkingLotName, entranceName, parkingNote, -1, -1);
-//                    } else if(placeExternalId != null) { //if deal's clicked, tab the polygon instead
-//                        didTapPolygon(getPolygonWithPlaceExternalId(placeExternalId));
-//                        return;
-//                    }
+                    if(amenity == sParkingPin.getParkingLocationPin()) {
+                        String parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
+                        String entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
+                        String parkingNote = ParkingManager.getParkingNotes(getActivity());
+                        showParkingDetail(amenity, false, parkingLotName, entranceName, parkingNote, -1, -1);
+                    } else if(placeExternalId != null) { //if deal's clicked, tab the polygon instead
+                        didTapPolygon(getPolygonWithPlaceExternalId(placeExternalId));
+                        return;
+                    }
 
                     mapView.getCamera().focusOn(coordinate);
                     zoomInOut();
