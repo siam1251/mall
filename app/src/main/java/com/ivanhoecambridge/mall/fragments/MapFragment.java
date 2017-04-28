@@ -1997,7 +1997,7 @@ public class MapFragment extends BaseFragment
             for (HashMap.Entry<Overlay, LocationLabelClicker> entry : overlays.entrySet()) {
                 Overlay overlay = entry.getKey();
                 LocationLabelClicker locationLabelClicker = entry.getValue();
-                if(locationLabelClicker.amenity.getName().equals(location.getName())){
+                if(locationLabelClicker.amenity == location){
 
                     mapView.removeMarker(overlay);
                     mLocationClickersMap.remove(overlay.getPosition());
