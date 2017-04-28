@@ -160,9 +160,6 @@ public class MapFragment extends BaseFragment
     private ThemeColorImageView ivLowerBg;
     private ImageView ivAmenity;
     private ThemeColorImageView ivFollowMode;
-    private TextView tvTestLocationAvailability;
-    private TextView tvTestLocationFindingMode;
-    private TextView tvTestGeofence;
     private FrameLayout flMap; ///todo: disabled for testing
     private FrameLayout flCircle; ///todo: disabled for testing
     private RelativeLayout rlSlidingPanel; ///todo: disabled for testing
@@ -345,22 +342,6 @@ public class MapFragment extends BaseFragment
             slIndoorLocationPresenter = new SLIndoorLocationPresenterImpl(getActivity(), this);
             if(mMainActivity.mGeofenceManager != null) mMainActivity.mGeofenceManager.setSLIndoorLocationPresenterImpl((SLIndoorLocationPresenterImpl) slIndoorLocationPresenter);
         }
-
-        //--TESTING
-        ImageView ivTest = (ImageView) view.findViewById(R.id.ivTest);
-        ImageView ivTestGeofence = (ImageView) view.findViewById(R.id.ivTestGeofence);
-        LinearLayout llTest = (LinearLayout) view.findViewById(R.id.llTest);
-        tvTestLocationAvailability = (TextView) view.findViewById(R.id.tvTestLocationAvailability);
-        tvTestLocationFindingMode = (TextView) view.findViewById(R.id.tvTestLocationFindingMode);
-        tvTestGeofence = (TextView) view.findViewById(R.id.tvTestGeofence);
-        TextView tvTestAngle = (TextView) view.findViewById(R.id.tvTestAngle);
-        ivTestGeofence.setOnClickListener(onTestGeofenceButtonListener);
-
-        /*if(*//*BuildConfig.BLUEDOT || *//*BuildConfig.DEBUG) { //testing
-            llTest.setVisibility(View.VISIBLE);
-        } else {
-            llTest.setVisibility(View.GONE);
-        }*/
 
         return view;
     }
