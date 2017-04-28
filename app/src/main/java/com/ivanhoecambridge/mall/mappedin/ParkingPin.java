@@ -6,8 +6,8 @@ package com.ivanhoecambridge.mall.mappedin;
 
 public class ParkingPin {
 
-    private CustomLocation parkingLocationPin;
-    private CustomLocation temporaryParkingLocationPin;
+    private Amenity parkingLocationPin;
+    private Amenity temporaryParkingLocationPin;
     private Pin parkingCoordinatePin;
     private Pin tempParkingCoordinatePin;
 
@@ -22,7 +22,7 @@ public class ParkingPin {
         this.parkingCoordinatePin = parkingPin;
     }
 
-    public void setParkingLocationPin(CustomLocation savedParkingLocation) {
+    public void setParkingLocationPin(Amenity savedParkingLocation) {
         removeExistingPin();
         this.parkingCoordinatePin = null;
         this.parkingLocationPin = savedParkingLocation;
@@ -37,7 +37,7 @@ public class ParkingPin {
         return parkingCoordinatePin;
     }
 
-    public CustomLocation getParkingLocationPin() {
+    public Amenity getParkingLocationPin() {
         return parkingLocationPin;
     }
 

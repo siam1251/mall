@@ -207,7 +207,7 @@ public class MapFragment extends BaseFragment
     private Polygon mSavedParkingPolygon = null;
     private int mOriginalColorsForParking; //original colors for parking used to clear its highlights on polygon
     private int mCurrentLevelIndex = -50;
-    private CustomLocation mTemporaryParkingLocation; //used to show the temporary parking spot from detail activity
+    private Amenity mTemporaryParkingLocation; //used to show the temporary parking spot from detail activity
     public String mPendingExternalCode;
 
     private Pin mSelectedPin;
@@ -1268,12 +1268,18 @@ public class MapFragment extends BaseFragment
      * @param parkingNote parking note
      * @param parkingPosition position of the parking in the parking arraylist
      */
-    private void showParkingDetail(final CustomLocation location, boolean isThisTempParkingSpot, String parkingLotName, String entranceName, String parkingNote, final int parkingPosition, final int entrancePosition){
+    private void showParkingDetail(final Amenity location, boolean isThisTempParkingSpot, String parkingLotName, String entranceName, String parkingNote, final int parkingPosition, final int entrancePosition){
         String llDealsTitle = "";
         if(isThisTempParkingSpot) llDealsTitle = getResources().getString(R.string.parking_polygon_store_name_temporary);
         else llDealsTitle = getResources().getString(R.string.parking_polygon_store_name);
 
-        showDirectionCard(true, IdType.AMENITY, Integer.valueOf(location.getExternalID()), llDealsTitle, parkingLotName + ", " + entranceName, null);
+        int externalId = Integer.MAX_VALUE;
+
+        if(location.externalId != null && !location.externalId.equals("")){
+            externalId = Integer.valueOf(location.externalId);
+        }
+
+        showDirectionCard(true, IdType.AMENITY, externalId, llDealsTitle, parkingLotName + ", " + entranceName, null);
         llDeals.setVisibility(View.VISIBLE);
         slidePanel(true);
 
@@ -1361,14 +1367,14 @@ public class MapFragment extends BaseFragment
         InfoFragment.getInstance().setParkingSpotCTA();
     }
 
-    private void setAsParkingSpot(final CustomLocation location){
+    private void setAsParkingSpot(final Amenity location){
         String parkingId;
         if(ParkingManager.getParkingMode(getActivity()) == ParkingManager.ParkingMode.LOCATION){
             parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
             showMySavedParkingPolygon(false, parkingId, true);
         }
 
-        parkingId = location.getId();
+        parkingId = location.id;
         ParkingManager.saveParkingSpotAndEntrance(getActivity(), parkingId);
         mMainActivity.setUpRightSidePanel();
         onParkingClick(true, true);
@@ -1405,6 +1411,57 @@ public class MapFragment extends BaseFragment
 
         showDirectionCard(true, IdType.AMENITY, externalId, location.getName(), categoryName, amenityDrawable);
     }
+
+    private void showParkingDetails(final Amenity location) {
+
+        IdType idType = IdType.EXTERNAL_CODE;
+        String storeName = location.getName();
+        if(location.amenityType != null && location.amenityType.equals(CustomLocation.TYPE_AMENITY_PARKING)) {
+            idType = IdType.PARKING;
+            storeName = ParkingManager.sParkings.getChildParkingNameById(location.id);
+
+            String llDealsTitle = getResources().getString(R.string.parking_polygon_parking_lot);
+            showDirectionCard(true, idType, Integer.valueOf(location.externalId), llDealsTitle, storeName, null);
+            ivDeal.setVisibility(View.VISIBLE);
+            slidePanel(true);
+            tvParkingNote.setVisibility(View.GONE);
+            tvDealName.setText(getResources().getString(R.string.parking_save_as_my_parking_spot));
+            llDeals.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(ParkingManager.isParkingLotSaved(getActivity())) {
+                        AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
+                        alertDialogForInterest.getAlertDialog(
+                                getActivity(),
+                                R.string.title_change_parking_spot,
+                                R.string.warning_change_my_parking_spot,
+                                R.string.action_ok,
+                                R.string.action_cancel,
+                                new AlertDialogForInterest.DialogAnsweredListener() {
+                                    @Override
+                                    public void okClicked() {
+                                        if(location == null) {
+                                            Log.e(TAG, "location clicked is null");
+                                            return;
+                                        }
+                                        setAsParkingSpot(location);
+
+                                    }
+                                });
+                    } else {
+                        if(location == null) {
+                            Log.e(TAG, "location clicked is null");
+                            return;
+                        }
+                        setAsParkingSpot(location);
+                    }
+                }
+            });
+            ivDeal.setImageDrawable(getResources().getDrawable(R.drawable.icn_parking_car_outline));
+        }
+    }
+
+
 
     private void showLocationDetails(final Tenant location) {
        // logger.debug("Location: name = " + location.getName() + " externalID = " + location.externalId);
@@ -1567,7 +1624,7 @@ public class MapFragment extends BaseFragment
     }
 
     @Override
-    public void removeParkingPinAtLocation(CustomLocation parkingLocationPin) {
+    public void removeParkingPinAtLocation(Amenity parkingLocationPin) {
         removePin(parkingLocationPin);
     }
 
@@ -2086,11 +2143,11 @@ public class MapFragment extends BaseFragment
             }
 
             if(parkingLotPosition != -1){
-                HashMap<String, CustomLocation> parkingHashMap = CustomLocation.getParkingHashMap();
+                HashMap<String, Amenity> parkingHashMap = this.parkingHashMap;
                 Parking storeParking = ParkingManager.sParkings.getParkings().get(parkingLotPosition);
                 List<ChildParking> childParkings = storeParking.getChildParkings();
 
-                CustomLocation currentNearestParkingLocation = null;
+                Amenity currentNearestParkingLocation = null;
                 double currentDistanceFromParkingToStore = 0.0;
                 ChildParking currentNearestChildParking = null;
 
@@ -2099,7 +2156,7 @@ public class MapFragment extends BaseFragment
                     ChildParking childParking = childParkings.get(childParkingPosition);
                     String parkingId = childParking.getParkingId();
                     if(parkingHashMap.containsKey(parkingId)){
-                        CustomLocation parkingLocation = parkingHashMap.get(parkingId);
+                        Amenity parkingLocation = parkingHashMap.get(parkingId);
                         List<Coordinate> coords = Arrays.asList(parkingLocation.getNavigatableCoordinates());
                         if(coords.size() > 0) {
                             Coordinate parkingLotCoordinate = coords.get(0);
@@ -2142,7 +2199,7 @@ public class MapFragment extends BaseFragment
                     //mSavedParkingPolygon.setColor(mOriginalColorsForParking);
                     mOriginalColorsForParking = 0;
                 }
-                sParkingPin.setParkingLocationPin(CustomLocation.getParkingHashMap().get(parkingId));
+                sParkingPin.setParkingLocationPin(this.parkingHashMap.get(parkingId));
                 mSavedParkingPolygon = polygons.get(0);
                 didTapPolygon(mSavedParkingPolygon);
                 if(focus) {
@@ -2173,7 +2230,7 @@ public class MapFragment extends BaseFragment
                     }
                 }
 
-                HashMap<String, CustomLocation> parkingHashMap = CustomLocation.getParkingHashMap();
+                HashMap<String, Amenity> parkingHashMap = this.parkingHashMap;
                 if(ParkingManager.getParkingMode(getActivity()) == ParkingManager.ParkingMode.LOCATION) {
                     String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
                     if(parkingHashMap.containsKey(parkingId)) {
