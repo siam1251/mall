@@ -1012,7 +1012,9 @@ public class MapFragment extends BaseFragment
             parkingLotName = ParkingManager.getMyParkingLot(getActivity()).getName();
             entranceName = ParkingManager.getMyEntrance(getActivity()).getName();
             showParkingDetail(sParkingPin.getParkingLocationPin(), false, parkingLotName, entranceName, parkingNote, -1, -1);
-        } else { //sParkingPin.getParkingLocationPin() == null
+        }
+        else
+        {
             showParkingDetail(false);
         }
     }
@@ -1081,13 +1083,13 @@ public class MapFragment extends BaseFragment
             }
         }
         //polygon.setColor(color);
-       // polygon.set
+        mapView.setColor(polygon, color);
     }
 
     private void clearHighlightedColours() {
         Set<java.util.Map.Entry<Polygon, Integer>> colours = originalColors.entrySet();
         for  (java.util.Map.Entry<Polygon, Integer> pair : colours) {
-            //pair.getKey().setColor(pair.getValue());
+            mapView.setColor(pair.getKey(), pair.getValue());
         }
 
         originalColors.clear();
@@ -1488,9 +1490,6 @@ public class MapFragment extends BaseFragment
         label.setPosition(coordinate);
         mapView.addMarker(label, false);
 
-        tvTestLocationAvailability.setText(sLocationAvailability == LocationAvailability.NOT_AVAILABLE ? "NOT AVAILABLE" : "AVAILABLE");
-        tvTestLocationFindingMode.setText(sLocationFindingMode == PositionAndHeadingMapVisualization.LocationFindingMode.GPS ? "GPS" : "BEACON");
-        tvTestGeofence.setText(sGeofenceEntered);
         mGreyDotDropped = false;
     }
 
