@@ -26,10 +26,6 @@ public class HeaderFactory {
     private final static String SEARCH_INDEX_VM_STAGING = "indexes/staging/tsawwassen-mills-index.msgpack";
     private final static String SEARCH_INDEX_VM_PRODUCTION = "indexes/production/tsawwassen-mills-index.msgpack";
 
-    public static String MALL_INFO_URL = "bins/2iu4o";
-    public static String AMENITIES_URL = "bins/18towh";
-    public static String PARKING_URL = "bins/141i4";
-
     public final static String HEADER_VALUE_ACCEPT = 			"application/json";
 
     private static HashMap<String, String> mHeaders;
