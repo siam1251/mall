@@ -1,9 +1,9 @@
 {
-  "amenities": [
+  "amenities":[
     {
       "type":"0",
       "enabled":true,
-      "title": "Customer Service",
+      "title":"Customer Service",
       "externalIds":[
         "information-counter"
       ]
@@ -11,24 +11,24 @@
     {
       "type":"1",
       "enabled":true,
-      "title": "Restrooms",
+      "title":"Restrooms",
       "externalIds":[
         "washroom",
         "family-washroom"
       ]
     },
     {
-      "type": "2",
-      "enabled": false,
-      "title": "Community Room",
-      "externalIds": [
+      "type":"2",
+      "enabled":false,
+      "title":"Community Room",
+      "externalIds":[
         "community-room"
       ]
     },
     {
       "type":"3",
       "enabled":true,
-      "title": "Elevators",
+      "title":"Elevators",
       "externalIds":[
         "Elevator"
       ]
@@ -36,7 +36,7 @@
     {
       "type":"4",
       "enabled":true,
-      "title": "Stairs & Escalators",
+      "title":"Stairs \u0026 Escalators",
       "externalIds":[
         "escalator/stairs"
       ]
@@ -44,7 +44,7 @@
     {
       "type":"6",
       "enabled":false,
-      "title": "Lockers",
+      "title":"Lockers",
       "externalIds":[
         "lockers"
       ]
@@ -52,7 +52,7 @@
     {
       "type":"7",
       "enabled":false,
-      "title": "ATM Machines",
+      "title":"ATM Machines",
       "externalIds":[
         "atm"
       ]
@@ -60,7 +60,7 @@
     {
       "type":"9",
       "enabled":true,
-      "title": "Bus Loop",
+      "title":"Bus Loop",
       "externalIds":[
         "shuttle",
         "subway"
