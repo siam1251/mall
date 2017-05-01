@@ -1,67 +1,91 @@
 {
-  "amenities": [
+  "amenities":[
     {
-      "type":"5763031e8fd2cb38f9000007",
+      "type":"57c5b03bbbf01426f0000000",
       "enabled":true,
-      "title": "Guest Services",
-      "externalIds":[
-        "information-counter"
-      ]
-    },
-    {
-      "type":"5762fef48fd2cb38f9000002",
-      "enabled":true,
-      "title": "Washrooms",
+      "title":"Washrooms",
       "externalIds":[
         "washroom"
       ]
     },
     {
-      "type":"5800f474f516a02881000011",
+      "type":"57c6e482bbf0141f92000002",
       "enabled":false,
-      "title": "Family Washrooms",
+      "title":"Family Washrooms",
       "externalIds":[
         "family-washroom"
       ]
     },
     {
-      "type":"5762fd938fd2cb38f9000000",
+      "type":"57d05ed3bbf0145ac8000004",
+      "enabled":true,
+      "title":"Guest Services",
+      "externalIds":[
+        "information-counter"
+      ]
+    },
+    {
+      "type":"57c6e4d0bbf0141f92000006",
       "enabled":false,
-      "title": "ATM",
+      "title":"Strollers",
+      "externalIds":[
+        "strollers"
+      ]
+    },
+    {
+      "type":"57c6e4bbbbf0141f92000005",
+      "enabled":false,
+      "title":"Nursing Room",
+      "externalIds":[
+        "changing-room"
+      ]
+    },
+    {
+      "type":"57c5f020bbf01435f5000006",
+      "enabled":false,
+      "title":"ATM",
       "externalIds":[
         "atm"
       ]
     },
     {
-      "type":"576303888fd2cb38f9000008",
+      "type":"57d06274bbf0145ac800000d",
       "enabled":false,
-      "title": "Nursing Room",
+      "title":"Parcel Pick Up",
       "externalIds":[
-        "Nursing Room"
+        "pick-up"
       ]
     },
     {
-      "type":"577299388fd2cb2955000000",
+      "type":"57c6e44abbf0141f92000000",
       "enabled":true,
-      "title": "Play Park",
+      "title":"Bus Shelter",
       "externalIds":[
-        "Play Park"
+        "bus-terminal"
       ]
     },
     {
-      "type":"580a5085f516a030d7000000",
-      "enabled":false,
-      "title": "Security",
+      "type":"57c6e490bbf0141f92000003",
+      "enabled":true,
+      "title":"Ferry Shuttle",
       "externalIds":[
-        "security"
+        "shuttle"
       ]
     },
     {
-      "type":"5800f1c7f516a02881000000",
+      "type":"57c6e4dbbbf0141f92000007",
       "enabled":false,
-      "title": "Strollers",
+      "title":"Taxi",
       "externalIds":[
-        "strollers"
+        "taxi-stand"
+      ]
+    },
+    {
+      "type":"57c6e468bbf0141f92000001",
+      "enabled":true,
+      "title":"Electric Vehicle Charging Station",
+      "externalIds":[
+        "charging"
       ]
     }
   ]
