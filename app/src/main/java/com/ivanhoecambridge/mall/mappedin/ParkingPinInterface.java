@@ -5,7 +5,7 @@ package com.ivanhoecambridge.mall.mappedin;
  */
 
 public interface ParkingPinInterface {
-    void removeParkingPinAtLocation(CustomLocation parkingLocationPin);
+    void removeParkingPinAtLocation(Amenity parkingLocationPin);
     void removeParkingPinAtCoordinate(Pin parkingCoordinatePin);
     void removeTempParkingPinAtCoordinate(Pin parkingCoordinatePin);
 }
