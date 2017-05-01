@@ -37,7 +37,6 @@ public class Constants {
     public static String SEARCH_INDEX_URL_BASE 	= "https://kcp-pkg.s3-us-west-2.amazonaws.com/";
     public final static String MOVIE_URL_BASE 	= "http://ivanhoe.webservice.cinema-source.com/";
 
-    public final static String MALL_INFO_URL_BASE 		= "https://api.myjson.com/";
     public final static String MALL_INFO_OFFLINE_TEXT 	= "mallinfo.json";
     public final static String AMENITIES_OFFLINE_TEXT 	= "amenities.json";
     public final static String PARKING_OFFLINE_TEXT 	= "parking.json";

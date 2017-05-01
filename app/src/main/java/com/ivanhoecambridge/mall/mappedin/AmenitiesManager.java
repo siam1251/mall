@@ -40,38 +40,12 @@ public class AmenitiesManager  {
 
     public static Amenities sAmenities = new Amenities();
 
-    public AmenityService getKcpService(){
-        ServiceFactory serviceFactory = new ServiceFactory();
-        if(mAmenityService == null) mAmenityService = serviceFactory.createRetrofitService(mContext, AmenityService.class, Constants.MALL_INFO_URL_BASE);
-        return mAmenityService;
-    }
-
     public AmenitiesManager(Context context, int loadingLayout, Handler handler) {
         mContext = context;
         mHandler = handler;
         mLoadingLayout = loadingLayout;
         logger = new Logger(getClass().getName());
     }
-
-    public void downloadAmenities(){
-        Call<Amenities> call = getKcpService().getAmenities(HeaderFactory.AMENITIES_URL);
-        call.enqueue(new Callback<Amenities>() {
-            @Override
-            public void onResponse(Call<Amenities> call, Response<Amenities> response) {
-                if(response.isSuccessful()){
-                    sAmenities = response.body();
-                    handleState(DOWNLOAD_COMPLETE);
-                } else handleState(DOWNLOAD_FAILED);
-            }
-
-            @Override
-            public void onFailure(Call<Amenities> call, Throwable t) {
-                logger.error(t);
-                handleState(DOWNLOAD_FAILED);
-            }
-        });
-    }
-
 
     private void handleState(int state){
         handleState(state, null);

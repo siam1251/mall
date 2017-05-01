@@ -669,21 +669,6 @@ public class MainActivity extends BaseActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        AmenitiesManager amenitiesManager = new AmenitiesManager(this, R.layout.layout_loading_item, new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message inputMessage) {
-                switch (inputMessage.arg1) {
-                    case KcpCategoryManager.DOWNLOAD_FAILED:
-                        break;
-                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                        break;
-                    default:
-                        super.handleMessage(inputMessage);
-                }
-            }
-        });
-        amenitiesManager.downloadAmenities();
     }
 
     private void initializeParkingData(){
@@ -697,21 +682,6 @@ public class MainActivity extends BaseActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        ParkingManager parkingManager = new ParkingManager(this, R.layout.layout_loading_item, new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message inputMessage) {
-                switch (inputMessage.arg1) {
-                    case KcpCategoryManager.DOWNLOAD_FAILED:
-                        break;
-                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                        break;
-                    default:
-                        super.handleMessage(inputMessage);
-                }
-            }
-        });
-        parkingManager.downloadParkings();
     }
 
     private void initializeMovieData(){
