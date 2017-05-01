@@ -1,9 +1,9 @@
 {
-  "amenities": [
+  "amenities":[
     {
       "type":"57c5b03bbbf01426f0000000",
       "enabled":true,
-      "title": "Washrooms",
+      "title":"Washrooms",
       "externalIds":[
         "washroom"
       ]
@@ -11,23 +11,23 @@
     {
       "type":"57c6e482bbf0141f92000002",
       "enabled":true,
-      "title": "Family Washrooms",
+      "title":"Family Washrooms",
       "externalIds":[
         "family-washroom"
       ]
     },
     {
-      "type": "57d05ed3bbf0145ac8000004",
-      "enabled": true,
-      "title": "Guest Services",
-      "externalIds": [
+      "type":"57d05ed3bbf0145ac8000004",
+      "enabled":true,
+      "title":"Guest Services",
+      "externalIds":[
         "information-counter"
       ]
     },
     {
       "type":"57c6e4d0bbf0141f92000006",
       "enabled":false,
-      "title": "Strollers",
+      "title":"Strollers",
       "externalIds":[
         "strollers"
       ]
@@ -35,7 +35,7 @@
     {
       "type":"57c6e4bbbbf0141f92000005",
       "enabled":false,
-      "title": "Nursing Room",
+      "title":"Nursing Room",
       "externalIds":[
         "changing-room"
       ]
@@ -43,7 +43,7 @@
     {
       "type":"57c5f020bbf01435f5000006",
       "enabled":false,
-      "title": "ATM",
+      "title":"ATM",
       "externalIds":[
         "atm"
       ]
@@ -51,7 +51,7 @@
     {
       "type":"57d06274bbf0145ac800000d",
       "enabled":false,
-      "title": "Parcel Pick Up",
+      "title":"Parcel Pick Up",
       "externalIds":[
         "pick-up"
       ]
@@ -59,7 +59,7 @@
     {
       "type":"57c6e44abbf0141f92000000",
       "enabled":true,
-      "title": "Bus Shelter",
+      "title":"Bus Shelter",
       "externalIds":[
         "bus-terminal"
       ]
@@ -67,7 +67,7 @@
     {
       "type":"57c6e490bbf0141f92000003",
       "enabled":false,
-      "title": "Ferry Shuttle",
+      "title":"Ferry Shuttle",
       "externalIds":[
         "shuttle"
       ]
@@ -75,7 +75,7 @@
     {
       "type":"57c6e4dbbbf0141f92000007",
       "enabled":false,
-      "title": "Taxi",
+      "title":"Taxi",
       "externalIds":[
         "taxi-stand"
       ]
@@ -83,7 +83,7 @@
     {
       "type":"57c6e468bbf0141f92000001",
       "enabled":false,
-      "title": "Electric Vehicle Charging Station",
+      "title":"Electric Vehicle Charging Station",
       "externalIds":[
         "charging"
       ]
