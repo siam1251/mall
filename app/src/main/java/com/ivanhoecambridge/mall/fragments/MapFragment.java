@@ -1082,7 +1082,7 @@ public class MapFragment extends BaseFragment
                 }
             }
         }
-        //polygon.setColor(color);
+
         mapView.setColor(polygon, color);
     }
 
@@ -2138,9 +2138,8 @@ public class MapFragment extends BaseFragment
                     mapView.getCamera().focusOn(coordinate);
                     zoomInOut();
 
-                    //destinationPolygon = location; //if location's set as destinationPolygon, it will automatically choose the closest amenity, in which case, the closest amenity has to be manually highlighted in didTapPolygon
                     destinationPolygon = coordinate;
-                    //if(location == sParkingPin.getParkingLocationPin()) return;
+
 
                     if(mSelectedPin == null) {
                         highlightThisLabel();

@@ -52,7 +52,6 @@ public class CustomLocation extends Location {
         if (this.getType().equals("tenant")) {
             id = Utils.encodingString(data);
             externalID = Utils.encodingString(data);
-          //  amenityType = Utils.encodingString(data);
             description = Utils.encodingString(data);
             logo = Utils.encodingImageSet(data);
         }else {
@@ -114,65 +113,7 @@ public class CustomLocation extends Location {
             }
         }
     }
-
-//    public CustomLocation(LocationData rawData) throws Exception {
-//        super(rawData);
-//        try {
-//            description = rawData.string("description");
-//            logo = rawData.imageCollection("logo");
-//
-//            //todo: disabled for testing
-//            if(rawData.string(TYPE_EXTERNAL_ID) != null) {
-//                externalID = rawData.stringForce(TYPE_EXTERNAL_ID);
-//                locationHashmapByExternalId.put(externalID, this);
-//            }
-//
-//            if(rawData.string(TYPE_ID) != null) {
-//                id = rawData.stringForce(TYPE_ID);
-//            }
-//
-//            //2016. 11. 10 - https://api.mappedin.com/1/location?venue=vaughan-mills doesn't give 'parking' and i don't know where the 'parking' data comes from for vaughan mills
-//            //wherever 'parking' data comes for VM, it receives this data from type: "amenity", amenity: "parking"
-//            //whwereas for Tsawwassen, the parking data comes from type: "amenity", amenities: "parking"
-//
-//            amenityType = rawData.string(TYPE_AMENITY);
-//            if(rawData.string(TYPE) != null && rawData.string(TYPE).equals(TYPE_AMENITIES)) {
-//                ArrayList<CustomLocation> amenityList;
-//                if(amenityHashmap.containsKey(amenityType)) amenityList = amenityHashmap.get(amenityType);
-//                else amenityList = new ArrayList<>();
-//                amenityList.add(this);
-//                amenityHashmap.put(amenityType, amenityList);
-//                if(amenityType != null && amenityType.equals(TYPE_AMENITY_PARKING)){
-//                    if(id != null) {
-//                        parkingHashMap.put(id, this);
-//                    }
-//                }
-//            }
-//
-//            //2016. 12. 8 - metropolis has pins like 'escalator/stairs' and 'elevator' and they dont' have 'amenity' as their type
-//            if(rawData.string(TYPE) != null && (rawData.string(TYPE).equals(TYPE_ELEVATOR) || rawData.string(TYPE).equals(TYPE_ESCALATOR_STAIRS))){
-//
-//                amenityType = rawData.string(TYPE);
-//                ArrayList<CustomLocation> amenityList;
-//                if(amenityHashmap.containsKey(amenityType)) amenityList = amenityHashmap.get(amenityType);
-//                else amenityList = new ArrayList<>();
-//                amenityList.add(this);
-//                amenityHashmap.put(amenityType, amenityList);
-//            }
-//
-//
-//            if(amenityType != null && amenityType.equals(TYPE_AMENITY_PARKING)){
-//                if(id != null) {
-//                    parkingHashMap.put(id, this);
-//                }
-//            }
-//
-//        //2016. 11. 10 - noticed that parking polygons for Tsawwassen's under type: "amenity", amenity: "parking" so rawData.string(TYPE).equals(TYPE_AMENITIES) gives "amenity" NOT "amenities"
-//
-//        } catch (Exception var3) {
-//            Logger.log("create location failed");
-//        }
-//    }
+    
 
     public static HashMap<String, ArrayList<CustomLocation>> getAmenityHashMap() {
         return amenityHashmap;
