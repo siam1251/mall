@@ -495,7 +495,7 @@ public class MapFragment extends BaseFragment
                 mapView = new MapView();
                 transaction.add(R.id.flMap, mapView);
             }
-            transaction.commit();
+            transaction.commitAllowingStateLoss();
 
             mapView.setDelegate(delegate);
 
