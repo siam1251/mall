@@ -265,41 +265,7 @@ public class InfoFragment extends BaseFragment {
             logger.error(e);
         }
     }
-
-    public void initializeMallInfoData(){
-        if(getActivity() == null){
-            setOnFragmentInteractionListener(new OnFragmentInteractionListener() {
-                @Override
-                public void onFragmentInteraction() {
-                    downloadMallInfo();
-                }
-            });
-        } else {
-            downloadMallInfo();
-        }
-    }
-
-    public void downloadMallInfo(){
-        KcpInfoManager kcpInfoManager = new KcpInfoManager(getActivity(), R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message inputMessage) {
-                switch (inputMessage.arg1) {
-                    case KcpCategoryManager.DOWNLOAD_FAILED:
-                        if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
-                        break;
-                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                        if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
-                        if(mInfoRecyclerViewAdapter != null) mInfoRecyclerViewAdapter.updateData(KcpMallInfoRoot.getInstance().getKcpMallInfo().getInfoList());
-                        break;
-                    default:
-                        super.handleMessage(inputMessage);
-                }
-            }
-        });
-        logger.debug("URL is " + HeaderFactory.MALL_INFO_URL);
-        kcpInfoManager.downloadMallInfo(Constants.MALL_INFO_URL_BASE, HeaderFactory.MALL_INFO_URL);
-    }
-
+ 
     private void setupRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);

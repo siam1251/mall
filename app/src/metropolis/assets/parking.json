@@ -1,154 +1,198 @@
 {
-  "parkings": [
+  "parkings":[
     {
-      "parkingId": "",
-      "name": "Surface Lot",
-      "childParkings": [
+      "parkingId":"",
+      "name":"Surface Lot",
+      "childParkings":[
         {
-          "parkingId": "5758386a8a3cb71bdc00000c",
-          "name": "Chapters",
-          "childParkings": []
+          "parkingId":"5758386a8a3cb71bdc00000c",
+          "name":"Chapters",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "575838bb8a3cb71bdc00000d",
-          "name": "Sears",
-          "childParkings": []
+          "parkingId":"575838bb8a3cb71bdc00000d",
+          "name":"Sears",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "575839458a3cb71bdc00000f",
-          "name": "Superstore",
-          "childParkings": []
+          "parkingId":"575839458a3cb71bdc00000f",
+          "name":"Superstore",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "5758392f8a3cb71bdc00000e",
-          "name": "Hudson's Bay",
-          "childParkings": []
+          "parkingId":"5758392f8a3cb71bdc00000e",
+          "name":"Hudson's Bay",
+          "childParkings":[
+
+          ]
         }
       ]
     },
     {
-      "parkingId": "",
-      "name": "P1 Underground",
-      "childParkings": [
+      "parkingId":"",
+      "name":"P1 Underground",
+      "childParkings":[
         {
-          "parkingId": "57587aaf8a3cb728da00000d",
-          "name": "Blue Zone",
-          "childParkings": []
+          "parkingId":"57587aaf8a3cb728da00000d",
+          "name":"Blue Zone",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "57587b028a3cb728da000010",
-          "name": "Green Zone",
-          "childParkings": []
+          "parkingId":"57587b028a3cb728da000010",
+          "name":"Green Zone",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "57587a5a8a3cb728da00000b",
-          "name": "Grey Zone",
-          "childParkings": []
+          "parkingId":"57587a5a8a3cb728da00000b",
+          "name":"Grey Zone",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "57587abf8a3cb728da00000e",
-          "name": "Purple Zone",
-          "childParkings": []
+          "parkingId":"57587abf8a3cb728da00000e",
+          "name":"Purple Zone",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "57587aea8a3cb728da00000f",
-          "name": "Orange Zone",
-          "childParkings": []
+          "parkingId":"57587aea8a3cb728da00000f",
+          "name":"Orange Zone",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "57587a978a3cb728da00000c",
-          "name": "Red Zone",
-          "childParkings": []
+          "parkingId":"57587a978a3cb728da00000c",
+          "name":"Red Zone",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "575878848a3cb728da00000a",
-          "name": "Yellow Zone",
-          "childParkings": []
+          "parkingId":"575878848a3cb728da00000a",
+          "name":"Yellow Zone",
+          "childParkings":[
+
+          ]
         }
       ]
     },
     {
-      "parkingId": "",
-      "name": "P2 Underground",
-      "childParkings": [
+      "parkingId":"",
+      "name":"P2 Underground",
+      "childParkings":[
         {
-          "parkingId": "57587c9f8a3cb728da000029",
-          "name": "Blue Zone",
-          "childParkings": []
+          "parkingId":"57587c9f8a3cb728da000029",
+          "name":"Blue Zone",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "57587c7d8a3cb728da000027",
-          "name": "Green Zone",
-          "childParkings": []
+          "parkingId":"57587c7d8a3cb728da000027",
+          "name":"Green Zone",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "57587c448a3cb728da000025",
-          "name": "Grey Zone",
-          "childParkings": []
+          "parkingId":"57587c448a3cb728da000025",
+          "name":"Grey Zone",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "57587c8d8a3cb728da000028",
-          "name": "Purple Zone",
-          "childParkings": []
+          "parkingId":"57587c8d8a3cb728da000028",
+          "name":"Purple Zone",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "57587c5b8a3cb728da000026",
-          "name": "Orange Zone",
-          "childParkings": []
+          "parkingId":"57587c5b8a3cb728da000026",
+          "name":"Orange Zone",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "57587cc58a3cb728da00002b",
-          "name": "Red Zone",
-          "childParkings": []
+          "parkingId":"57587cc58a3cb728da00002b",
+          "name":"Red Zone",
+          "childParkings":[
+
+          ]
         },
         {
-          "parkingId": "57587cb58a3cb728da00002a",
-          "name": "Yellow Zone",
-          "childParkings": []
+          "parkingId":"57587cb58a3cb728da00002a",
+          "name":"Yellow Zone",
+          "childParkings":[
+
+          ]
         }
       ]
     },
     {
-      "parkingId": "",
-      "name": "G Above Ground",
-      "childParkings": [
+      "parkingId":"",
+      "name":"G Above Ground",
+      "childParkings":[
         {
-          "parkingId": "57583a198a3cb71bdc000010",
-          "name": "Red Zone",
-          "childParkings": []
+          "parkingId":"57583a198a3cb71bdc000010",
+          "name":"Red Zone",
+          "childParkings":[
+
+          ]
         }
       ]
     },
     {
-      "parkingId": "",
-      "name": "UP1 Above Ground",
-      "childParkings": [
+      "parkingId":"",
+      "name":"UP1 Above Ground",
+      "childParkings":[
         {
-          "parkingId": "57585ac78a3cb73672000000",
-          "name": "Red Zone",
-          "childParkings": []
+          "parkingId":"57585ac78a3cb73672000000",
+          "name":"Red Zone",
+          "childParkings":[
+
+          ]
         }
       ]
     },
     {
-      "parkingId": "",
-      "name": "UP2 Above Ground",
-      "childParkings": [
+      "parkingId":"",
+      "name":"UP2 Above Ground",
+      "childParkings":[
         {
-          "parkingId": "57585d5e8a3cb73672000005",
-          "name": "Red Zone",
-          "childParkings": []
+          "parkingId":"57585d5e8a3cb73672000005",
+          "name":"Red Zone",
+          "childParkings":[
+
+          ]
         }
       ]
     },
     {
-      "parkingId": "",
-      "name": "UP3 Above Ground",
-      "childParkings": [
+      "parkingId":"",
+      "name":"UP3 Above Ground",
+      "childParkings":[
         {
-          "parkingId": "57585c388a3cb73672000003",
-          "name": "Red Zone",
-          "childParkings": []
+          "parkingId":"57585c388a3cb73672000003",
+          "name":"Red Zone",
+          "childParkings":[
+
+          ]
         }
       ]
     }

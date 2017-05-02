@@ -80,36 +80,11 @@ public class ParkingManager {
         }
     }
 
-    public ParkingService getKcpService(){
-        ServiceFactory serviceFactory = new ServiceFactory();
-        if(mParkingService == null) mParkingService = serviceFactory.createRetrofitService(mContext, ParkingService.class, Constants.MALL_INFO_URL_BASE);
-        return mParkingService;
-    }
-
     public ParkingManager(Context context, int loadingLayout, Handler handler) {
         mContext = context;
         mHandler = handler;
         mLoadingLayout = loadingLayout;
         logger = new Logger(getClass().getName());
-    }
-
-    public void downloadParkings(){
-        Call<Parkings> call = getKcpService().getParkings(HeaderFactory.PARKING_URL);
-        call.enqueue(new Callback<Parkings>() {
-            @Override
-            public void onResponse(Call<Parkings> call, Response<Parkings> response) {
-                if(response.isSuccessful()){
-                    sParkings = response.body();
-                    handleState(DOWNLOAD_COMPLETE);
-                } else handleState(DOWNLOAD_FAILED);
-            }
-
-            @Override
-            public void onFailure(Call<Parkings> call, Throwable t) {
-                logger.error(t);
-                handleState(DOWNLOAD_FAILED);
-            }
-        });
     }
 
     public interface ParkingService {
