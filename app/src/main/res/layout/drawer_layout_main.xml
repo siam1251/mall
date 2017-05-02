@@ -15,7 +15,7 @@
         >
 
         <ImageView
-            android:visibility="invisible"
+            android:visibility="visible"
             android:id="@+id/ivDrawerLayoutBg"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             />
 
         <View
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="74dp"
             android:background="@drawable/view_shadow_inverted_drawer_layout"
@@ -33,13 +33,14 @@
             />
 
 
-            android:visibility="gone"
+
         <com.ivanhoecambridge.mall.views.CircleImageView
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:id="@+id/ivDrawerLayoutUser"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:visibility="gone"
             android:src="@drawable/img_profile_default"/>
 
 
@@ -49,7 +50,8 @@
             android:gravity="center_vertical"
             android:layout_alignBottom="@+id/ivDrawerLayoutBg"
             android:layout_width="match_parent"
-            android:layout_height="45dp">
+            android:layout_height="45dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/llSignIn"
