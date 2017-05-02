@@ -383,7 +383,7 @@ public class MainActivity extends BaseActivity
             else initializeAccount();
             DirectoryFragment.getInstance().initializeDirectoryData();
 //            MapFragment.getInstance().initializeMap(); //TODO: cause int com.mappedin.jpct.Texture.getOpenGLID(int) from MappedIn - investigate
-            InfoFragment.getInstance().initializeMallInfoData();
+            InfoFragment.getInstance();
             initializeMapData();
             initializeParkingData();
             initializeSeachIndex();
