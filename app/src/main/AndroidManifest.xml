@@ -182,12 +182,12 @@
             android:value="f1f6308d"/>
 
         <!-- MAPPED IN KINETIC OFFICE-->
-        <!--<meta-data
-            android:name="com.mappedin.sdk.Username"
-            android:value="571a61f8c753ca0c5c000001" />
-        <meta-data
-            android:name="com.mappedin.sdk.Password"
-            android:value="f4a241fc2f4d2b5666d5c322b60d7f7a" />-->
+        <!--<meta-data-->
+            <!--android:name="com.mappedin.sdk.Username"-->
+            <!--android:value="571a61f8c753ca0c5c000001" />-->
+        <!--<meta-data-->
+            <!--android:name="com.mappedin.sdk.Password"-->
+            <!--android:value="f4a241fc2f4d2b5666d5c322b60d7f7a" />-->
 
 
         <!-- FABRIC CRASHLYTICS -->

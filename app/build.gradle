@@ -67,7 +67,7 @@ android {
             buildConfigField 'Boolean', 'MOVIE', 'true'
             buildConfigField 'Boolean', 'WHITE_FAV', 'true' //show white fav icon in case the selected fav's same as the toolbar bg color
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'true'
-            buildConfigField 'Boolean', 'BLUEDOT', 'false'
+            buildConfigField 'Boolean', 'BLUEDOT', 'true'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.12"'
 
             versionName "1.1.0"
@@ -81,7 +81,7 @@ android {
             buildConfigField 'Boolean', 'MOVIE', 'false'
             buildConfigField 'Boolean', 'WHITE_FAV', 'false'
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
-            buildConfigField 'Boolean', 'BLUEDOT', 'false'
+            buildConfigField 'Boolean', 'BLUEDOT', 'true'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.8"'
 
             versionName "1.1.0"
@@ -95,7 +95,7 @@ android {
             buildConfigField 'Boolean', 'MOVIE', 'false'
             buildConfigField 'Boolean', 'WHITE_FAV', 'false'
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
-            buildConfigField 'Boolean', 'BLUEDOT', 'false'
+            buildConfigField 'Boolean', 'BLUEDOT', 'true'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.6"'
 
             versionName "1.1.0"
@@ -109,7 +109,7 @@ android {
             buildConfigField 'Boolean', 'MOVIE', 'true'
             buildConfigField 'Boolean', 'WHITE_FAV', 'false'
             buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
-            buildConfigField 'Boolean', 'BLUEDOT', 'false'
+            buildConfigField 'Boolean', 'BLUEDOT', 'true'
             buildConfigField 'String', 'VERSION_NAME_STAGING', '"0.0.6"'
 
             versionName "1.1.0"
