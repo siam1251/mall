@@ -860,8 +860,9 @@ public class MainActivity extends BaseActivity
 
         //version
         TextView tvVersionNumber = (TextView) findViewById(R.id.tvVersionNumber);
-        String suffx = BuildConfig.DEBUG ? " " + getString(R.string.version_name_suffix) : "";
-        tvVersionNumber.setText(getString(R.string.version_name_prefix) + " " + BuildConfig.VERSION_NAME + suffx);
+        String versionCodeSuffix = BuildConfig.DEBUG ? "-" + getString(R.string.version_code_suffix) : "";
+        String versionNameSuffix = " (" + BuildConfig.VERSION_CODE + versionCodeSuffix + ")";
+        tvVersionNumber.setText(getString(R.string.version_name_prefix) + " " + BuildConfig.VERSION_NAME + versionNameSuffix);
     }
 
 

@@ -33,10 +33,11 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.ivanhoecambridge.mall"
+        versionName "1.1.0"
+        versionCode 1
+
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
         multiDexEnabled true
 
         renderscriptTargetApi 18
