@@ -1532,7 +1532,7 @@ public class MapFragment extends BaseFragment
             final Overlay2DImage label;
 
             if (mBlueDotCompass == null) {
-                label = new Overlay2DImage(getBlueDotSize(), getBlueDotSize(), getResources().getDrawable(R.drawable.icn_bluedot_orientation_pointer), getBlueDotSize()/2, getBlueDotSize()/2);
+                label = new Overlay2DImage(getBlueDotSize(), getBlueDotSize(), getResources().getDrawable(R.drawable.icn_bluebutton), getBlueDotSize()/2, getBlueDotSize()/2);
             } else {
                 label = mBlueDotCompass.getOverlay2DImage();
             }
