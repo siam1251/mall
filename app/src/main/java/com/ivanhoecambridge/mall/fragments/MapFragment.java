@@ -100,6 +100,8 @@ import com.mappedin.sdk.Venue;
 import com.senionlab.slutilities.type.LocationAvailability;
 import com.senionlab.slutilities.type.SLHeadingStatus;
 
+import org.w3c.dom.Text;
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -237,6 +239,8 @@ public class MapFragment extends BaseFragment
     boolean headingDropped = false;
     float tempHeading = 0f;
 
+    private TextView senionTextView;
+
     private static HashMap<String, ArrayList<Amenity>> amenityHashmap = new HashMap<>();
     private static HashMap<String, Tenant> locationHashmapByExternalId = new HashMap<>(); //used to find polygons for stores - that use external iD
     private static HashMap<String, Amenity> parkingHashMap = new HashMap<>();
@@ -270,6 +274,7 @@ public class MapFragment extends BaseFragment
         flCompass = (FrameLayout) view.findViewById(R.id.flCompass);
         rlSlidingPanel = (RelativeLayout) view.findViewById(R.id.rlSlidingPanel);
 //        rlSlidingPanel.setVisibility(View.GONE); //DELETED FOR TESTING
+        senionTextView = (TextView)view.findViewById(R.id.text_senionlabel);
 
         ivCompass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1463,6 +1468,7 @@ public class MapFragment extends BaseFragment
 
     @Override
     public void dropBlueDot(double x, double y, int floor) {
+        senionTextView.setText("Senion Id: " + String.valueOf(floor));
         int realFloorPosition = FloorToFloorMapPositionTranslator.getCorrectFloor(floor);
 
         if(maps == null) return;
