@@ -6,6 +6,8 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.exacttarget.etpushsdk.ETException;
+import com.exacttarget.etpushsdk.ETPush;
 import com.google.gson.annotations.SerializedName;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
@@ -75,15 +77,23 @@ public class AccountManager {
     }
 
     protected void postToCreateToken(){
-        String identifier = UUID.randomUUID().toString();
+        final String identifier = UUID.randomUUID().toString();
         String password = UUID.randomUUID().toString();
         Log.d(TAG, "identifier: " + identifier + " password: " + password);
+
+        try {
+            ETPush.getInstance().setSubscriberKey(identifier);
+        } catch (ETException e) {
+            e.printStackTrace();
+        }
+
         final KcpUser kcpUser = new KcpUser(identifier, password);
         Call<Token> createUser = getKcpService().postInterestedStores(KcpConstants.URL_POST_CREATE_USER, kcpUser.kcpUser);
         createUser.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if(response.isSuccessful()){
+
                     Call<Token> tokenCall = getKcpService().postInterestedStores(KcpConstants.URL_POST_CREATE_TOKEN, kcpUser.kcpToken.kcpTokenMap);
                     tokenCall.enqueue(new Callback<Token>() {
                         @Override
