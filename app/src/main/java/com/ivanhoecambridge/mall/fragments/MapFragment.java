@@ -110,6 +110,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import factory.HeaderFactory;
+import floormapping.FloorToFloorMapPositionTranslator;
 
 import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sGeofenceEntered;
 import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sLocationFindingMode;
@@ -1462,15 +1463,17 @@ public class MapFragment extends BaseFragment
 
     @Override
     public void dropBlueDot(double x, double y, int floor) {
+        int realFloorPosition = FloorToFloorMapPositionTranslator.getCorrectFloor(floor);
+
         if(maps == null) return;
-        if(maps.length <= floor) floor = 0;
+        if(maps.length <= realFloorPosition) realFloorPosition = 0;
         if(mFollowMode == FollowMode.CENTER || mFollowMode == FollowMode.COMPASS) {
-            focusOnBlueDot(floor, null);
+            focusOnBlueDot(realFloorPosition, null);
         }
 
         android.location.Location targetLocation = MapUtility.getLocation(x, y);
         Overlay2DImage label;
-        Coordinate coordinate  = new Coordinate(targetLocation, maps[floor]);
+        Coordinate coordinate  = new Coordinate(targetLocation, maps[realFloorPosition]);
         if(mBlueDotPin == null) { //first time dropping blue dot
             label = new Overlay2DImage(getBlueDotSize(), getBlueDotSize(), getResources().getDrawable(R.drawable.icn_bluebutton), getBlueDotSize()/2, getBlueDotSize()/2);
             mBlueDotPin = new Pin(coordinate, label, x, y);
