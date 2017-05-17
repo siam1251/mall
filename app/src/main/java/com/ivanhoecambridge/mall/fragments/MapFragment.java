@@ -1469,7 +1469,7 @@ public class MapFragment extends BaseFragment
     public void dropBlueDot(double x, double y, int floor) {
         if(maps == null) return;
         if(maps.length <= floor) floor = 0;
-        if(mFollowMode == FollowMode.CENTER || mFollowMode == FollowMode.COMPASS) {
+        if(mFollowMode == FollowMode.CENTER) {
             focusOnBlueDot(floor, null);
         }
 
@@ -1522,9 +1522,7 @@ public class MapFragment extends BaseFragment
     public void dropHeading(double x, double y, final float heading, SLHeadingStatus headingStatus) {
         try {
             if(maps == null || mBlueDotPin == null) return;
-            if(mapView.getCamera() != null && mFollowMode == FollowMode.COMPASS) {
-                mapView.getCamera().setRotationTo(0, -(float)Math.toRadians(heading - INITIAL_MAP_SLOPE));
-            }
+
             if(mBlueDotPin.getCoordinate().getMap().getAltitude() != maps[mCurrentLevelIndex].getAltitude()) {
                 return;
             }
@@ -1542,7 +1540,7 @@ public class MapFragment extends BaseFragment
             if(mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
             mBlueDotCompass = new Pin(coordinate, label);
             mBlueDotCompass.setCoordinate(coordinate);
-            if(mFollowMode != FollowMode.COMPASS)  label.setRotation((float)Math.toRadians(heading) + (float) mBearingFromCamera);
+            label.setRotation((float)Math.toRadians(heading) + (float) mBearingFromCamera);
             label.setPosition(coordinate);
             mapView.addMarker(label, false);
             tempHeading = heading;
@@ -1625,11 +1623,9 @@ public class MapFragment extends BaseFragment
                     setFollowMode(FollowMode.CENTER);
                     break;
                 case CENTER:
-                    setFollowMode(FollowMode.COMPASS);
-                    break;
-                case COMPASS:
                     setFollowMode(FollowMode.NONE);
                     break;
+
             }
         }
     };
@@ -1700,18 +1696,6 @@ public class MapFragment extends BaseFragment
                     ivFollowMode.setImageResource(R.drawable.icn_current_location);
                     ivFollowMode.setSelected(false);
                     break;
-                case COMPASS:
-
-                    if(mBlueDotCompass != null) {
-                        mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
-                        Overlay2DImage label = new Overlay2DImage(getBlueDotSize(), getBlueDotSize(), getResources().getDrawable(R.drawable.icn_bluedot_orientation_pointer), getBlueDotSize()/2, getBlueDotSize()/2);
-                        mBlueDotCompass.setOverlay2DImage(label);
-                    }
-
-                    ivFollowMode.setImageResource(R.drawable.icn_wayfinding_compass_bw);
-                    ivFollowMode.setSelected(true);
-                    if(mBlueDotPin != null) focusOnBlueDot(-100, mBlueDotPin.getCoordinate().getMap().getName());
-                    break;
                 case CENTER:
 
                     if(mBlueDotCompass != null) {
@@ -1735,7 +1719,7 @@ public class MapFragment extends BaseFragment
                     setMapLevel(floor, null, mapName);
                 }
                 mapView.getCamera().focusOn(mBlueDotPin.getCoordinate());
-                if(mFollowMode != FollowMode.COMPASS) mapView.getCamera().setRotationTo(0, 0);
+                mapView.getCamera().setRotationTo(0, 0);
             }
         } catch (Exception e) {
             e.printStackTrace();
