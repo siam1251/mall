@@ -24,7 +24,9 @@ public class SLMapPositions {
 	}
 
 	public static int getMapLevel(int senionsMapId){
-		if(!getMapPositions().containsKey(senionsMapId)) return 0;
+
+		// 2 is ground level.
+		if(!getMapPositions().containsKey(senionsMapId)) return 2;
 		return getMapPositions().get(senionsMapId);
 	}
 }

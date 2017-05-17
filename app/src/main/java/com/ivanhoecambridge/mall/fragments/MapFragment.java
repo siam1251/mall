@@ -1468,18 +1468,18 @@ public class MapFragment extends BaseFragment
 
     @Override
     public void dropBlueDot(double x, double y, int floor) {
-        senionTextView.setText("Senion Id: " + String.valueOf(floor));
-        int realFloorPosition = FloorToFloorMapPositionTranslator.getCorrectFloor(floor);
+        senionTextView.setText("Floor Id: " + String.valueOf(floor));
+       // int realFloorPosition = FloorToFloorMapPositionTranslator.getCorrectFloor(floor);
 
         if(maps == null) return;
-        if(maps.length <= realFloorPosition) realFloorPosition = 0;
+        if(maps.length <= floor) floor = 0;
         if(mFollowMode == FollowMode.CENTER || mFollowMode == FollowMode.COMPASS) {
-            focusOnBlueDot(realFloorPosition, null);
+            focusOnBlueDot(floor, null);
         }
 
         android.location.Location targetLocation = MapUtility.getLocation(x, y);
         Overlay2DImage label;
-        Coordinate coordinate  = new Coordinate(targetLocation, maps[realFloorPosition]);
+        Coordinate coordinate  = new Coordinate(targetLocation, maps[floor]);
         if(mBlueDotPin == null) { //first time dropping blue dot
             label = new Overlay2DImage(getBlueDotSize(), getBlueDotSize(), getResources().getDrawable(R.drawable.icn_bluebutton), getBlueDotSize()/2, getBlueDotSize()/2);
             mBlueDotPin = new Pin(coordinate, label, x, y);
