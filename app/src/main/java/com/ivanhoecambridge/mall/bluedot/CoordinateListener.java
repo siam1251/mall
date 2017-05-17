@@ -33,13 +33,12 @@ public class CoordinateListener implements LocationListener {
 
     @Override
     public void onLocationChanged(Location loc) {
-        int floorIndex = 0;
+        int floorIndex = -1;
         double radius = 100000;
         String geofence = "";
-        String geofences = "";
+
         for (Map.Entry<String, SLIndoorLocationPresenterImpl.GeofenceLocation> entry : GEOFENCE_LOCATIONS.entrySet()) {
-            if(entry.getValue().getDidEnterGeofence()) {
-                geofences = geofences + ", " + entry.getValue().name;
+            if (entry.getValue().getDidEnterGeofence()) {
                 if (radius > entry.getValue().radius) {
                     floorIndex = entry.getValue().floorIndex;
                     radius = entry.getValue().radius;
@@ -48,14 +47,14 @@ public class CoordinateListener implements LocationListener {
             }
         }
 
-        if(floorIndex != 1) {
-            Log.e("FLOORINDEX", geofence + " " +  floorIndex);
-        }
-        BlueDotPosition blueDotPosition = new BlueDotPosition(loc, floorIndex);
-        PositionAndHeadingMapVisualization positionAndHeadingMapVisualization = mPositionAndHeadingMapVisualization.get();
-        if(sLocationFindingMode == PositionAndHeadingMapVisualization.LocationFindingMode.GPS) {
-            sGeofenceEntered = geofence;
-            positionAndHeadingMapVisualization.setPos(blueDotPosition);
+        // If the locaiton has been identified, then set the blue dot position; otherwise just ignore
+        if (floorIndex >= 0) {
+            BlueDotPosition blueDotPosition = new BlueDotPosition(loc, floorIndex);
+            PositionAndHeadingMapVisualization positionAndHeadingMapVisualization = mPositionAndHeadingMapVisualization.get();
+            if (sLocationFindingMode == PositionAndHeadingMapVisualization.LocationFindingMode.GPS) {
+                sGeofenceEntered = geofence;
+                positionAndHeadingMapVisualization.setPos(blueDotPosition);
+            }
         }
     }
 

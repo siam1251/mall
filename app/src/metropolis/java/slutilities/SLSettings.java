@@ -27,7 +27,6 @@ public class SLSettings {
     static {
         GEOFENCE_LOCATIONS.put("KineticCafe", new SLIndoorLocationPresenterImpl.GeofenceLocation("KineticCafe", 43.642069, -79.374585, 200, 0));
         GEOFENCE_LOCATIONS.put("IvanhoeCambridge", new SLIndoorLocationPresenterImpl.GeofenceLocation("IvanhoeCambridge", 45.502519, -73.562517, 200, 0));
-
         GEOFENCE_LOCATIONS.put("MP", new SLIndoorLocationPresenterImpl.GeofenceLocation("MP", latitude, longitude, 500, 1, true));
 
         GEOFENCE_LOCATIONS.put("SL_SuperStore", new SLIndoorLocationPresenterImpl.GeofenceLocation("SL_SuperStore", 49.228242, -123.000393, 50, 1));
