@@ -87,19 +87,11 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
             //EXACT TARGET
             EventBus.getInstance().register(this);
             try {
-                String appId = "";
-                String accessToken = "";
-                String gcmSenderId = "";
 
-                if(Constants.IS_APP_IN_PRODUCTION) {
-                    appId = getString(R.string.app_id);
-                    accessToken = getString(R.string.access_token);
-                    gcmSenderId = getString(R.string.gcm_sender_id);
-                } else {
-                    appId = getString(R.string.staging_app_id);
-                    accessToken = getString(R.string.staging_access_token);
-                    gcmSenderId = getString(R.string.staging_gcm_sender_id);
-                }
+                 String appId = MallConstants.ET_APP_ID;//"f442b992-5da5-4788-9ce8-40aa486fa248";//getString(R.string.app_id);//
+                 String accessToken = MallConstants.ET_ACCESS_TOKEN;//"4z2cg2utxyu8kd2adz8z2mtw";//getString(R.string.access_token);
+                 String gcmSenderId = MallConstants.GCM_SENDER_ID;//getString(R.string.gcm_sender_id);
+
 
                 ETPush.configureSdk(new ETPushConfig.Builder(this)
                                 .setEtAppId(appId)

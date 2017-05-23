@@ -32,4 +32,8 @@ public class MallConstants {
     public final static String INSTAGRAM_PACKAGE_NAME = 		"com.instagram.android"; //to see if app is installed
     public final static String INSTAGRAM_ACCESS_TOKEN = "231349563.faee812.1a7e1f16f9354236979f88ffb646154b"; //VM
     public final static String INSTAGRAM_USER_ID = 		"249069342"; //VAUGHAN MILLS
+
+    public final static String ET_APP_ID = "b2109920-4dc4-4316-b84e-a9b9f6d49080";
+    public final static String ET_ACCESS_TOKEN = "q24hzmdeupkepjue5nxgtcw3";
+    public final static String GCM_SENDER_ID = "952040034121";
 }
