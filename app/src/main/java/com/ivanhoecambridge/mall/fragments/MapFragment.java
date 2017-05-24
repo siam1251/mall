@@ -1031,8 +1031,8 @@ public class MapFragment extends BaseFragment
         }
         return true;
     }
-
-    public void didTapNothing() {
+    
+    public void didTapBack() {
         clearHighlightedColours();
         clearLocationDetails();
         stopNavigation();
@@ -1055,6 +1055,35 @@ public class MapFragment extends BaseFragment
         }
 
         replaceSelectedPinWithRemovedPin();
+    }
+
+    public void didTapNothing() {
+
+        if(path == null) {
+
+            clearHighlightedColours();
+            clearLocationDetails();
+            stopNavigation();
+
+            startPolygon = null;
+            destinationPolygon = null;
+            mSearchMode = SearchMode.STORE;
+            mMapInPath.clear();
+            setLevelImageView(maps);
+            if (mDestinationPin != null) {
+                mapView.removeMarker(mDestinationPin.getOverlay2DImage());
+                mDestinationPin = null;
+            }
+
+            if (mVortexPins.size() > 0) {
+                for (VortexPin vortexPin : mVortexPins) {
+                    mapView.removeMarker(vortexPin.getVortexPin().getOverlay2DImage());
+                }
+                mVortexPins.clear();
+            }
+
+            replaceSelectedPinWithRemovedPin();
+        }
     }
 
     @Override

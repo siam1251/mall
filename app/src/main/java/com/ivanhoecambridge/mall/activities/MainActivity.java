@@ -258,7 +258,7 @@ public class MainActivity extends BaseActivity
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MapFragment.getInstance().didTapNothing();
+                MapFragment.getInstance().didTapBack();
             }
         });
         mViewPager = (KcpAnimatedViewPager) findViewById(R.id.vpMain);
@@ -291,7 +291,7 @@ public class MainActivity extends BaseActivity
                     setToolbarElevation(true);
                     if(MapFragment.getInstance().mSearchItem != null) MapFragment.getInstance().mSearchItem.collapseActionView();
                 } else {
-                    if(rlDestinationEditor.getVisibility() == View.VISIBLE) MapFragment.getInstance().didTapNothing();
+                    if(rlDestinationEditor.getVisibility() == View.VISIBLE) MapFragment.getInstance().didTapBack();
                     mViewPager.setPagingEnabled(true);
                     setToolbarElevation(false);
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.scRightDrawerLayout));
@@ -1339,7 +1339,7 @@ public class MainActivity extends BaseActivity
             //hide direction card
             if(mCurrentViewPagerTapPosition == VIEWPAGER_PAGE_MAP) {
                 if(MapFragment.getInstance().isDirectionCardVisible() || isDestinationEditorVisible()){
-                    MapFragment.getInstance().didTapNothing();
+                    MapFragment.getInstance().didTapBack();
                     return;
                 }
             }
