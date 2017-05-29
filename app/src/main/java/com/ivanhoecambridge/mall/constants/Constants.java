@@ -2,8 +2,8 @@ package com.ivanhoecambridge.mall.constants;
 
 public class Constants {
 	//todo: change production type in release
-	public final static boolean IS_APP_IN_PRODUCTION = true;
-//	public final static boolean IS_APP_IN_PRODUCTION = false;
+//	public final static boolean IS_APP_IN_PRODUCTION = true;
+	public final static boolean IS_APP_IN_PRODUCTION = false;
 
 	public final static int DURATION_MINIMUM_SPLASH_ANIMATION 				= 1000;
 	public final static int DURATION_SPLASH_ANIMATION 					  	= 7000;
