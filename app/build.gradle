@@ -147,7 +147,6 @@ android {
 //seems like this is currently a bug https://code.google.com/p/android/issues/detail?id=236471
 
 dependencies {
-    compile 'com.google.android.gms:play-services-analytics:10.2.6'
     compile 'com.google.android.gms:play-services-location:10.2.6'
     compile 'com.google.android.gms:play-services-maps:10.2.6'
     compile 'com.google.firebase:firebase-core:10.2.6'
