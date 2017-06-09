@@ -5,8 +5,6 @@ import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.ivanhoecambridge.mall.analytics.FirebaseTracking;
-
 /**
  * Created by Kay on 2016-07-15.
  */
@@ -28,7 +26,6 @@ public class BaseActivity extends AppCompatActivity implements ComponentCallback
     public void onTrimMemory(final int level) {
         if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
             Log.d("OnTrimMembyer", "OnTrimMembyer");
-            FirebaseTracking.getInstance(this).logAppPutBackground();
         }
     }
 
