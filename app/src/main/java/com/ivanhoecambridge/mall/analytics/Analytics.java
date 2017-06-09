@@ -13,7 +13,6 @@ public class Analytics implements AnalyticsInterface{
     private ICMPFirebaseAnalytics firebaseAnalytics = null;
 
     private Analytics(Context context) {
-        sAnalytics = Analytics.getInstance(context);
         firebaseAnalytics = ICMPFirebaseAnalytics.getInstance(context);
     }
 

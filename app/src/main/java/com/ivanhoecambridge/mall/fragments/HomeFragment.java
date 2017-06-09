@@ -22,6 +22,8 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
 import com.ivanhoecambridge.kcpandroidsdk.twitter.model.TwitterTweet;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.activities.MainActivity;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
 
@@ -46,6 +48,7 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
     private KcpSocialFeedManager mKcpSocialFeedManager;
     private ViewPager mViewPager;
     private int mViewPageToLoad = -1;
+    private int currentTab = VIEWPAGER_PAGE_NEWS;
 
     public static ArrayList<TwitterTweet> sTwitterFeedList = new ArrayList<>();
     public static ArrayList<InstagramFeed> sInstaFeedList = new ArrayList<>();
@@ -208,6 +211,20 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
         homeTopViewPagerAdapter.addFrag(mNewsFragment, getResources().getString(R.string.fragment_news));
         homeTopViewPagerAdapter.addFrag(mDealsFragment, getResources().getString(R.string.fragment_deals));
         viewPager.setAdapter(homeTopViewPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            @Override
+            public void onPageSelected(int position) {
+                currentTab = position;
+                trackPage();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
+
         onViewPagerCreated();
     }
 
@@ -275,6 +292,17 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
     public void selectPage(int pageIndex){
         if(mViewPager == null)  mViewPageToLoad = pageIndex;
         else mViewPager.setCurrentItem(pageIndex);
+        //this might be the correct location for news/deals screen tracking
+    }
+
+    public void trackPage() {
+        if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_HOME) {
+            if (currentTab == VIEWPAGER_PAGE_DEALS) {
+                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Homescreen - Deals tab");
+            } else if (currentTab == VIEWPAGER_PAGE_NEWS) {
+                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Homescreen - News tab");
+            }
+        }
     }
 
     @Override
@@ -284,6 +312,8 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
         updateAdapter(Constants.EXTERNAL_CODE_FEED);
         updateAdapter(Constants.EXTERNAL_CODE_DEAL);
         updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
+
+        trackPage();
     }
 
     @Override

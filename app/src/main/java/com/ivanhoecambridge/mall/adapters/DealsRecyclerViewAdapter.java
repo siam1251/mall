@@ -38,7 +38,7 @@ import java.util.ArrayList;
 
 public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    //TODO: should imeplemtn the filtering method so other deals don't have duplicates from recommended deals
+    //TODO: should implement the filtering method so other deals don't have duplicates from recommended deals
     private Context mContext;
 
     private ArrayList<KcpContentPage> mKcpContentPagesOtherDeals;
