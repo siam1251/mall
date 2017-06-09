@@ -30,6 +30,7 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.BaseActivity;
 import com.ivanhoecambridge.mall.activities.MainActivity;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 
@@ -99,6 +100,8 @@ public class TutorialActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+                Analytics.getInstance(getApplicationContext()).logScreenView(TutorialActivity.this, "Onboarding page " + position);
+
                 for (int i = 0; i < NUMB_ONBRD_SCREENS; i++) {
                     dots[i].setImageDrawable(TutorialActivity.this.getResources().getDrawable(R.drawable.viewpager_circle_page_incdicator_dot_unselected));
                 }
