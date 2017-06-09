@@ -292,7 +292,6 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
     public void selectPage(int pageIndex){
         if(mViewPager == null)  mViewPageToLoad = pageIndex;
         else mViewPager.setCurrentItem(pageIndex);
-        //this might be the correct location for news/deals screen tracking
     }
 
     public void trackPage() {
