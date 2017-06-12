@@ -1,0 +1,297 @@
+{
+  "project_info": {
+    "project_number": "1008432122266",
+    "firebase_url": "https://test-272c5.firebaseio.com",
+    "project_id": "test-272c5",
+    "storage_bucket": "test-272c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008432122266:android:5588f87b30042e2f",
+        "android_client_info": {
+          "package_name": "com.ivanhoecambridge.mall.seniondemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008432122266-9cijkl9l8vfun65ojb1ncvflmda5paa8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7PuJLMaO26PRJ1DgbGgrkrrG4_wnrDXw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008432122266:android:b68ef117ea803534",
+        "android_client_info": {
+          "package_name": "com.ivanhoecambridge.mall.crossironmills"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008432122266-9jjmh0cpoqn1e5v2m5f94qinjd9ogm2g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ivanhoecambridge.mall.crossironmills",
+            "certificate_hash": "ef4c09a01e0b5fd77443303f7aaf94ccbd3c3a5f"
+          }
+        },
+        {
+          "client_id": "1008432122266-9cijkl9l8vfun65ojb1ncvflmda5paa8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7PuJLMaO26PRJ1DgbGgrkrrG4_wnrDXw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008432122266-9cijkl9l8vfun65ojb1ncvflmda5paa8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1008432122266-3tied3e7ha0pjkn0c3gb1khl1i6q14d3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ivanhoecambridge.iostest"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008432122266:android:edbef4d9618c4159",
+        "android_client_info": {
+          "package_name": "com.ivanhoecambridge.mall.eatoncentre"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008432122266-2cpqk3rquus4431gkjsfjjachou0cbjh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ivanhoecambridge.mall.eatoncentre",
+            "certificate_hash": "ef4c09a01e0b5fd77443303f7aaf94ccbd3c3a5f"
+          }
+        },
+        {
+          "client_id": "1008432122266-9cijkl9l8vfun65ojb1ncvflmda5paa8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7PuJLMaO26PRJ1DgbGgrkrrG4_wnrDXw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008432122266-9cijkl9l8vfun65ojb1ncvflmda5paa8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1008432122266-3tied3e7ha0pjkn0c3gb1khl1i6q14d3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ivanhoecambridge.iostest"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008432122266:android:c0104e4e347b6b55",
+        "android_client_info": {
+          "package_name": "com.ivanhoecambridge.mall.metropolis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008432122266-m6fqlmrpko3f01546mgsghknn1imuoog.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ivanhoecambridge.mall.metropolis",
+            "certificate_hash": "ef4c09a01e0b5fd77443303f7aaf94ccbd3c3a5f"
+          }
+        },
+        {
+          "client_id": "1008432122266-9cijkl9l8vfun65ojb1ncvflmda5paa8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7PuJLMaO26PRJ1DgbGgrkrrG4_wnrDXw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008432122266-9cijkl9l8vfun65ojb1ncvflmda5paa8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1008432122266-3tied3e7ha0pjkn0c3gb1khl1i6q14d3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ivanhoecambridge.iostest"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008432122266:android:db9bbf0741dbb6ec",
+        "android_client_info": {
+          "package_name": "com.ivanhoecambridge.mall.tsawwassenmills"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008432122266-c9ug1or4bvo3rqkn007u4qs2a4s8jgnt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ivanhoecambridge.mall.tsawwassenmills",
+            "certificate_hash": "ef4c09a01e0b5fd77443303f7aaf94ccbd3c3a5f"
+          }
+        },
+        {
+          "client_id": "1008432122266-9cijkl9l8vfun65ojb1ncvflmda5paa8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7PuJLMaO26PRJ1DgbGgrkrrG4_wnrDXw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008432122266-9cijkl9l8vfun65ojb1ncvflmda5paa8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1008432122266-3tied3e7ha0pjkn0c3gb1khl1i6q14d3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ivanhoecambridge.iostest"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008432122266:android:310c15c4b45f65ae",
+        "android_client_info": {
+          "package_name": "com.ivanhoecambridge.mall.vaughanmills"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008432122266-oj1kllpea0dlla1u3d6iei8bkn9g98dh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ivanhoecambridge.mall.vaughanmills",
+            "certificate_hash": "ef4c09a01e0b5fd77443303f7aaf94ccbd3c3a5f"
+          }
+        },
+        {
+          "client_id": "1008432122266-9cijkl9l8vfun65ojb1ncvflmda5paa8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7PuJLMaO26PRJ1DgbGgrkrrG4_wnrDXw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008432122266-9cijkl9l8vfun65ojb1ncvflmda5paa8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1008432122266-3tied3e7ha0pjkn0c3gb1khl1i6q14d3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ivanhoecambridge.iostest"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

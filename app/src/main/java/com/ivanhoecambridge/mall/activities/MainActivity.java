@@ -85,7 +85,6 @@ import com.ivanhoecambridge.mall.adapters.HomeBottomTapAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.ActiveMallRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.GiftCardRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.IndexableRecylerView;
-import com.ivanhoecambridge.mall.analytics.FirebaseTracking;
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.constants.Constants;
 
@@ -206,8 +205,6 @@ public class MainActivity extends BaseActivity
                 ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, true);
             }
         });
-
-        FirebaseTracking.getInstance(this).logAppLaunch();
 
         final ImageView splashImage = (ImageView) MainActivity.this.findViewById(R.id.ivSplash);
         splashImage.setOnClickListener(new View.OnClickListener() {
