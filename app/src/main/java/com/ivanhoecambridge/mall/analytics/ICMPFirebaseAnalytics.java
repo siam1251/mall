@@ -27,7 +27,7 @@ public class ICMPFirebaseAnalytics implements AnalyticsInterface {
     }
 
     @Override
-    public void logScreenView (Activity activity, String screenName) {
+    public void logScreenView(Activity activity, String screenName) {
         firebaseAnalytics.setCurrentScreen(activity, screenName, null /* class override */);
     }
 

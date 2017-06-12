@@ -23,23 +23,23 @@ public class Analytics implements AnalyticsInterface{
         return sAnalytics;
     }
 
-    public void logScreenView (Activity activity, String screenName) {
+    public void logScreenView(Activity activity, String screenName) {
         firebaseAnalytics.logScreenView(activity, screenName);
     }
 
-    public void logEvent (String eventName, String category, String action) {
+    public void logEvent(String eventName, String category, String action) {
         firebaseAnalytics.logEvent(eventName, category, action);
     }
 
-    public void logEvent (String eventName, String category, String action, String label) {
+    public void logEvent(String eventName, String category, String action, String label) {
         firebaseAnalytics.logEvent(eventName, category, action, label);
     }
 
-    public void logEvent (String eventName, String category, String action, long value) {
+    public void logEvent(String eventName, String category, String action, long value) {
         firebaseAnalytics.logEvent(eventName, category, action, value);
     }
 
-    public void logEvent (String eventName, String category, String action, String label, long value) {
+    public void logEvent(String eventName, String category, String action, String label, long value) {
         firebaseAnalytics.logEvent(eventName, category, action, label, value);
     }
 }
