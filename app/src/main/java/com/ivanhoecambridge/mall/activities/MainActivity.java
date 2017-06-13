@@ -156,7 +156,7 @@ public class MainActivity extends BaseActivity
     private EditText etStartStore;
     private EditText etDestStore;
     private FrameLayout flActiveMallDot;
-    private int mCurrentViewPagerTapPosition = 0;
+    private int mCurrentViewPagerTapPosition = VIEWPAGER_PAGE_HOME;
     private GiftCardRecyclerViewAdapter mGiftCardRecyclerViewAdapter;
 
     private BadgeView badgeDeals;
@@ -267,6 +267,8 @@ public class MainActivity extends BaseActivity
             @Override
             public void onPageSelected(int position) {
                 mCurrentViewPagerTapPosition = position;
+                HomeFragment.getInstance().trackPage();
+
                 showMapToolbar(position);
                 if(position == VIEWPAGER_PAGE_MAP || position == VIEWPAGER_PAGE_INFO ) expandTopNav(); //TODO: change this hardcode
 

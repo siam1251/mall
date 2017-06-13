@@ -18,6 +18,7 @@ import android.widget.ListView;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.SocialFeedDetailRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.HomeFragment;
@@ -135,6 +136,12 @@ public class SocialDetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (mItemType == KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM) {
+            Analytics.getInstance(this).logScreenView(this, "Instagram Feed Screen");
+        } else if (mItemType == KcpContentTypeFactory.ITEM_TYPE_TWITTER) {
+            Analytics.getInstance(this).logScreenView(this, "Twitter Feed Screen");
+        }
     }
 
     public void onFinish(int resultCode){

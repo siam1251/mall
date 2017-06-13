@@ -36,6 +36,7 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpTimeConverter;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.GlideFactory;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
@@ -879,5 +880,11 @@ public class DetailActivity extends AppCompatActivity {
         if(mDealsRecyclerViewAdapter != null) mDealsRecyclerViewAdapter.notifyDataSetChanged();
         if(mEventsRecyclerViewAdapter != null) mEventsRecyclerViewAdapter.notifyDataSetChanged();
         setFav();
+
+        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_DEAL){
+            Analytics.getInstance(this).logScreenView(this, "Deal Details Screen - " + mKcpContentPage.getTitle() + " (" + mKcpContentPage.externalCode + ")");
+        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT){
+            Analytics.getInstance(this).logScreenView(this, "Event Details Screen - " + mKcpContentPage.getTitle() + " (" + mKcpContentPage.externalCode + ")");
+        }
     }
 }

@@ -2430,7 +2430,7 @@ public class MapFragment extends BaseFragment
                     @Override
                     public void onClick(View v) {
                         mMainActivity.selectPage(MainActivity.VIEWPAGER_PAGE_HOME);
-                        HomeFragment.getInstance().selectPage(1);
+                        HomeFragment.getInstance().selectPage(HomeFragment.VIEWPAGER_PAGE_DEALS);
                     }
                 });
             } else tvNumbOfDeals.setText("");
