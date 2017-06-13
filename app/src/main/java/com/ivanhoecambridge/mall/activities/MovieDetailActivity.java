@@ -23,6 +23,7 @@ import com.bumptech.glide.request.target.Target;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.movies.MovieManager;
 import com.ivanhoecambridge.mall.movies.models.MovieDetail;
@@ -278,4 +279,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Analytics.getInstance(this).logScreenView(this, "Movie Details Screen");
+    }
 }

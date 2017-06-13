@@ -24,6 +24,7 @@ import com.ivanhoecambridge.mall.adapters.AncmtRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.EventRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.NewsRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.adapters.DealsRecyclerViewAdapter;
@@ -307,6 +308,7 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
     protected void onResume() {
         super.onResume();
         setUpRecyclerView();
+        Analytics.getInstance(this).logScreenView(this, mPageTitle + " Screen");
     }
 
     public void onFinish(int resultCode){
