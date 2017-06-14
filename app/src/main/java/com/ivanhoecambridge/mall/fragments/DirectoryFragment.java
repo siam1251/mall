@@ -30,10 +30,12 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.activities.SubCategoryActivity;
 import com.ivanhoecambridge.mall.activities.SubStoreActivity;
 import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
 import com.ivanhoecambridge.mall.adapters.MallDirectoryRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
 import factory.HeaderFactory;
@@ -73,6 +75,7 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
     private Thread mCategoryThread;
 
     private int mViewPageToLoad = -1;
+    private int currentTab = VIEWPAGER_PAGE_CATEGORIES;
 
 
     private static DirectoryFragment sDirectoryFragment;
@@ -125,6 +128,21 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
         homeTopViewPagerAdapter.addFrag(mCategoriesFragment, getResources().getString(R.string.fragment_categories));
         homeTopViewPagerAdapter.addFrag(mPlacesFragment, getResources().getString(R.string.fragment_stores));
         viewPager.setAdapter(homeTopViewPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            @Override
+            public void onPageSelected(int position) {
+                currentTab = position;
+                trackPage();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
+
+        onViewPagerCreated();
     }
 
     private void updateCategoryAdapter(){
@@ -287,6 +305,19 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
         else mViewPager.setCurrentItem(pageIndex);
     }
 
+    public boolean searchVisible() {
+        return mMainActivity.rvMallDirectory.getVisibility()==View.VISIBLE;
+    }
+
+    public void trackPage() {
+        if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_DIRECTORY) {
+            if (currentTab == VIEWPAGER_PAGE_CATEGORIES) {
+                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Search screen - Categories Tab");
+            } else if (currentTab == VIEWPAGER_PAGE_STORES) {
+                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Search screen - Stores A-Z");
+            }
+        }
+    }
     @Override
     public void onViewPagerCreated() {
         if(mViewPageToLoad != -1) mViewPager.setCurrentItem(mViewPageToLoad);
@@ -336,6 +367,7 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
                     @Override
                     public boolean onMenuItemActionExpand(MenuItem item) {
                         mMainActivity.setActiveMallDot(false);
+                        Analytics.getInstance(getContext()).logScreenView(getActivity(), "Search engine screen");
                         mMainActivity.rvMallDirectory.setVisibility(View.VISIBLE);
                         return true;
                     }
