@@ -52,6 +52,7 @@ import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.adapters.CategoryStoreRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.SectionedLinearRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.bluedot.FollowMode;
 import com.ivanhoecambridge.mall.bluedot.MapViewWithBlueDot;
@@ -2203,6 +2204,12 @@ public class MapFragment extends BaseFragment
             mapView.addMarker(mRemovedPin.getOverlay2DImage(), false);
             mRemovedPin = null;
             showDirectionCard(false, null, 0, null, null, null);
+        }
+    }
+
+    public void trackPage() {
+        if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_MAP) {
+            Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Mall Map Screen");
         }
     }
 

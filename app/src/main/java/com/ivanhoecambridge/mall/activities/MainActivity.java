@@ -269,6 +269,7 @@ public class MainActivity extends BaseActivity
                 mCurrentViewPagerTapPosition = position;
                 HomeFragment.getInstance().trackPage();
                 DirectoryFragment.getInstance().trackPage();
+                MapFragment.getInstance().trackPage();
 
                 showMapToolbar(position);
                 if(position == VIEWPAGER_PAGE_MAP || position == VIEWPAGER_PAGE_INFO ) expandTopNav(); //TODO: change this hardcode
