@@ -28,10 +28,12 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.activities.DetailActivity;
 import com.ivanhoecambridge.mall.factory.GlideFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
+import com.ivanhoecambridge.mall.fragments.CategoriesFragment;
 import com.ivanhoecambridge.mall.fragments.MapFragment;
 import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
@@ -199,6 +201,13 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
             storeViewHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(mFooterText==null) {
+                        if (storeViewHolder.ivFav.isSelected())
+                            Analytics.getInstance(mContext).logEvent("search_store_unlike", "Search", "Unlike Store", storename);
+                        else
+                            Analytics.getInstance(mContext).logEvent("search_store_like", "Search", "Like Store", storename);
+                    }
+
                     Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
                         @Override
                         public void OnSqueezeAnimationDone() {
