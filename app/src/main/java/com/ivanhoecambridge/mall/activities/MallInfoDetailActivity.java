@@ -27,6 +27,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.Links;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.Location;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 
 import constants.MallConstants;
@@ -463,5 +464,11 @@ public class MallInfoDetailActivity extends AppCompatActivity{
     public void onBackPressed() {
         finish();
         ActivityAnimation.exitActivityAnimation(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Analytics.getInstance(this).logScreenView(this, "Mall information screen - " + mMallInfoType);
     }
 }

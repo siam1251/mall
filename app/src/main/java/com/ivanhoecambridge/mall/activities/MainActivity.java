@@ -270,6 +270,7 @@ public class MainActivity extends BaseActivity
                 HomeFragment.getInstance().trackPage();
                 DirectoryFragment.getInstance().trackPage();
                 MapFragment.getInstance().trackPage();
+                InfoFragment.getInstance().trackPage();
 
                 showMapToolbar(position);
                 if(position == VIEWPAGER_PAGE_MAP || position == VIEWPAGER_PAGE_INFO ) expandTopNav(); //TODO: change this hardcode
