@@ -14,6 +14,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategoryRoot;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.CategoryRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.CategoryStoreRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
@@ -102,6 +103,7 @@ public class SubCategoryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(mCategoryStoreRecyclerViewAdapter != null) mCategoryStoreRecyclerViewAdapter.notifyDataSetChanged();
+        Analytics.getInstance(this).logScreenView(this, "Search Screen - Sub Categories " + mCategoryName);
     }
 
     @Override

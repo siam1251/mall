@@ -31,6 +31,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategoryRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.InterestRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
 import factory.HeaderFactory;
@@ -297,6 +298,13 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 onFinish();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Analytics.getInstance(this).logScreenView(this, "Interests Selection Screen");
     }
 
     public void onFinish(){

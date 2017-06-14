@@ -24,6 +24,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.KcpMallInfoRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpTimeConverter;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import factory.HeaderFactory;
 
@@ -242,5 +243,11 @@ public class MallHourActivity extends AppCompatActivity {
     public void onBackPressed() {
         finish();
         ActivityAnimation.exitActivityAnimation(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Analytics.getInstance(this).logScreenView(this, "Mall Information Screen - Mall Hours Section");
     }
 }

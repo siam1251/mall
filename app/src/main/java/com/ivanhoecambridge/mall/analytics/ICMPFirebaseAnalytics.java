@@ -12,23 +12,23 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class ICMPFirebaseAnalytics implements AnalyticsInterface {
 
-    private static ICMPFirebaseAnalytics instance = null;
-    private FirebaseAnalytics firebaseAnalytics = null;
+    private static ICMPFirebaseAnalytics sICMPFirebaseAnalytics = null;
+    private FirebaseAnalytics mFirebaseAnalytics = null;
 
     private ICMPFirebaseAnalytics(Context context) {
-        firebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
     }
 
     public static ICMPFirebaseAnalytics getInstance(Context context) {
-        if (instance == null) {
-            instance  = new ICMPFirebaseAnalytics(context);
+        if (sICMPFirebaseAnalytics == null) {
+            sICMPFirebaseAnalytics  = new ICMPFirebaseAnalytics(context);
         }
-        return instance;
+        return sICMPFirebaseAnalytics;
     }
 
     @Override
     public void logScreenView(Activity activity, String screenName) {
-        firebaseAnalytics.setCurrentScreen(activity, screenName, null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(activity, screenName, null /* class override */);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ICMPFirebaseAnalytics implements AnalyticsInterface {
         Bundle bundle = new Bundle();
         bundle.putString("category", category);
         bundle.putString("action", action);
-        firebaseAnalytics.logEvent(eventName, bundle);
+        mFirebaseAnalytics.logEvent(eventName, bundle);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ICMPFirebaseAnalytics implements AnalyticsInterface {
         bundle.putString("category", category);
         bundle.putString("action", action);
         bundle.putString("label", label);
-        firebaseAnalytics.logEvent(eventName, bundle);
+        mFirebaseAnalytics.logEvent(eventName, bundle);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ICMPFirebaseAnalytics implements AnalyticsInterface {
         bundle.putString("category", category);
         bundle.putString("action", action);
         bundle.putLong("value", value);
-        firebaseAnalytics.logEvent(eventName, bundle);
+        mFirebaseAnalytics.logEvent(eventName, bundle);
     }
 
     @Override
@@ -64,6 +64,6 @@ public class ICMPFirebaseAnalytics implements AnalyticsInterface {
         bundle.putString("action", action);
         bundle.putString("label", label);
         bundle.putLong("value", value);
-        firebaseAnalytics.logEvent(eventName, bundle);
+        mFirebaseAnalytics.logEvent(eventName, bundle);
     }
 }

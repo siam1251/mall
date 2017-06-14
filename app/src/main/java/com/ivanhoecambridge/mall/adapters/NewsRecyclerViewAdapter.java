@@ -27,6 +27,7 @@ import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.activities.MyPagesActivity;
 import com.ivanhoecambridge.mall.activities.ShowtimesActivity;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.activities.DetailActivity;
 import com.ivanhoecambridge.mall.activities.InterestedCategoryActivity;
@@ -485,6 +486,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             ancmtViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Analytics.getInstance(mContext).logScreenView((Activity) mContext, "Announcement Screen");
                     Intent intent = new Intent(mContext, MyPagesActivity.class);
                     intent.putExtra(Constants.ARG_CAT_NAME, mContext.getResources().getString(R.string.my_page_all_ancmt));
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, mAnnouncements);

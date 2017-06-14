@@ -24,6 +24,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.InterestRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
@@ -144,6 +145,13 @@ public class InterestedStoreActivity extends AppCompatActivity {
                 onFinish();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Analytics.getInstance(this).logScreenView(this, "Recommended Stores Selection Screen");
     }
 
     public void onFinish(){

@@ -42,6 +42,7 @@ import com.ivanhoecambridge.mall.factory.GlideFactory;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.adapters.DealsRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.fragments.DirectoryFragment;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.utility.Utility;
@@ -536,6 +537,13 @@ public class DetailActivity extends AppCompatActivity {
             }
         } catch (Resources.NotFoundException e) {
             logger.error(e);
+
+            if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE) {
+                Analytics.getInstance(this).logScreenView(this, "Store Not Found Screen");
+            } else if (mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT) {
+                Analytics.getInstance(this).logScreenView(this, "Event Not Found Screen");
+            }
+            //TODO: verify that these screens are valid
         } catch (Exception e){
             logger.error(e);
         }
@@ -885,6 +893,19 @@ public class DetailActivity extends AppCompatActivity {
             Analytics.getInstance(this).logScreenView(this, "Deal Details Screen - " + mKcpContentPage.getTitle() + " (" + mKcpContentPage.externalCode + ")");
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT){
             Analytics.getInstance(this).logScreenView(this, "Event Details Screen - " + mKcpContentPage.getTitle() + " (" + mKcpContentPage.externalCode + ")");
+        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
+            Analytics.getInstance(this).logScreenView(this, "Store Details Screen - " + mKcpContentPage.getStoreName() + " (" + mKcpContentPage.externalCode + ")");
+        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
+            Analytics.getInstance(this).logScreenView(this, "Announcement Screen");
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
+            if (DirectoryFragment.getInstance().searchVisible())
+                Analytics.getInstance(this).logScreenView(this, "Search Engine Screen");
         }
     }
 }

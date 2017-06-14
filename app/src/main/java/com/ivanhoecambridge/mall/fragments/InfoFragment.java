@@ -34,6 +34,7 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.activities.MoviesActivity;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.activities.MallHourActivity;
 import com.ivanhoecambridge.mall.activities.MallInfoDetailActivity;
@@ -196,6 +197,12 @@ public class InfoFragment extends BaseFragment {
         }
     }
 
+    public void trackPage() {
+        if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_INFO) {
+            Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Mall Information Screen");
+        }
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -205,6 +212,7 @@ public class InfoFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        trackPage();
     }
 
     public void getMallHour() {

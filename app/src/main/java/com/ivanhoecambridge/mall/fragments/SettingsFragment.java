@@ -11,6 +11,7 @@ import com.exacttarget.etpushsdk.ETException;
 import com.exacttarget.etpushsdk.ETPush;
 import com.exacttarget.etpushsdk.data.Attribute;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.managers.ETManager;
 
 import org.w3c.dom.Attr;
@@ -62,6 +63,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onResume() {
         super.onResume();
+        Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Settings Screen - Notifications Section");
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         setSwitch();
     }
