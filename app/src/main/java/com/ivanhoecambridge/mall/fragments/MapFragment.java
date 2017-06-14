@@ -322,7 +322,7 @@ public class MapFragment extends BaseFragment
         viewRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Analytics.getInstance(getContext()).logEvent("map_directions_click", "Map", "Click On Directions", tvStoreName.getText().toString());
+                Analytics.getInstance(getContext()).logEvent("Map_Directions_Click", "Map", "Click on Directions", tvStoreName.getText().toString());
                 showDirectionEditor("", tvStoreName.getText().toString());
             }
         });
