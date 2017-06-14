@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.giftcard.GiftCard;
 import com.ivanhoecambridge.mall.giftcard.GiftCardResponse;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
@@ -44,6 +45,7 @@ public class GiftCardActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Analytics.getInstance(this).logScreenView(this, "Add a Gift Card Screen");
     }
 
 

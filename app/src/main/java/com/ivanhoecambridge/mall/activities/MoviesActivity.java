@@ -35,6 +35,7 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpTimeConverter;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.MoviesRecyclerViewAdapter;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.movies.MovieInterface;
 import com.ivanhoecambridge.mall.movies.MovieManager;
@@ -496,5 +497,11 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
         } catch (Exception e) {
             logger.error(e);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Analytics.getInstance(this).logScreenView(this, "Cinema Main Screen");
     }
 }

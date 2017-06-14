@@ -537,6 +537,13 @@ public class DetailActivity extends AppCompatActivity {
             }
         } catch (Resources.NotFoundException e) {
             logger.error(e);
+            //Tentative
+            if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE) {
+                Analytics.getInstance(this).logScreenView(this, "Store not found screen");
+            } else if (mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT) {
+                Analytics.getInstance(this).logScreenView(this, "Event not found screen");
+            }
+            //Tentative
         } catch (Exception e){
             logger.error(e);
         }
@@ -888,6 +895,8 @@ public class DetailActivity extends AppCompatActivity {
             Analytics.getInstance(this).logScreenView(this, "Event Details Screen - " + mKcpContentPage.getTitle() + " (" + mKcpContentPage.externalCode + ")");
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
             Analytics.getInstance(this).logScreenView(this, "Store Details Screen - " + mKcpContentPage.getStoreName() + " (" + mKcpContentPage.externalCode + ")");
+        } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
+            Analytics.getInstance(this).logScreenView(this, "Announcement screen");
         }
     }
 
