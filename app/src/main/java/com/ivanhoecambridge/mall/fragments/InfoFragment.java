@@ -199,7 +199,7 @@ public class InfoFragment extends BaseFragment {
 
     public void trackPage() {
         if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_INFO) {
-            Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Mall information screen");
+            Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Mall Information Screen");
         }
     }
 

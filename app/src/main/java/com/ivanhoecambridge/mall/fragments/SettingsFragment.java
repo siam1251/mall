@@ -63,7 +63,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onResume() {
         super.onResume();
-        Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Settings Screen - Notifications section");
+        Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Settings Screen - Notifications Section");
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         setSwitch();
     }

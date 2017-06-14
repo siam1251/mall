@@ -8,10 +8,8 @@ import android.app.Activity;
 
 public interface AnalyticsInterface {
 
-    //activity is only needed in ICMPFirebaseAnalytics for screen views
     public void logScreenView(Activity activity, String screenName);
 
-    //eventName is only needed in ICMPFirebaseAnalytics for event logging
     public void logEvent(String eventName, String category, String action);
 
     public void logEvent(String eventName, String category, String action, String label);

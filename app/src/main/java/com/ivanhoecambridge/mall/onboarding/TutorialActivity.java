@@ -58,6 +58,7 @@ public class TutorialActivity extends BaseActivity {
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
+        Analytics.getInstance(getApplicationContext()).logScreenView(TutorialActivity.this, "Onboarding Page 0");
         if(mHasFakeAlphaPage) setTheme(R.style.Theme_Transparent);
         setTheme(R.style.Theme_Onboarding);
         super.onCreate(savedInstanceState);
@@ -100,7 +101,7 @@ public class TutorialActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                Analytics.getInstance(getApplicationContext()).logScreenView(TutorialActivity.this, "Onboarding page " + position);
+                Analytics.getInstance(getApplicationContext()).logScreenView(TutorialActivity.this, "Onboarding Page " + position);
 
                 for (int i = 0; i < NUMB_ONBRD_SCREENS; i++) {
                     dots[i].setImageDrawable(TutorialActivity.this.getResources().getDrawable(R.drawable.viewpager_circle_page_incdicator_dot_unselected));

@@ -537,13 +537,13 @@ public class DetailActivity extends AppCompatActivity {
             }
         } catch (Resources.NotFoundException e) {
             logger.error(e);
-            //Tentative
+
             if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE) {
-                Analytics.getInstance(this).logScreenView(this, "Store not found screen");
+                Analytics.getInstance(this).logScreenView(this, "Store Not Found Screen");
             } else if (mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT) {
-                Analytics.getInstance(this).logScreenView(this, "Event not found screen");
+                Analytics.getInstance(this).logScreenView(this, "Event Not Found Screen");
             }
-            //Tentative
+            //TODO: verify that these screens are valid
         } catch (Exception e){
             logger.error(e);
         }
@@ -896,7 +896,7 @@ public class DetailActivity extends AppCompatActivity {
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
             Analytics.getInstance(this).logScreenView(this, "Store Details Screen - " + mKcpContentPage.getStoreName() + " (" + mKcpContentPage.externalCode + ")");
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
-            Analytics.getInstance(this).logScreenView(this, "Announcement screen");
+            Analytics.getInstance(this).logScreenView(this, "Announcement Screen");
         }
     }
 
@@ -905,7 +905,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onPause();
         if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
             if (DirectoryFragment.getInstance().searchVisible())
-                Analytics.getInstance(this).logScreenView(this, "Search engine screen");
+                Analytics.getInstance(this).logScreenView(this, "Search Engine Screen");
         }
     }
 }
