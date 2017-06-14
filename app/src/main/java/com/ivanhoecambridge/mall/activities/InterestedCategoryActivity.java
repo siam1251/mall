@@ -304,7 +304,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Analytics.getInstance(this).logScreenView(this, "Interests selection screen");
+        Analytics.getInstance(this).logScreenView(this, "Interests Selection Screen");
     }
 
     public void onFinish(){

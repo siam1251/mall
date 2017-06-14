@@ -48,7 +48,7 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
     private KcpSocialFeedManager mKcpSocialFeedManager;
     private ViewPager mViewPager;
     private int mViewPageToLoad = -1;
-    private int currentTab = VIEWPAGER_PAGE_NEWS;
+    private int mCurrentTab = VIEWPAGER_PAGE_NEWS;
 
     public static ArrayList<TwitterTweet> sTwitterFeedList = new ArrayList<>();
     public static ArrayList<InstagramFeed> sInstaFeedList = new ArrayList<>();
@@ -217,7 +217,7 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
 
             @Override
             public void onPageSelected(int position) {
-                currentTab = position;
+                mCurrentTab = position;
                 trackPage();
             }
 
@@ -296,10 +296,10 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
 
     public void trackPage() {
         if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_HOME) {
-            if (currentTab == VIEWPAGER_PAGE_DEALS) {
-                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Homescreen - Deals tab");
-            } else if (currentTab == VIEWPAGER_PAGE_NEWS) {
-                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Homescreen - News tab");
+            if (mCurrentTab == VIEWPAGER_PAGE_DEALS) {
+                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Homescreen - Deals Tab");
+            } else if (mCurrentTab == VIEWPAGER_PAGE_NEWS) {
+                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Homescreen - News Tab");
             }
         }
     }

@@ -75,7 +75,7 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
     private Thread mCategoryThread;
 
     private int mViewPageToLoad = -1;
-    private int currentTab = VIEWPAGER_PAGE_CATEGORIES;
+    private int mCurrentTab = VIEWPAGER_PAGE_CATEGORIES;
 
 
     private static DirectoryFragment sDirectoryFragment;
@@ -134,7 +134,7 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
 
             @Override
             public void onPageSelected(int position) {
-                currentTab = position;
+                mCurrentTab = position;
                 trackPage();
             }
 
@@ -311,10 +311,10 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
 
     public void trackPage() {
         if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_DIRECTORY) {
-            if (currentTab == VIEWPAGER_PAGE_CATEGORIES) {
-                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Search screen - Categories Tab");
-            } else if (currentTab == VIEWPAGER_PAGE_STORES) {
-                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Search screen - Stores A-Z");
+            if (mCurrentTab == VIEWPAGER_PAGE_CATEGORIES) {
+                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Search Screen - Categories Tab");
+            } else if (mCurrentTab == VIEWPAGER_PAGE_STORES) {
+                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Search Screen - Stores A-Z");
             }
         }
     }
@@ -367,7 +367,7 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
                     @Override
                     public boolean onMenuItemActionExpand(MenuItem item) {
                         mMainActivity.setActiveMallDot(false);
-                        Analytics.getInstance(getContext()).logScreenView(getActivity(), "Search engine screen");
+                        Analytics.getInstance(getContext()).logScreenView(getActivity(), "Search Engine Screen");
                         mMainActivity.rvMallDirectory.setVisibility(View.VISIBLE);
                         return true;
                     }

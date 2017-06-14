@@ -316,7 +316,7 @@ public class ParkingActivity extends AppCompatActivity {
 
     private void showSaveParkingSpotScreen(boolean enable){
         mDoneBtnShown = false;
-        Analytics.getInstance(this).logScreenView(this, "Save My Parking Spot Confirmation page");
+        Analytics.getInstance(this).logScreenView(this, "Save My Parking Spot Confirmation Page");
 
         if(enable) { //now show 3rd page
             tvQuestionOne.setVisibility(View.GONE);
@@ -571,7 +571,7 @@ public class ParkingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Analytics.getInstance(this).logScreenView(this, "Save My Parking Spot screen");
+        Analytics.getInstance(this).logScreenView(this, "Save My Parking Spot Screen");
     }
 
     public void onFinish(){
