@@ -317,8 +317,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                         .into(dealHolder.ivDealLogo);
             }
 
-            final String storeName = kcpContentPage.getStoreName();
-            dealHolder.tvDealStoreName.setText(storeName);
+            final String storename = kcpContentPage.getStoreName();
+            dealHolder.tvDealStoreName.setText(storename);
 
             final String title = kcpContentPage.getTitle();
             dealHolder.tvDealTitle.setText(title);
@@ -330,9 +330,9 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     if(HomeFragment.getInstance().isResumed()) {
                         if (dealHolder.ivFav.isSelected())
-                            Analytics.getInstance(mContext).logEvent("main_deal_unlike", "Main Screen", "Unlike Deal", title);
+                            Analytics.getInstance(mContext).logEvent("Main_Deal_Unlike", "Main Screen", "Unlike Deal", title, -1);
                         else
-                            Analytics.getInstance(mContext).logEvent("main_deal_like", "Main Screen", "Like Deal", title);
+                            Analytics.getInstance(mContext).logEvent("Main_Deal_Like", "Main Screen", "Like Deal", title, 1);
                     }
                     Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
                         @Override
@@ -358,7 +358,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     if(HomeFragment.getInstance().isResumed()) {
-                        Analytics.getInstance(mContext).logEvent("main_deal_click", "Main Screen", "Click On Deal", title);
+                        Analytics.getInstance(mContext).logEvent("Main_Deal_Click", "Main Screen", "Click On Deal", title);
                     }
 
                     Intent intent = new Intent(mContext, DetailActivity.class);
