@@ -22,11 +22,13 @@ import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.activities.DetailActivity;
 import com.ivanhoecambridge.mall.activities.InterestedCategoryActivity;
 import com.ivanhoecambridge.mall.factory.GlideFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
+import com.ivanhoecambridge.mall.fragments.HomeFragment;
 import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
 import com.ivanhoecambridge.mall.views.KCPSetRatioImageView;
 import com.ivanhoecambridge.mall.views.RecyclerViewFooter;
@@ -315,10 +317,10 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                         .into(dealHolder.ivDealLogo);
             }
 
-            String storename = kcpContentPage.getStoreName();
+            final String storename = kcpContentPage.getStoreName();
             dealHolder.tvDealStoreName.setText(storename);
 
-            String title = kcpContentPage.getTitle();
+            final String title = kcpContentPage.getTitle();
             dealHolder.tvDealTitle.setText(title);
 
             final String likeLink = kcpContentPage.getLikeLink();
@@ -326,6 +328,12 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             dealHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(HomeFragment.getInstance().isResumed()) {
+                        if (dealHolder.ivFav.isSelected())
+                            Analytics.getInstance(mContext).logEvent("Main_Deal_Unlike", "Main Screen", "Unlike Deal", title, -1);
+                        else
+                            Analytics.getInstance(mContext).logEvent("Main_Deal_Like", "Main Screen", "Like Deal", title, 1);
+                    }
                     Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
                         @Override
                         public void OnSqueezeAnimationDone() {
@@ -349,6 +357,10 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
             dealHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(HomeFragment.getInstance().isResumed()) {
+                        Analytics.getInstance(mContext).logEvent("Main_Deal_Click", "Main Screen", "Click On Deal", title);
+                    }
+
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
 
