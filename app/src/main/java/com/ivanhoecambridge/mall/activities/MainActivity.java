@@ -85,6 +85,7 @@ import com.ivanhoecambridge.mall.adapters.HomeBottomTapAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.ActiveMallRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.GiftCardRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.adapters.adapterHelper.IndexableRecylerView;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.constants.Constants;
 
@@ -1572,6 +1573,7 @@ public class MainActivity extends BaseActivity
                     int cardBalance = data.getIntExtra(GiftCard.EXTRA_GIFT_CARD_BALANCE, 0);
                     GiftCardManager.getInstance(this).addCard(cardNumber, cardBalance);
                     Toast.makeText(this, getString(R.string.gc_added_succesfully) + cardBalance, Toast.LENGTH_LONG).show();
+                    Analytics.getInstance(this).logEvent("Giftcard_Add", "Gift Card", "Gift Card Added", cardNumber, cardBalance);
                     mGiftCardRecyclerViewAdapter.updateData();
                 }
 
