@@ -141,6 +141,16 @@ public class DetailActivity extends AppCompatActivity {
         ivFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                switch (mContentPageType) {
+                    case KcpContentTypeFactory.ITEM_TYPE_EVENT:
+                        if (ivFav.isSelected()) {
+                            Analytics.getInstance(getApplicationContext()).logEvent("Event_Details_Unlike", "Details Screens", "Unlike Event", mKcpContentPage.getTitle(), -1);
+                        } else {
+                            Analytics.getInstance(getApplicationContext()).logEvent("Event_Details_Like", "Details Screens", "Like Event", mKcpContentPage.getTitle(), 1);
+                        }
+                        break;
+                }
+                
                 Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
                     @Override
                     public void OnSqueezeAnimationDone() {
