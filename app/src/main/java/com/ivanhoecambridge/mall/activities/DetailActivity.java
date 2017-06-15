@@ -149,6 +149,13 @@ public class DetailActivity extends AppCompatActivity {
                             Analytics.getInstance(getApplicationContext()).logEvent("Event_Details_Like", "Details Screens", "Like Event", mKcpContentPage.getTitle(), 1);
                         }
                         break;
+                    case KcpContentTypeFactory.ITEM_TYPE_STORE:
+                        if (ivFav.isSelected()) {
+                            Analytics.getInstance(getApplicationContext()).logEvent("Store_Details_Unlike", "Details Screens", "Unlike Store", mKcpContentPage.getStoreName(), -1);
+                        } else {
+                            Analytics.getInstance(getApplicationContext()).logEvent("Store_Details_Like", "Details Screens", "Like Store", mKcpContentPage.getStoreName(), 1);
+                        }
+                        break;
                 }
 
                 Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
