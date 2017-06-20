@@ -521,10 +521,22 @@ public class DetailActivity extends AppCompatActivity {
 
                     ((ViewGroup) llSharing).removeAllViews();
 
-                    if(kcpPlace.getFacebookLink() != null) ((ViewGroup) llSharing).addView(facebook.getView());
-                    if(kcpPlace.getTwitterLink() != null) ((ViewGroup) llSharing).addView(twiter.getView());
-                    if(kcpPlace.getInstagramLink() != null) ((ViewGroup) llSharing).addView(instagram.getView());
-                    if(kcpPlace.getMainWebsiteLink() != null) ((ViewGroup) llSharing).addView(webpage.getView());
+                    if(kcpPlace.getFacebookLink() != null){
+                        View v = facebook.getView();
+
+                        if (v != null) {
+                            ((ViewGroup) llSharing).addView(facebook.getView());
+                        }
+                    }
+                    if(kcpPlace.getTwitterLink() != null){
+                        ((ViewGroup) llSharing).addView(twiter.getView());
+                    }
+                    if(kcpPlace.getInstagramLink() != null) {
+                        ((ViewGroup) llSharing).addView(instagram.getView());
+                    }
+                    if(kcpPlace.getMainWebsiteLink() != null){
+                        ((ViewGroup) llSharing).addView(webpage.getView());
+                    }
                 }
             }
 
