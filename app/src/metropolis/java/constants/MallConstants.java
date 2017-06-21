@@ -33,7 +33,7 @@ public class MallConstants {
     public final static String INSTAGRAM_ACCESS_TOKEN = "231349563.faee812.1a7e1f16f9354236979f88ffb646154b"; //VM
     public final static String INSTAGRAM_USER_ID = 		"249069342"; //VAUGHAN MILLS
 
-    public final static String ET_APP_ID = "f442b992-5da5-4788-9ce8-40aa486fa248";
-    public final static String ET_ACCESS_TOKEN = "4z2cg2utxyu8kd2adz8z2mtw";
-    public final static String GCM_SENDER_ID = "678008942677";
+    public final static String ET_APP_ID = "71055392-7132-4a2f-9035-597507dd3b9b";
+    public final static String ET_ACCESS_TOKEN = "8qq327wa4k25c9a3mk9mt44k";
+    public final static String GCM_SENDER_ID = "1008432122266";
  }

@@ -35,5 +35,5 @@ public class MallConstants {
 
     public final static String ET_APP_ID = "";
     public final static String ET_ACCESS_TOKEN = "";
-    public final static String GCM_SENDER_ID = "678008942677";
+    public final static String GCM_SENDER_ID = "";
 }
