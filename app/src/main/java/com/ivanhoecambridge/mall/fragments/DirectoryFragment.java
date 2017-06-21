@@ -460,6 +460,8 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
             }
         });
         mCategoryThread.start();
+
+        createOrUpdateAdapter();
     }
 
     private void createOrUpdateAdapter(){
