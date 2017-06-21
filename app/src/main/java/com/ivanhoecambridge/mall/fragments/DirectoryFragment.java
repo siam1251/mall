@@ -415,12 +415,6 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
                     }
                 }
                 sortKcpPlaces(mPlaceByBrand);
-            }
-
-            @Override
-            protected void finalize() throws Throwable {
-                super.finalize();
-
                 createOrUpdateAdapter();
             }
         });
@@ -444,12 +438,6 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
                     }
                 }
                 sortKcpPlaces(mPlaceByTag);
-            }
-
-            @Override
-            protected void finalize() throws Throwable {
-                super.finalize();
-
                 createOrUpdateAdapter();
             }
         });
@@ -482,14 +470,9 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
                     }
                 }
                 sortKcpCategories(mKcpCategories);
-            }
-
-            @Override
-            protected void finalize() throws Throwable {
-                super.finalize();
-
                 createOrUpdateAdapter();
             }
+
         });
         mCategoryThread.start();
     }
