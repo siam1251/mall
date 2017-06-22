@@ -123,6 +123,7 @@ import com.ivanhoecambridge.mall.views.KcpAnimatedViewPager;
 import com.ivanhoecambridge.mall.views.ThemeColorImageView;
 import com.mappedin.sdk.Polygon;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -1570,10 +1571,11 @@ public class MainActivity extends BaseActivity
             } else if(requestCode == Constants.REQUEST_CODE_GIFT_CARD) {
                 if (resultCode == Activity.RESULT_OK) {
                     String cardNumber = data.getStringExtra(GiftCard.EXTRA_GIFT_CARD_NUMBER);
-                    int cardBalance = data.getIntExtra(GiftCard.EXTRA_GIFT_CARD_BALANCE, 0);
+                    float cardBalance = data.getFloatExtra(GiftCard.EXTRA_GIFT_CARD_BALANCE, 0);
+                    DecimalFormat df = new DecimalFormat(".00");
                     GiftCardManager.getInstance(this).addCard(cardNumber, cardBalance);
-                    Toast.makeText(this, getString(R.string.gc_added_succesfully) + cardBalance, Toast.LENGTH_LONG).show();
-                    Analytics.getInstance(this).logEvent("Giftcard_Add", "Gift Card", "Gift Card Added", cardNumber, cardBalance);
+                    Toast.makeText(this, getString(R.string.gc_added_succesfully) + df.format(cardBalance), Toast.LENGTH_LONG).show();
+                    Analytics.getInstance(this).logEvent("Giftcard_Add", "Gift Card", "Gift Card Added", cardNumber, (int)(cardBalance*100));
                     mGiftCardRecyclerViewAdapter.updateData();
                 }
 
