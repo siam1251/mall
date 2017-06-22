@@ -11,16 +11,16 @@ public class GiftCardResponse {
 
     @SerializedName("available_balance")
     @Expose
-    private Integer availableBalance;
+    private float availableBalance;
     @SerializedName("status")
     @Expose
     private String status;
     @SerializedName("activation_amount")
     @Expose
-    private Integer activationAmount;
+    private float activationAmount;
     @SerializedName("amf_amount")
     @Expose
-    private Integer amfAmount;
+    private float amfAmount;
     @SerializedName("is_icc_card")
     @Expose
     private Boolean isIccCard;
@@ -28,11 +28,11 @@ public class GiftCardResponse {
     @Expose
     private Boolean hasAtmAccess;
 
-    public Integer getAvailableBalance() {
+    public float getAvailableBalance() {
         return availableBalance;
     }
 
-    public void setAvailableBalance(Integer availableBalance) {
+    public void setAvailableBalance(float availableBalance) {
         this.availableBalance = availableBalance;
     }
 
@@ -44,19 +44,19 @@ public class GiftCardResponse {
         this.status = status;
     }
 
-    public Integer getActivationAmount() {
+    public float getActivationAmount() {
         return activationAmount;
     }
 
-    public void setActivationAmount(Integer activationAmount) {
+    public void setActivationAmount(float activationAmount) {
         this.activationAmount = activationAmount;
     }
 
-    public Integer getAmfAmount() {
+    public float getAmfAmount() {
         return amfAmount;
     }
 
-    public void setAmfAmount(Integer amfAmount) {
+    public void setAmfAmount(float amfAmount) {
         this.amfAmount = amfAmount;
     }
 
