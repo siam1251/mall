@@ -19,7 +19,6 @@ public class MallConstants {
     public static String RATINGS_PROVINCE_CODE = "on-rating";
     public static String CINEMA_NAME = "SilverCity";
 
-
     //TWITTER
     public final static String TWITTER_SCREEN_NAME = 		"Vaughan_Mills";
     public final static int 	NUMB_OF_TWEETS = 		5; //how many twitter tweets it will show at a time
