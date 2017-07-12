@@ -2363,6 +2363,9 @@ public class MapFragment extends BaseFragment
     }
 
     public boolean isDirectionCardVisible() {
+        if (rlDirection == null) {
+            return false;
+        }
         return rlDirection.getVisibility() == View.VISIBLE;
     }
     /**
