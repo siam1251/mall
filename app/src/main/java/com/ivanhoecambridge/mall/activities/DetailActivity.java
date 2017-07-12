@@ -930,7 +930,7 @@ public class DetailActivity extends AppCompatActivity {
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT){
             Analytics.getInstance(this).logScreenView(this, "Event Details Screen - " + mKcpContentPage.getTitle() + " (" + mKcpContentPage.externalCode + ")");
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
-            Analytics.getInstance(this).logScreenView(this, "Store Details Screen - " + mKcpContentPage.getStoreName() + " (" + mKcpContentPage.externalCode + ")");
+            Analytics.getInstance(this).logScreenView(this, "Store Details Screen - " + mKcpContentPage.getStoreName() + " (" + mKcpContentPage.getExternalCode() + ")");
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
             Analytics.getInstance(this).logScreenView(this, "Announcement Screen");
         }
