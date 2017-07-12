@@ -2490,6 +2490,9 @@ public class MapFragment extends BaseFragment
     }
 
     private void slidePanel(final boolean up){
+        if (getActivity()==null) {
+            return;
+        }
         final RelativeLayout.LayoutParams param = (RelativeLayout.LayoutParams) rlDirection.getLayoutParams();
         View rootView = getActivity().findViewById(android.R.id.content);
         if(mRootViewHeight == 0) mRootViewHeight = rootView.getHeight();
