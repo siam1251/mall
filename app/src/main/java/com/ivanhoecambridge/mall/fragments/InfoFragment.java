@@ -177,6 +177,10 @@ public class InfoFragment extends BaseFragment {
     }
 
     public void setParkingSpotCTA(){
+        if(mView == null || !this.isAdded()) {
+            return;
+        }
+
         ImageView ivPark = (ImageView) mView.findViewById(R.id.ivPark);
         TextView tvPark = (TextView) mView.findViewById(R.id.tvPark);
 
