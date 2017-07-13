@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -39,10 +40,12 @@ public class SocialDetailActivity extends AppCompatActivity {
     private RecyclerView rv;
     private RecyclerView.Adapter mAdapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
         setContentView(R.layout.activity_sub_category);
 
         Bundle bundle = getIntent().getExtras();
@@ -53,6 +56,7 @@ public class SocialDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         String pageTitle = "";
+
         if (mItemType == KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM){
             ImageView icn_share = (ImageView) toolbar.findViewById(R.id.icn_share);
             icn_share.setVisibility(View.VISIBLE);
@@ -77,7 +81,7 @@ public class SocialDetailActivity extends AppCompatActivity {
                 }
             });
             pageTitle = "@" + MallConstants.INSTAGRAM_USER_NAME;
-        } else if(mItemType == KcpContentTypeFactory.ITEM_TYPE_TWITTER) {
+        } else if (mItemType == KcpContentTypeFactory.ITEM_TYPE_TWITTER) {
             pageTitle = "@" + MallConstants.TWITTER_SCREEN_NAME;
             toolbar.setBackgroundColor(getResources().getColor(R.color.twitter_theme_color));
             toolbar.setTitleTextColor(getResources().getColor(R.color.white));
@@ -85,6 +89,7 @@ public class SocialDetailActivity extends AppCompatActivity {
             upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
+
         getSupportActionBar().setTitle(pageTitle);
 
         rv = (RecyclerView) findViewById(R.id.rv);
