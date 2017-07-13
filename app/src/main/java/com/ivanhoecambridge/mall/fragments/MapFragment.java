@@ -322,7 +322,7 @@ public class MapFragment extends BaseFragment
         viewRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Analytics.getInstance(getContext()).logEvent("Map_Directions_Click", "Map", "Click on Directions", tvStoreName.getText().toString());
+                Analytics.getInstance(getContext()).logEvent("MAP_Directions_Click", "MAP", "Click on Directions", tvStoreName.getText().toString());
                 showDirectionEditor("", tvStoreName.getText().toString());
             }
         });
@@ -2210,7 +2210,7 @@ public class MapFragment extends BaseFragment
 
     public void trackPage() {
         if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_MAP) {
-            Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Mall Map Screen");
+            Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "MAP - Mall Map");
         }
     }
 

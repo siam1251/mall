@@ -469,6 +469,6 @@ public class MallInfoDetailActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        Analytics.getInstance(this).logScreenView(this, "Mall Information Screen - " + mMallInfoType);
+        Analytics.getInstance(this).logScreenView(this, "MALL INFO - " + mMallInfoType);
     }
 }

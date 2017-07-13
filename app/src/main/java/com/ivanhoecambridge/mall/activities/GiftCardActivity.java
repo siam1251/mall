@@ -45,7 +45,7 @@ public class GiftCardActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Analytics.getInstance(this).logScreenView(this, "Add a Gift Card Screen");
+        Analytics.getInstance(this).logScreenView(this, "Add a Gift Card");
     }
 
 

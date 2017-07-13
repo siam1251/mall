@@ -151,7 +151,7 @@ public class InterestedStoreActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Analytics.getInstance(this).logScreenView(this, "Recommended Stores Selection Screen");
+        Analytics.getInstance(this).logScreenView(this, "Recommended Stores Selection");
     }
 
     public void onFinish(){

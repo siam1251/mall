@@ -312,9 +312,9 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
     public void trackPage() {
         if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_DIRECTORY) {
             if (mCurrentTab == VIEWPAGER_PAGE_CATEGORIES) {
-                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Search Screen - Categories Tab");
+                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "DIRECTORY - Categories Tab");
             } else if (mCurrentTab == VIEWPAGER_PAGE_STORES) {
-                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Search Screen - Stores A-Z");
+                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "DIRECTORY - Stores A-Z Tab");
             }
         }
     }
@@ -367,7 +367,7 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
                     @Override
                     public boolean onMenuItemActionExpand(MenuItem item) {
                         mMainActivity.setActiveMallDot(false);
-                        Analytics.getInstance(getContext()).logScreenView(getActivity(), "Search Engine Screen");
+                        Analytics.getInstance(getContext()).logScreenView(getActivity(), "DIRECTORY - Search Engine");
                         mMainActivity.rvMallDirectory.setVisibility(View.VISIBLE);
                         return true;
                     }

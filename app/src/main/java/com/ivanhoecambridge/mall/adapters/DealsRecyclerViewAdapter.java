@@ -330,9 +330,9 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     if(HomeFragment.getInstance().isResumed()) {
                         if (dealHolder.ivFav.isSelected())
-                            Analytics.getInstance(mContext).logEvent("Main_Deal_Unlike", "Main Screen", "Unlike Deal", title, -1);
+                            Analytics.getInstance(mContext).logEvent("HOME_Deal_Unlike", "HOME", "Unlike Deal", title, -1);
                         else
-                            Analytics.getInstance(mContext).logEvent("Main_Deal_Like", "Main Screen", "Like Deal", title, 1);
+                            Analytics.getInstance(mContext).logEvent("HOME_Deal_Like", "HOME", "Like Deal", title, 1);
                     }
                     Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
                         @Override
@@ -358,7 +358,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     if(HomeFragment.getInstance().isResumed()) {
-                        Analytics.getInstance(mContext).logEvent("Main_Deal_Click", "Main Screen", "Click On Deal", title);
+                        Analytics.getInstance(mContext).logEvent("HOME_Deal_Click", "HOME", "Click On Deal", title);
                     }
 
                     Intent intent = new Intent(mContext, DetailActivity.class);

@@ -143,9 +143,9 @@ public class SocialDetailActivity extends AppCompatActivity {
         super.onResume();
 
         if (mItemType == KcpContentTypeFactory.ITEM_TYPE_INSTAGRAM) {
-            Analytics.getInstance(this).logScreenView(this, "Instagram Feed Screen");
+            Analytics.getInstance(this).logScreenView(this, "HOME - Instagram Feed");
         } else if (mItemType == KcpContentTypeFactory.ITEM_TYPE_TWITTER) {
-            Analytics.getInstance(this).logScreenView(this, "Twitter Feed Screen");
+            Analytics.getInstance(this).logScreenView(this, "HOME - Twitter Feed");
         }
     }
 
