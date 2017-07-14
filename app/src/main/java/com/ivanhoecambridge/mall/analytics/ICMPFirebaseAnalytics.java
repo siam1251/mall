@@ -14,6 +14,8 @@ public class ICMPFirebaseAnalytics implements ICMPFirebaseAnalyticsInterface {
 
     private static ICMPFirebaseAnalytics sICMPFirebaseAnalytics = null;
     private FirebaseAnalytics mFirebaseAnalytics = null;
+    private final int mParamNameCharacterLimit = 40;
+    private final int mParamValueCharacterLimit = 100;
 
     private ICMPFirebaseAnalytics(Context context) {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
@@ -29,19 +31,19 @@ public class ICMPFirebaseAnalytics implements ICMPFirebaseAnalyticsInterface {
     private Bundle makeBundle(String category, String action, String label, Long value) {
         Bundle bundle = new Bundle();
 
-        if (category.length() > 100) {
-            category = category.substring(0, 100);
+        if (category.length() > mParamValueCharacterLimit) {
+            category = category.substring(0, mParamValueCharacterLimit);
         }
         bundle.putString("category", category);
 
-        if (action.length() > 100) {
-            action = action.substring(0, 100);
+        if (action.length() > mParamValueCharacterLimit) {
+            action = action.substring(0, mParamValueCharacterLimit);
         }
         bundle.putString("action", action);
 
         if (label != null) {
-            if (label.length() > 100) {
-                label = label.substring(0, 100);
+            if (label.length() > mParamValueCharacterLimit) {
+                label = label.substring(0, mParamValueCharacterLimit);
             }
             bundle.putString("label", label);
         }
@@ -55,16 +57,16 @@ public class ICMPFirebaseAnalytics implements ICMPFirebaseAnalyticsInterface {
 
     @Override
     public void logScreenView(Activity activity, String screenName) {
-        if (screenName.length() > 100) {
-            screenName = screenName.substring(0, 100);
+        if (screenName.length() > mParamValueCharacterLimit) {
+            screenName = screenName.substring(0, mParamValueCharacterLimit);
         }
         mFirebaseAnalytics.setCurrentScreen(activity, screenName, null /* class override */);
     }
 
     @Override
     public void logEvent(String eventName, String category, String action, String label, Long value) {
-        if (eventName.length() > 40) {
-            eventName = eventName.substring(0, 40);
+        if (eventName.length() > mParamNameCharacterLimit) {
+            eventName = eventName.substring(0, mParamNameCharacterLimit);
         }
         Bundle bundle = makeBundle(category, action, label, value);
         mFirebaseAnalytics.logEvent(eventName, bundle);
