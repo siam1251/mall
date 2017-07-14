@@ -928,11 +928,11 @@ public class DetailActivity extends AppCompatActivity {
         setFav();
 
         if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_DEAL){
-            Analytics.getInstance(this).logScreenView(this, "Deal - " + " (" + mKcpContentPage.externalCode + ")" + mKcpContentPage.getTitle());
+            Analytics.getInstance(this).logScreenView(this, "Deal - " + "(" + mKcpContentPage.externalCode + ") " + mKcpContentPage.getTitle());
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_EVENT){
-            Analytics.getInstance(this).logScreenView(this, "Event - " + " (" + mKcpContentPage.externalCode + ")" + mKcpContentPage.getTitle());
+            Analytics.getInstance(this).logScreenView(this, "Event - " + "(" + mKcpContentPage.externalCode + ") " + mKcpContentPage.getTitle());
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
-            Analytics.getInstance(this).logScreenView(this, "Store - " + " (" + mKcpContentPage.getExternalCode() + ")" + mKcpContentPage.getStoreName());
+            Analytics.getInstance(this).logScreenView(this, "Store - " + "(" + mKcpContentPage.getExternalCode() + ") " + mKcpContentPage.getStoreName());
         } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){
             Analytics.getInstance(this).logScreenView(this, "Announcement");
         }
