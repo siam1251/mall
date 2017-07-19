@@ -304,7 +304,11 @@ public class InterestedCategoryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Analytics.getInstance(this).logScreenView(this, "Interests Selection Screen");
+        if (getSupportActionBar().getTitle().equals(R.string.activity_title_interested_category)) {
+            Analytics.getInstance(this).logScreenView(this, "My Interests Selection");
+        } else {
+            Analytics.getInstance(this).logScreenView(this, "My Interests Update");
+        }
     }
 
     public void onFinish(){

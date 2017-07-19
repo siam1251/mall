@@ -103,7 +103,7 @@ public class SubCategoryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(mCategoryStoreRecyclerViewAdapter != null) mCategoryStoreRecyclerViewAdapter.notifyDataSetChanged();
-        Analytics.getInstance(this).logScreenView(this, "Search Screen - Sub Categories " + mCategoryName);
+        Analytics.getInstance(this).logScreenView(this, "DIRECTORY - " + mCategoryName);
     }
 
     @Override

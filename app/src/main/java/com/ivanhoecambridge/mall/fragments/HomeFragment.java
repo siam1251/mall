@@ -297,9 +297,9 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
     public void trackPage() {
         if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_HOME) {
             if (mCurrentTab == VIEWPAGER_PAGE_DEALS) {
-                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Homescreen - Deals Tab");
+                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "HOME - Deals Tab");
             } else if (mCurrentTab == VIEWPAGER_PAGE_NEWS) {
-                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "Homescreen - News Tab");
+                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "HOME - News Tab");
             }
         }
     }

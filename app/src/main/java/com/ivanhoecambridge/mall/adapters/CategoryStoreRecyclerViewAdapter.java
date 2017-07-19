@@ -203,9 +203,9 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     if(mFooterText==null) {
                         if (storeViewHolder.ivFav.isSelected())
-                            Analytics.getInstance(mContext).logEvent("Search_Store_Unlike", "Search", "Unlike Store", storename, -1);
+                            Analytics.getInstance(mContext).logEvent("DIRECTORY_Store_Unlike", "DIRECTORY", "Unlike Store", storename, -1);
                         else
-                            Analytics.getInstance(mContext).logEvent("Search_Store_Like", "Search", "Like Store", storename, 1);
+                            Analytics.getInstance(mContext).logEvent("DIRECTORY_Store_Like", "DIRECTORY", "Like Store", storename, 1);
                     }
 
                     Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {

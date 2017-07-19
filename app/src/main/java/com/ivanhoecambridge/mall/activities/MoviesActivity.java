@@ -502,6 +502,6 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
     @Override
     protected void onResume() {
         super.onResume();
-        Analytics.getInstance(this).logScreenView(this, "Cinema Main Screen");
+        Analytics.getInstance(this).logScreenView(this, "MALL INFO - Cinema");
     }
 }

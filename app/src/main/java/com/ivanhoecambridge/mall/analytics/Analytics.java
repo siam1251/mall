@@ -28,15 +28,15 @@ public class Analytics implements AnalyticsInterface{
     }
 
     public void logEvent(String eventName, String category, String action) {
-        mFirebaseAnalytics.logEvent(eventName, category, action);
+        mFirebaseAnalytics.logEvent(eventName, category, action, null, null);
     }
 
     public void logEvent(String eventName, String category, String action, String label) {
-        mFirebaseAnalytics.logEvent(eventName, category, action, label);
+        mFirebaseAnalytics.logEvent(eventName, category, action, label, null);
     }
 
     public void logEvent(String eventName, String category, String action, long value) {
-        mFirebaseAnalytics.logEvent(eventName, category, action, value);
+        mFirebaseAnalytics.logEvent(eventName, category, action, null, value);
     }
 
     public void logEvent(String eventName, String category, String action, String label, long value) {

@@ -114,6 +114,6 @@ public class ShowtimesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Analytics.getInstance(this).logScreenView(this, "Movie List Screen");
+        Analytics.getInstance(this).logScreenView(this, "Movie List");
     }
 }

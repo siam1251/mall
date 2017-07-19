@@ -248,6 +248,6 @@ public class MallHourActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Analytics.getInstance(this).logScreenView(this, "Mall Information Screen - Mall Hours Section");
+        Analytics.getInstance(this).logScreenView(this, "MALL INFO - Mall Hours");
     }
 }

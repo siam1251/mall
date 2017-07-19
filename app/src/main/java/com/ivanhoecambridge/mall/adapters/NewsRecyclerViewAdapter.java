@@ -486,7 +486,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             ancmtViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Analytics.getInstance(mContext).logScreenView((Activity) mContext, "Announcement Screen");
+                    Analytics.getInstance(mContext).logScreenView((Activity) mContext, "Announcement");
                     Intent intent = new Intent(mContext, MyPagesActivity.class);
                     intent.putExtra(Constants.ARG_CAT_NAME, mContext.getResources().getString(R.string.my_page_all_ancmt));
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, mAnnouncements);

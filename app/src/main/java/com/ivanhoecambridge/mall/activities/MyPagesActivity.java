@@ -308,7 +308,7 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
     protected void onResume() {
         super.onResume();
         setUpRecyclerView();
-        Analytics.getInstance(this).logScreenView(this, mPageTitle + " Screen");
+        Analytics.getInstance(this).logScreenView(this, "PROFILE - " + mPageTitle);
     }
 
     public void onFinish(int resultCode){
