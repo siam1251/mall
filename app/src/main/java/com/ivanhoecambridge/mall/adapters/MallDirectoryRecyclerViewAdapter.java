@@ -26,6 +26,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.activities.DetailActivity;
 import com.ivanhoecambridge.mall.factory.GlideFactory;
@@ -147,6 +148,14 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public void addFooter(String keyword, int itemType){
         mItems.add(new Footer(keyword, itemType));
+    }
+
+    private void logSearchRequestEvent(Boolean term, String label) {
+        if (term) {
+            Analytics.getInstance(mContext).logEvent("DIRECTORY_Searchrequest_Term", "DIRECTORY", "Click on Search Result", label);
+        } else {
+            Analytics.getInstance(mContext).logEvent("DIRECTORY_Searchrequest_Click", "DIRECTORY", "Click on Search Result", label);
+        }
     }
 
     private class Footer {
@@ -330,6 +339,8 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
             storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    logSearchRequestEvent(true, mKeyword);
+                    logSearchRequestEvent(false, storename);
 
                     KcpContentPage kcpContentPage = new KcpContentPage();
                     kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlaceTemp);
@@ -378,6 +389,8 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
             categoryHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    logSearchRequestEvent(true, mKeyword);
+                    logSearchRequestEvent(false, categoryName);
                     String subCategoriesUrl = kcpCategory.getSubCategoriesLink();
                     if(!subCategoriesUrl.equals("")){
                         //instead of expanding to subcategories, it always attemps to show all the stores under (whether there's L2, L3...)

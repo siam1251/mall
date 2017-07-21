@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.DirectoryFragment;
@@ -79,6 +80,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter {
             categoryHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Analytics.getInstance(mContext).logEvent("DIRECTORY_Category_Click", "DIRECTORY", "Click on Category", categoryName);
                     String subCategoriesUrl = kcpCategory.getSubCategoriesLink();
                     boolean hideChildCategories = kcpCategory.getCustom().getHideChildCategories();
                     if(hideChildCategories || subCategoriesUrl.equals("")) {
@@ -102,6 +104,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter {
             categoryHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Analytics.getInstance(mContext).logEvent("DIRECTORY_Subcategory_Click", "DIRECTORY", "Click on Subcategory", categoryName);
                     String placeUrl = subKcpCategory.getPlacesLink();
                     if(!placeUrl.equals("")){
                         DirectoryFragment.getInstance().tryDownloadPlacesForThisCategory(mContext, categoryName, externalCode, placeUrl, categoryHolder.tvCategory);

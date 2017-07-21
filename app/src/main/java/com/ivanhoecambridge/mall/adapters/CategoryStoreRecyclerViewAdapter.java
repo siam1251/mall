@@ -224,6 +224,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Analytics.getInstance(mContext).logEvent("DIRECTORY_Store_Click", "DIRECTORY", "Click Store", storename);
                 if(mStoreClickListener != null) mStoreClickListener.onStoreClick(kcpPlace.getPlaceId(), kcpPlace.getExternalCode(), storename, category);
                 else {
                     KcpContentPage kcpContentPage = new KcpContentPage();
