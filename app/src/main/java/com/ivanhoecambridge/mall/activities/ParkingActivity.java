@@ -98,6 +98,7 @@ public class ParkingActivity extends AppCompatActivity {
         tvEditSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Analytics.getInstance(ParkingActivity.this).logEvent("Parking_Startover_Click", "Parking", "Click on the Start Over Button");
                 showSaveParkingSpotScreen(false);
                 setupChildRecyclerView();
             }
@@ -106,6 +107,7 @@ public class ParkingActivity extends AppCompatActivity {
         tvSaveParkingLot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Analytics.getInstance(ParkingActivity.this).logEvent("Parking_Saveparkingspot_Click", "Parking", "Click on the Save Parking Spot Button");
                 ParkingManager.saveParkingSpotAndEntrance(ParkingActivity.this, mParkingNote, mParkingLotSelectedPosition, mEntranceSelectedPosition);
                 Toast.makeText(ParkingActivity.this, getResources().getString(R.string.parking_saved_my_parking_spot), Toast.LENGTH_SHORT).show();
                 setResult(PARKING_RESULT_CODE_SPOT_SAVED, new Intent());

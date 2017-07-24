@@ -106,6 +106,7 @@ public class InfoFragment extends BaseFragment {
         rlDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                logDirectionsEvent("Get Directions");
                 Utility.openGoogleMapWithAddress(getActivity(), HeaderFactory.MALL_NAME);
             }
         });
@@ -114,6 +115,7 @@ public class InfoFragment extends BaseFragment {
         rlSaveMyParkingSpot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Analytics.getInstance(mMainActivity).logEvent("MALLINFO_Savemyparking_Click", "MALL INFO", "Click Save My Parking Spot");
                 if(!ParkingManager.isParkingLotSaved(getActivity())){
                     final Intent intent = new Intent (getActivity(), ParkingActivity.class);
                     getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
@@ -128,6 +130,7 @@ public class InfoFragment extends BaseFragment {
         ivCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                logDirectionsEvent("Driving");
                 Utility.openGoogleMapWithAddressWithDrivingMode(getActivity(), HeaderFactory.MALL_NAME);
             }
         });
@@ -136,6 +139,7 @@ public class InfoFragment extends BaseFragment {
         ivSubway.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                logDirectionsEvent("Transit");
                 Utility.openGoogleMapWithAddressWithTransitMode(getActivity(), HeaderFactory.MALL_NAME);
             }
         });
@@ -144,6 +148,7 @@ public class InfoFragment extends BaseFragment {
         ivWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                logDirectionsEvent("Walking");
                 Utility.openGoogleMapWithAddressWithWalkingMode(getActivity(), HeaderFactory.MALL_NAME);
             }
         });
@@ -311,6 +316,10 @@ public class InfoFragment extends BaseFragment {
                 kcpMallInfoRoot.getKcpMallInfo().getInfoList(),
                 mListener);
         recyclerView.setAdapter(mInfoRecyclerViewAdapter);
+    }
+
+    private void logDirectionsEvent(String label) {
+        Analytics.getInstance(mMainActivity).logEvent("MALLINFO_Malldirection_Click", "MALL INFO", "Click on Get Directions", label);
     }
 
     public interface OnListFragmentInteractionListener {
