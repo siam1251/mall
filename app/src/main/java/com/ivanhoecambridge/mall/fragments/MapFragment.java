@@ -1594,6 +1594,8 @@ public class MapFragment extends BaseFragment
         @Override
         public void onStoreClick(final int storeId, final String externalCode, final String storeName, final String categoryName) {
             try {
+                Analytics.getInstance(mMainActivity).logEvent("MAP_Searchrequest_Term", "MAP", "Click on Search Result", mSearchString);
+                Analytics.getInstance(mMainActivity).logEvent("MAP_Searchrequest_Click", "MAP", "Click on Search Result", storeName);
 
                 if(!mMapLoaded) {
                     setMapInterface(new MapInterface() {
@@ -2475,6 +2477,7 @@ public class MapFragment extends BaseFragment
         llDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Analytics.getInstance(mMainActivity).logEvent("MAP_Storeinformation_Click", "MAP", "Click on Store Information", storeName);
                 KcpPlaces kcpPlace = null;
                 if(idType.equals(IdType.ID)) kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(id);
                 else if (idType.equals(IdType.EXTERNAL_CODE)) kcpPlace = KcpPlacesRoot.getInstance().getPlaceByExternalCode(String.valueOf(id));

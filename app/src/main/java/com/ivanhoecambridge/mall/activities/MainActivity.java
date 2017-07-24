@@ -1110,6 +1110,7 @@ public class MainActivity extends BaseActivity
         rlSeeDeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Analytics.getInstance(MainActivity.this).logEvent("MAP_Recommendeddeals_Click", "MAP", "Click See Recommended Deals");
                 Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
                     @Override
                     public void OnSqueezeAnimationDone() {
@@ -1138,6 +1139,8 @@ public class MainActivity extends BaseActivity
         rlSeeParking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!ParkingManager.isParkingLotSaved(MainActivity.this))
+                    Analytics.getInstance(MainActivity.this).logEvent("MAP_Savemyparkinglot_Click", "MAP", "Click Save My Parking Lot");
                 Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
                     @Override
                     public void OnSqueezeAnimationDone() {
