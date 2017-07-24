@@ -150,11 +150,18 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
         mItems.add(new Footer(keyword, itemType));
     }
 
-    private void logSearchRequestEvent(Boolean term, String label) {
-        if (term) {
-            Analytics.getInstance(mContext).logEvent("DIRECTORY_Searchrequest_Term", "DIRECTORY", "Click on Search Result", label);
-        } else {
-            Analytics.getInstance(mContext).logEvent("DIRECTORY_Searchrequest_Click", "DIRECTORY", "Click on Search Result", label);
+    private enum Type {
+        Term, Click
+    }
+
+    private void logSearchRequestEvent(Type type, String label) {
+        switch (type) {
+            case Term:
+                Analytics.getInstance(mContext).logEvent("DIRECTORY_Searchrequest_Term", "DIRECTORY", "Click on Search Result", label);
+                break;
+            case Click:
+                Analytics.getInstance(mContext).logEvent("DIRECTORY_Searchrequest_Click", "DIRECTORY", "Click on Search Result", label);
+                break;
         }
     }
 
@@ -339,8 +346,8 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
             storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    logSearchRequestEvent(true, mKeyword);
-                    logSearchRequestEvent(false, storename);
+                    logSearchRequestEvent(Type.Term, mKeyword);
+                    logSearchRequestEvent(Type.Click, storename);
 
                     KcpContentPage kcpContentPage = new KcpContentPage();
                     kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlaceTemp);
@@ -389,8 +396,8 @@ public class MallDirectoryRecyclerViewAdapter extends RecyclerView.Adapter {
             categoryHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    logSearchRequestEvent(true, mKeyword);
-                    logSearchRequestEvent(false, categoryName);
+                    logSearchRequestEvent(Type.Term, mKeyword);
+                    logSearchRequestEvent(Type.Click, categoryName);
                     String subCategoriesUrl = kcpCategory.getSubCategoriesLink();
                     if(!subCategoriesUrl.equals("")){
                         //instead of expanding to subcategories, it always attemps to show all the stores under (whether there's L2, L3...)
