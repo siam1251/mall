@@ -1110,7 +1110,9 @@ public class MainActivity extends BaseActivity
         rlSeeDeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Analytics.getInstance(MainActivity.this).logEvent("MAP_Recommendeddeals_Click", "MAP", "Click See Recommended Deals");
+                if (ivFilterDeal.isSelected()) {
+                    Analytics.getInstance(MainActivity.this).logEvent("MAP_Recommendeddeals_Click", "MAP", "Click See Recommended Deals");
+                }
                 Utility.startSqueezeAnimationForInterestedCat(new Utility.SqueezeListener() {
                     @Override
                     public void OnSqueezeAnimationDone() {
