@@ -217,6 +217,7 @@ public class DetailActivity extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            logEventForStore("Store_Viewonmap_Click", "Click View on Map");
                             setResult(Integer.valueOf(kcpContentPage.getExternalCode()), new Intent());
                             Intent intent = new Intent();
                             intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
@@ -240,6 +241,7 @@ public class DetailActivity extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            logEventForStore("Store_Nearestparking_Click", "Click Nearest Parking");
                             if(BuildConfig.NEAREST_PARKING_IMG){
                                 Intent intent = new Intent(DetailActivity.this, ZoomableImage.class);
                                 intent.putExtra(Constants.ARG_IMAGE_RESOURCE, R.drawable.ic_nearestparking);
@@ -266,6 +268,7 @@ public class DetailActivity extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            logEventForStore("Store_Phonenumber_Click", "Click Phone Call Link");
                             Utility.makeCallWithAlertDialog(
                                     DetailActivity.this,
                                     getResources().getString(R.string.title_make_calls),
@@ -415,6 +418,7 @@ public class DetailActivity extends AppCompatActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            logEventForStore("Store_Openinghours_Click", "Click Opening Hours");
                             if(mLayoutStoreHours == null) return;
                             Animation animation;
 
@@ -466,7 +470,7 @@ public class DetailActivity extends AppCompatActivity {
                 cTAList.add(phone);
 
             } else if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
-                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
+                final KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
 
                 cTAList.add(location);
                 cTAList.add(parking);
@@ -482,8 +486,7 @@ public class DetailActivity extends AppCompatActivity {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                                Utility.openWebPage(DetailActivity.this, kcpPlace.getFacebookLink());
+                                clickExternalLink(kcpPlace.getFacebookLink());
                             }
                         }, false);
 
@@ -496,8 +499,7 @@ public class DetailActivity extends AppCompatActivity {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                                Utility.openWebPage(DetailActivity.this, kcpPlace.getTwitterLink());
+                                clickExternalLink(kcpPlace.getTwitterLink());
                             }
                         }, false);
 
@@ -510,8 +512,7 @@ public class DetailActivity extends AppCompatActivity {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                                Utility.openWebPage(DetailActivity.this, kcpPlace.getInstagramLink());
+                                clickExternalLink(kcpPlace.getInstagramLink());
                             }
                         }, false);
 
@@ -526,8 +527,7 @@ public class DetailActivity extends AppCompatActivity {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
-                                Utility.openWebPage(DetailActivity.this, kcpPlace.getMainWebsiteLink());
+                                clickExternalLink(kcpPlace.getMainWebsiteLink());
                             }
                         }, false);
 
@@ -881,6 +881,15 @@ public class DetailActivity extends AppCompatActivity {
         rv.addItemDecoration(itemDecoration);
         return dealsRecyclerViewAdapter;
 
+    }
+
+    private void logEventForStore(String name, String action) {
+        Analytics.getInstance(this).logEvent(name, "Details Screens", action, mKcpContentPage.getTitle());
+    }
+
+    private void clickExternalLink(String link){
+        logEventForStore("Store_Externallink_Click", "Click External Link");
+        Utility.openWebPage(DetailActivity.this, link);
     }
 
     @Override
