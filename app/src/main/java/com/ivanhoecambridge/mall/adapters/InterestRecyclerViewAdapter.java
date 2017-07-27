@@ -315,12 +315,15 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
 
                     KcpContentPage kcpContentPage = new KcpContentPage();
                     kcpContentPage.setPlaceList(KcpContentTypeFactory.CONTENT_TYPE_STORE, kcpPlaces);
+                    String storeName = kcpContentPage.getStoreName();
 
                     if(mTempStoreFav.containsKey(kcpPlaces.getLikeLink())) {
+                        Analytics.getInstance(mContext).logEvent("PROFILE_Store_Unselect", "Interests", "Unselect Interest", storeName, -1);
                         mRemovedStoreFavs.put(kcpPlaces.getLikeLink(), kcpContentPage);
                         mTempStoreFav.remove(kcpPlaces.getLikeLink());
                         setSelectedStore(interestedStoreHolder.cvIntrst, interestedStoreHolder.ivFav, false);
                     } else {
+                        Analytics.getInstance(mContext).logEvent("PROFILE_Store_Select", "Interests", "Select Interest", storeName, 1);
                         if(mRemovedStoreFavs.containsKey(kcpPlaces.getLikeLink())) mRemovedStoreFavs.remove(kcpPlaces.getLikeLink());
                         mTempStoreFav.put(kcpPlaces.getLikeLink(), kcpContentPage);
                         setSelectedStore(interestedStoreHolder.cvIntrst, interestedStoreHolder.ivFav, true);
