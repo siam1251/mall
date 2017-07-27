@@ -440,6 +440,9 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+                    Analytics.getInstance(MainActivity.this).logEvent("Myprofiletab_Open", "PROFILE", "Open Profile Tab");
+                }
             }
 
             @Override
