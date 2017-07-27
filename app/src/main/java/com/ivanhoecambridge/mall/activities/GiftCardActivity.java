@@ -72,6 +72,7 @@ public class GiftCardActivity extends BaseActivity {
                 final String cardNumber = etCard.getText().toString();
                 //check if this gift card has already been added
                 if(GiftCardManager.getInstance(GiftCardActivity.this).isCardAdded(cardNumber)){
+                    logGiftCardFailEvent();
                     AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
                     alertDialogForInterest.getAlertDialog(
                             GiftCardActivity.this,
@@ -95,6 +96,7 @@ public class GiftCardActivity extends BaseActivity {
                         showProgressBar(false);
                         switch (inputMessage.arg1) {
                             case KcpCategoryManager.DOWNLOAD_FAILED:
+                                logGiftCardFailEvent();
                                 String errorMessage = (String) inputMessage.obj;
                                 AlertDialogForInterest alertDialogForInterest = new AlertDialogForInterest();
                                 alertDialogForInterest.getAlertDialog(
@@ -181,6 +183,9 @@ public class GiftCardActivity extends BaseActivity {
         }
     }
 
+    private void logGiftCardFailEvent() {
+        Analytics.getInstance(GiftCardActivity.this).logEvent("Giftcard_Fail", "Gift Card", "Gift Card Rejected");
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
