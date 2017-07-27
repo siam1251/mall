@@ -329,6 +329,7 @@ public class DetailActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             try {
+                                Analytics.getInstance(DetailActivity.this).logEvent("Event_Addtocalendar_Click", "Details Screens", "Click on Add to Calendar", kcpContentPage.getTitle());
                                 final SimpleDateFormat sdf = new SimpleDateFormat(KcpConstants.EFFECTIVE_DATE_FORMAT);
                                 Date dateObj = sdf.parse(kcpContentPage.effectiveStartTime);
                                 Calendar startTimeCalendar = Calendar.getInstance();
