@@ -171,7 +171,7 @@ public class MainActivity extends BaseActivity
     //GEOFENCE
     public GeofenceManager mGeofenceManager;
     private Animation mMenuActiveMallDotAnim;
-    private boolean mFirstPermissionRequestPrompt = false;
+    private boolean mDidPressLocationAccessRetry = false;
 
     public RecyclerView rvMallDirectory; //SEARCH RECYCLERVIEW FROM DIRECTORY FRAGMENT
     public IndexableRecylerView rvMap; //Store rv from Map Fragment
@@ -1497,7 +1497,9 @@ public class MainActivity extends BaseActivity
         }
     }
 
-
+    private void logLocationAccessEvent(String type) {
+        Analytics.getInstance(this).logEvent(type + "_Location_Access", "Onboarding", type + " Location Access");
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1632,8 +1634,10 @@ public class MainActivity extends BaseActivity
                             if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                                 boolean showRationale = shouldShowRequestPermissionRationale( permission );
                                 if (! showRationale) { // user denied flagging NEVER ASK AGAIN
-                                    if (mFirstPermissionRequestPrompt) {
-                                        Analytics.getInstance(this).logEvent("Disallow_Location_Access", "Onboarding", "Disallow Location Access");
+
+                                    //Without this check, analytics would be sent even if the user was not prompted for location access
+                                    if (mDidPressLocationAccessRetry) {
+                                        logLocationAccessEvent("Disallow");
                                     }
                                 } else if (Manifest.permission.ACCESS_FINE_LOCATION.equals(permission)) {
                                     View v = getLayoutInflater().inflate(R.layout.alertdialog_interest, null);
@@ -1646,7 +1650,7 @@ public class MainActivity extends BaseActivity
                                     builder.setPositiveButton(getString(R.string.action_sure), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            Analytics.getInstance(MainActivity.this).logEvent("Disallow_Location_Access", "Onboarding", "Disallow Location Access");
+                                            logLocationAccessEvent("Disallow");
                                             return;
                                         }
                                     });
@@ -1654,7 +1658,7 @@ public class MainActivity extends BaseActivity
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             ActivityCompat.requestPermissions(MainActivity.this, GeofenceManager.INITIAL_PERMS, GeofenceManager.LOCATION_REQUEST);
-                                            mFirstPermissionRequestPrompt = true;
+                                            mDidPressLocationAccessRetry = true;
                                             return;
                                         }
                                     });
@@ -1662,7 +1666,7 @@ public class MainActivity extends BaseActivity
                                     builder.show();
                                 }
                             } else if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                                Analytics.getInstance(this).logEvent("Allow_Location_Access", "Onboarding", "Allow Location Access");
+                                logLocationAccessEvent("Allow");
                             }
                         }
                     }
