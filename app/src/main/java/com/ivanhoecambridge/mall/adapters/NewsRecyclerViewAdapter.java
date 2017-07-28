@@ -535,6 +535,9 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
                 mSocialFeedViewPagerAdapter.getTwitterViewPagerAdapter(mContext, HomeFragment.sTwitterFeedList, new SocialFeedViewPagerAdapter.OnSocialFeedClickListener() {
                     @Override
                     public void onSocialFeedClicked() {
+                        if(HomeFragment.getInstance().isResumed()) {
+                            Analytics.getInstance(mContext).logEvent("HOME_Twitterfeed_Click", "HOME", "Click on Twitterfeed");
+                        }
                         if(!NetworkManager.isConnected(mContext)) return;
                         Intent intent = new Intent(mContext, SocialDetailActivity.class);
                         intent.putExtra(Constants.ARG_ACTIVITY_TYPE, KcpContentTypeFactory.ITEM_TYPE_TWITTER);

@@ -242,9 +242,13 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         if (holder instanceof LoadingViewHolder) {
             LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
-        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST){
+        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SET_MY_INTEREST||holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST){
             SetMyInterestViewHolder setMyInterestViewHolder = (SetMyInterestViewHolder) holder;
             setMyInterestViewHolder.tvIntrstTitle.setText(mContext.getResources().getString(R.string.intrst_card_recommended_title));
+            if (holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST) {
+                setMyInterestViewHolder.tvIntrstDesc.setText(mContext.getResources().getString(R.string.intrst_card_recommended_desc));
+                setMyInterestViewHolder.tvIntrstBtn.setText(mContext.getResources().getString(R.string.intrst_card_recommended_btn));
+            }
             setMyInterestViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -253,25 +257,10 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            //intrst card has top margin when recommended deals list are empty
+            //this doubles the top margin of the set interests card
             StaggeredGridLayoutManager.LayoutParams param = (StaggeredGridLayoutManager.LayoutParams) setMyInterestViewHolder.mView.getLayoutParams();
             param.topMargin = (int) mContext.getResources().getDimension(R.dimen.card_vertical_margin);
             setMyInterestViewHolder.mView.setLayoutParams(param);
-        } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST){
-            SetMyInterestViewHolder setMyInterestViewHolder = (SetMyInterestViewHolder) holder;
-            setMyInterestViewHolder.tvIntrstTitle.setText(mContext.getResources().getString(R.string.intrst_card_recommended_title));
-            setMyInterestViewHolder.tvIntrstDesc.setText(mContext.getResources().getString(R.string.intrst_card_recommended_desc));
-            setMyInterestViewHolder.tvIntrstBtn.setText(mContext.getResources().getString(R.string.intrst_card_recommended_btn));
-
-            setMyInterestViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((Activity)mContext).startActivityForResult(new Intent(mContext, InterestedCategoryActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
-                    ActivityAnimation.startActivityAnimation(mContext);
-                }
-            });
-
-
         } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS){
             SectionHeaderViewHolder sectionHeaderViewHolder = (SectionHeaderViewHolder) holder;
             sectionHeaderViewHolder.tvSectionHeader.setText(mContext.getResources().getString(R.string.section_header_recommended_deals));

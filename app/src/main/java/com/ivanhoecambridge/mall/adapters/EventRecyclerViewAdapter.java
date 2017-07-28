@@ -21,10 +21,12 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.DetailActivity;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.bluedot.CoordinateListener;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.GlideFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
+import com.ivanhoecambridge.mall.fragments.HomeFragment;
 import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.utility.Utility;
@@ -113,7 +115,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
                     eventHolder.ivAnnouncementLogo,
                     R.drawable.placeholder);
 
-            String title = kcpContentPage.getTitle();
+            final String title = kcpContentPage.getTitle();
             eventHolder.tvAnnouncementTitle.setText(title);
 
             //if event is for one day, also show its begin/end hours
@@ -149,6 +151,9 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
             eventHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(HomeFragment.getInstance().isResumed()) {
+                        Analytics.getInstance(mContext).logEvent("HOME_Event_Click", "HOME", "Click on Event", title);
+                    }
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
 
