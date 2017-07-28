@@ -55,10 +55,10 @@ public class TutorialActivity extends BaseActivity {
     private LinearLayout llViewPagerCountDots;
     private GetStartedButtonClicker mGetStartedButtonClicker;
     private boolean mHasFakeAlphaPage = false;
+    private int mCurrentPosition = 0;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
-        Analytics.getInstance(getApplicationContext()).logScreenView(TutorialActivity.this, "Onboarding Page 0");
         if(mHasFakeAlphaPage) setTheme(R.style.Theme_Transparent);
         setTheme(R.style.Theme_Onboarding);
         super.onCreate(savedInstanceState);
@@ -102,6 +102,7 @@ public class TutorialActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 Analytics.getInstance(getApplicationContext()).logScreenView(TutorialActivity.this, "Onboarding Page " + position);
+                mCurrentPosition = position;
 
                 for (int i = 0; i < NUMB_ONBRD_SCREENS; i++) {
                     dots[i].setImageDrawable(TutorialActivity.this.getResources().getDrawable(R.drawable.viewpager_circle_page_incdicator_dot_unselected));
@@ -148,6 +149,12 @@ public class TutorialActivity extends BaseActivity {
         mImageAdapter = new TutorialImageAdapter(this, getSupportFragmentManager());
         mImagePager.setAdapter(mImageAdapter);
         controlAnimationPlayback(0);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Analytics.getInstance(this).logScreenView(this, "Onboarding Page " + mCurrentPosition);
     }
 
     public void removeGetStartedBtn(boolean hide){
