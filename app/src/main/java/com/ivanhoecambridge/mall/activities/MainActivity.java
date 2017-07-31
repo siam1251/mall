@@ -1635,6 +1635,7 @@ public class MainActivity extends BaseActivity
             case GeofenceManager.LOCATION_REQUEST:
                 if (mGeofenceManager.canAccessLocation()) {
                     mGeofenceManager.setGeofence(true);
+                    logLocationAccessEvent("Allow");
                 } else {
                     if (Build.VERSION.SDK_INT >= 23) {
                         for (int i = 0, len = permissions.length; i < len; i++) {
@@ -1673,8 +1674,6 @@ public class MainActivity extends BaseActivity
                                     builder.setView(v);
                                     builder.show();
                                 }
-                            } else if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                                logLocationAccessEvent("Allow");
                             }
                         }
                     }
