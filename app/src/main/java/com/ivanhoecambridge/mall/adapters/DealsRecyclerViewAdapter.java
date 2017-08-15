@@ -347,7 +347,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     if(HomeFragment.getInstance().isResumed()) {
-                        Analytics.getInstance(mContext).logEvent("HOME_Deal_Click", "HOME", "Click On Deal", title);
+                        Analytics.getInstance(mContext).logEvent("HOME_Deal_Click", "HOME", "Click on Deal", title);
                     }
 
                     Intent intent = new Intent(mContext, DetailActivity.class);
