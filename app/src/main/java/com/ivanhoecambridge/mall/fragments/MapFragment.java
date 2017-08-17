@@ -1,5 +1,6 @@
 package com.ivanhoecambridge.mall.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -26,7 +27,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -138,6 +138,8 @@ public class MapFragment extends BaseFragment
 
     private enum IdType { ID, EXTERNAL_CODE, AMENITY, PARKING, INSTRUCTION };
 
+    private Context context;
+
     private ProgressBar pb;
     private View view;
     private RelativeLayout rlDirection;
@@ -239,6 +241,7 @@ public class MapFragment extends BaseFragment
     private boolean mGreyDotDropped = false;
     boolean headingDropped = false;
     float tempHeading = 0f;
+    private int blueDotSizeInPx = 0;
 
 
     private static HashMap<String, ArrayList<Amenity>> amenityHashmap = new HashMap<>();
@@ -1472,7 +1475,10 @@ public class MapFragment extends BaseFragment
 
 
     private int getBlueDotSize() {
-        return KcpUtility.dpToPx(getActivity(), PIN_BLUEDOT);
+        if (blueDotSizeInPx == 0) {
+            blueDotSizeInPx = KcpUtility.dpToPx(context, PIN_BLUEDOT);
+        }
+        return blueDotSizeInPx;
     }
 
     private int getVortexAndDestinationPinSize(){
@@ -2560,8 +2566,15 @@ public class MapFragment extends BaseFragment
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
+        context = null;
     }
 
     @Override
