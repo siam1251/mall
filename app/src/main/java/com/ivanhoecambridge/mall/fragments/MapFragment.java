@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -2575,6 +2574,7 @@ public class MapFragment extends BaseFragment
     @Override
     public void onDetach() {
         super.onDetach();
+        context = null;
     }
 
     @Override

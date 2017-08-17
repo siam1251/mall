@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.mall.activities.MainActivity;
@@ -51,6 +52,7 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
     private MapViewWithBlueDot mapViewWithBlueDot;
     private static CoordinateListener sCoordinateListener;
     private static LocationManager sLocationManager;
+
 
 
     public static class GeofenceLocation {
