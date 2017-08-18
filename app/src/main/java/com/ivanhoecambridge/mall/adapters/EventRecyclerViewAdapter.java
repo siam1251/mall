@@ -32,6 +32,7 @@ import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.MovieRecyclerItemDecoration;
+import com.ivanhoecambridge.mall.views.RecyclerViewFooter;
 
 import java.util.ArrayList;
 
@@ -44,6 +45,10 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
     private ArrayList<KcpContentPage> mKcpContentPagesNews;
     private FavouriteInterface mFavouriteInterface;
     private boolean mIsCardFullWidth;
+    private boolean mFooterExist;
+    private int mFooterLayout;
+    private String mFooterText;
+    private View.OnClickListener mFooterOnClickListener;
 
     public EventRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> events, boolean isCardFullWidth, FavouriteInterface favouriteInterface) {
         mContext = context;
@@ -99,6 +104,8 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
         switch (viewType){
             case KcpContentTypeFactory.ITEM_TYPE_EVENT:
                 return new EventViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item_event, parent, false));
+            case KcpContentTypeFactory.ITEM_TYPE_FOOTER:
+                return new RecyclerViewFooter.FooterViewHolder(LayoutInflater.from(mContext).inflate(mFooterLayout, parent, false));
         }
         return null;
     }
@@ -106,7 +113,11 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final KcpContentPage kcpContentPage = mKcpContentPagesNews.get(position);
-        if(getItemViewType(position) == KcpContentTypeFactory.ITEM_TYPE_EVENT){
+        if (holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_FOOTER) {
+            RecyclerViewFooter.FooterViewHolder footerViewHolder = (RecyclerViewFooter.FooterViewHolder) holder;
+            footerViewHolder.mView.setOnClickListener(mFooterOnClickListener);
+            footerViewHolder.tvFooter.setText(mFooterText);
+        } else if(getItemViewType(position) == KcpContentTypeFactory.ITEM_TYPE_EVENT){
             final EventViewHolder eventHolder = (EventViewHolder) holder;
             String imageUrl = kcpContentPage.getHighestResImageUrl();
             new GlideFactory().glideWithDefaultRatio(
@@ -170,6 +181,14 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
         }
     }
 
+    public void addFooter(String footerText, int footerLayout, View.OnClickListener onClickListener) {
+        mFooterExist = true;
+        mFooterText = footerText;
+        mFooterLayout = footerLayout;
+        mFooterOnClickListener = onClickListener;
+        mKcpContentPagesNews.add(new KcpContentPage());
+    }
+
     @Override
     public int getItemCount() {
         return mKcpContentPagesNews == null ? 0 : mKcpContentPagesNews.size();
@@ -177,6 +196,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemViewType(int position) {
+        if (mFooterExist && position == mKcpContentPagesNews.size() - 1) return KcpContentTypeFactory.ITEM_TYPE_FOOTER;
         KcpContentPage kcpContentPage = mKcpContentPagesNews.get(position);
         return KcpContentTypeFactory.getContentType(kcpContentPage);
     }
