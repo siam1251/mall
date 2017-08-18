@@ -3,6 +3,7 @@ package com.ivanhoecambridge.mall.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -109,7 +110,8 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                     mAdapter = dealsRecyclerViewAdapter;
 
                 } else if(mPageTitle.equals(getResources().getString(R.string.my_page_events))) {
-                    if(FavouriteManager.getInstance(MyPagesActivity.this).getFavEventContentPages().size() == 0) {
+                    ArrayList<KcpContentPage> favEventPages =  FavouriteManager.getInstance(MyPagesActivity.this).getFavEventContentPages();
+                    if(favEventPages.size() == 0) {
                         setUpEmptyPlaceHolder(R.drawable.icn_empty_events, getResources().getString(R.string.empty_placeholder_desc_event), true);
                         return;
                     }
@@ -117,28 +119,20 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MyPagesActivity.this);
                     rv.setLayoutManager(linearLayoutManager);
 
-                    ArrayList<KcpContentPage> favEventPages =  FavouriteManager.getInstance(MyPagesActivity.this).getFavEventContentPages();
                     KcpUtility.sortKcpContentpageByExpiryDate(favEventPages);
-
-                    NewsRecyclerViewAdapter newsRecyclerViewAdapter = new NewsRecyclerViewAdapter (
-                            MyPagesActivity.this,
-                            favEventPages
-                            );
-                    newsRecyclerViewAdapter.setFavouriteListener(MyPagesActivity.this);
-                    rv.setAdapter(newsRecyclerViewAdapter);
-                    newsRecyclerViewAdapter.addFooter(getString(R.string.explore_more_events), R.layout.list_item_my_page_footer, new View.OnClickListener() {
+                    EventRecyclerViewAdapter eventRecyclerViewAdapter = new EventRecyclerViewAdapter(MyPagesActivity.this, favEventPages, true, MyPagesActivity.this);
+                    eventRecyclerViewAdapter.addFooter(getResources().getString(R.string.explore_more_events), R.layout.list_item_my_page_footer, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             onFinish(Constants.RESULT_EVENTS);
                         }
                     });
-
+                    rv.setAdapter(eventRecyclerViewAdapter);
                     if(!mIsDecorationAdded){
                         NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(MyPagesActivity.this, R.dimen.card_vertical_margin);
                         rv.addItemDecoration(itemDecoration);
                     }
-
-                    mAdapter = newsRecyclerViewAdapter;
+                    mAdapter = eventRecyclerViewAdapter;
                 } else if(mPageTitle.equals(getResources().getString(R.string.my_page_stores))) {
                     StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(COLUMN_COUNT, StaggeredGridLayoutManager.VERTICAL);
                     staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
