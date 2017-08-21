@@ -201,11 +201,18 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
             storeViewHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mFooterText==null) {
-                        if (storeViewHolder.ivFav.isSelected())
+                    if (storeViewHolder.tvDealTitle.getText()==mContext.getString(R.string.my_page_stores)) {
+                        if (storeViewHolder.ivFav.isSelected()) {
+                            Analytics.getInstance(mContext).logEvent("PROFILE_Store_Unlike", "PROFILE", "Unlike Store", storename, -1);
+                        } else {
+                            Analytics.getInstance(mContext).logEvent("PROFILE_Store_Like", "PROFILE", "Like Store", storename, 1);
+                        }
+                    } else {
+                        if (storeViewHolder.ivFav.isSelected()) {
                             Analytics.getInstance(mContext).logEvent("DIRECTORY_Store_Unlike", "DIRECTORY", "Unlike Store", storename, -1);
-                        else
+                        } else {
                             Analytics.getInstance(mContext).logEvent("DIRECTORY_Store_Like", "DIRECTORY", "Like Store", storename, 1);
+                        }
                     }
 
                     Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
@@ -224,7 +231,9 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Analytics.getInstance(mContext).logEvent("DIRECTORY_Store_Click", "DIRECTORY", "Click Store", storename);
+                if (storeViewHolder.tvDealTitle.getText()!=mContext.getString(R.string.my_page_stores)) {
+                    Analytics.getInstance(mContext).logEvent("DIRECTORY_Store_Click", "DIRECTORY", "Click on Store", storename);
+                }
                 if(mStoreClickListener != null) mStoreClickListener.onStoreClick(kcpPlace.getPlaceId(), kcpPlace.getExternalCode(), storename, category);
                 else {
                     KcpContentPage kcpContentPage = new KcpContentPage();

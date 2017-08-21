@@ -302,7 +302,13 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
     protected void onResume() {
         super.onResume();
         setUpRecyclerView();
-        Analytics.getInstance(this).logScreenView(this, "PROFILE - " + mPageTitle);
+        if(mPageTitle.equals(getResources().getString(R.string.my_page_deals))) {
+            Analytics.getInstance(this).logScreenView(this, "PROFILE - My Deals");
+        } else if(mPageTitle.equals(getResources().getString(R.string.my_page_stores))) {
+            Analytics.getInstance(this).logScreenView(this, "PROFILE - My Stores");
+        } else if(mPageTitle.equals(getResources().getString(R.string.my_page_events))) {
+            Analytics.getInstance(this).logScreenView(this, "PROFILE - My Events");
+        }
     }
 
     public void onFinish(int resultCode){

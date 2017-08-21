@@ -884,7 +884,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void logEventForStore(String name, String action) {
-        Analytics.getInstance(this).logEvent(name, "Details Screens", action, mKcpContentPage.getTitle());
+        Analytics.getInstance(this).logEvent(name, "Details Screens", action, mKcpContentPage.getStoreName());
     }
 
     private void clickExternalLink(String link){
