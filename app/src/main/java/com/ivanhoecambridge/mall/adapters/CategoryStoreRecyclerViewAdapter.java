@@ -58,6 +58,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
     private boolean mFooterExist = false;
     private boolean mHeaderExist = false;
     private String mFooterText;
+    private String mPageTitle;
     private View.OnClickListener mOnClickListener;
     private Drawable placeholder;
 
@@ -168,7 +169,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
             return;
         }
 
-        final KcpPlaces kcpPlace = (KcpPlaces) mKcpPlacesList.get(position);
+        final KcpPlaces kcpPlace =  mKcpPlacesList.get(position);
         final StoreViewHolder storeViewHolder = (StoreViewHolder) holder;
 
         String imageUrl = kcpPlace.getHighestImageUrl();
@@ -201,7 +202,7 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
             storeViewHolder.ivFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (storeViewHolder.tvDealTitle.getText()==mContext.getString(R.string.my_page_stores)) {
+                    if (getPageTitle().equals(mContext.getString(R.string.my_page_stores))) {
                         if (storeViewHolder.ivFav.isSelected()) {
                             Analytics.getInstance(mContext).logEvent("PROFILE_Store_Unlike", "PROFILE", "Unlike Store", storename, -1);
                         } else {
@@ -231,8 +232,8 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
         storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (storeViewHolder.tvDealTitle.getText()!=mContext.getString(R.string.my_page_stores)) {
-                    Analytics.getInstance(mContext).logEvent("DIRECTORY_Store_Click", "DIRECTORY", "Click on Store", storename);
+                if (getPageTitle().equals(mContext.getString(R.string.my_page_stores))) {
+                    Analytics.getInstance(mContext).logEvent("PROFILE_Store_Click", "PROFILE", "Click on Store", storename);
                 }
                 if(mStoreClickListener != null) mStoreClickListener.onStoreClick(kcpPlace.getPlaceId(), kcpPlace.getExternalCode(), storename, category);
                 else {
@@ -253,6 +254,14 @@ public class CategoryStoreRecyclerViewAdapter extends RecyclerView.Adapter {
 
             }
         });
+    }
+
+    public void updatePageTitle(String title) {
+        mPageTitle = title;
+    }
+
+    private String getPageTitle() {
+        return mPageTitle == null ? "" : mPageTitle;
     }
 
     @Override

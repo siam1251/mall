@@ -94,6 +94,7 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                             dealContentPages,
                             null);
                     dealsRecyclerViewAdapter.setFavouriteListener(MyPagesActivity.this);
+                    dealsRecyclerViewAdapter.updatePageTitle(mPageTitle);
                     rv.setAdapter(dealsRecyclerViewAdapter);
                     dealsRecyclerViewAdapter.addFooter(getString(R.string.explore_more_deals), R.layout.list_item_my_page_footer, new View.OnClickListener() {
                         @Override
@@ -127,6 +128,7 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                             onFinish(Constants.RESULT_EVENTS);
                         }
                     });
+                    eventRecyclerViewAdapter.updatePageTitle(mPageTitle);
                     rv.setAdapter(eventRecyclerViewAdapter);
                     if(!mIsDecorationAdded){
                         NewsRecyclerItemDecoration itemDecoration = new NewsRecyclerItemDecoration(MyPagesActivity.this, R.dimen.card_vertical_margin);
@@ -153,6 +155,7 @@ public class MyPagesActivity extends AppCompatActivity implements FavouriteInter
                             MyPagesActivity.this,
                             kcpPlaces, KcpContentTypeFactory.PREF_ITEM_TYPE_PLACE);
                     categoryStoreRecyclerViewAdapter.setFavouriteListener(MyPagesActivity.this);
+                    categoryStoreRecyclerViewAdapter.updatePageTitle(mPageTitle);
                     rv.setAdapter(categoryStoreRecyclerViewAdapter);
                     categoryStoreRecyclerViewAdapter.addFooter(getString(R.string.explore_more_stores), R.layout.list_item_my_page_footer, new View.OnClickListener() {
                         @Override
