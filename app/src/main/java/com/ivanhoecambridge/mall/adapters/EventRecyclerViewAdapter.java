@@ -48,6 +48,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
     private boolean mFooterExist;
     private int mFooterLayout;
     private String mFooterText;
+    private String mPageTitle;
     private View.OnClickListener mFooterOnClickListener;
 
     public EventRecyclerViewAdapter(Context context, ArrayList<KcpContentPage> events, boolean isCardFullWidth, FavouriteInterface favouriteInterface) {
@@ -164,6 +165,8 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
                 public void onClick(View v) {
                     if(HomeFragment.getInstance().isResumed()) {
                         Analytics.getInstance(mContext).logEvent("HOME_Event_Click", "HOME", "Click on Event", title);
+                    } else if (getPageTitle().equals(mContext.getString(R.string.my_page_events))) {
+                        Analytics.getInstance(mContext).logEvent("PROFILE_Event_Click", "PROFILE", "Click on Event", title);
                     }
                     Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra(Constants.ARG_CONTENT_PAGE, kcpContentPage);
@@ -187,6 +190,14 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
         mFooterLayout = footerLayout;
         mFooterOnClickListener = onClickListener;
         mKcpContentPagesNews.add(new KcpContentPage());
+    }
+
+    public void updatePageTitle(String pageTitle) {
+        mPageTitle = pageTitle;
+    }
+
+    private String getPageTitle() {
+        return mPageTitle == null ? "" : mPageTitle;
     }
 
     @Override
