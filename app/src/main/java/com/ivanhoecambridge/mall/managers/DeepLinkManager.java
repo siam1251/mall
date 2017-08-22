@@ -75,8 +75,8 @@ public class DeepLinkManager {
             //https://halogenmobile.atlassian.net/wiki/display/IC/Deep+Linking - Confluence Deep Link Documentation
             String scheme = mMainActivity.getResources().getString(R.string.applicationId) + "://";
             //intent delivered from Exact Target Push
-            String deepLinkURL = "";
-            if(intent.getExtras() == null && intent.getExtras().getString(KEY_OPEN_DIRECT_URL) != null) {
+            String deepLinkURL;
+            if(intent.getExtras() != null && intent.getExtras().getString(KEY_OPEN_DIRECT_URL) != null) {
                 deepLinkURL = intent.getExtras().getString(KEY_OPEN_DIRECT_URL);
             } else { // intent delivered from URI
                 Uri data = intent.getData();

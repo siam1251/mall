@@ -65,6 +65,7 @@ public class DetailActivity extends AppCompatActivity {
     private ViewGroup mParentView;
     private ImageView ivDetailImage; //transition image
     private ImageView ivDetailLogo; //transition logo
+    private TextView tvDetailLogoText; //transition logo name (fallback if there is no logo)
     private String mLikeLink = "";
     private View mLayoutStoreHours;
 
@@ -125,6 +126,7 @@ public class DetailActivity extends AppCompatActivity {
                 ivFav.setVisibility(View.GONE);
             }
             setFav();
+            tvDetailLogoText = (TextView) findViewById(R.id.tvDetailLogoText);
         } catch (Exception e) {
             logger.error(e);
         }
@@ -311,6 +313,9 @@ public class DetailActivity extends AppCompatActivity {
                                     options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                                             DetailActivity.this,
                                             Pair.create((View)ivDetailLogo, transitionNameLogo));
+                                } else {
+                                    String transitionNameStoreTitle = getResources().getString(R.string.transition_store_name);
+                                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(DetailActivity.this, tvDetailLogoText, transitionNameStoreTitle);
                                 }
 
                                 ActivityCompat.startActivityForResult(DetailActivity.this, intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP, options.toBundle());
@@ -765,7 +770,7 @@ public class DetailActivity extends AppCompatActivity {
 
             //STORE IMAGE
             String logoUrl = kcpContentPage.getStoreLogo();
-            TextView tvDetailLogoText = (TextView) findViewById(R.id.tvDetailLogoText);
+//            TextView tvDetailLogoText = (TextView) findViewById(R.id.tvDetailLogoText);
             ivDetailLogo = (ImageView) findViewById(R.id.ivDetailLogo);
 
             if(logoUrl.equals("")){

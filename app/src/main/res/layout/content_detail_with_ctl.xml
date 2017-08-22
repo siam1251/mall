@@ -46,7 +46,7 @@
                 android:id="@+id/ivDetailLogo"
                 android:scaleType="fitCenter"
                 />
-                android:scaleType="centerCrop"
+
         </FrameLayout>
 
         <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
