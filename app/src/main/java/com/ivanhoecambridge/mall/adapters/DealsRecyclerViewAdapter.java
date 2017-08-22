@@ -86,8 +86,8 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         int sizeOfRecommendedDeals = mKcpContentPagesRecommendedDeals == null ? 0 : mKcpContentPagesRecommendedDeals.size();
         int sizeOfOtherDeals = mKcpContentPagesOtherDeals == null ? 0 : mKcpContentPagesOtherDeals.size();
 
-        boolean recommendedDealsExist =  sizeOfRecommendedDeals > 0 ? true : false;
-        boolean otherDealsExist = sizeOfOtherDeals > 0 ? true : false;
+        boolean recommendedDealsExist =  sizeOfRecommendedDeals > 0;
+        boolean otherDealsExist = sizeOfOtherDeals > 0;
 
         if(recommendedDealsExist){
             if(mhasSectionHeaders) mItems.add(KcpContentTypeFactory.ITEM_TYPE_SECTION_HEADER_RECOMMENDED_DEALS);
@@ -355,7 +355,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                     if(HomeFragment.getInstance().isResumed()) {
                         Analytics.getInstance(mContext).logEvent("HOME_Deal_Click", "HOME", "Click on Deal", title);
                     } else if (getPageTitle().equals(mContext.getString(R.string.my_page_deals))) {
-                        Analytics.getInstance(mContext).logEvent("PROFILE_Deal_Click", "Profile", "Click on Deal", title);
+                        Analytics.getInstance(mContext).logEvent("PROFILE_Deal_Click", "PROFILE", "Click on Deal", title);
                     }
 
                     Intent intent = new Intent(mContext, DetailActivity.class);
