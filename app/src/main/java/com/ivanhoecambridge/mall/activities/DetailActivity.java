@@ -302,7 +302,7 @@ public class DetailActivity extends AppCompatActivity {
                                 String imageUrl = kcpContentPage.getHighestResImageUrl();
                                 String logoUrl = kcpContentPage.getStoreLogo();
 
-                                ActivityOptionsCompat options = null;
+                                ActivityOptionsCompat options;
                                 if(ivDetailImage != null && !imageUrl.equals("")){
                                     String transitionNameImage = DetailActivity.this.getResources().getString(R.string.transition_news_image);
                                     options = ActivityOptionsCompat.makeSceneTransitionAnimation(

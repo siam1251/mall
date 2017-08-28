@@ -1,6 +1,6 @@
 package com.ivanhoecambridge.mall.fragments;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,9 +8,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
-import com.ivanhoecambridge.kcpandroidsdk.managers.KcpInfoManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpPlaceManager;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
@@ -41,6 +37,8 @@ import com.ivanhoecambridge.mall.activities.MallInfoDetailActivity;
 import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.adapters.InfoRecyclerViewAdapter;
 import factory.HeaderFactory;
+
+import com.ivanhoecambridge.mall.interfaces.ActiveViewPagerListener;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
@@ -50,7 +48,7 @@ import java.util.List;
 /**
  * Created by Kay on 2016-06-20.
  */
-public class InfoFragment extends BaseFragment {
+public class InfoFragment extends BaseFragment implements ActiveViewPagerListener{
 
     private View mView;
     private InfoRecyclerViewAdapter mInfoRecyclerViewAdapter;
@@ -60,6 +58,7 @@ public class InfoFragment extends BaseFragment {
     private TextView tvInfoHoursLight;
     private Toolbar toolbar;
 
+    private final String SCREEN_NAME = "MALL INFO - Mall Information";
     private static InfoFragment sInfoFragment;
     public static InfoFragment getInstance(){
         if(sInfoFragment == null) sInfoFragment = new InfoFragment();
@@ -206,10 +205,9 @@ public class InfoFragment extends BaseFragment {
         }
     }
 
-    public void trackPage() {
-        if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_INFO) {
-            Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "MALL INFO - Mall Information");
-        }
+    @Override
+    public void onPageActive() {
+        Analytics.getInstance(getContext()).logScreenView(getActivity(), SCREEN_NAME);
     }
 
     @Override
@@ -218,11 +216,6 @@ public class InfoFragment extends BaseFragment {
         mListener = null;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        trackPage();
-    }
 
     public void getMallHour() {
         try {

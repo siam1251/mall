@@ -62,6 +62,7 @@ import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
+import com.ivanhoecambridge.mall.interfaces.ActiveViewPagerListener;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
 import com.ivanhoecambridge.mall.managers.ThemeManager;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
@@ -124,7 +125,7 @@ import static slutilities.SLSettings.INITIAL_MAP_SLOPE;
  * Created by Kay on 2016-06-20.
  */
 public class MapFragment extends BaseFragment
-        implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot, ParkingPinInterface {
+        implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot, ParkingPinInterface, ActiveViewPagerListener {
 
     private final String TAG = "MapFragment";
     private static MapFragment sMapFragment;
@@ -139,7 +140,7 @@ public class MapFragment extends BaseFragment
     private enum IdType { ID, EXTERNAL_CODE, AMENITY, PARKING, INSTRUCTION };
 
     private Context context;
-
+    private final String SCREEN_NAME = "MAP - Mall Map";
     private ProgressBar pb;
     private View view;
     private RelativeLayout rlDirection;
@@ -2216,10 +2217,9 @@ public class MapFragment extends BaseFragment
         }
     }
 
-    public void trackPage() {
-        if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_MAP) {
-            Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "MAP - Mall Map");
-        }
+    @Override
+    public void onPageActive() {
+        Analytics.getInstance(getContext()).logScreenView(getActivity(), SCREEN_NAME);
     }
 
     @Override

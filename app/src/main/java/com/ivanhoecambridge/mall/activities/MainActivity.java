@@ -269,10 +269,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onPageSelected(int position) {
                 mCurrentViewPagerTapPosition = position;
-                HomeFragment.getInstance().trackPage();
-                DirectoryFragment.getInstance().trackPage();
-                MapFragment.getInstance().trackPage();
-                InfoFragment.getInstance().trackPage();
+                trackPage(position);
 
                 showMapToolbar(position);
                 if(position == VIEWPAGER_PAGE_MAP || position == VIEWPAGER_PAGE_INFO ) expandTopNav(); //TODO: change this hardcode
@@ -392,6 +389,25 @@ public class MainActivity extends BaseActivity
             initializeParkingData();
             initializeSeachIndex();
             if(BuildConfig.MOVIE)initializeMovieData();
+        }
+    }
+
+
+    private void trackPage(int position) {
+        switch (position) {
+            case VIEWPAGER_PAGE_HOME:
+            default:
+                HomeFragment.getInstance().onPageActive();
+                break;
+            case VIEWPAGER_PAGE_DIRECTORY:
+                DirectoryFragment.getInstance().onPageActive();
+                break;
+            case VIEWPAGER_PAGE_MAP:
+                MapFragment.getInstance().onPageActive();
+                break;
+            case VIEWPAGER_PAGE_INFO:
+                InfoFragment.getInstance().onPageActive();
+                break;
         }
     }
 
