@@ -322,6 +322,16 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener{
 
     @Override
     public void onPageActive() {
-        Analytics.getInstance(getContext()).logScreenView(getActivity(), SCREEN_NAME + (mCurrentTab == VIEWPAGER_PAGE_DEALS ? "Deals Tab" : "News Tab"));
+        String screenTab;
+        switch (mCurrentTab) {
+            case VIEWPAGER_PAGE_NEWS:
+            default:
+                screenTab = "News Tab";
+                break;
+            case VIEWPAGER_PAGE_DEALS:
+                screenTab = "Deals Tab";
+                break;
+        }
+        Analytics.getInstance(getContext()).logScreenView(getActivity(), SCREEN_NAME + screenTab);
     }
 }

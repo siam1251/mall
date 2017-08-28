@@ -770,7 +770,6 @@ public class DetailActivity extends AppCompatActivity {
 
             //STORE IMAGE
             String logoUrl = kcpContentPage.getStoreLogo();
-//            TextView tvDetailLogoText = (TextView) findViewById(R.id.tvDetailLogoText);
             ivDetailLogo = (ImageView) findViewById(R.id.ivDetailLogo);
 
             if(logoUrl.equals("")){

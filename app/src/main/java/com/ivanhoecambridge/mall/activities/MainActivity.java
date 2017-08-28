@@ -269,7 +269,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onPageSelected(int position) {
                 mCurrentViewPagerTapPosition = position;
-                trackPage(position);
+                updateActivePage(position);
 
                 showMapToolbar(position);
                 if(position == VIEWPAGER_PAGE_MAP || position == VIEWPAGER_PAGE_INFO ) expandTopNav(); //TODO: change this hardcode
@@ -393,7 +393,7 @@ public class MainActivity extends BaseActivity
     }
 
 
-    private void trackPage(int position) {
+    private void updateActivePage(int position) {
         switch (position) {
             case VIEWPAGER_PAGE_HOME:
             default:

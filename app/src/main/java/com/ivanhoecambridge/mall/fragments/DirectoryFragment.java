@@ -318,8 +318,18 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
 
     @Override
     public void onPageActive() {
+        String screenTab;
+        switch (mCurrentTab) {
+            case VIEWPAGER_PAGE_CATEGORIES:
+                default:
+                screenTab = "Categories Tab";
+                break;
+            case VIEWPAGER_PAGE_STORES:
+                screenTab = "Stores A-Z Tab";
+                break;
+        }
         Analytics.getInstance(getContext()).logScreenView(getActivity(),
-                SCREEN_NAME + (mCurrentTab == VIEWPAGER_PAGE_CATEGORIES ? "Categories Tab" : "Stores A-Z Tab"));
+                SCREEN_NAME + screenTab);
     }
 
     public class QueryTextListener implements SearchView.OnQueryTextListener {
