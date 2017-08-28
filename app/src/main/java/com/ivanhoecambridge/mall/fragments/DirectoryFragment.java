@@ -30,7 +30,6 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
-import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.activities.SubCategoryActivity;
 import com.ivanhoecambridge.mall.activities.SubStoreActivity;
 import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
@@ -51,11 +50,12 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class DirectoryFragment extends BaseFragment implements ViewPagerListener {
+public class DirectoryFragment extends BaseFragment implements ViewPagerListener{
 
     public final static int VIEWPAGER_PAGE_CATEGORIES = 0;
     public final static int VIEWPAGER_PAGE_STORES = 1;
 
+    private final static String SCREEN_NAME = "DIRECTORY - ";
 
     private CategoriesFragment mCategoriesFragment;
     private PlacesFragment mPlacesFragment;
@@ -135,7 +135,7 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
             @Override
             public void onPageSelected(int position) {
                 mCurrentTab = position;
-                trackPage();
+                onPageActive();
             }
 
             @Override
@@ -309,19 +309,27 @@ public class DirectoryFragment extends BaseFragment implements ViewPagerListener
         return mMainActivity.rvMallDirectory.getVisibility()==View.VISIBLE;
     }
 
-    public void trackPage() {
-        if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_DIRECTORY) {
-            if (mCurrentTab == VIEWPAGER_PAGE_CATEGORIES) {
-                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "DIRECTORY - Categories Tab");
-            } else if (mCurrentTab == VIEWPAGER_PAGE_STORES) {
-                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "DIRECTORY - Stores A-Z Tab");
-            }
-        }
-    }
+
     @Override
     public void onViewPagerCreated() {
         if(mViewPageToLoad != -1) mViewPager.setCurrentItem(mViewPageToLoad);
         mViewPageToLoad = -1;
+    }
+
+    @Override
+    public void onPageActive() {
+        String screenTab;
+        switch (mCurrentTab) {
+            case VIEWPAGER_PAGE_CATEGORIES:
+                default:
+                screenTab = "Categories Tab";
+                break;
+            case VIEWPAGER_PAGE_STORES:
+                screenTab = "Stores A-Z Tab";
+                break;
+        }
+        Analytics.getInstance(getContext()).logScreenView(getActivity(),
+                SCREEN_NAME + screenTab);
     }
 
     public class QueryTextListener implements SearchView.OnQueryTextListener {

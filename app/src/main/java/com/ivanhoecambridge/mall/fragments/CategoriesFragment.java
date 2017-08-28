@@ -61,6 +61,9 @@ public class CategoriesFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onPageActive() {}
+
     private void setupRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);

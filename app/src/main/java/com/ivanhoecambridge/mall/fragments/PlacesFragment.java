@@ -67,6 +67,9 @@ public class PlacesFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onPageActive() {}
+
     public void setupRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rvNews.setLayoutManager(linearLayoutManager);

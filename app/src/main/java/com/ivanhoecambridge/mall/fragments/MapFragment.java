@@ -56,7 +56,6 @@ import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.bluedot.FollowMode;
 import com.ivanhoecambridge.mall.bluedot.MapViewWithBlueDot;
-import com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenter;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
 import com.ivanhoecambridge.mall.constants.Constants;
@@ -98,10 +97,7 @@ import com.mappedin.sdk.Overlay2DImage;
 import com.mappedin.sdk.Path;
 import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.Venue;
-import com.senionlab.slutilities.type.LocationAvailability;
 import com.senionlab.slutilities.type.SLHeadingStatus;
-
-import org.w3c.dom.Text;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -113,18 +109,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import factory.HeaderFactory;
-import floormapping.FloorToFloorMapPositionTranslator;
-
-import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sGeofenceEntered;
-import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sLocationFindingMode;
-import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.sLocationAvailability;
-import static slutilities.SLSettings.INITIAL_MAP_SLOPE;
 
 /**
  * Created by Kay on 2016-06-20.
  */
 public class MapFragment extends BaseFragment
-        implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot, ParkingPinInterface {
+        implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot, ParkingPinInterface{
 
     private final String TAG = "MapFragment";
     private static MapFragment sMapFragment;
@@ -139,7 +129,7 @@ public class MapFragment extends BaseFragment
     private enum IdType { ID, EXTERNAL_CODE, AMENITY, PARKING, INSTRUCTION };
 
     private Context context;
-
+    private final String SCREEN_NAME = "MAP - Mall Map";
     private ProgressBar pb;
     private View view;
     private RelativeLayout rlDirection;
@@ -2216,10 +2206,9 @@ public class MapFragment extends BaseFragment
         }
     }
 
-    public void trackPage() {
-        if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_MAP) {
-            Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "MAP - Mall Map");
-        }
+    @Override
+    public void onPageActive() {
+        Analytics.getInstance(getContext()).logScreenView(getActivity(), SCREEN_NAME);
     }
 
     @Override

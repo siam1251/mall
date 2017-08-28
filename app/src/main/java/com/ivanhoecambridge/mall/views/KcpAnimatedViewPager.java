@@ -49,7 +49,9 @@ public class KcpAnimatedViewPager extends ViewPager /*implements ViewPager.OnPag
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KcpAnimatedViewPager);
             mSelectedColor = a.getColor(R.styleable.KcpAnimatedViewPager_selectedColor, getResources().getColor(R.color.themeColor));
             mUnselectedColor = a.getColor(R.styleable.KcpAnimatedViewPager_unSelectedColor, getResources().getColor(R.color.unselected));
+            a.recycle();
         }
+
 
         //implementing onPnageChangeListener won't call onPageScrollStateChanged because tapLayout seems to consume the event. below fixes the issue
         this.addOnPageChangeListener(new OnPageChangeListener() {

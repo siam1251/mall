@@ -22,7 +22,6 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
 import com.ivanhoecambridge.kcpandroidsdk.twitter.model.TwitterTweet;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
-import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
@@ -35,12 +34,13 @@ import com.ivanhoecambridge.mall.mappedin.Amenities;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends BaseFragment implements ViewPagerListener {
+public class HomeFragment extends BaseFragment implements ViewPagerListener{
 
 
     public final static int VIEWPAGER_PAGE_NEWS = 0;
     public final static int VIEWPAGER_PAGE_DEALS = 1;
 
+    private final static String SCREEN_NAME = "HOME - ";
 
     private NewsFragment mNewsFragment;
     private DealsFragment mDealsFragment;
@@ -82,6 +82,12 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
                 mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null) mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateInstaData(sInstaFeedList);
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        onPageActive();
     }
 
     public void initializeHomeData(){
@@ -218,7 +224,7 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
             @Override
             public void onPageSelected(int position) {
                 mCurrentTab = position;
-                trackPage();
+                onPageActive();
             }
 
             @Override
@@ -294,25 +300,13 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
         else mViewPager.setCurrentItem(pageIndex);
     }
 
-    public void trackPage() {
-        if(mMainActivity.getViewerPosition() == MainActivity.VIEWPAGER_PAGE_HOME) {
-            if (mCurrentTab == VIEWPAGER_PAGE_DEALS) {
-                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "HOME - Deals Tab");
-            } else if (mCurrentTab == VIEWPAGER_PAGE_NEWS) {
-                Analytics.getInstance(getContext()).logScreenView(this.getActivity(), "HOME - News Tab");
-            }
-        }
-    }
 
     @Override
     public void onResume() {
         super.onResume();
-
         updateAdapter(Constants.EXTERNAL_CODE_FEED);
         updateAdapter(Constants.EXTERNAL_CODE_DEAL);
         updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
-
-        trackPage();
     }
 
     @Override
@@ -324,5 +318,20 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener {
     public void onViewPagerCreated() {
         if(mViewPageToLoad != -1) mViewPager.setCurrentItem(mViewPageToLoad);
         mViewPageToLoad = -1;
+    }
+
+    @Override
+    public void onPageActive() {
+        String screenTab;
+        switch (mCurrentTab) {
+            case VIEWPAGER_PAGE_NEWS:
+            default:
+                screenTab = "News Tab";
+                break;
+            case VIEWPAGER_PAGE_DEALS:
+                screenTab = "Deals Tab";
+                break;
+        }
+        Analytics.getInstance(getContext()).logScreenView(getActivity(), SCREEN_NAME + screenTab);
     }
 }

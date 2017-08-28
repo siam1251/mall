@@ -9,7 +9,7 @@ import com.ivanhoecambridge.mall.activities.MainActivity;
 /**
  * Created by Kay on 2016-05-19.
  */
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment{
 
     protected final Logger logger = new Logger(getClass().getName());
     protected MainActivity mMainActivity;
@@ -28,6 +28,12 @@ public class BaseFragment extends Fragment {
     public void setOnFragmentInteractionListener(OnFragmentInteractionListener listener){
         mListener = listener;
     }
+
+    /**
+     * Notifies fragment that it's currently active.
+     */
+    protected abstract void onPageActive();
+
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction();
     }
