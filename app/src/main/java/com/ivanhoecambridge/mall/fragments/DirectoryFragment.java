@@ -39,7 +39,6 @@ import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
 import factory.HeaderFactory;
 
-import com.ivanhoecambridge.mall.interfaces.ActiveViewPagerListener;
 import com.ivanhoecambridge.mall.interfaces.ViewPagerListener;
 import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.managers.ThemeManager;
@@ -51,7 +50,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class DirectoryFragment extends BaseFragment implements ViewPagerListener, ActiveViewPagerListener {
+public class DirectoryFragment extends BaseFragment implements ViewPagerListener{
 
     public final static int VIEWPAGER_PAGE_CATEGORIES = 0;
     public final static int VIEWPAGER_PAGE_STORES = 1;

@@ -38,7 +38,6 @@ import com.ivanhoecambridge.mall.activities.ParkingActivity;
 import com.ivanhoecambridge.mall.adapters.InfoRecyclerViewAdapter;
 import factory.HeaderFactory;
 
-import com.ivanhoecambridge.mall.interfaces.ActiveViewPagerListener;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
@@ -48,7 +47,7 @@ import java.util.List;
 /**
  * Created by Kay on 2016-06-20.
  */
-public class InfoFragment extends BaseFragment implements ActiveViewPagerListener{
+public class InfoFragment extends BaseFragment{
 
     private View mView;
     private InfoRecyclerViewAdapter mInfoRecyclerViewAdapter;

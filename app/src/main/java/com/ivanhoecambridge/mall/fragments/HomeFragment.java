@@ -29,13 +29,12 @@ import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
 import constants.MallConstants;
 import factory.HeaderFactory;
 
-import com.ivanhoecambridge.mall.interfaces.ActiveViewPagerListener;
 import com.ivanhoecambridge.mall.interfaces.ViewPagerListener;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends BaseFragment implements ViewPagerListener, ActiveViewPagerListener {
+public class HomeFragment extends BaseFragment implements ViewPagerListener{
 
 
     public final static int VIEWPAGER_PAGE_NEWS = 0;

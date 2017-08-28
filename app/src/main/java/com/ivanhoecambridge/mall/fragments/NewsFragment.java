@@ -68,6 +68,9 @@ public class NewsFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onPageActive() {}
+
     public void setEmptyState(@Nullable String warningMsg){
         if(mMainActivity != null) mMainActivity.setEmptyState(tvEmptyState, warningMsg);
     }
