@@ -9,6 +9,7 @@ import android.support.transition.Scene;
 import android.support.transition.TransitionManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -17,6 +18,10 @@ import android.widget.Toast;
 
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
+import com.janrain.android.Jump;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -111,7 +116,31 @@ public class SignInAfterOnBoardingActivity extends BaseActivity {
     }
 
     void onClickEmail() {
-        Toast.makeText(this, "email", Toast.LENGTH_SHORT).show();
+        Jump.registerNewUser(createFakeUser(), null, new Jump.SignInResultHandler() {
+            @Override
+            public void onSuccess() {
+                Log.i("Register", "Successs");
+            }
+
+            @Override
+            public void onFailure(SignInError error) {
+                Log.i("Register", "Fail: " + error.toString());
+            }
+        });
+    }
+
+    private JSONObject createFakeUser() {
+        JSONObject fakeUser = new JSONObject();
+        try {
+            fakeUser.put("email", "fakeandroiduser@fakemail.com")
+                    .put("displayName", "FakeUser")
+                    .put("givenName", "Fake")
+                    .put("familyName", "User")
+                    .put("password", "ps1");
+        } catch (JSONException e) {
+            Log.e("JSON", e.getMessage());
+        }
+        return fakeUser;
     }
 
     private void changeScene(){
