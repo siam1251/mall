@@ -56,7 +56,7 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
-            buildConfigField "Boolean", "JAINRAIN_DEV", 'true'
+            buildConfigField "Boolean", "JANRAIN_DEV", 'true'
             buildConfigField "Boolean", "REPORT_CRASH", 'false'
         }
     }

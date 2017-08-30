@@ -124,7 +124,7 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
             }
         });*/
 
-        if (BuildConfig.JAINRAIN_DEV) {
+        if (BuildConfig.JANRAIN_DEV) {
             Jump.init(getApplicationContext(), JanRain.configure(JanRain.AppType.DEV));
         } else {
             Jump.init(getApplicationContext(), JanRain.configure(JanRain.AppType.PROD));
