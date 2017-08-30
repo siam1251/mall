@@ -32,7 +32,6 @@
         android:onClick="onClickFb"
 
         >
-        style="@style/SelectableItemForeground"
 
         <FrameLayout
             android:id="@+id/flFb"

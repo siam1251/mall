@@ -29,7 +29,7 @@ android {
 
 dependencies {
     compile 'com.android.support:support-v4:25.1.0'
-//    compile files('libs/org.apache.http.legacy.jar')
+    compile files('libs/org.apache.http.legacy.jar')
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     compile 'com.squareup.okhttp:okhttp-apache:2.5.0'
     compile 'com.squareup.okio:okio:1.6.0'

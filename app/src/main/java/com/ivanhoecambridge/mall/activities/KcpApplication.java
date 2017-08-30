@@ -28,6 +28,8 @@ import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.constants.Constants;
+import com.ivanhoecambridge.mall.constants.JanRain;
+import com.janrain.android.Jump;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.tweetui.TweetUi;
@@ -121,6 +123,12 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
                 if(BuildConfig.REPORT_CRASH) FirebaseCrash.report( e);
             }
         });*/
+
+        if (BuildConfig.JAINRAIN_DEV) {
+            Jump.init(getApplicationContext(), JanRain.configure(JanRain.AppType.DEV));
+        } else {
+            Jump.init(getApplicationContext(), JanRain.configure(JanRain.AppType.PROD));
+        }
     }
 
     @Override
