@@ -1,4 +1,4 @@
-include ':app', ':Jump'
+include ':app'
 def mfMallDir = file('submodules/kclib-android-kcpservice')
 def rootProjectDescriptor = settings.rootProject
 settings.createProjectDescriptor(rootProjectDescriptor, 'kcpandroidsdk', mfMallDir)
