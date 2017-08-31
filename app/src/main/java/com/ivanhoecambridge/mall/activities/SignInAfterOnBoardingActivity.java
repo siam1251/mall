@@ -106,13 +106,23 @@ public class SignInAfterOnBoardingActivity extends BaseActivity {
 
     @Optional
     @OnClick(R.id.cvFb) void onClickFb() {
-        Toast.makeText(this, "fb", Toast.LENGTH_SHORT).show();
+
     }
 
 
     @Optional
     @OnClick(R.id.cvGoogle) void onClickGoogle() {
-        Toast.makeText(this, "google", Toast.LENGTH_SHORT).show();
+        Jump.showSignInDialog(SignInAfterOnBoardingActivity.this, "googleplus", new Jump.SignInResultHandler() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure(SignInError error) {
+
+            }
+        }, null);
     }
 
     void onClickEmail() {
@@ -136,7 +146,8 @@ public class SignInAfterOnBoardingActivity extends BaseActivity {
                     .put("displayName", "FakeUser")
                     .put("givenName", "Fake")
                     .put("familyName", "User")
-                    .put("password", "ps1");
+                    .put("birthday", "1970-01-01")
+                    .put("password", "password1");
         } catch (JSONException e) {
             Log.e("JSON", e.getMessage());
         }
