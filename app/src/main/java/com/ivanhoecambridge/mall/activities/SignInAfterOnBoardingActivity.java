@@ -3,7 +3,6 @@ package com.ivanhoecambridge.mall.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.transition.Scene;
 import android.support.transition.TransitionManager;
@@ -12,11 +11,10 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.signup.SignUpManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.janrain.android.Jump;
 
@@ -40,6 +38,7 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Jump.
     private Scene mScene1;
     private Scene mScene2;
     private Scene mScene;
+    private SignUpManager signUpManager;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -66,6 +65,9 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Jump.
         mScene.enter();
 
         validateView();
+
+        signUpManager = new SignUpManager();
+
     }
 
     private void validateView(){
@@ -106,13 +108,15 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Jump.
 
     @Optional
     @OnClick(R.id.cvFb) void onClickFb() {
-        Jump.showSignInDialog(SignInAfterOnBoardingActivity.this, "facebook", this, null);
+        signUpManager.authenticate(this, "facebook");
+      //  Jump.showSignInDialog(SignInAfterOnBoardingActivity.this, "facebook", this, null);
     }
 
 
     @Optional
     @OnClick(R.id.cvGoogle) void onClickGoogle() {
-        Jump.showSignInDialog(SignInAfterOnBoardingActivity.this, "googleplus", this, null);
+        signUpManager.authenticate(this, "googleplus");
+      //  Jump.showSignInDialog(SignInAfterOnBoardingActivity.this, "googleplus", this, null);
     }
 
     void onClickEmail() {
