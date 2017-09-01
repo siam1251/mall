@@ -31,7 +31,7 @@ import butterknife.Optional;
  * Created by Kay on 2017-01-26.
  */
 
-public class SignInAfterOnBoardingActivity extends BaseActivity {
+public class SignInAfterOnBoardingActivity extends BaseActivity implements Jump.SignInResultHandler{
 
     RelativeLayout rlSignIn;
     CardView cvSignUpInFirstScene;
@@ -106,37 +106,17 @@ public class SignInAfterOnBoardingActivity extends BaseActivity {
 
     @Optional
     @OnClick(R.id.cvFb) void onClickFb() {
-
+        Jump.showSignInDialog(SignInAfterOnBoardingActivity.this, "facebook", this, null);
     }
 
 
     @Optional
     @OnClick(R.id.cvGoogle) void onClickGoogle() {
-        Jump.showSignInDialog(SignInAfterOnBoardingActivity.this, "googleplus", new Jump.SignInResultHandler() {
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onFailure(SignInError error) {
-
-            }
-        }, null);
+        Jump.showSignInDialog(SignInAfterOnBoardingActivity.this, "googleplus", this, null);
     }
 
     void onClickEmail() {
-        Jump.registerNewUser(createFakeUser(), null, new Jump.SignInResultHandler() {
-            @Override
-            public void onSuccess() {
-                Log.i("Register", "Successs");
-            }
-
-            @Override
-            public void onFailure(SignInError error) {
-                Log.i("Register", "Fail: " + error.toString());
-            }
-        });
+        Jump.registerNewUser(createFakeUser(), null, this);
     }
 
     private JSONObject createFakeUser() {
@@ -170,5 +150,15 @@ public class SignInAfterOnBoardingActivity extends BaseActivity {
     public void onBackPressed() {
         if(mScene == mScene2) changeScene();
         else finishActivity();
+    }
+
+    @Override
+    public void onSuccess() {
+
+    }
+
+    @Override
+    public void onFailure(SignInError error) {
+
     }
 }
