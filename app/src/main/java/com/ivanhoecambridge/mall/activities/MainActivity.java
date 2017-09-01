@@ -65,6 +65,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.exacttarget.etpushsdk.ETPush;
 import com.exacttarget.etpushsdk.util.EventBus;
 import com.google.gson.Gson;
@@ -88,9 +89,12 @@ import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.constants.Constants;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import factory.HeaderFactory;
 
 import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
+import com.ivanhoecambridge.mall.factory.GlideFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.DirectoryFragment;
 import com.ivanhoecambridge.mall.fragments.HomeFragment;
@@ -113,6 +117,7 @@ import com.ivanhoecambridge.mall.onboarding.TutorialActivity;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
 import com.ivanhoecambridge.mall.parking.Parkings;
 import com.ivanhoecambridge.mall.searchIndex.IndexManager;
+import com.ivanhoecambridge.mall.signup.JanrainRecordParser;
 import com.ivanhoecambridge.mall.user.AccountManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
@@ -120,7 +125,10 @@ import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 import com.ivanhoecambridge.mall.views.BadgeView;
 import com.ivanhoecambridge.mall.views.KcpAnimatedViewPager;
 import com.ivanhoecambridge.mall.views.ThemeColorImageView;
+import com.janrain.android.Jump;
 import com.mappedin.sdk.Polygon;
+
+import org.json.JSONException;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -159,6 +167,11 @@ public class MainActivity extends BaseActivity
     private FrameLayout flActiveMallDot;
     private int mCurrentViewPagerTapPosition = VIEWPAGER_PAGE_HOME;
     private GiftCardRecyclerViewAdapter mGiftCardRecyclerViewAdapter;
+
+
+    private LinearLayout llSignIn;
+    private TextView tvDrawerLayoutAccount;
+    private ImageView ivDrawerLayoutUser;
 
     private BadgeView badgeDeals;
     private BadgeView badgeEvents;
@@ -726,6 +739,8 @@ public class MainActivity extends BaseActivity
 
 
     private void setUpLeftSidePanel(){
+
+        llSignIn = (LinearLayout) findViewById(R.id.llSignIn);
         //ACCOUNT
         TextView tvSignIn = (TextView) findViewById(R.id.tvSignIn);
         tvSignIn.setOnClickListener(new View.OnClickListener() {
@@ -736,7 +751,7 @@ public class MainActivity extends BaseActivity
             }
         });
 
-        ImageView ivDrawerLayoutUser = (ImageView) findViewById(R.id.ivDrawerLayoutUser);
+        ivDrawerLayoutUser = (ImageView) findViewById(R.id.ivDrawerLayoutUser);
         ivDrawerLayoutUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -744,7 +759,7 @@ public class MainActivity extends BaseActivity
             }
         });
 
-        TextView tvDrawerLayoutAccount = (TextView) findViewById(R.id.tvDrawerLayoutAccount);
+        tvDrawerLayoutAccount = (TextView) findViewById(R.id.tvDrawerLayoutAccount);
         tvDrawerLayoutAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1643,6 +1658,22 @@ public class MainActivity extends BaseActivity
             mGeofenceManager.unRegisterBroadcastReceiver();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //temp testing 09/01/2017
+        loadUserDetails();
+    }
+
+    //temp
+    private void loadUserDetails() {
+        if (Jump.getSignedInUser() != null) {
+            JanrainRecordParser recordParser = new JanrainRecordParser();
+            llSignIn.setVisibility(View.VISIBLE);
+            tvDrawerLayoutAccount.setText(recordParser.getFullName());
+        }
     }
 
     @Override

@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.signup.SignUpManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.janrain.android.Jump;
+import com.janrain.android.engage.session.JRSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +31,7 @@ import butterknife.Optional;
  * Created by Kay on 2017-01-26.
  */
 
-public class SignInAfterOnBoardingActivity extends BaseActivity implements Jump.SignInResultHandler{
+public class SignInAfterOnBoardingActivity extends BaseActivity implements SignUpManager.onSignUpListener{
 
     RelativeLayout rlSignIn;
     CardView cvSignUpInFirstScene;
@@ -66,7 +68,7 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Jump.
 
         validateView();
 
-        signUpManager = new SignUpManager();
+        signUpManager = new SignUpManager(this);
 
     }
 
@@ -109,18 +111,16 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Jump.
     @Optional
     @OnClick(R.id.cvFb) void onClickFb() {
         signUpManager.authenticate(this, "facebook");
-      //  Jump.showSignInDialog(SignInAfterOnBoardingActivity.this, "facebook", this, null);
     }
 
 
     @Optional
     @OnClick(R.id.cvGoogle) void onClickGoogle() {
         signUpManager.authenticate(this, "googleplus");
-      //  Jump.showSignInDialog(SignInAfterOnBoardingActivity.this, "googleplus", this, null);
     }
 
     void onClickEmail() {
-        Jump.registerNewUser(createFakeUser(), null, this);
+
     }
 
     private JSONObject createFakeUser() {
@@ -157,12 +157,31 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Jump.
     }
 
     @Override
-    public void onSuccess() {
+    public void onPause() {
+        Jump.saveToDisk(this);
+        super.onPause();
+    }
 
+
+    @Override
+    public void onSignUpRequest() {
+        setProgressIndicator(true);
     }
 
     @Override
-    public void onFailure(SignInError error) {
-
+    public void onSignUpSuccess() {
+        setProgressIndicator(false);
+        finishActivity();
     }
+
+    @Override
+    public void onSignUpFailure(String error, String provider) {
+        setProgressIndicator(false);
+    }
+
+    private void setProgressIndicator(boolean shouldShowProgress) {
+        ProgressBarWhileDownloading.showProgressDialog(this, R.layout.layout_loading_item, shouldShowProgress);
+    }
+
+
 }
