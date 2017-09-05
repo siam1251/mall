@@ -361,8 +361,8 @@ public class MainActivity extends BaseActivity
 
         new DeepLinkManager(this).handleDeepLink(getIntent());
 
-        Jump.signOutCaptureUser(getApplicationContext());
-        //loadUserDetails();
+
+        loadUserDetails();
     }
 
     public int getViewerPosition(){
@@ -1446,6 +1446,11 @@ public class MainActivity extends BaseActivity
                 startActivity(new Intent(this, SettingsActivity.class));
                 ActivityAnimation.startActivityAnimation(MainActivity.this);
                 break;
+            case R.id.action_signout:
+                Jump.signOutCaptureUser(getApplicationContext());
+                toggleUserSignIn(false);
+                Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -1666,15 +1671,19 @@ public class MainActivity extends BaseActivity
     @Override
     public void onResume() {
         super.onResume();
+        loadUserDetails();
     }
-
 
     private void loadUserDetails() {
         if (Jump.getSignedInUser() != null) {
             JanrainRecordParser recordParser = new JanrainRecordParser();
-            llSignIn.setVisibility(View.VISIBLE);
             tvDrawerLayoutAccount.setText(recordParser.getFullName());
+            toggleUserSignIn(true);
         }
+    }
+
+    private void toggleUserSignIn(boolean isSignedIn) {
+        llSignIn.setVisibility(isSignedIn ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -305,6 +305,12 @@
             android:theme="@style/Theme.Janrain.Dialog.Light"
             android:windowSoftInputMode="stateHidden" >
         </activity>
+        <activity
+            android:name="com.janrain.android.engage.OpenIDAppAuthCancelledActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Janrain.Dialog.Light"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
 
     </application>
 
