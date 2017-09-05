@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.janrain.android.Jump;
+import com.janrain.android.engage.JREngage;
+import com.janrain.android.engage.session.JRSession;
 
 import org.json.JSONObject;
 
@@ -60,7 +62,15 @@ public class SignUpManager implements Jump.SignInResultHandler {
      *                                Otherwise if the traditional method of manual user registration is done this token can be null.
      */
     private void register(JSONObject userObject, @Nullable String socialRegistrationToken) {
-        Log.i(TAG, "Register in progress..");
         Jump.registerNewUser(userObject, socialRegistrationToken, this);
+    }
+
+    /**
+     * Utility method to check if the specified provider is enabled.
+     * @param provider Provider to check for.
+     * @return true if enabled, false if not.
+     */
+    public boolean isProviderEnabled(String provider) {
+        return JRSession.getInstance().getProviderByName(provider) != null;
     }
 }

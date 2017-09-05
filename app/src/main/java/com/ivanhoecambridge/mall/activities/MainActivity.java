@@ -360,6 +360,9 @@ public class MainActivity extends BaseActivity
         }
 
         new DeepLinkManager(this).handleDeepLink(getIntent());
+
+        Jump.signOutCaptureUser(getApplicationContext());
+        //loadUserDetails();
     }
 
     public int getViewerPosition(){
@@ -1663,11 +1666,9 @@ public class MainActivity extends BaseActivity
     @Override
     public void onResume() {
         super.onResume();
-        //temp testing 09/01/2017
-        loadUserDetails();
     }
 
-    //temp
+
     private void loadUserDetails() {
         if (Jump.getSignedInUser() != null) {
             JanrainRecordParser recordParser = new JanrainRecordParser();

@@ -19,10 +19,12 @@ import com.ivanhoecambridge.mall.signup.SignUpManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.janrain.android.Jump;
 import com.janrain.android.engage.session.JRSession;
+import com.twitter.sdk.android.core.models.Card;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
@@ -33,6 +35,9 @@ import butterknife.Optional;
 
 public class SignInAfterOnBoardingActivity extends BaseActivity implements SignUpManager.onSignUpListener{
 
+    private final String PROVIDER_FB = "facebook";
+    private final String PROVIDER_GOOGLE = "googleplus";
+
     RelativeLayout rlSignIn;
     CardView cvSignUpInFirstScene;
     CardView cvSignUpInSecondScene;
@@ -41,6 +46,9 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
     private Scene mScene2;
     private Scene mScene;
     private SignUpManager signUpManager;
+
+    private CardView cvFacebook;
+    private CardView cvGooglePlus;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -70,6 +78,12 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
 
         signUpManager = new SignUpManager(this);
 
+
+    }
+
+    private void toggleProviderVisibility() {
+        cvFacebook.setVisibility(signUpManager.isProviderEnabled(PROVIDER_FB) ? View.VISIBLE : View.GONE);
+        cvGooglePlus.setVisibility(signUpManager.isProviderEnabled(PROVIDER_GOOGLE) ? View.VISIBLE : View.GONE);
     }
 
     private void validateView(){
@@ -83,6 +97,9 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
             });
         } else if (mScene == mScene2) {
             cvSignUpInSecondScene = (CardView) findViewById(R.id.cvSignUp);
+            cvFacebook = (CardView) findViewById(R.id.cvFb);
+            cvGooglePlus = (CardView) findViewById(R.id.cvGoogle);
+            toggleProviderVisibility();
             cvSignUpInSecondScene.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
