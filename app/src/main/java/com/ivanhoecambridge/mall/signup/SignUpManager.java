@@ -20,10 +20,25 @@ public class SignUpManager implements Jump.SignInResultHandler {
     private String provider;
     private onSignUpListener onSignUpListener;
 
+    public enum ERROR_REASON {CANCELLED, INVALID_CREDENTIALS, UNKNOWN}
+
     public interface onSignUpListener {
-        void onSignUpRequest();
+        /**
+         * Notifies the caller that the sign up request process has started.
+         * @param provider Provider that sign up is being requested with.
+         */
+        void onSignUpRequest(String provider);
+
+        /**
+         * Called when the sign up request has completed successfully.
+         */
         void onSignUpSuccess();
-        void onSignUpFailure(String error, String provider);
+        /**
+         * Called when the sign up request has failed.
+         * @param errorReason Error reason.
+         * @param provider Provider that sign up failed with.
+         */
+        void onSignUpFailure(ERROR_REASON errorReason, String provider);
     }
 
     public SignUpManager(onSignUpListener onSignUpListener) {
@@ -37,7 +52,7 @@ public class SignUpManager implements Jump.SignInResultHandler {
      */
     public void authenticate(Activity activity, String provider) {
         this.provider = provider;
-        onSignUpListener.onSignUpRequest();
+        onSignUpListener.onSignUpRequest(provider);
         Jump.showSignInDialog(activity, provider, this, null);
     }
 
@@ -51,8 +66,13 @@ public class SignUpManager implements Jump.SignInResultHandler {
         if (error.reason == SignInError.FailureReason.CAPTURE_API_ERROR && error.captureApiError.isTwoStepRegFlowError()) {
             register(error.captureApiError.getPreregistrationRecord(), error.captureApiError.getSocialRegistrationToken());
         } else {
-            onSignUpListener.onSignUpFailure(error.toString(), provider);
+            onSignUpListener.onSignUpFailure(parseSignInError(error), provider);
         }
+    }
+
+    private ERROR_REASON parseSignInError(SignInError error) {
+        if (error.reason == SignInError.FailureReason.AUTHENTICATION_CANCELLED_BY_USER) return ERROR_REASON.CANCELLED;
+        return ERROR_REASON.UNKNOWN;
     }
 
     /**
