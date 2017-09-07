@@ -40,18 +40,18 @@
             android:id="@+id/ivDrawerLayoutUser"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:src="@drawable/img_profile_default"/>
 
 
-            android:visibility="gone"
+
         <LinearLayout
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:layout_alignBottom="@+id/ivDrawerLayoutBg"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/llSignIn"
@@ -89,7 +89,7 @@
 
             </LinearLayout>
 
-                android:visibility="gone"
+
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 android:id="@+id/tvSignIn"
