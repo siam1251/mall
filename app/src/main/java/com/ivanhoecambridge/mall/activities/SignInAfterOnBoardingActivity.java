@@ -25,7 +25,6 @@ import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.signup.SignUpManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.janrain.android.Jump;
-import com.janrain.android.engage.JREngageError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,7 +68,7 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
     //Janrain can sometimes experience a socket timeout through AppAuth with Google+
     //since janrain swallows the exception and we aren't notified in any way I've added a handler to disable the progress and display an error
     //after a minute.
-    private final long socketTimeoutTimer = 3000;
+    private final long socketTimeoutTimer = 60000;
     private Handler timeHandler;
     private Runnable socketError = new Runnable() {
         @Override
