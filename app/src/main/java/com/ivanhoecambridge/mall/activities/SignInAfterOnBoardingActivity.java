@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.signup.SignUpManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.janrain.android.Jump;
@@ -155,7 +156,7 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
     }
 
     @OnClick(R.id.tvSignIn) void onClickSignIn() {
-        startActivity(new Intent(SignInAfterOnBoardingActivity.this, SignInActivity.class));
+        startActivity(createSignInIntent());
         ActivityAnimation.startActivityAnimation(SignInAfterOnBoardingActivity.this);
     }
 
@@ -171,7 +172,12 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
     }
 
     void onClickEmail() {
+        startActivity(createSignInIntent().putExtra(Constants.KEY_ACTIVE_SCENE_ORDER, SignInActivity.SIGNUP_SCENE));
+        ActivityAnimation.startActivityAnimation(this);
+    }
 
+    private Intent createSignInIntent() {
+        return new Intent(this, SignInActivity.class);
     }
 
     private JSONObject createFakeUser() {

@@ -63,7 +63,7 @@
             android:focusableInTouchMode="true"
             android:layout_height="wrap_content"
             >
-            android:layout_height="110dp"
+
 
             <View
                 android:id="@+id/separatorFirst"

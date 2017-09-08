@@ -120,4 +120,8 @@ public class Constants {
 
 	//BITMAP KEY
 	public final static String KEY_PARKING_BLURRED = "parking_image";
+
+	//SIGNUP/SIGNIN
+	public final static String KEY_ACTIVE_SCENE_ORDER = "activeSceneOrder";
+
 }

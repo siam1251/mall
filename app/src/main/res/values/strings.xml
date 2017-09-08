@@ -365,7 +365,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="signin_dont_have_account">Don’t have an account?</string>
     <string name="signin_forgot_password">Forgot your password?</string>
     <string name="signin_other_sign_in_method">You can also sign in with a Facebook or Google account.</string>
-    <string name="signin_create_account">Create Account</string>
+    <string name="signin_create_account">Create An Account</string>
     <string name="signin_send_me_promos">Send Me Promos &amp; Deals</string>
     <string name="signin_by_signing_up">By signing up, you agree to the</string>
     <string name="signin_terms_and_conditions">Terms &amp; Conditions</string>
