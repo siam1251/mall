@@ -5,10 +5,15 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.view.ContextThemeWrapper;
 import android.text.format.DateFormat;
 import android.widget.DatePicker;
+
+import com.ivanhoecambridge.mall.R;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -16,6 +21,9 @@ import java.util.GregorianCalendar;
 public class BirthDayPickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private DateSelectedListener listener;
+
+
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -25,16 +33,16 @@ public class BirthDayPickerFragment extends DialogFragment implements DatePicker
         int day = c.get(Calendar.DAY_OF_MONTH);
 
 //        return new DatePickerDialog(getActivity(), AlertDialog.THEME_HOLO_LIGHT, this, year, month, day);
-        return new DatePickerDialog(getActivity(), android.R.style.Theme_Material_Light_Dialog_Alert, this, year, month, day);
+        return new DatePickerDialog(getActivity(), R.style.DialogTheme_BirthdayPicker, this, year, month, day);
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            listener = (DateSelectedListener) activity;
+            listener = (DateSelectedListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(listener.getClass().toString()
                     + " must implement DateSelectedListener");
         }
     }
@@ -50,6 +58,6 @@ public class BirthDayPickerFragment extends DialogFragment implements DatePicker
     }
 
     public interface DateSelectedListener {
-        public void onBirthdaySelected(GregorianCalendar birthday);
+        void onBirthdaySelected(GregorianCalendar birthday);
     }
 }
