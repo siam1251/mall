@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<android.support.v4.widget.NestedScrollView
     android:background="@color/card_bg"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -92,6 +92,7 @@
                     style="@style/EditTextSignIn"
                     android:id="@+id/etSecond"
                     android:hint="@string/hint_password"
+                    android:inputType="textVisiblePassword"
                     />
             </android.support.design.widget.TextInputLayout>
 
@@ -132,7 +133,6 @@
             />
 
         <android.support.v7.widget.CardView
-            android:onClick="onFbClicked"
             android:id="@+id/cvFb"
             style="@style/CardViewSignIn"
             android:layout_above="@+id/cvGoogle"
@@ -169,7 +169,6 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-        android:onClick="onGoogleClicked"
         android:clickable="false"
         android:id="@+id/cvGoogle"
         style="@style/CardViewSignIn"
@@ -235,4 +234,4 @@
                 />
         </LinearLayout>
     </LinearLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

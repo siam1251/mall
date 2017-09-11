@@ -5,13 +5,13 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.transition.Scene;
 import android.support.transition.TransitionManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -23,12 +23,9 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.signup.SignUpManager;
+import com.ivanhoecambridge.mall.signup.AuthenticationManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.janrain.android.Jump;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,12 +36,7 @@ import butterknife.Optional;
  * Created by Kay on 2017-01-26.
  */
 
-public class SignInAfterOnBoardingActivity extends BaseActivity implements SignUpManager.onSignUpListener{
-
-    private final String PROVIDER_FB = "facebook";
-    private final String PROVIDER_GOOGLE = "googleplus";
-
-    private final String TAG = getClass().getSimpleName();
+public class SignInAfterOnBoardingActivity extends BaseActivity implements AuthenticationManager.onJanrainAuthenticateListener {
 
     CoordinatorLayout clSignIn;
     CardView cvSignUpInFirstScene;
@@ -53,7 +45,7 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
     private Scene sceneSignUp;
     private Scene sceneSignUpSocial;
     private Scene activeScene;
-    private SignUpManager signUpManager;
+    private AuthenticationManager authenticationManager;
 
     //These can't be bound by ButterKnife as they don't exist in the main layout.
     //Would require to be bound to a class, which is then bound to the main view.
@@ -64,20 +56,6 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
     @BindView(R.id.ivDismiss)
     ImageView ivDismiss;
 
-
-
-    //Janrain can sometimes experience a socket timeout through AppAuth with Google+
-    //since janrain swallows the exception and we aren't notified in any way I've added a handler to disable the progress and display an error
-    //after a minute.
-    private final long socketTimeoutTimer = 60000;
-    private Handler timeHandler;
-    private Runnable socketError = new Runnable() {
-        @Override
-        public void run() {
-            setProgressIndicator(false);
-            setErrorNotificationMessage(getString(R.string.signin_error_unknown), true);
-        }
-    };
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -105,13 +83,12 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
 
         validateView();
 
-        signUpManager = new SignUpManager(this);
-        timeHandler = new Handler();
+        authenticationManager = new AuthenticationManager(this, new Handler(Looper.getMainLooper()));
     }
 
     private void toggleProviderVisibility() {
-        cvFacebook.setVisibility(signUpManager.isProviderEnabled(PROVIDER_FB) ? View.VISIBLE : View.GONE);
-        cvGooglePlus.setVisibility(signUpManager.isProviderEnabled(PROVIDER_GOOGLE) ? View.VISIBLE : View.GONE);
+        cvFacebook.setVisibility(authenticationManager.isProviderEnabled(AuthenticationManager.PROVIDER_FB) ? View.VISIBLE : View.GONE);
+        cvGooglePlus.setVisibility(authenticationManager.isProviderEnabled(AuthenticationManager.PROVIDER_GOOGLE) ? View.VISIBLE : View.GONE);
     }
 
     private void validateView(){
@@ -162,13 +139,13 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
 
     @Optional
     @OnClick(R.id.cvFb) void onClickFb() {
-        signUpManager.authenticate(this, PROVIDER_FB);
+        authenticationManager.authenticate(this, AuthenticationManager.PROVIDER_FB);
     }
 
 
     @Optional
     @OnClick(R.id.cvGoogle) void onClickGoogle() {
-        signUpManager.authenticate(this, PROVIDER_GOOGLE);
+        authenticationManager.authenticate(this, AuthenticationManager.PROVIDER_GOOGLE);
     }
 
     void onClickEmail() {
@@ -178,21 +155,6 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
 
     private Intent createSignInIntent() {
         return new Intent(this, SignInActivity.class);
-    }
-
-    private JSONObject createFakeUser() {
-        JSONObject fakeUser = new JSONObject();
-        try {
-            fakeUser.put("email", "fakeandroiduser@fakemail.com")
-                    .put("displayName", "FakeUser")
-                    .put("givenName", "Fake")
-                    .put("familyName", "User")
-                    .put("birthday", "1970-01-01")
-                    .put("password", "password1");
-        } catch (JSONException e) {
-            Log.e("JSON", e.getMessage());
-        }
-        return fakeUser;
     }
 
     private void changeScene(){
@@ -213,7 +175,7 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
             changeScene();
             if (ProgressBarWhileDownloading.isShowing()) {
                 setProgressIndicator(false);
-                timeHandler.removeCallbacks(socketError);
+                authenticationManager.removeSocketTimeOutCallback();
             }
         }
         else finishActivity();
@@ -222,27 +184,24 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
     @Override
     public void onPause() {
         Jump.saveToDisk(this);
-        timeHandler.removeCallbacks(socketError);
+        authenticationManager.removeSocketTimeOutCallback();
         super.onPause();
     }
 
 
     @Override
-    public void onSignUpRequest(String provider) {
+    public void onAuthenticateRequest(String provider) {
         setProgressIndicator(true);
-        if (provider.equals(PROVIDER_GOOGLE)) {
-            timeHandler.postDelayed(socketError, socketTimeoutTimer);
-        }
     }
 
     @Override
-    public void onSignUpSuccess() {
+    public void onAuthenticateSuccess() {
         setProgressIndicator(false);
         finishActivity();
     }
 
     @Override
-    public void onSignUpFailure(SignUpManager.ERROR_REASON errorReason, String provider) {
+    public void onAuthenticateFailure(AuthenticationManager.ERROR_REASON errorReason, String provider) {
         setProgressIndicator(false);
         setErrorNotificationMessage(getErrorMessage(errorReason), true);
     }
@@ -251,7 +210,7 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements SignU
         ProgressBarWhileDownloading.showProgressDialog(this, R.layout.layout_loading_item, shouldShowProgress);
     }
 
-    private String getErrorMessage(SignUpManager.ERROR_REASON errorReason) {
+    private String getErrorMessage(AuthenticationManager.ERROR_REASON errorReason) {
         switch (errorReason) {
             case CANCELLED:
                 return KcpUtility.getString(this, R.string.signin_error_cancelled);

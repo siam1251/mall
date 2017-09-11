@@ -21,17 +21,50 @@
             <include
                 layout="@layout/layout_toolbar_intrstd_category" />
 
+
+
         </android.support.design.widget.AppBarLayout>
+
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+            android:id="@+id/tvError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:background="@color/sign_in_error_red"
+            android:text="@string/signin_error_unknown"
+            android:drawableLeft="@drawable/icn_exit"
+            android:drawableStart="@drawable/icn_exit"
+            app:drawableFilterColor="@color/white"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:elevation="3dp"
+            app:layout_anchor="@id/ablTop"
+            app:layout_anchorGravity="bottom"
+            android:layout_gravity="bottom"
+            />
 
         <FrameLayout
             android:layout_marginTop="?attr/actionBarSize"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/scene_root">
+            android:id="@+id/scene_root"
+            app:layout_behavior="com.ivanhoecambridge.mall.views.ErrorNotificationBehavior"
+            app:layout_anchor="@id/tvError"
+            >
 
             <include
-                layout="@layout/transition_sign_in_one" />
+                layout="@layout/transition_sign_in_one"
+                />
+
+
+
 
         </FrameLayout>
+
+
+
     </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>

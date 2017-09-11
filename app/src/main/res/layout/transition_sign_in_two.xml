@@ -69,7 +69,7 @@
 
                 <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
-                    android:id="@+id/etFirst"
+                    android:id="@+id/etCreateAccountFullName"
                     android:hint="@string/hint_full_name" />
             </android.support.design.widget.TextInputLayout>
 
@@ -80,7 +80,7 @@
 
                 <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
-                    android:id="@+id/etSecond"
+                    android:id="@+id/etCreateAccountEmail"
                     android:hint="@string/hint_email"
                     android:inputType="textEmailAddress" />
 
@@ -93,7 +93,7 @@
 
                 <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
-                    android:id="@+id/etThird"
+                    android:id="@+id/etCreateAccountPassword"
                     android:hint="@string/hint_password"
                     android:inputType="textPassword"
                     />
@@ -106,7 +106,7 @@
 
                 <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
-                    android:id="@+id/etFourth"
+                    android:id="@+id/etCreateAccountPasswordConfirm"
                     android:inputType="textPassword"
                     android:hint="@string/hint_confirm_password"
                     />
@@ -119,7 +119,7 @@
 
                 <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
-                    android:id="@+id/etFifth"
+                    android:id="@+id/etCreateAccountBirthday"
                     android:hint="@string/hint_Birthday"
                     />
             </android.support.design.widget.TextInputLayout>
@@ -204,7 +204,6 @@
                 />
 
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                android:onClick="onClickTerms"
                 android:id="@+id/tvTerms"
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 style="@style/SelectableItemForeground"

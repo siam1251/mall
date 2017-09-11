@@ -32,7 +32,6 @@ public class BirthDayPickerFragment extends DialogFragment implements DatePicker
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-//        return new DatePickerDialog(getActivity(), AlertDialog.THEME_HOLO_LIGHT, this, year, month, day);
         return new DatePickerDialog(getActivity(), R.style.DialogTheme_BirthdayPicker, this, year, month, day);
     }
 
