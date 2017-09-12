@@ -15,11 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
@@ -31,12 +33,11 @@ import com.ivanhoecambridge.mall.signup.AuthenticationManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher;
-import com.janrain.android.engage.JREngageError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -77,6 +78,8 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     private TextView tvTerms;
     @BindView(R.id.tvError)
     TextView tvError;
+    @BindView(R.id.cbPromosDeals)
+    CheckBox cbPromosDeals;
     LinearLayout llSignInCreateAccountReset;
 
     //SCENE 1
@@ -87,8 +90,8 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     private AppcompatEditTextWithWatcher etCreateAccountPassword;
     private AppcompatEditTextWithWatcher etCreateAccountPasswordConfirm;
     private AppcompatEditTextWithWatcher etCreateAccountBirth;
-
-
+    //SIGN UP FIELDS
+    private String formattedBirthday;
     @Override
     protected void onResume() {
         super.onResume();
@@ -142,7 +145,6 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
     private void initializeView() {
         ButterKnife.bind(this);
-        tvTerms = (TextView) findViewById(R.id.tvTerms);
     }
 
 
@@ -203,7 +205,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             llSignInCreateAccountReset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                createUserAccount();
+                    authenticationManager.registerByEmail(createUserAccount());
                 }
             });
 
@@ -340,13 +342,13 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
                         return true;
                     } else if (etCreateAccountBirth.getTag() instanceof GregorianCalendar) {
                         Calendar datePicked = (GregorianCalendar) etCreateAccountBirth.getTag(); // calendar
-                        if (FormValidation.isDateBeforeToday(datePicked)) {
+                        if (FormValidation.isMinimumAgeRequired(datePicked)) {
                             tilCreateAccountBirth.setErrorEnabled(false);
                             etCreateAccountBirth.getOnFieldFilledListener().isFieldFilled(etCreateAccountBirth, true);
                             return true;
                         } else {
                             if (showErrorMsg)
-                                tilCreateAccountBirth.setError(getString(R.string.warning_pick_earlier_date));
+                                tilCreateAccountBirth.setError(getString(R.string.warning_minimum_age_date));
                             etCreateAccountBirth.getOnFieldFilledListener().isFieldFilled(etCreateAccountBirth, false);
                             return false;
                         }
@@ -364,6 +366,8 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
             formFillCheckerTwo.addEditText(etCreateAccountFullName, etCreateAccountEmail, etCreateAccountPassword, etCreateAccountPasswordConfirm, etCreateAccountBirth);
             etCreateAccountBirth.getOnFieldFilledListener().isFieldFilled(etCreateAccountBirth, true); //because birthday's optional, set the default to true
+
+            tvTerms = (TextView) findViewById(R.id.tvTerms);
 
             tvTerms.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -433,26 +437,53 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
         }, 2, SECONDS);
     }
 
-    private void createUserAccount() {
+    /**
+     * Retrieves all the filled out form information and creates a JSONObject from it.
+     * @return JSONObject which contains user information.
+     */
+    private JSONObject createUserAccount() {
         JSONObject newUser = new JSONObject();
         String displayName = getTextFromField(etCreateAccountFullName);
-        String[] nameSplit = displayName.split("\\s+");
+        String[] nameSplit;
+        if (displayName.length() > 0 && displayName.contains(" ")) {
+            nameSplit = displayName.split("\\s+");
+        } else {
+            nameSplit = new String[2];
+            nameSplit[0] = displayName;
+            nameSplit[1] = "";
+        }
+
         try {
             newUser.put("email", getTextFromField(etCreateAccountEmail))
                     .put("displayName", displayName)
                     .put("givenName", nameSplit[0])
-                    .put("familyName", nameSplit[1])
-                    .put("birthday", getTextFromField(etCreateAccountBirth))
+                    .put("familyName", nameSplit[nameSplit.length-1])
                     .put("password", getTextFromField(etCreateAccountPassword));
+            if (formattedBirthday != null && formattedBirthday.length() > 0) {
+                newUser.put("birthday", formattedBirthday);
+            }
+            //temporary -- doesn't do anything yet.
+            if (cbPromosDeals.isChecked()) {
+                newUser.put("apps", createAppsElement());
+            }
+
         } catch (JSONException e) {
             Log.e("JSON", e.getMessage());
         }
-        authenticationManager.registerByEmail(newUser);
+        return newUser;
     }
+
+
 
     private String getTextFromField(EditText edtField) {
         if (edtField == null || edtField.getText().toString().isEmpty()) return "";
         return edtField.getText().toString();
+    }
+
+    private JSONObject createAppsElement() throws JSONException {
+        JSONObject appsElement = new JSONObject();
+        appsElement.put("emailOptIn", cbPromosDeals.isChecked());
+        return appsElement;
     }
 
     private void changeScene(Scene scene) {
@@ -472,6 +503,8 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
         }
     }
 
+
+
     @Optional
     @OnClick(R.id.cvFb)
     void onFbClicked(View v) {
@@ -480,9 +513,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     @Optional
     @OnClick(R.id.cvGoogle)
     void onGoogleClicked(View v) {
-        setErrorNotificationMessage(getString(R.string.signin_error_unknown), true);
     }
-
 
     @OnClick(R.id.tvError)
     public void onErrorMessageClicked(View v) {
@@ -503,11 +534,24 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
     @Override
     public void onAuthenticateFailure(AuthenticationManager.ERROR_REASON errorReason, String provider) {
-
+        setProgressIndicator(false);
+        setErrorNotificationMessage(getErrorMessage(errorReason), true);
     }
 
     private void setProgressIndicator(boolean shouldShowProgress) {
         ProgressBarWhileDownloading.showProgressDialog(this, R.layout.layout_loading_item, shouldShowProgress);
+    }
+
+    private String getErrorMessage(AuthenticationManager.ERROR_REASON errorReason) {
+        switch (errorReason) {
+            case CANCELLED:
+                return KcpUtility.getString(this, R.string.signin_error_cancelled);
+            case INVALID_CREDENTIALS:
+                return KcpUtility.getString(this, R.string.signin_error_invalid_credentials);
+            case UNKNOWN:
+            default:
+                return KcpUtility.getString(this, R.string.signin_error_unknown);
+        }
     }
 
 
@@ -523,9 +567,16 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
                 Locale.getDefault()) + " " + date.get(GregorianCalendar.DAY_OF_MONTH) + ", "
                 + date.get(GregorianCalendar.YEAR);
 
+
+        formatBirthdayForJanrain(date);
         etCreateAccountBirth.setText(birthdayString);
         etCreateAccountBirth.setTag(date);
         etCreateAccountBirth.getOnValidateListener().validate(true);
+    }
+
+    private void formatBirthdayForJanrain(GregorianCalendar date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_JANRAIN_CAPTURE, Locale.US);
+        formattedBirthday = dateFormat.format(date.getTime());
     }
 
     private void setErrorNotificationMessage(@Nullable String error, boolean shouldDisplay) {

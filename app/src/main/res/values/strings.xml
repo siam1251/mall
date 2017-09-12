@@ -137,6 +137,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="warning_two_passwords_not_equal">Two passwords must be the same.</string>
     <string name="warning_wrong_date_format">Wrong date format.</string>
     <string name="warning_pick_earlier_date">Date of birth has to be earlier than today</string>
+    <string name="warning_minimum_age_date">You do not meet the minimum age requirements.</string>
     <string name="warning_gift_card_already_exist">This Gift Card number has already been added to your profile.</string>
     <string name="warning_gift_card_has_been_removed">Gift Card has been removed.</string>
 

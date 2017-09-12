@@ -65,7 +65,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.exacttarget.etpushsdk.ETPush;
 import com.exacttarget.etpushsdk.util.EventBus;
 import com.google.gson.Gson;
@@ -89,12 +88,9 @@ import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.constants.Constants;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import factory.HeaderFactory;
 
 import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
-import com.ivanhoecambridge.mall.factory.GlideFactory;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.DirectoryFragment;
 import com.ivanhoecambridge.mall.fragments.HomeFragment;
@@ -127,8 +123,6 @@ import com.ivanhoecambridge.mall.views.KcpAnimatedViewPager;
 import com.ivanhoecambridge.mall.views.ThemeColorImageView;
 import com.janrain.android.Jump;
 import com.mappedin.sdk.Polygon;
-
-import org.json.JSONException;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

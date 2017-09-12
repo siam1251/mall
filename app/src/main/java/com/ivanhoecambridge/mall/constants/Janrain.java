@@ -6,7 +6,7 @@ import com.janrain.android.JumpConfig;
  * Created by petar on 2017-08-29.
  */
 
-public class JanRain {
+public class Janrain {
 
     private final static String CAPTURE_FLOW_NAME = "standard";
     private final static String CAPTURE_LOCALE = "en-US";

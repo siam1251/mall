@@ -93,6 +93,7 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
      * Starts the email registration process.
      * @param userObject JSONObject that holds all required user information as specified by Janrain schema. */
     public void registerByEmail(JSONObject userObject) {
+        onJanrainAuthenticateListener.onAuthenticateRequest(null);
         register(userObject, null);
     }
 

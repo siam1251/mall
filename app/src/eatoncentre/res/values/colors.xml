@@ -9,6 +9,7 @@
 
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#f37021</color> <!--status bar-->
+    <color name="colorAccent">@color/themeColor</color>
     <color name="textColorPrimary">#000000</color>
     <color name="hamburger_menu">#212121</color>
     <color name="active_mall_off_state">#000000</color>

@@ -151,6 +151,7 @@
                 android:layout_height="48dp">
 
                 <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/cbPromosDeals"
                     android:theme="@style/CheckBoxStyle"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_width="wrap_content"

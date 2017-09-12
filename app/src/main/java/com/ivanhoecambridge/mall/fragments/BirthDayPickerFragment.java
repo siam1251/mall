@@ -1,16 +1,10 @@
 package com.ivanhoecambridge.mall.fragments;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.view.ContextThemeWrapper;
-import android.text.format.DateFormat;
 import android.widget.DatePicker;
 
 import com.ivanhoecambridge.mall.R;
@@ -21,9 +15,6 @@ import java.util.GregorianCalendar;
 public class BirthDayPickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private DateSelectedListener listener;
-
-
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
