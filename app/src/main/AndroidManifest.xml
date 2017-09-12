@@ -140,6 +140,7 @@
             android:theme="@style/AppTheme.Base"/>
         <activity
             android:name=".activities.SignInAfterOnBoardingActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base"/>
         <activity
@@ -260,6 +261,56 @@
             android:enabled="true" />
         <!-- END ETLocationReceiver and Service -->
 
+        <!-- The following activities are for the Janrain Engage for Android library -->
+        <!-- This activity must have a dialog theme such as Theme.Holo.Dialog, or
+            Theme.Dialog, etc.
+
+            Using android:theme="@style/Theme.Janrain.Dialog" will result in Theme.Dialog on API 4-10 and
+            Theme.Holo.DialogWhenLarge.NoActionBar on API 11+
+        -->
+        <activity
+            android:name="com.janrain.android.engage.ui.JRFragmentHostActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.Janrain.Dialog.Light"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            />
+
+        <!-- This activity must have a normal (non-dialog) theme such as Theme, Theme.Light, Theme.Holo, etc.
+
+            Using android:theme="@style/Theme.Janrain" or "@style/Theme.Janrain.Light" will result in
+            Theme (or Theme.Light) on API 4-10 and
+            Theme.Holo (or Theme.Holo.Light) on API 11+
+        -->
+        <activity
+            android:name="com.janrain.android.engage.ui.JRFragmentHostActivity$Fullscreen"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.Janrain.Light"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            />
+
+
+        <activity android:name="net.openid.appauth.RedirectUriReceiverActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https"
+                    android:host="com.googleusercontent.apps.1030164305150-0mvg7fmje095ib4qf4v38ujpgg2fnbcj:"
+                    android:path="/oauth2redirect"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.janrain.android.engage.OpenIDAppAuthTokenActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Janrain.Dialog.Light"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name="com.janrain.android.engage.OpenIDAppAuthCancelledActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Janrain.Dialog.Light"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
 
     </application>
 

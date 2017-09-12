@@ -40,6 +40,7 @@
 
     <declare-styleable name="CustomFontTextView">
         <attr name="fontFamily" format="string"/>
+        <attr name="drawableFilterColor" format="color"/>
     </declare-styleable>
 
     <declare-styleable name="ExpandableTextView">

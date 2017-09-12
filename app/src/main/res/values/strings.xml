@@ -372,6 +372,10 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="signin_forgot_your_password">Forgot your password?</string>
     <string name="signin_let_us_know">Let us know the email address you used to set up your account, and we’ll send you reset password instructions</string>
     <string name="signin_send_reset_instructions">Send Reset Instructions</string>
+    <string name="signin_error_cancelled">The request was cancelled by the user.</string>
+    <string name="signin_error_unknown">There was an error with your request.</string>
+    <string name="signin_error_permission_denied">The app requires permission to your account.</string>
+    <string name="signin_error_invalid_credentials">We were unable to retrieve the proper credentials.</string>
 
     <!--GIFT CARD-->
     <string name="gc_add_card">Add Card</string>

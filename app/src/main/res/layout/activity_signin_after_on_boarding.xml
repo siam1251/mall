@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rlSignIn"
+    android:id="@+id/clSignIn"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -19,6 +19,21 @@
 
     </FrameLayout>
 
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+        android:id="@+id/tvError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:background="@color/sign_in_error_red"
+        android:text="@string/signin_error_unknown"
+        android:drawableLeft="@drawable/icn_exit"
+        android:drawableStart="@drawable/icn_exit"
+        app:drawableFilterColor="@color/white"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
     <com.ivanhoecambridge.mall.views.ThemeColorImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
         ThemedImageView:filterColor="@color/white"
@@ -29,6 +44,9 @@
         android:padding="15dp"
         android:layout_margin="5dp"
         android:src="@drawable/icn_exit"
+        app:layout_anchor="@+id/tvError"
+        app:layout_anchorGravity="bottom"
+        android:layout_gravity="bottom"
         />
 
     <LinearLayout
@@ -65,5 +83,5 @@
             android:textSize="16sp"
             />
     </LinearLayout>
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
 

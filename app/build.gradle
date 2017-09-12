@@ -11,6 +11,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 repositories {
+    jcenter()
     maven { url 'https://maven.fabric.io/public' }
 }
 
@@ -43,7 +44,7 @@ android {
         renderscriptSupportModeEnabled true
 
         manifestPlaceholders = [
-                'appAuthRedirectScheme': 'com.googleusercontent.apps.169582807084-bk8a4jintrtka452cj1v610s588riapp'
+                'appAuthRedirectScheme': 'com.googleusercontent.apps.1030164305150-0mvg7fmje095ib4qf4v38ujpgg2fnbcj'
         ]
     }
     buildTypes {
@@ -134,6 +135,7 @@ android {
             buildConfigField 'Boolean', 'BLUEDOT', 'true'
         }
     }
+
 }
 
 //Upgrading android studio to 2.3, it was required to add multidex (com.android.support:multidex:1.0.1) as dependency.

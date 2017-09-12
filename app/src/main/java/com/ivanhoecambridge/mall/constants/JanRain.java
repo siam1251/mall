@@ -44,6 +44,7 @@ public class JanRain {
                 break;
             case PROD:
                 jumpConfig.engageAppId = "kchliobppnpaaggibkcg";
+                jumpConfig.captureAppId = "4dtcmxp2e4z2jgwzsmaftk7zn3";
                 jumpConfig.captureDomain = "ivanhoe-cambridge.us.janraincapture.com";
                 jumpConfig.captureClientId = "caycqadcfnjt7mbhwccvy5hxdfgpxzch";
                 jumpConfig.captureFlowName = CAPTURE_FLOW_NAME;
