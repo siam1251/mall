@@ -1,5 +1,6 @@
 package com.ivanhoecambridge.mall.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -78,8 +79,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     private TextView tvTerms;
     @BindView(R.id.tvError)
     TextView tvError;
-    @BindView(R.id.cbPromosDeals)
-    CheckBox cbPromosDeals;
+    private CheckBox cbPromosDeals;
     LinearLayout llSignInCreateAccountReset;
 
     //SCENE 1
@@ -367,6 +367,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             formFillCheckerTwo.addEditText(etCreateAccountFullName, etCreateAccountEmail, etCreateAccountPassword, etCreateAccountPasswordConfirm, etCreateAccountBirth);
             etCreateAccountBirth.getOnFieldFilledListener().isFieldFilled(etCreateAccountBirth, true); //because birthday's optional, set the default to true
 
+            cbPromosDeals = (CheckBox) findViewById(R.id.cbPromosDeals);
             tvTerms = (TextView) findViewById(R.id.tvTerms);
 
             tvTerms.setOnClickListener(new View.OnClickListener() {
@@ -529,6 +530,8 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     @Override
     public void onAuthenticateSuccess() {
         setProgressIndicator(false);
+        startActivity(createHomeIntent());
+        ActivityAnimation.startActivityAnimation(this);
         finishActivity();
     }
 
@@ -536,6 +539,12 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     public void onAuthenticateFailure(AuthenticationManager.ERROR_REASON errorReason, String provider) {
         setProgressIndicator(false);
         setErrorNotificationMessage(getErrorMessage(errorReason), true);
+    }
+
+    private Intent createHomeIntent() {
+        Intent homeIntent = new Intent(this, MainActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return homeIntent;
     }
 
     private void setProgressIndicator(boolean shouldShowProgress) {
