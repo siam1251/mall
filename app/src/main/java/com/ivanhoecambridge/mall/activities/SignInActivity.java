@@ -34,6 +34,7 @@ import com.ivanhoecambridge.mall.signup.AuthenticationManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher;
+import com.janrain.android.Jump;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -129,6 +130,12 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
     }
 
+    @Override
+    public void onPause() {
+        Jump.saveToDisk(this);
+        super.onPause();
+    }
+
     private Scene setActiveRootScene(Bundle data) {
         if (data == null) {return signInScene;}
         switch (data.getInt(Constants.KEY_ACTIVE_SCENE_ORDER, SIGNUP_SCENE)) {
@@ -158,7 +165,6 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             llSignInCreateAccountReset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    fakeLoading();
                     Toast.makeText(SignInActivity.this, "SIGNING IN", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -387,7 +393,6 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             llSignInCreateAccountReset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    fakeLoading();
                     Toast.makeText(SignInActivity.this, "Send Reset Instruction", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -423,19 +428,6 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
             formFillCheckerThree.addEditText(etSignInEmail);
         }
-    }
-
-    //the network handling code is not complete for signin. Until then, use below to mock the network processing for UI testing.
-    private void fakeLoading() {
-        ProgressBarWhileDownloading.showProgressDialog(SignInActivity.this, R.layout.layout_loading_item, true);
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        ScheduledFuture<?> handl = scheduler.schedule(new Runnable() {
-            @Override
-            public void run() {
-                ProgressBarWhileDownloading.showProgressDialog(SignInActivity.this, R.layout.layout_loading_item, false);
-                finishActivity();
-            }
-        }, 2, SECONDS);
     }
 
     /**
@@ -618,7 +610,4 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     public void onBackPressed() {
         finishActivity();
     }
-
-
-
 }
