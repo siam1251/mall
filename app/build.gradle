@@ -64,6 +64,9 @@ android {
     productFlavors {
         metropolis {
             applicationId "com.ivanhoecambridge.mall.metropolis"
+            manifestPlaceholders = [
+                    'appAuthRedirectScheme': '1030164305150-ojedem0qqn6be0k5v19c87r6fhk9utta.apps.googleusercontent.com'
+            ]
 
             buildConfigField 'String', 'MALL', '"metropolis-at-metrotown"'
             buildConfigField 'Boolean', 'PUSH', 'true'
@@ -76,6 +79,9 @@ android {
 
         vaughanmills {
             applicationId "com.ivanhoecambridge.mall.vaughanmills"
+            manifestPlaceholders = [
+                    'appAuthRedirectScheme': '1030164305150-7u8l61d40dgfptekdgk65dj9ui9o6joi.apps.googleusercontent.com'
+            ]
 
             buildConfigField 'String', 'MALL', '"vaughan-mills"'
             buildConfigField 'Boolean', 'PUSH', 'true'
@@ -88,6 +94,9 @@ android {
 
         tsawwassenmills {
             applicationId "com.ivanhoecambridge.mall.tsawwassenmills"
+            manifestPlaceholders = [
+                    'appAuthRedirectScheme': '1030164305150-mlb7svjg62scue5plv5rrb4t1ssf9jci.apps.googleusercontent.com'
+            ]
 
             buildConfigField 'String', 'MALL', '"tsawwassen-mills"'
             buildConfigField 'Boolean', 'PUSH', 'true'
@@ -100,6 +109,9 @@ android {
 
         crossironmills {
             applicationId "com.ivanhoecambridge.mall.crossironmills"
+            manifestPlaceholders = [
+                    'appAuthRedirectScheme': '1030164305150-djqbv5f7penaqkg4c1iu7ccvlidj6grn.apps.googleusercontent.com'
+            ]
 
             buildConfigField 'String', 'MALL', '"crossiron-mills"'
             buildConfigField 'Boolean', 'PUSH', 'true'
@@ -112,6 +124,9 @@ android {
 
         eatoncentre {
             applicationId "com.ivanhoecambridge.mall.eatoncentre"
+            manifestPlaceholders = [
+                    'appAuthRedirectScheme': '1030164305150-la1mff2o40hj0rn3j8qo95lqeu918t4e.apps.googleusercontent.com'
+            ]
 
             buildConfigField 'String', 'MALL', '"Kinetic Cafe Office"'
             buildConfigField 'Boolean', 'PUSH', 'true'
@@ -125,6 +140,9 @@ android {
 
         seniondemo {
             applicationId "com.ivanhoecambridge.mall.seniondemo"
+            manifestPlaceholders = [
+                    'appAuthRedirectScheme': ''
+            ]
 
             buildConfigField 'String', 'MALL', '"Kinetic Cafe Office"'
             buildConfigField 'Boolean', 'PUSH', 'false'
