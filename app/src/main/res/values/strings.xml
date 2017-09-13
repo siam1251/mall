@@ -377,6 +377,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="signin_error_unknown">There was an error with your request.</string>
     <string name="signin_error_permission_denied">The app requires permission to your account.</string>
     <string name="signin_error_invalid_credentials">We were unable to retrieve the proper credentials.</string>
+    <string name="signin_error_invalid_credentials_try_again">Incorrect username or password. Please try again.</string>
+    <string name="signin_error_social_signin_only">That account is social sign in only.</string>
 
     <!--GIFT CARD-->
     <string name="gc_add_card">Add Card</string>

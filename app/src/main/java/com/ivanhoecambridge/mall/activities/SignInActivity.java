@@ -43,16 +43,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * Created by Kay on 2017-01-27.
@@ -83,7 +78,9 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     private CheckBox cbPromosDeals;
     LinearLayout llSignInCreateAccountReset;
 
-    //SCENE 1
+    //SIGN IN SCENE
+    private AppcompatEditTextWithWatcher etSignInEmail;
+    private AppcompatEditTextWithWatcher etSignInPassword;
 
     //SIGN UP SCENE
     private AppcompatEditTextWithWatcher etCreateAccountFullName;
@@ -165,7 +162,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             llSignInCreateAccountReset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(SignInActivity.this, "SIGNING IN", Toast.LENGTH_SHORT).show();
+                    authenticationManager.authenticate(getTextFromField(etSignInEmail), getTextFromField(etSignInPassword));
                 }
             });
 
@@ -180,7 +177,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
             //EMAIL
             final TextInputLayout tilSignInEmail = (TextInputLayout) findViewById(R.id.tilFirst);
-            final AppcompatEditTextWithWatcher etSignInEmail = (AppcompatEditTextWithWatcher) findViewById(R.id.etFirst);
+            etSignInEmail = (AppcompatEditTextWithWatcher) findViewById(R.id.etSignInEmail);
             etSignInEmail.setOnFieldFilledListener(formFillCheckerOne);
             etSignInEmail.setOnValidateListener(new AppcompatEditTextWithWatcher.OnValidateListener() {
                 @Override
@@ -198,7 +195,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             });
 
             //PASSWORD
-            final AppcompatEditTextWithWatcher etSignInPassword = (AppcompatEditTextWithWatcher) findViewById(R.id.etSecond);
+            etSignInPassword = (AppcompatEditTextWithWatcher) findViewById(R.id.etSignInPassword);
             etSignInPassword.setOnFieldFilledListener(formFillCheckerOne);
 
             formFillCheckerOne.addEditText(etSignInEmail, etSignInPassword);
@@ -501,11 +498,13 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     @Optional
     @OnClick(R.id.cvFb)
     void onFbClicked(View v) {
+        authenticationManager.authenticate(this, AuthenticationManager.PROVIDER_FB);
     }
 
     @Optional
     @OnClick(R.id.cvGoogle)
     void onGoogleClicked(View v) {
+       authenticationManager.authenticate(this, AuthenticationManager.PROVIDER_GOOGLE);
     }
 
     @OnClick(R.id.tvError)
@@ -549,6 +548,10 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
                 return KcpUtility.getString(this, R.string.signin_error_cancelled);
             case INVALID_CREDENTIALS:
                 return KcpUtility.getString(this, R.string.signin_error_invalid_credentials);
+            case INVALID_CREDENTIALS_SIGNIN:
+                return KcpUtility.getString(this, R.string.signin_error_invalid_credentials_try_again);
+            case SOCIAL_ONLY:
+                return KcpUtility.getString(this, R.string.signin_error_social_signin_only);
             case UNKNOWN:
             default:
                 return KcpUtility.getString(this, R.string.signin_error_unknown);
