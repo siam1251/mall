@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -9,13 +10,22 @@ android {
     useLibrary "org.apache.http.legacy"
 
     defaultConfig {
+
         minSdkVersion 16
         targetSdkVersion 25
         // replace the below string with your own Google client ID. Make sure this is consistent
         // with the values used in openid_appauth_idp_configs.xml
         manifestPlaceholders = [
-                'appAuthRedirectScheme': 'com.googleusercontent.apps.UPDATE'
+                'appAuthRedirectScheme': ''
         ]
+    }
+    productFlavors.whenObjectAdded { flavor ->
+        if (rootProject.hasProperty(flavor.name)) {
+            def flavorData = rootProject.ext[flavor.name]
+            flavor.manifestPlaceholders = [
+                    'appAuthRedirectScheme': flavorData.appAuthRedirectScheme
+            ]
+        }
     }
 
     buildTypes {
@@ -24,6 +34,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
 
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 }
 
