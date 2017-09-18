@@ -295,7 +295,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="https"
-                    android:host="com.googleusercontent.apps.${appAuthRedirectScheme}:"
+                    android:host="${appAuthRedirectScheme}:"
                     android:path="/oauth2redirect"/>
             </intent-filter>
         </activity>

@@ -43,6 +43,7 @@ android {
 
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
+
     }
     buildTypes {
         release {
@@ -63,7 +64,7 @@ android {
         if (rootProject.hasProperty(flavor.name)) {
             def flavorData = rootProject.ext[flavor.name]
             flavor.manifestPlaceholders = [
-                    'appAuthRedirectScheme': flavorData.appAuthRedirectScheme
+                    'appAuthRedirectScheme': rootProject.ext.redirect_uri_scheme + flavorData.appAuthRedirectScheme
             ]
             flavor.resValue 'string', 'google_client_id', flavorData.appAuthRedirectScheme + rootProject.ext.client_id_scheme
             flavor.resValue 'string', 'google_auth_redirect_uri', rootProject.ext.redirect_uri_scheme + flavorData.appAuthRedirectScheme + ':/oauth2redirect'
