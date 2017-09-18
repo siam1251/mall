@@ -29,11 +29,17 @@
         <item name="buttonBarButtonStyle">@style/MyButtonStyle</item>
 
 
+
         <!--For TextInputLayout Underline Color-->
         <item name="colorControlNormal">@color/detail_separator_color</item>
         <item name="colorControlActivated">@color/detail_separator_color</item>
+
+        <item name="checkboxStyle">@style/CheckBoxStyle</item>
     </style>
 
+    <style name="DialogTheme.BirthdayPicker" parent="DialogTheme">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/welcome_btn_color</item>
@@ -50,6 +56,10 @@
     </style>
 
 
+    <style name="CheckBoxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="colorControlActivated">@color/themeColor</item>
+        <item name="colorControlNormal">@color/checkbox_normal</item>
+    </style>
 
     <style name="Theme.Transparent" parent="Theme.AppCompat.Light.NoActionBar">
 
@@ -301,7 +311,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-
 
     <style name="CardViewSignIn" parent="@style/CardView">
         <item name="android:layout_gravity">center_horizontal</item>

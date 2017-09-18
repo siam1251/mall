@@ -63,6 +63,7 @@ public class Constants {
  	public final static String DATE_FORMAT_EVENT_HOUR 				= "h:mm aa";
  	public final static String DATE_FORMAT_ANNOUNCEMENT 			= "MMMM d, EEEE";
  	public final static String DATE_FORMAT_ANNOUNCEMENT_GROUPED 	= "MMMM d";
+	public final static String DATE_FORMAT_JANRAIN_CAPTURE 			= "yyyy-MM-dd ";
 
 
 	//DETAIL
@@ -120,4 +121,8 @@ public class Constants {
 
 	//BITMAP KEY
 	public final static String KEY_PARKING_BLURRED = "parking_image";
+
+	//SIGNUP/SIGNIN
+	public final static String KEY_ACTIVE_SCENE_ORDER = "activeSceneOrder";
+
 }

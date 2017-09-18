@@ -177,6 +177,7 @@
     <color name="sign_in_red">#ee3f33</color>
     <color name="sign_in_disabled">#939393</color>
     <color name="sign_in_error_red">#d0011b</color>
+    <color name="checkbox_normal">#89010101</color>
 
 
 

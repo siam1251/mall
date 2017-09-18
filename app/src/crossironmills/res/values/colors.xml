@@ -8,6 +8,7 @@
 
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color> <!--status bar-->
+    <color name="colorAccent">@color/themeColor</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="hamburger_menu">#ee3f33</color>
     <color name="active_mall_off_state">#FFFFFF</color>

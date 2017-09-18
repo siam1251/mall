@@ -1,0 +1,24 @@
+ext {
+    redirect_uri_scheme = 'com.googleusercontent.apps.'
+    client_id_scheme = '.apps.googleusercontent.com'
+    metropolis = [
+            appAuthRedirectScheme : '1030164305150-ojedem0qqn6be0k5v19c87r6fhk9utta'
+    ]
+
+    vaughanmills = [
+            appAuthRedirectScheme : '1030164305150-7u8l61d40dgfptekdgk65dj9ui9o6joi'
+    ]
+
+    tsawwassenmills = [
+            appAuthRedirectScheme : '1030164305150-mlb7svjg62scue5plv5rrb4t1ssf9jci'
+    ]
+
+    crossironmills = [
+            appAuthRedirectScheme : '1030164305150-djqbv5f7penaqkg4c1iu7ccvlidj6grn'
+    ]
+
+    eatoncentre = [
+            appAuthRedirectScheme : '1030164305150-la1mff2o40hj0rn3j8qo95lqeu918t4e'
+    ]
+
+}

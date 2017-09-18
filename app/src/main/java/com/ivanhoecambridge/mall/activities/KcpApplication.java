@@ -1,8 +1,6 @@
 package com.ivanhoecambridge.mall.activities;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
@@ -28,7 +26,7 @@ import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.constants.JanRain;
+import com.ivanhoecambridge.mall.constants.Janrain;
 import com.janrain.android.Jump;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
@@ -125,9 +123,9 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
         });*/
 
         if (BuildConfig.JANRAIN_DEV) {
-            Jump.init(getApplicationContext(), JanRain.configure(JanRain.AppType.DEV));
+            Jump.init(getApplicationContext(), Janrain.configure(Janrain.AppType.DEV));
         } else {
-            Jump.init(getApplicationContext(), JanRain.configure(JanRain.AppType.PROD));
+            Jump.init(getApplicationContext(), Janrain.configure(Janrain.AppType.PROD));
         }
 
     }

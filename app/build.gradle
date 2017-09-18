@@ -10,6 +10,7 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+
 repositories {
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
@@ -43,9 +44,6 @@ android {
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
 
-        manifestPlaceholders = [
-                'appAuthRedirectScheme': 'com.googleusercontent.apps.1030164305150-0mvg7fmje095ib4qf4v38ujpgg2fnbcj'
-        ]
     }
     buildTypes {
         release {
@@ -61,6 +59,19 @@ android {
             buildConfigField "Boolean", "REPORT_CRASH", 'false'
         }
     }
+
+    productFlavors.whenObjectAdded { flavor ->
+        if (rootProject.hasProperty(flavor.name)) {
+            def flavorData = rootProject.ext[flavor.name]
+            flavor.manifestPlaceholders = [
+                    'appAuthRedirectScheme': rootProject.ext.redirect_uri_scheme + flavorData.appAuthRedirectScheme
+            ]
+            flavor.resValue 'string', 'google_client_id', flavorData.appAuthRedirectScheme + rootProject.ext.client_id_scheme
+            flavor.resValue 'string', 'google_auth_redirect_uri', rootProject.ext.redirect_uri_scheme + flavorData.appAuthRedirectScheme + ':/oauth2redirect'
+        }
+
+    }
+
     productFlavors {
         metropolis {
             applicationId "com.ivanhoecambridge.mall.metropolis"
@@ -143,6 +154,7 @@ android {
 //seems like this is currently a bug https://code.google.com/p/android/issues/detail?id=236471
 
 dependencies {
+    compile project(':Jump')
     compile 'com.google.android.gms:play-services-location:11.0.2'
     compile 'com.google.android.gms:play-services-gcm:11.0.2'
     compile 'com.google.android.gms:play-services-maps:11.0.2'
@@ -175,7 +187,6 @@ dependencies {
     compile 'com.exacttarget.etpushsdk:etsdk:4.5.0@aar'
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile project(':Jump')
 }
 
 apply plugin: 'com.google.gms.google-services'
