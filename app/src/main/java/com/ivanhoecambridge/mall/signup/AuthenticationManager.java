@@ -124,10 +124,15 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
 
     private ERROR_REASON parseSignInError(SignInError error) {
         ERROR_REASON errorReason;
-        if (error.reason == SignInError.FailureReason.AUTHENTICATION_CANCELLED_BY_USER) {errorReason = ERROR_REASON.CANCELLED;}
-        else if (error.reason == SignInError.FailureReason.CAPTURE_API_ERROR && error.captureApiError.code == 210) { errorReason = ERROR_REASON.INVALID_CREDENTIALS_SIGNIN; }
-        else if (error.captureApiError.isMergeFlowError()) { errorReason = ERROR_REASON.SOCIAL_ONLY; }
-        else errorReason = ERROR_REASON.UNKNOWN;
+        if (error.reason == SignInError.FailureReason.AUTHENTICATION_CANCELLED_BY_USER) {
+            errorReason = ERROR_REASON.CANCELLED;
+        } else if (error.reason == SignInError.FailureReason.CAPTURE_API_ERROR && error.captureApiError.code == 210) {
+            errorReason = ERROR_REASON.INVALID_CREDENTIALS_SIGNIN;
+        } else if (error.captureApiError.isMergeFlowError()) {
+            errorReason = ERROR_REASON.SOCIAL_ONLY;
+        } else {
+            errorReason = ERROR_REASON.UNKNOWN;
+        }
         return errorReason;
     }
 
