@@ -77,7 +77,7 @@
 
                 <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
-                    android:id="@+id/etFirst"
+                    android:id="@+id/etSignInEmail"
                     android:hint="@string/hint_email"
                     android:inputType="textEmailAddress"
                     />
@@ -91,9 +91,9 @@
 
                 <com.ivanhoecambridge.mall.views.AppcompatEditTextWithWatcher
                     style="@style/EditTextSignIn"
-                    android:id="@+id/etSecond"
+                    android:id="@+id/etSignInPassword"
                     android:hint="@string/hint_password"
-                    android:inputType="textVisiblePassword"
+                    android:inputType="textPassword"
                     />
             </android.support.design.widget.TextInputLayout>
 

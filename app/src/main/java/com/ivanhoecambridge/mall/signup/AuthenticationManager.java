@@ -20,7 +20,7 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
     private String provider;
     private onJanrainAuthenticateListener onJanrainAuthenticateListener;
 
-    public enum ERROR_REASON {CANCELLED, INVALID_CREDENTIALS, UNKNOWN}
+    public enum ERROR_REASON {CANCELLED, INVALID_CREDENTIALS, INVALID_CREDENTIALS_SIGNIN, SOCIAL_ONLY, UNKNOWN}
 
     public final static String PROVIDER_FB = "facebook";
     public final static String PROVIDER_GOOGLE = "googleplus";
@@ -91,6 +91,16 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
     }
 
     /**
+     * Authenticates with an email and password.
+     * @param userEmail Email.
+     * @param userPassword Password.
+     */
+    public void authenticate(String userEmail, String userPassword) {
+        onJanrainAuthenticateListener.onAuthenticateRequest(null);
+        Jump.performTraditionalSignIn(userEmail, userPassword, this, null);
+    }
+
+    /**
      * Starts the email registration process.
      * @param userObject JSONObject that holds all required user information as specified by Janrain schema. */
     public void registerByEmail(JSONObject userObject) {
@@ -113,8 +123,17 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
     }
 
     private ERROR_REASON parseSignInError(SignInError error) {
-        if (error.reason == SignInError.FailureReason.AUTHENTICATION_CANCELLED_BY_USER) return ERROR_REASON.CANCELLED;
-        return ERROR_REASON.UNKNOWN;
+        ERROR_REASON errorReason;
+        if (error.reason == SignInError.FailureReason.AUTHENTICATION_CANCELLED_BY_USER) {
+            errorReason = ERROR_REASON.CANCELLED;
+        } else if (error.reason == SignInError.FailureReason.CAPTURE_API_ERROR && error.captureApiError.code == 210) {
+            errorReason = ERROR_REASON.INVALID_CREDENTIALS_SIGNIN;
+        } else if (error.captureApiError.isMergeFlowError()) {
+            errorReason = ERROR_REASON.SOCIAL_ONLY;
+        } else {
+            errorReason = ERROR_REASON.UNKNOWN;
+        }
+        return errorReason;
     }
 
     /**

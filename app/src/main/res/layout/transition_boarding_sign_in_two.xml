@@ -28,7 +28,6 @@
         android:layout_below="@+id/tvDesc"
         android:layout_marginBottom="11dp"
         style="@style/CardViewSignIn"
-        card_view:cardBackgroundColor="#df4a32"
         android:onClick="onClickFb"
 
         >
