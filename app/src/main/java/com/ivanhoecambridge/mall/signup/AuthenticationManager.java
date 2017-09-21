@@ -152,7 +152,9 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
      * @return value stored under the specified key or null if it does not exist.
      */
     private String parseRawResponse(JSONObject jsonResponse, String keyToFind) {
-        if (jsonResponse == null || keyToFind == null || keyToFind.length() == 0) return null;
+        if (jsonResponse == null || keyToFind == null || keyToFind.length() == 0) {
+            return null;
+        }
         String rawResponse = null;
         try {
             if (jsonResponse.has(keyToFind)) {
