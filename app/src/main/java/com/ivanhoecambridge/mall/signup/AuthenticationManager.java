@@ -111,7 +111,7 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
      * @param userObject JSONObject that holds all required user information as specified by Janrain schema. */
     public void registerByEmail(JSONObject userObject) {
         onJanrainAuthenticateListener.onAuthenticateRequest(null);
-        register(userObject, null);
+        register(modifyDisplayNameAsEmail(userObject), null);
     }
 
     @Override
@@ -196,7 +196,22 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
      *                                Otherwise if the traditional method of manual user registration is done this token can be null.
      */
     private void register(JSONObject userObject, @Nullable String socialRegistrationToken) {
-        Jump.registerNewUser(userObject, socialRegistrationToken, this);
+        Jump.registerNewUser(modifyDisplayNameAsEmail(userObject), socialRegistrationToken, this);
+    }
+
+    /**
+     * Modifies an existing JSONObject containing user information to set the display name attribute as the user email.
+     * <br /> This is done because Janrain display names are unique and two users cannot have the same display name.
+     * @param userObject JSONObject to modify.
+     * @return Modified user JSONObject.
+     */
+    private JSONObject modifyDisplayNameAsEmail(JSONObject userObject) {
+        try {
+            userObject.put("displayName", userObject.getString("email"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return userObject;
     }
 
     /**
