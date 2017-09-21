@@ -201,7 +201,7 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Authe
     }
 
     @Override
-    public void onAuthenticateFailure(AuthenticationManager.ERROR_REASON errorReason, String provider) {
+    public void onAuthenticateFailure(AuthenticationManager.ERROR_REASON errorReason, String rawError,  String provider) {
         setProgressIndicator(false);
         setErrorNotificationMessage(getErrorMessage(errorReason), true);
     }

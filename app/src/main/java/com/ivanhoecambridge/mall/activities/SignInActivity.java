@@ -527,9 +527,9 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     }
 
     @Override
-    public void onAuthenticateFailure(AuthenticationManager.ERROR_REASON errorReason, String provider) {
+    public void onAuthenticateFailure(AuthenticationManager.ERROR_REASON errorReason, String errorRawReason, String provider) {
         setProgressIndicator(false);
-        setErrorNotificationMessage(getErrorMessage(errorReason), true);
+        setErrorNotificationMessage(getErrorMessage(errorReason, errorRawReason), true);
     }
 
     private Intent createHomeIntent() {
@@ -542,7 +542,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
         ProgressBarWhileDownloading.showProgressDialog(this, R.layout.layout_loading_item, shouldShowProgress);
     }
 
-    private String getErrorMessage(AuthenticationManager.ERROR_REASON errorReason) {
+    private String getErrorMessage(AuthenticationManager.ERROR_REASON errorReason, String errorRawReason) {
         switch (errorReason) {
             case CANCELLED:
                 return KcpUtility.getString(this, R.string.signin_error_cancelled);
@@ -550,6 +550,8 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
                 return KcpUtility.getString(this, R.string.signin_error_invalid_credentials);
             case INVALID_CREDENTIALS_SIGNIN:
                 return KcpUtility.getString(this, R.string.signin_error_invalid_credentials_try_again);
+            case INVALID_FORM_INPUT:
+                return errorRawReason.length() == 0 ? KcpUtility.getString(this, R.string.signin_error_unknown) : errorRawReason;
             case SOCIAL_ONLY:
                 return KcpUtility.getString(this, R.string.signin_error_social_signin_only);
             case UNKNOWN:

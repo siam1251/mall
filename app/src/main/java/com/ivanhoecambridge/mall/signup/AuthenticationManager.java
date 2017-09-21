@@ -3,11 +3,15 @@ package com.ivanhoecambridge.mall.signup;
 import android.app.Activity;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.janrain.android.Jump;
+import com.janrain.android.engage.JREngage;
 import com.janrain.android.engage.session.JRSession;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -18,9 +22,10 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
 
     private final String TAG = "AuthenticationManager";
     private String provider;
+    private String errorRawReason;
     private onJanrainAuthenticateListener onJanrainAuthenticateListener;
 
-    public enum ERROR_REASON {CANCELLED, INVALID_CREDENTIALS, INVALID_CREDENTIALS_SIGNIN, SOCIAL_ONLY, UNKNOWN}
+    public enum ERROR_REASON {CANCELLED, INVALID_CREDENTIALS, INVALID_CREDENTIALS_SIGNIN, SOCIAL_ONLY, INVALID_FORM_INPUT, UNKNOWN}
 
     public final static String PROVIDER_FB = "facebook";
     public final static String PROVIDER_GOOGLE = "googleplus";
@@ -31,7 +36,7 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
         @Override
         public void run() {
             if (onJanrainAuthenticateListener != null) {
-                onJanrainAuthenticateListener.onAuthenticateFailure(ERROR_REASON.UNKNOWN, provider);
+                onJanrainAuthenticateListener.onAuthenticateFailure(ERROR_REASON.UNKNOWN, null,  provider);
             }
         }
     };
@@ -50,9 +55,10 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
         /**
          * Called when the sign up or sign in request has failed.
          * @param errorReason Error reason.
+         * @param errorRawReason Error reason as returned by the Janrain response.
          * @param provider Provider that sign up or sign in failed with.
          */
-        void onAuthenticateFailure(ERROR_REASON errorReason, String provider);
+        void onAuthenticateFailure(ERROR_REASON errorReason, String errorRawReason, String provider);
     }
 
     public AuthenticationManager(onJanrainAuthenticateListener onJanrainAuthenticateListener, Handler socketTimeHandler) {
@@ -118,7 +124,7 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
         if (error.reason == SignInError.FailureReason.CAPTURE_API_ERROR && error.captureApiError.isTwoStepRegFlowError()) {
             register(error.captureApiError.getPreregistrationRecord(), error.captureApiError.getSocialRegistrationToken());
         } else {
-            onJanrainAuthenticateListener.onAuthenticateFailure(parseSignInError(error), provider);
+            onJanrainAuthenticateListener.onAuthenticateFailure(parseSignInError(error), getErrorRawReason(), provider);
         }
     }
 
@@ -130,10 +136,57 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
             errorReason = ERROR_REASON.INVALID_CREDENTIALS_SIGNIN;
         } else if (error.captureApiError.isMergeFlowError()) {
             errorReason = ERROR_REASON.SOCIAL_ONLY;
+        } else if (error.captureApiError.isFormValidationError()) {
+            errorReason = ERROR_REASON.INVALID_FORM_INPUT;
+            setErrorRawReason(parseRawResponse(error.captureApiError.raw_response, "invalid_fields"));
         } else {
             errorReason = ERROR_REASON.UNKNOWN;
         }
         return errorReason;
+    }
+
+    /**
+     * Parses the raw response as returned by Janrain. This will return the first response that matches under the given key.
+     * @param jsonResponse JSONObject response.
+     * @param keyToFind The key to look for within the response object.
+     * @return value stored under the specified key or null if it does not exist.
+     */
+    private String parseRawResponse(JSONObject jsonResponse, String keyToFind) {
+        if (jsonResponse == null || keyToFind == null || keyToFind.length() == 0) {
+            return null;
+        }
+        String rawResponse = null;
+        try {
+            if (jsonResponse.has(keyToFind)) {
+                if (jsonResponse.get(keyToFind) instanceof JSONObject) {
+                    JSONObject keyObject = jsonResponse.getJSONObject(keyToFind);
+                    String firstKey = keyObject.keys().next();
+                    if (keyObject.get(firstKey) instanceof JSONArray) {
+                        JSONArray responseArr = keyObject.getJSONArray(firstKey);
+                        if (!responseArr.isNull(0)) {
+                            rawResponse = responseArr.getString(0);
+                        }
+                    } else {
+                        rawResponse = keyObject.optString(firstKey);
+                    }
+
+                } else {
+                    rawResponse =  jsonResponse.getString(keyToFind);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return rawResponse;
+
+    }
+
+    private String getErrorRawReason() {
+        return errorRawReason == null ? "" : errorRawReason;
+    }
+
+    private void setErrorRawReason(String errorRawReason) {
+        this.errorRawReason = errorRawReason;
     }
 
     /**
