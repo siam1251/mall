@@ -15,20 +15,20 @@ public class CategoryIconFactory {
     private static final String[] mCategoryExclusion = {"Parking", "ANC", "Common Area", "Common Areas"};
 
     //metropolitan
-    private static final String EXTERNAL_BOOKS_CARDS_AND_SPECIALTY        = "38";
-    private static final String EXTERNAL_CODE_DEPARTMENT_AND_VARIETY      = "91";
-    private static final String EXTERNAL_ELECTRONICS                      = "1";
-    private static final String EXTERNAL_ENTERTAINMENT                    = "11";
-    private static final String EXTERNAL_FOOD                             = "44";
-    private static final String EXTERNAL_CODE_HOME                        = "15";
-    private static final String EXTERNAL_CODE_JEWELERY_AND_ACCESSORIES    = "70";
-    private static final String EXTERNAL_CODE_KIDS_AND_BABY               = "6";
-    private static final String EXTERNAL_CODE_MENS_CLOTHING               = "51";
-    private static final String EXTERNAL_SERVICES                         = "16";
-    private static final String EXTERNAL_CODE_SHEOS_AND_BAGS              = "64";
-    private static final String EXTERNAL_CODE_SPORTS_AND_FITNESS          = "77";
-    private static final String EXTERNAL_CODE_BEAUTY_AND_HEALTH           = "30";
-    private static final String EXTERNAL_CODE_WOMENS_CLOTHING             = "82";
+    private static final String EXTERNAL_BOOKS_CARDS_AND_SPECIALTY        = "59";
+    private static final String EXTERNAL_CODE_DEPARTMENT_AND_VARIETY      = "112";
+    private static final String EXTERNAL_ELECTRONICS                      = "22";
+    private static final String EXTERNAL_ENTERTAINMENT                    = "32";
+    private static final String EXTERNAL_FOOD                             = "65";
+    private static final String EXTERNAL_CODE_HOME                        = "77";
+    private static final String EXTERNAL_CODE_JEWELERY_AND_ACCESSORIES    = "91";
+    private static final String EXTERNAL_CODE_KIDS_AND_BABY               = "27";
+    private static final String EXTERNAL_CODE_MENS_CLOTHING               = "72";
+    private static final String EXTERNAL_SERVICES                         = "37";
+    private static final String EXTERNAL_CODE_SHEOS_AND_BAGS              = "85";
+    private static final String EXTERNAL_CODE_SPORTS_AND_FITNESS          = "98";
+    private static final String EXTERNAL_CODE_BEAUTY_AND_HEALTH           = "51";
+    private static final String EXTERNAL_CODE_WOMENS_CLOTHING             = "103";
 
     /*private static final String EXTERNAL_PARKING                          = "108";
     private static final String EXTERNAL_COMMON_AREA                      = "109";
