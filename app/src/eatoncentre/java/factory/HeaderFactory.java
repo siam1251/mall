@@ -23,8 +23,8 @@ public class HeaderFactory {
 
     public static String MALL_NAME = "Senion Demo";
     public static String MAP_VENUE_NAME = "Kinetic Cafe Office";
-    private final static String SEARCH_INDEX_MP_STAGING = "indexes/staging/metropolis-at-metrotown-index.msgpack";
-    private final static String SEARCH_INDEX_MP_PRODUCTION = "indexes/production/metropolis-at-metrotown-index.msgpack";
+    private final static String SEARCH_INDEX_MP_STAGING = "indexes/staging/centre-eaton-index.msgpack";
+    private final static String SEARCH_INDEX_MP_PRODUCTION = "indexes/production/centre-eaton-index.msgpack";
 
     public final static String HEADER_VALUE_ACCEPT = "application/json, application/vnd.kcp.place+json; version=1.0, application/vnd.kcp.view-all-content+json; version=1.0, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.icmp-event+json; version=1.0, application/vnd.kcp.icmp-announcement+json; version=1.0, application/vnd.kcp.blog-post+json; version=1.0, application/vnd.kcp.icmp-twitter+json; version=1.0, application/vnd.kcp.icmp-instagram+json; version=1.0, application/vnd.kcp.icmp-set-interests+json; version=1.0, application/vnd.kcp.icmp-movie+json; version=1.0";
 
