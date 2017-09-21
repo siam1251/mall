@@ -1,24 +1,82 @@
+apply from: './app/coreconfig.gradle'
 ext {
     redirect_uri_scheme = 'com.googleusercontent.apps.'
     client_id_scheme = '.apps.googleusercontent.com'
     metropolis = [
-            appAuthRedirectScheme : '1030164305150-ojedem0qqn6be0k5v19c87r6fhk9utta'
+            appAuthRedirectScheme: '1030164305150-ojedem0qqn6be0k5v19c87r6fhk9utta',
+            mallName             : '"metropolis-at-metrotown"',
+            hasPush              : 'true',
+            hasParkingPolygon    : 'true',
+            hasMovie             : 'true',
+            hasWhiteFav          : 'true',
+            hasNearestParkingImg : 'true',
+            hasBlueDot           : 'true'
     ]
 
     vaughanmills = [
-            appAuthRedirectScheme : '1030164305150-7u8l61d40dgfptekdgk65dj9ui9o6joi'
+            appAuthRedirectScheme: '1030164305150-7u8l61d40dgfptekdgk65dj9ui9o6joi',
+            mallName             : '"vaughan-mills"',
+            hasPush              : 'true',
+            hasParkingPolygon    : 'true',
+            hasMovie             : 'false',
+            hasWhiteFav          : 'false',
+            hasNearestParkingImg : 'false',
+            hasBlueDot           : 'true'
     ]
 
     tsawwassenmills = [
-            appAuthRedirectScheme : '1030164305150-mlb7svjg62scue5plv5rrb4t1ssf9jci'
+            appAuthRedirectScheme: '1030164305150-mlb7svjg62scue5plv5rrb4t1ssf9jci',
+            mallName             : '"tsawwassen-mills"',
+            hasPush              : 'true',
+            hasParkingPolygon    : 'true',
+            hasMovie             : 'false',
+            hasWhiteFav          : 'false',
+            hasNearestParkingImg : 'false',
+            hasBlueDot           : 'true'
     ]
 
     crossironmills = [
-            appAuthRedirectScheme : '1030164305150-djqbv5f7penaqkg4c1iu7ccvlidj6grn'
+            appAuthRedirectScheme: '1030164305150-djqbv5f7penaqkg4c1iu7ccvlidj6grn',
+            mallName             : '"crossiron-mills"',
+            hasPush              : 'true',
+            hasParkingPolygon    : 'true',
+            hasMovie             : 'true',
+            hasWhiteFav          : 'false',
+            hasNearestParkingImg : 'false',
+            hasBlueDot           : 'true'
     ]
 
     eatoncentre = [
-            appAuthRedirectScheme : '1030164305150-la1mff2o40hj0rn3j8qo95lqeu918t4e'
+            appAuthRedirectScheme: '1030164305150-la1mff2o40hj0rn3j8qo95lqeu918t4e',
+            mallName             : rootProject.ext.defaultMallName,
+            hasPush              : 'true',
+            hasParkingPolygon    : 'true',
+            hasMovie             : 'true',
+            hasWhiteFav          : 'false',
+            hasNearestParkingImg : 'false',
+            hasBlueDot           : 'true'
+    ]
+
+    seniondemo = [
+        appAuthRedirectScheme: '',
+            mallName: rootProject.ext.defaultMallName,
+            hasPush: 'false',
+            hasParkingPolygon: 'true',
+            hasMovie: 'true',
+            hasWhiteFav: 'true',
+            hasNearestParkingImg: 'true',
+            hasBlueDot: 'true'
+    ]
+
+    bayshore = [
+            appAuthRedirectScheme: '1030164305150-t3dnj6r0ft021q3rgc4q75v343dakth9',
+            mallName             : '"bayshore',
+            hasPush              : 'true',
+            hasParkingPolygon    : 'false',
+            hasMovie             : 'false',
+            hasWhiteFav          : 'false',
+            hasNearestParkingImg : 'false',
+            hasBlueDot           : 'true'
     ]
 
 }
