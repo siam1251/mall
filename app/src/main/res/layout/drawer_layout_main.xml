@@ -16,12 +16,13 @@
         <RelativeLayout
             android:id="@+id/rlDrawerSignIn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <ImageView
                 android:id="@+id/ivDrawerLayoutBg"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="147dp"
                 android:background="@color/black"
                 android:scaleType="centerCrop"
                 android:src="@drawable/img_profile_activemall_signin"
@@ -59,8 +60,8 @@
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvDrawerLayoutAccount"
                     style="@style/SelectableItemBackground"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
@@ -81,7 +82,8 @@
                     android:padding="13dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/icn_profilesettings"
-                    ThemedImageView:filterColor="@color/white" />
+                    ThemedImageView:filterColor="@color/white"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
