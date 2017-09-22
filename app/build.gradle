@@ -62,89 +62,33 @@ android {
 
     productFlavors.whenObjectAdded { flavor ->
         if (rootProject.hasProperty(flavor.name)) {
+            applicationId rootProject.ext.packageName + ".${flavor.name}"
+
             def flavorData = rootProject.ext[flavor.name]
             flavor.manifestPlaceholders = [
                     'appAuthRedirectScheme': rootProject.ext.redirect_uri_scheme + flavorData.appAuthRedirectScheme
             ]
             flavor.resValue 'string', 'google_client_id', flavorData.appAuthRedirectScheme + rootProject.ext.client_id_scheme
             flavor.resValue 'string', 'google_auth_redirect_uri', rootProject.ext.redirect_uri_scheme + flavorData.appAuthRedirectScheme + ':/oauth2redirect'
+            flavor.buildConfigField 'String', fieldMall, flavorData.mallName
+            flavor.buildConfigField 'Boolean', fieldPush, flavorData.hasPush
+            flavor.buildConfigField 'Boolean', fieldParkingPolygon, flavorData.hasParkingPolygon
+            flavor.buildConfigField 'Boolean', fieldMovie, flavorData.hasMovie
+            flavor.buildConfigField 'Boolean', fieldWhiteFav, flavorData.hasWhiteFav
+            flavor.buildConfigField 'Boolean', fieldNearestParkingImg, flavorData.hasNearestParkingImg
+            flavor.buildConfigField 'Boolean', fieldBlueDot, flavorData.hasBlueDot
         }
 
     }
 
     productFlavors {
-        metropolis {
-            applicationId "com.ivanhoecambridge.mall.metropolis"
-
-            buildConfigField 'String', 'MALL', '"metropolis-at-metrotown"'
-            buildConfigField 'Boolean', 'PUSH', 'true'
-            buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
-            buildConfigField 'Boolean', 'MOVIE', 'true'
-            buildConfigField 'Boolean', 'WHITE_FAV', 'true' //show white fav icon in case the selected fav's same as the toolbar bg color
-            buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'true'
-            buildConfigField 'Boolean', 'BLUEDOT', 'true'
-        }
-
-        vaughanmills {
-            applicationId "com.ivanhoecambridge.mall.vaughanmills"
-
-            buildConfigField 'String', 'MALL', '"vaughan-mills"'
-            buildConfigField 'Boolean', 'PUSH', 'true'
-            buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
-            buildConfigField 'Boolean', 'MOVIE', 'false'
-            buildConfigField 'Boolean', 'WHITE_FAV', 'false'
-            buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
-            buildConfigField 'Boolean', 'BLUEDOT', 'true'
-        }
-
-        tsawwassenmills {
-            applicationId "com.ivanhoecambridge.mall.tsawwassenmills"
-
-            buildConfigField 'String', 'MALL', '"tsawwassen-mills"'
-            buildConfigField 'Boolean', 'PUSH', 'true'
-            buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
-            buildConfigField 'Boolean', 'MOVIE', 'false'
-            buildConfigField 'Boolean', 'WHITE_FAV', 'false'
-            buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
-            buildConfigField 'Boolean', 'BLUEDOT', 'true'
-        }
-
-        crossironmills {
-            applicationId "com.ivanhoecambridge.mall.crossironmills"
-
-            buildConfigField 'String', 'MALL', '"crossiron-mills"'
-            buildConfigField 'Boolean', 'PUSH', 'true'
-            buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
-            buildConfigField 'Boolean', 'MOVIE', 'true'
-            buildConfigField 'Boolean', 'WHITE_FAV', 'false'
-            buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'false'
-            buildConfigField 'Boolean', 'BLUEDOT', 'true'
-        }
-
-        eatoncentre {
-            applicationId "com.ivanhoecambridge.mall.eatoncentre"
-
-            buildConfigField 'String', 'MALL', '"Kinetic Cafe Office"'
-            buildConfigField 'Boolean', 'PUSH', 'true'
-            buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
-            buildConfigField 'Boolean', 'MOVIE', 'true'
-            buildConfigField 'Boolean', 'WHITE_FAV', 'true' //show white fav icon in case the selected fav's same as the toolbar bg color
-            buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'true'
-            buildConfigField 'Boolean', 'BLUEDOT', 'true'
-        }
-
-
-        seniondemo {
-            applicationId "com.ivanhoecambridge.mall.seniondemo"
-
-            buildConfigField 'String', 'MALL', '"Kinetic Cafe Office"'
-            buildConfigField 'Boolean', 'PUSH', 'false'
-            buildConfigField 'Boolean', 'PARKING_POLYGON', 'true'
-            buildConfigField 'Boolean', 'MOVIE', 'true'
-            buildConfigField 'Boolean', 'WHITE_FAV', 'true' //show white fav icon in case the selected fav's same as the toolbar bg color
-            buildConfigField 'Boolean', 'NEAREST_PARKING_IMG', 'true'
-            buildConfigField 'Boolean', 'BLUEDOT', 'true'
-        }
+        bayshore {}
+        crossironmills {}
+        eatoncentre {}
+        metropolis {}
+        seniondemo {}
+        tsawwassenmills {}
+        vaughanmills {}
     }
 
 }
@@ -155,38 +99,38 @@ android {
 
 dependencies {
     compile project(':Jump')
-    compile 'com.google.android.gms:play-services-location:11.0.2'
-    compile 'com.google.android.gms:play-services-gcm:11.0.2'
-    compile 'com.google.android.gms:play-services-maps:11.0.2'
-    compile 'com.google.firebase:firebase-core:11.0.2'
-    compile 'com.google.firebase:firebase-ads:11.0.2'
-    compile 'com.google.firebase:firebase-messaging:11.0.2'
-    compile 'com.google.firebase:firebase-crash:11.0.2'
+    compile "com.google.android.gms:play-services-location:${playServicesGcm}"
+    compile "com.google.android.gms:play-services-gcm:${playServicesGcm}"
+    compile "com.google.android.gms:play-services-maps:${playServicesGcm}"
+    compile "com.google.firebase:firebase-core:${firebase}"
+    compile "com.google.firebase:firebase-ads:${firebase}"
+    compile "com.google.firebase:firebase-messaging:${firebase}"
+    compile "com.google.firebase:firebase-crash:${firebase}"
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile project(path: ':kcpandroidsdk')
     compile files('libs/twitter4j-core-4.0.4.jar')
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.android.support:preference-v7:25.2.0'
-    compile 'com.android.support:preference-v14:25.2.0'
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.android.support:cardview-v7:25.2.0'
+    compile "com.android.support:appcompat-v7:${supportLibrary}"
+    compile "com.android.support:design:${supportLibrary}"
+    compile "com.android.support:support-v4:${supportLibrary}"
+    compile "com.android.support:preference-v7:${supportLibrary}"
+    compile "com.android.support:preference-v14:${supportLibrary}"
+    compile "com.android.support:multidex:${multiDex}"
+    compile "com.github.bumptech.glide:glide:${glide}"
+    compile "com.android.support:cardview-v7:${supportLibrary}"
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
-    compile 'com.android.support:recyclerview-v7:25.2.0'
-    compile 'com.mappedin.sdk:mappedin:0.8.8'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    compile "com.android.support:recyclerview-v7:${supportLibrary}"
+    compile "com.mappedin.sdk:mappedin:${mappedIn}"
+    compile("com.crashlytics.sdk.android:crashlytics:2.6.8@aar") {
         transitive = true;
     }
-    compile('com.twitter.sdk.android:twitter:1.14.1@aar') {
+    compile("com.twitter.sdk.android:twitter:${twitter}") {
         transitive = true;
     }
-    compile 'org.msgpack:msgpack-core:0.8.9'
-    compile 'com.exacttarget.etpushsdk:etsdk:4.5.0@aar'
-    compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile "org.msgpack:msgpack-core:${msgPack}"
+    compile "com.exacttarget.etpushsdk:etsdk:${exactTarget}"
+    compile "com.jakewharton:butterknife:${butterKnife}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${butterKnife}"
 }
 
 apply plugin: 'com.google.gms.google-services'
