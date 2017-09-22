@@ -1,262 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:id="@+id/scLeftPanel"
-    android:background="@color/white"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scLeftPanel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
-    android:fillViewport="true"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="@color/white"
+    android:fillViewport="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:visibility="visible"
-            android:id="@+id/ivDrawerLayoutBg"
-            android:scaleType="centerCrop"
+        <RelativeLayout
+            android:id="@+id/rlDrawerSignIn"
             android:layout_width="match_parent"
-            android:layout_height="147dp"
-            android:background="@color/black"
-            android:src="@drawable/img_profile_activemall"
-            />
+            android:layout_height="wrap_content"
+            >
 
-        <View
-            android:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="74dp"
-            android:background="@drawable/view_shadow_inverted_drawer_layout"
-            android:layout_alignBottom="@+id/ivDrawerLayoutBg"
-            />
+            <ImageView
+                android:id="@+id/ivDrawerLayoutBg"
+                android:layout_width="match_parent"
+                android:layout_height="147dp"
+                android:background="@color/black"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_profile_activemall_signin"
+                android:visibility="visible" />
 
-
-
-        <com.ivanhoecambridge.mall.views.CircleImageView
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:id="@+id/ivDrawerLayoutUser"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:visibility="visible"
-            android:src="@drawable/img_profile_default"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:layout_alignBottom="@+id/ivDrawerLayoutBg"
+                android:background="@drawable/view_shadow_inverted_drawer_layout"
+                android:visibility="visible" />
 
 
+            <com.ivanhoecambridge.mall.views.CircleImageView
+                android:id="@+id/ivDrawerLayoutUser"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:src="@drawable/img_profile_default"
+                android:visibility="visible" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_alignBottom="@+id/ivDrawerLayoutBg"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:visibility="visible">
 
             <LinearLayout
-                android:id="@+id/llSignIn"
-                android:orientation="horizontal"
+                android:id="@+id/llDisplayNameSettings"
                 android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/tvSignIn"
+                android:layout_below="@id/ivDrawerLayoutUser"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                app:fontFamily="@string/fontFamily_roboto_medium"
-                style="@style/SelectableItemBackground"
-                android:id="@+id/tvDrawerLayoutAccount"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:gravity="center_vertical"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textColor="@color/white"
-                android:textSize="18dp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                tools:text="Andrew Cherwenka"/>
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvDrawerLayoutAccount"
+                    style="@style/SelectableItemBackground"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    app:fontFamily="@string/fontFamily_roboto_medium"
+                    tools:text="Andrew Cherwenka" />
 
-            <com.ivanhoecambridge.mall.views.ThemeColorImageView
-                xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
-                android:layout_weight="0"
-                ThemedImageView:filterColor="@color/white"
-                android:id="@+id/ivDrawerlayoutSetting"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:padding="13dp"
-                android:layout_marginLeft="10dp"
-                style="@style/SelectableItemBackground"
-                android:src="@drawable/icn_profilesettings"/>
+                <com.ivanhoecambridge.mall.views.ThemeColorImageView xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/ivDrawerlayoutSetting"
+                    style="@style/SelectableItemBackground"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:padding="13dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/icn_profilesettings"
+                    ThemedImageView:filterColor="@color/white"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
 
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                app:fontFamily="@string/fontFamily_roboto_medium"
                 android:id="@+id/tvSignIn"
-                android:layout_margin="@dimen/card_horizontal_margin"
-                android:textColor="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/btn_style_corner_radius_with_selected_state"
                 style="@style/SelectableItemForegroundNormal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignBottom="@id/ivDrawerLayoutBg"
+                android:layout_margin="@dimen/card_horizontal_margin"
+                android:background="@drawable/btn_style_corner_radius_with_selected_state"
                 android:gravity="center"
                 android:text="@string/drawer_sign_in"
+                android:textColor="@color/white"
                 android:textSize="14dp"
-
+                app:fontFamily="@string/fontFamily_roboto_medium"
                 />
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <include
+            layout="@layout/layout_active_mall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/layout_active_mall"
-            android:layout_below="@+id/ivDrawerLayoutBg"
-            android:visibility="gone"
-            />
+            android:layout_below="@+id/rlDrawerSignIn"
+            android:visibility="gone" />
 
         <LinearLayout
-            android:layout_below="@+id/llActiveMall"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"
+            android:layout_below="@+id/rlDrawerSignIn"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/activity_horizontal_margin">
 
 
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:id="@+id/tvMyFav"
-                android:gravity="center_vertical"
-                app:fontFamily="@string/fontFamily_roboto_light"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:textSize="16dp"
-                android:textColor="@color/place_txt"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:gravity="center_vertical"
                 android:text="@string/drawer_my_favourites"
-                />
+                android:textColor="@color/place_txt"
+                android:textSize="16dp"
+                app:fontFamily="@string/fontFamily_roboto_light" />
 
             <FrameLayout
                 android:id="@+id/flDeals"
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout">
 
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                    app:fontFamily="@string/fontFamily_roboto_medium"
                     android:id="@+id/tvDeals"
                     style="@style/DrawerLayoutFavouriteItemsTextView"
                     android:text="@string/drawer_deals"
-                    />
+                    app:fontFamily="@string/fontFamily_roboto_medium" />
 
-                <com.ivanhoecambridge.mall.views.BadgeView
-                    xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
-                    BadgeView:badgeBgColor="@color/themeColor"
+                <com.ivanhoecambridge.mall.views.BadgeView xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/badgeDeals"
                     style="@style/DrawerLayoutFavouriteItemsBadge"
-                    android:id="@+id/badgeDeals"/>
+                    BadgeView:badgeBgColor="@color/themeColor" />
 
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/flEvents"
-                style="@style/DrawerLayoutFavouriteItemsFrameLayout"
-                >
+                style="@style/DrawerLayoutFavouriteItemsFrameLayout">
 
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvEvents"
                     style="@style/DrawerLayoutFavouriteItemsTextView"
-                    app:fontFamily="@string/fontFamily_roboto_medium"
                     android:text="@string/drawer_events"
-                    />
+                    app:fontFamily="@string/fontFamily_roboto_medium" />
 
-                <com.ivanhoecambridge.mall.views.BadgeView
-                    xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
-                    BadgeView:badgeBgColor="@color/themeColor"
+                <com.ivanhoecambridge.mall.views.BadgeView xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/badgeEvents"
                     style="@style/DrawerLayoutFavouriteItemsBadge"
-                    android:id="@+id/badgeEvents"/>
+                    BadgeView:badgeBgColor="@color/themeColor" />
 
 
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/flStores"
-                style="@style/DrawerLayoutFavouriteItemsFrameLayout"
-                >
+                style="@style/DrawerLayoutFavouriteItemsFrameLayout">
 
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvStores"
                     style="@style/DrawerLayoutFavouriteItemsTextView"
-                    app:fontFamily="@string/fontFamily_roboto_medium"
                     android:text="@string/drawer_stores"
-                    />
+                    app:fontFamily="@string/fontFamily_roboto_medium" />
 
-                <com.ivanhoecambridge.mall.views.BadgeView
-                    xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
-                    BadgeView:badgeBgColor="@color/themeColor"
+                <com.ivanhoecambridge.mall.views.BadgeView xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/badgeStores"
                     style="@style/DrawerLayoutFavouriteItemsBadge"
-                    android:id="@+id/badgeStores"/>
+                    BadgeView:badgeBgColor="@color/themeColor" />
 
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/flInterests"
-                style="@style/DrawerLayoutFavouriteItemsFrameLayout"
-                >
+                style="@style/DrawerLayoutFavouriteItemsFrameLayout">
 
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvInterests"
                     style="@style/DrawerLayoutFavouriteItemsTextView"
-                    app:fontFamily="@string/fontFamily_roboto_medium"
                     android:text="@string/drawer_interests"
-                    />
+                    app:fontFamily="@string/fontFamily_roboto_medium" />
 
-                <com.ivanhoecambridge.mall.views.BadgeView
-                    xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
-                    BadgeView:badgeBgColor="@color/themeColor"
+                <com.ivanhoecambridge.mall.views.BadgeView xmlns:BadgeView="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/badgeInterests"
                     style="@style/DrawerLayoutFavouriteItemsBadge"
-                    android:id="@+id/badgeInterests"/>
+                    BadgeView:badgeBgColor="@color/themeColor" />
 
             </FrameLayout>
 
 
             <View
                 android:id="@+id/separator"
-                android:layout_alignParentBottom="true"
                 style="@style/separater"
+                android:layout_alignParentBottom="true"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:background="#33fafafa"
-                />
+                android:background="#33fafafa" />
 
 
             <FrameLayout
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                >
+                android:paddingTop="8dp">
 
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:id="@+id/tvMyGC"
-                    android:gravity="center_vertical"
-                    app:fontFamily="@string/fontFamily_roboto_light"
-
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:textSize="16dp"
-                    android:textColor="@color/place_txt"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+
+                    android:gravity="center_vertical"
                     android:text="@string/drawer_my_gift_card"
-                    />
+                    android:textColor="@color/place_txt"
+                    android:textSize="16dp"
+                    app:fontFamily="@string/fontFamily_roboto_light" />
 
                 <com.ivanhoecambridge.mall.views.ThemeColorImageView
-                    style="@style/SelectableItemForeground"
                     android:id="@+id/ivMoreMenu"
-                    ThemedImageView:filterColor="@color/filter_off_color"
+                    style="@style/SelectableItemForeground"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_menu_moreoverflow"
                     android:layout_gravity="right|center_vertical"
                     android:layout_marginRight="8dp"
-                    />
+                    android:src="@drawable/ic_menu_moreoverflow"
+                    ThemedImageView:filterColor="@color/filter_off_color" />
 
             </FrameLayout>
 
@@ -277,76 +257,72 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvGiftCard"
-                android:nestedScrollingEnabled="false"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
 
             <LinearLayout
-                android:layout_marginTop="30dp"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
                 android:gravity="bottom"
-                android:layout_height="match_parent">
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
+                    android:orientation="horizontal"
                     android:padding="4dp">
 
                     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                        style="@style/SelectableItemForeground"
-                        android:layout_gravity="center"
                         android:id="@+id/tvPrivacyPolicy"
-                        app:fontFamily="@string/fontFamily_roboto_medium"
+                        style="@style/SelectableItemForeground"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="10dp"
+                        android:layout_gravity="center"
                         android:text="@string/privacy_policy"
                         android:textColor="@color/privacy_policy_text_color"
-                        />
+                        android:textSize="10dp"
+                        app:fontFamily="@string/fontFamily_roboto_medium" />
 
                     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                        style="@style/SelectableItemForeground"
-                        android:layout_gravity="center"
                         android:id="@+id/tvDot"
-                        app:fontFamily="@string/fontFamily_roboto_medium"
+                        style="@style/SelectableItemForeground"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="10dp"
-                        android:text="•"
+                        android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
+                        android:text="•"
                         android:textColor="@color/privacy_policy_text_color"
-                        />
+                        android:textSize="10dp"
+                        app:fontFamily="@string/fontFamily_roboto_medium" />
 
 
                     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                        style="@style/SelectableItemForeground"
-                        android:layout_gravity="center"
                         android:id="@+id/tvTermsOfService"
-                        app:fontFamily="@string/fontFamily_roboto_medium"
+                        style="@style/SelectableItemForeground"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="10dp"
+                        android:layout_gravity="center"
                         android:text="@string/terms_of_service"
                         android:textColor="@color/privacy_policy_text_color"
-                        />
+                        android:textSize="10dp"
+                        app:fontFamily="@string/fontFamily_roboto_medium" />
 
                 </LinearLayout>
 
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:id="@+id/tvVersionNumber"
-                    android:gravity="center_horizontal"
-                    app:fontFamily="@string/fontFamily_roboto_regular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    tools:text="1.0.0"
-                    android:textColor="@color/insta_desc_color"
                     android:layout_marginBottom="13dp"
-                    />
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/insta_desc_color"
+                    android:textSize="10dp"
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    tools:text="1.0.0" />
 
             </LinearLayout>
         </LinearLayout>
