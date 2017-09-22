@@ -5,7 +5,7 @@ ext {
 
     bayshore = [
             appAuthRedirectScheme: '1030164305150-t3dnj6r0ft021q3rgc4q75v343dakth9',
-            mallName             : '"bayshore',
+            mallName             : '"bayshore"',
             hasPush              : 'true',
             hasParkingPolygon    : 'false',
             hasMovie             : 'false',
