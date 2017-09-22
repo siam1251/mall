@@ -82,13 +82,13 @@ android {
     }
 
     productFlavors {
-        metropolis {}
-        vaughanmills {}
-        tsawwassenmills {}
+        bayshore {}
         crossironmills {}
         eatoncentre {}
+        metropolis {}
         seniondemo {}
-        bayshore {}
+        tsawwassenmills {}
+        vaughanmills {}
     }
 
 }

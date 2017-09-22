@@ -2,33 +2,12 @@ apply from: './app/coreconfig.gradle'
 ext {
     redirect_uri_scheme = 'com.googleusercontent.apps.'
     client_id_scheme = '.apps.googleusercontent.com'
-    metropolis = [
-            appAuthRedirectScheme: '1030164305150-ojedem0qqn6be0k5v19c87r6fhk9utta',
-            mallName             : '"metropolis-at-metrotown"',
-            hasPush              : 'true',
-            hasParkingPolygon    : 'true',
-            hasMovie             : 'true',
-            hasWhiteFav          : 'true',
-            hasNearestParkingImg : 'true',
-            hasBlueDot           : 'true'
-    ]
 
-    vaughanmills = [
-            appAuthRedirectScheme: '1030164305150-7u8l61d40dgfptekdgk65dj9ui9o6joi',
-            mallName             : '"vaughan-mills"',
+    bayshore = [
+            appAuthRedirectScheme: '1030164305150-t3dnj6r0ft021q3rgc4q75v343dakth9',
+            mallName             : '"bayshore',
             hasPush              : 'true',
-            hasParkingPolygon    : 'true',
-            hasMovie             : 'false',
-            hasWhiteFav          : 'false',
-            hasNearestParkingImg : 'false',
-            hasBlueDot           : 'true'
-    ]
-
-    tsawwassenmills = [
-            appAuthRedirectScheme: '1030164305150-mlb7svjg62scue5plv5rrb4t1ssf9jci',
-            mallName             : '"tsawwassen-mills"',
-            hasPush              : 'true',
-            hasParkingPolygon    : 'true',
+            hasParkingPolygon    : 'false',
             hasMovie             : 'false',
             hasWhiteFav          : 'false',
             hasNearestParkingImg : 'false',
@@ -57,8 +36,19 @@ ext {
             hasBlueDot           : 'true'
     ]
 
+    metropolis = [
+            appAuthRedirectScheme: '1030164305150-ojedem0qqn6be0k5v19c87r6fhk9utta',
+            mallName             : '"metropolis-at-metrotown"',
+            hasPush              : 'true',
+            hasParkingPolygon    : 'true',
+            hasMovie             : 'true',
+            hasWhiteFav          : 'true',
+            hasNearestParkingImg : 'true',
+            hasBlueDot           : 'true'
+    ]
+
     seniondemo = [
-        appAuthRedirectScheme: '',
+            appAuthRedirectScheme: '',
             mallName: rootProject.ext.defaultMallName,
             hasPush: 'false',
             hasParkingPolygon: 'true',
@@ -68,11 +58,22 @@ ext {
             hasBlueDot: 'true'
     ]
 
-    bayshore = [
-            appAuthRedirectScheme: '1030164305150-t3dnj6r0ft021q3rgc4q75v343dakth9',
-            mallName             : '"bayshore',
+    tsawwassenmills = [
+            appAuthRedirectScheme: '1030164305150-mlb7svjg62scue5plv5rrb4t1ssf9jci',
+            mallName             : '"tsawwassen-mills"',
             hasPush              : 'true',
-            hasParkingPolygon    : 'false',
+            hasParkingPolygon    : 'true',
+            hasMovie             : 'false',
+            hasWhiteFav          : 'false',
+            hasNearestParkingImg : 'false',
+            hasBlueDot           : 'true'
+    ]
+
+    vaughanmills = [
+            appAuthRedirectScheme: '1030164305150-7u8l61d40dgfptekdgk65dj9ui9o6joi',
+            mallName             : '"vaughan-mills"',
+            hasPush              : 'true',
+            hasParkingPolygon    : 'true',
             hasMovie             : 'false',
             hasWhiteFav          : 'false',
             hasNearestParkingImg : 'false',
