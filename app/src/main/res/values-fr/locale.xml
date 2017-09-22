@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="is_english">false</bool>
+    <string name="locale">fr</string>
+    <string name="mall_info_json">mallinfo_fr.json</string>
+</resources>

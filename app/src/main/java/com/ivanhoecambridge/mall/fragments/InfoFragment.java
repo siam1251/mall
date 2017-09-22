@@ -301,7 +301,7 @@ public class InfoFragment extends BaseFragment{
         };
 
         KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
-        kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), Constants.MALL_INFO_OFFLINE_TEXT);
+        kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), Constants.getStringFromResources(getContext(), R.string.mall_info_json));
 
         mInfoRecyclerViewAdapter = new InfoRecyclerViewAdapter(
                 getActivity(),

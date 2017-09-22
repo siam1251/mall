@@ -857,7 +857,7 @@ public class MainActivity extends BaseActivity
                                     });
                         } else if (id == R.id.action_faq) {
                             KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
-                            kcpMallInfoRoot.createOfflineKcpMallInfo(MainActivity.this, Constants.MALL_INFO_OFFLINE_TEXT);
+                            kcpMallInfoRoot.createOfflineKcpMallInfo(MainActivity.this, Constants.getStringFromResources(getApplicationContext(), R.string.mall_info_json));
                             List<InfoList> infoList = kcpMallInfoRoot.getKcpMallInfo().getInfoList();
                             if(infoList != null) {
                                 for(int i = 0; i < infoList.size(); i++) {
