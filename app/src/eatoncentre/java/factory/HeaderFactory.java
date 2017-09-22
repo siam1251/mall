@@ -21,7 +21,7 @@ public class HeaderFactory {
     public static String HEADER_VALUE_DATAHUB_CATALOG = "centre-eaton";
     //------------------------------ END POINT ------------------------------
 
-    public static String MALL_NAME = "Senion Demo";
+    public static String MALL_NAME = "Centre Eaton de Montreal";
     public static String MAP_VENUE_NAME = "Centre Eaton";
     private final static String SEARCH_INDEX_MP_STAGING = "indexes/staging/centre-eaton-index.msgpack";
     private final static String SEARCH_INDEX_MP_PRODUCTION = "indexes/production/centre-eaton-index.msgpack";
