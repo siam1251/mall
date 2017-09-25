@@ -1,6 +1,8 @@
 package slutilities;
 
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
+import com.ivanhoecambridge.mall.slutilities.SLGeofencingArea;
+import com.ivanhoecambridge.mall.slutilities.SLPointOfInterest;
 import com.senionlab.slutilities.type.FloorNr;
 import com.senionlab.slutilities.type.SLCoordinate3D;
 
