@@ -75,7 +75,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter {
             final String categoryName = kcpCategory.getCategoryName();
             categoryHolder.tvCategory.setText(categoryName);
             final String externalCode = kcpCategory.getExternalCode();
-            categoryHolder.ivCategory.setImageResource(CategoryIconFactory.getCategoryIcon(externalCode));
+            categoryHolder.ivCategory.setImageResource(CategoryIconFactory.getCategoryIcon(externalCode, mContext));
 
             categoryHolder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
