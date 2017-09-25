@@ -1,16 +1,21 @@
 <resources>
+<<<<<<< Updated upstream:app/src/eatoncentre/res/values/strings.xml
     <string name="app_name">Eaton Centre</string>
     <string name="mall_name">Eaton Centre</string>
     <string name="applicationId">com.ivanhoecambridge.eatoncentre</string>
+=======
+    <string name="mall_name">Bayshore</string>
+    <string name="applicationId">com.ivanhoecambridge.bayshore</string>
+>>>>>>> Stashed changes:app/src/bayshore/res/values/strings.xml
 
     <!--MOVIES-->
     <string name="movie_title">SilverCity Cinema</string>
 
     <!--ACTIVE MALL-->
-    <string name="active_mall_welcome_msg">Welcome to Metropolis, here’s what’s happening today!</string>
+    <string name="active_mall_welcome_msg">Welcome to Bayshore, here’s what’s happening today!</string>
 
     <!--ONBOARDING-->
-    <string name="onbd_one_title">Welcome to\nMetropolis at Metrotown’s new companion app</string>
+    <string name="onbd_one_title">Welcome to\nBayshore\'s new companion app</string>
 
     <!--PRIVACY-->
     <string name="url_privacy_policy">https://metropolisatmetrotown.com/privacy-policy/</string>

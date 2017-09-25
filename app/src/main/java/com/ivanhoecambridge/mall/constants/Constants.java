@@ -1,8 +1,16 @@
 package com.ivanhoecambridge.mall.constants;
 
+<<<<<<< Updated upstream
+=======
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
+
+import com.ivanhoecambridge.mall.BuildConfig;
+
+>>>>>>> Stashed changes
 public class Constants {
 	//todo: change production type in release
-	public final static boolean IS_APP_IN_PRODUCTION = true;
+	public final static boolean IS_APP_IN_PRODUCTION = BuildConfig.IS_APP_IN_PRODUCTION;
 //	public final static boolean IS_APP_IN_PRODUCTION = false;
 
 	public final static int DURATION_MINIMUM_SPLASH_ANIMATION 				= 1000;
