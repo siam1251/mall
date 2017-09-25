@@ -5,8 +5,10 @@ package constants;
  */
 
 public class MallConstants {
-    public final static String MALL_NAME = "Bayshore";
+    public final static String MALL_NAME = "Bayshore Shopping Centre";
     public final static String MAP_VENUE_NAME = "Bayshore";
+    public final static String MALL_NAME_URL = "bayshore";
+
 
     public static String MOVIE_API_KEY = "cnidg";
     public static String MOVIE_HOUSE_ID = "25879";

@@ -2,7 +2,6 @@ package com.ivanhoecambridge.mall.constants;
 
 import com.ivanhoecambridge.mall.BuildConfig;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 
 public class Constants {
 	//todo: change production type in release
