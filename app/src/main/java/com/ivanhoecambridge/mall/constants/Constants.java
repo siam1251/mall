@@ -1,13 +1,9 @@
 package com.ivanhoecambridge.mall.constants;
 
-<<<<<<< Updated upstream
-=======
-import android.content.Context;
-import android.support.v4.content.ContextCompat;
 
 import com.ivanhoecambridge.mall.BuildConfig;
 
->>>>>>> Stashed changes
+
 public class Constants {
 	//todo: change production type in release
 	public final static boolean IS_APP_IN_PRODUCTION = BuildConfig.IS_APP_IN_PRODUCTION;
