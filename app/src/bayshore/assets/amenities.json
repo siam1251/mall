@@ -1,0 +1,70 @@
+{
+  "amenities":[
+    {
+      "type":"1",
+      "enabled":true,
+      "title":"Washrooms",
+      "externalIds":[
+        "washroom",
+        "family-washroom"
+      ]
+    },
+    {
+      "type":"0",
+      "enabled":true,
+      "title":"Guest Services",
+      "externalIds":[
+        "information-counter"
+      ]
+    },
+    {
+      "type":"2",
+      "enabled":false,
+      "title":"Community Room",
+      "externalIds":[
+        "community-room"
+      ]
+    },
+    {
+      "type":"3",
+      "enabled":false,
+      "title":"Elevators",
+      "externalIds":[
+        "Elevator"
+      ]
+    },
+    {
+      "type":"4",
+      "enabled":false,
+      "title":"Stairs \u0026 Escalators",
+      "externalIds":[
+        "escalator/stairs"
+      ]
+    },
+    {
+      "type":"6",
+      "enabled":false,
+      "title":"Lockers",
+      "externalIds":[
+        "lockers"
+      ]
+    },
+    {
+      "type":"7",
+      "enabled":false,
+      "title":"ATM Machines",
+      "externalIds":[
+        "atm"
+      ]
+    },
+    {
+      "type":"9",
+      "enabled":true,
+      "title":"Bus Loop",
+      "externalIds":[
+        "shuttle",
+        "subway"
+      ]
+    }
+  ]
+}
