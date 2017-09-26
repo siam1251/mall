@@ -7,6 +7,7 @@ ext {
     fieldWhiteFav = 'WHITE_FAV'
     fieldNearestParkingImg = 'NEAREST_PARKING_IMG'
     fieldBlueDot = 'BLUEDOT'
+    fieldAppName = 'app_name'
     defaultMallName = '"Kinetic Cafe Office"'
 
     supportLibrary = '25.2.0'

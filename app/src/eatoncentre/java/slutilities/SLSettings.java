@@ -3,6 +3,8 @@ package slutilities;
 import com.google.android.gms.maps.model.LatLng;
 import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
+import com.ivanhoecambridge.mall.slutilities.SLGeofencingArea;
+import com.ivanhoecambridge.mall.slutilities.SLPointOfInterest;
 import com.senionlab.slutilities.geofencing.geometries.SLCircle;
 import com.senionlab.slutilities.geofencing.geometries.a;
 import com.senionlab.slutilities.type.FloorNr;
