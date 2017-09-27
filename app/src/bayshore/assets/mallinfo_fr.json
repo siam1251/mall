@@ -1,6 +1,7 @@
 {
     "infoList":[
                 {
+                "type": "Mall Hours",
                 "title":"Heures d'ouverture",
                 "subtitle":"Voir les heures d'ouverture pour les jours fériés",
                 "imageURLs":["mallinfo-banner-mallhours"]
