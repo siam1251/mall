@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--PRIVACY-->
+    <string name="url_privacy_policy">https://www.bayshoreshoppingcentre.com/fr/politique-de-confidentialite/</string>
+    <string name="url_terms">https://www.bayshoreshoppingcentre.com/fr/mentions-legales/</string>
+</resources>
