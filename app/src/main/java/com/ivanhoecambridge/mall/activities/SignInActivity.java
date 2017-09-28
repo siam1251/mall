@@ -159,14 +159,13 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             formFillCheckerOne = new FormFillChecker(this);
 
             llSignInCreateAccountReset = (LinearLayout) findViewById(R.id.llSignInCreateAccount);
-            llSignInCreateAccountReset.setClickable(false);
             llSignInCreateAccountReset.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     authenticationManager.authenticate(getTextFromField(etSignInEmail), getTextFromField(etSignInPassword));
                 }
             });
-
+            llSignInCreateAccountReset.setClickable(false);
             tvSignIn = (TextView) findViewById(R.id.tvSignIn);
             tvSignIn.setOnClickListener(new View.OnClickListener() {
                 @Override
