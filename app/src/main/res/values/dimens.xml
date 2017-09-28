@@ -267,5 +267,9 @@
     <dimen name="sign_in_card_corner_radius">3dp</dimen>
     <dimen name="sign_in_card_elevation">2dp</dimen>
 
+    <!--PROFILE-->
+    <dimen name="profile_sign_in_bg_height">147dp</dimen>
+    <dimen name="profile_sign_out_bg_height">192dp</dimen>
+
 
 </resources>

@@ -1714,13 +1714,7 @@ public class MainActivity extends BaseActivity
 
     private void resizeBackgroundImage(boolean isSignedIn) {
         RelativeLayout.LayoutParams lpDrawerLayoutBg = (RelativeLayout.LayoutParams) ivDrawerLayoutBg.getLayoutParams();
-        LinearLayout.LayoutParams lpTvAccount = (LinearLayout.LayoutParams) tvDrawerLayoutAccount.getLayoutParams();
-        if (isSignedIn) {
-            lpDrawerLayoutBg.height += lpTvAccount.height;
-        } else {
-            lpDrawerLayoutBg.height -= lpTvAccount.height;
-        }
-
+        lpDrawerLayoutBg.height = (int) getResources().getDimension((isSignedIn) ? R.dimen.profile_sign_out_bg_height : R.dimen.profile_sign_in_bg_height);
         ivDrawerLayoutBg.setLayoutParams(lpDrawerLayoutBg);
     }
 
