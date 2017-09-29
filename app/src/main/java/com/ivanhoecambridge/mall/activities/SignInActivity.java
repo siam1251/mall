@@ -165,7 +165,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
                     authenticationManager.authenticate(getTextFromField(etSignInEmail), getTextFromField(etSignInPassword));
                 }
             });
-
+            llSignInCreateAccountReset.setClickable(false);
             tvSignIn = (TextView) findViewById(R.id.tvSignIn);
             tvSignIn.setOnClickListener(new View.OnClickListener() {
                 @Override
