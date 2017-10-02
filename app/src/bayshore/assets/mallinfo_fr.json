@@ -1,0 +1,146 @@
+{
+    "infoList":[
+                {
+                "type": "Mall Hours",
+                "title":"Heures d'ouverture",
+                "subtitle":"Voir les heures d'ouverture pour les jours fériés",
+                "imageURLs":["mallinfo-banner-mallhours"]
+                },
+                {
+                "additionalInfo":[
+                                  {
+                                  "details":"Les poussettes sont disponibles pour un frais nominal &#224; l'entr&#233;e TD (entr&#233;e no.1). Le co&#251;t est de 4,00 $ pour les poussettes &#224; une place et de 5,00 $ pour les poussettes &#224; deux places.",
+                                  "title":"Poussettes"
+                                  },
+                                  {
+                                  "details":"Les fauteuils roulants et les marchettes sont disponibles selon le principe du premier arriv&#233;, premier servi. Une pi&#232;ce d&#8217;identit&#233; avec photo est requise.",
+                                  "title":"Marchettes et fauteuils roulants"
+                                  },
+                                  {
+                                  "details":"Magasinez avec votre carte-cadeau dans 21 centres &#224; l'&#233;chelle nationale! Offrir le cadeau parfait n'a jamais &#233;t&#233; aussi simple. La carte-cadeau Bayshore est bien accueillie par les centaines de d&#233;taillants participants du centre commercial.",
+                                  "title":"Cartes-cadeaux Bayshore"
+                                  },
+                                  {
+                                  "details":"Visitez le bureau de s&#233;curit&#233; situ&#233; au premier niveau pr&#232;s des toilettes (entr&#233;e no. 5) si vous avez besoin d'une trousse de premiers soins.",
+                                  "title":"Premiers soins"
+                                  },
+                                  {
+                                  "details":"Une grande salle d'allaitement est disponible dans les toilettes pour femmes de la foire alimentaire. Il y a aussi une salle d'allaitement dans les toilettes familiales au premier niveau.",
+                                  "title":"Salle d'allaitement"
+                                  },
+                                  {
+                                  "details":"Avez-vous perdu ou retrouv&#233; un objet lors de votre visite? Assurez-vous de contacter le service &#224; la client&#232;le. Les objets sont trait&#233;s au bureau du service &#224; la client&#232;le, o&#249; ils sont conserv&#233;s pendant une p&#233;riode de 30 jours.",
+                                  "title":"Objets trouvés"
+                                  }
+                                  ],
+                "subtitle":"Contactez notre personnel du kioske d'information",
+                "title":"Service à la clientèle",
+                "locations":[
+                             {
+                             "name": "Premier niveau, près de Victoria's Secret",
+                             "locationID": "57962344aeb44b6027000016",
+                             "mapName": "Level 1 - Parking 1",
+                             "locationType": "amenity"
+                             }
+                             ],
+                "hours":"Today",
+                "phoneNumber":"(613) 829-7491",
+                "details":"Chez Bayshore, nous nous engageons &#224; vous offrir une exp&#233;rience de magasinage exceptionnelle. Notre personnel comp&#233;tent est fier d'offrir de nombreux services gratuits et tarifaires pour rendre votre exp&#233;rience de magasinage m&#233;morable.",
+                "additionalInfoTitle":"Services disponibles",
+                "imageURLs":["mallinfo-banner-customerservice"],
+                "phoneURL":"tel://+16138297491"
+                },
+                {
+                "imageURLs":["mallinfo-banner-GENERIC"],
+                "subtitle":"Trouvez les toilettes, la sécurité, le guichet automatique et d'autres services",
+                "details":"Vous cherchez autre chose qui n'est pas r&#233;pertori&#233;? Bayshore vous propose plusieurs commodit&#233;s et services sans frais. Retrouvez-les sur la carte interactive du centre.\n\nToilettes familiales\nToilettes\nStations de remplissage de bouteilles d'eau\nService &#224; la client&#232;le\nSalle d'allaitement\nPoussettes\nMarchettes et fauteuils roulants\nEscaliers, escaliers roulants et ascenseurs\nGuichet automatique\nStation OC Transpo\nRecyclage de produits &#233;lectroniques",
+                "title":"Commodités"
+                },
+                {
+                "additionalInfo":[
+                                  {
+                                  "details":"Vous avez d&#233;j&#224; une carte-cadeau? Appuyez sur le bouton \"V&#233;rifiez votre solde\" ci-dessus pour v&#233;rifier votre solde en ligne.",
+                                  "title":"Vérifiez votre solde de la carte-cadeau"
+                                  },
+                                  {
+                                  "details":"Demandez votre carte-cadeau au bureau du service &#224; la client&#232;le, situ&#233; au premier niveau pr&#232;s de Victoria's Secret",
+                                  "title":"Où acheter votre carte-cadeau"
+                                  }
+                                  ],
+                "subtitle":"Vérifiez votre solde de carte-cadeau Ivanhoé Cambridge",
+                "links":[
+                         {
+                         "linkType":"internal",
+                         "linkTitle":"Vérifiez votre solde",
+                         "linkURL":"tab/profile_giftcards"
+                         }
+                         ],
+                "title":"Cartes-cadeaux",
+                "locations":[
+                             {
+                             "name": "Premier niveau, près de Victoria's Secret",
+                             "locationID": "57962344aeb44b6027000016",
+                             "mapName": "Level 1 - Parking 1",
+                             "locationType": "amenity"
+                             }
+                             ],
+                "details":"Offrir le cadeau parfait n'a jamais &#233;t&#233; aussi simple. La carte-cadeau Bayshore est bien accueillie par les centaines de d&#233;taillants participants du centre commercial.",
+                "additionalInfoTitle":"Questions fréquemment posées",
+                "imageURLs":["mallinfo-banner-giftcard"]
+                },
+                {
+                "subtitle":"Restez connecté avec Bayshore",
+                "instagram":{
+                "url":"https://www.instagram.com/BayshoreOttawa/",
+                "title":"BayshoreOttawa"
+                },
+                "title":"Réseaux sociaux",
+                "twitter":{
+                "url":"https://www.twitter.com/BayshoreOttawa/",
+                "title":"BayshoreOttawa"
+                },
+                "facebook":{
+                "url":"https://www.facebook.com/BayshoreOttawa/",
+                "title":"BayshoreOttawa"
+                },
+                "details":"Suivez-nous pour en savoir plus au sujet des tendances, des promotions, des concours et tout ce qui est Bayshore!",
+                "imageURLs":["mallinfo-banner-metropolisexpress"]
+                },
+                {
+                "imageURLs":["mallinfo-banner-busskytrain"],
+                "subtitle":"Voir l'information sur le transport en commun",
+                "details":"&#192; tous les coins de la ville, Bayshore est accessible par le transport en commun avec un terminal sur site. Recherchez les routes 61, 62, 85 et 97 chez OC Transpo. Le centre se trouve &#224; 20 minutes du centre-ville d'Ottawa. En 2021, le nouveau syst&#232;me TLR de la ville s'&#233;tendra jusqu'&#224; la station Bayshore.",
+                "links":[
+                         {
+                         "linkTitle":"Consultez l'horaire d'OC Transpo",
+                         "linkURL":"http://www.octranspo.com/acceuil/"
+                         }
+                         ],
+                "title":"Transport en commun"
+                },
+                {
+                "imageURLs":["mallinfo-banner-about"],
+                "details":"Situ&#233; dans l&#8217;ouest de la r&#233;gion d'Ottawa-Gatineau, Bayshore est un centre commercial super-r&#233;gional, qui abrite un m&#233;lange impressionnant de plus de 190 d&#233;taillants. &#201;l&#233;gamment con&#231;u sur trois niveaux, le centre comprend une vari&#233;t&#233; de magasins parmi les plus populaires sur le march&#233;.",
+                "subtitle":"En savoir davantage sur Bayshore",
+                "locations":[
+                             {
+                             "locationType":"external",
+                             "locationID":"https://www.google.ca/maps?q=@45.3471994,-75.8067581",
+                             "name":"100 Bayshore Dr, Ottawa, ON"
+                             }
+                             ],
+                "title":"À propos du centre"
+                }
+                ],
+    "hoursExceptions":[
+                       "A&W",
+                       "Bayshore Optometrist",
+                       "Moxie's",
+                       "Second Cup",
+                       "South St. Burger",
+                       "Starbucks",
+                       "Tim Hortons",
+                       "Trillium Dental",
+                       "Walmart"
+                       ]
+}

@@ -1,0 +1,65 @@
+{
+  "amenities":[
+    {
+      "type":"1",
+      "enabled":true,
+      "title":"Washroom",
+      "externalIds":[
+        "washroom",
+        "family-washroom"
+      ]
+    },
+    {
+      "type":"0",
+      "enabled":true,
+      "title":"Guest Service",
+      "externalIds":[
+        "information-counter"
+      ]
+    },
+    {
+      "type":1,
+      "enabled":true,
+      "title":"Food Court",
+      "externalIds":[
+        "Aire de restauration",
+        "Food Court"
+      ]
+    },
+    {
+      "type":1,
+      "enabled":true,
+      "title":"Strollers",
+      "externalIds":[
+        "strollers"
+      ]
+    },
+    {
+      "type":1,
+      "enabled":true,
+      "title":"Taxi Stand",
+      "externalIds": [
+        "taxi-stand"
+      ]
+    },
+    {
+      "type":1,
+      "enabled":true,
+      "title":"Nursing Room",
+      "externalIds":[
+        "nursing-room"
+      ]
+    },
+    {
+      "type":"4",
+      "enabled":false,
+      "title":"Stairs \u0026 Escalators",
+      "externalIds":[
+        "Escalator",
+        "Stairs",
+        "Escaliers",
+        "Ascenseur"
+      ]
+    }
+  ]
+}

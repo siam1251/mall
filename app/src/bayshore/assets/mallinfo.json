@@ -1,0 +1,159 @@
+{
+  "infoList": [
+    {
+      "imageURLs": [
+        "mallinfo-banner-mallhours"
+      ], 
+      "subtitle": "See upcoming holiday hours, special hours, etc.", 
+      "title": "Mall Hours"
+    }, 
+    {
+      "additionalInfo": [
+        {
+          "details": "Strollers are available for a nominal fee at the TD Entrance (Entrance \u00231). Single and double strollers are available. The cost is \u00244.00 for singles, and \u00245.00 for doubles.", 
+          "title": "Strollers"
+        }, 
+        {
+          "details": "Complimentary wheelchairs and walkers are available on a first-come, first-served basis. Photo identification is required.", 
+          "title": "Wheelchair \u0026 Walkers"
+        }, 
+        {
+          "details": "Shop with your gift card at 21 shopping centres nationwide! Offering the perfect gift has never been easier. The Bayshore gift card is welcomed by the mall's hundreds of participating retailers.", 
+          "title": "Bayshore Gift Cards"
+        }, 
+        {
+          "details": "Please visit the Mall Security office located on the first level by the washrooms (Entrance \u00235) if you are in need of a First Aid Kit.", 
+          "title": "First Aid"
+        }, 
+        {
+          "details": "A large, comfortable nursing room is available through the women's washroom in the Food Court. There is also a nursing room in the first level family washrooms.", 
+          "title": "Nursing Room"
+        }, 
+        {
+          "details": "Lost or found an item during your visit? Be sure to contact Guest Services. Found items are transferred and tracked at Guest Services, where they are kept for a period of 30 days.", 
+          "title": "Lost \u0026 Found"
+        }
+      ], 
+      "subtitle": "Get in touch with our friendly customer service staff", 
+      "title": "Guest Services", 
+      "locations": [
+        {
+          "mapName": "Level 1 - Parking 1", 
+          "locationType": "amenity", 
+          "locationID": "57962344aeb44b6027000016", 
+          "name": "First level, by Victoria's Secret"
+        }
+      ], 
+      "hours": "Today", 
+      "phoneNumber": "(613) 829-7491", 
+      "details": "At Bayshore, we are committed to providing you with an exceptional shopping experience. Our knowledgeable staff is proud to offer many complimentary and fee services to make your shopping experience memorable.", 
+      "additionalInfoTitle": "Available Services", 
+      "imageURLs": [
+        "mallinfo-banner-customerservice"
+      ], 
+      "phoneURL": "tel://+16138297491"
+    }, 
+    {
+      "imageURLs": [
+        "mallinfo-banner-amenities"
+      ], 
+      "subtitle": "Find the Washrooms, Elevators, ATM, and other amenities", 
+      "details": "Looking for something else not listed? Bayshore offers various amenities and complimentary services. View them on the interactive mall map.\n\nFamily Washrooms\nRestrooms\nWater Bottle Filling Stations\nGuest Services\nNursing Room\nStroller Rental\nWalkers \u0026 Wheelchairs\nStairs, Escalators \u0026 Elevators\nATM\nOC Transpo Station\nElectronic Recycling Bin", 
+      "title": "Amenities"
+    }, 
+    {
+      "additionalInfo": [
+        {
+          "details": "Already have a gift card? Tap on the \"Check your balance\" button above to check your balance online.", 
+          "title": "Check your gift card balance"
+        }, 
+        {
+          "details": "Ask for your gift card at our Guest Services kiosk, located on the first level by Victoria's Secret.", 
+          "title": "Where to buy your gift card?"
+        }
+      ], 
+      "subtitle": "Check your Bayshore gift card balance.", 
+      "links": [
+        {
+          "linkType": "internal", 
+          "linkTitle": "Check Your Balance", 
+          "linkURL": "tab/profile_giftcards"
+        }
+      ], 
+      "title": "Gift Card Information", 
+      "locations": [
+        {
+          "mapName": "Level 1 - Parking 1", 
+          "locationType": "amenity", 
+          "locationID": "57962344aeb44b6027000016", 
+          "name": "First level, by Victoria's Secret"
+        }
+      ], 
+      "details": "Offering the perfect gift has never been easier. The Bayshore gift card is welcomed by the mall's hundreds of participating retailers.", 
+      "additionalInfoTitle": "Frequently Asked Questions", 
+      "imageURLs": [
+        "mallinfo-banner-giftcard"
+      ]
+    }, 
+    {
+      "subtitle": "Follow us to keep up with trends, promotions, contests and everything Bayshore!", 
+      "instagram": {
+        "url": "https://www.instagram.com/BayshoreOttawa/", 
+        "title": "BayshoreOttawa"
+      }, 
+      "title": "Social Network", 
+      "twitter": {
+        "url": "https://www.twitter.com/BayshoreOttawa/", 
+        "title": "BayshoreOttawa"
+      }, 
+      "facebook": {
+        "url": "https://www.facebook.com/BayshoreOttawa/", 
+        "title": "BayshoreOttawa"
+      }, 
+      "details": "Follow us to keep up with trends, promotions, contests and everything Bayshore!", 
+      "imageURLs": [
+        "mallinfo-banner-socialnetwork"
+      ]
+    }, 
+    {
+      "imageURLs": [
+        "mallinfo-banner-transportation"
+      ], 
+      "subtitle": "See public transit information and schedules", 
+      "details": "Bayshore is easily accessible from all corners of the city via public transit with its own main bus terminal. Look for main OC Transpo routes 61, 62, 85, and 97. The centre is a short 20-minute ride from downtown Ottawa. In 2021, the city's new LRT system will extend to Bayshore station.", 
+      "links": [
+        {
+          "linkTitle": "View OC Transpo Schedule", 
+          "linkURL": "http://www.octranspo.com/?from=splash"
+        }
+      ], 
+      "title": "Public Transportation"
+    }, 
+    {
+      "imageURLs": [
+        "mallinfo-banner-about"
+      ], 
+      "details": "Located in the rapidly growing western portion of the Ottawa-Gatineau area, Bayshore is a super-regional shopping centre, home to an exciting mix of over 190 retailers. Stylishly designed over three levels, the centre includes a variety of the hottest stores on the market.", 
+      "subtitle": "Learn more about Bayshore", 
+      "locations": [
+        {
+          "locationType": "external", 
+          "locationID": "https://www.google.ca/maps?q=@45.3471994,-75.8067581", 
+          "name": "100 Bayshore Dr, Ottawa, ON"
+        }
+      ], 
+      "title": "About Mall"
+    }
+  ], 
+  "hoursExceptions": [
+    "A\u0026W", 
+    "Bayshore Optometrist", 
+    "Moxie's",
+    "Second Cup", 
+    "South St. Burger", 
+    "Starbucks", 
+    "Tim Hortons", 
+    "Trillium Dental", 
+    "Walmart"
+  ]
+}

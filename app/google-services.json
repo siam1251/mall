@@ -291,6 +291,37 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008432122266:android:75184bf6e77fda34",
+        "android_client_info": {
+          "package_name": "com.ivanhoecambridge.mall.bayshore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008432122266-9cijkl9l8vfun65ojb1ncvflmda5paa8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7PuJLMaO26PRJ1DgbGgrkrrG4_wnrDXw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

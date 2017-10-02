@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
+import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.activities.MyPagesActivity;
@@ -72,7 +73,9 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     private static ArrayList<Integer> mNewsFeedOrder = new ArrayList<Integer>();
     static {
         mNewsFeedOrder.add(KcpContentTypeFactory.ITEM_TYPE_EVENT);
-        mNewsFeedOrder.add(KcpContentTypeFactory.ITEM_TYPE_MOVIE);
+        if (BuildConfig.MOVIE) {
+            mNewsFeedOrder.add(KcpContentTypeFactory.ITEM_TYPE_MOVIE);
+        }
         mNewsFeedOrder.add(KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT);
         mNewsFeedOrder.add(KcpContentTypeFactory.ITEM_TYPE_TWITTER);
         mNewsFeedOrder.add(KcpContentTypeFactory.ITEM_TYPE_ADJUST_MY_INTEREST);

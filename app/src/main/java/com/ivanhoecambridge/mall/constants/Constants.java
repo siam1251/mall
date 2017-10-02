@@ -1,8 +1,7 @@
 package com.ivanhoecambridge.mall.constants;
 
-
 import com.ivanhoecambridge.mall.BuildConfig;
-
+import android.content.Context;
 
 public class Constants {
 	//todo: change production type in release
@@ -44,6 +43,7 @@ public class Constants {
     public final static String MALL_INFO_OFFLINE_TEXT 	= "mallinfo.json";
     public final static String AMENITIES_OFFLINE_TEXT 	= "amenities.json";
     public final static String PARKING_OFFLINE_TEXT 	= "parking.json";
+
 
 
 	//DOWNLOAD TYPES
@@ -128,5 +128,9 @@ public class Constants {
 
 	//SIGNUP/SIGNIN
 	public final static String KEY_ACTIVE_SCENE_ORDER = "activeSceneOrder";
+
+	public static String getStringFromResources(Context context, int resourceId) {
+		return context.getString(resourceId);
+	}
 
 }
