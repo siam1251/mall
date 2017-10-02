@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- JSON files -->
+    <string name="mall_info_json">mallinfo_fr.json</string>
+
+    <!-- ACTIONS -->
+    <string name="action_settings">Réglages</string>
+    <string name="action_reset">Annuler</string>
+    <string name="action_ok">OK</string>
+    <string name="action_got_it">Ok</string>
+    <string name="action_call">Appeler</string>
+    <string name="action_exit">Fermer</string>
+    <string name="action_do_not_save">Ne pas sauvegarder</string>
+    <string name="action_save">Sauvegarder</string>
+    <string name="action_cancel">Fermer</string>
+    <string name="action_no_thanks">Non</string>
+    <string name="action_done">Terminer</string>
+    <string name="action_retry">Réessayer</string>
+    <string name="action_sure">I\'M SURE</string>
+    <string name="action_next">Suivant</string>
+    <string name="action_dismiss">Ignorer</string>
+    <string name="action_yes">Oui</string>
+    <string name="action_no">Non</string>
+    <string name="action_remove">Supprimer</string>
+    <string name="action_faq">FAQ</string>
+    <string name="action_refresh">REFRESH</string>
+    <string name="action_back">Retour</string>
+
+    <!-- ALERT DIALOG TITLE -->
+    <string name="title_unsaved_changes">Changement non sauvegardés</string>
+    <string name="title_make_calls">Appelerr</string>
+    <string name="title_testing">INSERT MSG</string>
+    <string name="title_open_instagram_app">Open in Instagram App</string>
+    <string name="title_open_instagram_website">Voir sur Instagram</string>
+    <string name="title_do_not_save_parking">Fermer sans sauvegarder</string>
+    <string name="title_remove_my_parking">Supprimer mon stationnement</string>
+    <string name="title_add_notes">Ajouter une note</string>
+    <string name="title_permission_denied">Location Access Denied</string>
+    <string name="title_change_parking_spot">Change Parking Spot</string>
+    <string name="title_map">Carte</string>
+    <string name="title_directory">Répertoire des boutiques</string>
+    <string name="title_info">Informations</string>
+    <string name="title_enable_bluetooth">Bluetooth</string>
+    <string name="title_current_location_not_available">Current Location Not Available</string>
+    <string name="title_remove_gc">Retirer la carte cadeau</string>
+    <string name="title_error">Oups!</string>
+    <string name="title_oops">Oups!</string>
+
+    <!--FRAGMENT TITLE-->
+    <string name="fragment_news">Nouvelles</string>
+    <string name="fragment_deals">Offres</string>
+    <string name="fragment_categories">Categorie</string>
+    <string name="fragment_stores">Magasins A-Z"</string>
+    <string name="fragment_sub_categories">Sous-catégorie</string>
+    <string name="fragment_category_stores">Categorie</string>
+
+    <!--menu-->
+    <string name="menu_home">ACCEUIL</string>
+    <string name="menu_directory">RÉPERTOIRE</string>
+    <string name="menu_map">CARTE</string>
+    <string name="menu_info">INFO</string>
+
+    <!--SOCIAL SHARING-->
+    <string name="social_facebook">Facebook</string>
+    <string name="social_twitter">Twitter</string>
+    <string name="social_instagram">Instagram</string>
+    <string name="social_webpage">Webpage</string>
+
+
+    <!--interest card-->
+    <string name="intrst_card_title">Quels sont vos intérêts?</string>
+    <string name="intrst_card_desc">Préciser vos intérêts pour obtenir des recommandations d\'offres personnalisées!</string>
+    <string name="intrst_card_btn">Préciser vos intérêts</string>
+
+    <string name="intrst_card_recommended_title">Offres recommandées</string>
+    <string name="intrst_card_recommended_desc">Ajuster les offres recommandées en ajoutant ou en retirant des intérêts </string>
+    <string name="intrst_card_recommended_btn">Ajuster mes intérêts</string>
+
+    <!-- MALL INFO DETAILS -->
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_mall_hours">Heures d\'ouverture</string>
+    <string name="title_mall_information">Informations</string>
+    <string name="title_mall_holiday_hours">Jours fériés</string>
+    <string name="mall_info_disclaimer_title">Les heures d\'ouverture peuvent varier pour les magasins: </string>
+
+    <string name="warning_download_completed">Download completed</string>
+    <string name="warning_download_failed">Les données n\'ont pu être téléchargées</string>
+    <string name="warning_no_internet_connection">Aucune connexion internet</string>
+    <string name="warning_retry">Réessayer</string>
+    <string name="warning_empty_news">Aucune nouvelle ou annonce</string>
+    <string name="warning_empty_deals">Il n\'y a pas d\'offre aujourd\'hui..</string>
+    <string name="warning_exit_interest">Si vous quittez, vous allez perdre vos intérêts sauvegardés</string>
+    <string name="warning_make_call">Voulez-vous appelez\n</string>
+    <string name="warning_fav_added">Favoris ajouté!</string>
+    <string name="warning_fav_removed">Favoris ajouté!</string>
+    <string name="warning_open_instagram_app">Voulez-vous consulter ceci dans l\'appli Instagram?</string>
+    <string name="warning_open_instagram_website">Voulez-vous consulter ceci sur le site Web Instagram?</string>
+    <string name="warning_no_recommended_deals">Il n\'y a aucune offre recommandée pour le moment</string>
+    <string name="warning_no_parking_saved">Fermer cette fenêtre effacera toutes les informations relatives à votre stationnement.</string>
+    <string name="warning_active_mall_activated">Connecté au centre</string>
+    <string name="warning_no_deal_for_today">Il n\'y a pas d\'offre aujourd\'hui.</string>
+    <string name="warning_no_event_for_today">Aucun événement prévu.</string>
+
+    <string name="warning_require_location_permission">L\'application requiert le positionnement de votre appareil pour accéder aux fonctionnalités de centre commercial en direct. Êtes-vous sûr de vouloir refuser les autorisations?</string>
+    <string name="warning_require_location_permission_for_blue_dot">L\'application requiert cette autorisation pour trouver votre positionnement et accéder aux fonctionnalités du centre commercial en direct. Êtes-vous sûr de vouloir refuser les autorisations?</string>
+    <string name="warning_selected_same_store">Désolé, vous ne pouvez sélectionner le même magasin</string>
+    <string name="warning_selected_same_location">Désolé, vous ne pouvez sélectionner le même endroit</string>
+    <string name="warning_remove_my_parking">Êtes-vous certain de vouloir supprimer votre place de stationnement?</string>
+    <string name="warning_change_my_parking_spot">Seulement la dernière place de stationnement sera sauvegardée</string>
+    <string name="warning_turn_on_bluetooth">Activer le Bluethooth dans \"Réglages\" pour que l\'application puisse détecter votre position actuelle.</string>
+    <string name="warning_current_location_not_available">Désolé votre position actuelle n\'est pas disponible, s\'il vous plait essayez de nouveau dans quelques secondes.</string>
+    <string name="warning_not_valid_address">Adresse courriel invalide </string>
+    <string name="warning_must_be_longer">Doit contenir un minimum de 7 caractères.</string>
+    <string name="warning_two_passwords_not_equal">Les mots de passe doivent être les mêmes</string>
+    <string name="warning_wrong_date_format">Mauvais format de date, utiliser: jj/mm/yyyy</string>
+    <string name="warning_pick_earlier_date">La date de naissance doit être antérieure à aujourd\'hui</string>
+    <string name="warning_minimum_age_date">Vous n\'avez pas l\'âge minimum requis </string>
+    <string name="warning_gift_card_already_exist">Cette carte cadeau a déjà été ajoutée.</string>
+    <string name="warning_gift_card_has_been_removed">La carte cadeau a été supprimée.</string>
+
+    <!--SECTION HEADER-->
+    <string name="section_header_recommended_deals">Offres recommandées</string>
+    <string name="section_header_other_deals">Autres offres</string>
+
+    <!--ACTIVITY TITLE-->
+    <string name="activity_title_interested_category">Quels sont vos intérêts?</string>
+    <string name="activity_title_interested_category_update">Mettre à jour mes intérêts</string>
+    <string name="activity_title_interested_store">Magasins recommandés</string>
+    <string name="activity_title_settings">Réglages</string>
+
+    <!--INTERESTED CATEGORY-->
+    <string name="intrstd_cat_help_us">Identifier vos catégories préférées pour obtenir des recommandation de promos et de magasins</string>
+    <string name="intrstd_cat_recommended_section_header">Sur la base de vos sélections, voici quelques magasins que nous pensons que vous aimerez. Ajoutez-les à vos favoris pour obtenir des offres exclusives!</string>
+    <string name="intrstd_cat_other_section_header">&#8230; si nous en avons oublié, assurez-vous de les \najouter:</string>
+    <string name="intrstd_store_desc">Nous croyons que vous aimerez ces magasins!\nSélectionnez lesquels sont vos préférés</string>
+
+    <!--MALL INFO PARKING-->
+    <string name="info_get_directions">Directions</string>
+    <string name="info_save_my_parking_spot">Sauvegarder mon stationnement</string>
+    <string name="info_my_parking_spot">Mon stationnement </string>
+
+    <!--MALL INFO TITLE-->
+    <string name="mall_info_mall_hours">Heures d\'ouverture</string>
+    <string name="mall_info_guest_service">Service à la clientèle</string>
+    <string name="mall_info_amenities">Services</string>
+    <string name="mall_info_gift_card">Vérifier le solde de votre carte cadeau</string>
+    <string name="mall_info_social">Social Network</string>
+    <string name="mall_info_about">About</string>
+    <string name="mall_info_shuttles">Shopping Shuttle</string>
+    <string name="mall_info_public_transportation">Public Transportation</string>
+    <string name="mall_info_tourist_information">Tourist Information</string>
+    <string name="mall_info_accessibility">Accessibility</string>
+    <string name="mall_info_customer_service">Service à la clientèle</string>
+    <string name="mall_info_cinema">Cinema</string>
+
+    <!--CTA-->
+    <string name="cta_find_on_map">Retour à la carte</string>
+    <string name="cta_check_your_balance">Vérifier le solde de votre carte cadeau</string>
+    <string name="cta_check_your_balance_url">https://getmybalance.com/</string>
+    <string name="hours_of_operation">Heures d\'ouverture</string>
+    <string name="cta_view_on_map">Voir sur la carte</string>
+    <string name="cta_view_more">Afficher davantage</string>
+    <string name="cta_show_map">Retour à la carte</string>
+    <string name="cta_store_information">Détails sur le magasin</string>
+    <string name="cta_add_to_calendar">Ajouter au calendrier</string>
+
+    <!--DRAWER LAYOUT-->
+    <string name="drawer_my_favourites">My Favourites</string>
+    <string name="drawer_my_gift_card">My Gift Cards</string>
+    <string name="drawer_deals">Mes offres</string>
+    <string name="drawer_events">Mes événements</string>
+    <string name="drawer_stores">Mes magasins</string>
+    <string name="drawer_interests">Mes intérêts</string>
+    <string name="drawer_add_gc">+ Ajouter une carte cadeau</string>
+    <string name="drawer_sign_in">Se connecter</string>
+    <!-- Sign out from drawer is temporary -->
+    <string name="drawer_sign_out">Se déconnecter</string>
+
+    <string name="drawer_todays_deals">Offres du jour</string>
+    <string name="drawer_todays_events">Événement du jour</string>
+
+    <!--MY PAGES-->
+    <string name="my_page_deals">Mes offres</string>
+    <string name="my_page_events">Mes événements</string>
+    <string name="my_page_stores">Mes magasins</string>
+    <string name="my_page_interests">Mes intérêts</string>
+
+    <string name="my_page_deals_for_today">Offres du jour</string>
+    <string name="my_page_events_for_today">Événement du jour</string>
+    <string name="my_page_all_ancmt">Toutes les annonces</string>
+    <string name="my_page_all_event">Tous les événements</string>
+
+
+    <string name="explore_more_deals">Rechercher d\'autres offres</string>
+    <string name="explore_more_events">Rechercher d\'autres évènements</string>
+    <string name="explore_more_stores">Rechercher d\'autres magasins</string>
+    <string name="empty_placeholder_title">You have no favourites!</string>
+    <string name="empty_placeholder_desc_deal">This is where all your favourited deals will appear. Heart a deal to get started.</string>
+    <string name="empty_placeholder_desc_event">This is where all your favourited events will appear. Heart an event to get started.</string>
+    <string name="empty_placeholder_desc_store">This is where all your favourited stores will appear. Heart a store to get started.</string>
+    <string name="empty_placeholder_ancmt">Aucune nouvelle ou annonce</string>
+    <string name="empty_placeholder_event">Aucun événement prévu</string>
+
+    <!--MAP-->
+    <string name="map_filter_see_deal">Voir les offres recommandées</string>
+    <string name="map_filter_hide_deal">Masquer les offres recommandées</string>
+    <string name="map_filter_save_parking">Sauvegarder mon stationnement</string>
+
+    <string name="map_filter_see_parking">Mon stationnement</string>
+    <string name="map_filter_hide_parking">Masquer ma place de stationnement</string>
+    <string name="map_view_amenities_on_map">Voir les services sur la carte</string>
+
+    <!-- HINTS -->
+    <string name="hint_search_store">Rechercher un magasin</string>
+    <string name="hint_search_directory">Chercher dans le répertoire</string>
+    <string name="hint_search_start">directions à partir de&#8230;</string>
+    <string name="hint_search_destination">Directions vers&#8230;</string>
+    <string name="hint_search_start_when_not_empty">De</string>
+    <string name="hint_search_destination_when_not_empty">à</string>
+    <string name="hint_add_notes">Ajouter des notes à votre place de stationnement i.e. "Pilier 15F proche des escaliers"</string>
+    <string name="hint_full_name">Nom complet</string>
+    <string name="hint_email">Courriel</string>
+    <string name="hint_password">Mot de passe</string>
+    <string name="hint_confirm_password">Confirmer le mot de passe</string>
+    <string name="hint_Birthday">Anniversaire (optionnel)</string>
+    <string name="hint_card_number">Numéro de la carte</string>
+
+    <!--PARKING-->
+    <string name="parking_question_one">Près de quelle entrée avez-vous stationné?</string>
+    <string name="parking_question_two">Which pillar did you park at?</string>
+    <string name="parking_btn_save_parking_spot">Sauvegarder mon stationnement</string>
+    <string name="parking_btn_edit_selection">Modifier la sélection</string>
+    <string name="parking_add_note">Ajouter une note</string>
+    <string name="parking_polygon_store_name">Mon stationnement</string>
+    <string name="parking_polygon_store_name_temporary">Stationnement à proximité</string>
+    <string name="parking_polygon_blue_dot_temporary">Mon stationnement</string>
+    <string name="parking_polygon_parking_lot">Mon stationnement</string>
+    <string name="parking_remove_my_spot">Supprimer mon stationnement</string>
+    <string name="parking_save_as_my_parking_spot">Sauvegarder mon stationnement</string>
+    <string name="parking_nearest_spot">Stationnement à proximité</string>
+    <string name="parking_saved_my_parking_spot">Votre stationnement est sauvegardé</string>
+    <string name="parking_pinned_at_current_location">Épinglé à la position actuelle</string>
+    <string name="parking_add_notes">Ajouter une note</string>
+    <string name="parking_use">Utiliser</string>
+    <string name="parking_current_location">Mon emplacement actuel</string>
+    <string name="parking_use_current_location">Utiliser mon emplacement actuel</string>
+
+    <!--SEARCH-->
+    <string name="search_store_that_contains">Magasins qui vendent: </string>
+    <string name="search_cat_that_contains">Catégories correspondantes: </string>
+    <string name="search_type_cat">(Catégorie)</string>
+    <string name="search_type_keyword">(Mot-clé)</string>
+    <string name="search_type_brand">(Marque)</string>
+    <string name="search_type_tag">(Tags/Produits)</string>
+    <string name="search_empty_results_place_holder">Aucun résultat avec ce nom</string>
+    <string name="search_stores_that_match">Magasin correspondant</string>
+
+
+    <!--ONBOARDING-->
+    <string name="onbd_two_title">Recevez des promos suggérées</string>
+    <string name="onbd_three_title">Trouvez vos marques préférées</string>
+    <string name="onbd_four_title">Trouvez toujours votre chemin</string>
+    <string name="onbd_five_title">En direct au centre</string>
+
+    <string name="onbd_one_desc">""</string>
+    <string name="onbd_two_desc">Recevez des recommandations de promos de vos boutiques préférées</string>
+    <string name="onbd_three_desc">Découvrez des boutiques en un clic grâce à la recherche avancée</string>
+    <string name="onbd_four_desc">À l\’aide du repérage avancé et le positionnement intérieur, localisez facilement une boutique ou votre voiture garée</string>
+    <string name="onbd_five_desc">Dès l\’arrivée, l\’appli se connecte au centre et vous propose tout ce qu\’il faut pour une expérience de magasinage optimale!</string>
+
+    <string name="onbd_btn_lets_get_started">Débuter</string>
+    <string name="onbd_btn_lets_get_skip">Passer</string>
+    <string name="onbd_btn_lets_get_done">Terminer</string>
+
+    <!--MOVIES-->
+    <string name="movie_title">Movie Cinema</string>
+    <string name="movie_desc">Voir les films et les horaires</string>
+    <string name="movie_now_playing">À l\'affiche</string>
+    <string name="movie_showtime">Voir les heures</string>
+    <string name="movie_find_on_map">Voir sur la carte</string>
+    <string name="movie_showtimes_title">Horaires</string>
+    <string name="movie_detail_title">Détails du film</string>
+    <string name="movie_watch_trailer">Bande annonce</string>
+    <string name="movie_synopsis">Synopsis</string>
+    <string name="movie_starring">Distribution:</string>
+    <string name="movie_directed_by">Réalisateur:</string>
+    <string name="movie_advisory">Classement:</string>
+    <string name="movie_next_showtime">Prochaine représentation à</string>
+    <string name="movie_all_showtimes">All Showtimes</string>
+
+    <string name="signin_create_account_to_save">Créer un compte, pour sauvegarder vos préférences!</string>
+    <string name="signin_sign_up">S\'inscrire</string>
+    <string name="signin_already_have_account">Déjà un compte?</string>
+    <string name="signin_signin_with_underline"><u>Se connecter</u></string>
+    <string name="signin_use_existing_profile">(REPLACE WITH LOGO)Use an existing profile by siging up with your Facebook or Google account.</string>
+    <string name="signin_connect_with_fb">Connect with Facebook</string>
+    <string name="signin_connect_with_google">Connect with Google+</string>
+    <string name="signin_signup_with_email">Adhérer avec votre courriel</string>
+    <string name="signin_sign_in">Se connecter</string>
+    <string name="signin_password_reset">Réinitialiser / Mot de passe oublié</string>
+    <string name="signin_dont_have_account">Pas de compte?</string>
+    <string name="signin_forgot_password">Mot de passe oublié?</string>
+    <string name="signin_other_sign_in_method">(REPLACE WITH LOGO)You can also sign in with a Facebook or Google account.</string>
+    <string name="signin_create_account">Créer un compte</string>
+    <string name="signin_send_me_promos">M\'envoyer les offres et mises à jour</string>
+    <string name="signin_by_signing_up">En adhérant vous acceptez les</string>
+    <string name="signin_terms_and_conditions">Termes et conditions</string>
+    <string name="signin_forgot_your_password">Mot de passe oublié?</string>
+    <string name="signin_let_us_know">Faites-nous savoir l\'adresse électronique que vous avez utilisée pour configurer votre compte, et nous vous enverrons des instructions de réinitialisation du mot de passe</string>
+    <string name="signin_send_reset_instructions">Envoyer les instructions de réinitialisation</string>
+    <string name="signin_error_cancelled">La demande a été annulée par l\'utilisateur.</string>
+    <string name="signin_error_unknown">Une erreur est survenue avec la requête.</string>
+    <string name="signin_error_permission_denied">L\'application requiert l\'autorisation de votre compte.</string>
+    <string name="signin_error_invalid_credentials">Nous n\'avons pas pu récupérer les informations d\'identification.</string>
+    <string name="signin_error_invalid_credentials_try_again">Mot de passe ou nom d\'utilisateur incorrect</string>
+    <string name="signin_error_social_signin_only">Ce compte est que pour les connections avec réseaux sociaux.</string>
+
+    <!--GIFT CARD-->
+    <string name="gc_add_card">Ajouter une carte cadeau</string>
+    <string name="error_code_404">Le numéro saisi est non valide.</string>
+    <string name="error_code_500">Erreur de serveur</string>
+    <string name="error_code_internet">SVP verifier votre connection internet et essayer de nouveau.</string>
+    <string name="gc_added_succesfully">Carte cadeau ajouté - La balance est $</string>
+    <string name="gc_removed">La carte cadeau a été supprimée</string>
+    <string name="gc_refresh">La balance de la carte cadeau a été mise à jour</string>
+    <!---->
+
+    <string name="privacy_policy"><u>Politique de confidentialité</u></string>
+    <string name="terms_of_service"><u>Termes et conditions</u></string>
+    <string name="version_name_prefix">Version </string>
+    <string name="version_code_suffix">DEBUG</string>
+
+    <string name="card_title_ancmt">Annonces</string>
+    <string name="card_title_event">Événements</string>
+    <string name="card_view_all">Voir tout</string>
+
+    <!--DETAIL-->
+    <string name="detail_store_deals">Détails du magasin</string>
+    <string name="detail_store_events">Événement du magasin</string>
+
+
+    <!--ETC-->
+    <string name="see_all_stores">Voir les magasins</string>
+    <string name="open_now">Ouvrez maintenant</string>
+    <string name="to_in_time">to</string>
+    <string name="follow_someone_on_in_social_sharing">follow %1$s! on&#8230;</string> <!--follow someone on instagram-->
+    <string name="today_in_mall_hour">Aujourd\'hui</string>
+    <string name="closed_in_mall_hour">Fermé</string>
+    <string name="holiday_reminder_in_mall_hour">Ceci est un rappel, %1$s! sera ouvert sur un horaire différent du:</string> <!--This is a reminder that HeaderFactory.MALL_NAME  will have adjusted hours on:-->
+
+
+
+</resources>
