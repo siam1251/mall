@@ -5,14 +5,22 @@
     <color name="warningColor">@color/themeColor</color> <!--#CFff4444-->
     <color name="themeColorDark">#CC5D1B</color>
 
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">@color/themeColor</color> <!--status bar-->
-    <color name="colorAccent">@color/themeColor</color>
-    <color name="textColorPrimary">#000000</color>
-    <color name="hamburger_menu">#212121</color>
-    <color name="active_mall_off_state">#000000</color>
-    <color name="toolbarTextColor">#FFFFFF</color>
-    <color name="tabSelectedTextColor">@color/themeColor</color>
+    <color name="colorPrimary">@color/black</color>
+    <color name="colorPrimaryDark">@color/black</color>
+    <color name="textColorPrimary">@color/white</color>
+    <color name="hamburger_menu">@color/black</color>
+    <color name="active_mall_off_state">@color/white</color>
+    <color name="toolbarTextColor">@color/white</color>
+    <color name="tabSelectedTextColor">@color/white</color>
+
+    <color name="colorPrimary_alt">#FFFFFF</color>
+    <color name="colorPrimaryDark_alt">@color/themeColor</color> <!--status bar-->
+    <color name="colorAccent_alt">@color/themeColor</color>
+    <color name="textColorPrimary_alt">#000000</color>
+    <color name="hamburger_menu_alt">#212121</color>
+    <color name="active_mall_off_state_alt">#000000</color>
+    <color name="toolbarTextColor_alt">#FFFFFF</color>
+    <color name="tabSelectedTextColor_alt">@color/themeColor</color>
     <color name="emptySearchResults">@color/themeColor</color>
     <color name="detailActivityToolbarColor">@color/themeColor</color>
     <color name="parkingSaveBtnTextColor">#FFFFFF</color>
@@ -23,4 +31,6 @@
     <!--MAP-->
     <color name="map_destination_store">#273e94</color>
     <color name="directionSymbol">#000000</color>
+
+    <!-- Nobody knows the definite colour scheme so the light scheme is saved here for now-->
 </resources>
