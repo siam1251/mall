@@ -35,7 +35,7 @@
     <string name="title_do_not_save_parking">Fermer sans sauvegarder</string>
     <string name="title_remove_my_parking">Supprimer mon stationnement</string>
     <string name="title_add_notes">Ajouter une note</string>
-    <string name="title_permission_denied">Location Access Denied</string>
+    <string name="title_permission_denied">Accès localisation refusé</string>
     <string name="title_change_parking_spot">Change Parking Spot</string>
     <string name="title_map">Carte</string>
     <string name="title_directory">Répertoire des boutiques</string>
@@ -165,8 +165,8 @@
     <string name="cta_add_to_calendar">Ajouter au calendrier</string>
 
     <!--DRAWER LAYOUT-->
-    <string name="drawer_my_favourites">My Favourites</string>
-    <string name="drawer_my_gift_card">My Gift Cards</string>
+    <string name="drawer_my_favourites">Mes favoris</string>
+    <string name="drawer_my_gift_card">Mes cartes cadeaux</string>
     <string name="drawer_deals">Mes offres</string>
     <string name="drawer_events">Mes événements</string>
     <string name="drawer_stores">Mes magasins</string>
@@ -194,8 +194,8 @@
     <string name="explore_more_deals">Rechercher d\'autres offres</string>
     <string name="explore_more_events">Rechercher d\'autres évènements</string>
     <string name="explore_more_stores">Rechercher d\'autres magasins</string>
-    <string name="empty_placeholder_title">You have no favourites!</string>
-    <string name="empty_placeholder_desc_deal">This is where all your favourited deals will appear. Heart a deal to get started.</string>
+    <string name="empty_placeholder_title">Vous n\'avez aucun favoris!</string>
+    <string name="empty_placeholder_desc_deal">C\'est ici que vos promotions favorites s\'afficherons, cliquez sur le coeur d\'une promotion pour commencer</string>
     <string name="empty_placeholder_desc_event">This is where all your favourited events will appear. Heart an event to get started.</string>
     <string name="empty_placeholder_desc_store">This is where all your favourited stores will appear. Heart a store to get started.</string>
     <string name="empty_placeholder_ancmt">Aucune nouvelle ou annonce</string>
@@ -227,7 +227,7 @@
 
     <!--PARKING-->
     <string name="parking_question_one">Près de quelle entrée avez-vous stationné?</string>
-    <string name="parking_question_two">Which pillar did you park at?</string>
+    <string name="parking_question_two">Prêt de quel pilier êtes-vous stationné?</string>
     <string name="parking_btn_save_parking_spot">Sauvegarder mon stationnement</string>
     <string name="parking_btn_edit_selection">Modifier la sélection</string>
     <string name="parking_add_note">Ajouter une note</string>
@@ -293,8 +293,8 @@
     <string name="signin_already_have_account">Déjà un compte?</string>
     <string name="signin_signin_with_underline"><u>Se connecter</u></string>
     <string name="signin_use_existing_profile">(REPLACE WITH LOGO)Use an existing profile by siging up with your Facebook or Google account.</string>
-    <string name="signin_connect_with_fb">Connect with Facebook</string>
-    <string name="signin_connect_with_google">Connect with Google+</string>
+    <string name="signin_connect_with_fb">Connectez-vous avec Facebook</string>
+    <string name="signin_connect_with_google">Connectez-vous avec Google</string>
     <string name="signin_signup_with_email">Adhérer avec votre courriel</string>
     <string name="signin_sign_in">Se connecter</string>
     <string name="signin_password_reset">Réinitialiser / Mot de passe oublié</string>
@@ -342,7 +342,7 @@
     <!--ETC-->
     <string name="see_all_stores">Voir les magasins</string>
     <string name="open_now">Ouvrez maintenant</string>
-    <string name="to_in_time">to</string>
+    <string name="to_in_time">à</string>
     <string name="follow_someone_on_in_social_sharing">follow %1$s! on&#8230;</string> <!--follow someone on instagram-->
     <string name="today_in_mall_hour">Aujourd\'hui</string>
     <string name="closed_in_mall_hour">Fermé</string>
