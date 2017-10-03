@@ -4,6 +4,7 @@
       "imageURLs": [
         "mallinfo-banner-mallhours"
       ],
+      "type": "mallHours",
       "subtitle": "See upcoming holiday hours, special hours, etc.",
       "title": "Business Hours"
     },
@@ -36,7 +37,7 @@
       "locations": [
         {
           "locationType": "amenity",
-          "locationID": "56ec218092eb3329db000004",
+          "locationID": "5762c06e3818993053000002",
           "name": "Sainte-Catherine Level"
         }
       ],
@@ -54,7 +55,7 @@
         "mallinfo-banner-amenities"
       ],
       "subtitle": "Find the Washrooms, Elevators, Food Court and other amenities",
-      "details": "Looking for something else not listed? Montreal Eaton Centre offers various amenities and complimentary services. View them on the interactive map.\n\nGuest Services\nRestrooms\nElevators\nBreastfeeding Room\nLockers\nATM Machines",
+      "details": "Looking for something else not listed? Montr&#233;al Eaton Centre offers various amenities and complimentary services. View them on the interactive map.\n\nGuest Services\nRestrooms\nElevators\nBreastfeeding Room\nLockers\nATM Machines",
       "title": "Amenities"
     },
     {
@@ -80,20 +81,20 @@
       "locations": [
         {
           "locationType": "amenity",
-          "locationID": "",
+          "locationID": "5762c06e3818993053000002",
           "name": "Information Kiosk: Sainte-Catherine Level"
         }
       ],
-      "phoneNumber": "(403) 984-6800",
+      "phoneNumber": "(514) 288-3708",
       "details": "Finding the perfect gift has never been easier. The gift card is accepted in nearly all our stores.",
       "additionalInfoTitle": "Frequently Asked Questions",
       "imageURLs": [
         "mallinfo-banner-giftcard"
       ],
-      "phoneURL": "tel://+14039846800"
+      "phoneURL": "tel://+15142883708"
     },
     {
-      "subtitle": "Get social with the Montreal Eaton Centre",
+      "subtitle": "Get social with the Montréal Eaton Centre",
       "instagram": {
         "url": "https://www.instagram.com/centre_eaton_montreal/",
         "title": "centre_eaton_montreal"
@@ -108,7 +109,7 @@
         "url": "https://www.facebook.com/centreeatonmtl",
         "title": "centreeatonmtl"
       },
-      "details": "Follow the Montreal Eaton Centre on the following social networks!",
+      "details": "Follow the Montr&#233;al Eaton Centre on the following social networks!",
       "imageURLs": [
         "mallinfo-banner-social"
       ]
@@ -136,7 +137,7 @@
         }
       ],
       "title": "Public Transportation",
-      "details": "Montreal Eaton Centre is easily accessible via public transit.",
+      "details": "Montr&#233;al Eaton Centre is easily accessible via public transit.",
       "imageURLs": [
         "mallinfo-banner-transportation"
       ]
@@ -145,9 +146,9 @@
       "imageURLs": [
         "mallinfo-banner-about"
       ],
-      "subtitle": "Learn more about the Montreal Eaton Centre",
+      "subtitle": "Learn more about the Montréal Eaton Centre",
       "details": "Located in the heart of Montr&#233;al on Canada's largest shopping strip, and door to the famous underground city, the Montr&#233;al Eaton Centre has over the years become home to prominent attractions downtown. Each year the Centre welcomes 30 million visitors. The number one shopping destination in the city, the Montr&#233;al Eaton Centre features 175 shops and restaurants, as well as the famous Gr&#233;vin Montr&#233;al wax museum, all spread over 5 floors. The Centre also features one of the largest food courts in North America, with free wireless Internet access. Steeped in the excitement and creativity that make Montr&#233;al such a fascinating city, the Montr&#233;al Eaton Centre is proud to regularly host artistic and cultural events.",
-      "title": "About the Montreal Eaton Centre"
+      "title": "About the Montréal Eaton Centre"
     }
   ],
   "hoursExceptions": [
