@@ -36,7 +36,7 @@
     <string name="title_remove_my_parking">Supprimer mon stationnement</string>
     <string name="title_add_notes">Ajouter une note</string>
     <string name="title_permission_denied">Accès localisation refusé</string>
-    <string name="title_change_parking_spot">Change Parking Spot</string>
+    <string name="title_change_parking_spot">Changer la place de stationnement</string>
     <string name="title_map">Carte</string>
     <string name="title_directory">Répertoire des boutiques</string>
     <string name="title_info">Informations</string>
