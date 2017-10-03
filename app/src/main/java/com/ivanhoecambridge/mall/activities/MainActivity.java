@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -65,6 +66,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.exacttarget.etpushsdk.ETPush;
 import com.exacttarget.etpushsdk.util.EventBus;
 import com.google.gson.Gson;
@@ -113,7 +118,7 @@ import com.ivanhoecambridge.mall.onboarding.TutorialActivity;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
 import com.ivanhoecambridge.mall.parking.Parkings;
 import com.ivanhoecambridge.mall.searchIndex.IndexManager;
-import com.ivanhoecambridge.mall.signup.JanrainRecordParser;
+import com.ivanhoecambridge.mall.signup.JanrainRecordManager;
 import com.ivanhoecambridge.mall.user.AccountManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
@@ -163,7 +168,11 @@ public class MainActivity extends BaseActivity
     private GiftCardRecyclerViewAdapter mGiftCardRecyclerViewAdapter;
 
 
-    private LinearLayout llSignIn;
+
+
+    private ImageView ivDrawerLayoutBg;
+    private LinearLayout llDisplayNameSettings;
+    private TextView tvSignInOrOut;
     private TextView tvDrawerLayoutAccount;
     private ImageView ivDrawerLayoutUser;
 
@@ -188,6 +197,7 @@ public class MainActivity extends BaseActivity
     private ETPush etPush;
     public static MovieManager sMovieManager;
 
+    private JanrainRecordManager jrRecordManager;
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -355,8 +365,6 @@ public class MainActivity extends BaseActivity
 
         new DeepLinkManager(this).handleDeepLink(getIntent());
 
-
-        loadUserDetails();
     }
 
     public int getViewerPosition(){
@@ -737,14 +745,21 @@ public class MainActivity extends BaseActivity
 
     private void setUpLeftSidePanel(){
 
-        llSignIn = (LinearLayout) findViewById(R.id.llSignIn);
+        ivDrawerLayoutBg = (ImageView) findViewById(R.id.ivDrawerLayoutBg);
+
+        llDisplayNameSettings = (LinearLayout) findViewById(R.id.llDisplayNameSettings);
         //ACCOUNT
-        TextView tvSignIn = (TextView) findViewById(R.id.tvSignIn);
-        tvSignIn.setOnClickListener(new View.OnClickListener() {
+        tvSignInOrOut = (TextView) findViewById(R.id.tvSignIn);
+        tvSignInOrOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SignInAfterOnBoardingActivity.class));
-                ActivityAnimation.startActivityAnimation(MainActivity.this);
+                if (tvSignInOrOut.getText().toString().equals(getString(R.string.drawer_sign_out))) {
+                    jrRecordManager.signOut();
+                    toggleUserSignIn(false);
+                } else {
+                    startActivity(new Intent(MainActivity.this, SignInAfterOnBoardingActivity.class));
+                    ActivityAnimation.startActivityAnimation(MainActivity.this);
+                }
             }
         });
 
@@ -752,7 +767,6 @@ public class MainActivity extends BaseActivity
         ivDrawerLayoutUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "User Image clicked", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -760,7 +774,6 @@ public class MainActivity extends BaseActivity
         tvDrawerLayoutAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Account clicked", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -844,7 +857,7 @@ public class MainActivity extends BaseActivity
                                     });
                         } else if (id == R.id.action_faq) {
                             KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
-                            kcpMallInfoRoot.createOfflineKcpMallInfo(MainActivity.this, Constants.MALL_INFO_OFFLINE_TEXT);
+                            kcpMallInfoRoot.createOfflineKcpMallInfo(MainActivity.this, Constants.getStringFromResources(getApplicationContext(), R.string.mall_info_json));
                             List<InfoList> infoList = kcpMallInfoRoot.getKcpMallInfo().getInfoList();
                             if(infoList != null) {
                                 for(int i = 0; i < infoList.size(); i++) {
@@ -948,7 +961,6 @@ public class MainActivity extends BaseActivity
             FrameLayout flTodaysDeals = (FrameLayout) findViewById(R.id.flTodaysDeals);
             FrameLayout flTodaysEvents = (FrameLayout) findViewById(R.id.flTodaysEvents);
 
-            ImageView ivDrawerLayoutBg = (ImageView) findViewById(R.id.ivDrawerLayoutBg);
 
             TextView tvPrivacyPolicy = (TextView) findViewById(R.id.tvPrivacyPolicy);
             TextView tvTermsOfService = (TextView) findViewById(R.id.tvTermsOfService);
@@ -1424,10 +1436,10 @@ public class MainActivity extends BaseActivity
             case R.id.home:
                 break;
             case R.id.action_test:
-//            throw new RuntimeException("This is a crash"); //enable to force crash for testing
-            setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
+            throw new RuntimeException("This is a crash"); //enable to force crash for testing
+           // setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
 //            GiftCardManager.getInstance(this).updateBalance(); //enable to update the gift card balance
-                break;
+                //break;
             case R.id.action_geofence_test:
                 mGeofenceManager.setGeofence(true);
                 break;
@@ -1670,14 +1682,56 @@ public class MainActivity extends BaseActivity
 
     private void loadUserDetails() {
         if (Jump.getSignedInUser() != null) {
-            JanrainRecordParser recordParser = new JanrainRecordParser();
-            tvDrawerLayoutAccount.setText(recordParser.getFullName());
-            toggleUserSignIn(true);
+            jrRecordManager = new JanrainRecordManager(this);
+            if (jrRecordManager.isUserSignedIn()) {
+                toggleUserSignIn(true);
+            }
         }
     }
 
+    /**
+     * Toggles the sign in button text and user display name.
+     * @param isSignedIn boolean to toggle visibility and text.
+     */
     private void toggleUserSignIn(boolean isSignedIn) {
-        llSignIn.setVisibility(isSignedIn ? View.VISIBLE : View.GONE);
+        ivDrawerLayoutBg.setImageDrawable(ContextCompat.getDrawable(this, isSignedIn ?
+                R.drawable.img_profile_activemall_signout : R.drawable.img_profile_activemall_signin));
+        tvSignInOrOut.setBackground(ContextCompat.getDrawable(this, isSignedIn ?
+                R.drawable.btn_selector_signout : R.drawable.btn_style_corner_radius_with_selected_state));
+        tvSignInOrOut.setTextColor(colour(isSignedIn ?
+                R.color.black : R.color.white));
+        tvSignInOrOut.setText(getString(isSignedIn ? R.string.drawer_sign_out : R.string.drawer_sign_in));
+        llDisplayNameSettings.setVisibility(isSignedIn ? View.VISIBLE : View.GONE);
+
+        resizeBackgroundImage(isSignedIn);
+        updateUserViews(isSignedIn);
+
+    }
+
+    private int colour(int colourId) {
+        return ContextCompat.getColor(this, colourId);
+    }
+
+    private void resizeBackgroundImage(boolean isSignedIn) {
+        RelativeLayout.LayoutParams lpDrawerLayoutBg = (RelativeLayout.LayoutParams) ivDrawerLayoutBg.getLayoutParams();
+        lpDrawerLayoutBg.height = (int) getResources().getDimension((isSignedIn) ? R.dimen.profile_sign_out_bg_height : R.dimen.profile_sign_in_bg_height);
+        ivDrawerLayoutBg.setLayoutParams(lpDrawerLayoutBg);
+    }
+
+    private void updateUserViews(boolean isSignedIn) {
+        if (isSignedIn) {
+            tvDrawerLayoutAccount.setText(jrRecordManager.getFullName());
+            jrRecordManager.loadProfileImage(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    ivDrawerLayoutUser.setImageBitmap(resource);
+                }
+            });
+        } else {
+            //not that it matters as the TextView gets hidden anyways.
+            tvDrawerLayoutAccount.setText("");
+            ivDrawerLayoutUser.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.img_profile_default));
+        }
     }
 
     @Override

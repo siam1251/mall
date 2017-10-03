@@ -8,7 +8,7 @@
     tools:showIn="@layout/drawer_layout_main"
     android:layout_height="wrap_content"
     >
-    android:background="@color/active_mall_bg"
+
 
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:layout_marginLeft="@dimen/activity_margin_big"

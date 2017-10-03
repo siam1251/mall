@@ -1,6 +1,8 @@
-package slutilities;
+ package slutilities;
 
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
+import com.ivanhoecambridge.mall.slutilities.SLGeofencingArea;
+import com.ivanhoecambridge.mall.slutilities.SLPointOfInterest;
 import com.senionlab.slutilities.type.FloorNr;
 import com.senionlab.slutilities.type.SLCoordinate3D;
 
@@ -20,7 +22,7 @@ public class SLSettings {
     public static double latitude = 49.038166;
     public static double longitude = -123.085491;
 
-    public static final SLGeofencingArea[] GEOFENCING_ARRAY = {};
+    public static final SLGeofencingArea[]                                        GEOFENCING_ARRAY   = {};
     public static HashMap<String, SLIndoorLocationPresenterImpl.GeofenceLocation> GEOFENCE_LOCATIONS = new HashMap<String, SLIndoorLocationPresenterImpl.GeofenceLocation>();
     static {
 //        GEOFENCE_LOCATIONS.put("KineticCafe", new SLIndoorLocationPresenterImpl.GeofenceLocation("KineticCafe", 43.642069, -79.374585, 200, 0));

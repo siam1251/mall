@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -284,9 +286,10 @@ public class InfoFragment extends BaseFragment{
             public void onListFragmentInteraction(int position, final InfoList infoList) {
                 KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
                 List<InfoList> infoLists = kcpMallInfoRoot.getKcpMallInfo().getInfoList();
-                if(infoLists.get(position).getTitle().contains(getResources().getString(R.string.mall_info_mall_hours))){
+                InfoList infoListItem = infoLists.get(position);
+                if(getValueOrDefault(infoListItem.getTitle(), infoListItem.getType(), R.string.mall_info_mall_hours)){
                     getActivity().startActivity(new Intent(getActivity(), MallHourActivity.class));
-                } else if (infoLists.get(position).getMenuTitle() != null && infoLists.get(position).getMenuTitle().contains(getString(R.string.mall_info_cinema))){
+                } else if (getValueOrDefault(infoListItem.getMenuTitle(), null, R.string.mall_info_cinema)){
                     Intent intent = new Intent(getActivity(), MoviesActivity.class);
                     intent.putExtra(Constants.ARG_TRANSITION_ENABLED, false);
                     getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
@@ -301,13 +304,17 @@ public class InfoFragment extends BaseFragment{
         };
 
         KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
-        kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), Constants.MALL_INFO_OFFLINE_TEXT);
+        kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), Constants.getStringFromResources(getContext(), R.string.mall_info_json));
 
         mInfoRecyclerViewAdapter = new InfoRecyclerViewAdapter(
                 getActivity(),
                 kcpMallInfoRoot.getKcpMallInfo().getInfoList(),
                 mListener);
         recyclerView.setAdapter(mInfoRecyclerViewAdapter);
+    }
+
+    private boolean getValueOrDefault(String infoValue, String defValue, int resId) {
+        return KcpUtility.resMatchesValueOrDefault(getContext(), infoValue, defValue, resId);
     }
 
     private void logDirectionsEvent(String label) {
