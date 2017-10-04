@@ -1,0 +1,67 @@
+{
+  "parkings": [
+    {
+      "parkingId": "",
+      "name": "Stationnement P1",
+      "childParkings": [
+        {
+          "parkingId": "59c2b9da4bd0ef3d61000003",
+          "name": "P1A",
+          "childParkings": []
+        },
+        {
+          "parkingId": "59c2ba024bd0ef3d61000004",
+          "name": "P1B",
+          "childParkings": []
+        },
+        {
+          "parkingId": "59c2ba164bd0ef3d61000005",
+          "name": "P1C",
+          "childParkings": []
+        },
+        {
+          "parkingId": "59c2ba464bd0ef3d61000006",
+          "name": "P1D",
+          "childParkings": []
+        },
+        {
+          "parkingId": "59c2ba5e4bd0ef3d61000007",
+          "name": "P1E",
+          "childParkings": []
+        },
+        {
+          "parkingId": "59c2ba6f4bd0ef3d61000008",
+          "name": "P1F",
+          "childParkings": []
+        }
+      ]
+    },
+
+    {
+      "parkingId": "",
+      "name": "Stationnement P2",
+      "childParkings": [
+        {
+          "parkingId": "59c2ba914bd0ef3d61000009",
+          "name": "P2A",
+          "childParkings": []
+        },
+        {
+          "parkingId": "59c2baae4bd0ef3d6100000a",
+          "name": "P2B",
+          "childParkings": []
+        },
+        {
+          "parkingId": "59c2bac14bd0ef3d6100000b",
+          "name": "P2C",
+          "childParkings": []
+        },
+        {
+          "parkingId": "59c2bad54bd0ef3d6100000c",
+          "name": "P2D",
+          "childParkings": []
+        }
+      ]
+    }
+  ]
+}
