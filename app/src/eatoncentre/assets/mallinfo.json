@@ -2,7 +2,7 @@
   "infoList": [
     {
       "imageURLs": [
-        "mallinfo-banner-mallhours"
+        "img_mallinfo_hours"
       ],
       "type": "Mall Hours",
       "subtitle": "See upcoming holiday hours, special hours, etc.",
@@ -46,13 +46,13 @@
       "details": "Located on the Sainte-Catherine level, stop by our information kiosk to get answers to all your questions.",
       "additionalInfoTitle": "Available Services",
       "imageURLs": [
-        "mallinfo-banner-customerservice"
+        "img_mallinfo_guest"
       ],
       "phoneURL": "tel://+15142883708"
     },
     {
       "imageURLs": [
-        "mallinfo-banner-amenities"
+        "img_mallinfo_amenities"
       ],
       "subtitle": "Find the Washrooms, Elevators, Food Court and other amenities",
       "details": "Looking for something else not listed? Montr&#233;al Eaton Centre offers various amenities and complimentary services. View them on the interactive map.\n\nGuest Services\nRestrooms\nElevators\nBreastfeeding Room\nLockers\nATM Machines",
@@ -89,7 +89,7 @@
       "details": "Finding the perfect gift has never been easier. The gift card is accepted in nearly all our stores.",
       "additionalInfoTitle": "Frequently Asked Questions",
       "imageURLs": [
-        "mallinfo-banner-giftcard"
+        "img_mallinfo_giftcard"
       ],
       "phoneURL": "tel://+15142883708"
     },
@@ -111,7 +111,7 @@
       },
       "details": "Follow the Montr&#233;al Eaton Centre on the following social networks!",
       "imageURLs": [
-        "mallinfo-banner-social"
+        "img_mallinfo_social"
       ]
     },
     {
@@ -139,12 +139,12 @@
       "title": "Public Transportation",
       "details": "Montr&#233;al Eaton Centre is easily accessible via public transit.",
       "imageURLs": [
-        "mallinfo-banner-transportation"
+        "img_mallinfo_transportation"
       ]
     },
     {
       "imageURLs": [
-        "mallinfo-banner-about"
+        "img_mallinfo_main"
       ],
       "subtitle": "Learn more about the Montréal Eaton Centre",
       "details": "Located in the heart of Montr&#233;al on Canada's largest shopping strip, and door to the famous underground city, the Montr&#233;al Eaton Centre has over the years become home to prominent attractions downtown. Each year the Centre welcomes 30 million visitors. The number one shopping destination in the city, the Montr&#233;al Eaton Centre features 175 shops and restaurants, as well as the famous Gr&#233;vin Montr&#233;al wax museum, all spread over 5 floors. The Centre also features one of the largest food courts in North America, with free wireless Internet access. Steeped in the excitement and creativity that make Montr&#233;al such a fascinating city, the Montr&#233;al Eaton Centre is proud to regularly host artistic and cultural events.",

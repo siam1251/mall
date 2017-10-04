@@ -2,7 +2,7 @@
   "infoList": [
     {
       "imageURLs": [
-        "mallinfo-banner-mallhours"
+        "img_mallinfo_hours"
       ],
       "type": "Mall Hours",
       "subtitle": "Voir les heures d'ouverture pour les jours fériés",
@@ -46,13 +46,13 @@
       "details": "Situ&#233; au niveau Sainte-Catherine, arr&#234;tez-vous au kiosque d&#8217;information pour toute question.",
       "additionalInfoTitle": "Services disponibles",
       "imageURLs": [
-        "mallinfo-banner-customerservice"
+        "img_mallinfo_guest"
       ],
       "phoneURL": "tel://+15142883708"
     },
     {
       "imageURLs": [
-        "mallinfo-banner-amenities"
+        "img_mallinfo_amenities"
       ],
       "subtitle": "Trouvez les toilettes, la sécurité, le guichet automatique et d'autres services",
       "details": "Vous cherchez autre chose qui n'est pas r&#233;pertori&#233;? Le Centre Eaton de Montr&#233;al offre divers installations et services gratuits. D&#233;couvrez-les sur la carte interactive.\n\nServices &#224; la client&#232;le\nToilettes\nAscenseurs\nSalle d'allaitement\nCasiers\nGuichets automatiques",
@@ -89,7 +89,7 @@
       "details": "Offrir le cadeau parfait n&#8217;a jamais &#233;t&#233; aussi simple. La carte-cadeau est accept&#233;e chez pratiquement toutes nos boutiques.",
       "additionalInfoTitle": "Frequently Asked Questions",
       "imageURLs": [
-        "mallinfo-banner-giftcard"
+        "img_mallinfo_giftcard"
       ],
       "phoneURL": "tel://+15142883708"
     },
@@ -111,7 +111,7 @@
       },
       "details": "Suivez le Centre Eaton de Montr&#233;al sur les r&#233;seaux sociaux suivants!",
       "imageURLs": [
-        "mallinfo-banner-social"
+        "img_mallinfo_social"
       ]
     },
     {
@@ -139,12 +139,12 @@
       "title": "Transport en commun",
       "details": "Le Centre Eaton de Montr&#233;al est facilement accessible en transports en commun.",
       "imageURLs": [
-        "mallinfo-banner-transportation"
+        "img_mallinfo_transportation"
       ]
     },
     {
       "imageURLs": [
-        "mallinfo-banner-about"
+        "img_mallinfo_main"
       ],
       "subtitle": "En savoir davantage sur le Centre Eaton",
       "details": "Situ&#233; au c&#339;ur de Montr&#233;al sur la plus grande art&#232;re commerciale au Canada et porte d&#8217;entr&#233;e du c&#233;l&#232;bre r&#233;seau souterrain, le Centre Eaton de Montr&#233;al est devenu au fil des ans un lieu d'attractions de premier plan au centre-ville. Le Centre accueille chaque ann&#233;e 30 millions de visiteurs. Premi&#232;re destination shopping de la ville, le Centre Eaton de Montr&#233;al compte 175 boutiques et restos, ainsi que le c&#233;l&#232;bre mus&#233;e de cire Gr&#233;vin Montr&#233;al, le tout r&#233;parti sur 5 &#233;tages. Le Centre offre &#233;galement un Espace Restos, l&#8217;un des plus grands en Am&#233;rique du Nord, avec acc&#232;s &#224; Internet sans fil gratuit. T&#233;moin de l&#8217;effervescence et de la cr&#233;ativit&#233; qui font de Montr&#233;al une ville si fascinante, le Centre Eaton de Montr&#233;al est fier de recevoir r&#233;guli&#232;rement des &#233;v&#233;nements artistiques et culturels.",
