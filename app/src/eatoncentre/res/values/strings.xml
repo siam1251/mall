@@ -7,10 +7,10 @@
     <string name="movie_title">SilverCity Cinema</string>
 
     <!--ACTIVE MALL-->
-    <string name="active_mall_welcome_msg">Welcome to Metropolis, here’s what’s happening today!</string>
+    <string name="active_mall_welcome_msg">Welcome to the Montréal Eaton Centre, here’s what’s happening today!</string>
 
     <!--ONBOARDING-->
-    <string name="onbd_one_title">Welcome to\nMetropolis at Metrotown’s new companion app</string>
+    <string name="onbd_one_title">Welcome to\nthe Montréal Eaton Centre’s new companion app</string>
 
     <!--PRIVACY-->
     <string name="url_privacy_policy">https://www.centreeatondemontreal.com/en/privacy-policy/</string>
