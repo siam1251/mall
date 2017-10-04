@@ -78,8 +78,8 @@
     <string name="intrst_card_desc">Set your interests to get personalized deal recommendations just for you!</string>
     <string name="intrst_card_btn">SET MY INTERESTS</string>
 
-    <string name="intrst_card_recommended_title">Offres recommandées</string>
-    <string name="intrst_card_recommended_desc">Ajuster les offres recommandées en ajoutant ou en retirant des intérêts </string>
+    <string name="intrst_card_recommended_title">What Are Your Interests?</string>
+    <string name="intrst_card_recommended_desc">Set your interests to get personalized deal recommendations just for you!</string>
     <string name="intrst_card_recommended_btn">ADJUST MY INTERESTS</string>
 
 
