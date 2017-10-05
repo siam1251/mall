@@ -24,6 +24,7 @@ public class HeaderFactory  {
     public static String MAP_VENUE_NAME = MallConstants.MAP_VENUE_NAME;
     private final static String SEARCH_INDEX_MP_STAGING = String.format("indexes/staging/%s-index.msgpack", MALL_NAME_URL);
     private final static String SEARCH_INDEX_MP_PRODUCTION = String.format("indexes/production/%s-index.msgpack", MALL_NAME_URL);
+    public static String HEADER_VALUE_DATAHUB_LOCALE;
 
     public final static String HEADER_VALUE_ACCEPT = "application/json, application/vnd.kcp.place+json; version=1.0, application/vnd.kcp.view-all-content+json; version=1.0, application/vnd.kcp.icmp-deal+json; version=1.0, application/vnd.kcp.icmp-event+json; version=1.0, application/vnd.kcp.icmp-announcement+json; version=1.0, application/vnd.kcp.blog-post+json; version=1.0, application/vnd.kcp.icmp-twitter+json; version=1.0, application/vnd.kcp.icmp-instagram+json; version=1.0, application/vnd.kcp.icmp-set-interests+json; version=1.0, application/vnd.kcp.icmp-movie+json; version=1.0";
 
@@ -40,11 +41,15 @@ public class HeaderFactory  {
         constructHeader();
     }
 
+    public static void changeLocale(String locale) {
+        HEADER_VALUE_DATAHUB_LOCALE = locale;
+    }
+
     public static void constructHeader() {
         mHeaders = new HashMap<>();
 
         mHeaders.put(HEADER_KEY_DATAHUB_CATALOG,    HEADER_VALUE_DATAHUB_CATALOG);
-        mHeaders.put(HEADER_KEY_DATAHUB_LOCALE,     Constants.HEADER_VALUE_DATAHUB_LOCALE);
+        mHeaders.put(HEADER_KEY_DATAHUB_LOCALE,     HEADER_VALUE_DATAHUB_LOCALE);
         mHeaders.put(HEADER_KEY_CLIENT_TOKEN,       getClientToken());
         mHeaders.put(HEADER_KEY_AUTHORIZATION,      KcpAccount.getInstance().getUserTokenWithBearer());
 
