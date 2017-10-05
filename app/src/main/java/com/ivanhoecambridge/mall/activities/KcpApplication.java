@@ -72,6 +72,7 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
         TwitterAuthConfig authConfig =  new TwitterAuthConfig(MallConstants.TWITTER_API_KEY, MallConstants.TWITTER_API_SECRET);
         KcpConstants.setBaseURL(Constants.IS_APP_IN_PRODUCTION);
         KcpAccount.getInstance().initialize(getApplicationContext());
+        Constants.setLocale(getApplicationContext(), R.string.locale);
         HeaderFactory.changeCatalog(HeaderFactory.HEADER_VALUE_DATAHUB_CATALOG);
 
         if(BuildConfig.REPORT_CRASH) {
