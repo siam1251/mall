@@ -1077,7 +1077,7 @@ public class MainActivity extends BaseActivity
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.active_mall_off_state)));
                 badgeTextColor = Color.WHITE;
                 generalTextColor = Color.BLACK;
-                drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_bg_inactive);
+                //drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_bg_inactive);
                 privacyTextColor = getResources().getColor(R.color.privacy_policy_text_color);
                 versionNumberTextColor = getResources().getColor(R.color.insta_desc_color);
             }

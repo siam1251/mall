@@ -2,5 +2,4 @@
 <resources>
     <bool name="is_english">true</bool>
     <string name="locale">en</string>
-    <string name="mall_info_json">mallinfo.json</string>
 </resources>

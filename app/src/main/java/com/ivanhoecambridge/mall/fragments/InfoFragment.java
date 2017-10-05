@@ -2,6 +2,7 @@ package com.ivanhoecambridge.mall.fragments;
 
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -44,6 +45,8 @@ import com.ivanhoecambridge.mall.parking.ParkingManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -304,7 +307,7 @@ public class InfoFragment extends BaseFragment{
         };
 
         KcpMallInfoRoot kcpMallInfoRoot = KcpMallInfoRoot.getInstance();
-        kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), Constants.getStringFromResources(getContext(), R.string.mall_info_json));
+        kcpMallInfoRoot.createOfflineKcpMallInfo(getActivity(), Constants.getStringFromResources(getContext(), getValidMallInfoFile()));
 
         mInfoRecyclerViewAdapter = new InfoRecyclerViewAdapter(
                 getActivity(),
@@ -315,6 +318,23 @@ public class InfoFragment extends BaseFragment{
 
     private boolean getValueOrDefault(String infoValue, String defValue, int resId) {
         return KcpUtility.resMatchesValueOrDefault(getContext(), infoValue, defValue, resId);
+    }
+
+    /**
+     * Checks for the <em>mall_info.json</em> file based on the locale. If the locale file does not exist for that mall, it will default to the english file.
+     * @return resource ID value that contains the name of the file.
+     */
+    private int getValidMallInfoFile() {
+        int validInfoFileId = R.string.mall_info_json_default;
+        if (!KcpUtility.isCurrentLocale(getContext(), "en")) {
+            AssetManager assetManager = getContext().getAssets();
+            try {
+                if (Arrays.asList(assetManager.list(".")).contains(getString(R.string.mall_info_json))) validInfoFileId = R.string.mall_info_json;
+            } catch (IOException io) {
+                io.printStackTrace();
+            }
+        }
+        return validInfoFileId;
     }
 
     private void logDirectionsEvent(String label) {

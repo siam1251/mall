@@ -2,7 +2,7 @@
   "infoList": [
     {
       "imageURLs": [
-        "mallinfo-banner-mallhours"
+        "img_mallinfo_hours"
       ], 
       "subtitle": "See upcoming holiday hours, special hours, etc.", 
       "title": "Mall Hours"
@@ -49,13 +49,13 @@
       "details": "At Bayshore, we are committed to providing you with an exceptional shopping experience. Our knowledgeable staff is proud to offer many complimentary and fee services to make your shopping experience memorable.", 
       "additionalInfoTitle": "Available Services", 
       "imageURLs": [
-        "mallinfo-banner-customerservice"
+        "img_mallinfo_guest"
       ], 
       "phoneURL": "tel://+16138297491"
     }, 
     {
       "imageURLs": [
-        "mallinfo-banner-amenities"
+        "img_mallinfo_amenities"
       ], 
       "subtitle": "Find the Washrooms, Elevators, ATM, and other amenities", 
       "details": "Looking for something else not listed? Bayshore offers various amenities and complimentary services. View them on the interactive mall map.\n\nFamily Washrooms\nRestrooms\nWater Bottle Filling Stations\nGuest Services\nNursing Room\nStroller Rental\nWalkers \u0026 Wheelchairs\nStairs, Escalators \u0026 Elevators\nATM\nOC Transpo Station\nElectronic Recycling Bin", 
@@ -72,7 +72,9 @@
           "title": "Where to buy your gift card?"
         }
       ], 
-      "subtitle": "Check your Bayshore gift card balance.", 
+      "subtitle": "Check your Bayshore gift card balance.",
+      "phoneNumber": "(613) 829-7491",
+      "phoneURL": "tel://+16138297491",
       "links": [
         {
           "linkType": "internal", 
@@ -80,7 +82,7 @@
           "linkURL": "tab/profile_giftcards"
         }
       ], 
-      "title": "Gift Card Information", 
+      "title": "Gift Card Balance",
       "locations": [
         {
           "mapName": "Level 1 - Parking 1", 
@@ -92,7 +94,7 @@
       "details": "Offering the perfect gift has never been easier. The Bayshore gift card is welcomed by the mall's hundreds of participating retailers.", 
       "additionalInfoTitle": "Frequently Asked Questions", 
       "imageURLs": [
-        "mallinfo-banner-giftcard"
+        "img_mallinfo_giftcard"
       ]
     }, 
     {
@@ -112,12 +114,12 @@
       }, 
       "details": "Follow us to keep up with trends, promotions, contests and everything Bayshore!", 
       "imageURLs": [
-        "mallinfo-banner-socialnetwork"
+        "img_mallinfo_social"
       ]
     }, 
     {
       "imageURLs": [
-        "mallinfo-banner-transportation"
+        "img_mallinfo_transportation"
       ], 
       "subtitle": "See public transit information and schedules", 
       "details": "Bayshore is easily accessible from all corners of the city via public transit with its own main bus terminal. Look for main OC Transpo routes 61, 62, 85, and 97. The centre is a short 20-minute ride from downtown Ottawa. In 2021, the city's new LRT system will extend to Bayshore station.", 
@@ -131,7 +133,7 @@
     }, 
     {
       "imageURLs": [
-        "mallinfo-banner-about"
+        "img_mallinfo_main"
       ], 
       "details": "Located in the rapidly growing western portion of the Ottawa-Gatineau area, Bayshore is a super-regional shopping centre, home to an exciting mix of over 190 retailers. Stylishly designed over three levels, the centre includes a variety of the hottest stores on the market.", 
       "subtitle": "Learn more about Bayshore", 

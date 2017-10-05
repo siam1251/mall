@@ -88,7 +88,8 @@
 
             </RelativeLayout>
 
-            <ImageView
+            <com.ivanhoecambridge.mall.views.ThemeColorImageView
+                app:filterColorSelected="@color/themeColor"
                 android:transitionName="@string/transition_fav"
                 android:id="@+id/ivFav"
                 android:layout_height="wrap_content"
