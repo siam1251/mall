@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <bool name="is_english">true</bool>
-    <string name="locale">en</string>
+    <string name="locale">en-CA</string>
 </resources>

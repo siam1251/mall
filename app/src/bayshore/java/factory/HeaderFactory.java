@@ -41,15 +41,12 @@ public class HeaderFactory  {
         constructHeader();
     }
 
-    public static void changeLocale(String locale) {
-        HEADER_VALUE_DATAHUB_LOCALE = locale;
-    }
 
     public static void constructHeader() {
         mHeaders = new HashMap<>();
 
         mHeaders.put(HEADER_KEY_DATAHUB_CATALOG,    HEADER_VALUE_DATAHUB_CATALOG);
-        mHeaders.put(HEADER_KEY_DATAHUB_LOCALE,     HEADER_VALUE_DATAHUB_LOCALE);
+        mHeaders.put(HEADER_KEY_DATAHUB_LOCALE,     Constants.HEADER_VALUE_DATAHUB_LOCALE);
         mHeaders.put(HEADER_KEY_CLIENT_TOKEN,       getClientToken());
         mHeaders.put(HEADER_KEY_AUTHORIZATION,      KcpAccount.getInstance().getUserTokenWithBearer());
 
