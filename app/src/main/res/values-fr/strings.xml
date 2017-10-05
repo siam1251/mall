@@ -326,7 +326,7 @@
     <!---->
 
     <string name="privacy_policy"><u>Politique de confidentialité</u></string>
-    <string name="terms_of_service"><u>Termes et conditions</u></string>
+    <string name="terms_of_service"><u>Termes et Conditions</u></string>
     <string name="version_name_prefix">Version </string>
     <string name="version_code_suffix">DEBUG</string>
 
