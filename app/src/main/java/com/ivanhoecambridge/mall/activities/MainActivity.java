@@ -1011,7 +1011,7 @@ public class MainActivity extends BaseActivity
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.themeColor)));
                 badgeTextColor = getResources().getColor(R.color.active_mall_badge_text_color);
                 generalTextColor = getResources().getColor(R.color.active_mall_text_color);
-//                drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_activemall);
+                drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_activemall);
                 privacyTextColor = getResources().getColor(R.color.white);
                 versionNumberTextColor = getResources().getColor(R.color.white);
 
@@ -1077,7 +1077,7 @@ public class MainActivity extends BaseActivity
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.active_mall_off_state)));
                 badgeTextColor = Color.WHITE;
                 generalTextColor = Color.BLACK;
-//                drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_bg_inactive);
+                drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_bg_inactive);
                 privacyTextColor = getResources().getColor(R.color.privacy_policy_text_color);
                 versionNumberTextColor = getResources().getColor(R.color.insta_desc_color);
             }
