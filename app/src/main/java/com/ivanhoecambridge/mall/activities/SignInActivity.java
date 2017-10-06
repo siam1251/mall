@@ -162,7 +162,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             formFillCheckerOne = new FormFillChecker(this);
             ivMallLogo = (ImageView) findViewById(R.id.ivMallLogo);
 
-            int id = getResources().getIdentifier("img_signin_malll_logo_small", "drawable", getPackageName());
+            int id = getResources().getIdentifier("img_signin_mall_logo_small", "drawable", getPackageName());
             if (id > 0) {
                 ivMallLogo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.img_signin_malll_logo_small));
             }
