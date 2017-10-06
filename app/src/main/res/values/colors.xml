@@ -184,5 +184,8 @@
     <color name="social_btn_fb">#39579b</color>
     <color name="social_btn_google_plus">#df4a32</color>
 
+    <!-- SIGN IN -->
+    <color name="sign_in_divider">#e3e3e3</color>
+
 
 </resources>
