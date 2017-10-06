@@ -23,6 +23,14 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true">
 
+        <ImageView
+            android:id="@+id/ivMallLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/img_signin_malll_logo_small"/>
+        
         <LinearLayout
             android:orientation="horizontal"
             android:id="@+id/llSign"
@@ -118,20 +126,15 @@
             android:onClick="onClickForgotPassword"
             />
 
-
-        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-            android:layout_marginTop="40dp"
-            android:layout_above="@+id/cvFb"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/tvDesc"
-            app:fontFamily="@string/fontFamily_roboto_medium"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:textColor="@color/map_level_enabled"
-            android:textAlignment="center"
-            android:text="@string/signin_other_sign_in_method"
-            />
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/sign_in_divider"/>
 
         <android.support.v7.widget.CardView
             android:id="@+id/cvFb"
@@ -205,10 +208,7 @@
             </FrameLayout>
         </android.support.v7.widget.CardView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+
 
         <LinearLayout
             style="@style/SelectableItemForegroundWhite"
