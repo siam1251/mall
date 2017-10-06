@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Eaton Centre</string>
+    <string name="mall_name">Eaton Centre</string>
+    <string name="applicationId">com.ivanhoecambridge.eatoncentre</string>
+
+    <!--MOVIES-->
+    <string name="movie_title">SilverCity Cinema</string>
+
+    <!--ACTIVE MALL-->
+    <string name="active_mall_welcome_msg">Welcome to the Montréal Eaton Centre, here’s what’s happening today!</string>
+
+    <!--ONBOARDING-->
+    <string name="onbd_one_title">Welcome to\nthe Montréal Eaton Centre’s new companion app</string>
+
+    <!--PRIVACY-->
+    <string name="url_privacy_policy">https://www.centreeatondemontreal.com/en/privacy-policy/</string>
+    <string name="url_terms">https://www.centreeatondemontreal.com/en/terms-conditions/</string>
+</resources>

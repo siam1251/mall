@@ -29,7 +29,7 @@ ext {
 
     eatoncentre = [
             appAuthRedirectScheme: '1030164305150-la1mff2o40hj0rn3j8qo95lqeu918t4e',
-            mallName             : rootProject.ext.defaultMallName,
+            mallName             : '"centre-eaton"',
             appName              : '"Eaton Centre"',
             hasPush              : 'true',
             hasParkingPolygon    : 'true',

@@ -3,67 +3,72 @@
     {
       "type":"0",
       "enabled":true,
-      "title":"Customer Service",
-      "externalIds":[
-        "information-counter"
-      ]
-    },
-    {
-      "type":"1",
-      "enabled":true,
-      "title":"Restrooms",
+      "title":"Washroom",
       "externalIds":[
         "washroom",
         "family-washroom"
       ]
     },
     {
+      "type":"1",
+      "enabled":true,
+      "title":"Information Kiosk",
+      "externalIds":[
+        "information-kiosk",
+        "Guest Services",
+        "Conciergerie"
+      ]
+    },
+    {
       "type":"2",
       "enabled":false,
-      "title":"Community Room",
+      "title":"Food Court",
       "externalIds":[
-        "community-room"
+        "Food Court",
+        "Aire de restauration"
       ]
     },
     {
       "type":"3",
-      "enabled":true,
-      "title":"Elevators",
+      "enabled":false,
+      "title":"Strollers",
       "externalIds":[
-        "Elevator"
+        "strollers"
       ]
     },
     {
       "type":"4",
-      "enabled":true,
-      "title":"Stairs \u0026 Escalators",
+      "enabled":false,
+      "title":"Taxi Stand",
       "externalIds":[
-        "escalator/stairs"
+        "taxi-stand"
       ]
     },
     {
       "type":"6",
       "enabled":false,
-      "title":"Lockers",
+      "title":"Nursing Room",
       "externalIds":[
-        "lockers"
+        "Nursing Room",
+        "Salle d'allaitement"
       ]
     },
     {
       "type":"7",
-      "enabled":false,
-      "title":"ATM Machines",
+      "enabled":true,
+      "title":"Elevator",
       "externalIds":[
-        "atm"
+        "Elevator",
+        "Ascenseur"
       ]
     },
     {
       "type":"9",
       "enabled":true,
-      "title":"Bus Loop",
+      "title":"Stairs \u0026 Escalators",
       "externalIds":[
-        "shuttle",
-        "subway"
+        "Stairs",
+        "Escalator"
       ]
     }
   ]

@@ -180,7 +180,7 @@
 
         <meta-data
             android:name="com.mappedin.sdk.DataSchema"
-            android:value="f1f6308d"/>
+            android:value="ae3e0662"/>
 
         <!-- MAPPED IN KINETIC OFFICE-->
         <!--<meta-data-->
