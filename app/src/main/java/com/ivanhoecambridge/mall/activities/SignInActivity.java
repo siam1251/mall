@@ -164,7 +164,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
             int id = getResources().getIdentifier("img_signin_mall_logo_small", "drawable", getPackageName());
             if (id > 0) {
-                ivMallLogo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.img_signin_malll_logo_small));
+                ivMallLogo.setImageDrawable(ContextCompat.getDrawable(this, id));
             }
 
             llSignInCreateAccountReset = (LinearLayout) findViewById(R.id.llSignInCreateAccount);
