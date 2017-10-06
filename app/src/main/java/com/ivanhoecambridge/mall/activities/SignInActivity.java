@@ -9,6 +9,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.transition.Scene;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,6 +81,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     LinearLayout llSignInCreateAccountReset;
 
     //SIGN IN SCENE
+    private ImageView                    ivMallLogo;
     private AppcompatEditTextWithWatcher etSignInEmail;
     private AppcompatEditTextWithWatcher etSignInPassword;
 
@@ -157,6 +160,12 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
             //SIGN IN SCENE
             getSupportActionBar().setTitle(getString(R.string.signin_sign_in));
             formFillCheckerOne = new FormFillChecker(this);
+            ivMallLogo = (ImageView) findViewById(R.id.ivMallLogo);
+
+            int id = getResources().getIdentifier("img_signin_mall_logo_small", "drawable", getPackageName());
+            if (id > 0) {
+                ivMallLogo.setImageDrawable(ContextCompat.getDrawable(this, id));
+            }
 
             llSignInCreateAccountReset = (LinearLayout) findViewById(R.id.llSignInCreateAccount);
             llSignInCreateAccountReset.setOnClickListener(new View.OnClickListener() {

@@ -1011,7 +1011,7 @@ public class MainActivity extends BaseActivity
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.themeColor)));
                 badgeTextColor = getResources().getColor(R.color.active_mall_badge_text_color);
                 generalTextColor = getResources().getColor(R.color.active_mall_text_color);
-                drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_activemall);
+                drawerLayoutBgDrawable = ContextCompat.getDrawable(this, jrRecordManager.isUserSignedIn() ? R.drawable.img_profile_activemall_signout : R.drawable.img_profile_activemall_signin);
                 privacyTextColor = getResources().getColor(R.color.white);
                 versionNumberTextColor = getResources().getColor(R.color.white);
 
@@ -1077,7 +1077,7 @@ public class MainActivity extends BaseActivity
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.active_mall_off_state)));
                 badgeTextColor = Color.WHITE;
                 generalTextColor = Color.BLACK;
-                drawerLayoutBgDrawable = getResources().getDrawable(R.drawable.img_profile_bg_inactive);
+                drawerLayoutBgDrawable = ContextCompat.getDrawable(this, R.drawable.img_profile_bg_inactive);
                 privacyTextColor = getResources().getColor(R.color.privacy_policy_text_color);
                 versionNumberTextColor = getResources().getColor(R.color.insta_desc_color);
             }
@@ -1092,6 +1092,7 @@ public class MainActivity extends BaseActivity
             mGiftCardRecyclerViewAdapter.setBadgeColor(generalTextColor, badgeTextColor);
 
 
+            ivDrawerLayoutBg.setImageDrawable(drawerLayoutBgDrawable);
             tvMyFav.setTextColor(generalTextColor);
             tvMyGC.setTextColor(generalTextColor);
             tvDeals.setTextColor(generalTextColor);
@@ -1694,8 +1695,12 @@ public class MainActivity extends BaseActivity
      * @param isSignedIn boolean to toggle visibility and text.
      */
     private void toggleUserSignIn(boolean isSignedIn) {
-        ivDrawerLayoutBg.setImageDrawable(ContextCompat.getDrawable(this, isSignedIn ?
-                R.drawable.img_profile_activemall_signout : R.drawable.img_profile_activemall_signin));
+        if (mActiveMall) {
+            ivDrawerLayoutBg.setImageDrawable(ContextCompat.getDrawable(this, isSignedIn ?
+                    R.drawable.img_profile_activemall_signout : R.drawable.img_profile_activemall_signin));
+        } else {
+            ivDrawerLayoutBg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.img_profile_bg_inactive));
+        }
         tvSignInOrOut.setBackground(ContextCompat.getDrawable(this, isSignedIn ?
                 R.drawable.btn_selector_signout : R.drawable.btn_style_corner_radius_with_selected_state));
         tvSignInOrOut.setTextColor(colour(isSignedIn ?

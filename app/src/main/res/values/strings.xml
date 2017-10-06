@@ -1,5 +1,9 @@
 <resources>
 
+    <!-- JSON files -->
+    <string name="mall_info_json">mallinfo.json</string>
+    <string name="mall_info_json_default" translatable="false">mallinfo.json</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -65,17 +69,17 @@
     <string name="social_facebook">Facebook</string>
     <string name="social_twitter">Twitter</string>
     <string name="social_instagram">Instagram</string>
-    <string name="social_webpage">Webpage</string>
+    <string name="social_webpage">Page Web</string>
 
 
 
     <!--interest card-->
-    <string name="intrst_card_title">What Are Your Interests?</string>
+    <string name="intrst_card_title">What Interests You?</string>
     <string name="intrst_card_desc">Set your interests to get personalized deal recommendations just for you!</string>
     <string name="intrst_card_btn">SET MY INTERESTS</string>
 
-    <string name="intrst_card_recommended_title">Recommended Deals</string>
-    <string name="intrst_card_recommended_desc">Fine tune your Recommended Deals by adding or removing interests.</string>
+    <string name="intrst_card_recommended_title">What Are Your Interests?</string>
+    <string name="intrst_card_recommended_desc">Set your interests to get personalized deal recommendations just for you!</string>
     <string name="intrst_card_recommended_btn">ADJUST MY INTERESTS</string>
 
 
@@ -88,39 +92,34 @@
     <string name="transition_category_name">transition category name</string>
     <string name="transition_movie_poster">transition movie poster</string>
 
-    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non ante dictum, tempor orci nec, ultricies urna. Donec a consequat leo. Aliquam commodo venenatis nisi tempor lacinia. Aenean scelerisque, diam eu fringilla tempus, risus nisl dignissim nisl, at pharetra arcu orci et erat. Nullam pharetra gravida neque, sit amet accumsan nisl ornare volutpat. Nulla mauris turpis, consectetur consequat neque eget, egestas tristique felis. Fusce et sodales orci. Duis odio purus, consectetur a pulvinar a, ultrices mollis tortor. Duis efficitur posuere malesuada. Donec fringilla aliquet metus id faucibus. Aliquam erat volutpat. Integer felis ante, pharetra vel nibh in, blandit pulvinar enim. Duis sed eleifend lectus, eu accumsan risus. Maecenas tincidunt dignissim dictum. Fusce velit nibh, pellentesque at finibus sed, fringilla id ipsum.
-
-Ut nec euismod augue. Mauris laoreet, lacus blandit maximus placerat, ante risus vehicula neque, a consequat ipsum mauris ac risus. Fusce dui nisi, hendrerit non dui sed, tristique molestie nisl. Vivamus a orci eu felis tristique dapibus. Fusce at dui pellentesque, placerat ante sed, consequat erat. Pellentesque vulputate est sed placerat consectetur. Praesent eget egestas augue. Phasellus id dolor mauris. Aliquam rutrum tortor dolor, eu hendrerit metus tempus quis. Sed suscipit lorem neque, at semper lorem rhoncus ut. Etiam at facilisis ex. Morbi ultrices, metus non laoreet porta, augue nisl suscipit mauris, id finibus velit mauris vitae magna. Morbi mauris nibh, ultrices sed consectetur sit amet, mattis non lacus. Suspendisse dictum risus nec mi malesuada bibendum. Nam convallis nec justo at elementum.
-
-Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales orci ligula nec mi. Quisque maximus tristique ante et tristique. Mauris quis sem ut libero cursus fringilla. Fusce dictum mattis ligula ut interdum. Nunc massa justo, vulputate tristique rutrum eget, lacinia a ipsum. Nulla et tincidunt velit. Proin tincidunt in purus nec elementum. Nulla id leo non eros tempor fringilla quis eget urna. Nunc congue urna vel diam congue, ac mattis massa ultrices. Duis sit amet risus ac magna sagittis luctus et eget velit. Mauris dictum molestie dictum.</string>
-    <string name="title_activity_detail">DetailActivity</string>
+     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_mall_hours">Mall Hours</string>
     <string name="title_mall_information">Mall Information</string>
-    <string name="title_mall_holiday_hours">Holiday Hours</string>
+    <string name="title_mall_holiday_hours">Jours fériés</string>
 
-
+    <string name="lorem">Lorem lorem lorem lorem lorem lorem</string>
     <string name="test_disclaimer">* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non ante dictum, tempor orci nec, ultricies urna. Donec a consequat leo. Aliquam commodo venenatis nisi tempor lacinia. </string>
     <string name="mall_info_disclaimer_title">Hours of operation may vary at the following stores: </string>
     <string name="title_activity_test">Test</string>
 
     <!--warning-->
     <string name="warning_download_completed">Download completed</string>
-    <string name="warning_download_failed">Download failed</string>
+    <string name="warning_download_failed">Could not download data.</string>
     <string name="warning_no_internet_connection">No Internet Connection</string>
     <string name="warning_retry">RETRY</string>
-    <string name="warning_empty_news">There are no news available.\nPlease check back later.</string>
-    <string name="warning_empty_deals">There are no deals available.\nPlease check back later.</string>
-    <string name="warning_exit_interest">If you leave this page then any unsaved changes will be lost. Are you sure you want to exit?</string>
-    <string name="warning_make_call">Do you want to call the number\n</string>
+    <string name="warning_empty_news">There are no news or announcements.</string>
+    <string name="warning_empty_deals">There are no deals today.</string>
+    <string name="warning_exit_interest">If you exit, you will lose all your saved interests.</string>
+    <string name="warning_make_call">Do you want to call\n</string>
     <string name="warning_fav_added">Added a favourite!</string>
     <string name="warning_fav_removed">Favourite removed</string>
     <string name="warning_open_instagram_app">Would you like to view this in the Instagram App?</string>
     <string name="warning_open_instagram_website">Would you like to view this on the Instagram website?</string>
     <string name="warning_no_recommended_deals">There are no matches for Recommended Deals at this time.</string>
-    <string name="warning_no_parking_saved">Closing this window will clear any unsaved changes you have made to your parking spot.</string>
-    <string name="warning_active_mall_activated">You are now connected to the mall!</string>
-    <string name="warning_no_deal_for_today">There are no deals happening today. Please check back later.</string>
-    <string name="warning_no_event_for_today">There are no events happening today. Please check back later.</string>
+    <string name="warning_no_parking_saved">Closing this window will remove all saved information about your parking spot.</string>
+    <string name="warning_active_mall_activated">Connected to Mall</string>
+    <string name="warning_no_deal_for_today">There are no deals today.</string>
+    <string name="warning_no_event_for_today">There are no events scheduled.</string>
     <!--<string name="warning_require_location_permission">The app needs device’s location to show deals and events happening around you today.</string>-->
     <string name="warning_require_location_permission">The app requires your device’s location to access connected mall features. Are you sure you want to deny permissions?</string>
     <string name="warning_require_location_permission_for_blue_dot">The app requires this permission to find your location and access connected mall features. Are you sure you want to deny permissions?</string>
@@ -129,9 +128,9 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="warning_remove_my_parking">Are you sure you want to remove your parking spot?</string>
     <string name="warning_change_my_parking_spot">Changing your parking spot will overwrite any previously saved information.</string>
     <string name="warning_turn_on_bluetooth">Please turn on Bluetooth to find your current location.</string>
-    <string name="warning_current_location_not_available">If you are at the mall, please try again in a few seconds.</string>
+    <string name="warning_current_location_not_available">Sorry, current location not available. If you are at the mall, please try again in a few seconds.</string>
     <string name="warning_not_valid_address">Not a valid Email address.</string>
-    <string name="warning_must_be_longer">Password must be 7 or longer.</string>
+    <string name="warning_must_be_longer">Password must be 7 characters or longer.</string>
     <string name="warning_two_passwords_not_equal">Two passwords must be the same.</string>
     <string name="warning_wrong_date_format">Wrong date format.</string>
     <string name="warning_pick_earlier_date">Date of birth has to be earlier than today</string>
@@ -139,21 +138,21 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="warning_gift_card_already_exist">This Gift Card number has already been added to your profile.</string>
     <string name="warning_gift_card_has_been_removed">Gift Card has been removed.</string>
 
-    <!--section header-->
+    <!--SECTION HEADER-->
     <string name="section_header_recommended_deals">Recommended Deals</string>
     <string name="section_header_other_deals">Other Deals</string>
 
-    <!--activity title-->
+    <!--ACTIVITY TITLE-->
     <string name="activity_title_interested_category">What Interests You?</string>
     <string name="activity_title_interested_category_update">Update My Interests</string>
     <string name="activity_title_interested_store">Recommended Stores</string>
     <string name="activity_title_settings">Settings</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
 
-    <!--interested category-->
+    <!--INTERESTED CATEGORY-->
     <string name="intrstd_cat_help_us">Highlight your preferred categories to get deals and stores recommendations</string>
     <string name="intrstd_cat_recommended_section_header">Based on your selections, here are some stores we think you’ll like.\nAdd them to your favourites to get exclusive deals!</string>
-    <string name="intrstd_cat_other_section_header">... and if we missed any, make sure to\ncapture them below:</string>
+    <string name="intrstd_cat_other_section_header">&#8230; and if we missed any, make sure to\ncapture them below:</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="intrstd_store_desc">Here are the stores we think you will like!\nSelect which are your favourite:</string>
 
@@ -180,8 +179,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="mall_info_cinema">Cinema</string>
 
     <!--CTA-->
-    <string name="cta_find_on_map">Find on Map</string>
-    <string name="cta_check_your_balance">Check Your Balance</string>
+    <string name="cta_find_on_map">Go to Map</string>
+    <string name="cta_check_your_balance">Check Your Gift Card Balance</string>
     <string name="cta_check_your_balance_url">https://getmybalance.com/</string>
     <string name="hours_of_operation">Hours of Operation</string>
     <string name="cta_view_on_map">View On Map</string>
@@ -224,7 +223,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="empty_placeholder_desc_deal">This is where all your favourited deals will appear. Heart a deal to get started.</string>
     <string name="empty_placeholder_desc_event">This is where all your favourited events will appear. Heart an event to get started.</string>
     <string name="empty_placeholder_desc_store">This is where all your favourited stores will appear. Heart a store to get started.</string>
-    <string name="empty_placeholder_ancmt">There are no announcements</string>
+    <string name="empty_placeholder_ancmt">There are no news or announcements</string>
     <string name="empty_placeholder_event">There are no events scheduled</string>
 
     <!--MAP-->
@@ -238,8 +237,8 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
 
     <string name="hint_search_store">Search a Store</string>
     <string name="hint_search_directory">Search Mall Directory</string>
-    <string name="hint_search_start">Directions from...</string>
-    <string name="hint_search_destination">Directions to...</string>
+    <string name="hint_search_start">Directions from&#8230;</string>
+    <string name="hint_search_destination">Directions to&#8230;</string>
     <string name="hint_search_start_when_not_empty">from</string>
     <string name="hint_search_destination_when_not_empty">to</string>
     <string name="hint_add_notes">Include additional notes to your parking i.e. “Pillar 15F near stairs”</string>
@@ -295,7 +294,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="parking_remove_my_spot">Remove My Parking Spot</string>
     <string name="parking_save_as_my_parking_spot">Set as My Parking Spot</string>
     <string name="parking_nearest_spot">Nearest Parking Spot</string>
-    <string name="parking_saved_my_parking_spot">My Parking Spot is Saved</string>
+    <string name="parking_saved_my_parking_spot">Your parking spot is saved</string>
     <string name="parking_pinned_at_current_location">Pinned at current location</string>
     <string name="parking_add_notes">Add Notes</string>
     <string name="parking_use">Use</string>
@@ -343,7 +342,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="movie_showtime">View All Showtimes</string>
     <string name="movie_find_on_map">Find On Map</string>
     <string name="movie_showtimes_title">Showtimes</string>
-    <string name="movie_detail_title">Movie Details</string>
+    <string name="movie_detail_title">Movie Information</string>
     <string name="movie_watch_trailer">Watch Trailer</string>
     <string name="movie_synopsis">Synopsis</string>
     <string name="movie_starring">Starring:</string>
@@ -362,7 +361,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="signin_connect_with_google">Connect with Google+</string>
     <string name="signin_signup_with_email">Sign Up With Email</string>
     <string name="signin_sign_in">Sign In</string>
-    <string name="signin_password_reset">Password Reset</string>
+    <string name="signin_password_reset">Reset / Forgot Password</string>
     <string name="signin_dont_have_account">Don’t have an account?</string>
     <string name="signin_forgot_password">Forgot your password?</string>
     <string name="signin_other_sign_in_method">You can also sign in with a Facebook or Google account.</string>
@@ -386,11 +385,12 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="error_code_500">Server Error</string>
     <string name="error_code_internet">Please check your internet connection and try again.</string>
     <string name="gc_added_succesfully">Gift Card Added - Balance is $</string>
+    <string name="gc_removed">Gift Card has been removed.</string>
     <string name="gc_refresh">Gift Card Balance has been updated</string>
     <!---->
 
     <string name="privacy_policy"><u>Privacy Policy</u></string>
-    <string name="terms_of_service"><u>Terms of Service</u></string>
+    <string name="terms_of_service"><u>Terms and Conditions</u></string>
     <string name="version_name_prefix">Version </string>
     <string name="version_code_suffix">DEBUG</string>
 
@@ -407,7 +407,7 @@ Cras lobortis, diam ac porttitor dapibus, nibh libero vulputate ex, et sodales o
     <string name="see_all_stores">See All Stores</string>
     <string name="open_now">Open Now</string>
     <string name="to_in_time">to</string> <!--12:00 TO 3:00 -->
-    <string name="follow_someone_on_in_social_sharing">follow %1$s! on...</string> <!--follow someone on instagram-->
+    <string name="follow_someone_on_in_social_sharing">follow %1$s! on&#8230;</string> <!--follow someone on instagram-->
     <string name="today_in_mall_hour">Today</string>
     <string name="closed_in_mall_hour">CLOSED</string>
     <string name="holiday_reminder_in_mall_hour">This is a reminder that %1$s! will have adjusted hours on:</string> <!--This is a reminder that HeaderFactory.MALL_NAME  will have adjusted hours on:-->
