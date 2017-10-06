@@ -329,7 +329,9 @@ public class InfoFragment extends BaseFragment{
         if (!KcpUtility.isCurrentLocale(getContext(), "en")) {
             AssetManager assetManager = getContext().getAssets();
             try {
-                if (Arrays.asList(assetManager.list(".")).contains(getString(R.string.mall_info_json))) validInfoFileId = R.string.mall_info_json;
+                if (Arrays.asList(assetManager.list("")).contains(getString(R.string.mall_info_json))) {
+                    validInfoFileId = R.string.mall_info_json;
+                }
             } catch (IOException io) {
                 io.printStackTrace();
             }
