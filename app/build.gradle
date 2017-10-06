@@ -32,7 +32,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "25.0.2"
     defaultConfig {
-        versionName "1.4.0"
+        versionName "1.6.0"
         versionCode 1
 
         minSdkVersion 16
