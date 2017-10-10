@@ -67,7 +67,6 @@ import com.ivanhoecambridge.mall.mappedin.Amenities;
 import com.ivanhoecambridge.mall.mappedin.Amenities.OnParkingClickListener;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
 import com.ivanhoecambridge.mall.mappedin.Amenity;
-import com.ivanhoecambridge.mall.mappedin.CustomLocation;
 import com.ivanhoecambridge.mall.mappedin.MapUtility;
 import com.ivanhoecambridge.mall.mappedin.ParkingPin;
 import com.ivanhoecambridge.mall.mappedin.ParkingPinInterface;
@@ -449,6 +448,63 @@ public class MapFragment extends BaseFragment
 
     }
 
+    public static Amenity getAmenityWithLocationId(String locationId){
+        try {
+            for (ArrayList<Amenity> amenities : amenityHashmap.values()) {
+                for (Amenity amenity : amenities) {
+                    if (amenity.id.equals(locationId)) {
+                        return amenity;
+                    }
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static ArrayList<Polygon> getParkingPolygonsFromLocationWithId(String id){
+
+        if(parkingHashMap.containsKey(id)) {
+
+            ArrayList<Polygon> polygons = new ArrayList<>();
+
+            if (parkingHashMap.get(id).getPolygons() != null) {
+                polygons = new ArrayList<>(Arrays.asList(parkingHashMap.get(id).getPolygons()));
+            }
+
+            return polygons;
+        }
+
+        return null;
+    }
+
+    public static Polygon getNearestParkingPolygonFromStorePolygon(Polygon polygon) {
+        try {
+            Coordinate storeCoordinate = polygon.getLocations()[0].getNavigatableCoordinates()[0];
+
+            double nearestDistance = 0;
+            Polygon nearestParkingPolygon = null;
+
+            for (Amenity parkingLocation : parkingHashMap.values()) {
+                ArrayList<Coordinate> navigatableCoordinates = (ArrayList<Coordinate>) Arrays.asList(parkingLocation.getNavigatableCoordinates());
+
+                for (Coordinate parkingLotCoord : navigatableCoordinates) {
+                    double distance = parkingLotCoord.metersFrom(storeCoordinate);
+
+                    if(nearestDistance == 0 || nearestDistance > distance) {
+                        nearestParkingPolygon = parkingLocation.getPolygons()[0];
+                        nearestDistance = distance;
+                    }
+                }
+            }
+
+            return nearestParkingPolygon;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private Polygon getPolygonWithPlaceExternalId(String placeExternalCode){
         ArrayList<Polygon> polygons = getPolygonsFromLocationWithExternalCode(placeExternalCode);
         if(polygons != null && polygons.size() > 0) {
@@ -467,6 +523,15 @@ public class MapFragment extends BaseFragment
             }
 
             return polygons;
+        }
+
+        return null;
+    }
+
+    public static Location getLocationWithExternalCode(String externalCode){
+
+        if(locationHashmapByExternalId.containsKey(externalCode)) {
+            return locationHashmapByExternalId.get(externalCode);
         }
 
         return null;
@@ -517,7 +582,7 @@ public class MapFragment extends BaseFragment
                     }
 
                     amenityHashmap.put(amenity.amenityType, amenityList);
-                    if (amenity.amenityType != null && amenity.amenityType.equals("parking")) {
+                    if (amenity.amenityType != null && amenity.amenityType.equals(KcpPlaces.PLACE_TYPE_PARKING)) {
                         if (amenity.id != null) {
                             parkingHashMap.put(amenity.id, amenity);
                         }
@@ -668,7 +733,7 @@ public class MapFragment extends BaseFragment
 
             //highlight the store that has been pending
             if(mPendingExternalCode != null) {
-                ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocationWithExternalCode(mPendingExternalCode);
+                ArrayList<Polygon> polygons = getPolygonsFromLocationWithExternalCode(mPendingExternalCode);
                 mPendingExternalCode = null;
                 if(polygons != null && polygons.size() > 0) {
                     showStoreOnTheMapFromDetailActivity(polygons.get(0));
@@ -877,11 +942,11 @@ public class MapFragment extends BaseFragment
                 Directions directions = null;
                 Location arriveAtLocation = null;
 
-                if(destinationPolygon instanceof Polygon){
+                if (destinationPolygon instanceof Polygon) {
                     arriveAtLocation = ((Polygon) destinationPolygon).getLocations()[0];
-                } else if(destinationPolygon instanceof CustomLocation){
-                    arriveAtLocation = ((CustomLocation) destinationPolygon);
-                } else if (destinationPolygon instanceof  Coordinate) {
+                } else if (destinationPolygon instanceof Location) {
+                    arriveAtLocation = ((Location) destinationPolygon);
+                } else if (destinationPolygon instanceof Coordinate) {
 
                 }
 
@@ -894,10 +959,10 @@ public class MapFragment extends BaseFragment
                 }
 
                 Coordinate destinationPolygonCoordinate = null;
-                if(destinationPolygon instanceof Polygon) {
+                if (destinationPolygon instanceof Polygon) {
                     highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
                     destinationPolygonCoordinate = ((Polygon) destinationPolygon).getAnchor();
-                } else if(destinationPolygon instanceof CustomLocation && !((CustomLocation) destinationPolygon).getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) {
+                } else if (destinationPolygon instanceof Amenity && !((Amenity) destinationPolygon).amenityType.equals(KcpPlaces.PLACE_TYPE_PARKING)) {
                 } else if (destinationPolygon instanceof Coordinate){
                     Coordinate startPolygonCoord = ((Polygon) startPolygon).getLocations()[0].getNavigatableCoordinates()[0];
                     clearHighlightedColours();
@@ -907,7 +972,7 @@ public class MapFragment extends BaseFragment
                         locationLabelClicker.highlightThisLabel();
                     }
                 } else {
-                    destinationPolygonCoordinate = ((CustomLocation) destinationPolygon).getNavigatableCoordinates()[0];
+                    destinationPolygonCoordinate = destinationPolygon.getNavigatableCoordinates()[0];
                 }
 
                 if(((Polygon) startPolygon).getMap().getShortName() != null) {
@@ -1870,14 +1935,14 @@ public class MapFragment extends BaseFragment
         }
 
         for( KcpContentPage kcpContentPage: mRecommendedDealsContentPageList) {
-            Location location = CustomLocation.getLocationWithExternalCode(kcpContentPage.getExternalCode());
+            Location location = getLocationWithExternalCode(kcpContentPage.getExternalCode());
             if(location != null) removePin(location);
         }
 
         if(enabled && dealContentPages != null) {
             mRecommendedDealsContentPageList = new ArrayList<KcpContentPage>();
             for(KcpContentPage kcpContentPage : dealContentPages) {
-                Location location = CustomLocation.getLocationWithExternalCode(kcpContentPage.getExternalCode());
+                Location location = getLocationWithExternalCode(kcpContentPage.getExternalCode());
                 if(location != null){
                     List<Coordinate> coords = Arrays.asList(location.getNavigatableCoordinates());
                     for(Coordinate coordinate : coords) {
@@ -1984,7 +2049,7 @@ public class MapFragment extends BaseFragment
     }
 
     private void showMySavedParkingPolygon(boolean showParkingSpot, String parkingId, boolean focus){
-        ArrayList<Polygon> polygons = CustomLocation.getParkingPolygonsFromLocationWithId(parkingId);
+        ArrayList<Polygon> polygons = getParkingPolygonsFromLocationWithId(parkingId);
         if(polygons != null && polygons.size() > 0) {
             if(showParkingSpot) {
                 if(mSavedParkingPolygon != null && mOriginalColorsForParking != 0) {
@@ -2128,7 +2193,6 @@ public class MapFragment extends BaseFragment
             this.placeExternalId = placeExternalId;
         }
 
-        public CustomLocation location = null;
         public Tenant tenant = null;
         public Amenity amenity = null;
         public Drawable drawable = null;
@@ -2186,9 +2250,11 @@ public class MapFragment extends BaseFragment
 
         public void highlightThisLabel(){
             dropPinWithColor(coordinate, drawable);
-            if(location == null || !location.getAmenityType().equals(CustomLocation.TYPE_AMENITY_PARKING)) { //parking pin is temporary - shouldn'be be readded
+
+            if(amenity != null) {
                 mRemovedPin = new Pin(coordinate, label);
             }
+
             mapView.removeMarker(label);
         }
     }

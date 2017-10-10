@@ -137,30 +137,6 @@ public class MapUtility {
         return KcpUtility.dpToPx((Activity) context , px);
     }
 
-    public static Polygon getNearestParkingPolygonFromStorePolygon(Polygon polygon){
-        try {
-            HashMap<String, CustomLocation> parkingHashmap = CustomLocation.getParkingHashMap();
-            Coordinate storeCoordinate = polygon.getLocations()[0].getNavigatableCoordinates()[0];
-
-            double nearestDistance = 0;
-            Polygon nearestParkingPolygon = null;
-            for (CustomLocation parkingLocation : parkingHashmap.values()) {
-                ArrayList<Coordinate> navigatableCoordinates = (ArrayList<Coordinate>) Arrays.asList(parkingLocation.getNavigatableCoordinates());
-                for(Coordinate parkingLotCoord : navigatableCoordinates) {
-                    double distance = parkingLotCoord.metersFrom(storeCoordinate);
-                    if(nearestDistance == 0 || nearestDistance > distance) {
-                        nearestParkingPolygon = parkingLocation.getPolygons()[0];
-                        nearestDistance = distance;
-                    }
-                }
-            }
-
-            return nearestParkingPolygon;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     public static Location getLocation(double latitude, double longitude){
         android.location.Location targetLocation = null;//provider name is unecessary
         try {

@@ -111,7 +111,7 @@ import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
 import com.ivanhoecambridge.mall.managers.SidePanelManagers;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
-import com.ivanhoecambridge.mall.mappedin.CustomLocation;
+import com.ivanhoecambridge.mall.mappedin.Amenity;
 import com.ivanhoecambridge.mall.mappedin.MapUtility;
 import com.ivanhoecambridge.mall.movies.MovieManager;
 import com.ivanhoecambridge.mall.onboarding.TutorialActivity;
@@ -1528,7 +1528,7 @@ public class MainActivity extends BaseActivity
         rvMallDirectory.setVisibility(View.INVISIBLE);
         int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
         String externalCode = String.valueOf(resultCode);
-        ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocationWithExternalCode(externalCode);
+        ArrayList<Polygon> polygons = MapFragment.getPolygonsFromLocationWithExternalCode(externalCode);
         if(polygons == null || polygons.size() == 0) return;
         Polygon storePolygon = polygons.get(0);
         if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
@@ -1536,7 +1536,7 @@ public class MainActivity extends BaseActivity
             if(parkingName != null) {
                 int parkingPosition = ParkingManager.sParkings.getParkingPositionByName(parkingName);
                 if(BuildConfig.PARKING_POLYGON) {
-                    Polygon nearestParkingPolygon = MapUtility.getNearestParkingPolygonFromStorePolygon(storePolygon);
+                    Polygon nearestParkingPolygon = MapFragment.getNearestParkingPolygonFromStorePolygon(storePolygon);
                     MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, nearestParkingPolygon);
                 } else {
                     if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, storePolygon);
@@ -1590,8 +1590,9 @@ public class MainActivity extends BaseActivity
                     String locationID = data.getStringExtra(Constants.ARG_LOCATION_ID);
                     String mapName = data.getStringExtra(Constants.ARG_LOCATION_MAP_NAME);
                     if(mapName != null) MapFragment.getInstance().setMapLevel(-50, null, mapName);
-                    CustomLocation customLocation = CustomLocation.getLocationWithLocationId(locationID);
-                    String externalID = customLocation.getAmenityType(); //amenityType from MappedIn == ExternalID from amenities.json
+                    Amenity amenityLocation = MapFragment.getAmenityWithLocationId(locationID);
+                    String externalID = amenityLocation.amenityType;
+
                     final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityWithExternalId(externalID);
                     boolean isToggled = Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, amenity == null ? false : amenity.isEnabled());
                     if(!isToggled) {
