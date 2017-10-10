@@ -1011,7 +1011,11 @@ public class MainActivity extends BaseActivity
                 hamburgerMenuColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(this, R.color.themeColor)));
                 badgeTextColor = getResources().getColor(R.color.active_mall_badge_text_color);
                 generalTextColor = getResources().getColor(R.color.active_mall_text_color);
-                drawerLayoutBgDrawable = ContextCompat.getDrawable(this, jrRecordManager.isUserSignedIn() ? R.drawable.img_profile_activemall_signout : R.drawable.img_profile_activemall_signin);
+                if (jrRecordManager == null) {
+                    drawerLayoutBgDrawable = ContextCompat.getDrawable(this, R.drawable.img_profile_activemall_signin);
+                } else {
+                    drawerLayoutBgDrawable = ContextCompat.getDrawable(this, jrRecordManager.isUserSignedIn() ? R.drawable.img_profile_activemall_signout : R.drawable.img_profile_activemall_signin);
+                }
                 privacyTextColor = getResources().getColor(R.color.white);
                 versionNumberTextColor = getResources().getColor(R.color.white);
 
