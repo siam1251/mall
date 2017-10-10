@@ -81,7 +81,7 @@ public class Amenities {
     /**
      *
      * @param context
-     * @param key for LocationData, key is GSON_KEY_AMENITY + title
+     * @param key for Amenity, key is GSON_KEY_AMENITY + title
      * @param isToggled
      */
     public static void saveToggle(final Context context, String key, boolean isToggled){
