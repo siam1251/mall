@@ -112,7 +112,6 @@ import com.ivanhoecambridge.mall.managers.SidePanelManagers;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
 import com.ivanhoecambridge.mall.mappedin.Amenity;
-import com.ivanhoecambridge.mall.mappedin.MapUtility;
 import com.ivanhoecambridge.mall.movies.MovieManager;
 import com.ivanhoecambridge.mall.onboarding.TutorialActivity;
 import com.ivanhoecambridge.mall.parking.ParkingManager;

@@ -10,21 +10,16 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 
-import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
-import com.ivanhoecambridge.mall.R;
 import com.mappedin.sdk.Coordinate;
 import com.mappedin.sdk.Map;
 import com.mappedin.sdk.Overlay2DImage;
-import com.mappedin.sdk.Polygon;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Kay on 2016-11-09.
