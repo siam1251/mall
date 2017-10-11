@@ -1,6 +1,7 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+
     android:id="@+id/cvIntrst"
     card_view:cardCornerRadius="@dimen/intrstd_card_corner_radius"
     card_view:cardUseCompatPadding="true"
@@ -32,7 +33,8 @@
             android:id="@+id/ivIntrstd"
             />
 
-        <ImageView
+        <com.ivanhoecambridge.mall.views.ThemeColorImageView
+            card_view:filterColorSelected="@color/themeColor"
             android:id="@+id/ivFav"
             android:layout_width="@dimen/intrstd_fav_width"
             android:layout_height="wrap_content"
