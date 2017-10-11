@@ -519,7 +519,7 @@ public class MapFragment extends BaseFragment
             ArrayList<Polygon> polygons = new ArrayList<>();
 
             if (locationHashmapByExternalId.get(externalCode).getPolygons() != null) {
-                polygons = new ArrayList<Polygon>(Arrays.asList(locationHashmapByExternalId.get(externalCode).getPolygons()));
+                polygons = new ArrayList<>(Arrays.asList(locationHashmapByExternalId.get(externalCode).getPolygons()));
             }
 
             return polygons;
@@ -528,13 +528,8 @@ public class MapFragment extends BaseFragment
         return null;
     }
 
-    public static Location getLocationWithExternalCode(String externalCode){
-
-        if(locationHashmapByExternalId.containsKey(externalCode)) {
-            return locationHashmapByExternalId.get(externalCode);
-        }
-
-        return null;
+    public static Location getLocationWithExternalCode(String externalCode) {
+        return locationHashmapByExternalId.get(externalCode);
     }
 
     // Get the basic info for all Venues we have access to
