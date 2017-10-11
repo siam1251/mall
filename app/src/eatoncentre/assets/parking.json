@@ -2,7 +2,7 @@
   "parkings": [
     {
       "parkingId": "",
-      "name": "Parking P1",
+      "name": "P1",
       "childParkings": [
         {
           "parkingId": "59c2b9da4bd0ef3d61000003",
@@ -39,7 +39,7 @@
 
     {
       "parkingId": "",
-      "name": "Parking P2",
+      "name": "P2",
       "childParkings": [
         {
           "parkingId": "59c2ba914bd0ef3d61000009",
