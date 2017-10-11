@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -68,6 +69,8 @@ import com.ivanhoecambridge.mall.mappedin.Amenities.OnParkingClickListener;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
 import com.ivanhoecambridge.mall.mappedin.Amenity;
 import com.ivanhoecambridge.mall.mappedin.CustomLocation;
+import com.ivanhoecambridge.mall.mappedin.Elevator;
+import com.ivanhoecambridge.mall.mappedin.EscalatorStairs;
 import com.ivanhoecambridge.mall.mappedin.MapUtility;
 import com.ivanhoecambridge.mall.mappedin.ParkingPin;
 import com.ivanhoecambridge.mall.mappedin.ParkingPinInterface;
@@ -99,6 +102,8 @@ import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.Venue;
 import com.senionlab.slutilities.type.SLHeadingStatus;
 
+import java.net.URI;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -237,6 +242,7 @@ public class MapFragment extends BaseFragment
     private static HashMap<String, ArrayList<Amenity>> amenityHashmap = new HashMap<>();
     private static HashMap<String, Tenant> locationHashmapByExternalId = new HashMap<>(); //used to find polygons for stores - that use external iD
     private static HashMap<String, Amenity> parkingHashMap = new HashMap<>();
+    private static HashMap<String, Location> stairsElevatorsMap = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -515,8 +521,12 @@ public class MapFragment extends BaseFragment
                         amenityList = new ArrayList<>();
                         amenityList.add(amenity);
                     }
-
-                    amenityHashmap.put(amenity.amenityType, amenityList);
+                    if (amenity.amenityType == null || amenity.amenityType.isEmpty()) {
+                        amenityList.add(0, amenity);
+                        amenityHashmap.put(amenity.getName(), amenityList);
+                    } else {
+                        amenityHashmap.put(amenity.amenityType, amenityList);
+                    }
                     if (amenity.amenityType != null && amenity.amenityType.equals("parking")) {
                         if (amenity.id != null) {
                             parkingHashMap.put(amenity.id, amenity);
@@ -538,7 +548,23 @@ public class MapFragment extends BaseFragment
                     return tenant;
                 }
             };
-            LocationGenerator[] locationGenerators = {tenant, amenity};
+            LocationGenerator elevators = new LocationGenerator() {
+                @Override
+                public Location locationGenerator(ByteBuffer byteBuffer, int i, Venue venue) {
+                    Elevator elevator = new Elevator(byteBuffer, i, venue);
+                    addLocationToLocationMap(elevator);
+                    return elevator;
+                }
+            };
+            LocationGenerator escalatorStairs = new LocationGenerator() {
+                @Override
+                public Location locationGenerator(ByteBuffer byteBuffer, int i, Venue venue) {
+                    EscalatorStairs escalatorStairs = new EscalatorStairs(byteBuffer, i, venue);
+                    addLocationToLocationMap(escalatorStairs);
+                    return escalatorStairs;
+                }
+            };
+            LocationGenerator[] locationGenerators = {tenant, amenity, elevators, escalatorStairs};
             mappedIn.getVenue(activeVenue, accessibleDirections, locationGenerators, new GetVenueCallback());
 
         }
@@ -586,6 +612,10 @@ public class MapFragment extends BaseFragment
         public void onError(Exception e) {
             Logger.log("Error loading Venue: " + e);
         }
+    }
+
+    private void addLocationToLocationMap(Location locationData) {
+        stairsElevatorsMap.put(locationData.getName(), locationData);
     }
 
     private void setMapLevelArrowVisibility(){
@@ -1397,6 +1427,7 @@ public class MapFragment extends BaseFragment
         path = null;
     }
 
+    //TODO: Clean up amenityHashMap processing
     /**
      *
      * @param enabled
@@ -1437,9 +1468,53 @@ public class MapFragment extends BaseFragment
                     }
                 }
             }
+            if (stairsElevatorsMap.size() > 0 && (isStairsOrEscalators(amenityName) || isElevator(amenityName))) {
+                final Location locationItem =  stairsElevatorsMap.get(amenityName);
+                if (enabled) {
+                    String imageUrl = null;
+                    if (isStairsOrEscalators(amenityName)) {
+                        EscalatorStairs escalatorStairs = (EscalatorStairs) locationItem;
+                        imageUrl = escalatorStairs.logo.getImage(getImagePinSize()).toString();
+                    } else if (isElevator(amenityName)) {
+                        Elevator elevator = (Elevator) locationItem;
+                        imageUrl = elevator.logo.getImage(getImagePinSize()).toString();
+                    }
+                    for (final Coordinate coords : Arrays.asList(locationItem.getNavigatableCoordinates())) {
+                        Glide.with(getContext())
+                                .load(imageUrl)
+                                .asBitmap()
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                        mAmeityDrawable = new BitmapDrawable(getResources(), resource);
+                                        mAmeityDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                                        dropPin(coords, locationItem, mAmeityDrawable);
+                                        if (clickOverlay) {
+                                            clickOverlayWithNameAndPosition(amenityName, mapName);
+                                        }
+                                    }
+                                });
+
+                    }
+                } else {
+                    if (mAmenityClicked.equals(amenityName)) {
+                        showDirectionCard(false, null, 0, null, null, null);
+                    }
+                    removePin(locationItem);
+                }
+            }
         } catch (Exception e) {
             logger.error(e);
         }
+    }
+
+    private boolean isStairsOrEscalators(String amenityName) {
+        return amenityName.equalsIgnoreCase("Stairs") || amenityName.equals("Ascenseur")
+                || amenityName.equalsIgnoreCase("Escalator") || amenityName.equalsIgnoreCase("Escaliers");
+    }
+
+    private boolean isElevator(String amenityName) {
+        return  amenityName.equalsIgnoreCase("Elevator");
     }
 
 
@@ -2106,7 +2181,13 @@ public class MapFragment extends BaseFragment
             if (location.getType().equals("tenant")) {
                 this.tenant = (Tenant) location;
             }else {
-                this.amenity = (Amenity) location;
+                if (isStairsOrEscalators(location.getName())) {
+                    this.escalatorStairs = (EscalatorStairs) location;
+                } else if (isElevator(location.getName())) {
+                    this.elevator = (Elevator) location;
+                } else {
+                    this.amenity = (Amenity) location;
+                }
             }
 
             this.drawable = pinDrawable;
@@ -2129,6 +2210,8 @@ public class MapFragment extends BaseFragment
         }
 
         public CustomLocation location = null;
+        public EscalatorStairs escalatorStairs = null;
+        public Elevator elevator = null;
         public Tenant tenant = null;
         public Amenity amenity = null;
         public Drawable drawable = null;
