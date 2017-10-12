@@ -2144,17 +2144,16 @@ public class MapFragment extends BaseFragment
 
         public LocationLabelClicker(Location location, Drawable pinDrawable, Overlay2DImage label, Coordinate coordinate) {
 
-            if (location.getType().equals("tenant")) {
+            if (location instanceof Tenant) {
                 this.tenant = (Tenant) location;
+            } else if (location instanceof EscalatorStairs) {
+                this.escalatorStairs = (EscalatorStairs) location;
+            } else if (location instanceof Elevator) {
+                this.elevator = (Elevator) location;
             } else {
-                if (location instanceof EscalatorStairs) {
-                    this.escalatorStairs = (EscalatorStairs) location;
-                } else if (location instanceof Elevator) {
-                    this.elevator = (Elevator) location;
-                } else {
-                    this.amenity = (Amenity) location;
-                }
+                this.amenity = (Amenity) location;
             }
+
 
             this.drawable = pinDrawable;
             this.label = label;
