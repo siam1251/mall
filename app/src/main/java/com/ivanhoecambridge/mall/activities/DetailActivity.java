@@ -804,7 +804,7 @@ public class DetailActivity extends AppCompatActivity {
             String time = "";
 
             if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
-                String[] timeArray = kcpContentPage.getStoreHourForToday(KcpPlacesRoot.getInstance().getMallContinuousOverrides());
+                String[] timeArray = kcpContentPage.getStoreHoursForToday(KcpPlacesRoot.getInstance().getMallContinuousOverrides());
 
                 switch(timeArray[0]) {
                     case KcpOperatingHour.STATUS_BEFORE_CLOSED:
