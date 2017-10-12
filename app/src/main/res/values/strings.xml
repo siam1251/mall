@@ -402,6 +402,11 @@
     <string name="detail_store_deals">Store Deals</string>
     <string name="detail_store_events">Store Events</string>
 
+    <!--MALL HOURS-->
+    <string name="mall_hours_open_until">Open until</string>
+    <string name="mall_hours_closed_until">Closed now. Opens at</string>
+    <string name="mall_hours_closed">Closed now</string>
+    <string name="mall_hours_open">Open now</string>    <!--TODO: Replaces open_now-->
 
     <!--ETC-->
     <string name="see_all_stores">See All Stores</string>
