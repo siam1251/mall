@@ -119,7 +119,7 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:gravity="center_vertical"
                 android:textSize="@dimen/detail_recyclerview_header_text"
-                tools:text="Store Deals"
+                android:text="Store Deals"
                 android:textColor="@color/detail_title_text"
                 android:layout_marginTop="@dimen/detail_recyclerview_header_top_margin"
                 android:layout_width="match_parent"

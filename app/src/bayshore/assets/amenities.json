@@ -28,7 +28,7 @@
     },
     {
       "type":1,
-      "enabled":true,
+      "enabled":false,
       "title":"Strollers",
       "externalIds":[
         "strollers"
@@ -36,7 +36,7 @@
     },
     {
       "type":1,
-      "enabled":true,
+      "enabled":false,
       "title":"Taxi Stand",
       "externalIds": [
         "taxi-stand"
@@ -44,7 +44,7 @@
     },
     {
       "type":1,
-      "enabled":true,
+      "enabled":false,
       "title":"Nursing Room",
       "externalIds":[
         "nursing-room"
@@ -52,13 +52,14 @@
     },
     {
       "type":"4",
-      "enabled":false,
+      "enabled":true,
       "title":"Stairs \u0026 Escalators",
       "externalIds":[
         "Escalator",
         "Stairs",
         "Escaliers",
-        "Ascenseur"
+        "Ascenseur",
+        "escalator/stairs"
       ]
     }
   ]

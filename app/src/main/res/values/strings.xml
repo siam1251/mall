@@ -61,7 +61,7 @@
     <!--menu-->
     <string name="menu_home">HOME</string>
     <string name="menu_directory">DIRECTORY</string>
-    <string name="menu_map">Map</string>
+    <string name="menu_map">MAP</string>
     <string name="menu_info">INFO</string>
 
 
