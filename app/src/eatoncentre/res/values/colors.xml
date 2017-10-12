@@ -5,13 +5,13 @@
     <color name="warningColor">@color/themeColor</color>
     <color name="themeColorDark">@color/themeColor</color>
 
-    <color name="colorPrimary">@color/black</color>
+    <color name="colorPrimary">@color/white</color>
     <color name="colorPrimaryDark">@color/black</color>
-    <color name="textColorPrimary">@color/white</color>
-    <color name="hamburger_menu">@color/black</color>
-    <color name="active_mall_off_state">@color/white</color>
+    <color name="textColorPrimary">@color/black</color>
+    <color name="hamburger_menu">#212121</color>
+    <color name="active_mall_off_state">@color/black</color>
     <color name="toolbarTextColor">@color/white</color>
-    <color name="tabSelectedTextColor">@color/white</color>
+    <color name="tabSelectedTextColor">@color/themeColor</color>
     <color name="emptySearchResults">@color/themeColor</color>
     <color name="detailActivityToolbarColor">@color/themeColor</color>
     <color name="parkingSaveBtnTextColor">#FFFFFF</color>
