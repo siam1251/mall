@@ -847,7 +847,7 @@ public class DetailActivity extends AppCompatActivity {
             //BODY
             TextView tvDetailBody = (TextView) findViewById(R.id.tvDetailBody);
             String body = kcpContentPage.getBody();
-            if(body.equals("")) {
+            if(body == null || body.isEmpty()) {
                 tvDetailBody.setVisibility(View.GONE);
             } else {
                 HtmlTextView.setHtmlTextView(this, tvDetailBody, body, R.color.html_link_text_color);
