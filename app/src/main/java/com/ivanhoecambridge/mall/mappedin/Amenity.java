@@ -15,7 +15,7 @@ import java.nio.ByteBuffer;
 public class Amenity extends Location {
     public String id;
     public String externalId;
-    public String amenityType;
+    public String amenityType; //externalId
     public String description;
     public ImageSet logo;
 

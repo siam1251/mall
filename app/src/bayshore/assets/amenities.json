@@ -58,7 +58,8 @@
         "Escalator",
         "Stairs",
         "Escaliers",
-        "Ascenseur"
+        "Ascenseur",
+        "escalator/stairs"
       ]
     }
   ]
