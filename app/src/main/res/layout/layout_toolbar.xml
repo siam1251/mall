@@ -7,20 +7,17 @@
     app:layout_scrollFlags="scroll|enterAlways"
     android:theme="@style/MainToolbarStyle"
     android:layout_height="?attr/actionBarSize">
-    android:theme="@style/ToolbarStyle"
-    app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
-    app:popupTheme="@style/ToolbarStyle"
     <!--app:popupTheme is what really changed the toolbar default menu drawable color-->
 
-    <ImageView
+    <com.ivanhoecambridge.mall.views.ThemeColorImageView
         xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
-        ThemedImageView:filterColor="@color/toolbarTextColor"
+        ThemedImageView:filterColor="@color/black"
         android:id="@+id/ivToolbar"
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:src="@drawable/logo_mall"/>
-        android:layout_width="107dp"
+
 
 </android.support.v7.widget.Toolbar>
