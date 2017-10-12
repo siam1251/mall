@@ -9,10 +9,10 @@
     <string name="action_ok">OK</string>
     <string name="action_got_it">Ok</string>
     <string name="action_call">Appeler</string>
-    <string name="action_exit">Fermer</string>
+    <string name="action_exit">Quitter</string>
     <string name="action_do_not_save">Ne pas sauvegarder</string>
     <string name="action_save">Sauvegarder</string>
-    <string name="action_cancel">Fermer</string>
+    <string name="action_cancel">Continuer</string>
     <string name="action_no_thanks">Non</string>
     <string name="action_done">Terminer</string>
     <string name="action_retry">Réessayer</string>
@@ -41,7 +41,7 @@
     <string name="title_directory">Répertoire des boutiques</string>
     <string name="title_info">Informations</string>
     <string name="title_enable_bluetooth">Bluetooth</string>
-    <string name="title_current_location_not_available">Current Location Not Available</string>
+    <string name="title_current_location_not_available">Position actuelle non disponible</string>
     <string name="title_remove_gc">Retirer la carte cadeau</string>
     <string name="title_error">Oups!</string>
     <string name="title_oops">Oups!</string>
@@ -49,7 +49,7 @@
     <!--FRAGMENT TITLE-->
     <string name="fragment_news">Nouvelles</string>
     <string name="fragment_deals">Offres</string>
-    <string name="fragment_categories">Categorie</string>
+    <string name="fragment_categories">Categories</string>
     <string name="fragment_stores">Magasins A-Z"</string>
     <string name="fragment_sub_categories">Sous-catégorie</string>
     <string name="fragment_category_stores">Categorie</string>

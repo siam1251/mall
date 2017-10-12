@@ -40,7 +40,7 @@
                 style="@style/SelectableItemForeground"
                 android:layout_marginLeft="5dp"
                 android:gravity="center_vertical"
-                android:layout_width="60dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/signin_sign_in"
                 android:textColor="@color/themeColor"
