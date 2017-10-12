@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -128,8 +129,10 @@ import com.ivanhoecambridge.mall.views.ThemeColorImageView;
 import com.janrain.android.Jump;
 import com.mappedin.sdk.Polygon;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -698,12 +701,30 @@ public class MainActivity extends BaseActivity
 
     }
 
+    /**
+     * Checks for the <em>amenities.json</em> file based on the locale. If the locale file does not exist for that mall, it will default to the english file.
+     * @return resource ID value that contains the name of the file.
+     */
+    private int getValidAmenitiesFile() {
+        int validInfoFileId = R.string.amenities_json_default;
+
+        if (!KcpUtility.isCurrentLocale(this, "en")) {
+            AssetManager assetManager = this.getAssets();
+            try {
+                if (Arrays.asList(assetManager.list("")).contains(getString(R.string.amenities_json))) {
+                    validInfoFileId = R.string.amenities_json;
+                }
+            } catch (IOException io) {
+                io.printStackTrace();
+            }
+        }
+        return validInfoFileId;
+    }
 
     private void initializeMapData(){
-
         String data = "";
         try {
-            data = KcpUtility.convertStreamToString(getAssets().open(Constants.AMENITIES_OFFLINE_TEXT));
+            data = KcpUtility.convertStreamToString(getAssets().open(Constants.getStringFromResources(this, getValidAmenitiesFile())));
             Gson gson = new Gson();
             AmenitiesManager.sAmenities = gson.fromJson(data, Amenities.class);
         } catch (Exception e) {

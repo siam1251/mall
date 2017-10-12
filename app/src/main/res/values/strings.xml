@@ -3,6 +3,8 @@
     <!-- JSON files -->
     <string name="mall_info_json">mallinfo.json</string>
     <string name="mall_info_json_default" translatable="false">mallinfo.json</string>
+    <string name="amenities_json">amenities.json</string>
+    <string name="amenities_json_default" translatable="false">amenities.json</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
