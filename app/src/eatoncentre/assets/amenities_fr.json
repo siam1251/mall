@@ -12,7 +12,7 @@
     {
       "type":"1",
       "enabled":true,
-      "title":"Kioske d'information",
+      "title":"Kiosque d'information",
       "externalIds":[
         "information-kiosk",
         "Guest Services",
