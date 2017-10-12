@@ -2,6 +2,7 @@ package com.ivanhoecambridge.mall.adapters;
 
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,7 +98,11 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter {
             final String externalCode = subKcpCategory.getExternalCode();
             final String categoryName = subKcpCategory.getCategoryName();
 
-            if(position == 0) categoryHolder.tvCategory.setText(mContext.getResources().getString(R.string.see_all_stores));
+
+            if(position == 0) {
+                categoryHolder.tvCategory.setTypeface(null, Typeface.BOLD);
+                categoryHolder.tvCategory.setText(mContext.getResources().getString(R.string.see_all_stores));
+            }
             else categoryHolder.tvCategory.setText(categoryName);
 
 
