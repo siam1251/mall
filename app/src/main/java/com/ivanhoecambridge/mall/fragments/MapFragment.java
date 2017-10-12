@@ -483,7 +483,7 @@ public class MapFragment extends BaseFragment
         try {
             Coordinate storeCoordinate = polygon.getLocations()[0].getNavigatableCoordinates()[0];
 
-            double nearestDistance = 0;
+            double nearestDistance = Double.MAX_VALUE;
             Polygon nearestParkingPolygon = null;
 
             for (Amenity parkingLocation : parkingHashMap.values()) {
@@ -492,7 +492,7 @@ public class MapFragment extends BaseFragment
                 for (Coordinate parkingLotCoord : navigatableCoordinates) {
                     double distance = parkingLotCoord.metersFrom(storeCoordinate);
 
-                    if(nearestDistance == 0 || nearestDistance > distance) {
+                    if(distance < nearestDistance) {
                         nearestParkingPolygon = parkingLocation.getPolygons()[0];
                         nearestDistance = distance;
                     }
