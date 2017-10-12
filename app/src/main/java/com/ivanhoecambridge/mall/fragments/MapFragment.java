@@ -1854,19 +1854,21 @@ public class MapFragment extends BaseFragment
 
     public void clickOverlayWithNameAndPosition(String amenityName, String mapName) {
 
-        List<Coordinate> coords = Arrays.asList(amenityMap.get(amenityName).getNavigatableCoordinates());
-        for (Coordinate coordinate : coords) {
-            if (mapName == null || (mapName != null && coordinate.getMap().getName().equals(mapName))) {
-                //if the map's already has the pin selected then return
-                if (mSelectedPin != null && mSelectedPin.getCoordinate() == coordinate) {
+        Location amenityItem = amenityMap.get(amenityName);
+        if (amenityItem != null) {
+            List<Coordinate> coords = Arrays.asList(amenityItem.getNavigatableCoordinates());
+            for (Coordinate coordinate : coords) {
+                if (mapName == null || (mapName != null && coordinate.getMap().getName().equals(mapName))) {
+                    //if the map's already has the pin selected then return
+                    if (mSelectedPin != null && mSelectedPin.getCoordinate() == coordinate) {
+                        return;
+                    }
+                    LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(coordinate);
+                    locationLabelClicker.onClick();
                     return;
                 }
-                LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(coordinate);
-                locationLabelClicker.onClick();
-                return;
             }
         }
-
     }
 
     public void removePin(Overlay overlay, Coordinate coordinate) {
