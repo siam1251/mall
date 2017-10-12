@@ -3,7 +3,7 @@
     <color name="themeColor">#e96562</color>
     <color name="themeColorTransparent">#30e96562</color>
     <color name="warningColor">@color/themeColor</color> <!--#CFff4444-->
-    <color name="themeColorDark">#CC5D1B</color>
+    <color name="themeColorDark">@color/themeColor</color>
 
     <color name="colorPrimary">@color/black</color>
     <color name="colorPrimaryDark">@color/black</color>
