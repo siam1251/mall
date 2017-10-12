@@ -103,7 +103,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                         }
                     }
                 });
-                kcpCategoryManager.downloadPlacesForTheseCategoryIds(mInterestRecyclerViewAdapter.getCatIdsFromMap());
+                kcpCategoryManager.downloadPlacesForTheseCategoryIds(mInterestRecyclerViewAdapter.getFavCategoryIds());
                 FavouriteManager.getInstance(InterestedCategoryActivity.this).updateFavCat(mInterestRecyclerViewAdapter.getTempCatMap(), mInterestRecyclerViewAdapter.getRemovedCatMap(), true, null);
             }
         });
