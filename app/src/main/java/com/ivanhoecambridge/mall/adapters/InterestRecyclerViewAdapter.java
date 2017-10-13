@@ -74,16 +74,12 @@ public class InterestRecyclerViewAdapter extends RecyclerView.Adapter {
         createItems();
     }
 
-    public ArrayList<Integer> getCatIdsFromMap(){
-        ArrayList<Integer> catIds = new ArrayList<Integer>();
-        HashMap<Integer, KcpCategories> kcpCategoriesHashMap = KcpCategoryRoot.getInstance().getFingerPrintCategoriesMap();
-        for (String link : mTempCatFav.keySet()) {
-            KcpCategories kcpCategories = kcpCategoriesHashMap.get(link);
-            if(kcpCategories != null) {
-                catIds.add(kcpCategories.getCategoryId());
-            }
+    public ArrayList<Integer> getFavCategoryIds() {
+        ArrayList<Integer> favCategoryIds = new ArrayList<>();
+        for (KcpCategories category : mTempCatFav.values()) {
+            favCategoryIds.add(category.getCategoryId());
         }
-        return catIds;
+        return favCategoryIds;
     }
 
     public HashMap<String, KcpCategories> getTempCatMap(){

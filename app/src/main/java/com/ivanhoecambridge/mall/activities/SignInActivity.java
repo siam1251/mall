@@ -1,5 +1,6 @@
 package com.ivanhoecambridge.mall.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -55,7 +56,7 @@ import butterknife.Optional;
  * Created by Kay on 2017-01-27.
  */
 
-public class SignInActivity extends BaseActivity implements FormFillInterface, BirthDayPickerFragment.DateSelectedListener, AuthenticationManager.onJanrainAuthenticateListener {
+public class SignInActivity extends BaseActivity implements FormFillInterface, BirthDayPickerFragment.DateSelectedListener, DialogInterface.OnDismissListener, AuthenticationManager.onJanrainAuthenticateListener {
 
     ViewGroup rootContainer;
     private Scene signInScene;
@@ -65,6 +66,8 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     private FormFillChecker formFillCheckerOne;
     private FormFillChecker formFillCheckerTwo;
     private FormFillChecker formFillCheckerThree;
+
+    private BirthDayPickerFragment birthdayFragment;
 
     private AuthenticationManager authenticationManager;
 
@@ -337,11 +340,20 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
-                        DialogFragment newFragment = new BirthDayPickerFragment();
-                        newFragment.show(getSupportFragmentManager(), "datePicker");
-                    } else {
-                        etCreateAccountBirth.getOnValidateListener().validate(true);
+                        if (birthdayFragment == null) {
+                            birthdayFragment = new BirthDayPickerFragment();
+                        }
+                        birthdayFragment.show(getSupportFragmentManager(), "datePicker");
                     }
+                }
+            });
+            etCreateAccountBirth.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (birthdayFragment == null) {
+                        birthdayFragment = new BirthDayPickerFragment();
+                    }
+                    birthdayFragment.show(getSupportFragmentManager(), "datePicker");
                 }
             });
             etCreateAccountBirth.setOnFieldFilledListener(formFillCheckerTwo);
@@ -502,7 +514,10 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
         }
     }
 
-
+    @Override
+    public void onDismiss(DialogInterface dialogInterface) {
+        etCreateAccountBirth.getOnValidateListener().validate(true);
+    }
 
     @Optional
     @OnClick(R.id.cvFb)
@@ -624,4 +639,6 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     public void onBackPressed() {
         finishActivity();
     }
+
+
 }

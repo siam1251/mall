@@ -70,10 +70,6 @@ public class TutorialActivity extends BaseActivity {
         llViewPagerCountDots = (LinearLayout) findViewById(R.id.llViewPagerCircle);
 
         rlOnbrd = (RelativeLayout) findViewById(R.id.rlOnbrd);
-        int id = getResources().getIdentifier("onboarding_bg", "drawable", getPackageName());
-        if (id > 0) {
-            rlOnbrd.setBackground(ContextCompat.getDrawable(this, id));
-        }
         tvOnbdSkip = (TextView) findViewById(R.id.tvOnbdSkip);
         tvOnbdSkip.setOnClickListener(new OnClickListener() {
             @Override

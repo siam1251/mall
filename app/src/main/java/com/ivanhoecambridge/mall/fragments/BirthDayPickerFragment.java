@@ -3,6 +3,7 @@ package com.ivanhoecambridge.mall.fragments;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
@@ -15,6 +16,7 @@ import java.util.GregorianCalendar;
 public class BirthDayPickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private DateSelectedListener listener;
+    private DialogInterface.OnDismissListener onDismissListener;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -22,8 +24,9 @@ public class BirthDayPickerFragment extends DialogFragment implements DatePicker
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-
-        return new DatePickerDialog(getActivity(), R.style.DialogTheme_BirthdayPicker, this, year, month, day);
+        DatePickerDialog birthdayPicker =  new DatePickerDialog(getActivity(), R.style.DialogTheme_BirthdayPicker, this, year, month, day);
+        birthdayPicker.setOnDismissListener(onDismissListener);
+        return birthdayPicker;
     }
 
     @Override
@@ -31,6 +34,7 @@ public class BirthDayPickerFragment extends DialogFragment implements DatePicker
         super.onAttach(context);
         try {
             listener = (DateSelectedListener) context;
+            onDismissListener = (DialogInterface.OnDismissListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(listener.getClass().toString()
                     + " must implement DateSelectedListener");

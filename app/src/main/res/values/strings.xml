@@ -199,7 +199,7 @@
     <string name="drawer_stores">Stores</string>
     <string name="drawer_interests">Interests</string>
     <string name="drawer_add_gc">+ Add a Gift Card</string>
-    <string name="drawer_sign_in">Sign In</string>
+    <string name="drawer_sign_in">Sign Up</string>
     <!-- Sign out from drawer is temporary -->
     <string name="drawer_sign_out">Sign Out</string>
 
@@ -359,8 +359,8 @@
     <string name="signin_already_have_account">Already have an account?</string>
     <string name="signin_signin_with_underline"><u>Sign In</u></string>
     <string name="signin_use_existing_profile">Use an existing profile by siging up with your Facebook or Google account.</string>
-    <string name="signin_connect_with_fb">Connect with Facebook</string>
-    <string name="signin_connect_with_google">Connect with Google+</string>
+    <string name="signin_connect_with_fb">Sign In with Facebook</string>
+    <string name="signin_connect_with_google">Sign In Google+</string>
     <string name="signin_signup_with_email">Sign Up With Email</string>
     <string name="signin_sign_in">Sign In</string>
     <string name="signin_password_reset">Reset / Forgot Password</string>
