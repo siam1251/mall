@@ -2,6 +2,7 @@
 <resources>
     <!-- JSON files -->
     <string name="mall_info_json">mallinfo_fr.json</string>
+    <string name="amenities_json">amenities_fr.json</string>
 
     <!-- ACTIONS -->
     <string name="action_settings">Réglages</string>

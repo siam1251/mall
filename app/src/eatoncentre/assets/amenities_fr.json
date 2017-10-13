@@ -1,0 +1,75 @@
+{
+  "amenities":[
+    {
+      "type":"0",
+      "enabled":true,
+      "title":"Toilettes",
+      "externalIds":[
+        "washroom",
+        "family-washroom"
+      ]
+    },
+    {
+      "type":"1",
+      "enabled":true,
+      "title":"Kiosque d'information",
+      "externalIds":[
+        "information-kiosk",
+        "Guest Services",
+        "Conciergerie"
+      ]
+    },
+    {
+      "type":"2",
+      "enabled":false,
+      "title":"Aire de restauration",
+      "externalIds":[
+        "Food Court",
+        "Aire de restauration"
+      ]
+    },
+    {
+      "type":"3",
+      "enabled":false,
+      "title":"Poussettes",
+      "externalIds":[
+        "strollers"
+      ]
+    },
+    {
+      "type":"4",
+      "enabled":false,
+      "title":"Station de taxi",
+      "externalIds":[
+        "taxi-stand"
+      ]
+    },
+    {
+      "type":"6",
+      "enabled":false,
+      "title":"Salle d'allaitement",
+      "externalIds":[
+        "Nursing Room",
+        "Salle d'allaitement"
+      ]
+    },
+    {
+      "type":"7",
+      "enabled":true,
+      "title":"Ascenseurs",
+      "externalIds":[
+        "Elevator",
+        "Ascenseur"
+      ]
+    },
+    {
+      "type":"9",
+      "enabled":true,
+      "title":"Escaliers et Escaliers roulant",
+      "externalIds":[
+        "Stairs",
+        "Escalator"
+      ]
+    }
+  ]
+}
