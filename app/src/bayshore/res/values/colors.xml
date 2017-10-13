@@ -24,4 +24,9 @@
     <color name="map_destination_store">#273e94</color>
     <color name="directionSymbol">#000000</color>
 
+    <!-- LEFT DRAWER -->
+    <color name="profile_border_color">#b9646464</color>
+    <color name="profile_default_img_filter_color">#000000</color>
+    <color name="profile_divider">#e2e2e2</color>
+
 </resources>

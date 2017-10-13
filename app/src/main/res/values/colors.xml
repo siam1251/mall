@@ -170,9 +170,11 @@
     <color name="map_level_with_path">#007aff</color>
     <color name="map_level_without_path">#FFFFFF</color>
 
-    <!--LEFT PANEL-->
+    <!--LEFT DRAWER-->
     <color name="privacy_policy_text_color">#101010</color>
-
+    <color name="profile_border_color">@color/white</color>
+    <color name="profile_default_img_filter_color">#ffffff</color>
+    <color name="profile_divider">#fff</color>
     <!--SIGN -->
     <color name="sign_in_red">#ee3f33</color>
     <color name="sign_in_disabled">#939393</color>
@@ -186,6 +188,7 @@
 
     <!-- SIGN IN -->
     <color name="sign_in_divider">#e3e3e3</color>
+
 
 
 </resources>

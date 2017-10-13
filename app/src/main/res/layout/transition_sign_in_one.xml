@@ -166,7 +166,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/signin_connect_with_fb"
+                    android:text="@string/signin_sign_in_with_fb"
                     android:textSize="16dp"
                     />
 
@@ -202,7 +202,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/signin_connect_with_google"
+                    android:text="@string/signin_sign_in_with_google"
                     android:textSize="16dp"
                     />
 
