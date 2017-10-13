@@ -16,8 +16,7 @@
         <RelativeLayout
             android:id="@+id/rlDrawerSignIn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/ivDrawerLayoutBg"
@@ -25,7 +24,7 @@
                 android:layout_height="@dimen/profile_sign_in_bg_height"
                 android:background="@color/black"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_profile_activemall_signin"
+                android:src="@drawable/img_profile_bg_inactive"
                 android:visibility="visible" />
 
             <View
@@ -33,10 +32,12 @@
                 android:layout_height="74dp"
                 android:layout_alignBottom="@+id/ivDrawerLayoutBg"
                 android:background="@drawable/view_shadow_inverted_drawer_layout"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
 
             <com.ivanhoecambridge.mall.views.CircleImageView
+                app:borderFilterColor="@color/profile_border_color"
+                app:srcFilterColor="@color/profile_default_img_filter_color"
                 android:id="@+id/ivDrawerLayoutUser"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -105,6 +106,11 @@
 
         </RelativeLayout>
 
+        <View
+            android:layout_below="@id/rlDrawerSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/sign_in_divider"/>
 
         <include
             layout="@layout/layout_active_mall"

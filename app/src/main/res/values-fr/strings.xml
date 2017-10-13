@@ -294,7 +294,9 @@
     <string name="signin_already_have_account">Déjà un compte?</string>
     <string name="signin_signin_with_underline"><u>Se connecter</u></string>
     <string name="signin_use_existing_profile">(REPLACE WITH LOGO)Use an existing profile by siging up with your Facebook or Google account.</string>
+    <string name="signin_sign_in_with_fb">Connectez-vous avec Facebook</string>
     <string name="signin_connect_with_fb">Connectez-vous avec Facebook</string>
+    <string name="signin_sign_in_with_google">Connectez-vous avec Google</string>
     <string name="signin_connect_with_google">Connectez-vous avec Google</string>
     <string name="signin_signup_with_email">Adhérer avec votre courriel</string>
     <string name="signin_sign_in">Se connecter</string>

@@ -1,6 +1,7 @@
 package com.ivanhoecambridge.mall.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
@@ -12,9 +13,12 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.support.v7.widget.AppCompatImageView;
+
+import com.ivanhoecambridge.mall.R;
 
 /**
  * Created by Kay on 2016-06-20.
@@ -22,22 +26,34 @@ import android.support.v7.widget.AppCompatImageView;
 public class CircleImageView extends AppCompatImageView {
 
     private Context mContext;
-
+    private int borderFilterColor;
+    private int srcFilterColor;
     public CircleImageView(Context context) {
         super(context);
         mContext = context;
+        initDefaults(context);
     }
 
     public CircleImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-
+        initDefaults(context);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView);
+        borderFilterColor = a.getColor(R.styleable.CircleImageView_borderFilterColor, Color.WHITE);
+        a.recycle();
     }
 
     public CircleImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
+        initDefaults(context);
     }
+
+    private void initDefaults(Context context) {
+        borderFilterColor = Color.WHITE;
+        srcFilterColor = ContextCompat.getColor(context, R.color.profile_default_img_filter_color);
+    }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -64,7 +80,7 @@ public class CircleImageView extends AppCompatImageView {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,(float) dp, context.getResources().getDisplayMetrics());
     }
 
-    public static Bitmap getCircularBitmapWithWhiteBorder(Bitmap bitmap,
+    public Bitmap getCircularBitmapWithWhiteBorder(Bitmap bitmap,
                                                           int borderWidth) {
         if (bitmap == null || bitmap.isRecycled()) {
             return null;
@@ -84,13 +100,13 @@ public class CircleImageView extends AppCompatImageView {
         canvas.drawCircle(width / 2, height / 2, radius, paint);
         paint.setShader(null);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.WHITE);
+        paint.setColor(borderFilterColor);
         paint.setStrokeWidth(borderWidth);
         canvas.drawCircle(width / 2, height / 2, radius - borderWidth / 2, paint);
         return canvasBitmap;
     }
 
-    public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
+    public Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
         Bitmap sbmp;
 
         if (bmp.getWidth() != radius || bmp.getHeight() != radius) {
@@ -113,10 +129,10 @@ public class CircleImageView extends AppCompatImageView {
         paint.setFilterBitmap(true);
         paint.setDither(true);
         canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(Color.parseColor("#FFFFFF"));
+        paint.setColor(srcFilterColor);
         canvas.drawCircle(radius / 2 + 0.7f,
                 radius / 2 + 0.7f, radius / 2 + 0.1f, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
         canvas.drawBitmap(sbmp, rect, rect, paint);
 
         return output;
