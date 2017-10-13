@@ -29,6 +29,7 @@ import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpPlaceManager;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpOperatingHour;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpOverrides;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
@@ -799,15 +800,26 @@ public class DetailActivity extends AppCompatActivity {
 
             //ANNOUNCEMENT / EVENT PERIOD
             TextView tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
+
             String time = "";
+
             if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_STORE){
-                String[] timeArray = new String[2];
-                time = kcpContentPage.getStoreHourForToday(timeArray, KcpPlacesRoot.getInstance().getMallContinuousOverrides());
-                time = timeArray[0].toUpperCase() + " " + timeArray[1];
-                if(time.toLowerCase().contains("closed")) { //TODO: change for other languages
-                    tvDetailDate.setBackgroundResource(R.drawable.btn_style_corner_radius_gray);
-                    tvDetailDate.setTextColor(getResources().getColor(R.color.white));
+                String[] timeArray = kcpContentPage.getStoreHoursForToday(KcpPlacesRoot.getInstance().getMallContinuousOverrides());
+
+                switch(timeArray[0]) {
+                    case KcpOperatingHour.STATUS_BEFORE_CLOSED:
+                        tvDetailDate.setBackgroundResource(R.drawable.btn_style_corner_radius_gray);
+                        tvDetailDate.setTextColor(getResources().getColor(R.color.white));
+
+                        time = getString(R.string.mall_hours_open_until) + " " + timeArray[1];
+
+                        break;
+                    case KcpOperatingHour.STATUS_BEFORE_OPEN:
+                    default:
+                        time = getString(R.string.mall_hours_closed_until) + " " + timeArray[1];
+                        break;
                 }
+
             } else {
                 if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){ //announcement doesn't have effective start/end date but only publish start date
                     time = kcpContentPage.getFormattedDate(kcpContentPage.publishStartTime, Constants.DATE_FORMAT_ANNOUNCEMENT);
@@ -835,8 +847,11 @@ public class DetailActivity extends AppCompatActivity {
             //BODY
             TextView tvDetailBody = (TextView) findViewById(R.id.tvDetailBody);
             String body = kcpContentPage.getBody();
-            if(body.equals("")) tvDetailBody.setVisibility(View.GONE);
-            else HtmlTextView.setHtmlTextView(this, tvDetailBody, body, R.color.html_link_text_color);
+            if(body == null || body.isEmpty()) {
+                tvDetailBody.setVisibility(View.GONE);
+            } else {
+                HtmlTextView.setHtmlTextView(this, tvDetailBody, body, R.color.html_link_text_color);
+            }
 
         } catch (Exception e) {
             logger.error(e);

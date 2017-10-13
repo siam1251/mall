@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpPlaceManager;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpOperatingHour;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlacesRoot;
 import com.ivanhoecambridge.kcpandroidsdk.models.MallInfo.InfoList;
@@ -259,21 +260,29 @@ public class InfoFragment extends BaseFragment{
             KcpPlacesRoot kcpPlacesRoot = KcpPlacesRoot.getInstance();
             KcpPlaces kcpPlaces = kcpPlacesRoot.getPlaceByPlaceType(KcpPlaces.PLACE_TYPE_MALL);
             toolbar.setVisibility(View.VISIBLE);
-            String[] timeArray = new String[2];
-            String time = kcpPlaces.getStoreHourForToday(timeArray, kcpPlacesRoot.getMallContinuousOverrides());
-            if(time.equals("")) {
-                toolbar.setVisibility(View.GONE);
-            }
 
-            tvInfoHoursBold.setText(timeArray[0]);
-            tvInfoHoursLight.setText(timeArray[1]);
+            String[] timeArray = kcpPlaces.getStoreHoursForToday(kcpPlacesRoot.getMallContinuousOverrides());
 
-            if(time.startsWith("Open")){
-                logger.debug("mall is OPEN");
-                toolbar.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_open));
-            } else if (time.startsWith("Closed")){
-                logger.debug("mall is CLOSED");
-                toolbar.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_closed));
+            switch(timeArray[0]) {
+                case KcpOperatingHour.STATUS_BEFORE_OPEN:
+                    logger.debug("mall is CLOSED");
+                    toolbar.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_closed));
+
+                    tvInfoHoursBold.setText(getString(R.string.mall_hours_closed_until));
+                    tvInfoHoursLight.setText(timeArray[1]);
+                    break;
+                case KcpOperatingHour.STATUS_BEFORE_CLOSED:
+                    logger.debug("mall is OPEN");
+                    toolbar.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_open));
+
+                    tvInfoHoursBold.setText(getString(R.string.mall_hours_open_until));
+                    tvInfoHoursLight.setText(timeArray[1]);
+                    break;
+                case KcpOperatingHour.STATUS_CLOSED:
+                case KcpOperatingHour.STATUS_CLOSED_OVERRIDE:
+                default:
+                    toolbar.setVisibility(View.GONE);
+                    break;
             }
         } catch (Exception e) {
             logger.error(e);

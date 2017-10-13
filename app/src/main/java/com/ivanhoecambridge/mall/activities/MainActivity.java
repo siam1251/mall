@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -111,8 +112,7 @@ import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
 import com.ivanhoecambridge.mall.managers.SidePanelManagers;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
-import com.ivanhoecambridge.mall.mappedin.CustomLocation;
-import com.ivanhoecambridge.mall.mappedin.MapUtility;
+import com.ivanhoecambridge.mall.mappedin.Amenity;
 import com.ivanhoecambridge.mall.movies.MovieManager;
 import com.ivanhoecambridge.mall.onboarding.TutorialActivity;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
@@ -129,8 +129,10 @@ import com.ivanhoecambridge.mall.views.ThemeColorImageView;
 import com.janrain.android.Jump;
 import com.mappedin.sdk.Polygon;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -699,12 +701,30 @@ public class MainActivity extends BaseActivity
 
     }
 
+    /**
+     * Checks for the <em>amenities.json</em> file based on the locale. If the locale file does not exist for that mall, it will default to the english file.
+     * @return resource ID value that contains the name of the file.
+     */
+    private int getValidAmenitiesFile() {
+        int validInfoFileId = R.string.amenities_json_default;
+
+        if (!KcpUtility.isCurrentLocale(this, "en")) {
+            AssetManager assetManager = this.getAssets();
+            try {
+                if (Arrays.asList(assetManager.list("")).contains(getString(R.string.amenities_json))) {
+                    validInfoFileId = R.string.amenities_json;
+                }
+            } catch (IOException io) {
+                io.printStackTrace();
+            }
+        }
+        return validInfoFileId;
+    }
 
     private void initializeMapData(){
-
         String data = "";
         try {
-            data = KcpUtility.convertStreamToString(getAssets().open(Constants.AMENITIES_OFFLINE_TEXT));
+            data = KcpUtility.convertStreamToString(getAssets().open(Constants.getStringFromResources(this, getValidAmenitiesFile())));
             Gson gson = new Gson();
             AmenitiesManager.sAmenities = gson.fromJson(data, Amenities.class);
         } catch (Exception e) {
@@ -1532,7 +1552,7 @@ public class MainActivity extends BaseActivity
         rvMallDirectory.setVisibility(View.INVISIBLE);
         int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
         String externalCode = String.valueOf(resultCode);
-        ArrayList<Polygon> polygons = CustomLocation.getPolygonsFromLocationWithExternalCode(externalCode);
+        ArrayList<Polygon> polygons = MapFragment.getPolygonsFromLocationWithExternalCode(externalCode);
         if(polygons == null || polygons.size() == 0) return;
         Polygon storePolygon = polygons.get(0);
         if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
@@ -1540,7 +1560,7 @@ public class MainActivity extends BaseActivity
             if(parkingName != null) {
                 int parkingPosition = ParkingManager.sParkings.getParkingPositionByName(parkingName);
                 if(BuildConfig.PARKING_POLYGON) {
-                    Polygon nearestParkingPolygon = MapUtility.getNearestParkingPolygonFromStorePolygon(storePolygon);
+                    Polygon nearestParkingPolygon = MapFragment.getNearestParkingPolygonFromStorePolygon(storePolygon);
                     MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, nearestParkingPolygon);
                 } else {
                     if(parkingPosition != -1) MapFragment.getInstance().showParkingSpotFromDetailActivity(parkingPosition, storePolygon);
@@ -1594,8 +1614,9 @@ public class MainActivity extends BaseActivity
                     String locationID = data.getStringExtra(Constants.ARG_LOCATION_ID);
                     String mapName = data.getStringExtra(Constants.ARG_LOCATION_MAP_NAME);
                     if(mapName != null) MapFragment.getInstance().setMapLevel(-50, null, mapName);
-                    CustomLocation customLocation = CustomLocation.getLocationWithLocationId(locationID);
-                    String externalID = customLocation.getAmenityType(); //LocationData Type from MappedIn == ExternalID from amenities.json
+                    Amenity amenityLocation = MapFragment.getAmenityWithLocationId(locationID);
+                    String externalID = amenityLocation.amenityType;
+
                     final Amenities.Amenity amenity = AmenitiesManager.sAmenities.getAmenityWithExternalId(externalID);
                     boolean isToggled = Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_AMENITY + externalID, amenity == null ? false : amenity.isEnabled());
                     if(!isToggled) {

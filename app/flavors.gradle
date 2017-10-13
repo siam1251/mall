@@ -8,7 +8,7 @@ ext {
             mallName             : '"bayshore"',
             appName              : '"Bayshore"',
             hasPush              : 'true',
-            hasParkingPolygon    : 'false',
+            hasParkingPolygon    : 'true',
             hasMovie             : 'false',
             hasWhiteFav          : 'false',
             hasNearestParkingImg : 'false',

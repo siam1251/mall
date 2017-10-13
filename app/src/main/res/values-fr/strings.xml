@@ -2,6 +2,7 @@
 <resources>
     <!-- JSON files -->
     <string name="mall_info_json">mallinfo_fr.json</string>
+    <string name="amenities_json">amenities_fr.json</string>
 
     <!-- ACTIONS -->
     <string name="action_settings">Réglages</string>
@@ -338,6 +339,11 @@
     <string name="detail_store_deals">Détails du magasin</string>
     <string name="detail_store_events">Événement du magasin</string>
 
+    <!--MALL HOURS-->
+    <string name="mall_hours_open_until">Ouvert jusqu\'à </string>
+    <string name="mall_hours_closed_until">Fermé. Ouvre à </string>
+    <string name="mall_hours_closed">Fermé maintenant</string>
+    <string name="mall_hours_open">Ouvrez maintenant</string> <!--TODO: Replaces open_now-->
 
     <!--ETC-->
     <string name="see_all_stores">Voir les magasins</string>

@@ -7,10 +7,6 @@
     android:paddingLeft="28dp"
     android:paddingRight="28dp"
     android:orientation="vertical">
-    android:background="@drawable/view_gradient_onboarding"
-
-
-        android:layout_marginTop="43dp"
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:layout_marginTop="@dimen/onboarding_desc_top_margin"
         android:textSize="@dimen/onboarding_first_title"
@@ -23,7 +19,6 @@
         android:lineSpacingMultiplier="1.2"
         android:textColor="@color/white"
         />
-
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:layout_below="@+id/tvOnbdTitle"
         app:fontFamily="@string/fontFamily_roboto_regular"
@@ -38,8 +33,6 @@
         android:textSize="17dp"
         android:lineSpacingMultiplier="1.35"
         tools:text="Get smart deal recommendations from your favourite stores and shopping interests"/>
-        android:textSize="19dp"
-
     <Button
         android:visibility="gone"
         android:layout_width="match_parent"
