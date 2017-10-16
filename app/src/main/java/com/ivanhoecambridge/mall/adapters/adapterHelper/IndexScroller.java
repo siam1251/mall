@@ -56,10 +56,17 @@ public class IndexScroller {
     }
 
     public void draw(Canvas canvas) {
-        if (mState == STATE_HIDDEN)
+        if (mState == STATE_HIDDEN) {
             return;
+        }
 
-        if(mIndexbarRect == null ) return;
+        if (mIndexbarRect == null) {
+            return;
+        }
+
+        if (mSections == null || mSections.size() <= 0) {
+            return;
+        }
 
         // mAlphaRate determines the rate of opacity
         Paint indexbarPaint = new Paint();
@@ -204,6 +211,7 @@ public class IndexScroller {
     }
 
     private void setState(int state) {
+
         if (state < STATE_HIDDEN || state > STATE_HIDING)
             return;
 
@@ -294,6 +302,13 @@ public class IndexScroller {
 
     };
 
+    public boolean hasDataToShow() {
+        if(mSections.isEmpty() || mSectionPosition.isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     public void notifyChanges(List<String> sectionName, List<Integer> sectionPosition) {
     // Pre-calculate and pass your section header and position
