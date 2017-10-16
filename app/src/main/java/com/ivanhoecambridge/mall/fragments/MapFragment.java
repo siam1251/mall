@@ -886,7 +886,7 @@ public class MapFragment extends BaseFragment
 
         if (directions != null) {
 
-            path = new Path(directions.getPath(), 1.5f, 1.5f, getResources().getColor(R.color.map_destination_store));
+            path = new Path(directions.getPath(), 1.5f, 1.5f, getResources().getColor(R.color.map_wayfinding_path));
             mapView.addPath(path);
             setMapLevelsInPath(directions.getPath());
         }
@@ -971,7 +971,7 @@ public class MapFragment extends BaseFragment
                 directions = destinationPolygon.directionsFrom(activeVenue, startPolygon, ((Polygon) startPolygon).getLocations()[0], arriveAtLocation); //real use
 
                 if (directions != null) {
-                    path = new Path(directions.getPath(), 1.5f, 1.5f, getResources().getColor(R.color.map_destination_store));
+                    path = new Path(directions.getPath(), 1.5f, 1.5f, getResources().getColor(R.color.map_wayfinding_path));
                     mapView.addPath(path);
                     setMapLevelsInPath(directions.getPath());
                 }
