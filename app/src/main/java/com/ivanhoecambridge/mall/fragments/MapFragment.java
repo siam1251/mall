@@ -452,6 +452,9 @@ public class MapFragment extends BaseFragment
         mSectionedAdapter.setSections(sections.toArray(dummy));
         mMainActivity.rvMap.setAdapter(mSectionedAdapter);
 
+        if (kcpPlacesFiltered.isEmpty() && !mSearchString.equals("")) {
+            mPlaceRecyclerViewAdapter.addFooter(getString(R.string.search_empty_results_place_holder), R.layout.list_item_directory_footer_empty);
+        }
     }
 
     public static Amenity getAmenityWithLocationId(String locationId){
