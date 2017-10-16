@@ -61,13 +61,13 @@ public class IndexableRecylerView extends RecyclerView implements RecyclerView.O
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
 
-        if (mScroller != null)
+        if (mScroller != null) {
             mScroller.show();
+        }
 
         // Intercept ListView's touch event
-        if (mScroller != null && mScroller.onTouchEvent(ev))
+        if (mScroller != null && mScroller.hasDataToShow() && mScroller.onTouchEvent(ev))
             return true;
-
 
         return super.onTouchEvent(ev);
     }
