@@ -355,7 +355,7 @@
 
     <!-- SIGNIN -->
     <string name="signin_create_account_to_save">Create an account to save all your preferences in one place.</string>
-    <string name="signin_sign_up">Sign In</string>
+    <string name="signin_sign_up">Sign Up</string>
     <string name="signin_already_have_account">Already have an account?</string>
     <string name="signin_signin_with_underline"><u>Sign In</u></string>
     <string name="signin_use_existing_profile">Use an existing profile by siging up with your Facebook or Google account.</string>
