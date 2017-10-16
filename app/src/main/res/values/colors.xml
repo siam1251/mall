@@ -135,6 +135,7 @@
     <!--MAP FILTER-->
     <color name="filter_off_color">#787878</color>
     <color name="map_wayfinding_path">#273e94</color>
+    <color name="map_destination_store">#273e94</color>
     <color name="directionSymbol">#13bed0</color>
 
     <!--PARKING-->
