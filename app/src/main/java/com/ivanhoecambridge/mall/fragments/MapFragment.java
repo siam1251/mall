@@ -2362,13 +2362,10 @@ public class MapFragment extends BaseFragment
         public void highlightThisLabel() {
             dropPinWithColor(coordinate, drawable);
 
-            if(amenity != null) {
-                mRemovedPin = new Pin(coordinate, label);
-            } else if(escalatorStairs != null) {
-                mRemovedPin = new Pin(coordinate, label);
-            } else if(elevator != null) {
+            if(amenity != null || escalatorStairs != null || elevator != null) {
                 mRemovedPin = new Pin(coordinate, label);
             }
+
             mapView.removeMarker(label);
         }
     }
