@@ -268,14 +268,14 @@ public class InfoFragment extends BaseFragment{
                     logger.debug("mall is CLOSED");
                     toolbar.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_closed));
 
-                    tvInfoHoursBold.setText(getString(R.string.mall_hours_closed_until));
+                    tvInfoHoursBold.setText(getString(R.string.mall_hours_closed_until, " "));
                     tvInfoHoursLight.setText(timeArray[1]);
                     break;
                 case KcpOperatingHour.STATUS_BEFORE_CLOSED:
                     logger.debug("mall is OPEN");
                     toolbar.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_open));
 
-                    tvInfoHoursBold.setText(getString(R.string.mall_hours_open_until));
+                    tvInfoHoursBold.setText(getString(R.string.mall_hours_open_until, " "));
                     tvInfoHoursLight.setText(timeArray[1]);
                     break;
                 case KcpOperatingHour.STATUS_CLOSED:
