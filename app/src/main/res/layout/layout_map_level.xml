@@ -38,7 +38,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp">
+        android:layout_height="35dp">
 
         <ImageView
             android:layout_alignParentTop="true"
@@ -60,7 +60,7 @@
             android:textColor="#787a86"
             android:textSize="10dp"
             tools:text="SC, OG N UP3"
-            android:lines="2"
+            android:lines="3"
             />
     </RelativeLayout>
 
