@@ -1440,6 +1440,39 @@ public class MapFragment extends BaseFragment
         showDirectionCard(true, IdType.AMENITY, externalId, location.getName(), categoryName, amenityDrawable);
     }
 
+    private void showEscalatorStairsDetail(final EscalatorStairs location, final Drawable escalatorStairsDrawable) {
+        String categoryName = "";
+
+        if (location.getCategories() != null && location.getCategories().length > 0) {
+            categoryName = location.getCategories()[0].getName();
+        }
+
+        mAmenityClicked = location.getName();
+
+        int externalId = Integer.MAX_VALUE;
+        if (location.externalId != null && !location.externalId.equals("")) {
+            externalId = Integer.parseInt(location.externalId);
+        }
+
+        showDirectionCard(true, IdType.AMENITY, externalId, location.getName(), categoryName, escalatorStairsDrawable);
+    }
+
+    private void showElevatorDetail(final Elevator location, final Drawable elevatorDrawable) {
+        String categoryName = "";
+
+        if (location.getCategories() != null && location.getCategories().length > 0) {
+            categoryName = location.getCategories()[0].getName();
+        }
+
+        mAmenityClicked = location.getName();
+
+        int externalId = Integer.MAX_VALUE;
+        if (location.externalId != null && !location.externalId.equals("")) {
+            externalId = Integer.parseInt(location.externalId);
+        }
+
+        showDirectionCard(true, IdType.AMENITY, externalId, location.getName(), categoryName, elevatorDrawable);
+    }
 
     private void showLocationDetails(final Tenant location) {
 
@@ -2278,6 +2311,40 @@ public class MapFragment extends BaseFragment
                             showAmenityDetail(amenity, drawable);
                         }
                     }
+                } else if(escalatorStairs != null) {
+                    mapView.getCamera().focusOn(coordinate);
+                    zoomInOut();
+
+                    destinationPolygon = coordinate;
+
+                    if (mSelectedPin == null) {
+                        highlightThisLabel();
+                        showEscalatorStairsDetail(escalatorStairs, drawable);
+                    } else {
+                        Coordinate removeableMarkerCoordinate = mSelectedPin.getCoordinate();
+                        replaceSelectedPinWithRemovedPin();
+                        if (removeableMarkerCoordinate != coordinate) {
+                            highlightThisLabel();
+                            showEscalatorStairsDetail(escalatorStairs, drawable);
+                        }
+                    }
+                } else if(elevator != null) {
+                    mapView.getCamera().focusOn(coordinate);
+                    zoomInOut();
+
+                    destinationPolygon = coordinate;
+
+                    if (mSelectedPin == null) {
+                        highlightThisLabel();
+                        showElevatorDetail(elevator, drawable);
+                    } else {
+                        Coordinate removeableMarkerCoordinate = mSelectedPin.getCoordinate();
+                        replaceSelectedPinWithRemovedPin();
+                        if (removeableMarkerCoordinate != coordinate) {
+                            highlightThisLabel();
+                            showElevatorDetail(elevator, drawable);
+                        }
+                    }
                 } else {
                     if (label == sParkingPin.getParkingCoordinatePin().getOverlay2DImage()) {
                         showParkingDetail(false);
@@ -2296,6 +2363,10 @@ public class MapFragment extends BaseFragment
             dropPinWithColor(coordinate, drawable);
 
             if(amenity != null) {
+                mRemovedPin = new Pin(coordinate, label);
+            } else if(escalatorStairs != null) {
+                mRemovedPin = new Pin(coordinate, label);
+            } else if(elevator != null) {
                 mRemovedPin = new Pin(coordinate, label);
             }
             mapView.removeMarker(label);
