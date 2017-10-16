@@ -64,7 +64,7 @@ public class IndexScroller {
             return;
         }
 
-        if (mSections == null || mSections.size() <= 0) {
+        if (mSections == null || mSections.isEmpty()) {
             return;
         }
 
@@ -303,11 +303,7 @@ public class IndexScroller {
     };
 
     public boolean hasDataToShow() {
-        if(mSections.isEmpty() || mSectionPosition.isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(mSections.isEmpty() || mSectionPosition.isEmpty());
     }
 
     public void notifyChanges(List<String> sectionName, List<Integer> sectionPosition) {
