@@ -67,10 +67,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
 import com.exacttarget.etpushsdk.ETPush;
 import com.exacttarget.etpushsdk.util.EventBus;
 import com.google.gson.Gson;
@@ -124,6 +122,7 @@ import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 import com.ivanhoecambridge.mall.views.BadgeView;
+import com.ivanhoecambridge.mall.views.CircleImageView;
 import com.ivanhoecambridge.mall.views.KcpAnimatedViewPager;
 import com.ivanhoecambridge.mall.views.ThemeColorImageView;
 import com.janrain.android.Jump;
@@ -172,11 +171,11 @@ public class MainActivity extends BaseActivity
 
 
 
-    private ImageView ivDrawerLayoutBg;
-    private LinearLayout llDisplayNameSettings;
-    private TextView tvSignInOrOut;
-    private TextView tvDrawerLayoutAccount;
-    private ImageView ivDrawerLayoutUser;
+    private ImageView       ivDrawerLayoutBg;
+    private LinearLayout    llDisplayNameSettings;
+    private TextView        tvSignInOrOut;
+    private TextView        tvDrawerLayoutAccount;
+    private CircleImageView ivDrawerLayoutUser;
 
     private BadgeView badgeDeals;
     private BadgeView badgeEvents;
@@ -783,7 +782,7 @@ public class MainActivity extends BaseActivity
             }
         });
 
-        ivDrawerLayoutUser = (ImageView) findViewById(R.id.ivDrawerLayoutUser);
+        ivDrawerLayoutUser = (CircleImageView) findViewById(R.id.ivDrawerLayoutUser);
         ivDrawerLayoutUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1008,6 +1007,7 @@ public class MainActivity extends BaseActivity
             int privacyTextColor;
             int versionNumberTextColor;
             Drawable drawerLayoutBgDrawable;
+            updateProfileAvatarForActiveMall(activeMallEnabled);
 
             if(activeMallEnabled) {
 
@@ -1761,6 +1761,23 @@ public class MainActivity extends BaseActivity
             //not that it matters as the TextView gets hidden anyways.
             tvDrawerLayoutAccount.setText("");
             ivDrawerLayoutUser.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.img_profile_default));
+        }
+        updateProfileAvatarForActiveMall(mActiveMall);
+    }
+
+    /**
+     * Updates the colors and filter modes for the user avatar image depending on active mall state.
+     * @param isActiveMall Active Mall status.
+     */
+    private void updateProfileAvatarForActiveMall(boolean isActiveMall) {
+        if (isActiveMall) {
+            tvDrawerLayoutAccount.setTextColor(colour(R.color.profile_name_activemall));
+            ivDrawerLayoutUser.setBorderFilterColor(R.color.profile_activemall_border_color);
+            ivDrawerLayoutUser.setSrcFilterMode(PorterDuff.Mode.SRC_IN);
+        } else {
+            tvDrawerLayoutAccount.setTextColor(colour(R.color.profile_name_inactive));
+            //only reset the porter duff mode if the user doesn't exist or has no image.
+            ivDrawerLayoutUser.resetToDefaultColors((jrRecordManager == null || !jrRecordManager.userHasProfileImage()));
         }
     }
 

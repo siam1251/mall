@@ -13,6 +13,8 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -26,8 +28,10 @@ import com.ivanhoecambridge.mall.R;
 public class CircleImageView extends AppCompatImageView {
 
     private Context mContext;
-    private int borderFilterColor;
+    private int borderFilterColor, defaultFilterColor;
     private int srcFilterColor;
+    private PorterDuff.Mode defaultPorterDuffMode, currentPorterDuffMode;
+    
     public CircleImageView(Context context) {
         super(context);
         mContext = context;
@@ -37,10 +41,10 @@ public class CircleImageView extends AppCompatImageView {
     public CircleImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        initDefaults(context);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView);
-        borderFilterColor = a.getColor(R.styleable.CircleImageView_borderFilterColor, Color.WHITE);
+        defaultFilterColor = a.getColor(R.styleable.CircleImageView_borderFilterColor, Color.WHITE);
         a.recycle();
+        initDefaults(context);
     }
 
     public CircleImageView(Context context, AttributeSet attrs, int defStyle) {
@@ -50,9 +54,42 @@ public class CircleImageView extends AppCompatImageView {
     }
 
     private void initDefaults(Context context) {
-        borderFilterColor = Color.WHITE;
+        borderFilterColor = defaultFilterColor;
         srcFilterColor = ContextCompat.getColor(context, R.color.profile_default_img_filter_color);
+        defaultPorterDuffMode = PorterDuff.Mode.DST_IN;
+        currentPorterDuffMode = defaultPorterDuffMode;
     }
+
+
+    /**
+     * Set the border color.
+     * @param color Color resource
+     */
+    public void setBorderFilterColor(@ColorRes int color) {
+        borderFilterColor = ContextCompat.getColor(mContext, color);
+        invalidate();
+    }
+
+    /**
+     * Sets the src filter PorterDuff.Mode
+     * @param mode PorterDuff.Mode
+     */
+    public void setSrcFilterMode(PorterDuff.Mode mode) {
+        currentPorterDuffMode = mode;
+        invalidate();
+    }
+
+    /**
+     * Resets the border and default src image to it's original color.
+     */
+    public void resetToDefaultColors(boolean shouldResetPorterDuff) {
+        if (shouldResetPorterDuff) {
+            currentPorterDuffMode = defaultPorterDuffMode;
+        }
+        borderFilterColor = defaultFilterColor;
+        invalidate();
+    }
+
 
 
     @Override
@@ -132,7 +169,7 @@ public class CircleImageView extends AppCompatImageView {
         paint.setColor(srcFilterColor);
         canvas.drawCircle(radius / 2 + 0.7f,
                 radius / 2 + 0.7f, radius / 2 + 0.1f, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        paint.setXfermode(new PorterDuffXfermode(currentPorterDuffMode));
         canvas.drawBitmap(sbmp, rect, rect, paint);
 
         return output;

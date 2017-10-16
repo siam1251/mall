@@ -51,7 +51,7 @@
     <string name="fragment_news">Nouvelles</string>
     <string name="fragment_deals">Offres</string>
     <string name="fragment_categories">Categories</string>
-    <string name="fragment_stores">Magasins A-Z"</string>
+    <string name="fragment_stores">Magasins A-Z</string>
     <string name="fragment_sub_categories">Sous-catégorie</string>
     <string name="fragment_category_stores">Categorie</string>
 
@@ -266,8 +266,8 @@
     <string name="onbd_one_desc">""</string>
     <string name="onbd_two_desc">Recevez des recommandations de promos de vos boutiques préférées</string>
     <string name="onbd_three_desc">Découvrez des boutiques en un clic grâce à la recherche avancée</string>
-    <string name="onbd_four_desc">À l\’aide du repérage avancé et le positionnement intérieur, localisez facilement une boutique ou votre voiture garée</string>
-    <string name="onbd_five_desc">Dès l\’arrivée, l\’appli se connecte au centre et vous propose tout ce qu\’il faut pour une expérience de magasinage optimale!</string>
+    <string name="onbd_four_desc">À l\'aide du repérage avancé et le positionnement intérieur, localisez facilement une boutique ou votre voiture garée</string>
+    <string name="onbd_five_desc">Dès l\'arrivée, l\'appli se connecte au centre et vous propose tout ce qu\'il faut pour une expérience de magasinage optimale!</string>
 
     <string name="onbd_btn_lets_get_started">Débuter</string>
     <string name="onbd_btn_lets_get_skip">Passer</string>
@@ -293,7 +293,6 @@
     <string name="signin_sign_up">S\'inscrire</string>
     <string name="signin_already_have_account">Déjà un compte?</string>
     <string name="signin_signin_with_underline"><u>Se connecter</u></string>
-    <string name="signin_use_existing_profile">(REPLACE WITH LOGO)Use an existing profile by siging up with your Facebook or Google account.</string>
     <string name="signin_sign_in_with_fb">Connectez-vous avec Facebook</string>
     <string name="signin_connect_with_fb">Connectez-vous avec Facebook</string>
     <string name="signin_sign_in_with_google">Connectez-vous avec Google</string>
@@ -303,7 +302,6 @@
     <string name="signin_password_reset">Réinitialiser / Mot de passe oublié</string>
     <string name="signin_dont_have_account">Pas de compte?</string>
     <string name="signin_forgot_password">Mot de passe oublié?</string>
-    <string name="signin_other_sign_in_method">(REPLACE WITH LOGO)You can also sign in with a Facebook or Google account.</string>
     <string name="signin_create_account">Créer un compte</string>
     <string name="signin_send_me_promos">M\'envoyer les offres et mises à jour</string>
     <string name="signin_by_signing_up">En adhérant vous acceptez les</string>
