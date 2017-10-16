@@ -342,8 +342,8 @@
     <string name="detail_store_events">Événement du magasin</string>
 
     <!--MALL HOURS-->
-    <string name="mall_hours_open_until">Ouvert jusqu\'à%1$s!</string>
-    <string name="mall_hours_closed_until">Fermé. Ouvre à%1$s!</string>
+    <string name="mall_hours_open_until">Ouvert jusqu\'à%1$s</string>
+    <string name="mall_hours_closed_until">Fermé. Ouvre à%1$s</string>
     <string name="mall_hours_closed">Fermé maintenant</string>
     <string name="mall_hours_open">Ouvrez maintenant</string> <!--TODO: Replaces open_now-->
 
