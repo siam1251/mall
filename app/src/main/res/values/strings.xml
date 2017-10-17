@@ -411,6 +411,7 @@
     <string name="mall_hours_closed_until">Closed now. Opens at\u0020</string>
     <string name="mall_hours_closed">Closed now</string>
     <string name="mall_hours_open">Open now</string>    <!--TODO: Replaces open_now-->
+    <string name="mall_hours_format">%1$s - %2$s</string>
 
     <!--ETC-->
     <string name="see_all_stores">See All Stores</string>
@@ -421,5 +422,17 @@
     <string name="closed_in_mall_hour">CLOSED</string>
     <string name="holiday_reminder_in_mall_hour">This is a reminder that %1$s! will have adjusted hours on:</string> <!--This is a reminder that HeaderFactory.MALL_NAME  will have adjusted hours on:-->
 
+    <!-- DATE FORMAT -->
+    <string name="date_format_effective_event">MMM d</string>
+    <string name="date_format_effective">EEEE, MMMM d</string>
+    <string name="date_format_mall_hour_date">EEE. MMM d</string>
+    <string name="date_format_holiday_date">MMMM d</string>
+    <string name="date_format_holiday">EEEE MMMM d</string>
+    <string name="date_format_holiday_store">EEE, MMMM d</string>
+    <string name="date_format_day">EEE</string>
+    <string name="date_format_event_hour">h:mm aa</string>
+    <string name="date_format_announcement">MMMM d, EEEE</string>
+    <string name="date_format_announcement_grouped">MMMM d</string>
+    <string name="date_format_janrain_capture">yyyy-MM-dd</string>
 
 </resources>

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -87,10 +88,10 @@ public class ActiveMallRecyclerViewAdapter extends RecyclerView.Adapter {
             String title = kcpContentPage.getTitle();
             kcpContentViewHolder.tvActiveMallTitle.setText(title);
 
-            String time =
-                    kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EFFECTIVE) +
-                            " - " +
-                            kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EFFECTIVE);
+            String time = mContext.getString(R.string.mall_hours_format,
+                    kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.getStringFromResources(mContext, R.string.date_format_effective)),
+                    kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.getStringFromResources(mContext, R.string.date_format_effective))
+            );
             kcpContentViewHolder.tvActiveMallDesc.setText(time);
         } else if(holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_DEAL) {
 

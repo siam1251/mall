@@ -618,7 +618,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
             String title = kcpContentPage.getTitle();
             tvAncmtTitle.setText(title);
 
-            String startingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_ANNOUNCEMENT_GROUPED);
+            String startingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.getStringFromResources(mContext, R.string.date_format_announcement_grouped));
             tvAncmtDate.setText(startingTime);
 
             view.setOnClickListener(new View.OnClickListener() {

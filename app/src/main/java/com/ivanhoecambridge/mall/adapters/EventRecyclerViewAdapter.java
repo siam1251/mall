@@ -132,14 +132,14 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
 
             //if event is for one day, also show its begin/end hours
             String time = "";
-            String startingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EFFECTIVE_EVENT);
-            String endingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EFFECTIVE_EVENT);
+            String startingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.getStringFromResources(mContext, R.string.date_format_effective_event));
+            String endingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.getStringFromResources(mContext, R.string.date_format_effective_event));
 
             if(!startingTime.equals(endingTime)) {
                 time = startingTime + " - " + endingTime;
             } else {
-                String eventStartHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EVENT_HOUR);
-                String eventEndingHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EVENT_HOUR);
+                String eventStartHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.getStringFromResources(mContext, R.string.date_format_event_hour));
+                String eventEndingHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.getStringFromResources(mContext, R.string.date_format_event_hour));
                 time = startingTime + " @ " + eventStartHour + " to " + eventEndingHour;
             }
 
