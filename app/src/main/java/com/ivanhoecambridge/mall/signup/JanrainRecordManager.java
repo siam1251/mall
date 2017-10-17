@@ -46,6 +46,13 @@ public class JanrainRecordManager {
         return captureRecord != null;
     }
 
+    /**
+     * Checks if the user has a set profile image.
+     * @return true if an image exists, false if not.
+     */
+    public boolean userHasProfileImage() {
+        return getProfileImageUrl() != null;
+    }
 
     /**
      * Gets the user profile image URL stored in janrain. Will select the first available photo.
