@@ -811,12 +811,12 @@ public class DetailActivity extends AppCompatActivity {
                         tvDetailDate.setBackgroundResource(R.drawable.btn_style_corner_radius_gray);
                         tvDetailDate.setTextColor(getResources().getColor(R.color.white));
 
-                        time = getString(R.string.mall_hours_open_until, " " + timeArray[1]);
+                        time = getString(R.string.mall_hours_open_until) + timeArray[1];
 
                         break;
                     case KcpOperatingHour.STATUS_BEFORE_OPEN:
                     default:
-                        time = getString(R.string.mall_hours_closed_until, " " + timeArray[1]);
+                        time = getString(R.string.mall_hours_closed_until) + timeArray[1];
                         break;
                 }
 
