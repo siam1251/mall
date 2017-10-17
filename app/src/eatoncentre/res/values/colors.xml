@@ -20,6 +20,6 @@
     <color name="intrst_bg">@color/themeColor</color>
 
     <!--MAP-->
-    <color name="map_destination_store">#273e94</color>
+    <color name="map_destination_store">@color/themeColor</color>
     <color name="directionSymbol">#000000</color>
 </resources>
