@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -266,7 +267,7 @@ public class InfoFragment extends BaseFragment{
             switch(timeArray[0]) {
                 case KcpOperatingHour.STATUS_BEFORE_OPEN:
                     logger.debug("mall is CLOSED");
-                    toolbar.setBackgroundColor(getResources().getColor(R.color.info_hours_bg_closed));
+                    toolbar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.info_hours_bg_closed));
 
                     tvInfoHoursBold.setText(getString(R.string.mall_hours_closed_until, " "));
                     tvInfoHoursLight.setText(timeArray[1]);
