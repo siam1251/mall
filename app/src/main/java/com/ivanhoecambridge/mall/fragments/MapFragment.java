@@ -2239,7 +2239,6 @@ public class MapFragment extends BaseFragment
                 this.amenity = (Amenity) location;
             }
 
-
             this.drawable = pinDrawable;
             this.label = label;
             this.coordinate = coordinate;
@@ -2268,11 +2267,14 @@ public class MapFragment extends BaseFragment
         public Coordinate      coordinate      = null;
         public String          placeExternalId = null;
 
+
         //TODO: if there are two pins, only one that overlaps the other one receives touch (it should pass it to other ones from SDK level)
         public void onClick() {
             try {
-                if (path != null || coordinate.getMap().getAltitude() != maps[mCurrentLevelIndex].getAltitude())
-                    return; //map shouldn't be clicakble when the paths drawn or this indicates the pin clicked is not on the floor you are looking at
+                if (path != null || coordinate.getMap().getAltitude() != maps[mCurrentLevelIndex].getAltitude()) {
+                    return; // map shouldn't be clickable when the paths drawn or this indicates the pin clicked is not on the floor you are looking at
+                }
+
                 if (amenity != null) {
 
                     //TODO Refactor parking
