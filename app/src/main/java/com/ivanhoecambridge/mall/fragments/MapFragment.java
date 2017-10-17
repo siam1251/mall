@@ -497,7 +497,7 @@ public class MapFragment extends BaseFragment
             Polygon nearestParkingPolygon = null;
 
             for (Amenity parkingLocation : parkingHashMap.values()) {
-                ArrayList<Coordinate> navigatableCoordinates = (ArrayList<Coordinate>) Arrays.asList(parkingLocation.getNavigatableCoordinates());
+                Coordinate[] navigatableCoordinates= parkingLocation.getNavigatableCoordinates();
 
                 for (Coordinate parkingLotCoord : navigatableCoordinates) {
                     double distance = parkingLotCoord.metersFrom(storeCoordinate);
