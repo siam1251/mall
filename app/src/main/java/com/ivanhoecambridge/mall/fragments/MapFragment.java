@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
@@ -886,7 +887,7 @@ public class MapFragment extends BaseFragment
 
         if (directions != null) {
 
-            path = new Path(directions.getPath(), 1.5f, 1.5f, getResources().getColor(R.color.map_wayfinding_path));
+            path = new Path(directions.getPath(), 1.5f, 1.5f, ContextCompat.getColor(getContext(), R.color.map_wayfinding_path));
             mapView.addPath(path);
             setMapLevelsInPath(directions.getPath());
         }
@@ -894,7 +895,7 @@ public class MapFragment extends BaseFragment
         Coordinate destinationPolygonCoordinate = null;
         if (destinationPolygon instanceof Polygon) {
 
-            highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
+            highlightPolygon((Polygon) destinationPolygon, ContextCompat.getColor(getContext(), R.color.themeColor));
             destinationPolygonCoordinate = ((Polygon) destinationPolygon).getAnchor();
         } else if (destinationPolygon instanceof Coordinate) {
 
