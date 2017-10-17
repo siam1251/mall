@@ -116,14 +116,14 @@ public class MallHourActivity extends AppCompatActivity {
                     holidayNames = holidayNames + comingHolidays.get(i).getName();
                     if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + " • ";
 
-                    String holidayStartDate = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getStartDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.DATE_FORMAT_HOLIDAY_DATE);
-                    String holidayEndDate = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.DATE_FORMAT_HOLIDAY_DATE);
+                    String holidayStartDate = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getStartDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.getStringFromResources(this, R.string.date_format_holiday_date));
+                    String holidayEndDate = KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.getStringFromResources(this, R.string.date_format_holiday_date));
 
                     String newHolidayPeriod = holidayStartDate.equals(holidayEndDate) ? holidayStartDate : holidayStartDate + " - " + holidayEndDate;
                     holidayPeriod = holidayPeriod + newHolidayPeriod;
                     if(i != comingHolidays.size() - 1 ) holidayPeriod = holidayPeriod + "\n";
 
-                    holidayDay = holidayDay + KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.DATE_FORMAT_HOLIDAY);
+                    holidayDay = holidayDay + KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.getStringFromResources(this, R.string.date_format_holiday));
                     boolean isOpen = comingHolidays.get(i).getStatus().equals("open") ? true : false;
 
 
@@ -202,7 +202,7 @@ public class MallHourActivity extends AppCompatActivity {
 
                 separator.setVisibility(View.GONE);
             } else {
-                String mallHourDate = KcpTimeConverter.convertDateFormat(today.getTime(), Constants.DATE_FORMAT_MALL_HOUR_DATE);
+                String mallHourDate = KcpTimeConverter.convertDateFormat(today.getTime(), Constants.getStringFromResources(this, R.string.date_format_mall_hour_date));
                 tvDate.setText(mallHourDate);
                 if(daysPastToday == Constants.NUMB_OF_DAYS - 1) separator.setVisibility(View.GONE);
             }

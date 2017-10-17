@@ -278,7 +278,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
 
                             String holidayNames = "";
                             for(int i = 0; i < comingHolidays.size(); i++) {
-                                holidayNames = holidayNames + comingHolidays.get(i).getName() + " " + KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.DATE_FORMAT_HOLIDAY_STORE);
+                                holidayNames = holidayNames + comingHolidays.get(i).getName() + " " + KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.getStringFromResources(this, R.string.date_format_holiday_store));
                                 if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + "\n";
                             }
                             tvHolidayName.setText(holidayNames);
@@ -397,7 +397,7 @@ public class MoviesActivity extends AppCompatActivity implements MovieInterface{
                 if (daysPastToday == 0) {
                     v.setBackgroundColor(getResources().getColor(R.color.store_hour_selected_bg));
                 }
-                String mallHourDate = KcpTimeConverter.convertDateFormat(today.getTime(), Constants.DATE_FORMAT_DAY);
+                String mallHourDate = KcpTimeConverter.convertDateFormat(today.getTime(), Constants.getStringFromResources(this, R.string.date_format_day));
                 tvDate.setText(mallHourDate.toUpperCase());
 
                 //overriding holidays

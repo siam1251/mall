@@ -605,7 +605,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     }
 
     private void formatBirthdayForJanrain(GregorianCalendar date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_JANRAIN_CAPTURE, Locale.US);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.getStringFromResources(this, R.string.date_format_janrain_capture), Locale.US);
         formattedBirthday = dateFormat.format(date.getTime());
     }
 

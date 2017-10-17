@@ -354,6 +354,17 @@
     <string name="closed_in_mall_hour">Fermé</string>
     <string name="holiday_reminder_in_mall_hour">Ceci est un rappel, %1$s! sera ouvert sur un horaire différent du:</string> <!--This is a reminder that HeaderFactory.MALL_NAME  will have adjusted hours on:-->
 
-
+    <!-- DATE FORMAT -->
+    <string name="date_format_effective_event">d MMM</string>
+    <string name="date_format_effective">EEEE d, MMMM</string>
+    <string name="date_format_mall_hour_date">EEE. d MMM</string>
+    <string name="date_format_holiday_date">d MMMM</string>
+    <string name="date_format_holiday">EEEE d MMMM</string>
+    <string name="date_format_holiday_store">EEE d, MMMM</string>
+    <string name="date_format_day">EEE</string>
+    <string name="date_format_event_hour">h:mm aa</string>
+    <string name="date_format_announcement">EEEE d, MMMM</string>
+    <string name="date_format_announcement_grouped">d MMMM</string>
+    <string name="date_format_janrain_capture">yyyy-MM-dd</string>
 
 </resources>

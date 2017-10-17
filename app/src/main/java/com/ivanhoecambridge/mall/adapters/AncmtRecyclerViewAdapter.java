@@ -105,7 +105,7 @@ public class AncmtRecyclerViewAdapter extends RecyclerView.Adapter {
             String title = kcpContentPage.getTitle();
             ancmtViewHolder.tvAncmtTitle.setText(title);
 
-            String startingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_ANNOUNCEMENT_GROUPED);
+            String startingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.getStringFromResources(mContext, R.string.date_format_announcement_grouped));
             ancmtViewHolder.tvAncmtDate.setText(startingTime);
 
             ancmtViewHolder.mView.setOnClickListener(new View.OnClickListener() {

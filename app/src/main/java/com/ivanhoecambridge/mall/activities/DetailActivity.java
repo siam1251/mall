@@ -397,7 +397,7 @@ public class DetailActivity extends AppCompatActivity {
 
                         String holidayNames = "";
                         for(int i = 0; i < comingHolidays.size(); i++) {
-                            holidayNames = holidayNames + comingHolidays.get(i).getName() + " " + KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.DATE_FORMAT_HOLIDAY_STORE);
+                            holidayNames = holidayNames + comingHolidays.get(i).getName() + " " + KcpTimeConverter.convertDateFormatWithYearMonthDateGiven(comingHolidays.get(i).getEndDatetime(), KcpConstants.OVERRIDE_HOUR_FORMAT, Constants.getStringFromResources(this, R.string.date_format_holiday_store));
                             if(i != comingHolidays.size() - 1 ) holidayNames = holidayNames + "\n";
                         }
                         tvHolidayName.setText(holidayNames);
@@ -616,7 +616,7 @@ public class DetailActivity extends AppCompatActivity {
             if(daysPastToday == 0) {
                 v.setBackgroundColor(getResources().getColor(R.color.store_hour_selected_bg));
             }
-            String mallHourDate = KcpTimeConverter.convertDateFormat(today.getTime(), Constants.DATE_FORMAT_DAY);
+            String mallHourDate = KcpTimeConverter.convertDateFormat(today.getTime(), Constants.getStringFromResources(this, R.string.date_format_day));
             tvDate.setText(mallHourDate.toUpperCase());
 
             //overriding holidays
@@ -822,17 +822,17 @@ public class DetailActivity extends AppCompatActivity {
 
             } else {
                 if(mContentPageType == KcpContentTypeFactory.ITEM_TYPE_ANNOUNCEMENT){ //announcement doesn't have effective start/end date but only publish start date
-                    time = kcpContentPage.getFormattedDate(kcpContentPage.publishStartTime, Constants.DATE_FORMAT_ANNOUNCEMENT);
+                    time = kcpContentPage.getFormattedDate(kcpContentPage.publishStartTime, Constants.getStringFromResources(this, R.string.date_format_announcement));
                 } else {
                     //if event is for one day, also show its begin/end hours
-                    String startingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_HOLIDAY_STORE);
-                    String endingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_HOLIDAY_STORE);
+                    String startingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.getStringFromResources(this, R.string.date_format_holiday_store));
+                    String endingTime = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.getStringFromResources(this, R.string.date_format_holiday_store));
 
                     if(!startingTime.equals(endingTime)) {
                         time = startingTime + " - " + endingTime;
                     } else {
-                        String eventStartHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.DATE_FORMAT_EVENT_HOUR);
-                        String eventEndingHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.DATE_FORMAT_EVENT_HOUR);
+                        String eventStartHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveStartTime, Constants.getStringFromResources(this, R.string.date_format_event_hour));
+                        String eventEndingHour = kcpContentPage.getFormattedDate(kcpContentPage.effectiveEndTime, Constants.getStringFromResources(this, R.string.date_format_event_hour));
                         time = startingTime + " @ " + eventStartHour + " " + getString(R.string.to_in_time) + " " + eventEndingHour;
                     }
                 }
