@@ -1423,7 +1423,7 @@ public class MapFragment extends BaseFragment
         InfoFragment.getInstance().setParkingSpotCTA();
     }
 
-    private void showAmenityDetail(final Amenity location, final Drawable amenityDrawable) {
+    private void showAmenityDetail(final Location location, final Drawable locationDrawable) {
 
         String categoryName = "";
 
@@ -1431,48 +1431,39 @@ public class MapFragment extends BaseFragment
             categoryName = location.getCategories()[0].getName();
         }
 
-        mAmenityClicked = location.amenityType;
+        mAmenityClicked = getAmenityType(location);
 
         int externalId = Integer.MAX_VALUE;
-        if (location.externalId != null && !location.externalId.equals("")) {
-            externalId = Integer.parseInt(location.externalId);
+        String amenityExternalId = getAmenityExternalId(location);
+
+        if (!amenityExternalId.equals("")) {
+            externalId = Integer.parseInt(amenityExternalId);
         }
 
-        showDirectionCard(true, IdType.AMENITY, externalId, location.getName(), categoryName, amenityDrawable);
+        showDirectionCard(true, IdType.AMENITY, externalId, location.getName(), categoryName, locationDrawable);
     }
 
-    private void showEscalatorStairsDetail(final EscalatorStairs location, final Drawable escalatorStairsDrawable) {
-        String categoryName = "";
-
-        if (location.getCategories() != null && location.getCategories().length > 0) {
-            categoryName = location.getCategories()[0].getName();
+    private String getAmenityType(final Location location) {
+        if (location instanceof Amenity) {
+            return ((Amenity) location).amenityType;
+        } else {
+            return location.getName();
         }
-
-        mAmenityClicked = location.getName();
-
-        int externalId = Integer.MAX_VALUE;
-        if (location.externalId != null && !location.externalId.equals("")) {
-            externalId = Integer.parseInt(location.externalId);
-        }
-
-        showDirectionCard(true, IdType.AMENITY, externalId, location.getName(), categoryName, escalatorStairsDrawable);
     }
 
-    private void showElevatorDetail(final Elevator location, final Drawable elevatorDrawable) {
-        String categoryName = "";
+    private String getAmenityExternalId(final Location location) {
 
-        if (location.getCategories() != null && location.getCategories().length > 0) {
-            categoryName = location.getCategories()[0].getName();
+        String externalId = "";
+
+        if (location instanceof Amenity) {
+            externalId = ((Amenity) location).externalId;
+        } else if (location instanceof EscalatorStairs) {
+            externalId = ((EscalatorStairs) location).externalId;
+        } else if (location instanceof Elevator) {
+            externalId = ((Elevator) location).externalId;
         }
 
-        mAmenityClicked = location.getName();
-
-        int externalId = Integer.MAX_VALUE;
-        if (location.externalId != null && !location.externalId.equals("")) {
-            externalId = Integer.parseInt(location.externalId);
-        }
-
-        showDirectionCard(true, IdType.AMENITY, externalId, location.getName(), categoryName, elevatorDrawable);
+        return (externalId != null) ? externalId : "";
     }
 
     private void showLocationDetails(final Tenant location) {
@@ -2294,69 +2285,43 @@ public class MapFragment extends BaseFragment
                         didTapPolygon(getPolygonWithPlaceExternalId(placeExternalId));
                         return;
                     }
-
-                    mapView.getCamera().focusOn(coordinate);
-                    zoomInOut();
-
-                    destinationPolygon = coordinate;
-
-
-                    if (mSelectedPin == null) {
-                        highlightThisLabel();
-                        showAmenityDetail(amenity, drawable);
-                    } else {
-                        Coordinate removeableMarkerCoordinate = mSelectedPin.getCoordinate();
-                        replaceSelectedPinWithRemovedPin();
-                        if (removeableMarkerCoordinate != coordinate) {
-                            highlightThisLabel();
-                            showAmenityDetail(amenity, drawable);
-                        }
-                    }
+                    focusAmenity(amenity);
                 } else if(escalatorStairs != null) {
-                    mapView.getCamera().focusOn(coordinate);
-                    zoomInOut();
-
-                    destinationPolygon = coordinate;
-
-                    if (mSelectedPin == null) {
-                        highlightThisLabel();
-                        showEscalatorStairsDetail(escalatorStairs, drawable);
-                    } else {
-                        Coordinate removeableMarkerCoordinate = mSelectedPin.getCoordinate();
-                        replaceSelectedPinWithRemovedPin();
-                        if (removeableMarkerCoordinate != coordinate) {
-                            highlightThisLabel();
-                            showEscalatorStairsDetail(escalatorStairs, drawable);
-                        }
-                    }
+                    focusAmenity(escalatorStairs);
                 } else if(elevator != null) {
-                    mapView.getCamera().focusOn(coordinate);
-                    zoomInOut();
-
-                    destinationPolygon = coordinate;
-
-                    if (mSelectedPin == null) {
-                        highlightThisLabel();
-                        showElevatorDetail(elevator, drawable);
-                    } else {
-                        Coordinate removeableMarkerCoordinate = mSelectedPin.getCoordinate();
-                        replaceSelectedPinWithRemovedPin();
-                        if (removeableMarkerCoordinate != coordinate) {
-                            highlightThisLabel();
-                            showElevatorDetail(elevator, drawable);
-                        }
-                    }
+                    focusAmenity(elevator);
                 } else {
                     if (label == sParkingPin.getParkingCoordinatePin().getOverlay2DImage()) {
                         showParkingDetail(false);
                         mapView.getCamera().focusOn(coordinate);
                         zoomInOut();
                         destinationPolygon = coordinate;
-                    } else if (label == mBlueDotPin.getOverlay2DImage()) { //user's clicking on blue dot that's above the parking lot pin
+                    } else if (label == mBlueDotPin.getOverlay2DImage()) {
+                        //user's clicking on blue dot that's above the parking lot pin
                     }
                 }
             } catch (Exception e) {
                 Log.e(TAG, "error in overlay image onClick");
+            }
+        }
+
+        private void focusAmenity(Location location) {
+            mapView.getCamera().focusOn(coordinate);
+            zoomInOut();
+
+            destinationPolygon = coordinate;
+
+            if (mSelectedPin == null) {
+                highlightThisLabel();
+                showAmenityDetail(location, drawable);
+            } else {
+                Coordinate removableMarkerCoordinate = mSelectedPin.getCoordinate();
+                replaceSelectedPinWithRemovedPin();
+
+                if (removableMarkerCoordinate != coordinate) {
+                    highlightThisLabel();
+                    showAmenityDetail(location, drawable);
+                }
             }
         }
 
