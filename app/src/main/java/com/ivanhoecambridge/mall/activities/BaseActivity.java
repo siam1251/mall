@@ -15,6 +15,7 @@ public class BaseActivity extends AppCompatActivity implements ComponentCallback
 
     @Override
     public void onConfigurationChanged(final Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override

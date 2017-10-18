@@ -1,6 +1,7 @@
 package com.ivanhoecambridge.mall.fragments;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
@@ -14,6 +15,11 @@ public abstract class BaseFragment extends Fragment{
     protected final Logger logger = new Logger(getClass().getName());
     protected MainActivity mMainActivity;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Override
     public void onAttach(Context context) {

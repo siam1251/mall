@@ -170,7 +170,6 @@ public class MainActivity extends BaseActivity
 
 
 
-
     private ImageView       ivDrawerLayoutBg;
     private LinearLayout    llDisplayNameSettings;
     private TextView        tvSignInOrOut;
@@ -262,7 +261,6 @@ public class MainActivity extends BaseActivity
         };
         mSplashThread.start();
         initializeToolbar();
-
         rvMallDirectory = (RecyclerView) findViewById(R.id.rvMallDirectory);
         rvMap = (IndexableRecylerView) findViewById(R.id.rvMap);
 
@@ -385,6 +383,8 @@ public class MainActivity extends BaseActivity
     }
 
     public void initializeKcpData(final SwipeRefreshLayout srl){
+        Constants.setLocale(this, R.string.locale);
+        HeaderFactory.constructHeader();
         if(!KcpUtility.isNetworkAvailable(this)){
             mOfflineSnackbar = null;
             if(srl != null) srl.setRefreshing(false);
@@ -1690,6 +1690,8 @@ public class MainActivity extends BaseActivity
         if(mGeofenceManager != null && mGeofenceManager.getGoogleApiClient() != null) {
             mGeofenceManager.getGoogleApiClient().disconnect();
         }
+
+
     }
 
     @Override
