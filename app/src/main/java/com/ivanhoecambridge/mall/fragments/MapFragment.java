@@ -898,7 +898,7 @@ public class MapFragment extends BaseFragment
         Coordinate destinationPolygonCoordinate = null;
         if (destinationPolygon instanceof Polygon) {
 
-            highlightPolygon((Polygon) destinationPolygon, ContextCompat.getColor(getContext(), R.color.themeColor));
+            highlightPolygon((Polygon) destinationPolygon, R.color.themeColor);
             destinationPolygonCoordinate = ((Polygon) destinationPolygon).getAnchor();
         } else if (destinationPolygon instanceof Coordinate) {
 
@@ -982,7 +982,7 @@ public class MapFragment extends BaseFragment
 
                 Coordinate destinationPolygonCoordinate = null;
                 if (destinationPolygon instanceof Polygon) {
-                    highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
+                    highlightPolygon((Polygon) destinationPolygon, R.color.themeColor);
                     destinationPolygonCoordinate = ((Polygon) destinationPolygon).getAnchor();
                 } else if (destinationPolygon instanceof Amenity && !((Amenity) destinationPolygon).amenityType.equals(KcpPlaces.PLACE_TYPE_PARKING)) {
                 } else if (destinationPolygon instanceof Coordinate){
@@ -1000,7 +1000,7 @@ public class MapFragment extends BaseFragment
                 if (((Polygon) startPolygon).getMap().getShortName() != null) {
                     setMapLevel(-50, ((Polygon) startPolygon).getMap().getShortName(), null);
                 }
-                highlightPolygon((Polygon) startPolygon, getResources().getColor(R.color.map_destination_store));
+                highlightPolygon((Polygon) startPolygon, R.color.map_destination_store);
                 showDirectionCard(false, null, 0, null, null, null);
                 dropDestinationPin(destinationPolygonCoordinate, getResources().getDrawable(R.drawable.icn_wayfinding_destination));
                 dropVortexOnThePath(directions.getInstructions());
@@ -1010,7 +1010,7 @@ public class MapFragment extends BaseFragment
             } else {
                 clearHighlightedColours();
                 if (destinationPolygon instanceof Polygon) {
-                    highlightPolygon((Polygon) destinationPolygon, getResources().getColor(R.color.themeColor));
+                    highlightPolygon((Polygon) destinationPolygon, R.color.themeColor);
                     try {
                         if (mSavedParkingPolygon != null && destinationPolygon == mSavedParkingPolygon) {
                             mapView.getCamera().focusOn(polygon);
@@ -1030,9 +1030,14 @@ public class MapFragment extends BaseFragment
         } catch (Resources.NotFoundException e) {
             logger.error(e);
             e.printStackTrace();
+        } catch (NullPointerException npe) {
+          npe.printStackTrace();
         } catch (Exception e) {
-            if (((Polygon) startPolygon).getMap().getShortName() != null) {
-                setMapLevel(-50, ((Polygon) startPolygon).getMap().getShortName(), null);
+            Polygon storePolygon = (Polygon) startPolygon;
+            if (storePolygon != null){
+                if (((Polygon) startPolygon).getMap().getShortName() != null) {
+                    setMapLevel(-50, ((Polygon) startPolygon).getMap().getShortName(), null);
+                }
             }
             logger.error(e);
             e.printStackTrace();
@@ -1185,7 +1190,7 @@ public class MapFragment extends BaseFragment
         });
     }
 
-    private void highlightPolygon(Polygon polygon, int color) {
+    private void highlightPolygon(final Polygon polygon, final int color) {
         if (mSavedParkingPolygon != null && mSavedParkingPolygon == polygon && mOriginalColorsForParking == 0) {
             //mOriginalColorsForParking != 0 so that when tapping already highlighted parking polygon, it doesn't save that highlight color to mOriginalColorsForParking
             mOriginalColorsForParking = polygon.color();
@@ -1198,8 +1203,14 @@ public class MapFragment extends BaseFragment
                 }
             }
         }
+        //Not a long term solution, MappedIn SDKs have changed so once we update it'll be a more efficient solution.
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mapView.setColor(polygon, ContextCompat.getColor(getContext(), color));
+            }
+        }, 75);
 
-        mapView.setColor(polygon, color);
     }
 
     private void clearHighlightedColours() {
@@ -2641,6 +2652,25 @@ public class MapFragment extends BaseFragment
             }
         });
     }
+    //internal method to test highlighting
+    public void focusAll() {
+        int delayMore = 0;
+        for (final Tenant tenant : locationHashmapByExternalId.values()) {
+            focusHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (tenant.getPolygons().length > 0) {
+                        Polygon polygon = tenant.getPolygons()[0];
+                        clearHighlightedColours();
+                        highlightPolygon(polygon, R.color.themeColor);
+                    }
+                }
+            }, 400 * delayMore++);
+
+        }
+    }
+
+    private Handler focusHandler = new Handler();
 
     private void slidePanel(final boolean up) {
         if (getActivity() == null) {

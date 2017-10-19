@@ -1477,10 +1477,8 @@ public class MainActivity extends BaseActivity
                 startActivity(new Intent(this, SettingsActivity.class));
                 ActivityAnimation.startActivityAnimation(MainActivity.this);
                 break;
-            case R.id.action_signout:
-                Jump.signOutCaptureUser(getApplicationContext());
-                toggleUserSignIn(false);
-                Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show();
+            case R.id.action_focusall:
+                MapFragment.getInstance().focusAll();
                 break;
         }
         return super.onOptionsItemSelected(item);
