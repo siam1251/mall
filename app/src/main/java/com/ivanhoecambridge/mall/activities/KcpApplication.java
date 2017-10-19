@@ -75,7 +75,7 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
         Constants.setLocale(getApplicationContext(), R.string.locale);
         HeaderFactory.changeCatalog(HeaderFactory.HEADER_VALUE_DATAHUB_CATALOG);
 
-        if(!BuildConfig.REPORT_CRASH) {
+        if(BuildConfig.REPORT_CRASH) {
             FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
             Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
         } else {
