@@ -57,7 +57,7 @@
                 app:fontFamily="@string/fontFamily_roboto_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/signin_sign_in"
+                android:text="@string/signin_sign_up"
                 android:textColor="@color/themeColor"
                 android:textSize="16dp"
                 />
