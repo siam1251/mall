@@ -1690,8 +1690,6 @@ public class MainActivity extends BaseActivity
         if(mGeofenceManager != null && mGeofenceManager.getGoogleApiClient() != null) {
             mGeofenceManager.getGoogleApiClient().disconnect();
         }
-
-
     }
 
     @Override
