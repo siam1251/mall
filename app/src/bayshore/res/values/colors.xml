@@ -17,6 +17,8 @@
     <color name="detailActivityToolbarColor">@color/themeColor</color>
     <color name="parkingSaveBtnTextColor">#FFFFFF</color>
 
+    <!-- INFO -->
+    <color name="info_toolbar_gradient_end">#00000000</color>
     <!--interest card-->
     <color name="intrst_bg">@color/themeColor</color>
 

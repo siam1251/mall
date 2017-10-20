@@ -125,6 +125,7 @@
     <color name="info_hours_bg_closed">#f44336</color>
     <color name="info_txt">#36373c</color>
     <color name="info_save_my_parking_spot_arrow">#A3A3A3</color>
+    <color name="info_toolbar_gradient_end">#4d000000</color>
 
     <!--INFO DETAIL-->
     <color name="info_mall_hour_holiday_stroke">#f44336</color>
