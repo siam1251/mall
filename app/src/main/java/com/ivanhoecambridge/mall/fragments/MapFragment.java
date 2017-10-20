@@ -342,13 +342,16 @@ public class MapFragment extends BaseFragment
         setViewListener();
         initializeMap();
 
+
+        return view;
+    }
+
+    private void initializeBlueDot() {
         if (BuildConfig.BLUEDOT) {
-            slIndoorLocationPresenter = new SLIndoorLocationPresenterImpl(getActivity(), this);
+            slIndoorLocationPresenter = new SLIndoorLocationPresenterImpl(getContext(), MapFragment.this);
             if (mMainActivity.mGeofenceManager != null)
                 mMainActivity.mGeofenceManager.setSLIndoorLocationPresenterImpl((SLIndoorLocationPresenterImpl) slIndoorLocationPresenter);
         }
-
-        return view;
     }
 
     private void setViewListener() {
@@ -391,6 +394,7 @@ public class MapFragment extends BaseFragment
                     public void onReady() {
                         initializeMap();
                     }
+
                 });
             }
         } catch (Exception e) {
@@ -628,6 +632,7 @@ public class MapFragment extends BaseFragment
     private class GetVenueCallback implements MappedinCallback<Venue> {
         @Override
         public void onCompleted(final Venue venue) {
+            initializeBlueDot();
             maps = venue.getMaps();
             if (maps.length == 0) {
                 Logger.log("No maps! Make sure your venue is set up correctly!");
