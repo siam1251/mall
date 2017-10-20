@@ -50,10 +50,10 @@
     <!--FRAGMENT TITLE-->
     <string name="fragment_news">Nouvelles</string>
     <string name="fragment_deals">Offres</string>
-    <string name="fragment_categories">Categories</string>
+    <string name="fragment_categories">Catégorie</string>
     <string name="fragment_stores">Magasins A-Z</string>
     <string name="fragment_sub_categories">Sous-catégorie</string>
-    <string name="fragment_category_stores">Categorie</string>
+    <string name="fragment_category_stores">Catégorie</string>
 
     <!--menu-->
     <string name="menu_home">ACCEUIL</string>
