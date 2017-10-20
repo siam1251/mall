@@ -9,8 +9,6 @@
     android:background="@drawable/view_toolbar_shadow"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     >
-    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"    <!--opaque white-->
-    android:theme="@style/ThemeOverlay.AppCompat.Dark" <!--transparent white-->
 
     <TextView
         android:id="@+id/tvToolbar"
