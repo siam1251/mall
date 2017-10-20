@@ -80,9 +80,9 @@ public class DeepLinkManager {
                 deepLinkURL = intent.getExtras().getString(KEY_OPEN_DIRECT_URL);
             } else { // intent delivered from URI
                 Uri data = intent.getData();
-                deepLinkURL = data.toString();
+                deepLinkURL = (data == null) ? "" : data.toString();
             }
-            parseIntentData(TextUtils.split(deepLinkURL, scheme)[1]);
+            if (!deepLinkURL.isEmpty()) parseIntentData(TextUtils.split(deepLinkURL, scheme)[1]);
             return this;
         } catch (Exception e) {
             Log.e(TAG, e.toString());
