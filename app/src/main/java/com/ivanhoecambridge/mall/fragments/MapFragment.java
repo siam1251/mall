@@ -1010,14 +1010,15 @@ public class MapFragment extends BaseFragment
             } else {
                 clearHighlightedColours();
                 if (destinationPolygon instanceof Polygon) {
-                    highlightPolygon((Polygon) destinationPolygon, R.color.themeColor);
+                    Polygon destination = (Polygon) destinationPolygon;
+                    highlightPolygon(destination, R.color.themeColor);
                     try {
                         if (mSavedParkingPolygon != null && destinationPolygon == mSavedParkingPolygon) {
                             mapView.getCamera().focusOn(polygon);
                             zoomInOut();
                             showSavedParkingDetail();
                         } else {
-                            showLocationDetails((Tenant) ((Polygon) destinationPolygon).getLocations()[0]);
+                            showNavigatableDetails(destination.getLocations()[0]);
                         }
                     } catch (Exception e) {
                         logger.error(e);
@@ -1496,6 +1497,12 @@ public class MapFragment extends BaseFragment
         String storeName = location.getName();
 
         showDirectionCard(true, idType, Integer.valueOf(location.externalId), storeName, categoryName, null);
+    }
+
+    private void showNavigatableDetails(Location location) {
+        if (location instanceof Tenant) {
+            showLocationDetails((Tenant) location);
+        }
     }
 
     private void clearLocationDetails() {
