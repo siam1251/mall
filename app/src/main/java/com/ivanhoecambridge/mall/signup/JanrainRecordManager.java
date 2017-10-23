@@ -36,6 +36,7 @@ public class JanrainRecordManager {
      */
     public void signOut() {
         Jump.signOutCaptureUser(context.getApplicationContext());
+        captureRecord = null;
     }
 
     /**

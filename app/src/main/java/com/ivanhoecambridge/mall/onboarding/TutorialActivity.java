@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
+import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.BaseActivity;
 import com.ivanhoecambridge.mall.activities.MainActivity;
@@ -57,6 +58,7 @@ public class TutorialActivity extends BaseActivity {
     private GetStartedButtonClicker mGetStartedButtonClicker;
     private boolean mHasFakeAlphaPage = false;
     private int mCurrentPosition = 0;
+    private String wayFindingTitle;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -81,6 +83,8 @@ public class TutorialActivity extends BaseActivity {
         tvOnbd = (TextView) findViewById(R.id.tvOnbd);
         mGetStartedButtonClicker = new GetStartedButtonClicker();
         tvOnbd.setOnClickListener(mGetStartedButtonClicker);
+
+        wayFindingTitle = getString(BuildConfig.BLUEDOT ? R.string.onbd_four_title : R.string.onbd_four_no_bluedot_title);
 
         mDescriptionFragments = new ArrayList<Fragment>();
         mDescriptionFragments.add(TutorialDescription.newInstance(0, R.string.onbd_one_title, 0));
