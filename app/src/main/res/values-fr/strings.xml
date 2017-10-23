@@ -50,10 +50,10 @@
     <!--FRAGMENT TITLE-->
     <string name="fragment_news">Nouvelles</string>
     <string name="fragment_deals">Offres</string>
-    <string name="fragment_categories">Catégorie</string>
+    <string name="fragment_categories">Catégories</string>
     <string name="fragment_stores">Magasins A-Z</string>
     <string name="fragment_sub_categories">Sous-catégorie</string>
-    <string name="fragment_category_stores">Catégorie</string>
+    <string name="fragment_category_stores">Catégories</string>
 
     <!--menu-->
     <string name="menu_home">ACCEUIL</string>
@@ -258,9 +258,10 @@
 
 
     <!--ONBOARDING-->
-    <string name="onbd_two_title">Recevez des promos suggérées</string>
+    <string name="onbd_two_title">Recevez des promos</string>
     <string name="onbd_three_title">Trouvez vos marques préférées</string>
     <string name="onbd_four_title">Trouvez toujours votre chemin</string>
+    <string name="onbd_four_no_bluedot_title">Trouvez votre chemin</string>
     <string name="onbd_five_title">En direct au centre</string>
 
     <string name="onbd_one_desc">""</string>

@@ -8,6 +8,7 @@
     android:id="@+id/rlMap"
     android:background="@color/card_bg">
 
+
     <FrameLayout
         android:id="@+id/flMap"
         android:layout_width="match_parent"
@@ -15,21 +16,6 @@
         android:layout_centerInParent="true"
         />
 
-    <ProgressBar
-        android:visibility="gone"
-        android:layout_centerInParent="true"
-        android:id="@+id/pb"
-        style="@style/progressBarMedium"
-        />
-
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cta_show_map"
-        android:id="@+id/btnShowMap"
-        android:layout_centerInParent="true"
-        />
 
     <FrameLayout
         android:visibility="invisible"
@@ -55,6 +41,24 @@
             android:src="@drawable/icn_compass_inner"
             />
 
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/ll_map_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/white">
+
+        <ProgressBar
+            android:id="@+id/pb_map"
+            android:layout_gravity="center"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:indeterminateDuration="1000"
+            android:layout_marginBottom="50dp"/>
 
     </FrameLayout>
 
@@ -232,7 +236,6 @@
                     android:layout_marginRight="10dp"
                     android:src="@drawable/icn_deals"/>
 
-                android:layout_marginLeft="10dp"
                 <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                     android:gravity="center_vertical"
                     android:layout_weight="1"
@@ -309,8 +312,6 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    android:visibility="gone"
-    android:layout_marginBottom="55dp"
     <RelativeLayout
         android:layout_marginBottom="65dp"
         android:layout_alignParentBottom="true"
@@ -328,8 +329,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-
-            style="@style/SelectableItemForeground"
             <FrameLayout
                 android:id="@+id/flCircle"
                 android:layout_width="@dimen/map_level_width"

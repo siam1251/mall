@@ -1774,8 +1774,8 @@ public class MainActivity extends BaseActivity
             ivDrawerLayoutUser.setSrcFilterMode(PorterDuff.Mode.SRC_IN);
         } else {
             tvDrawerLayoutAccount.setTextColor(colour(R.color.profile_name_inactive));
-            //only reset the porter duff mode if the user doesn't exist or has no image.
-            ivDrawerLayoutUser.resetToDefaultColors((jrRecordManager == null || !jrRecordManager.userHasProfileImage()));
+            //only reset the porter duff mode if the user doesn't exist or has no image or not signed in.
+            ivDrawerLayoutUser.resetToDefaultColors((jrRecordManager == null || !jrRecordManager.userHasProfileImage() || !jrRecordManager.isUserSignedIn()));
         }
     }
 

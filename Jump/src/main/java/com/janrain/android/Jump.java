@@ -40,6 +40,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.janrain.android.capture.Capture;
 import com.janrain.android.capture.CaptureApiError;
@@ -65,6 +66,7 @@ import net.openid.appauth.browser.VersionedBrowserMatcher;
 
 import org.json.JSONObject;
 
+import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -899,7 +901,11 @@ public class Jump {
         } catch (StreamCorruptedException e) {
             throwDebugException(new RuntimeException(e));
         } catch (IOException e) {
-            throwDebugException(new RuntimeException(e));
+            if (e instanceof EOFException) {
+                Log.e("Janrain", "EOF");
+            } else {
+                throwDebugException(new RuntimeException(e));
+            }
         } catch (ClassNotFoundException e) {
             throwDebugException(new RuntimeException(e));
         } finally {
