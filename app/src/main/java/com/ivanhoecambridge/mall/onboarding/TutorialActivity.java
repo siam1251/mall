@@ -58,7 +58,7 @@ public class TutorialActivity extends BaseActivity {
     private GetStartedButtonClicker mGetStartedButtonClicker;
     private boolean mHasFakeAlphaPage = false;
     private int mCurrentPosition = 0;
-    private String wayFindingTitle;
+    private int wayFindingTitleRes;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -84,13 +84,13 @@ public class TutorialActivity extends BaseActivity {
         mGetStartedButtonClicker = new GetStartedButtonClicker();
         tvOnbd.setOnClickListener(mGetStartedButtonClicker);
 
-        wayFindingTitle = getString(BuildConfig.BLUEDOT ? R.string.onbd_four_title : R.string.onbd_four_no_bluedot_title);
+        wayFindingTitleRes = BuildConfig.BLUEDOT ? R.string.onbd_four_title : R.string.onbd_four_no_bluedot_title;
 
         mDescriptionFragments = new ArrayList<Fragment>();
         mDescriptionFragments.add(TutorialDescription.newInstance(0, R.string.onbd_one_title, 0));
         mDescriptionFragments.add(TutorialDescription.newInstance(1, R.string.onbd_two_title, R.string.onbd_two_desc));
         mDescriptionFragments.add(TutorialDescription.newInstance(2, R.string.onbd_three_title, R.string.onbd_three_desc));
-        mDescriptionFragments.add(TutorialDescription.newInstance(3, R.string.onbd_four_title, R.string.onbd_four_desc));
+        mDescriptionFragments.add(TutorialDescription.newInstance(3, wayFindingTitleRes, R.string.onbd_four_desc));
         mDescriptionFragments.add(TutorialDescription.newInstance(4,R.string.onbd_five_title, R.string.onbd_five_desc));
         if(mHasFakeAlphaPage) mDescriptionFragments.add(TutorialDescription.newInstance(5, 0, 0));
 
