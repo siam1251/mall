@@ -91,6 +91,7 @@
 
             <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
                 android:id="@+id/tvSignIn"
+                android:elevation="3dp"
                 style="@style/SelectableItemForegroundNormal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -99,7 +100,7 @@
                 android:background="@drawable/btn_style_corner_radius_with_selected_state"
                 android:gravity="center"
                 android:text="@string/drawer_sign_in"
-                android:textColor="@color/white"
+                android:textColor="@color/profile_signup_text"
                 android:textSize="14dp"
                 app:fontFamily="@string/fontFamily_roboto_medium"
                 />

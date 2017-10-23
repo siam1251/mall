@@ -24,4 +24,7 @@
     <!--MAP-->
     <color name="map_destination_store">#273e94</color>
     <color name="directionSymbol">#000000</color>
+
+    <color name="profile_name_inactive">@color/themeColor</color>
+    <color name="profile_signup_text">@color/themeColor</color>
 </resources>
