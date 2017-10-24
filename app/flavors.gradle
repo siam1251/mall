@@ -36,7 +36,7 @@ ext {
             hasMovie             : 'true',
             hasWhiteFav          : 'false',
             hasNearestParkingImg : 'false',
-            hasBlueDot           : 'true'
+            hasBlueDot           : 'false'
     ]
 
     metropolis = [

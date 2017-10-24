@@ -1,8 +1,11 @@
 package com.ivanhoecambridge.mall.constants;
 
 import com.ivanhoecambridge.mall.BuildConfig;
+import com.ivanhoecambridge.mall.R;
 
 import android.content.Context;
+
+import java.util.Arrays;
 
 public class Constants {
     public final static boolean IS_APP_IN_PRODUCTION = BuildConfig.IS_APP_IN_PRODUCTION;
@@ -23,6 +26,7 @@ public class Constants {
     public final static String HEADER_VALUE_DATAHUB_CATALOG_VM        = "vaughan-mills";
     public final static String HEADER_VALUE_DATAHUB_CATALOG_MP        = "metropolis-at-metrotown";
     public static       String HEADER_VALUE_DATAHUB_LOCALE            = "en-CA";
+    public final static String HEADER_VALUE_LOCALE_DEFAULT = "en-CA";
     public final static String HEADER_VALUE_CLIENT_TOKEN_PRODUCTION   = "NTJlMWFiZjEtOTg5Ni00YmQyLTg2YWEtZDNlYzE3N2MwYWE1OmUzYzQ4ZWVkNDM2ZDA2MWNmMzA1Y2U3NzhmNTdlZjkzMWJkYWJhN2UwNjM1ZTBmMWFkYjdlYTdlOTgwYWI4NjM2NGI3NzdhYzQ0OTBiOWJlMmU0MDdhNjUyZDNmNmIwMWQyMjI0NzIxNjJkODY0NzZkMWM3NjAzZDQzNGQ5ZjA3"; //PRODUCTION
     public final static String HEADER_VALUE_CLIENT_TOKEN_STAGING      = "OTVhZWMxMTEtNGJiNC00ZDk1LWEwYzAtNTE0ZjhhNDRkOWVkOmQ5ODY5YjIyZDE2NDY1NmZmM2M2N2ZhYjBhYzhlZGIwZDc2YzRiYWRlNWQwZGRmMmJkYzhhYjcyM2M3YTIyYjc2OTgxMTg2YmI1YTFjNTIzMjMyNzUxMzJlMzI0YTJlODU3OTZlMGRkZWQwM2RmZmVkNmQ5ZDBhYjlkOTEzNjU5"; //STAGING
     public final static String HEADER_VALUE_CONTENT_TYPE              = "application/json";
@@ -133,8 +137,20 @@ public class Constants {
         return context.getString(resourceId);
     }
 
+    /**
+     * Sets the locale for the HEADER_DATAHUB_LOCALE. If the specified locale is not supported by the flavour of the app
+     * <br /> then it will default to en-CA
+     * @param context Context object
+     * @param newLocale Desired locale.
+     */
     public static void setLocale(Context context, int newLocale) {
-        HEADER_VALUE_DATAHUB_LOCALE = context.getString(newLocale);
+        String desiredLocale = context.getString(newLocale);
+        String[] supportedLocales = context.getResources().getStringArray(R.array.supportedLocales);
+        if (Arrays.asList(supportedLocales).contains(desiredLocale)) {
+            HEADER_VALUE_DATAHUB_LOCALE = desiredLocale;
+        } else {
+            HEADER_VALUE_DATAHUB_LOCALE = HEADER_VALUE_LOCALE_DEFAULT;
+        }
     }
 
 }

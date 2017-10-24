@@ -1215,7 +1215,7 @@ public class MapFragment extends BaseFragment
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mapView.setColor(polygon, ContextCompat.getColor(getContext(), color));
+                if (mapView != null) mapView.setColor(polygon, ContextCompat.getColor(getContext(), color));
             }
         }, 75);
 
