@@ -181,12 +181,12 @@
     <color name="profile_name_inactive">@color/white</color>
     <color name="profile_name_activemall">@color/white</color>
     <color name="profile_signout_color">#ececec</color>
+    <color name="profile_signup_text">@color/white</color>
     <!--SIGN -->
     <color name="sign_in_red">#ee3f33</color>
     <color name="sign_in_disabled">#939393</color>
     <color name="sign_in_error_red">#d0011b</color>
     <color name="checkbox_normal">#89010101</color>
-
 
     <!-- SOCIAL SIGN UP -->
     <color name="social_btn_fb">#39579b</color>

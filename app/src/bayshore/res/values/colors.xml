@@ -32,7 +32,6 @@
     <color name="profile_divider">#e2e2e2</color>
     <color name="profile_activemall_border_color">#fff</color>
     <color name="profile_name_inactive">@color/black</color>
-
     <!-- SIGN IN -->
     <color name="sign_in_divider">#e3e3e3</color>
 </resources>
