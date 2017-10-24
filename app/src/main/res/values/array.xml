@@ -16,4 +16,8 @@
         <item>@drawable/icn_menu_mall_info</item>
     </string-array>
 
+    <string-array name="supportedLocales">
+        <item>en-CA</item>
+    </string-array>
+
 </resources>
