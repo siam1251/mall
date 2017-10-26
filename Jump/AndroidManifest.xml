@@ -22,6 +22,7 @@
         Using android:theme="@style/Theme.Janrain.Dialog" will result in Theme.Dialog on API 4-10 and
         Theme.Holo.DialogWhenLarge.NoActionBar on API 11+
     -->
+    <application>
     <activity
         android:name="com.janrain.android.engage.ui.JRFragmentHostActivity"
         android:configChanges="orientation|screenSize"
@@ -41,5 +42,6 @@
             android:theme="@style/Theme.Janrain"
             android:windowSoftInputMode="adjustResize|stateHidden"
             />
+    </application>
 
 </manifest>
