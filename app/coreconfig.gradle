@@ -10,7 +10,7 @@ ext {
     fieldAppName = 'app_name'
     defaultMallName = '"Kinetic Cafe Office"'
 
-    supportLibrary = '25.2.0'
+    supportLibrary = '26.0.2'
     firebase = '11.0.2'
     playServicesGcm = '11.0.2'
     multiDex = '1.0.1'
