@@ -14,6 +14,7 @@ apply plugin: 'io.fabric'
 repositories {
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
+    google()
 }
 
 android {
@@ -30,7 +31,7 @@ android {
         }
     }
     compileSdkVersion 26
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "26.0.2"
     defaultConfig {
         versionName "1.6.0"
         versionCode 1
@@ -83,7 +84,7 @@ android {
         }
 
     }
-
+    flavorDimensions  "release"
     productFlavors {
         bayshore {}
         crossironmills {}
@@ -125,10 +126,10 @@ dependencies {
     compile "com.android.support:recyclerview-v7:${supportLibrary}"
     compile "com.mappedin.sdk:mappedin:${mappedIn}"
     compile("com.crashlytics.sdk.android:crashlytics:2.6.8@aar") {
-        transitive = true;
+        transitive = true
     }
     compile("com.twitter.sdk.android:twitter:${twitter}") {
-        transitive = true;
+        transitive = true
     }
     compile "org.msgpack:msgpack-core:${msgPack}"
     compile "com.exacttarget.etpushsdk:etsdk:${exactTarget}"
