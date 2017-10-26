@@ -71,6 +71,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.exacttarget.etpushsdk.ETPush;
 import com.exacttarget.etpushsdk.util.EventBus;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
@@ -183,6 +184,9 @@ public class MainActivity extends BaseActivity
     private ThemeColorImageView ivMoreMenu;
     public static boolean mActiveMall = false;
     public boolean mSplashScreenGone = false; //when map initializes it causes lag to splashscreen. Use this variable to see if splash screen's gone
+
+    //internal
+    private boolean isFirebaseAnalyticsOn;
 
     //GEOFENCE
     public GeofenceManager mGeofenceManager;
@@ -1479,6 +1483,12 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.action_focusall:
                 MapFragment.getInstance().focusAll();
+                break;
+            case R.id.action_firebase:
+                isFirebaseAnalyticsOn = !isFirebaseAnalyticsOn;
+                Toast.makeText(this, "Firebase Analytics is " + (isFirebaseAnalyticsOn ? "ON" : "OFF"), Toast.LENGTH_SHORT).show();
+                FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(isFirebaseAnalyticsOn);
+                item.setTitle("Toggle Analytics (" + (isFirebaseAnalyticsOn ? "OFF" : "ON") + ")");
                 break;
         }
         return super.onOptionsItemSelected(item);
