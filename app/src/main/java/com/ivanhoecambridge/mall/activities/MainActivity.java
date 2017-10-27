@@ -1727,7 +1727,7 @@ public class MainActivity extends BaseActivity
         tvSignInOrOut.setBackground(ContextCompat.getDrawable(this, isSignedIn ?
                 R.drawable.btn_selector_signout : R.drawable.btn_style_corner_radius_with_selected_state));
         tvSignInOrOut.setTextColor(colour(isSignedIn ?
-                R.color.black : R.color.white));
+                R.color.black : R.color.profile_signup_text));
         tvSignInOrOut.setText(getString(isSignedIn ? R.string.drawer_sign_out : R.string.drawer_sign_in));
         llDisplayNameSettings.setVisibility(isSignedIn ? View.VISIBLE : View.GONE);
 
