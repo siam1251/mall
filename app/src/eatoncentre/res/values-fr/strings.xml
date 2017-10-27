@@ -4,7 +4,7 @@
     <!--ONBOARDING-->
     <string name="onbd_one_title">Bienvenue dans la\n nouvelle appli Centre Eaton de Montréal</string>
     <!-- ACTIVE MALL -->
-    <string name="active_mall_welcome_msg">Bienvenue au Centre Eaton de Montréal, présentement en cours:</string>
+    <string name="active_mall_welcome_msg">Bienvenue au Centre Eaton de Montréal, présentement en cours</string>
 
     <!--PRIVACY-->
     <string name="url_privacy_policy">https://www.centreeatondemontreal.com/fr/politique-de-confidentialite/</string>
