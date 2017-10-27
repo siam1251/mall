@@ -332,7 +332,7 @@
     <string name="onbd_two_desc">Get smart deal recommendations from your favourite stores and shopping interests</string>
     <string name="onbd_three_desc">Easily discover stores with our advanced store search</string>
     <string name="onbd_four_desc">With advanced wayfinding, get directions easily to a store or to your parked car</string>
-    <string name="onbd_four_no_bluedot_desc">With directions easily go to a store or to your parked car</string>
+    <string name="onbd_four_no_bluedot_desc">Easily go to a store or to your parked car, with directions.</string>
     <string name="onbd_five_desc">On arrival the app will connect to the mall and provide everything you need for a great shopping experience!</string>
 
     <string name="onbd_btn_lets_get_started">Let’s Get Started</string>
