@@ -328,6 +328,12 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
                             Analytics.getInstance(mContext).logEvent("HOME_Deal_Unlike", "HOME", "Unlike Deal", title, -1);
                         else
                             Analytics.getInstance(mContext).logEvent("HOME_Deal_Like", "HOME", "Like Deal", title, 1);
+                    } else if (getPageTitle().equals(mContext.getString(R.string.my_page_events_for_today)) || getPageTitle().equals(mContext.getString(R.string.my_page_events))) {
+                        if (dealHolder.ivFav.isSelected()) {
+                            Analytics.getInstance(mContext).logEvent("PROFILE_Deal_Unlike", "PROFILE", "Unlike Deal", title, -1);
+                        } else {
+                            Analytics.getInstance(mContext).logEvent("PROFILE_Deal_Like", "PROFILE", "Like Deal", title, 1);
+                        }
                     }
                     Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
                         @Override
