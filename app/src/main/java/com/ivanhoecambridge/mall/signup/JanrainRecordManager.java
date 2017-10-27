@@ -64,6 +64,12 @@ public class JanrainRecordManager {
             try {
                 JSONArray photos = (JSONArray) captureRecord.get("photos");
                 JSONObject photoObject = photos.getJSONObject(0);
+                for (int i = 0; i < photos.length(); i++) {
+                    photoObject = photos.getJSONObject(i);
+                    if (photoObject.getString("type").equals("original")) {
+                        break;
+                    }
+                }
                 return photoObject.getString("value");
             } catch (JSONException e) {
                 Log.i("JSON", e.getMessage());
