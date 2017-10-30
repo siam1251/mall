@@ -5,6 +5,10 @@
         android:orderInCategory="100"
         android:title="Focus All"
         app:showAsAction="never"/>
+    <item android:id="@+id/action_firebase"
+          android:orderInCategory="120"
+          android:title="Toggle Analytics (On)"/>
+
     <item
         android:id="@+id/action_backend_vm"
         android:orderInCategory="100"
