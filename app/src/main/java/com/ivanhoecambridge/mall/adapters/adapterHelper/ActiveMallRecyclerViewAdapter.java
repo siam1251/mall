@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.activities.DetailActivity;
 import com.ivanhoecambridge.mall.factory.GlideFactory;
@@ -72,7 +73,7 @@ public class ActiveMallRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final KcpContentPage kcpContentPage = mKcpContentPages.get(position);
 
         final KcpContentViewHolder kcpContentViewHolder = (KcpContentViewHolder) holder;
