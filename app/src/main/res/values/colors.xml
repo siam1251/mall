@@ -185,7 +185,7 @@
     <!--SIGN -->
     <color name="sign_in_red">#ee3f33</color>
     <color name="sign_in_disabled">#939393</color>
-    <color name="sign_in_error_red">#d0011b</color>
+    <color name="dropdown_error_red">#d0011b</color>
     <color name="checkbox_normal">#89010101</color>
 
     <!-- SOCIAL SIGN UP -->
@@ -194,6 +194,11 @@
 
     <!-- SIGN IN -->
     <color name="sign_in_divider">#00e3e3e3</color>
+
+    <!-- GIFT CARD -->
+    <color name="gc_blue">#FF007AFF</color>
+    <color name="gc_light_gray">#FFCECECE</color>
+    <color name="gc_error_red">#FFFF0020</color>
 
 
 

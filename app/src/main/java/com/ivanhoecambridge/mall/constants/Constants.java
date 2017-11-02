@@ -26,7 +26,7 @@ public class Constants {
     public final static String HEADER_VALUE_DATAHUB_CATALOG_VM        = "vaughan-mills";
     public final static String HEADER_VALUE_DATAHUB_CATALOG_MP        = "metropolis-at-metrotown";
     public static       String HEADER_VALUE_DATAHUB_LOCALE            = "en-CA";
-    public final static String HEADER_VALUE_LOCALE_DEFAULT = "en-CA";
+    public final static String HEADER_VALUE_LOCALE_DEFAULT            = "en-CA";
     public final static String HEADER_VALUE_CLIENT_TOKEN_PRODUCTION   = "NTJlMWFiZjEtOTg5Ni00YmQyLTg2YWEtZDNlYzE3N2MwYWE1OmUzYzQ4ZWVkNDM2ZDA2MWNmMzA1Y2U3NzhmNTdlZjkzMWJkYWJhN2UwNjM1ZTBmMWFkYjdlYTdlOTgwYWI4NjM2NGI3NzdhYzQ0OTBiOWJlMmU0MDdhNjUyZDNmNmIwMWQyMjI0NzIxNjJkODY0NzZkMWM3NjAzZDQzNGQ5ZjA3"; //PRODUCTION
     public final static String HEADER_VALUE_CLIENT_TOKEN_STAGING      = "OTVhZWMxMTEtNGJiNC00ZDk1LWEwYzAtNTE0ZjhhNDRkOWVkOmQ5ODY5YjIyZDE2NDY1NmZmM2M2N2ZhYjBhYzhlZGIwZDc2YzRiYWRlNWQwZGRmMmJkYzhhYjcyM2M3YTIyYjc2OTgxMTg2YmI1YTFjNTIzMjMyNzUxMzJlMzI0YTJlODU3OTZlMGRkZWQwM2RmZmVkNmQ5ZDBhYjlkOTEzNjU5"; //STAGING
     public final static String HEADER_VALUE_CONTENT_TYPE              = "application/json";
@@ -103,12 +103,16 @@ public class Constants {
     public final static int    REQUEST_CODE_LOCATE_GUEST_SERVICE  = 105;
     public final static int    REQUEST_CODE_TUTORIAL              = 106;
     public final static int    REQUEST_CODE_GIFT_CARD             = 107;
+    public final static int    REQUEST_CODE_SIGN_UP               = 108;
+    public final static int    REQUEST_CODE_SIGN_UP_SIGN_IN       = 109;
     public final static int    RESULT_DONE_PRESSED_WITH_CHANGE    = 0;
     public final static int    RESULT_DONE_PRESSED_WITHOUT_CHANGE = 1;
     public final static int    RESULT_EXIT                        = 2;
+    public final static int    RESULT_FAILED                      = 3;
     public final static int    REQUEST_CODE_VIEW_STORE_ON_MAP     = 543;
     public final static String REQUEST_CODE_KEY                   = "requestCode";
     public final static String REQUEST_CODE_KEY_PARKING_NAME      = "parkingName";
+
 
     public final static int RESULT_DEALS  = 1;
     public final static int RESULT_EVENTS = 2;
@@ -140,7 +144,8 @@ public class Constants {
     /**
      * Sets the locale for the HEADER_DATAHUB_LOCALE. If the specified locale is not supported by the flavour of the app
      * <br /> then it will default to en-CA
-     * @param context Context object
+     *
+     * @param context   Context object
      * @param newLocale Desired locale.
      */
     public static void setLocale(Context context, int newLocale) {

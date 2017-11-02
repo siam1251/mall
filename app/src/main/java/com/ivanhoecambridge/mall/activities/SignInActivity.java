@@ -544,14 +544,18 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
     @Override
     public void onAuthenticateSuccess() {
+        setResult(RESULT_OK);
         setProgressIndicator(false);
-        startActivity(createHomeIntent());
+        if (getCallingActivity() == null) {
+            startActivity(createHomeIntent());
+        }
         ActivityAnimation.startActivityAnimation(this);
         finishActivity();
     }
 
     @Override
     public void onAuthenticateFailure(AuthenticationManager.ERROR_REASON errorReason, String errorRawReason, String provider) {
+        setResult(Constants.RESULT_FAILED);
         setProgressIndicator(false);
         setErrorNotificationMessage(getErrorMessage(errorReason, errorRawReason), true);
     }
@@ -637,6 +641,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
     @Override
     public void onBackPressed() {
+        setResult(RESULT_CANCELED);
         finishActivity();
     }
 

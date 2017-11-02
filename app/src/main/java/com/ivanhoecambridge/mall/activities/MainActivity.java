@@ -1659,12 +1659,6 @@ public class MainActivity extends BaseActivity
                 mGeofenceManager = new GeofenceManager(this);
             } else if(requestCode == Constants.REQUEST_CODE_GIFT_CARD) {
                 if (resultCode == Activity.RESULT_OK) {
-                    String cardNumber = data.getStringExtra(GiftCard.EXTRA_GIFT_CARD_NUMBER);
-                    float cardBalance = data.getFloatExtra(GiftCard.EXTRA_GIFT_CARD_BALANCE, 0);
-                    DecimalFormat df = new DecimalFormat(".00");
-                    GiftCardManager.getInstance(this).addCard(cardNumber, cardBalance);
-                    Toast.makeText(this, getString(R.string.gc_added_succesfully) + df.format(cardBalance), Toast.LENGTH_LONG).show();
-                    Analytics.getInstance(this).logEvent("Giftcard_Add", "Gift Card", "Gift Card Added", cardNumber, (int)(cardBalance*100));
                     mGiftCardRecyclerViewAdapter.updateData();
                 }
 
@@ -1743,6 +1737,8 @@ public class MainActivity extends BaseActivity
 
         resizeBackgroundImage(isSignedIn);
         updateUserViews(isSignedIn);
+
+        KcpUtility.saveToSharedPreferences(this, JanrainRecordManager.KEY_USER_SIGNED_IN, isSignedIn);
 
     }
 

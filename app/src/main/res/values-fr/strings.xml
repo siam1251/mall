@@ -319,11 +319,19 @@
     <string name="signin_error_social_signin_only">Ce compte est que pour les connections avec réseaux sociaux.</string>
 
     <!--GIFT CARD-->
+    <string name="gc_page_title">Vérifier le solde votre carte cadeau</string>
+    <string name="gc_card_number">Numéro de la carte</string>
+    <string name="gc_card_number_error">Numéro de carte invalide</string>
+    <string name="gc_card_balance">Solde de la carte</string>
+    <string name="gc_sign_up_save_card_balance">S\'inscrire pour sauvegarder la balance</string>
+    <string name="gc_save_card_balance">Sauvegarder la balance</string>
+    <string name="gc_check_another">Vérifier une autre carte cadeau</string>
     <string name="gc_add_card">Ajouter une carte cadeau</string>
     <string name="error_code_404">Le numéro saisi est non valide.</string>
     <string name="error_code_500">Erreur de serveur</string>
     <string name="error_code_internet">SVP verifier votre connection internet et essayer de nouveau.</string>
     <string name="gc_added_succesfully">Carte cadeau ajouté - La balance est $</string>
+    <string name="gc_added_dialog_title">Carte cadeau ajoutée</string>
     <string name="gc_removed">La carte cadeau a été supprimée</string>
     <string name="gc_refresh">La balance de la carte cadeau a été mise à jour</string>
     <!---->

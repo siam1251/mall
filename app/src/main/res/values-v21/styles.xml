@@ -26,4 +26,9 @@
         <item name="android:headerBackground">@color/welcome_btn_color</item>
         <item name="colorAccent">@color/welcome_btn_color</item>
     </style>
+
+    <style name="CardViewForm.Button" parent="CardViewForm">
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?android:selectableItemBackground</item>
+    </style>
 </resources>

@@ -199,6 +199,7 @@
     <string name="drawer_stores">Stores</string>
     <string name="drawer_interests">Interests</string>
     <string name="drawer_add_gc">+ Add a Gift Card</string>
+    <string name="drawer_check_gc_balance">Check Your Gift Card Balance</string>
     <string name="drawer_sign_in">Sign Up</string>
     <!-- Sign out from drawer is temporary -->
     <string name="drawer_sign_out">Sign Out</string>
@@ -386,11 +387,24 @@
     <string name="signin_error_social_signin_only">That account is social sign in only.</string>
 
     <!--GIFT CARD-->
+    <string name="gc_page_title">Check Gift Card Balance</string>
+    <string name="gc_card_number">Card Number</string>
+    <string name="gc_card_number_hint">000 &#8211; 000 &#8211; 000 &#8211; 000 &#8211; 0000</string>
+    <string name="gc_card_number_error">Card Number Invalid</string>
+    <string name="gc_card_balance_hint">$0.00</string>
+    <string name="gc_card_balance_format">$%.2f</string>
+    <string name="gc_card_balance">Card Balance</string>
+    <string name="gc_sign_up_save_card_balance">Sign Up to Save Card Balance</string>
+    <string name="gc_save_card_balance">Save Card Balance</string>
+    <string name="gc_check_another">Check Another Gift Card</string>
     <string name="gc_add_card">Add Card</string>
+    <string name="gc_error_request">There was an error with the request.</string>
     <string name="error_code_404">Invalid Card Number</string>
-    <string name="error_code_500">Server Error</string>
+    <string name="error_code_500">There was a problem with the server.</string>
     <string name="error_code_internet">Please check your internet connection and try again.</string>
-    <string name="gc_added_succesfully">Gift Card Added - Balance is $</string>
+    <string name="gc_added_succesfully_balance">Gift Card Added - Balance is $</string>
+    <string name="gc_added_dialog_title">Gift Card Added</string>
+    <string name="gc_add_another">Add Another Gift Card?</string>
     <string name="gc_removed">Gift Card has been removed.</string>
     <string name="gc_refresh">Gift Card Balance has been updated</string>
     <!---->

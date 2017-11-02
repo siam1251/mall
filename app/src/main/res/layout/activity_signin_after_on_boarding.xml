@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
-        android:background="@color/sign_in_error_red"
+        android:background="@color/dropdown_error_red"
         android:text="@string/signin_error_unknown"
         android:drawableLeft="@drawable/icn_exit"
         android:drawableStart="@drawable/icn_exit"

@@ -133,7 +133,11 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Authe
     }
 
     @OnClick(R.id.tvSignIn) void onClickSignIn() {
-        startActivity(createSignInIntent());
+        if (getCallingActivity() == null) {
+            startActivity(createSignInIntent());
+        } else {
+            startActivityForResult(createSignInIntent(), Constants.REQUEST_CODE_SIGN_UP_SIGN_IN);
+        }
         ActivityAnimation.startActivityAnimation(SignInAfterOnBoardingActivity.this);
     }
 
@@ -148,8 +152,13 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Authe
         authenticationManager.authenticate(this, AuthenticationManager.PROVIDER_GOOGLE);
     }
 
+
     void onClickEmail() {
-        startActivity(createSignInIntent().putExtra(Constants.KEY_ACTIVE_SCENE_ORDER, SignInActivity.SIGNUP_SCENE));
+        if (getCallingActivity() == null) {
+            startActivity(createSignInIntent().putExtra(Constants.KEY_ACTIVE_SCENE_ORDER, SignInActivity.SIGNUP_SCENE));
+        } else {
+            startActivityForResult(createSignInIntent().putExtra(Constants.KEY_ACTIVE_SCENE_ORDER, SignInActivity.SIGNUP_SCENE), Constants.REQUEST_CODE_SIGN_UP_SIGN_IN);
+        }
         ActivityAnimation.startActivityAnimation(this);
     }
 
@@ -196,12 +205,14 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Authe
 
     @Override
     public void onAuthenticateSuccess() {
+        setResult(RESULT_OK);
         setProgressIndicator(false);
         finishActivity();
     }
 
     @Override
     public void onAuthenticateFailure(AuthenticationManager.ERROR_REASON errorReason, String rawError,  String provider) {
+        setResult(Constants.RESULT_FAILED);
         setProgressIndicator(false);
         setErrorNotificationMessage(getErrorMessage(errorReason), true);
     }
@@ -242,5 +253,11 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Authe
         tvError.startAnimation(slideDirection);
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_CODE_SIGN_UP_SIGN_IN) {
+            setResult(resultCode);
+            finishActivity();
+        }
+    }
 }

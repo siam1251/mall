@@ -19,6 +19,8 @@ import org.json.JSONObject;
 
 public class JanrainRecordManager {
 
+    public final static String KEY_USER_SIGNED_IN = "USER_SIGNED_IN";
+
     private CaptureRecord captureRecord;
     private Context context;
 
