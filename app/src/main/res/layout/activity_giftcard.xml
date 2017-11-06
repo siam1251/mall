@@ -47,7 +47,7 @@
                     android:drawableRight="@drawable/icn_exit"
                     app:drawableFilterColor="@color/white"
                     android:padding="8dp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_marginTop="?attr/actionBarSize"/>
 
             </android.support.design.widget.CollapsingToolbarLayout>
