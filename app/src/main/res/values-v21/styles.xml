@@ -29,6 +29,6 @@
 
     <style name="CardViewForm.Button" parent="CardViewForm">
         <item name="android:clickable">true</item>
-        <item name="android:foreground">?android:selectableItemBackground</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 </resources>
