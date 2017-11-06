@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.signup.AuthenticationManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
@@ -206,6 +207,7 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Authe
     @Override
     public void onAuthenticateSuccess() {
         setResult(RESULT_OK);
+        Analytics.getInstance(this).logEvent("Profile_Signin_Completed", "PROFILE", "Sign Up completed");
         setProgressIndicator(false);
         finishActivity();
     }
@@ -213,6 +215,7 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Authe
     @Override
     public void onAuthenticateFailure(AuthenticationManager.ERROR_REASON errorReason, String rawError,  String provider) {
         setResult(Constants.RESULT_FAILED);
+        Analytics.getInstance(this).logEvent("Profile_Signin_Incompleted", "PROFILE", "Sign Up incompleted");
         setProgressIndicator(false);
         setErrorNotificationMessage(getErrorMessage(errorReason), true);
     }

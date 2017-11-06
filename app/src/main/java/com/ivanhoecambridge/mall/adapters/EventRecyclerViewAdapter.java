@@ -112,7 +112,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final KcpContentPage kcpContentPage = mKcpContentPagesNews.get(position);
         if (holder.getItemViewType() == KcpContentTypeFactory.ITEM_TYPE_FOOTER) {
             RecyclerViewFooter.FooterViewHolder footerViewHolder = (RecyclerViewFooter.FooterViewHolder) holder;
@@ -153,8 +153,16 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter{
                     Utility.startSqueezeAnimationForFav(new Utility.SqueezeListener() {
                         @Override
                         public void OnSqueezeAnimationDone() {
+                            if (getPageTitle().equals(mContext.getString(R.string.my_page_deals_for_today)) || getPageTitle().equals(mContext.getString(R.string.my_page_deals))) {
+                                if (eventHolder.ivFav.isSelected()) {
+                                    Analytics.getInstance(mContext).logEvent("PROFILE_Event_Unlike", "PROFILE", "Unlike deal", title, -1);
+                                } else {
+                                    Analytics.getInstance(mContext).logEvent("PROFILE_Event_Like", "PROFILE", "Like deal", title, 1);
+                                }
+                            }
                             eventHolder.ivFav.setSelected(!eventHolder.ivFav.isSelected());
                             FavouriteManager.getInstance(mContext).addOrRemoveFavContent(likeLink, kcpContentPage, mFavouriteInterface);
+
                         }
                     }, (Activity) mContext, eventHolder.ivFav);
                 }

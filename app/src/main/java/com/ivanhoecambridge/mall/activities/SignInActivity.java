@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.kcpandroidsdk.views.ProgressBarWhileDownloading;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.fragments.BirthDayPickerFragment;
 import com.ivanhoecambridge.mall.signin.FormFillChecker;
@@ -545,6 +546,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     @Override
     public void onAuthenticateSuccess() {
         setResult(RESULT_OK);
+        Analytics.getInstance(this).logEvent("Profile_Signin_Completed", "PROFILE", "Sign Up completed");
         setProgressIndicator(false);
         if (getCallingActivity() == null) {
             startActivity(createHomeIntent());
@@ -556,6 +558,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
     @Override
     public void onAuthenticateFailure(AuthenticationManager.ERROR_REASON errorReason, String errorRawReason, String provider) {
         setResult(Constants.RESULT_FAILED);
+        Analytics.getInstance(this).logEvent("Profile_Signin_Incompleted", "PROFILE", "Sign Up incompleted");
         setProgressIndicator(false);
         setErrorNotificationMessage(getErrorMessage(errorReason, errorRawReason), true);
     }
