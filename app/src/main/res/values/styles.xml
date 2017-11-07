@@ -323,6 +323,11 @@
 
     </style>
 
+    <style name="CardViewText" parent="TextAppearance.AppCompat">
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
     <style name="CardViewForm" parent="@style/CardView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">44dp</item>
