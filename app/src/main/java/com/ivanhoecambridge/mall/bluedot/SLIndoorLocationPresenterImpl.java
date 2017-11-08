@@ -129,8 +129,10 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
         this.mContext = context;
         this.mapViewWithBlueDot = mapViewWithBlueDot;
         positionAndHeadingMapVisualization.init(mapViewWithBlueDot);
-        sLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        sCoordinateListener = new CoordinateListener(positionAndHeadingMapVisualization); //method 1
+        if (mContext != null) {
+            sLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+            sCoordinateListener = new CoordinateListener(positionAndHeadingMapVisualization); //method 1
+        }
     }
 
     @Override
