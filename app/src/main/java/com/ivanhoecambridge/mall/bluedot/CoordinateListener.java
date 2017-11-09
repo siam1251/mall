@@ -53,7 +53,9 @@ public class CoordinateListener implements LocationListener {
             PositionAndHeadingMapVisualization positionAndHeadingMapVisualization = mPositionAndHeadingMapVisualization.get();
             if (sLocationFindingMode == PositionAndHeadingMapVisualization.LocationFindingMode.GPS) {
                 sGeofenceEntered = geofence;
-                positionAndHeadingMapVisualization.setPos(blueDotPosition);
+                if (positionAndHeadingMapVisualization != null) {
+                    positionAndHeadingMapVisualization.setPos(blueDotPosition);
+                }
             }
         }
     }
