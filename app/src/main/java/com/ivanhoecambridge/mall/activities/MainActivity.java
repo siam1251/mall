@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -93,6 +94,7 @@ import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.constants.Constants;
 
+import constants.MallConstants;
 import factory.HeaderFactory;
 
 import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
@@ -116,6 +118,8 @@ import com.ivanhoecambridge.mall.movies.MovieManager;
 import com.ivanhoecambridge.mall.onboarding.TutorialActivity;
 import com.ivanhoecambridge.mall.parking.ParkingManager;
 import com.ivanhoecambridge.mall.parking.Parkings;
+import com.ivanhoecambridge.mall.rating.AppRatingManager;
+import com.ivanhoecambridge.mall.rating.RatingListener;
 import com.ivanhoecambridge.mall.searchIndex.IndexManager;
 import com.ivanhoecambridge.mall.signup.JanrainRecordManager;
 import com.ivanhoecambridge.mall.user.AccountManager;
@@ -133,6 +137,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -142,7 +147,7 @@ import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOn
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, KcpApplication.EtPushListener{
+        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, KcpApplication.EtPushListener, RatingListener{
 
     protected static final String TAG = "MainActivity";
     private final static int WELCOME_MSG_RESET_TIMER_IN_HOUR = 12; //every this hour, it will try to show the welcome msg to help parking
@@ -168,6 +173,7 @@ public class MainActivity extends BaseActivity
     private FrameLayout flActiveMallDot;
     private int mCurrentViewPagerTapPosition = VIEWPAGER_PAGE_HOME;
     private GiftCardRecyclerViewAdapter mGiftCardRecyclerViewAdapter;
+    private AlertDialog ratingDialog;
 
 
 
@@ -258,6 +264,12 @@ public class MainActivity extends BaseActivity
                         splashImage.startAnimation(animFadeOut);
                         if(mReadyToLoadMapListener != null) mReadyToLoadMapListener.onReady();
                         ProgressBarWhileDownloading.showProgressDialog(MainActivity.this, R.layout.layout_loading_item, false);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                showRatingDialog();
+                            }
+                        }, 1000);
                     }
                 });
 
@@ -1532,6 +1544,8 @@ public class MainActivity extends BaseActivity
         this.etPush = etPush;
     }
 
+
+
     public interface RefreshListener {
         void onRefresh(int msg);
     }
@@ -1674,6 +1688,19 @@ public class MainActivity extends BaseActivity
         }
     }
 
+
+    public void showRatingDialog() {
+        if (ratingDialog != null) {
+            ratingDialog.show();
+        }
+    }
+
+    private void launchPlayStore() {
+        Intent playIntent = new Intent(Intent.ACTION_VIEW);
+        playIntent.setData(Uri.parse(getString(R.string.ar_play_store_url, BuildConfig.APPLICATION_ID)));
+        startActivity(playIntent);
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -1690,6 +1717,7 @@ public class MainActivity extends BaseActivity
         if(mGeofenceManager != null && mGeofenceManager.getGoogleApiClient() != null) {
             mGeofenceManager.getGoogleApiClient().connect();
         }
+        AppRatingManager.getInstance().getUsage(this, this);
     }
 
     @Override
@@ -1787,6 +1815,36 @@ public class MainActivity extends BaseActivity
             //only reset the porter duff mode if the user doesn't exist or has no image or not signed in.
             ivDrawerLayoutUser.resetToDefaultColors((jrRecordManager == null || !jrRecordManager.userHasProfileImage() || !jrRecordManager.isUserSignedIn()));
         }
+    }
+
+    @Override
+    public void onCreateRatingDialog(final DialogActionListener dialogActionListener) {
+        if (ratingDialog == null) {
+            ratingDialog = new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.ar_dialog_title, getString(R.string.app_name)))
+                    .setMessage(getString(R.string.ar_dialog_message))
+                    .setPositiveButton(getString(R.string.action_ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialogActionListener.onDialogOK();
+                            dialog.dismiss();
+                            launchPlayStore();
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.action_later), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            dialogActionListener.onDialogDeferred();
+                        }
+                    })
+                    .create();
+        }
+    }
+
+    @Override
+    public void onDestroyRatingDialog() {
+        ratingDialog = null;
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
+import com.crashlytics.android.core.CrashlyticsListener;
 import com.exacttarget.etpushsdk.ETAnalytics;
 import com.exacttarget.etpushsdk.ETException;
 import com.exacttarget.etpushsdk.ETLogListener;
@@ -27,11 +28,13 @@ import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.constants.Janrain;
+import com.ivanhoecambridge.mall.rating.AppRatingManager;
 import com.janrain.android.Jump;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
+import java.util.Calendar;
 import java.util.LinkedHashSet;
 
 import constants.MallConstants;
@@ -68,7 +71,7 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
     @Override
     public void onCreate() {
         super.onCreate();
-
+        AppRatingManager.init(getApplicationContext());
         TwitterAuthConfig authConfig =  new TwitterAuthConfig(MallConstants.TWITTER_API_KEY, MallConstants.TWITTER_API_SECRET);
         KcpConstants.setBaseURL(Constants.IS_APP_IN_PRODUCTION);
         KcpAccount.getInstance().initialize(getApplicationContext());
@@ -77,7 +80,14 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
 
         if(BuildConfig.REPORT_CRASH) {
             FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
-            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics(), new TweetUi());
+            final CrashlyticsCore core = new CrashlyticsCore.Builder()
+                    .listener(new CrashlyticsListener() {
+                        @Override
+                        public void crashlyticsDidDetectCrashDuringPreviousExecution() {
+                            AppRatingManager.trackCrashReport(getApplicationContext());
+                        }
+                    }).build();
+            Fabric.with(this, new TwitterCore(authConfig), new Crashlytics.Builder().core(core).build(), new TweetUi());
         } else {
             FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(false);
             Fabric.with(this, new TwitterCore(authConfig), new TweetUi());

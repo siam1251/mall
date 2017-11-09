@@ -133,6 +133,9 @@ public class Constants {
     //SIGNUP/SIGNIN
     public final static String KEY_ACTIVE_SCENE_ORDER = "activeSceneOrder";
 
+    //VERSION
+    public final static String KEY_APP_VERSION = "app_version";
+
     public static String getStringFromResources(Context context, int resourceId) {
         return context.getString(resourceId);
     }

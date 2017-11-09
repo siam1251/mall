@@ -369,4 +369,8 @@
     <string name="date_format_announcement_grouped">d MMMM</string>
     <string name="date_format_janrain_capture">yyyy-MM-dd</string>
 
+    <!-- APP RATE -->
+    <string name="ar_dialog_title">Vous aimez %1$s?</string>
+    <string name="ar_dialog_message">S\'il vous plaît prenez un moment pour l\'évaluer</string>
+
 </resources>

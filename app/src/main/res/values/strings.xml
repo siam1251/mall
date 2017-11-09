@@ -12,6 +12,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_reset">Reset</string>
     <string name="action_ok">Ok</string>
+    <string name="action_later">LATER</string>
     <string name="action_got_it">GOT IT</string>
     <string name="action_call">Call</string>
     <string name="action_exit">Exit</string>
@@ -436,5 +437,10 @@
     <string name="date_format_announcement">MMMM d, EEEE</string>
     <string name="date_format_announcement_grouped">MMMM d</string>
     <string name="date_format_janrain_capture">yyyy-MM-dd</string>
+
+    <!-- APP RATE -->
+    <string name="ar_play_store_url" translatable="false">market://details?id=%1$s</string>
+    <string name="ar_dialog_title">Enjoying %1$s App?</string>
+    <string name="ar_dialog_message">Please take a moment to rate it.</string>
 
 </resources>
