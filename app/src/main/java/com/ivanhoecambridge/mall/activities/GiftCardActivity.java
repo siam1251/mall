@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +46,7 @@ public class GiftCardActivity extends BaseActivity implements GiftCardManager.Gi
     private final char   DIVIDER     = '-';
     private final int    MAX_DIGITS  = 20;
     private final String TEST_NUMBER = "1000140032956896";
+    private final String PATTERN = "###-###-###-###-####";
 
     @BindView(R.id.rlParent)
     RelativeLayout rlParent;
@@ -132,20 +132,49 @@ public class GiftCardActivity extends BaseActivity implements GiftCardManager.Gi
 
     @OnTextChanged(value = R.id.edtGiftCardNumber, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     public void onCardNumberChanged(Editable s) {
-        if (s.length() > 0 && (s.length() % 4) == 0) {
-            char currentChar = s.charAt(s.length() - 1);
-            if (currentChar == DIVIDER) {
-                s.delete(s.length() - 1, s.length());
-            }
-            if (Character.isDigit(currentChar)) {
-                s.insert(s.length() - 1, String.valueOf(DIVIDER));
-            }
+        if (!inputMatchesPattern(s.toString(), PATTERN)) {
+            String reformatted = reformatString(s.toString().replace(String.valueOf(DIVIDER), ""), PATTERN);
+            s.replace(0, s.length(), reformatted);
         }
         if (s.length() == MAX_DIGITS) {
             checkCardBalance();
         }
 
     }
+
+    private String reformatString(String rawString, String pattern) {
+        StringBuilder sb = new StringBuilder(pattern);
+        StringBuilder rawSb = new StringBuilder(rawString);
+        int dividerCount = 0;
+        int index = 0;
+        for (int i = 0; i < rawString.length() + dividerCount; i++) {
+            if (pattern.charAt(i) == '#') {
+                char number = rawSb.charAt(0);
+                sb.setCharAt(i, number);
+                rawSb.deleteCharAt(0);
+            } else {
+                dividerCount++;
+            }
+            index++;
+        }
+        sb.delete(index, sb.length());
+        return sb.toString();
+    }
+
+    private boolean inputMatchesPattern(String input, String pattern) {
+        int index = 0;
+        boolean patternMatches = true;
+        while (patternMatches && index < input.length()) {
+            if (Character.isDigit(input.charAt(index)) && pattern.charAt(index) == DIVIDER ||
+                    input.charAt(index) == DIVIDER && pattern.charAt(index) != DIVIDER) {
+                patternMatches = false;
+            }
+            index++;
+        }
+        return patternMatches;
+    }
+
+
 
     @OnFocusChange(R.id.edtGiftCardNumber)
     public void onCardNumberFocusChanged(boolean hasFocus) {
