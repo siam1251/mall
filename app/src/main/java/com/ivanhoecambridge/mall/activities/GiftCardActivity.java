@@ -143,22 +143,21 @@ public class GiftCardActivity extends BaseActivity implements GiftCardManager.Gi
     }
 
     private String reformatString(String rawString, String pattern) {
-        StringBuilder sb = new StringBuilder(pattern);
+        StringBuilder patternSb = new StringBuilder(pattern);
         StringBuilder rawSb = new StringBuilder(rawString);
         int dividerCount = 0;
         int index = 0;
         for (int i = 0; i < rawString.length() + dividerCount; i++) {
             if (pattern.charAt(i) == '#') {
-                char number = rawSb.charAt(0);
-                sb.setCharAt(i, number);
+                patternSb.setCharAt(i, rawSb.charAt(0));
                 rawSb.deleteCharAt(0);
             } else {
                 dividerCount++;
             }
             index++;
         }
-        sb.delete(index, sb.length());
-        return sb.toString();
+        patternSb.delete(index, patternSb.length());
+        return patternSb.toString();
     }
 
     private boolean inputMatchesPattern(String input, String pattern) {
