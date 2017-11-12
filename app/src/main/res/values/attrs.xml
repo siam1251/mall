@@ -1,6 +1,8 @@
 <resources>
 
-
+    <!-- Attrs defined outside of styleable elements are common shared values that any view can use -->
+    <attr name="drawableFilterColor" format="color"/>
+    <attr name="fontFamily" format="string"/>
     <!-- Declare custom theme attributes that allow changing which styles are
          used for button bars depending on the API level.
          ?android:attr/buttonBarStyle is new as of API 11 so this is
@@ -45,8 +47,8 @@
     </declare-styleable>
 
     <declare-styleable name="CustomFontTextView">
-        <attr name="fontFamily" format="string"/>
-        <attr name="drawableFilterColor" format="color"/>
+        <attr name="fontFamily"/>
+        <attr name="drawableFilterColor"/>
     </declare-styleable>
 
     <declare-styleable name="ExpandableTextView">
@@ -60,6 +62,16 @@
 
     <declare-styleable name="CustomBottomSheetBehavior">
         <attr name="anchorPoint" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="FormEditText">
+        <attr name="fontFamily"/>
+        <attr name="drawableFilterColor"/>
+        <attr name="drawableFilterColorSelected" format="color"/>
+        <attr name="activeHint" format="enum">
+            <enum name="none" value="0"/>
+            <enum name="underlineDash" value="1"/>
+        </attr>
     </declare-styleable>
 </resources>
 

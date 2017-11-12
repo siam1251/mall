@@ -6,4 +6,5 @@
     <string name="fontFamily_roboto_medium">fonts/Roboto-Medium.ttf</string>
     <string name="fontFamily_roboto_bold">fonts/Roboto-Bold.ttf</string>
     <string name="fontFamily_roboto_lightitalic">fonts/Roboto-LightItalic.ttf</string>
+    <string name="fontFamily_OpenSans">fonts/OpenSans-Regular.ttf</string>
 </resources>

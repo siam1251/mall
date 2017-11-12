@@ -1,128 +1,173 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/card_bg"
-    >
-    <android.support.design.widget.CoordinatorLayout
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <android.support.design.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cdlIntCat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/cdlIntCat"
         tools:context="com.ivanhoecambridge.mall.activities.InterestedCategoryActivity">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/ablTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:elevation="3dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+           >
 
-            <include
-                layout="@layout/layout_toolbar_intrstd_category" />
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/ctbGiftCard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:titleEnabled="false"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="@color/themeColor">
+
+
+                <ImageView style="@style/GiftCardBanner"
+                    android:id="@+id/ivGiftCardImage"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_mallinfo_giftcard"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.7"/>
+
+
+               <include layout="@layout/toolbar_pinned" />
+
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView style="@style/TextViewError"
+                    android:id="@+id/tvErrorDropDown"
+                    android:drawableEnd="@drawable/icn_exit"
+                    android:drawableRight="@drawable/icn_exit"
+                    app:drawableFilterColor="@color/white"
+                    android:padding="8dp"
+                    android:visibility="gone"
+                    android:layout_marginTop="?attr/actionBarSize"/>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+
 
         </android.support.design.widget.AppBarLayout>
 
-        <ScrollView
-            android:layout_marginTop="?attr/actionBarSize"
-            android:background="@color/card_bg"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:ThemedImageView="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/svGiftCard"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/scSign"
+            android:background="@color/card_bg"
             android:fillViewport="true"
-            >
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:background="@color/card_bg"
-                android:layout_width="match_parent"
-                android:id="@+id/rlTransition"
-                android:layout_height="match_parent">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                    app:fontFamily="@string/fontFamily_roboto_medium"
-                    android:layout_marginTop="23dp"
+                <LinearLayout
+                    android:id="@+id/llGiftCardInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/hint_card_number"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:textSize="14dp"
-                    />
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
-                <android.support.v7.widget.CardView
-                    android:layout_marginTop="10dp"
-                    android:onClick="onGoogleClicked"
-                    android:clickable="false"
-                    android:id="@+id/cvGoogle"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    card_view:cardCornerRadius="@dimen/sign_in_card_corner_radius"
-                    card_view:cardElevation="@dimen/sign_in_card_elevation"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:layout_above="@+id/llSignInCreateAccount"
-                    android:layout_marginBottom="22dp"
-                    card_view:cardBackgroundColor="@color/white"
-                    >
-                        <EditText
-                            android:paddingLeft="14dp"
-                            android:paddingRight="14dp"
+                    <TextView style="@style/TextViewForm"
+                        android:id="@+id/tvGiftCardNumber"
+                        android:text="@string/gc_card_number" />
+
+                    <android.support.v7.widget.CardView style="@style/CardViewForm.GiftCard"
+                        android:id="@+id/cvGiftCardNumber"
+                        android:layout_marginBottom="5dp">
+
+                       <com.ivanhoecambridge.mall.views.FormEditText style="@style/EditTextForm.Number"
+                           android:id="@+id/edtGiftCardNumber"
+                           android:hint="@string/gc_card_number_hint"
+                           android:maxLength="20"
+                           android:drawableRight="@drawable/icn_edit"
+                           android:drawableEnd="@drawable/icn_edit"
+                           android:letterSpacing="0.08"
+                           android:maxLines="1"
+                           app:drawableFilterColor="@color/gc_blue"
+                           app:fontFamily="@string/fontFamily_OpenSans"/>
+
+                        <ProgressBar android:theme="@style/ProgressBarStyle"
+                            android:id="@+id/pbGiftCardNumber"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:visibility="gone"
+                            android:layout_gravity="center_vertical|end"/>
+
+                    </android.support.v7.widget.CardView>
+
+                    <TextView style="@style/TextAppearance.AppCompat.Caption"
+                        android:id="@+id/tvGiftCardNumberError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gc_card_number_error"
+                        android:textColor="@color/gc_error_red"
+                        android:layout_gravity="end"
+                        android:visibility="gone"/>
+
+                    <TextView style="@style/TextViewForm"
+                        android:id="@+id/tvCardBalance"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/gc_card_balance" />
+
+                    <android.support.v7.widget.CardView style="@style/CardViewForm.GiftCard"
+                       android:id="@+id/cvGiftCardBalance"
+                        android:focusableInTouchMode="true"
+                        android:focusable="true">
+
+                        <com.ivanhoecambridge.mall.views.FormEditText style="@style/EditTextForm.Number"
+                            android:id="@+id/edtGiftCardBalance"
+                            android:hint="@string/gc_card_balance_hint"
+                            android:textStyle="bold"
+                            android:focusable="false"
+                            android:longClickable="false"
+                            app:fontFamily="@string/fontFamily_roboto_medium"/>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView style="@style/CardViewForm.Button"
+                        android:id="@+id/cvSaveCardBalance">
+
+                        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView style="@style/CardViewText"
+                            android:id="@+id/tvSaveCardBalance"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:id="@+id/etCard"
-                            android:inputType="phone"
-                            android:background="@android:color/transparent"
-                            android:maxLength="20"
-                            />
-                </android.support.v7.widget.CardView>
+                            android:enabled="false"
+                            android:background="@drawable/btn_sign_up_to_save"
+                            android:text="@string/gc_sign_up_save_card_balance"
+                            app:fontFamily="@string/fontFamily_roboto_medium"
+                            android:textColor="@color/white"
+                            android:gravity="center"
+                           />
 
+                    </android.support.v7.widget.CardView>
 
+                    <android.support.v7.widget.CardView style="@style/CardViewForm.Button"
+                        android:id="@+id/cvCheckAnother"
+                        android:layout_marginTop="10dp">
 
+                        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView style="@style/CardViewText"
+                            android:id="@+id/tvCheckAnotherGiftCard"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/gc_check_another"
+                            app:fontFamily="@string/fontFamily_roboto_medium"
+                            android:textColor="@color/gc_blue"
+                            android:gravity="center" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    </android.support.v7.widget.CardView>
 
-                <LinearLayout
-                    style="@style/SelectableItemForegroundWhite"
-                    android:layout_alignParentBottom="true"
-                    android:layout_gravity="bottom"
-                    android:id="@+id/llSignInCreateAccount"
-                    android:background="@color/sign_in_disabled"
-                    android:layout_width="match_parent"
-                    android:gravity="center_horizontal"
-                    android:layout_height="48dp"
-                    >
-
-                    <ProgressBar
-                        android:layout_gravity="center"
-                        android:id="@+id/pb"
-                        style="@style/progressBarMedium"
-                        android:visibility="gone"
-                        />
-
-                    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                        android:id="@+id/tvSign"
-                        style="@style/SelectableItemForeground"
-                        android:layout_marginLeft="5dp"
-                        android:gravity="center_vertical"
-                        app:fontFamily="@string/fontFamily_roboto_bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/gc_add_card"
-                        android:textColor="@color/white"
-                        android:textSize="16dp"
-                        />
                 </LinearLayout>
 
-            </LinearLayout>
-        </ScrollView>
+
+        </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>
