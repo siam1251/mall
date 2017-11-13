@@ -338,6 +338,7 @@
 
     <string name="onbd_btn_lets_get_started">Let’s Get Started</string>
     <string name="onbd_btn_lets_get_skip">Skip</string>
+    <string name="onbd_btn_next">Next</string>
     <string name="onbd_btn_lets_get_done">Done</string>
 
     <!--MOVIES-->

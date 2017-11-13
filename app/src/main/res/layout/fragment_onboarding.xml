@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="25dp"
+    android:paddingStart="25dp"
+    android:paddingRight="25dp"
+    android:paddingEnd="25dp"
+    android:paddingBottom="20dp"
+    android:background="@color/themeColor">
+
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+        android:id="@+id/tvOnbdDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="25dp"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:lineSpacingMultiplier="1.2"
+        tools:text="@string/onbd_five_desc"/>
+
+    <ImageView
+        android:id="@+id/ivOnbdImage"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center|bottom"
+        android:layout_marginTop="25dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/onboarding_1"/>
+
+</LinearLayout>
