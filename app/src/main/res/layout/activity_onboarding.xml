@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/themeColor">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPagerOnboarding"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tlDots"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            app:tabBackground="@drawable/tab_indicator"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp"/>
+
+    </android.support.v4.view.ViewPager>
+
+
+
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+        style="@style/TextOnBoarding"
+        android:id="@+id/tvOnbdSkip"
+        app:fontFamily="@string/fontFamily_roboto_medium"
+        android:text="@string/onbd_btn_lets_get_skip"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone"/>
+
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+        style="@style/TextOnBoarding"
+        android:id="@+id/tvOnbdGetStarted"
+        app:fontFamily="@string/fontFamily_roboto_medium"
+        android:text="@string/onbd_btn_lets_get_started"
+        android:layout_centerHorizontal="true"
+        />
+
+    <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView style="@style/TextOnBoarding"
+        android:id="@+id/tvOnbdNext"
+        app:fontFamily="@string/fontFamily_roboto_medium"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/onbd_btn_next"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"/>
+
+
+
+</RelativeLayout>

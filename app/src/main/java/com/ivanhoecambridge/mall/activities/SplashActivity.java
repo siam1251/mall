@@ -1,17 +1,14 @@
 package com.ivanhoecambridge.mall.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 
-import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.onboarding.TutorialActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
