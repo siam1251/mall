@@ -140,7 +140,6 @@
             android:theme="@style/AppTheme.Base"/>
         <activity
             android:name=".activities.SignInAfterOnBoardingActivity"
-            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base"/>
         <activity

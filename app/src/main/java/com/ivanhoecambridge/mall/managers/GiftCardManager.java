@@ -1,8 +1,6 @@
 package com.ivanhoecambridge.mall.managers;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -12,35 +10,25 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
-import com.ivanhoecambridge.kcpandroidsdk.twitter.TwitterAPI;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
-import com.ivanhoecambridge.mall.activities.GiftCardActivity;
-import com.ivanhoecambridge.mall.constants.Constants;
+import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.giftcard.GiftCard;
 import com.ivanhoecambridge.mall.giftcard.GiftCardResponse;
-import com.ivanhoecambridge.mall.parking.ParkingManager;
-import com.ivanhoecambridge.mall.parking.Parkings;
-import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.impl.auth.BasicScheme;
-
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import factory.HeaderFactory;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.GET;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -50,8 +38,12 @@ import retrofit2.http.Url;
 
 public class GiftCardManager {
 
+    private final String END_POINT = "https://webservices.storefinancial.net/api/v1/en/cards/";
+    private final long timeOutDuration = 1;
+
     private static Context mContext;
     private final static String KEY_GSON_GIFT_CARD = "GIFT_CARD";
+    private final static String KEY_GSON_GIFT_CARD_SIGN_UP = "GIFT_CARD_SIGN_UP";
     private final static String PARAM_PROGRAM = "Ivanhoe138";
     private final static String PARAM_FIELDS = "available_balance,status";
 
@@ -64,16 +56,45 @@ public class GiftCardManager {
     private final static String HEADER_VALUE_ICMP_AUTO = "Ivanhoestats";
     private final static String HEADER_VALUE_ICMP_PASS = "1Iv@nh0e!";
 
+    private HashMap<String, String> headers;
     private static HashMap<String, GiftCard> giftCards;
     private static GiftCardManager sGiftCardManager;
     protected GiftCardService mGiftCardService;
     protected Handler mHandler;
+    private GiftCardListener giftCardListener;
+    public GiftCardUpdateListener mGiftCardUpdateListener;
 
     public static final int DOWNLOAD_FAILED = -1;
     public static final int DOWNLOAD_STARTED = 1;
     public static final int DOWNLOAD_COMPLETE = 2;
     public static final int DATA_ADDED = 3;
     public static final int TASK_COMPLETE = 4;
+
+    public static final int ERROR_INVALID_CARD = 11;
+    public static final int ERROR_DUPLICATE_CARD = 12;
+
+    /**
+     * Gift card callback to notify when the gift card has been added.
+     */
+    public interface GiftCardListener {
+        /**
+         * Notifies the user that a gift card has been added successfully.
+         */
+        void onGiftCardAdded();
+
+        /**
+         * Notifies the user that an error has occured when attempting to add the gift card.
+         * @param giftCardError GiftCard error type.
+         */
+        void onGiftCardError(int giftCardError);
+    }
+
+    /**
+     * Gift card listener that listens for changes on already existing gift cards on profile screen.
+     */
+    public interface GiftCardUpdateListener {
+        void onGiftCardUpdated();
+    }
 
     public static GiftCardManager getInstance(Context context) {
         mContext = context;
@@ -93,14 +114,28 @@ public class GiftCardManager {
     public interface GiftCardService {
         @GET
         Call<GiftCardResponse> getGCBalance(
+                @HeaderMap Map<String, String> headers,
                 @Url String url,
                 @Query("program") String program,
                 @Query("fields") String fields);
     }
 
-    public GiftCardUpdateListener mGiftCardUpdateListener;
+
+
+    /**
+     * Sets a callback listener for gift card updates on the profile screen.
+     * @param giftCardUpdateListener GiftCardUpdateListener callback.
+     */
     public void setGiftCardUpdateListener(GiftCardUpdateListener giftCardUpdateListener){
         mGiftCardUpdateListener = giftCardUpdateListener;
+    }
+
+    /**
+     * Sets a callback listener for Gift Card adding.
+     * @param giftCardListener GiftCardListener callback.
+     */
+    public void setGiftCardListener(GiftCardListener giftCardListener) {
+        this.giftCardListener = giftCardListener;
     }
 
     public HashMap<String, GiftCard> getGiftCards() {
@@ -114,6 +149,22 @@ public class GiftCardManager {
         HashMap<String, GiftCard> obj = gson.fromJson(json, listType);
         if(obj == null) return new HashMap<String, GiftCard>();
         else return obj;
+    }
+
+    /**
+     * Saves a single gift card into the cache until after the user has signed up.
+     * @param giftCard GiftCard object to save
+     */
+    public void saveGiftCardAfterSignUp(GiftCard giftCard) {
+        KcpUtility.saveGson(mContext, KEY_GSON_GIFT_CARD_SIGN_UP, giftCard);
+    }
+
+    public void applySavedGiftCardToAccount() {
+        GiftCard savedGiftCard = KcpUtility.getObjectFromCache(mContext, KEY_GSON_GIFT_CARD_SIGN_UP, GiftCard.class);
+        if (savedGiftCard != null) {
+            saveCardToAccount(savedGiftCard);
+            KcpUtility.removeFromCache(mContext, KEY_GSON_GIFT_CARD_SIGN_UP);
+        }
     }
 
     private void saveGiftCard(){
@@ -130,6 +181,20 @@ public class GiftCardManager {
         giftCards.put(cardNumber, new GiftCard(cardNumber, cardBalance));
         saveGiftCard();
         return cardExist;
+    }
+
+    public void saveCardToAccount(GiftCard giftCard) {
+        if (giftCards.containsKey(giftCard.getCardNumber())) {
+            if (giftCardListener != null) {
+                giftCardListener.onGiftCardError(ERROR_DUPLICATE_CARD);
+            }
+        } else {
+            giftCards.put(giftCard.getCardNumber(), giftCard);
+            saveGiftCard();
+            if (giftCardListener != null) {
+                giftCardListener.onGiftCardAdded();
+            }
+        }
     }
 
     public boolean removeCard(String cardNumber){
@@ -180,20 +245,16 @@ public class GiftCardManager {
         }
     }
 
-    public interface GiftCardUpdateListener {
-        void onGiftCardUpdated();
-    }
+
 
     public GiftCardService getKcpService(){
-        ServiceFactory serviceFactory = new ServiceFactory();
-
-        HashMap<String, String> headers = new HashMap<String, String>();
+        headers = new HashMap();
         headers.put(HEADER_KEY_ACCEPT,     HEADER_VALUE_ACCEPT);
         headers.put(HEADER_KEY_AUTH,       getAuth());
         headers.put(HEADER_KEY_ICMP_AUTO,  HEADER_VALUE_ICMP_AUTO);
         headers.put(HEADER_KEY_ICMP_PASS,  HEADER_VALUE_ICMP_PASS);
 
-        if(mGiftCardService == null) mGiftCardService = serviceFactory.createRetrofitService(mContext, headers, GiftCardService.class, "https://webservices.storefinancial.net/api/v1/en/cards/");
+        if(mGiftCardService == null) mGiftCardService = ServiceFactory.createRetrofitService(mContext, timeOutDuration, GiftCardService.class, END_POINT);
         return mGiftCardService;
     }
 
@@ -204,30 +265,28 @@ public class GiftCardManager {
     }
 
     public void checkCardBalance(String cardNumber){
-        cardNumber = cardNumber.replace(" ", "");
-        Call<GiftCardResponse> call = getKcpService().getGCBalance(cardNumber, PARAM_PROGRAM, PARAM_FIELDS);
+        cardNumber = cardNumber.replace("-", "");
+        Call<GiftCardResponse> call = getKcpService().getGCBalance(headers, cardNumber, PARAM_PROGRAM, PARAM_FIELDS);
         call.enqueue(new Callback<GiftCardResponse>() {
             @Override
             public void onResponse(Call<GiftCardResponse> call, Response<GiftCardResponse> response) {
                 if(response.isSuccessful()){
                     GiftCardResponse giftCardResponse = response.body();
-                    handleState(DOWNLOAD_COMPLETE, giftCardResponse);
+                    handleState(DOWNLOAD_COMPLETE, giftCardResponse, 0);
                 } else {
                     int code = response.code();
+                    int errorCode = 0;
                     String errorMsg;
                     switch(code) {
                         case 400: //malformed syntax
-                            errorMsg = response.message();
-                            break;
                         case 401: //auth failed
-                            errorMsg = response.message();
+                            errorMsg = mContext.getString(R.string.gc_error_request);
                             break;
                         case 404: //URL doesn't match any of defined routes
                             errorMsg = mContext.getString(R.string.error_code_404);
+                            errorCode = ERROR_INVALID_CARD;
                             break;
                         case 500: //server error
-                            errorMsg = mContext.getString(R.string.error_code_500);
-                            break;
                         case 504: //server error
                             errorMsg = mContext.getString(R.string.error_code_500);
                             break;
@@ -236,7 +295,7 @@ public class GiftCardManager {
                             break;
                     }
 
-                    handleState(DOWNLOAD_FAILED, errorMsg);
+                    handleState(DOWNLOAD_FAILED, errorMsg, errorCode);
                 }
             }
 
@@ -248,14 +307,15 @@ public class GiftCardManager {
     }
 
     private void handleState(int state){
-        handleState(state, mContext.getString(R.string.error_code_internet));
+        handleState(state, mContext.getString(R.string.error_code_internet), 0);
     }
 
-    private void handleState(int state, @Nullable Object result){
+    private void handleState(int state, @Nullable Object result, int error){
         if(mHandler == null) return;
         Message message = new Message();
         message.arg1 = state;
         message.obj = result;
+        message.what = error;
         mHandler.sendMessage(message);
     }
 

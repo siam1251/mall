@@ -323,6 +323,7 @@
 
     </style>
 
+
     <style name="TextOnBoarding" parent="TextAppearance.AppCompat">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">60dp</item>
@@ -336,6 +337,64 @@
         <item name="android:layout_alignParentBottom">true</item>
     </style>
         <!--<item name="android:theme">@style/SelectableItemWhite</item>-->
+
+    <style name="CardViewText" parent="TextAppearance.AppCompat">
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="CardViewForm" parent="@style/CardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="cardCornerRadius">3dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardBackgroundColor">@color/white</item>
+    </style>
+
+    <style name="CardViewForm.GiftCard" parent="CardViewForm">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">22dp</item>
+    </style>
+
+    <style name="CardViewForm.Button" parent="CardViewForm">
+        <item name="android:clickable">true</item>
+        <item name="cardPreventCornerOverlap">false</item>
+        <item name="android:theme">@style/SelectableItemWhite</item>
+        <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="EditTextForm" parent="@style/Base.Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="paddingStart">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="paddingEnd">10dp</item>
+    </style>
+
+    <style name="EditTextForm.Number" parent="EditTextForm">
+        <item name="android:inputType">number</item>
+        <item name="android:digits">0123456789-_</item>
+    </style>
+
+    <style name="TextViewForm" parent="TextAppearance.AppCompat">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/info_txt</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@string/fontFamily_roboto_bold</item>
+    </style>
+
+    <style name="TextViewError" parent="TextAppearance.AppCompat">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/dropdown_error_red</item>
+    </style>
+
 
 </resources>
 

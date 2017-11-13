@@ -128,7 +128,7 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
                 GiftCard giftCard = mGiftCards.get(position);
                 final GiftCardHolder gcHolder = (GiftCardHolder) holder;
 
-                gcHolder.tvGCNumber.setText(giftCard.getFormattedCardNumber());
+                gcHolder.tvGCNumber.setText(giftCard.getCardNumber());
                 gcHolder.tvGCNumber.setTextColor(mGeneralTextColor);
 
                 gcHolder.bvGCBalance.setBadgeText("$" + String.format("%.2f", giftCard.getCardBalance()));
