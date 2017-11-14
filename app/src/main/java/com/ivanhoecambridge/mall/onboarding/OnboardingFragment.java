@@ -75,9 +75,6 @@ public class OnboardingFragment extends Fragment{
         Picasso.with(getContext())
                 .load(imageId)
                 .into(ivOnbdImage);
-        if (secondImageId > 0) {
-            startAnimationCallbacks();
-        }
         return view;
     }
 
@@ -106,25 +103,7 @@ public class OnboardingFragment extends Fragment{
 
             }
         });
-        Animation animateFadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.anim_fade_out);
-        animateFadeOut.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                ivOnbdImage.startAnimation(animateFadeIn);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        ivOnbdImage.startAnimation(animateFadeOut);
+        ivOnbdImage.startAnimation(animateFadeIn);
     }
 
     Runnable repeatAnimation = new Runnable() {
@@ -135,8 +114,10 @@ public class OnboardingFragment extends Fragment{
         }
     };
 
+
     public void removeAnimationCallbacks() {
         handler.removeCallbacks(repeatAnimation);
+
     }
 
     public void startAnimationCallbacks() {

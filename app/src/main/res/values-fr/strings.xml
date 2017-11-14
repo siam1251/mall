@@ -273,6 +273,7 @@
 
     <string name="onbd_btn_lets_get_started">Débuter</string>
     <string name="onbd_btn_lets_get_skip">Passer</string>
+    <string name="onbd_btn_next">Suivant</string>
     <string name="onbd_btn_lets_get_done">Terminer</string>
 
     <!--MOVIES-->
