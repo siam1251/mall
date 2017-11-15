@@ -405,8 +405,8 @@
     <string name="error_code_500">There was a problem with the server.</string>
     <string name="error_code_internet">Please check your internet connection and try again.</string>
     <string name="gc_added_succesfully_balance">Gift Card Added - Balance is $</string>
-    <string name="gc_added_dialog_title">Gift Card Added</string>
-    <string name="gc_add_another">Add Another Gift Card?</string>
+    <string name="gc_added_dialog_title">Gift Card Saved to Profile!</string>
+    <string name="gc_add_another">Would you like to save another gift card?</string>
     <string name="gc_removed">Gift Card has been removed.</string>
     <string name="gc_refresh">Gift Card Balance has been updated</string>
     <!---->
