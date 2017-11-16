@@ -107,6 +107,7 @@ import com.ivanhoecambridge.mall.geofence.GeofenceManager;
 import com.ivanhoecambridge.mall.giftcard.GiftCard;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
 import com.ivanhoecambridge.mall.managers.DeepLinkManager;
+import com.ivanhoecambridge.mall.managers.ETManager;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
 import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
@@ -147,7 +148,7 @@ import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOn
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, KcpApplication.EtPushListener, RatingListener{
+        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, KcpApplication.EtPushListener, RatingListener, ETManager.NotificationRequestListener{
 
     protected static final String TAG = "MainActivity";
     private final static int WELCOME_MSG_RESET_TIMER_IN_HOUR = 12; //every this hour, it will try to show the welcome msg to help parking
@@ -379,7 +380,6 @@ public class MainActivity extends BaseActivity
         }
 
         new DeepLinkManager(this).handleDeepLink(getIntent());
-
     }
 
     public int getViewerPosition(){
@@ -1532,6 +1532,15 @@ public class MainActivity extends BaseActivity
         synchronized (mSplashThread) {
             mSplashThread.notifyAll();
         }
+        if (KcpUtility.isPermissionGranted(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ETManager.requestNotificationPermission(MainActivity.this, MainActivity.this);
+                }
+            }, 1500);
+
+        }
     }
 
     public static RefreshListener mOnRefreshListener;
@@ -1544,6 +1553,28 @@ public class MainActivity extends BaseActivity
         this.etPush = etPush;
     }
 
+    @Override
+    public void onNotificationRequestRequired() {
+        AlertDialog notificationRequest = new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.notif_dialog_title, getString(R.string.app_name)))
+                .setMessage(getString(R.string.notif_dialog_message))
+                .setPositiveButton(getString(R.string.notif_dialog_action_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ETManager.toggleAllNotifications(true);
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(getString(R.string.notif_dialog_action_no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ETManager.toggleAllNotifications(false);
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        notificationRequest.show();
+    }
 
 
     public interface RefreshListener {
@@ -1850,6 +1881,7 @@ public class MainActivity extends BaseActivity
                 if (mGeofenceManager.canAccessLocation()) {
                     mGeofenceManager.setGeofence(true);
                     logLocationAccessEvent("Allow");
+                    ETManager.requestNotificationPermission(this, this);
                 } else {
                     if (Build.VERSION.SDK_INT >= 23) {
                         for (int i = 0, len = permissions.length; i < len; i++) {
@@ -1883,6 +1915,12 @@ public class MainActivity extends BaseActivity
                                             ActivityCompat.requestPermissions(MainActivity.this, GeofenceManager.INITIAL_PERMS, GeofenceManager.LOCATION_REQUEST);
                                             mDidPressLocationAccessRetry = true;
                                             return;
+                                        }
+                                    });
+                                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                        @Override
+                                        public void onDismiss(DialogInterface dialog) {
+                                            ETManager.requestNotificationPermission(MainActivity.this, MainActivity.this);
                                         }
                                     });
                                     builder.setView(v);

@@ -384,4 +384,10 @@
     <string name="ar_dialog_title">Vous aimez %1$s?</string>
     <string name="ar_dialog_message">S\'il vous plaît prenez un moment pour l\'évaluer</string>
 
+    <!-- NOTIFICATIONS -->
+    <string name="notif_dialog_title">Autorisez-vous %1$s à vous envoyer des notifications?</string>
+    <string name="notif_dialog_message">Les notifications peuvent inclure des alertes, des sons et des pastilles d\'icônes. Vous pouvez les configurer dans Réglages.</string>
+    <string name="notif_dialog_action_ok">Autoriser</string>
+    <string name="notif_dialog_action_no">Refuser</string>
+
 </resources>

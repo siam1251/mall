@@ -458,4 +458,10 @@
     <string name="ar_dialog_title">Enjoying %1$s App?</string>
     <string name="ar_dialog_message">Please take a moment to rate it.</string>
 
+    <!-- NOTIFICATIONS -->
+    <string name="notif_dialog_title">%1$s Would Like to Send You Notifications</string>
+    <string name="notif_dialog_message">Notifications may include alerts, sounds, and icon badges. These can be configured in Settings.</string>
+    <string name="notif_dialog_action_ok">OK</string>
+    <string name="notif_dialog_action_no">Don\'t allow</string>
+
 </resources>
