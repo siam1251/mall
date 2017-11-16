@@ -32,6 +32,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     private SwitchPreferenceCompat spWeeklyDigest;
     private SwitchPreferenceCompat spDailyDigest;
+    private boolean fromSwitch = false;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -75,23 +76,32 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
      * so this may not be necessary. but who knows ET might change the cached attribute after it fails several times to update.
      */
     private void setSwitch(){
+       updateFromSwitchFlag(true);
         try {
             ArrayList<Attribute> attributes = ETManager.getETAttributes();
             for(Attribute attribute : attributes) {
                 if(attribute.getKey().equals(KEY_ATTRIBUTE_WEEKLY_NOTIFICATION)){
                     if(spWeeklyDigest != null) {
-                        spWeeklyDigest.setChecked(Boolean.valueOf(attribute.getValue()));
+                        spWeeklyDigest.setChecked(isEnabled(attribute));
                     }
                 }  else if(attribute.getKey().equals(KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION)) {
                     if(spDailyDigest != null) {
-                        spDailyDigest.setChecked(Boolean.valueOf(attribute.getValue()));
+                        spDailyDigest.setChecked(isEnabled(attribute));
                     }
                 }
             }
+            updateAllETAttributes();
         } catch (Exception e) {
+            updateFromSwitchFlag(false);
             Log.e(TAG, "error setting switch from ETManager.getETAttributes()");
         }
     }
+
+    private boolean isEnabled(Attribute attr) {
+        if (attr.getValue() == null) return false;
+        return Boolean.valueOf(attr.getValue());
+    }
+
 
     @Override
     public void onPause() {
@@ -102,6 +112,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (fromSwitch) return;
         boolean weeklyAttributeAdded = false;
         boolean dailyDealAttributeAdded = false;
         boolean dailyEventAttributeAdded = false;
@@ -113,7 +124,18 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
 
         if(weeklyAttributeAdded || dailyDealAttributeAdded || dailyEventAttributeAdded) {
-            ETManager.updateET();
+           ETManager.updateET();
         }
+    }
+
+    private void updateFromSwitchFlag(boolean isFromSetSwitch) {
+        fromSwitch = isFromSetSwitch;
+    }
+
+    private void updateAllETAttributes() {
+        ETManager.addETAttribute(ETManager.KEY_ATTRIBUTE_WEEKLY_NOTIFICATION, String.valueOf(spWeeklyDigest.isChecked()));
+        ETManager.addETAttribute(ETManager.KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION, String.valueOf(spDailyDigest.isChecked()));
+        ETManager.addETAttribute(ETManager.KEY_ATTRIBUTE_DAILY_EVENT_NOTIFICATION, String.valueOf(spDailyDigest.isChecked()));
+        updateFromSwitchFlag(false);
     }
 }

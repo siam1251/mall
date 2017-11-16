@@ -141,7 +141,8 @@ public class AppRatingManager{
         Calendar lastUsedCal = Calendar.getInstance();
         lastUsedCal.setTime(lastUsedDate);
 
-        return (todaysCal.get(Calendar.DAY_OF_YEAR) != lastUsedCal.get(Calendar.DAY_OF_YEAR));
+        return (todaysCal.get(Calendar.DAY_OF_YEAR) != lastUsedCal.get(Calendar.DAY_OF_YEAR) ||
+                (todaysCal.get(Calendar.YEAR) > lastUsedCal.get(Calendar.YEAR)));
     }
 
     /**
