@@ -160,6 +160,8 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
     private void requestLocationPermissionDialog() {
         if (!KcpUtility.isPermissionGranted(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
+        } else {
+            startMainActivity();
         }
     }
 
