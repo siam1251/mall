@@ -80,7 +80,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         try {
             ArrayList<Attribute> attributes = ETManager.getETAttributes();
             for(Attribute attribute : attributes) {
-                Log.i(TAG, attribute.getKey() + ":" + attribute.getValue());
                 if(attribute.getKey().equals(KEY_ATTRIBUTE_WEEKLY_NOTIFICATION)){
                     if(spWeeklyDigest != null) {
                         spWeeklyDigest.setChecked(isEnabled(attribute));
