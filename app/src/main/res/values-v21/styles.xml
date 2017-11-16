@@ -30,5 +30,9 @@
     <style name="CardViewForm.Button" parent="CardViewForm">
         <item name="android:clickable">true</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginStart">15dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:layout_marginEnd">15dp</item>
     </style>
 </resources>

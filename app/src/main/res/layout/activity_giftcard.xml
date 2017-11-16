@@ -133,41 +133,45 @@
 
                     </android.support.v7.widget.CardView>
 
-                    <android.support.v7.widget.CardView style="@style/CardViewForm.Button"
-                        android:id="@+id/cvSaveCardBalance">
-
-                        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView style="@style/CardViewText"
-                            android:id="@+id/tvSaveCardBalance"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:enabled="false"
-                            android:background="@drawable/btn_sign_up_to_save"
-                            android:text="@string/gc_sign_up_save_card_balance"
-                            app:fontFamily="@string/fontFamily_roboto_medium"
-                            android:textColor="@color/white"
-                            android:gravity="center"
-                           />
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView style="@style/CardViewForm.Button"
-                        android:id="@+id/cvCheckAnother"
-                        android:layout_marginTop="10dp">
-
-                        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView style="@style/CardViewText"
-                            android:id="@+id/tvCheckAnotherGiftCard"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="@string/gc_check_another"
-                            app:fontFamily="@string/fontFamily_roboto_medium"
-                            android:textColor="@color/gc_blue"
-                            android:gravity="center" />
-
-                    </android.support.v7.widget.CardView>
-
                 </LinearLayout>
 
 
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.v7.widget.CardView style="@style/CardViewForm.Button"
+        android:id="@+id/cvSaveCardBalance"
+        android:layout_above="@+id/cvCheckAnother"
+        >
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView style="@style/CardViewText"
+            android:id="@+id/tvSaveCardBalance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:enabled="false"
+            android:background="@drawable/btn_sign_up_to_save"
+            android:text="@string/gc_sign_up_save_card_balance"
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:textColor="@color/white"
+            android:gravity="center"
+            />
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView style="@style/CardViewForm.Button"
+        android:id="@+id/cvCheckAnother"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true">
+
+        <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView style="@style/CardViewText"
+            android:id="@+id/tvCheckAnotherGiftCard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/gc_check_another"
+            app:fontFamily="@string/fontFamily_roboto_medium"
+            android:textColor="@color/gc_blue"
+            android:gravity="center" />
+
+    </android.support.v7.widget.CardView>
 </RelativeLayout>
