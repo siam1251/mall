@@ -10,13 +10,13 @@
             android:key="notification_deals_weekly_digest_enabled"
             android:title="Les résumés hebdomadaires"
             android:summary="Recevoir un résumé de vos offres et événements enregistrés à venir tous les jeudis à l'heure que vous préférez."
-            android:defaultValue="true" />
+            android:defaultValue="false" />
 
         <android.support.v7.preference.SwitchPreferenceCompat
             android:key="notification_deals_daily_reminders_enabled"
             android:title="Alertes de rappel"
             android:summary="Recevez des rappels (maximum une fois par jour) avant l'expiration de vos offres et événements enregistrés."
-            android:defaultValue="true"/>
+            android:defaultValue="false"/>
 
     </android.support.v7.preference.PreferenceCategory>
 
