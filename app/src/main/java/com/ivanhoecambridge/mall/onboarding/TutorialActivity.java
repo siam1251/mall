@@ -1,7 +1,11 @@
 package com.ivanhoecambridge.mall.onboarding;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,10 +15,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.BaseActivity;
 import com.ivanhoecambridge.mall.analytics.Analytics;
+import com.ivanhoecambridge.mall.interfaces.PermissionListener;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 
 import java.util.ArrayList;
@@ -24,13 +30,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+
 /**
  * Created by petar on 2017-11-10.
  */
 
-public class TutorialActivity extends BaseActivity implements ViewPager.OnPageChangeListener{
+public class TutorialActivity extends BaseActivity implements ViewPager.OnPageChangeListener, PermissionListener{
 
+    private final int PERMISSION_LOCATION = 1;
     private ArrayList<Fragment> fragmentList;
+
     @BindView(R.id.viewPagerOnboarding)
     ViewPager viewPager;
     @BindView(R.id.tlDots)
@@ -42,6 +51,7 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
     @BindView(R.id.tvOnbdSkip)
     TextView tvSkip;
     private OnboardingFragment currentFragment;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,10 +73,9 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
         fragmentList.add(OnboardingFragment.newInstance(1, R.string.onbd_two_title, R.string.onbd_two_desc, R.drawable.onboarding_2, R.drawable.onboarding_2_alt));
         fragmentList.add(OnboardingFragment.newInstance(2, R.string.onbd_three_title, R.string.onbd_three_desc, R.drawable.onboarding_3, R.drawable.onboarding_3_alt));
         fragmentList.add(OnboardingFragment.newInstance(3,
-                getStringResByBoolean(R.string.onbd_four_title, R.string.onbd_four_no_bluedot_desc, BuildConfig.BLUEDOT),
-                getStringResByBoolean(R.string.onbd_four_desc, R.string.onbd_four_no_bluedot_title, BuildConfig.BLUEDOT),
+                getStringResByBoolean(R.string.onbd_four_title, R.string.onbd_four_no_bluedot_title, BuildConfig.BLUEDOT),
+                getStringResByBoolean(R.string.onbd_four_desc, R.string.onbd_four_no_bluedot_desc, BuildConfig.BLUEDOT),
                 R.drawable.onboarding_4, 0));
-        fragmentList.add(OnboardingFragment.newInstance(4, R.string.onbd_five_title, R.string.onbd_five_desc, R.drawable.onboarding_5, 0));
 
         OnboardingPagerAdapter onbdAdapter = new OnboardingPagerAdapter(getSupportFragmentManager());
         onbdAdapter.addFragments(fragmentList);
@@ -91,16 +100,19 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
         if (!isLastPage(viewPager.getCurrentItem())) {
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, false);
         } else {
-           startMainActivity();
+           requestLocationPermissionDialog();
         }
     }
 
     @OnClick(R.id.tvOnbdSkip)
     public void onSkipTutorial() {
-        startMainActivity();
+        requestLocationPermissionDialog();
     }
 
     private void startMainActivity() {
+        if (currentFragment != null) {
+            currentFragment.removeAnimationCallbacks();
+        }
         finish();
         ActivityAnimation.exitActivityAnimation(this);
     }
@@ -143,8 +155,12 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
+    public void onPageScrollStateChanged(int state) {}
 
+    private void requestLocationPermissionDialog() {
+        if (!KcpUtility.isPermissionGranted(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
+        }
     }
 
     private void animateToInitialPosition() {
@@ -203,6 +219,28 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
         tvNext.setVisibility(isFirstPage ? View.GONE : View.VISIBLE);
         tvSkip.setVisibility(isFirstPage ? View.GONE : View.VISIBLE);
         dotIndicators.setVisibility(isFirstPage ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    @Override
+    public void onPermissionGranted() {
+        startMainActivity();
+    }
+
+    @Override
+    public void onPermissionDenied() {
+        //show rationale?
+        startMainActivity();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                onPermissionGranted();
+            } else {
+                onPermissionDenied();
+            }
+        }
     }
 
     public static class OnboardingPagerAdapter extends FragmentPagerAdapter {
