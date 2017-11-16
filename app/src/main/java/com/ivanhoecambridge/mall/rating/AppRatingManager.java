@@ -23,6 +23,7 @@ public class AppRatingManager{
     private final static String GSON_KEY_LAUNCH_TIMES = "ar_launch_times";
     private final static String GSON_KEY_LATER_WAIT   = "ar_later_wait";
     private final static String GSON_KEY_CRASHED_DATE = "ar_crashed_date";
+    private final static String GSON_KEY_LAST_INC_DATE = "ar_last_incremented_day";
 
     private final int dayThreshold;
     private final int launchTimes;
@@ -64,7 +65,10 @@ public class AppRatingManager{
         if (INSTANCE.shouldResetOnUpgrade && KcpUtility.isNewVersion(context, Constants.KEY_APP_VERSION, BuildConfig.VERSION_NAME)) {
             KcpUtility.removeFromCache(context, GSON_KEY_USER_RATED);
         }
-        KcpUtility.incrementIntCacheValue(context, GSON_KEY_LAUNCH_TIMES);
+        if (isNewDay(context)) {
+            KcpUtility.saveGson(context, GSON_KEY_LAST_INC_DATE, Calendar.getInstance().getTime());
+            KcpUtility.incrementIntCacheValue(context, GSON_KEY_LAUNCH_TIMES);
+        }
         //only increment the later wait value if exists aka the user has already seen the dialog and pressed LATER
         if (KcpUtility.loadIntFromCache(context, GSON_KEY_LATER_WAIT, -1) >= 0) {
             KcpUtility.incrementIntCacheValue(context, GSON_KEY_LATER_WAIT);
@@ -123,6 +127,21 @@ public class AppRatingManager{
         KcpUtility.cacheToPreferences(context, GSON_KEY_LAUNCH_TIMES, currentLaunchCycle);
         KcpUtility.removeFromCache(context, GSON_KEY_LATER_WAIT);
 
+    }
+
+    /**
+     * Checks to see if the current usage day is a new day.
+     * @param context Context object.
+     * @return true if the day is new, false otherwise.
+     */
+    private static boolean isNewDay(Context context) {
+        Date lastUsedDate = KcpUtility.getObjectFromCache(context, GSON_KEY_LAST_INC_DATE, Date.class);
+        if (lastUsedDate == null) return true;
+        Calendar todaysCal = Calendar.getInstance();
+        Calendar lastUsedCal = Calendar.getInstance();
+        lastUsedCal.setTime(lastUsedDate);
+
+        return (todaysCal.get(Calendar.DAY_OF_YEAR) != lastUsedCal.get(Calendar.DAY_OF_YEAR));
     }
 
     /**
