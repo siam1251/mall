@@ -331,6 +331,7 @@ public class GiftCardActivity extends BaseActivity implements GiftCardManager.Gi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODE_SIGN_UP) {
             if (resultCode == RESULT_OK) {
+                isUserSignedIn = true;
                 tvSaveCardBalance.setText(getString(R.string.gc_save_card_balance));
                 gcManager.applySavedGiftCardToAccount();
             } else if (resultCode == Constants.RESULT_FAILED) {
