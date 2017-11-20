@@ -1848,11 +1848,9 @@ public class MainActivity extends BaseActivity
     @Override
     public void onCreateRatingDialog(final DialogActionListener dialogActionListener) {
         if (ratingDialog == null) {
-            View ratingView = LayoutInflater.from(this).inflate(R.layout.dialog_rating, null);
             ratingDialog = new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.ar_dialog_title, getString(R.string.app_name)))
                     .setMessage(getString(R.string.ar_dialog_message))
-                    .setView(ratingView)
                     .setPositiveButton(getString(R.string.action_ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
