@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -236,6 +235,9 @@ public class MapFragment extends BaseFragment
     boolean headingDropped = false;
     float   tempHeading    = 0f;
     private int blueDotSizeInPx = 0;
+    private boolean isMapFullyLoaded = false;
+    private Polygon deferredPolygon;
+    private boolean isDeferred             = false;
 
 
     private static HashMap<String, Tenant>   locationHashmapByExternalId = new HashMap<>(); //used to find polygons for stores - that use external iD
@@ -326,7 +328,6 @@ public class MapFragment extends BaseFragment
         mappedIn = new MappedIn(getActivity().getApplication());
         mapView = new MapView(); //TODO: disabled for testing
 
-
         mMainActivity.setOnAmenityClickListener(MapFragment.this);
         mMainActivity.setOnDealsClickListener(MapFragment.this);
         mMainActivity.setOnParkingClickListener(MapFragment.this);
@@ -334,6 +335,7 @@ public class MapFragment extends BaseFragment
         setHasOptionsMenu(true);
         setViewListener();
         initializeMap();
+
 
 
         return view;
@@ -647,7 +649,6 @@ public class MapFragment extends BaseFragment
             setBlueDotIconVisibility();
 
             mMapLoaded = true;
-
             if (mMapInterface != null) mMapInterface.mapLoaded();
             //MappedIn has their own progress bar that's not accessible, if our progress bar isn't delayed then we would
             //briefly see the ugly MappedIn one.
@@ -655,8 +656,10 @@ public class MapFragment extends BaseFragment
                 @Override
                 public void run() {
                     setProgressIndicator(false);
+                    setIsMapFullyLoaded(maps[mCurrentLevelIndex].mapReady());
                 }
             }, 1800);
+
 
         }
 
@@ -755,12 +758,11 @@ public class MapFragment extends BaseFragment
                 }
                 mCurrentLevelIndex = mapIndex;
             }
-
+            setIsMapFullyLoaded(maps[mCurrentLevelIndex].mapReady());
             mapView.setMap(maps[mCurrentLevelIndex]);
             tvLevel.setText(maps[mCurrentLevelIndex].getShortName());
             setLevelImageView(maps);
             showInstruction(maps[mCurrentLevelIndex].getAltitude());
-
             //highlight the store that has been pending
             if (mPendingExternalCode != null) {
                 ArrayList<Polygon> polygons = getPolygonsFromLocationWithExternalCode(mPendingExternalCode);
@@ -860,6 +862,12 @@ public class MapFragment extends BaseFragment
         zoomInOut();
     }
 
+    private void setIsMapFullyLoaded(boolean isMapFullyLoaded) {
+        this.isMapFullyLoaded = isMapFullyLoaded;
+        if (isMapFullyLoaded) {
+            highlightDeferredFromStore();
+        }
+    }
 
     private void drawPath() {
         if (path != null) {
@@ -928,6 +936,7 @@ public class MapFragment extends BaseFragment
     }
 
     public boolean didTapPolygon(Polygon polygon) {
+        deferredPolygon = null;
         try {
             if (path != null || polygon == null)
                 return true; //map shouldn't be clicakble when the paths drawn
@@ -1098,7 +1107,9 @@ public class MapFragment extends BaseFragment
 
 
     private void zoomInOut() {
-        mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_DEFAULT);
+        if (mapView.getCamera() != null) {
+            mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_DEFAULT);
+        }
     }
 
     private void showSavedParkingDetail() {
@@ -1198,6 +1209,18 @@ public class MapFragment extends BaseFragment
         flProgressOverlay.setVisibility(toggleVisible ? View.VISIBLE : View.GONE);
     }
 
+    /**
+     * Highlights a store/parking when requesting to locate a location before the map has loaded.
+     * The location will be stored into a deferredPolygon object and then re-highlighted when the map is ready.
+     */
+    private void highlightDeferredFromStore() {
+        if (deferredPolygon != null) {
+
+           highlightPolygon(deferredPolygon, R.color.themeColor);
+           zoomInOut();
+        }
+    }
+
     private void highlightPolygon(final Polygon polygon, final int color) {
         if (mSavedParkingPolygon != null && mSavedParkingPolygon == polygon && mOriginalColorsForParking == 0) {
             //mOriginalColorsForParking != 0 so that when tapping already highlighted parking polygon, it doesn't save that highlight color to mOriginalColorsForParking
@@ -1212,12 +1235,22 @@ public class MapFragment extends BaseFragment
             }
         }
         //Not a long term solution, MappedIn SDKs have changed so once we update it'll be a more efficient solution.
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mapView != null) mapView.setColor(polygon, ContextCompat.getColor(getContext(), color));
-            }
-        }, 75);
+        if (isMapFullyLoaded) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mapView != null) {
+                        try {
+                            mapView.setColor(polygon, ContextCompat.getColor(getContext(), color));
+                        } catch (NullPointerException e) {
+                            Log.e(TAG, e.getMessage());
+                        }
+                    }
+                }
+            }, 95);
+        } else {
+            deferredPolygon = polygon;
+        }
 
     }
 
@@ -1494,21 +1527,30 @@ public class MapFragment extends BaseFragment
         try {
             String externalId = location.externalId;
             KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceByExternalCode(externalId);
-            if (kcpPlace != null) categoryName = kcpPlace.getCategoryWithOverride();
-            else categoryName = location.getCategories()[0].getName();
+            categoryName = (kcpPlace != null) ? kcpPlace.getCategoryWithOverride() : location.getCategories()[0].getName();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         IdType idType = IdType.EXTERNAL_CODE;
         String storeName = location.getName();
-
         showDirectionCard(true, idType, Integer.valueOf(location.externalId), storeName, categoryName, null);
     }
 
-    private void showNavigatableDetails(Location location) {
+    private void showNavigatableDetails(final Location location) {
         if (location instanceof Tenant) {
-            showLocationDetails((Tenant) location);
+            //Showing the direction/details card has to be delayed when highlighting is deferred because the map
+            //and any depending layouts still need to be laid out. The switch floors toggle and blue dot compass won't
+            //be shown properly if we don't delay the details. This only happens when the map is requested before it is loaded.
+            long delay = isDeferred ? 500 : 0;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    showLocationDetails((Tenant) location);
+                    isDeferred = false;
+                }
+            }, delay);
+
         }
     }
 
