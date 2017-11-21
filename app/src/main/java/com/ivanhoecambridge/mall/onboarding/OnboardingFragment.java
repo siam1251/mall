@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -69,7 +70,11 @@ public class OnboardingFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_onboarding, container, false);
-        TextView tvDesc = view.findViewById(R.id.tvOnbdDesc);
+        CustomFontTextView tvDesc = view.findViewById(R.id.tvOnbdDesc);
+        if (page == 0) {
+            tvDesc.setTextSize(21);
+            tvDesc.setFont(getContext(), getString(R.string.fontFamily_roboto_medium));
+        }
         ivOnbdImage = view.findViewById(R.id.ivOnbdImage);
         tvDesc.setText(pageDescription);
         Picasso.with(getContext())

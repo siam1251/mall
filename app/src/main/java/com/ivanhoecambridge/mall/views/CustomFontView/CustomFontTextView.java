@@ -53,6 +53,7 @@ public class CustomFontTextView extends TextView {
 	public void setFont(Context context, String font){
 		Typeface tf = Typeface.createFromAsset(context.getAssets(), font);
 		this.setTypeface(tf);
+		invalidate();
 	}
 
 	protected void onDraw (Canvas canvas) {
