@@ -1215,7 +1215,7 @@ public class MapFragment extends BaseFragment
      */
     private void highlightDeferredFromStore() {
         if (deferredPolygon != null) {
-
+           isDeferred = true;
            highlightPolygon(deferredPolygon, R.color.themeColor);
            zoomInOut();
         }
