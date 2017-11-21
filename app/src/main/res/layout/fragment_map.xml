@@ -283,7 +283,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             >
-            android:layout_alignParentTop="true"
+
 
             <ImageView
                 android:layout_centerInParent="true"
@@ -314,6 +314,7 @@
 
     <RelativeLayout
         android:layout_marginBottom="65dp"
+        android:layout_above="@id/rlDirection"
         android:layout_alignParentBottom="true"
         android:id="@+id/rlSlidingPanel"
         android:layout_width="match_parent"

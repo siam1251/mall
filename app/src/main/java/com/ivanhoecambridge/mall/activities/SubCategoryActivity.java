@@ -116,6 +116,11 @@ public class SubCategoryActivity extends AppCompatActivity {
         ActivityAnimation.exitActivityAnimation(this);
     }
 
+    private void finishActivityWithResult(int resultCode, Intent intent) {
+        setResult(resultCode, intent);
+        finish();
+    }
+
     public void onFinish(int resultCode){
         setResult(resultCode, new Intent());
         onBackPressed();
@@ -124,21 +129,18 @@ public class SubCategoryActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {
-            if(data == null) {
-            } else {
+           if (data != null) {
                 int code = data.getIntExtra(Constants.REQUEST_CODE_KEY, 0);
                 if(code == Constants.REQUEST_CODE_SHOW_PARKING_SPOT){
                     String parkingName = data.getStringExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME);
                     Intent intent = new Intent();
                     intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_SHOW_PARKING_SPOT);
                     intent.putExtra(Constants.REQUEST_CODE_KEY_PARKING_NAME, parkingName);
-                    setResult(Integer.valueOf(resultCode), intent);
-                    onBackPressed();
+                    finishActivityWithResult(resultCode, intent);
                 } else if(code == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP){
                     Intent intent = new Intent();
                     intent.putExtra(Constants.REQUEST_CODE_KEY, Constants.REQUEST_CODE_VIEW_STORE_ON_MAP);
-                    setResult(Integer.valueOf(resultCode), intent);
-                    onBackPressed();
+                    finishActivityWithResult(resultCode, intent);
                 }
             }
         }
