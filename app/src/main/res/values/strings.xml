@@ -92,6 +92,7 @@
     <string name="transition_store_name">transition store name</string>
     <string name="transition_news_expiry_date">transition expiry date</string>
     <string name="transition_fav">transition fav</string>
+    <string name="transition_share">transition share</string>
     <string name="transition_category_name">transition category name</string>
     <string name="transition_movie_poster">transition movie poster</string>
 

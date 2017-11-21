@@ -60,7 +60,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements View.OnClickListener{
 
     protected final Logger logger = new Logger(getClass().getName());
     private ViewGroup mParentView;
@@ -75,6 +75,7 @@ public class DetailActivity extends AppCompatActivity {
     private DealsRecyclerViewAdapter mEventsRecyclerViewAdapter;
     private KcpContentPage mKcpContentPage;
     private ImageView ivFav;
+    private ImageView ivShare;
 
 
     @Override
@@ -119,6 +120,8 @@ public class DetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(true);
 
             ivFav = (ImageView) toolbar.findViewById(R.id.ivFav);
+            ivShare = (ImageView) toolbar.findViewById(R.id.ivShare);
+            ivShare.setOnClickListener(this);
             if(BuildConfig.WHITE_FAV){
                 ivFav.setImageResource(R.drawable.btn_fav_white);
             }
@@ -131,6 +134,20 @@ public class DetailActivity extends AppCompatActivity {
         } catch (Exception e) {
             logger.error(e);
         }
+    }
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.ivShare) {
+            // TODO: change it to the actual target url --- share(mKcpContentPage.getLikeLink());
+            share("www.google.com");
+        }
+    }
+
+    private void share(String url) {
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+        sendIntent.setType("text/plain");
+        this.startActivity(sendIntent);
     }
 
     private void setFav(){
@@ -975,4 +992,6 @@ public class DetailActivity extends AppCompatActivity {
                 Analytics.getInstance(this).logScreenView(this, "DIRECTORY - Search Engine");
         }
     }
+
+
 }
