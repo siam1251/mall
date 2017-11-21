@@ -168,7 +168,6 @@ public class MapFragment extends BaseFragment
     public  MenuItem                         mSearchItem;
     private MenuItem                         mFilterItem;
     public  CategoryStoreRecyclerViewAdapter mPlaceRecyclerViewAdapter;
-    private ArrayList<KcpContentPage>        mRecommendedDealsContentPageList;
     private Drawable                         mAmeityDrawable;
 
     private int upperLevel;
@@ -194,6 +193,7 @@ public class MapFragment extends BaseFragment
     private HashMap<Polygon, Integer>                           originalColors       = new HashMap<Polygon, Integer>();
     private ConcurrentHashMap<Overlay, LocationLabelClicker>    overlays             = new ConcurrentHashMap<Overlay, LocationLabelClicker>();
     private ConcurrentHashMap<Coordinate, LocationLabelClicker> mLocationClickersMap = new ConcurrentHashMap<Coordinate, LocationLabelClicker>();
+    private ArrayList<Overlay>                                  dealsPinOverlays     = new ArrayList<>();
     private Venue                                               activeVenue          = null;
     private boolean                                             navigationMode       = false;
     private Path path;
@@ -1205,6 +1205,7 @@ public class MapFragment extends BaseFragment
         });
     }
 
+
     private void setProgressIndicator(boolean toggleVisible) {
         flProgressOverlay.setVisibility(toggleVisible ? View.VISIBLE : View.GONE);
     }
@@ -1991,10 +1992,14 @@ public class MapFragment extends BaseFragment
     public void dropDealsPin(final Coordinate coordinate, final Location location, final Drawable pinDrawable, String externalId) {
         //TODO: only add pins to the current floor
         Overlay2DImage label = new Overlay2DImage(getImagePinSize(), getImagePinSize(), pinDrawable, getImagePinSize() / 2, getImagePinSize() / 2);
+        if (mLocationClickersMap != null && overlays.containsKey(coordinate)) {
+            return;
+        }
         label.setPosition(coordinate);
 
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate, externalId);
         overlays.put(label, clicker);
+        dealsPinOverlays.add(label);
         mLocationClickersMap.put(coordinate, clicker);
 
         mapView.addMarker(label, false);
@@ -2040,12 +2045,15 @@ public class MapFragment extends BaseFragment
     public void removePin(final Location location) {
         try {
             for (HashMap.Entry<Overlay, LocationLabelClicker> entry : overlays.entrySet()) {
+
                 Overlay overlay = entry.getKey();
                 LocationLabelClicker locationLabelClicker = entry.getValue();
+
                 if (locationLabelClicker.amenity == location || locationLabelClicker.escalatorStairs == location
                         || locationLabelClicker.elevator == location) {
 
                     mapView.removeMarker(overlay);
+
                     mLocationClickersMap.remove(overlay.getPosition());
                     overlays.remove(overlay);
                 }
@@ -2055,25 +2063,31 @@ public class MapFragment extends BaseFragment
         }
     }
 
+    public void removePin(Overlay overlay) {
+        try {
+            mLocationClickersMap.remove(overlay.getPosition());
+            overlays.remove(overlay);
+            mapView.removeMarker(overlay);
+
+        } catch (Exception e) {
+            logger.error(e);
+        }
+    }
+
     @Override
     public void onDealsClick(boolean enabled) {
         //TODO: when deals list's refreshed, this mRecommendedDealsExternalCodeList should be set to null to refresh this list too
         ArrayList<KcpContentPage> dealContentPages = KcpNavigationRoot.getInstance().getNavigationpage(Constants.EXTERNAL_CODE_RECOMMENDED).getKcpContentPageList(true); //RECOMMENDED DEALS
-        if (mRecommendedDealsContentPageList == null) {
-            if (dealContentPages == null) return;
-            mRecommendedDealsContentPageList = new ArrayList<KcpContentPage>();
-            for (KcpContentPage kcpContentPage : dealContentPages) {
-                mRecommendedDealsContentPageList.add(kcpContentPage);
-            }
+        // clear all the previous deals pin
+        if (dealsPinOverlays != null) {
+                for (Overlay overlay : dealsPinOverlays) {
+                    removePin(overlay);
+                }
+                dealsPinOverlays.clear();
         }
 
-        for (KcpContentPage kcpContentPage : mRecommendedDealsContentPageList) {
-            Location location = getLocationWithExternalCode(kcpContentPage.getExternalCode());
-            if (location != null) removePin(location);
-        }
-
+        // put the deals pin if the toogle button is enabled
         if (enabled && dealContentPages != null) {
-            mRecommendedDealsContentPageList = new ArrayList<KcpContentPage>();
             for (KcpContentPage kcpContentPage : dealContentPages) {
                 Location location = getLocationWithExternalCode(kcpContentPage.getExternalCode());
                 if (location != null) {
@@ -2082,9 +2096,9 @@ public class MapFragment extends BaseFragment
                         Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_deals, 0);
                         KcpPlaces kcpPlace = KcpPlacesRoot.getInstance().getPlaceById(kcpContentPage.getStoreId());
                         dropDealsPin(coordinate, location, amenityDrawable, kcpPlace.getExternalCode());
+
                     }
                 }
-                mRecommendedDealsContentPageList.add(kcpContentPage);
             }
         }
     }
@@ -2195,8 +2209,10 @@ public class MapFragment extends BaseFragment
                     zoomInOut();
                 }
             } else {
-                if (mSavedParkingPolygon != null) //mSavedParkingPolygon.setColor(mOriginalColorsForParking);
+                if (mSavedParkingPolygon != null) { //mSavedParkingPolygon.setColor(mOriginalColorsForParking);
                     didTapNothing();
+                    originalColors.put(mSavedParkingPolygon, mSavedParkingPolygon.color());
+                }
                 mSavedParkingPolygon = null;
                 mOriginalColorsForParking = 0;
             }
@@ -2218,6 +2234,7 @@ public class MapFragment extends BaseFragment
                     }
                 }
 
+
                 HashMap<String, Amenity> parkingHashMap = this.parkingHashMap;
                 if (ParkingManager.getParkingMode(getActivity()) == ParkingManager.ParkingMode.LOCATION) {
                     String parkingId = ParkingManager.getMyEntrance(getActivity()).getParkingId();
@@ -2228,6 +2245,9 @@ public class MapFragment extends BaseFragment
                             for (final Coordinate coordinate : coords) {
                                 Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car, 0);
                                 dropPin(coordinate, sParkingPin.getParkingLocationPin(), amenityDrawable);
+                                if (mLocationClickersMap.containsKey(coordinate)) {
+                                    mLocationClickersMap.remove(coordinate);
+                                }
                                 destinationPolygon = sParkingPin.getParkingLocationPin();
                                 if (focus) {
                                     mapView.getCamera().focusOn(coordinate);
