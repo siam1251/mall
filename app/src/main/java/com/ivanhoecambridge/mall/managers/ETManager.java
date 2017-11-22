@@ -65,4 +65,14 @@ public class ETManager {
         }
     }
 
+    public static String getDeviceId() {
+        String deviceId = "";
+        try {
+            deviceId = ETPush.getInstance().getDeviceId();
+        } catch (ETException e) {
+            e.printStackTrace();
+        }
+        return deviceId;
+    }
+
 }

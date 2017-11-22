@@ -331,6 +331,19 @@
                     app:fontFamily="@string/fontFamily_roboto_regular"
                     tools:text="1.0.0" />
 
+                <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                    android:id="@+id/tvTargetDeviceId"
+                    android:textIsSelectable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="13dp"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone"
+                    android:textColor="@color/insta_desc_color"
+                    android:textSize="10dp"
+                    app:fontFamily="@string/fontFamily_roboto_regular"
+                    tools:text="1.0.0" />
+
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
