@@ -321,7 +321,7 @@
     <string name="signin_error_social_signin_only">Ce compte est que pour les connections avec réseaux sociaux.</string>
 
     <!--GIFT CARD-->
-    <string name="gc_page_title">Vérifier le solde votre carte cadeau</string>
+    <string name="gc_page_title">Vérifiez votre solde</string>
     <string name="gc_card_number">Numéro de la carte</string>
     <string name="gc_card_number_error">Numéro de carte invalide</string>
     <string name="gc_card_balance">Solde de la carte</string>
