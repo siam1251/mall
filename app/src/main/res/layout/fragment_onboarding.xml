@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llOnbdFragment"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,10 +15,10 @@
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:id="@+id/tvOnbdDesc"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:gravity="center"
         android:layout_marginTop="25dp"
-        android:textSize="24sp"
+        android:textSize="@dimen/onboarding_text_size"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:lineSpacingMultiplier="1.2"
@@ -29,6 +30,16 @@
         android:layout_height="match_parent"
         android:layout_gravity="center|bottom"
         android:layout_marginTop="25dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/onboarding_1"/>
+
+    <ImageView
+        android:id="@+id/ivOnbdImageAlt"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center|bottom"
+        android:layout_marginTop="25dp"
+        android:visibility="gone"
         android:scaleType="centerInside"
         android:src="@drawable/onboarding_1"/>
 

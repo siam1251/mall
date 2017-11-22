@@ -3,5 +3,5 @@
     <!--ONBOARDING-->
     <dimen name="onboarding_first_title">26dp</dimen>
     <dimen name="onboarding_second_title">23dp</dimen>
-
+    <dimen name="onboarding_text_size">20sp</dimen>
 </resources>
