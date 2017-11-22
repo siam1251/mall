@@ -415,6 +415,7 @@
     <string name="terms_of_service"><u>Terms and Conditions</u></string>
     <string name="version_name_prefix">Version </string>
     <string name="version_code_suffix">DEBUG</string>
+    <string name="title_debug_target_device">Device ID: %1$s</string>
 
     <string name="card_title_ancmt">Announcements</string>
     <string name="card_title_event">Events</string>

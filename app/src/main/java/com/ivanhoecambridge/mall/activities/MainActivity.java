@@ -63,7 +63,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -94,10 +93,6 @@ import com.ivanhoecambridge.mall.adapters.adapterHelper.IndexableRecylerView;
 import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.bluedot.BluetoothManager;
 import com.ivanhoecambridge.mall.constants.Constants;
-
-import constants.MallConstants;
-import factory.HeaderFactory;
-
 import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.DirectoryFragment;
@@ -105,7 +100,6 @@ import com.ivanhoecambridge.mall.fragments.HomeFragment;
 import com.ivanhoecambridge.mall.fragments.InfoFragment;
 import com.ivanhoecambridge.mall.fragments.MapFragment;
 import com.ivanhoecambridge.mall.geofence.GeofenceManager;
-import com.ivanhoecambridge.mall.giftcard.GiftCard;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
 import com.ivanhoecambridge.mall.managers.DeepLinkManager;
 import com.ivanhoecambridge.mall.managers.ETManager;
@@ -136,12 +130,12 @@ import com.janrain.android.Jump;
 import com.mappedin.sdk.Polygon;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import factory.HeaderFactory;
 
 import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESULT_CODE_SPOT_PENDING;
 import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESULT_CODE_SPOT_SAVED;
@@ -947,6 +941,13 @@ public class MainActivity extends BaseActivity
         String versionCodeSuffix = BuildConfig.DEBUG ? "-" + getString(R.string.version_code_suffix) : "";
         String versionNameSuffix = " (" + BuildConfig.VERSION_CODE + versionCodeSuffix + ")";
         tvVersionNumber.setText(getString(R.string.version_name_prefix) + " " + BuildConfig.VERSION_NAME + versionNameSuffix);
+
+        TextView tvTargetDeviceId = findViewById(R.id.tvTargetDeviceId);
+        String deviceId = ETManager.getDeviceId();
+        if (BuildConfig.DEBUG && !deviceId.isEmpty()) {
+            tvTargetDeviceId.setText(getString(R.string.title_debug_target_device, deviceId));
+            tvTargetDeviceId.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -1002,6 +1003,7 @@ public class MainActivity extends BaseActivity
             TextView tvTermsOfService = (TextView) findViewById(R.id.tvTermsOfService);
             TextView tvDot = (TextView) findViewById(R.id.tvDot);
             TextView tvVersionNumber = (TextView) findViewById(R.id.tvVersionNumber);
+            TextView tvTargetDeviceId = findViewById(R.id.tvTargetDeviceId);
 
             tvPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1144,6 +1146,7 @@ public class MainActivity extends BaseActivity
             tvTermsOfService.setTextColor(privacyTextColor);
             tvDot.setTextColor(privacyTextColor);
             tvVersionNumber.setTextColor(versionNumberTextColor);
+            tvTargetDeviceId.setTextColor(versionNumberTextColor);
             ivMoreMenu.setColor(generalTextColor, generalTextColor);
         } catch (Resources.NotFoundException e) {
             logger.error(e);
