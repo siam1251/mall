@@ -34,7 +34,6 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
-import java.util.Calendar;
 import java.util.LinkedHashSet;
 
 import constants.MallConstants;
@@ -47,9 +46,9 @@ import io.fabric.sdk.android.Fabric;
 public class KcpApplication extends MultiDexApplication implements ETLogListener, ETPushConfigureSdkListener {
 
     private static final String TAG = "KcpApplication";
-    public static final boolean ANALYTICS_ENABLED = false;
+    public static final boolean ANALYTICS_ENABLED = true;
     public static final boolean CLOUD_PAGES_ENABLED = false;
-    public static final boolean WAMA_ENABLED = false;
+    public static final boolean WAMA_ENABLED = true;
     public static final boolean PROXIMITY_ENABLED = false;
     public static final boolean LOCATION_ENABLED = true;
     private static final LinkedHashSet<EtPushListener> listeners = new LinkedHashSet<>();
