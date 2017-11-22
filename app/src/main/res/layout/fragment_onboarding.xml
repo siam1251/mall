@@ -2,45 +2,55 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llOnbdFragment"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="25dp"
-    android:paddingStart="25dp"
-    android:paddingRight="25dp"
-    android:paddingEnd="25dp"
+    android:background="@color/themeColor"
+    android:orientation="vertical"
     android:paddingBottom="20dp"
-    android:background="@color/themeColor">
+    android:paddingEnd="25dp"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp"
+    android:paddingStart="25dp">
 
     <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
         android:id="@+id/tvOnbdDesc"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:gravity="center"
         android:layout_marginTop="25dp"
-        android:textSize="@dimen/onboarding_text_size"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.2"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:lineSpacingMultiplier="1.2"
-        tools:text="@string/onbd_five_desc"/>
+        android:textSize="@dimen/onboarding_text_size"
+        tools:text="@string/onbd_five_desc" />
 
-    <ImageView
-        android:id="@+id/ivOnbdImage"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center|bottom"
-        android:layout_marginTop="25dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/onboarding_1"/>
+        android:layout_marginTop="25dp">
 
-    <ImageView
-        android:id="@+id/ivOnbdImageAlt"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center|bottom"
-        android:layout_marginTop="25dp"
-        android:visibility="gone"
-        android:scaleType="centerInside"
-        android:src="@drawable/onboarding_1"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src="@drawable/onboarding_device_frame" />
+
+        <ImageView
+            android:id="@+id/ivOnbdImage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src="@drawable/onboarding_1" />
+
+
+        <ImageView
+            android:id="@+id/ivOnbdImageAlt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src="@drawable/onboarding_1"
+            android:visibility="gone" />
+    </FrameLayout>
 
 </LinearLayout>

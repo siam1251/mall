@@ -95,18 +95,17 @@ public class OnboardingFragment extends Fragment{
 
     private void fadeTransition() {
         Fade transition = new Fade();
-        transition.setDuration(850);
+        transition.setDuration(450);
 
         TransitionManager.beginDelayedTransition(llOnboarding, transition);
         if (ivOnbdImage.getVisibility() == View.VISIBLE) {
             ivOnbdImageAlt.setVisibility(View.VISIBLE);
-            ivOnbdImage.setVisibility(View.GONE);
+            ivOnbdImage.setVisibility(View.INVISIBLE);
         } else {
             ivOnbdImage.setVisibility(View.VISIBLE);
-            ivOnbdImageAlt.setVisibility(View.GONE);
+            ivOnbdImageAlt.setVisibility(View.INVISIBLE);
         }
     }
-
 
     Runnable repeatAnimation = new Runnable() {
         @Override
