@@ -31,10 +31,12 @@
         android:layout_marginTop="25dp">
 
         <ImageView
+            android:id="@+id/ivOnbdImageFrame"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:scaleType="centerInside"
-            android:src="@drawable/onboarding_device_frame" />
+            android:src="@drawable/onboarding_device_frame"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/ivOnbdImage"

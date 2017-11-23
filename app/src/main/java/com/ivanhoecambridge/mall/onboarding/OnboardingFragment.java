@@ -31,6 +31,7 @@ public class OnboardingFragment extends Fragment{
     private final int ANIM_DELAY = 2500;
     private ImageView ivOnbdImage;
     private ImageView ivOnbdImageAlt;
+    private ImageView ivOnbdFrame;
 
     private String       pageTitle;
     private String       pageDescription;
@@ -81,6 +82,7 @@ public class OnboardingFragment extends Fragment{
         }
         ivOnbdImage = view.findViewById(R.id.ivOnbdImage);
         ivOnbdImageAlt = view.findViewById(R.id.ivOnbdImageAlt);
+        ivOnbdFrame = view.findViewById(R.id.ivOnbdImageFrame);
         tvDesc.setText(pageDescription);
         Picasso.with(getContext())
                 .load(imageId)
@@ -121,8 +123,13 @@ public class OnboardingFragment extends Fragment{
 
     }
 
+    private void showOnboardingFrameImage() {
+        ivOnbdFrame.setVisibility(View.VISIBLE);
+    }
+
     public void startAnimationCallbacks() {
         if (secondImageId > 0) {
+            showOnboardingFrameImage();
             handler.post(repeatAnimation);
         }
     }
