@@ -77,7 +77,7 @@
           "linkURL": "tab/profile_giftcards"
         }
       ],
-      "title": "Information Carte-Cadeaux",
+      "title": "Information Carte-Cadeau",
       "locations": [
         {
           "locationType": "amenity",
@@ -87,7 +87,7 @@
       ],
       "phoneNumber": "(514) 288-3708",
       "details": "Offrir le cadeau parfait n&#8217;a jamais &#233;t&#233; aussi simple. La carte-cadeau est accept&#233;e chez pratiquement toutes nos boutiques.",
-      "additionalInfoTitle": "Frequently Asked Questions",
+      "additionalInfoTitle": "Foire aux questions",
       "imageURLs": [
         "img_mallinfo_giftcard"
       ],
