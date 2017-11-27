@@ -84,7 +84,7 @@ public class SignInAfterOnBoardingActivity extends BaseActivity implements Authe
 
         validateView();
 
-        authenticationManager = new AuthenticationManager(this, new Handler(Looper.getMainLooper()));
+        authenticationManager = new AuthenticationManager(this, this, new Handler(Looper.getMainLooper()));
     }
 
     private void toggleProviderVisibility() {

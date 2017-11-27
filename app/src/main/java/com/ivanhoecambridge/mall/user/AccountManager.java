@@ -12,14 +12,13 @@ import com.google.gson.annotations.SerializedName;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
-import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.account.KcpAccount;
-import factory.HeaderFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import factory.HeaderFactory;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,8 +37,10 @@ public class AccountManager {
     private static final String KEY_CREDENTIALS = "credentials";
     private static final String KEY_TYPE = "type";
     private static final String KEY_ID = "identifier";
+    private static final String KEY_SECRET = "secret";
     private static final String KEY_PASSWORD = "password";
     private static final String VALUE_DEVICE_CREDENTIAL = "DeviceCredential";
+    private static final String VALUE_JANRAIN_CREDENTIAL = "JanrainCredential";
 
     public static final int DOWNLOAD_FAILED = -1;
     public static final int DOWNLOAD_STARTED = 1;
@@ -52,17 +53,27 @@ public class AccountManager {
     protected Context mContext;
     protected HashMap<String, String> mHeadersMap;
 
+    public interface KcpAccountMergeListner {
+        void onAccountMergeSuccess();
+        void onAccountMergeFailed(int errorCode, String error);
+    }
+
     /**
      *
      * @param context
      * @param headersMap DO NOT include Authorization
      * @param handler
      */
-
     public AccountManager(Context context, HashMap<String, String> headersMap, Handler handler) {
         mContext = context;
         mHandler = handler;
         mHeadersMap = headersMap;
+        logger = new Logger(getClass().getName());
+    }
+
+    public AccountManager(Context context) {
+        mContext = context;
+        mHeadersMap = HeaderFactory.getHeaders();
         logger = new Logger(getClass().getName());
     }
 
@@ -88,13 +99,13 @@ public class AccountManager {
         }
 
         final KcpUser kcpUser = new KcpUser(identifier, password);
-        Call<Token> createUser = getKcpService().postInterestedStores(KcpConstants.URL_POST_CREATE_USER, kcpUser.kcpUser);
+        Call<Token> createUser = getKcpService().postToUserService(KcpConstants.URL_POST_CREATE_USER, kcpUser.kcpUser);
         createUser.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if(response.isSuccessful()){
 
-                    Call<Token> tokenCall = getKcpService().postInterestedStores(KcpConstants.URL_POST_CREATE_TOKEN, kcpUser.kcpToken.kcpTokenMap);
+                    Call<Token> tokenCall = getKcpService().postToUserService(KcpConstants.URL_POST_CREATE_TOKEN, kcpUser.kcpToken.kcpTokenMap);
                     tokenCall.enqueue(new Callback<Token>() {
                         @Override
                         public void onResponse(Call<Token> call, Response<Token> response) {
@@ -126,6 +137,85 @@ public class AccountManager {
         });
     }
 
+    /**
+     * Posts a request to KCP with a Janrain credential payload, if successful the response will update the user bearer token
+     * and the Janrain user will be merged with a valid KCP user. If the user is syncing for the first time, this call will fail with
+     * a 422 and will cause a sync call {@link #syncJanrainUserToKcp(HashMap, KcpAccountMergeListner)} to run first and then re-execute this call.
+     * @param identifier Janrain UUID
+     * @param mergeListener Merge callback listener
+     */
+    public void updateUserTokenWithJanrainId(String identifier, final KcpAccountMergeListner mergeListener) {
+        final HashMap<String, String> janrainPayload = createJanrainPayload(identifier);
+        Call<Token> requestNewBearerToken = getKcpService().postToUserService(KcpConstants.URL_POST_CREATE_TOKEN, janrainPayload);
+        requestNewBearerToken.enqueue(new Callback<Token>() {
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                if (response.isSuccessful()) {
+                    updateResponseBearerToken(response.body().getToken());
+                    mergeListener.onAccountMergeSuccess();
+                } else {
+                    if (response.code() == 422) {
+                        syncJanrainUserToKcp(janrainPayload, mergeListener);
+                    } else {
+                        mergeListener.onAccountMergeFailed(-1, response.errorBody().toString());
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                logger.error(t);
+                mergeListener.onAccountMergeFailed(-1, t.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Posts a request to KCP to create a new user credential based on the given Janrain credentials. This is only called when attempting to update
+     * the bearer token with a new user that has not been merged with KCP.
+     * @param janrainCredentials Janrain credentials containing the uuid
+     * @param mergeListener Merge callback listener.
+     */
+    private void syncJanrainUserToKcp(HashMap<String, String> janrainCredentials, final KcpAccountMergeListner mergeListener) {
+        Call<Credential> requestCreateCredential = getKcpService().createUserCredential(KcpConstants.URL_POST_ADD_CREDENTIAL, janrainCredentials);
+        requestCreateCredential.enqueue(new Callback<Credential>() {
+            @Override
+            public void onResponse(Call<Credential> call, Response<Credential> response) {
+                if (response.isSuccessful()) {
+                    updateUserTokenWithJanrainId(response.body().getJanrainId(), mergeListener);
+                } else {
+                    mergeListener.onAccountMergeFailed(response.code(), response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Credential> call, Throwable t) {
+                logger.error(t);
+                mergeListener.onAccountMergeFailed(-1, t.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Updates the user bearer token when a call to /a/token is successful.
+     * @param token Token returned by a successful response.
+     */
+    private void updateResponseBearerToken(String token) {
+        if (!token.isEmpty()) {
+            KcpAccount.getInstance().saveGsonUserToken(mContext, token);
+            HeaderFactory.constructHeader();
+        }
+    }
+
+    private HashMap<String, String> createJanrainPayload(String janrainId) {
+        HashMap<String, String> payload = new HashMap<>();
+        payload.put(KEY_TYPE, VALUE_JANRAIN_CREDENTIAL);
+        payload.put(KEY_ID, janrainId);
+        payload.put(KEY_SECRET, janrainId);
+        return payload;
+    }
+
     private void handleState(int state){
         handleState(state, null);
     }
@@ -150,9 +240,14 @@ public class AccountManager {
 
     public interface UserService {
         @POST
-        Call<Token> postInterestedStores(
+        Call<Token> postToUserService(
                 @Url String url,
                 @Body HashMap userAccount);
+        @POST
+        Call<Credential> createUserCredential(
+                @Url String url,
+                @Body HashMap userPayload
+        );
     }
 
     public class Token {
@@ -162,6 +257,20 @@ public class AccountManager {
         public String getToken(){
             if(token == null) return "";
             return token;
+        }
+    }
+
+    private class Credential {
+        private int id;
+        private String type;
+        private String identifier;
+
+        private int getId() {
+            return id;
+        }
+
+        private String getJanrainId() {
+            return (identifier == null) ? "" : identifier;
         }
     }
 
