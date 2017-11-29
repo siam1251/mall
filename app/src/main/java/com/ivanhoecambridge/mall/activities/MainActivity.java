@@ -1866,6 +1866,12 @@ public class MainActivity extends BaseActivity
         updateUserViews(isSignedIn);
 
         KcpUtility.saveToSharedPreferences(this, JanrainRecordManager.KEY_USER_SIGNED_IN, isSignedIn);
+        if (isSignedIn) {
+            KcpUtility.cacheToPreferences(this, JanrainRecordManager.KEY_USER_ID, jrRecordManager.getUserId());
+        } else {
+            AccountManager.signOutAndReset(this);
+            mGiftCardRecyclerViewAdapter.updateData();
+        }
 
     }
 

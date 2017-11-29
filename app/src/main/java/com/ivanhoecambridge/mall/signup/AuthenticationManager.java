@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.user.AccountManager;
 import com.janrain.android.Jump;
 import com.janrain.android.engage.session.JRSession;
@@ -18,13 +19,14 @@ import org.json.JSONObject;
  * Created by petar on 2017-09-01.
  */
 
-public class AuthenticationManager implements Jump.SignInResultHandler, AccountManager.KcpAccountMergeListner {
+public class AuthenticationManager implements Jump.SignInResultHandler, AccountManager.KcpAccountMergeListener {
 
     private final String TAG = "AuthenticationManager";
     private Context                       context;
     private String                        provider;
     private String                        errorRawReason;
     private onJanrainAuthenticateListener onJanrainAuthenticateListener;
+    private String uuid;
 
 
 
@@ -119,8 +121,8 @@ public class AuthenticationManager implements Jump.SignInResultHandler, AccountM
 
     @Override
     public void onSuccess() {
+        updateUUID();
         mergeToKcpAccount();
-       // onJanrainAuthenticateListener.onAuthenticateSuccess();
     }
 
     @Override
@@ -227,14 +229,16 @@ public class AuthenticationManager implements Jump.SignInResultHandler, AccountM
         return JRSession.getInstance().getProviderByName(provider) != null;
     }
 
-    private void mergeToKcpAccount() {
-        String uuid = null;
-        AccountManager accountManager = null;
+    private void updateUUID() {
         try {
             uuid = Jump.getSignedInUser().getString("uuid");
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
+    }
+
+    private void mergeToKcpAccount() {
+        AccountManager accountManager = null;
         if (context != null) {
             accountManager = new AccountManager(context);
         }
@@ -248,7 +252,7 @@ public class AuthenticationManager implements Jump.SignInResultHandler, AccountM
 
     @Override
     public void onAccountMergeSuccess() {
-        Log.i(TAG, "Account Merge succcess!");
+        KcpUtility.cacheToPreferences(context, JanrainRecordManager.KEY_USER_ID, uuid);
         onJanrainAuthenticateListener.onAuthenticateSuccess();
     }
 
