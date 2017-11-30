@@ -248,25 +248,30 @@
             </FrameLayout>
 
 
-            <!--<com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:id="@+id/tvMyGC"
-                android:gravity="center_vertical"
-                app:fontFamily="@string/fontFamily_roboto_light"
-                android:layout_marginTop="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:textSize="16dp"
-                android:textColor="@color/place_txt"
-                android:text="@string/drawer_my_gift_card"
-                />-->
+           <ProgressBar
+               android:id="@+id/pbGCUpdate"
+               android:theme="@style/ProgressBarStyle"
+               android:layout_width="wrap_content"
+               android:layout_height="35dp"
+               android:layout_gravity="center_horizontal"/>
 
+            <TextView
+                android:id="@+id/tvGCUpdateMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/drawer_gc_retrieving_balance"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="visible"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvGiftCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone"/>
+
 
             <LinearLayout
                 android:layout_width="match_parent"

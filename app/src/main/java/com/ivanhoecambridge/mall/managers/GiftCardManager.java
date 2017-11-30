@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Base64;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,7 +13,6 @@ import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
-import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.giftcard.GiftCard;
 import com.ivanhoecambridge.mall.giftcard.GiftCardResponse;
 
@@ -94,6 +92,7 @@ public class GiftCardManager {
      */
     public interface GiftCardUpdateListener {
         void onGiftCardUpdated();
+        void onGiftCardUpdateFailed(String errorMessage);
     }
 
     public static GiftCardManager getInstance(Context context) {
@@ -209,11 +208,18 @@ public class GiftCardManager {
      * update balance of all cards saved
      */
     public void updateBalance(){
-        List<String> giftCardList = new ArrayList<String>(giftCards.keySet());
-        for(int i = 0; i < giftCardList.size(); i++) {
-            updateBalance(giftCardList.get(i), i == giftCardList.size() - 1);
+        List<String> giftCardList = new ArrayList<>(giftCards.keySet());
+        if (giftCardList.isEmpty()) {
+            if (mGiftCardUpdateListener != null) {
+                mGiftCardUpdateListener.onGiftCardUpdated();
+            }
+        } else {
+            for (int i = 0; i < giftCardList.size(); i++) {
+                updateBalance(giftCardList.get(i), i == giftCardList.size() - 1);
+            }
         }
     }
+
 
     /**
      * update balance of a single card
@@ -228,11 +234,11 @@ public class GiftCardManager {
                 public void handleMessage(Message inputMessage) {
                     switch (inputMessage.arg1) {
                         case KcpCategoryManager.DOWNLOAD_FAILED:
+                            if (mGiftCardUpdateListener != null) mGiftCardUpdateListener.onGiftCardUpdateFailed(mContext.getString(R.string.drawer_gc_failed_to_update));
                             break;
                         case KcpCategoryManager.DOWNLOAD_COMPLETE:
                             GiftCardResponse giftCardResponse = (GiftCardResponse) inputMessage.obj;
                             addCard(cardNumber, giftCardResponse.getAvailableBalance());
-                            if(showToast) Toast.makeText(mContext, mContext.getString(R.string.gc_refresh), Toast.LENGTH_SHORT).show(); //toast each gc balance
                             if(mGiftCardUpdateListener != null) mGiftCardUpdateListener.onGiftCardUpdated();
                             break;
                         default:
