@@ -116,7 +116,7 @@ public class GiftCardManager {
     }
 
     private GiftCardManager() {
-        userGiftCards = loadGiftCardsById(getUUID());
+        loadGiftCardsById(getUUID());
     }
 
     private String getUUID() {
@@ -153,16 +153,20 @@ public class GiftCardManager {
         return userGiftCards;
     }
 
-    private static HashMap<String, GiftCard> loadGiftCardsById(String userId) {
-        if (userId == null || userId.isEmpty()) return new HashMap<>();
-        String allCardsJson = KcpUtility.loadFromCache(mContext, KEY_GSON_ALL_GIFT_CARDS, null);
-        if (allCardsJson == null) return new HashMap<>();
-        Type cardType = new TypeToken<HashMap<String, HashMap<String, GiftCard>>>() {}.getType();
-        HashMap<String, HashMap<String, GiftCard>> allGiftCards = new Gson().fromJson(
-                allCardsJson, cardType
-        );
-        if (allGiftCards == null) return new HashMap<>();
-        return allGiftCards.get(userId);
+    public static void loadGiftCardsById(String userId) {
+        HashMap<String, GiftCard> giftCardsById = new HashMap<>();
+        if (userId != null && !userId.isEmpty()) {
+            String allCardsJson = KcpUtility.loadFromCache(mContext, KEY_GSON_ALL_GIFT_CARDS, null);
+            if (allCardsJson != null) {
+                Type cardType = new TypeToken<HashMap<String, HashMap<String, GiftCard>>>() {
+                }.getType();
+                HashMap<String, HashMap<String, GiftCard>> allGiftCards = new Gson().fromJson(
+                        allCardsJson, cardType
+                );
+                if (allGiftCards != null) giftCardsById = allGiftCards.get(userId);
+            }
+        }
+        userGiftCards = giftCardsById;
     }
 
     /**
