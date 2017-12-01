@@ -70,6 +70,7 @@ public class GiftCardManager {
 
     public static final int ERROR_INVALID_CARD = 11;
     public static final int ERROR_DUPLICATE_CARD = 12;
+    private boolean isFakeReduce = false;
 
     /**
      * Gift card callback to notify when the gift card has been added.
@@ -215,7 +216,11 @@ public class GiftCardManager {
             }
         } else {
             for (int i = 0; i < giftCardList.size(); i++) {
-                updateBalance(giftCardList.get(i), i == giftCardList.size() - 1);
+                if (isFakeReduce) {
+                    mGiftCardUpdateListener.onGiftCardUpdated();
+                } else {
+                    updateBalance(giftCardList.get(i), i == giftCardList.size() - 1);
+                }
             }
         }
     }
@@ -247,10 +252,26 @@ public class GiftCardManager {
                 }
             });
             giftCardManager.checkCardBalance(cardNumber);
-        } else {
         }
     }
 
+    /**
+     * Simulates a fake reduciton on all gift cards stored. Only available through debug.
+     * @return true if it's currently on, false if not.
+     */
+    public void fakeReduce() {
+       isFakeReduce = !isFakeReduce;
+       if (!isFakeReduce) return;
+       try {
+           HashMap<String, GiftCard> gcCopy = new HashMap<>(giftCards);
+            for (String card : gcCopy.keySet()) {
+               removeCard(card);
+               addCard(card, 3.50f);
+           }
+       } catch (Exception e) {
+           e.printStackTrace();
+        }
+    }
 
 
     public GiftCardService getKcpService(){

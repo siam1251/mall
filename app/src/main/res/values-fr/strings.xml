@@ -168,6 +168,8 @@
 
     <!--DRAWER LAYOUT-->
     <string name="drawer_my_favourites">Mes favoris</string>
+    <string name="drawer_gc_retrieving_balance">Récupération du solde</string>
+    <string name="drawer_gc_failed_to_update">La mise à jour du solde de votre carte a échoué</string>
     <string name="drawer_my_gift_card">Mes cartes-cadeaux</string>
     <string name="drawer_deals">Mes offres</string>
     <string name="drawer_events">Mes événements</string>

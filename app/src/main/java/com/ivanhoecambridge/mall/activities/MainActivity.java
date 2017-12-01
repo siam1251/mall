@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -207,6 +208,7 @@ public class MainActivity extends BaseActivity
     public static MovieManager sMovieManager;
 
     private JanrainRecordManager jrRecordManager;
+    private Handler uiHandler = new Handler();
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -389,7 +391,6 @@ public class MainActivity extends BaseActivity
     }
 
     public void openLeftDrawerLayout(){
-        hideGiftCardList(true);
         mDrawer.openDrawer(GravityCompat.START);
     }
 
@@ -490,6 +491,7 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                hideGiftCardList();
                 GiftCardManager.getInstance(MainActivity.this).updateBalance();
                 if (mDrawer.isDrawerOpen(GravityCompat.START)) {
                     Analytics.getInstance(MainActivity.this).logEvent("Myprofiletab_Open", "PROFILE", "Open Profile Tab");
@@ -940,8 +942,8 @@ public class MainActivity extends BaseActivity
             }
 
             @Override
-            public void onGiftCardUpdateFailed(String errorMessage) {
-                hideGiftCardList(false);
+            public void onGiftCardUpdateFailed(final String errorMessage) {
+                showGiftCardsListWithError(errorMessage);
             }
         });
 
@@ -963,21 +965,37 @@ public class MainActivity extends BaseActivity
     }
 
     private void showGiftCardsList() {
-        mGiftCardRecyclerViewAdapter.setOnlyShowFooter(false);
         rvGiftCard.setVisibility(View.VISIBLE);
         setGiftCardUpdateIndicator(false);
         toggleGiftCardUpdateText(null, false);
     }
 
-    private void hideGiftCardList(boolean isUpdating) {
-        if (!isUpdating) {
-            rvGiftCard.setVisibility(View.VISIBLE);
-            mGiftCardRecyclerViewAdapter.setOnlyShowFooter(true);
-        } else {
-            rvGiftCard.setVisibility(View.GONE);
-        }
-        setGiftCardUpdateIndicator(isUpdating);
-        toggleGiftCardUpdateText(getString(R.string.drawer_gc_failed_to_update), !isUpdating);
+    private void showGiftCardsListWithError(@NonNull String errorMessage) {
+        setGiftCardUpdateIndicator(false);
+        final Animation fadeOut = new AlphaAnimation(1.0f, 0.0f);
+        fadeOut.setDuration(2000);
+        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                showGiftCardsList();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        tvGCUpdateMessage.setText(errorMessage);
+        tvGCUpdateMessage.setAnimation(fadeOut);
+        tvGCUpdateMessage.startAnimation(fadeOut);
+    }
+
+    private void hideGiftCardList() {
+        rvGiftCard.setVisibility(View.GONE);
+        setGiftCardUpdateIndicator(true);
+        toggleGiftCardUpdateText(getString(R.string.drawer_gc_retrieving_balance), true);
     }
 
     /**
@@ -1528,9 +1546,9 @@ public class MainActivity extends BaseActivity
             case R.id.home:
                 break;
             case R.id.action_test:
-             //   GiftCardManager.getInstance(this).fakeReduce();
-            //throw new RuntimeException("This is a crash"); //enable to force crash for testing
-           // setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
+           // throw new RuntimeException("This is a crash"); //enable to force crash for testing
+                GiftCardManager.getInstance(this).fakeReduce();
+                // setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
 //            GiftCardManager.getInstance(this).updateBalance(); //enable to update the gift card balance
                 //break;
             case R.id.action_geofence_test:

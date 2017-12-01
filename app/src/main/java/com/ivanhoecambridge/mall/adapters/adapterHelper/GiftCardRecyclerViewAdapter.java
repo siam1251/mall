@@ -32,7 +32,6 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
     private int mBadgeTextColor = Color.WHITE;
     private int mGeneralTextColor = Color.BLACK;
     private boolean mShowCheckBox = false;
-    private boolean showFooterOnly = false;
 
     private boolean[] checkedStatus;
 
@@ -115,9 +114,6 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public void setOnlyShowFooter(boolean shouldOnlyShowFooter) {
-       this.showFooterOnly = shouldOnlyShowFooter;
-    }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
@@ -165,18 +161,14 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return showFooterOnly ? footerOnlyList.size() : mGiftCards.size();
+        return mGiftCards.size();
     }
 
     @Override
     public int getItemViewType(int position) {
         if(mFooterOnClickListener != null) {
-            if (showFooterOnly) {
-                return ITEM_TYPE_FOOTER;
-            } else {
-                if (mGiftCards.size() == position + 1) return ITEM_TYPE_FOOTER;
-                else return ITEM_TYPE_GC;
-            }
+            if (mGiftCards.size() == position + 1) return ITEM_TYPE_FOOTER;
+            else return ITEM_TYPE_GC;
         } else return ITEM_TYPE_GC;
     }
 
