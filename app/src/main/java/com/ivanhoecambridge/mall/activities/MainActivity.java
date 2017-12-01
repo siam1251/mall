@@ -1546,11 +1546,9 @@ public class MainActivity extends BaseActivity
             case R.id.home:
                 break;
             case R.id.action_test:
-           // throw new RuntimeException("This is a crash"); //enable to force crash for testing
                 GiftCardManager.getInstance(this).fakeReduce();
                 // setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
-//            GiftCardManager.getInstance(this).updateBalance(); //enable to update the gift card balance
-                //break;
+                break;
             case R.id.action_geofence_test:
                 mGeofenceManager.setGeofence(true);
                 break;

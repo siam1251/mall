@@ -256,7 +256,7 @@ public class GiftCardManager {
     }
 
     /**
-     * Simulates a fake reduciton on all gift cards stored. Only available through debug.
+     * Simulates a fake reduction on all gift cards stored. Only available through debug.
      * @return true if it's currently on, false if not.
      */
     public void fakeReduce() {
