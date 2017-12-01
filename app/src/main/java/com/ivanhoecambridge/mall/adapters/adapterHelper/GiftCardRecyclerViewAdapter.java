@@ -5,25 +5,17 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
-import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
-import com.ivanhoecambridge.mall.adapters.SocialFeedDetailRecyclerViewAdapter;
-import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.giftcard.GiftCard;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
-import com.ivanhoecambridge.mall.parking.Parking;
 import com.ivanhoecambridge.mall.views.BadgeView;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,6 +27,7 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private HashMap<String, GiftCard> giftCards;
     private ArrayList<GiftCard> mGiftCards = new ArrayList<>();
+    private ArrayList<GiftCard> footerOnlyList = new ArrayList<>();
     private View.OnClickListener mFooterOnClickListener;
     private int mBadgeTextColor = Color.WHITE;
     private int mGeneralTextColor = Color.BLACK;
@@ -64,11 +57,12 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
     public void addFooter(){
         GiftCard giftCard = new GiftCard();
         mGiftCards.add(giftCard);
+        footerOnlyList.add(giftCard);
     }
 
 
     public void updateData() {
-        mGiftCards = new ArrayList<GiftCard>(GiftCardManager.getInstance(mContext).getGiftCards().values());
+        mGiftCards = new ArrayList<>(GiftCardManager.getInstance(mContext).getGiftCards().values());
         if(mFooterOnClickListener != null) addFooter();
         notifyDataSetChanged();
     }
@@ -119,6 +113,7 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
         mBadgeTextColor = badgeColor;
         notifyDataSetChanged();
     }
+
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
@@ -172,7 +167,7 @@ public class GiftCardRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         if(mFooterOnClickListener != null) {
-            if(mGiftCards.size() == position + 1) return ITEM_TYPE_FOOTER;
+            if (mGiftCards.size() == position + 1) return ITEM_TYPE_FOOTER;
             else return ITEM_TYPE_GC;
         } else return ITEM_TYPE_GC;
     }

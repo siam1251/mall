@@ -195,6 +195,8 @@
     <!--DRAWER LAYOUT-->
     <string name="drawer_my_favourites">My Favourites</string>
     <string name="drawer_my_gift_card">My Gift Cards</string>
+    <string name="drawer_gc_retrieving_balance">Retrieving gift card balance</string>
+    <string name="drawer_gc_failed_to_update">Failed to get updated gift card balance</string>
     <string name="drawer_deals">Deals</string>
     <string name="drawer_events">Events</string>
     <string name="drawer_stores">Stores</string>

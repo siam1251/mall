@@ -24,7 +24,7 @@
     <string name="action_yes">Oui</string>
     <string name="action_no">Non</string>
     <string name="action_remove">Supprimer</string>
-    <string name="action_faq">FAQ</string>
+    <string name="action_faq">Foire aux questions</string>
     <string name="action_refresh">REFRESH</string>
     <string name="action_back">Retour</string>
 
@@ -168,6 +168,8 @@
 
     <!--DRAWER LAYOUT-->
     <string name="drawer_my_favourites">Mes favoris</string>
+    <string name="drawer_gc_retrieving_balance">Récupération du solde</string>
+    <string name="drawer_gc_failed_to_update">La mise à jour du solde de votre carte a échoué</string>
     <string name="drawer_my_gift_card">Mes cartes-cadeaux</string>
     <string name="drawer_deals">Mes offres</string>
     <string name="drawer_events">Mes événements</string>

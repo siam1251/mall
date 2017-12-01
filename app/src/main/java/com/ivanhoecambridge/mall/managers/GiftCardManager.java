@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Base64;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,7 +13,6 @@ import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
-import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.giftcard.GiftCard;
 import com.ivanhoecambridge.mall.giftcard.GiftCardResponse;
 
@@ -72,6 +70,7 @@ public class GiftCardManager {
 
     public static final int ERROR_INVALID_CARD = 11;
     public static final int ERROR_DUPLICATE_CARD = 12;
+    private boolean isFakeReduce = false;
 
     /**
      * Gift card callback to notify when the gift card has been added.
@@ -94,6 +93,7 @@ public class GiftCardManager {
      */
     public interface GiftCardUpdateListener {
         void onGiftCardUpdated();
+        void onGiftCardUpdateFailed(String errorMessage);
     }
 
     public static GiftCardManager getInstance(Context context) {
@@ -209,11 +209,22 @@ public class GiftCardManager {
      * update balance of all cards saved
      */
     public void updateBalance(){
-        List<String> giftCardList = new ArrayList<String>(giftCards.keySet());
-        for(int i = 0; i < giftCardList.size(); i++) {
-            updateBalance(giftCardList.get(i), i == giftCardList.size() - 1);
+        List<String> giftCardList = new ArrayList<>(giftCards.keySet());
+        if (giftCardList.isEmpty()) {
+            if (mGiftCardUpdateListener != null) {
+                mGiftCardUpdateListener.onGiftCardUpdated();
+            }
+        } else {
+            for (int i = 0; i < giftCardList.size(); i++) {
+                if (isFakeReduce) {
+                    mGiftCardUpdateListener.onGiftCardUpdated();
+                } else {
+                    updateBalance(giftCardList.get(i), i == giftCardList.size() - 1);
+                }
+            }
         }
     }
+
 
     /**
      * update balance of a single card
@@ -228,11 +239,11 @@ public class GiftCardManager {
                 public void handleMessage(Message inputMessage) {
                     switch (inputMessage.arg1) {
                         case KcpCategoryManager.DOWNLOAD_FAILED:
+                            if (mGiftCardUpdateListener != null) mGiftCardUpdateListener.onGiftCardUpdateFailed(mContext.getString(R.string.drawer_gc_failed_to_update));
                             break;
                         case KcpCategoryManager.DOWNLOAD_COMPLETE:
                             GiftCardResponse giftCardResponse = (GiftCardResponse) inputMessage.obj;
                             addCard(cardNumber, giftCardResponse.getAvailableBalance());
-                            if(showToast) Toast.makeText(mContext, mContext.getString(R.string.gc_refresh), Toast.LENGTH_SHORT).show(); //toast each gc balance
                             if(mGiftCardUpdateListener != null) mGiftCardUpdateListener.onGiftCardUpdated();
                             break;
                         default:
@@ -241,10 +252,26 @@ public class GiftCardManager {
                 }
             });
             giftCardManager.checkCardBalance(cardNumber);
-        } else {
         }
     }
 
+    /**
+     * Simulates a fake reduction on all gift cards stored. Only available through debug.
+     * @return true if it's currently on, false if not.
+     */
+    public void fakeReduce() {
+       isFakeReduce = !isFakeReduce;
+       if (!isFakeReduce) return;
+       try {
+           HashMap<String, GiftCard> gcCopy = new HashMap<>(giftCards);
+            for (String card : gcCopy.keySet()) {
+               removeCard(card);
+               addCard(card, 3.50f);
+           }
+       } catch (Exception e) {
+           e.printStackTrace();
+        }
+    }
 
 
     public GiftCardService getKcpService(){

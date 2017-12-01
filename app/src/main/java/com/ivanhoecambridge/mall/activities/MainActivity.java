@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -63,6 +64,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -169,8 +171,10 @@ public class MainActivity extends BaseActivity
     private FrameLayout flActiveMallDot;
     private int mCurrentViewPagerTapPosition = VIEWPAGER_PAGE_HOME;
     private GiftCardRecyclerViewAdapter mGiftCardRecyclerViewAdapter;
-    private AlertDialog ratingDialog;
-
+    private AlertDialog                 ratingDialog;
+    private RecyclerView                rvGiftCard;
+    private ProgressBar                 pbGCUpdate;
+    private TextView tvGCUpdateMessage;
 
 
     private ImageView       ivDrawerLayoutBg;
@@ -204,6 +208,7 @@ public class MainActivity extends BaseActivity
     public static MovieManager sMovieManager;
 
     private JanrainRecordManager jrRecordManager;
+    private Handler uiHandler = new Handler();
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -486,6 +491,8 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                hideGiftCardList();
+                GiftCardManager.getInstance(MainActivity.this).updateBalance();
                 if (mDrawer.isDrawerOpen(GravityCompat.START)) {
                     Analytics.getInstance(MainActivity.this).logEvent("Myprofiletab_Open", "PROFILE", "Open Profile Tab");
                 }
@@ -774,7 +781,8 @@ public class MainActivity extends BaseActivity
 
 
     private void setUpLeftSidePanel(){
-
+        pbGCUpdate = findViewById(R.id.pbGCUpdate);
+        tvGCUpdateMessage = findViewById(R.id.tvGCUpdateMessage);
         ivDrawerLayoutBg = (ImageView) findViewById(R.id.ivDrawerLayoutBg);
 
         llDisplayNameSettings = (LinearLayout) findViewById(R.id.llDisplayNameSettings);
@@ -920,7 +928,7 @@ public class MainActivity extends BaseActivity
             }
         };
 
-        RecyclerView rvGiftCard = (RecyclerView) findViewById(R.id.rvGiftCard);
+        rvGiftCard =  findViewById(R.id.rvGiftCard);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvGiftCard.setLayoutManager(linearLayoutManager);
         mGiftCardRecyclerViewAdapter = new GiftCardRecyclerViewAdapter(this, GiftCardManager.getInstance(this).getGiftCards(), footerClickListener);
@@ -930,6 +938,12 @@ public class MainActivity extends BaseActivity
             @Override
             public void onGiftCardUpdated() {
                 mGiftCardRecyclerViewAdapter.updateData();
+                showGiftCardsList();
+            }
+
+            @Override
+            public void onGiftCardUpdateFailed(final String errorMessage) {
+                showGiftCardsListWithError(errorMessage);
             }
         });
 
@@ -948,6 +962,57 @@ public class MainActivity extends BaseActivity
             tvTargetDeviceId.setText(getString(R.string.title_debug_target_device, deviceId));
             tvTargetDeviceId.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void showGiftCardsList() {
+        rvGiftCard.setVisibility(View.VISIBLE);
+        setGiftCardUpdateIndicator(false);
+        toggleGiftCardUpdateText(null, false);
+    }
+
+    private void showGiftCardsListWithError(@NonNull String errorMessage) {
+        setGiftCardUpdateIndicator(false);
+        final Animation fadeOut = new AlphaAnimation(1.0f, 0.0f);
+        fadeOut.setDuration(2000);
+        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                showGiftCardsList();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        tvGCUpdateMessage.setText(errorMessage);
+        tvGCUpdateMessage.setAnimation(fadeOut);
+        tvGCUpdateMessage.startAnimation(fadeOut);
+    }
+
+    private void hideGiftCardList() {
+        rvGiftCard.setVisibility(View.GONE);
+        setGiftCardUpdateIndicator(true);
+        toggleGiftCardUpdateText(getString(R.string.drawer_gc_retrieving_balance), true);
+    }
+
+    /**
+     * Toggles the visibility of Gift Card update text.
+     * @param message The message to display.
+     * @param shouldShowMessage true to show, false to hide.
+     */
+    private void toggleGiftCardUpdateText(String message, boolean shouldShowMessage) {
+        if (message == null) {
+            message = getString(R.string.drawer_gc_retrieving_balance);
+        }
+        tvGCUpdateMessage.setText(message);
+        tvGCUpdateMessage.setVisibility(shouldShowMessage ? View.VISIBLE : View.GONE);
+    }
+
+    private void setGiftCardUpdateIndicator(boolean shouldShow) {
+        pbGCUpdate.setVisibility(shouldShow ? View.VISIBLE : View.GONE);
     }
 
 
@@ -1481,10 +1546,9 @@ public class MainActivity extends BaseActivity
             case R.id.home:
                 break;
             case R.id.action_test:
-            throw new RuntimeException("This is a crash"); //enable to force crash for testing
-           // setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
-//            GiftCardManager.getInstance(this).updateBalance(); //enable to update the gift card balance
-                //break;
+                GiftCardManager.getInstance(this).fakeReduce();
+                // setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
+                break;
             case R.id.action_geofence_test:
                 mGeofenceManager.setGeofence(true);
                 break;
