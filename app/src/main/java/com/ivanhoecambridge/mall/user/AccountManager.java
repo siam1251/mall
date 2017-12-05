@@ -147,7 +147,7 @@ public class AccountManager {
      * @param identifier Janrain UUID
      * @param mergeListener Merge callback listener
      */
-    public void updateUserTokenWithJanrainId(String identifier, final KcpAccountMergeListener mergeListener) {
+    public void updateUserTokenWithJanrainId(final String identifier, final KcpAccountMergeListener mergeListener) {
         final HashMap<String, String> janrainPayload = createJanrainPayload(identifier);
         Call<Token> requestNewBearerToken = getKcpService().postToUserService(KcpConstants.URL_POST_CREATE_TOKEN, janrainPayload);
         requestNewBearerToken.enqueue(new Callback<Token>() {
@@ -155,6 +155,8 @@ public class AccountManager {
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if (response.isSuccessful()) {
                     updateResponseBearerToken(response.body().getToken());
+                    updateGiftCards(identifier);
+                   // updateETSubscriberKey(identifier);
                     mergeListener.onAccountMergeSuccess();
                 } else {
                     if (response.code() == 422) {
@@ -209,6 +211,14 @@ public class AccountManager {
             KcpAccount.getInstance().saveGsonUserToken(mContext, token);
             HeaderFactory.constructHeader();
         }
+    }
+
+    private void updateGiftCards(String userId) {
+        GiftCardManager.migrateLegacyGiftCards(mContext, userId);
+    }
+
+    private void updateETSubscriberKey(String userId) {
+        //update ET key
     }
 
     private HashMap<String, String> createJanrainPayload(String janrainId) {

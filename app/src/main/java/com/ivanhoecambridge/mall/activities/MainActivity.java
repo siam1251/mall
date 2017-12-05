@@ -1546,8 +1546,8 @@ public class MainActivity extends BaseActivity
             case R.id.home:
                 break;
             case R.id.action_test:
-                GiftCardManager.getInstance(this).fakeReduce();
-                // setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
+                GiftCardManager.getInstance(this).injectLegacyGiftCard(this);
+                GiftCardManager.migrateLegacyGiftCards(this, jrRecordManager.getUserId());
                 break;
             case R.id.action_geofence_test:
                 mGeofenceManager.setGeofence(true);

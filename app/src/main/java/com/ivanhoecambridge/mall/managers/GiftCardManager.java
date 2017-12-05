@@ -6,6 +6,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Base64;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -37,15 +39,19 @@ import retrofit2.http.Url;
 
 public class GiftCardManager {
 
+    private final static String TAG = "GiftCardManager";
     private final String END_POINT = "https://webservices.storefinancial.net/api/v1/en/cards/";
     private final long timeOutDuration = 1;
 
     private static Context mContext;
-    private final static String KEY_GSON_ALL_GIFT_CARDS = "ALL_GIFT_CARDS";
-    private final static String KEY_GSON_GIFT_CARD = "GIFT_CARD";
+    private final static String KEY_GSON_ALL_GIFT_CARDS    = "ALL_GIFT_CARDS";
+    /**
+     * Legacy key pre-account merging.
+     */
+    private final static String LEGACY_KEY_GSON_GIFT_CARD  = "GIFT_CARD";
     private final static String KEY_GSON_GIFT_CARD_SIGN_UP = "GIFT_CARD_SIGN_UP";
-    private final static String PARAM_PROGRAM = "Ivanhoe138";
-    private final static String PARAM_FIELDS = "available_balance,status";
+    private final static String PARAM_PROGRAM              = "Ivanhoe138";
+    private final static String PARAM_FIELDS               = "available_balance,status";
 
     private final static String HEADER_KEY_ACCEPT = "Accept";
     private final static String HEADER_KEY_AUTH = "Authorization";
@@ -115,6 +121,7 @@ public class GiftCardManager {
         }
     }
 
+
     private GiftCardManager() {
         loadGiftCardsById(getUUID());
     }
@@ -151,6 +158,35 @@ public class GiftCardManager {
 
     public HashMap<String, GiftCard> getGiftCards() {
         return userGiftCards;
+    }
+
+    public void injectLegacyGiftCard(Context context) {
+        HashMap<String, GiftCard> legacyGC = new HashMap<>();
+        GiftCard gc1 = new GiftCard("1000140032956896", 5.0f);
+        GiftCard gc2 = new GiftCard("1000140032966888", 5.0f);
+        legacyGC.put(gc1.getCardNumber(), gc1);
+        legacyGC.put(gc2.getCardNumber(), gc2);
+        KcpUtility.saveGson(context, LEGACY_KEY_GSON_GIFT_CARD, legacyGC);
+    }
+
+    /**
+     * Migrates any existing gift cards that existed under a local user account with saved gift cards.
+     * This will load all gift cards stored on the device and apply it to the signed in user. On completion the data will be removed from legacy storage.
+     * @param context Context object.
+     * @param userId Signed-in user id
+     */
+    public static void migrateLegacyGiftCards(Context context, String userId) {
+        String existingCardsJson = KcpUtility.loadFromCache(context, LEGACY_KEY_GSON_GIFT_CARD, null);
+        if (existingCardsJson != null) {
+            Type existingCardsType = new TypeToken<HashMap<String, GiftCard>>() {}.getType();
+            HashMap<String, GiftCard> existingGiftCards = new Gson().fromJson(
+                    existingCardsJson, existingCardsType
+            );
+            if (existingGiftCards != null) {
+                saveLegacyGiftCardsForUser(context, userId, existingGiftCards);
+                KcpUtility.removeFromCache(context, LEGACY_KEY_GSON_GIFT_CARD);
+            }
+        }
     }
 
     public static void loadGiftCardsById(String userId) {
@@ -192,6 +228,14 @@ public class GiftCardManager {
     private void saveGiftCard(String uid){
         userGiftCardsById.put(uid, userGiftCards);
         KcpUtility.saveGson(mContext, KEY_GSON_ALL_GIFT_CARDS, userGiftCardsById);
+    }
+
+
+    private static void saveLegacyGiftCardsForUser(Context context, String uid, HashMap<String, GiftCard> userGiftCards) {
+       HashMap<String, HashMap<String, GiftCard>> giftCardsByUserId = KcpUtility.getNestedHashMapWithKeyValue(context, KEY_GSON_ALL_GIFT_CARDS);
+       if (giftCardsByUserId == null) {Log.e(TAG, "GiftCard storage does not exist"); return;}
+       giftCardsByUserId.put(uid, userGiftCards);
+       KcpUtility.saveGson(context, KEY_GSON_ALL_GIFT_CARDS, giftCardsByUserId);
     }
 
     private boolean isCardAdded(String cardNumber){
