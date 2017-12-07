@@ -33,9 +33,6 @@ import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.InterestRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
-
-import factory.HeaderFactory;
-
 import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.NetworkManager;
@@ -46,6 +43,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+
+import factory.HeaderFactory;
 
 /**
  * Created by Kay on 2016-05-31.
@@ -84,7 +83,7 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 final ProgressBar pb = (ProgressBar) findViewById(R.id.pb);
                 pb.setVisibility(View.VISIBLE);
                 tvIntrstd.setVisibility(View.GONE);
-                KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(InterestedCategoryActivity.this, R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
+                KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(InterestedCategoryActivity.this, R.layout.layout_loading_item, HeaderFactory.getHeaders(), new Handler(Looper.getMainLooper()) {
                     @Override
                     public void handleMessage(Message inputMessage) {
                         tvIntrstd.setVisibility(View.VISIBLE);

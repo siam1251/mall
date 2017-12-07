@@ -22,17 +22,16 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
 import com.ivanhoecambridge.kcpandroidsdk.twitter.model.TwitterTweet;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
 import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
-
-import constants.MallConstants;
-import factory.HeaderFactory;
-
 import com.ivanhoecambridge.mall.interfaces.ViewPagerListener;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 
 import java.util.ArrayList;
+
+import constants.MallConstants;
+import factory.HeaderFactory;
 
 public class HomeFragment extends BaseFragment implements ViewPagerListener{
 
@@ -193,7 +192,7 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener{
     }
 
     private void downloadFingerPrintingCategories(){
-        KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
+        KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), R.layout.layout_loading_item, HeaderFactory.getHeaders(), new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message inputMessage) {
                 switch (inputMessage.arg1) {

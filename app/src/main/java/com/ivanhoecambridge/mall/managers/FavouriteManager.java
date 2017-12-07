@@ -2,7 +2,6 @@ package com.ivanhoecambridge.mall.managers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,18 +10,12 @@ import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
-import factory.HeaderFactory;
-
-import com.ivanhoecambridge.mall.activities.InterestedStoreActivity;
-import com.ivanhoecambridge.mall.activities.MainActivity;
-import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
 import com.ivanhoecambridge.mall.models.MultiLike;
 
@@ -32,6 +25,8 @@ import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+
+import factory.HeaderFactory;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -262,7 +257,7 @@ public class FavouriteManager {
             }
         });
         if(postLikeListToServer) {
-            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, new HeaderFactory().getHeaders(), new LikeListHandler(handler));
+            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, HeaderFactory.getHeaders(), new LikeListHandler(handler));
             kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch( getLikeListFromMap(likeList) , getLikeListFromMap(unlikeList)));
         }
     }

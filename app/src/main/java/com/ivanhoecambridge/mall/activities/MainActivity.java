@@ -177,6 +177,7 @@ public class MainActivity extends BaseActivity
     private TextView tvGCUpdateMessage;
 
 
+
     private ImageView       ivDrawerLayoutBg;
     private LinearLayout    llDisplayNameSettings;
     private TextView        tvSignInOrOut;
@@ -1868,11 +1869,11 @@ public class MainActivity extends BaseActivity
         KcpUtility.saveToSharedPreferences(this, JanrainRecordManager.KEY_USER_SIGNED_IN, isSignedIn);
         if (isSignedIn) {
             GiftCardManager.loadGiftCardsForSingleUserById(jrRecordManager.getUserId());
-            mGiftCardRecyclerViewAdapter.updateData();
         } else {
             AccountManager.signOutAndReset(this);
-            mGiftCardRecyclerViewAdapter.updateData();
         }
+        mGiftCardRecyclerViewAdapter.updateData();
+        initializeKcpData(null);
 
     }
 
