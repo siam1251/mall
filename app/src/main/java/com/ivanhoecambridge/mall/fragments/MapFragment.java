@@ -935,6 +935,7 @@ public class MapFragment extends BaseFragment
         showInstruction(maps[mCurrentLevelIndex].getAltitude());
     }
 
+    @Override
     public boolean didTapPolygon(Polygon polygon) {
         deferredPolygon = null;
         try {
@@ -1126,9 +1127,11 @@ public class MapFragment extends BaseFragment
         }
     }
 
+    @Override
     public boolean didTapOverlay(Overlay overlay) {
         LocationLabelClicker clicker = overlays.get(overlay);
         if (clicker != null) {
+            clearHighlightedColours();
             clicker.onClick();
         }
         return true;
@@ -1159,6 +1162,7 @@ public class MapFragment extends BaseFragment
         replaceSelectedPinWithRemovedPin();
     }
 
+    @Override
     public void didTapNothing() {
 
         if (path == null) {
