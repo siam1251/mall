@@ -7,7 +7,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -62,15 +61,15 @@ public class GiftCardManager {
     private final static String HEADER_VALUE_ICMP_AUTO = "Ivanhoestats";
     private final static String HEADER_VALUE_ICMP_PASS = "1Iv@nh0e!";
 
-    private HashMap<String, String>          headers;
-    private static HashMap<String, GiftCard> userGiftCards;
-    private String                           uuid;
-    private HashMap<String, HashMap<String, GiftCard>> userGiftCardsById;
-    private static GiftCardManager sGiftCardManager;
-    protected GiftCardService mGiftCardService;
-    protected Handler mHandler;
-    private GiftCardListener giftCardListener;
-    public GiftCardUpdateListener mGiftCardUpdateListener;
+    private HashMap<String, String>                    headers;
+    private static HashMap<String, GiftCard>           singleUserGiftCards;
+    private String                                     uuid;
+    private HashMap<String, HashMap<String, GiftCard>> allUserGiftCardsById;
+    private static GiftCardManager                     sGiftCardManager;
+    protected GiftCardService                          mGiftCardService;
+    protected Handler                                  mHandler;
+    private GiftCardListener                           giftCardListener;
+    public GiftCardUpdateListener                      mGiftCardUpdateListener;
 
     public static final int DOWNLOAD_FAILED = -1;
     public static final int DOWNLOAD_STARTED = 1;
@@ -115,15 +114,15 @@ public class GiftCardManager {
     public GiftCardManager(Context context, Handler handler) {
         mContext = context;
         mHandler = handler;
-        userGiftCardsById = KcpUtility.getObjectFromCache(context, KEY_GSON_ALL_GIFT_CARDS, HashMap.class);
-        if (userGiftCardsById == null) {
-            userGiftCardsById = new HashMap<>();
+        allUserGiftCardsById = KcpUtility.getNestedHashMapWithKeyValue(context, KEY_GSON_ALL_GIFT_CARDS);
+        if (allUserGiftCardsById == null) {
+            allUserGiftCardsById = new HashMap<>();
         }
     }
 
 
     private GiftCardManager() {
-        loadGiftCardsById(getUUID());
+        loadGiftCardsForSingleUserById(getUUID());
     }
 
     private String getUUID() {
@@ -157,13 +156,13 @@ public class GiftCardManager {
     }
 
     public HashMap<String, GiftCard> getGiftCards() {
-        return userGiftCards;
+        return singleUserGiftCards;
     }
 
     public void injectLegacyGiftCard(Context context) {
         HashMap<String, GiftCard> legacyGC = new HashMap<>();
-        GiftCard gc1 = new GiftCard("1000140032956896", 5.0f);
-        GiftCard gc2 = new GiftCard("1000140032966888", 5.0f);
+        GiftCard gc1 = new GiftCard("123-456-789-123-4567", 5.0f);
+        GiftCard gc2 = new GiftCard("999-000-808-333-9000", 5.0f);
         legacyGC.put(gc1.getCardNumber(), gc1);
         legacyGC.put(gc2.getCardNumber(), gc2);
         KcpUtility.saveGson(context, LEGACY_KEY_GSON_GIFT_CARD, legacyGC);
@@ -189,7 +188,7 @@ public class GiftCardManager {
         }
     }
 
-    public static void loadGiftCardsById(String userId) {
+    public static void loadGiftCardsForSingleUserById(String userId) {
         HashMap<String, GiftCard> giftCardsById = new HashMap<>();
         if (userId != null && !userId.isEmpty()) {
             String allCardsJson = KcpUtility.loadFromCache(mContext, KEY_GSON_ALL_GIFT_CARDS, null);
@@ -202,7 +201,7 @@ public class GiftCardManager {
                 if (allGiftCards != null) giftCardsById = allGiftCards.get(userId);
             }
         }
-        userGiftCards = giftCardsById;
+        singleUserGiftCards = giftCardsById;
     }
 
     /**
@@ -226,8 +225,11 @@ public class GiftCardManager {
     }
 
     private void saveGiftCard(String uid){
-        userGiftCardsById.put(uid, userGiftCards);
-        KcpUtility.saveGson(mContext, KEY_GSON_ALL_GIFT_CARDS, userGiftCardsById);
+        if (allUserGiftCardsById == null) {
+            allUserGiftCardsById = KcpUtility.getNestedHashMapWithKeyValue(mContext, KEY_GSON_ALL_GIFT_CARDS);
+        }
+        allUserGiftCardsById.put(uid, singleUserGiftCards);
+        KcpUtility.saveGson(mContext, KEY_GSON_ALL_GIFT_CARDS, allUserGiftCardsById);
     }
 
 
@@ -239,24 +241,24 @@ public class GiftCardManager {
     }
 
     private boolean isCardAdded(String cardNumber){
-        if(userGiftCards == null || !userGiftCards.containsKey(cardNumber)) return false;
+        if(singleUserGiftCards == null || !singleUserGiftCards.containsKey(cardNumber)) return false;
         else return true;
     }
 
     private boolean addCard(String cardNumber, float cardBalance){
         boolean cardExist = isCardAdded(cardNumber);
-        userGiftCards.put(cardNumber, new GiftCard(cardNumber, cardBalance));
+        singleUserGiftCards.put(cardNumber, new GiftCard(cardNumber, cardBalance));
         saveGiftCard(getUUID());
         return cardExist;
     }
 
     public void saveCardToAccount(String uid, GiftCard giftCard) {
-        if (userGiftCards.containsKey(giftCard.getCardNumber())) {
+        if (singleUserGiftCards.containsKey(giftCard.getCardNumber())) {
             if (giftCardListener != null) {
                 giftCardListener.onGiftCardError(ERROR_DUPLICATE_CARD);
             }
         } else {
-            userGiftCards.put(giftCard.getCardNumber(), giftCard);
+            singleUserGiftCards.put(giftCard.getCardNumber(), giftCard);
             saveGiftCard(uid);
             if (giftCardListener != null) {
                 giftCardListener.onGiftCardAdded();
@@ -265,9 +267,8 @@ public class GiftCardManager {
     }
 
     public boolean removeCard(String cardNumber){
-        if(userGiftCards.containsKey(cardNumber)) {
-            userGiftCards.remove(cardNumber);
-            saveGiftCard(getUUID());
+        if(singleUserGiftCards.containsKey(cardNumber)) {
+            singleUserGiftCards.remove(cardNumber);
             return true;
         } return false;
     }
@@ -276,7 +277,7 @@ public class GiftCardManager {
      * update balance of all cards saved
      */
     public void updateBalance(){
-        List<String> giftCardList = new ArrayList<>(giftCards.keySet());
+        List<String> giftCardList = new ArrayList<>(singleUserGiftCards.keySet());
         if (giftCardList.isEmpty()) {
             if (mGiftCardUpdateListener != null) {
                 mGiftCardUpdateListener.onGiftCardUpdated();
@@ -299,7 +300,7 @@ public class GiftCardManager {
      * @param showToast show toast to indicate update's been done ex. when checking the last giftcard blaance
      */
     private void updateBalance(final String cardNumber, final boolean showToast){
-        if(userGiftCards.containsKey(cardNumber)) {
+        if(singleUserGiftCards.containsKey(cardNumber)) {
 
             GiftCardManager giftCardManager = new GiftCardManager(mContext, new Handler(Looper.getMainLooper()) {
                 @Override
@@ -328,21 +329,22 @@ public class GiftCardManager {
      * @return true if it's currently on, false if not.
      */
     public void fakeReduce() {
-       isFakeReduce = !isFakeReduce;
-       if (!isFakeReduce) return;
-       try {
-           HashMap<String, GiftCard> gcCopy = new HashMap<>(giftCards);
+        isFakeReduce = !isFakeReduce;
+        if (!isFakeReduce) return;
+        try {
+            HashMap<String, GiftCard> gcCopy = new HashMap<>(singleUserGiftCards);
             for (String card : gcCopy.keySet()) {
-               removeCard(card);
-               addCard(card, 3.50f);
-           }
-       } catch (Exception e) {
-           e.printStackTrace();
+                removeCard(card);
+                addCard(card, 3.50f);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
     public void reset() {
         resetUUID();
-        userGiftCards.clear();
+        singleUserGiftCards.clear();
     }
 
     private void resetUUID() {
@@ -350,7 +352,7 @@ public class GiftCardManager {
     }
 
     public GiftCardService getKcpService(){
-        headers = new HashMap();
+        headers = new HashMap<>();
         headers.put(HEADER_KEY_ACCEPT,     HEADER_VALUE_ACCEPT);
         headers.put(HEADER_KEY_AUTH,       getAuth());
         headers.put(HEADER_KEY_ICMP_AUTO,  HEADER_VALUE_ICMP_AUTO);

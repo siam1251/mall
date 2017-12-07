@@ -1867,8 +1867,7 @@ public class MainActivity extends BaseActivity
 
         KcpUtility.saveToSharedPreferences(this, JanrainRecordManager.KEY_USER_SIGNED_IN, isSignedIn);
         if (isSignedIn) {
-            KcpUtility.cacheToPreferences(this, JanrainRecordManager.KEY_USER_ID, jrRecordManager.getUserId());
-            GiftCardManager.loadGiftCardsById(jrRecordManager.getUserId());
+            GiftCardManager.loadGiftCardsForSingleUserById(jrRecordManager.getUserId());
             mGiftCardRecyclerViewAdapter.updateData();
         } else {
             AccountManager.signOutAndReset(this);

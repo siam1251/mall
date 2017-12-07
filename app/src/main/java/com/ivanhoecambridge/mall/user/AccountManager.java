@@ -14,6 +14,7 @@ import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.account.KcpAccount;
+import com.ivanhoecambridge.mall.managers.ETManager;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
 import com.ivanhoecambridge.mall.signup.JanrainRecordManager;
 
@@ -156,7 +157,7 @@ public class AccountManager {
                 if (response.isSuccessful()) {
                     updateResponseBearerToken(response.body().getToken());
                     updateGiftCards(identifier);
-                   // updateETSubscriberKey(identifier);
+                    updateETSubscriberKey(identifier);
                     mergeListener.onAccountMergeSuccess();
                 } else {
                     if (response.code() == 422) {
@@ -213,12 +214,20 @@ public class AccountManager {
         }
     }
 
+    /**
+     * Updates any existing gift cards to be merged into the new account.
+     * @param userId Janrain userId
+     */
     private void updateGiftCards(String userId) {
         GiftCardManager.migrateLegacyGiftCards(mContext, userId);
     }
 
+    /**
+     * Updates the ExactTarget subscriber key with the newly merged Janrain Id
+     * @param userId Janrain userId
+     */
     private void updateETSubscriberKey(String userId) {
-        //update ET key
+        ETManager.updateSubscriberKey(userId);
     }
 
     private HashMap<String, String> createJanrainPayload(String janrainId) {

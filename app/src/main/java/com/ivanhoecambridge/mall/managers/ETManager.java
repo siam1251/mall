@@ -1,7 +1,6 @@
 package com.ivanhoecambridge.mall.managers;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.exacttarget.etpushsdk.ETException;
 import com.exacttarget.etpushsdk.ETPush;
@@ -47,6 +46,15 @@ public class ETManager {
         try {
             ETPush.getInstance().updateEt();
         } catch (ETException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateSubscriberKey(String subscriberKey) {
+        try {
+            ETPush.getInstance().setSubscriberKey(subscriberKey);
+            ETPush.getInstance().updateEt();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
