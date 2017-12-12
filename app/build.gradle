@@ -126,12 +126,14 @@ dependencies {
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile "com.android.support:recyclerview-v7:${supportLibrary}"
     compile "com.mappedin.sdk:mappedin:${mappedIn}"
+    compile "com.google.android.gms:play-services-tagmanager:${firebase}"
     compile("com.crashlytics.sdk.android:crashlytics:2.6.8@aar") {
         transitive = true
     }
     compile("com.twitter.sdk.android:twitter:${twitter}") {
         transitive = true
     }
+
     compile "org.msgpack:msgpack-core:${msgPack}"
     compile "com.exacttarget.etpushsdk:etsdk:${exactTarget}"
     compile "com.jakewharton:butterknife:${butterKnife}"

@@ -5,13 +5,13 @@ package constants;
  */
 
 public class MallConstants {
-    public final static String MALL_NAME = "Bayshore Shopping Centre";
+    public final static String MALL_NAME = "Reference Mall";
     public final static String MAP_VENUE_NAME = "Bayshore Shopping Centre";
     public final static String MALL_NAME_URL = "reference-mall";
 
 
     public static String MOVIE_API_KEY = "cnidg";
-    public static String MOVIE_HOUSE_ID = "5645";
+    public static String MOVIE_HOUSE_ID = "25879";
     public static String MOVIE_QUERY_THEATER = "theater";
     public static String MOVIE_QUERY_MOVIE = "movie";
     public static String MOVIE_SCHEDULE = "yes";
@@ -20,7 +20,7 @@ public class MallConstants {
     public static String MOVIE_MP4 = "cnidg";
     public static String MOVIE_PHOTOS = "large";
 
-    public static String RATINGS_PROVINCE_CODE = "bc-rating";
+    public static String RATINGS_PROVINCE_CODE = "ab-rating";
     public static String CINEMA_NAME = "SilverCity";
 
     //TWITTER
