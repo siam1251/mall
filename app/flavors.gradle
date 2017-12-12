@@ -87,4 +87,16 @@ ext {
             hasBlueDot           : 'true'
     ]
 
+    referencemall = [
+            appAuthRedirectScheme: '1030164305150-ubedb42dae7sg5ekkonrd975j1v0p5u0',
+            mallName             : '"referencemall"',
+            appName              : '"Reference Mall"',
+            hasPush              : 'true',
+            hasParkingPolygon    : 'true',
+            hasMovie             : 'true',
+            hasWhiteFav          : 'true',
+            hasNearestParkingImg : 'false',
+            hasBlueDot           : 'true'
+    ]
+
 }

@@ -93,6 +93,7 @@ android {
         seniondemo {}
         tsawwassenmills {}
         vaughanmills {}
+        referencemall {}
     }
 
 }

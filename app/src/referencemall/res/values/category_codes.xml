@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dir_beauty_and_health">47</string>
+    <string name="dir_books_cards_and_specialty">55</string>
+    <string name="dir_department_and_variety">108</string>
+    <string name="dir_electronics">18</string>
+    <string name="dir_entertainment">28</string>
+    <string name="dir_food">61</string>
+    <string name="dir_home">73</string>
+    <string name="dir_jewelery_and_accessories">87</string>
+    <string name="dir_kids_and_baby">23</string>
+    <string name="dir_mens">68</string>
+    <string name="dir_services">33</string>
+    <string name="dir_shoes_and_bags">81</string>
+    <string name="dir_sports_and_fitness">94</string>
+    <string name="dir_womens">99</string>
+    <string-array name="excluded">
+        <item></item>
+    </string-array>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="themeColor">#e96562</color>
+    <color name="themeColorTransparent">#30e96562</color>
+    <color name="warningColor">@color/themeColor</color> <!--#CFff4444-->
+    <color name="themeColorDark">@color/themeColor</color>
+
+    <color name="colorPrimary">@color/white</color>
+    <color name="colorPrimaryDark">@color/black</color>
+    <color name="colorAccent">@color/themeColor</color>
+    <color name="textColorPrimary">@color/black</color>
+    <color name="hamburger_menu">#212121</color>
+    <color name="active_mall_off_state">@color/black</color>
+    <color name="toolbarTextColor">@color/white</color>
+    <color name="tabSelectedTextColor">@color/themeColor</color>
+    <color name="emptySearchResults">@color/themeColor</color>
+    <color name="detailActivityToolbarColor">@color/themeColor</color>
+    <color name="parkingSaveBtnTextColor">#FFFFFF</color>
+
+    <!-- INFO -->
+    <color name="info_toolbar_gradient_end">#00000000</color>
+    <!--interest card-->
+    <color name="intrst_bg">@color/themeColor</color>
+
+    <!--MAP-->
+    <color name="map_destination_store">@color/themeColor</color>
+    <color name="directionSymbol">#000000</color>
+
+    <!-- LEFT DRAWER -->
+    <color name="profile_border_color">#646464</color>
+    <color name="profile_default_img_filter_color">#000000</color>
+    <color name="profile_divider">#e2e2e2</color>
+    <color name="profile_activemall_border_color">#fff</color>
+    <color name="profile_name_inactive">@color/black</color>
+    <!-- SIGN IN -->
+    <color name="sign_in_divider">#e3e3e3</color>
+</resources>

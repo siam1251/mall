@@ -1,0 +1,17 @@
+<resources>
+    <string name="mall_name">Bayshore</string>
+    <string name="applicationId">com.ivanhoecambridge.bayshore</string>
+
+    <!--MOVIES-->
+    <string name="movie_title">SilverCity Cinema</string>
+
+    <!--ACTIVE MALL-->
+    <string name="active_mall_welcome_msg">Welcome to Bayshore, here’s what’s happening today!</string>
+
+    <!--ONBOARDING-->
+    <string name="onbd_one_title">Welcome to\nBayshore\'s \nnew companion app</string>
+
+    <!--PRIVACY-->
+    <string name="url_privacy_policy">https://www.bayshoreshoppingcentre.com/en/privacy-policy/</string>
+    <string name="url_terms">https://www.bayshoreshoppingcentre.com/en/terms-conditions/</string>
+</resources>
