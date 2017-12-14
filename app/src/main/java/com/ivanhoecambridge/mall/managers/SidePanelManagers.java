@@ -42,6 +42,14 @@ public class SidePanelManagers {
         });
     }
 
+    public void updateInterests(int size) {
+        badgeInterests.setBadgeText(size);
+    }
+
+    public void updateDeals(int size) {
+        badgeDeals.setBadgeText(size);
+    }
+
     public interface FavouriteListener {
         void onFavouriteChanged();
     }

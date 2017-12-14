@@ -10,6 +10,7 @@ import android.util.Log;
  */
 public class BaseActivity extends AppCompatActivity implements ComponentCallbacks2 {
 
+
     public boolean mIsRunning = false;
 
 
@@ -41,4 +42,5 @@ public class BaseActivity extends AppCompatActivity implements ComponentCallback
         super.onStop();
         mIsRunning = false;
     }
+
 }

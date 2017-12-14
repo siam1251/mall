@@ -12,21 +12,22 @@ import com.google.gson.annotations.SerializedName;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
-import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.managers.ETManager;
+import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
-import com.ivanhoecambridge.mall.signup.JanrainRecordManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
 import factory.HeaderFactory;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
 
@@ -116,9 +117,7 @@ public class AccountManager {
                             if(response.isSuccessful()){
                                 String token = response.body().getToken();
                                 if(!token.equals("")){
-                                    //token received - use this
-                                    KcpAccount.getInstance().saveGsonUserToken(mContext, token);
-                                    HeaderFactory.constructHeader(); //update the header
+                                    updateResponseBearerToken(token);
                                     handleState(DOWNLOAD_COMPLETE);
                                 }
                             } else handleState(DOWNLOAD_FAILED);
@@ -215,6 +214,29 @@ public class AccountManager {
     }
 
     /**
+     * Deletes the user bearer token when the user signs out of the app.
+     * On success, all profile data is reset and a new user is created.
+     */
+    private void deleteUserToken() {
+        Call<ResponseBody> deleteToken = getKcpService().deleteUserToken();
+        deleteToken.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    resetUserProfile();
+                } else {
+                    Log.e(TAG, response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                logger.error(t);
+            }
+        });
+    }
+
+    /**
      * Updates any existing gift cards to be merged into the new account.
      * @param userId Janrain userId
      */
@@ -260,11 +282,19 @@ public class AccountManager {
         mHandler.sendMessage(message);
     }
 
-    public static void signOutAndReset(Context context) {
+    /**
+     * Sends a DELETE request to KCP for the user bearer token.
+     */
+    public void signOutAndReset() {
         //on token delete call ->
-        KcpUtility.removeFromCache(context, JanrainRecordManager.KEY_USER_ID);
-        GiftCardManager.getInstance(context).reset();
+        deleteUserToken();
         //create new device user -> invalidate token -> downloadUserToken()
+    }
+
+    private void resetUserProfile() {
+        GiftCardManager.getInstance(mContext).reset();
+        FavouriteManager.getInstance(mContext).resetFavourites();
+        Session.getInstance(mContext).endSession(mContext);
     }
 
     public interface UserService {
@@ -277,6 +307,8 @@ public class AccountManager {
                 @Url String url,
                 @Body HashMap userPayload
         );
+        @DELETE(KcpConstants.URL_POST_CREATE_TOKEN)
+        Call<ResponseBody> deleteUserToken();
     }
 
     public class Token {

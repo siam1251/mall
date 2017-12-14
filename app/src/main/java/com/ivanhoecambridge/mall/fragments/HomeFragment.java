@@ -1,5 +1,6 @@
 package com.ivanhoecambridge.mall.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import com.ivanhoecambridge.kcpandroidsdk.instagram.model.InstagramFeed;
 import com.ivanhoecambridge.kcpandroidsdk.instagram.model.Media;
 import com.ivanhoecambridge.kcpandroidsdk.instagram.model.Recent;
-import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpNavigationRootManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpSocialFeedManager;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
@@ -25,25 +25,33 @@ import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.adapters.HomeTopViewPagerAdapter;
 import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
+import com.ivanhoecambridge.mall.fragments.presenters.HomePresenter;
+import com.ivanhoecambridge.mall.fragments.uiviews.HomeView;
 import com.ivanhoecambridge.mall.interfaces.ViewPagerListener;
 import com.ivanhoecambridge.mall.mappedin.Amenities;
 
 import java.util.ArrayList;
 
 import constants.MallConstants;
-import factory.HeaderFactory;
 
-public class HomeFragment extends BaseFragment implements ViewPagerListener{
+public class HomeFragment extends BaseFragment implements ViewPagerListener, HomeView{
+
+
+    public interface UserProfileLikesListener {
+        void onProfileDataUpdated();
+    }
+
+    private HomePresenter            homePresenter;
+    private UserProfileLikesListener userProfileLikesListener;
 
 
     public final static int VIEWPAGER_PAGE_NEWS = 0;
     public final static int VIEWPAGER_PAGE_DEALS = 1;
 
     private final static String SCREEN_NAME = "HOME - ";
-
+    private KcpNavigationRootManager mKcpNavigationRootManager;
     private NewsFragment mNewsFragment;
     private DealsFragment mDealsFragment;
-    private KcpNavigationRootManager mKcpNavigationRootManager;
     private KcpSocialFeedManager mKcpSocialFeedManager;
     private ViewPager mViewPager;
     private int mViewPageToLoad = -1;
@@ -58,6 +66,11 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener{
         return sHomeFragment;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        userProfileLikesListener = (UserProfileLikesListener) context;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,21 +103,19 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener{
     }
 
     public void initializeHomeData(){
-        if(getActivity() == null){
+        if (homePresenter == null) {
+            homePresenter = new HomePresenter(this);
             setOnFragmentInteractionListener(new OnFragmentInteractionListener() {
                 @Override
                 public void onFragmentInteraction() {
-                    downloadNewsAndDeal();
-                    downloadSocialFeeds();
-                    downloadFingerPrintingCategories();
+                    homePresenter.downloadNewData();
                 }
             });
-        } else {
-            downloadNewsAndDeal();
-            downloadSocialFeeds();
-            downloadFingerPrintingCategories();
         }
+
+        homePresenter.downloadNewData();
     }
+
 
     public void downloadNewsAndDeal(){
 
@@ -112,36 +123,6 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener{
             if(mNewsFragment != null) mNewsFragment.setEmptyState(null);
             if(mDealsFragment != null) mDealsFragment.setEmptyState(null);
 
-            mKcpNavigationRootManager = new KcpNavigationRootManager(getActivity(), R.layout.layout_loading_item, new HeaderFactory().getHeaders(), new Handler(Looper.getMainLooper()) {
-                @Override
-                public void handleMessage(Message inputMessage) {
-                    switch (inputMessage.arg1) {
-                        case KcpNavigationRootManager.DOWNLOAD_STARTED:
-                            break;
-                        case KcpNavigationRootManager.DOWNLOAD_COMPLETE:
-                            mMainActivity.mIsDataLoaded = true;
-                            if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
-                            String mode = (String) inputMessage.obj;
-                            updateAdapter(mode);
-                            mMainActivity.setActiveMall(true, mMainActivity.mActiveMall); //force refresh the active mall view
-                            break;
-                        case KcpNavigationRootManager.DATA_ADDED:
-                            mNewsFragment.mNewsRecyclerViewAdapter.addData(mKcpNavigationRootManager.getKcpContentPageList());
-                            mNewsFragment.mEndlessRecyclerViewScrollListener.onLoadDone();
-                            break;
-                        case KcpNavigationRootManager.TASK_COMPLETE:
-                            break;
-                        case KcpNavigationRootManager.DOWNLOAD_FAILED:
-                            mMainActivity.mIsDataLoaded = false;
-                            mMainActivity.onDataDownloaded();
-                            if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
-                            break;
-                        default:
-                            super.handleMessage(inputMessage);
-                    }
-                }
-            });
-            mKcpNavigationRootManager.downloadNewsAndDeal();
         } catch (Exception e) {
             logger.error(e);
         }
@@ -191,23 +172,6 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener{
 //        mKcpSocialFeedManager.downloadInstagram(Constants.INSTAGRAM_USER_NAME, Constants.INSTAGRAM_USER_ID, Constants.INSTAGRAM_ACCESS_TOKEN, Constants.INSTAGRAM_BASE_URL, Constants.NUMB_OF_INSTA); //DISABLED : IA-170
     }
 
-    private void downloadFingerPrintingCategories(){
-        KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(getActivity(), R.layout.layout_loading_item, HeaderFactory.getHeaders(), new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message inputMessage) {
-                switch (inputMessage.arg1) {
-                    case KcpCategoryManager.DOWNLOAD_FAILED:
-                        break;
-                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                        break;
-
-                    default:
-                        super.handleMessage(inputMessage);
-                }
-            }
-        });
-        kcpCategoryManager.downloadFingerPrintingCategories();
-    }
 
     private void setupViewPager(ViewPager viewPager) {
         HomeTopViewPagerAdapter homeTopViewPagerAdapter = new HomeTopViewPagerAdapter(getChildFragmentManager());
@@ -234,6 +198,8 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener{
     }
 
     public void downloadMoreFeeds(String navigationPageType){
+        //todo check ths method out more
+        if (mKcpNavigationRootManager == null) return;
         try {
             KcpNavigationPage kcpNavigationPage = KcpNavigationRoot.getInstance().getNavigationpage(navigationPageType);
             String nextUrl = kcpNavigationPage.getNextContentPageUrl();
@@ -246,27 +212,26 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener{
         }
     }
 
-    /**
-     *
-     * @param mode determines which adapter it should update - if null, it updates all adapters
-     */
-    private void updateAdapter(String mode){
+    private void updateAdapter(String mode, ArrayList<KcpContentPage> kcpContentPages) {
         try {
-            KcpNavigationPage kcpNavigationPage = KcpNavigationRoot.getInstance().getNavigationpage(mode);
-            if(kcpNavigationPage != null && kcpNavigationPage.getKcpContentPageList(true) != null){
-                if(mode.equals(Constants.EXTERNAL_CODE_FEED)) {
-                    updateNewsAdapter(kcpNavigationPage.getKcpContentPageList(true));
-                } else if(mode.equals(Constants.EXTERNAL_CODE_DEAL)) {
-                    updateOtherDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
-                } else if(mode.equals(Constants.EXTERNAL_CODE_RECOMMENDED)) {
-                    updateRecommendedDealsAdapter(kcpNavigationPage.getKcpContentPageList(true));
+            switch (mode) {
+                case Constants.EXTERNAL_CODE_RECOMMENDED:
+                    updateRecommendedDealsAdapter(kcpContentPages);
                     MapFragment.getInstance().onDealsClick(Amenities.isToggled(getActivity(), Amenities.GSON_KEY_DEAL, false));
-                }
+                    break;
+                case Constants.EXTERNAL_CODE_FEED:
+                    updateNewsAdapter(kcpContentPages);
+                    break;
+                case Constants.EXTERNAL_CODE_DEAL:
+                    updateOtherDealsAdapter(kcpContentPages);
+                    break;
             }
         } catch (Exception e) {
             logger.error(e);
         }
     }
+
+
 
     private void updateNewsAdapter(ArrayList<KcpContentPage> kcpContentPages){
         if(mNewsFragment.mNewsRecyclerViewAdapter == null) return;
@@ -303,9 +268,9 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener{
     @Override
     public void onResume() {
         super.onResume();
-        updateAdapter(Constants.EXTERNAL_CODE_FEED);
-        updateAdapter(Constants.EXTERNAL_CODE_DEAL);
-        updateAdapter(Constants.EXTERNAL_CODE_RECOMMENDED);
+        if (homePresenter != null) {
+            homePresenter.refreshAdapterData();
+        }
     }
 
     @Override
@@ -332,5 +297,68 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener{
                 break;
         }
         Analytics.getInstance(getContext()).logScreenView(getActivity(), SCREEN_NAME + screenTab);
+    }
+
+    @Override
+    public void setProgressIndicator(boolean isShowing) {
+
+    }
+
+
+    @Override
+    public void onAdapterDataRefresh(String mode, ArrayList<KcpContentPage> kcpContentPages) {
+        updateAdapter(mode, kcpContentPages);
+    }
+
+    @Override
+    public void onNewsAndDealsUpdated(boolean isAddedData, String mode, ArrayList<KcpContentPage> kcpContentPages) {
+        if (!isAddedData) {
+            updateAdapter(mode, kcpContentPages);
+        } else {
+            mNewsFragment.mNewsRecyclerViewAdapter.addData(kcpContentPages);
+            mNewsFragment.mEndlessRecyclerViewScrollListener.onLoadDone();
+        }
+    }
+
+    @Override
+    public void onSocialFeedUpdated(KcpSocialFeedManager kcpSocialFeedManager, int socialFeedType) {
+        switch (socialFeedType) {
+            case HomePresenter.SOCIAL_FEED_TWITTER:
+                updateTwitterFeedAdapter(kcpSocialFeedManager.getTwitterTweets());
+                break;
+            case HomePresenter.SOCIAL_FEED_IG:
+                break;
+        }
+
+    }
+
+    private void updateTwitterFeedAdapter(ArrayList<TwitterTweet> tweets) {
+        sTwitterFeedList.addAll(tweets);
+        if (mNewsFragment.mNewsRecyclerViewAdapter != null &&
+                mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter() != null ) {
+            mNewsFragment.mNewsRecyclerViewAdapter.getSocialFeedViewPagerAdapter().updateTwitterData(sTwitterFeedList);
+        }
+    }
+
+    @Override
+    public void updateProfileData() {
+        if (userProfileLikesListener != null) {
+            userProfileLikesListener.onProfileDataUpdated();
+        }
+    }
+
+    @Override
+    public void onAllDataDownloadSuccess() {
+        mMainActivity.mIsDataLoaded = true;
+        if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_completed);
+    }
+
+    @Override
+    public void onDataDownloadFailure(int failedOn) {
+        if (failedOn == HomePresenter.NEWS_DEALS) {
+            mMainActivity.mIsDataLoaded = false;
+            mMainActivity.onDataDownloaded();
+            if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
+        }
     }
 }

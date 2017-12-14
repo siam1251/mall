@@ -121,6 +121,8 @@ import com.ivanhoecambridge.mall.rating.RatingListener;
 import com.ivanhoecambridge.mall.searchIndex.IndexManager;
 import com.ivanhoecambridge.mall.signup.JanrainRecordManager;
 import com.ivanhoecambridge.mall.user.AccountManager;
+import com.ivanhoecambridge.mall.user.ActivityListener;
+import com.ivanhoecambridge.mall.user.Session;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
@@ -145,7 +147,7 @@ import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOn
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, KcpApplication.EtPushListener, RatingListener, ETManager.NotificationRequestListener{
+        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, KcpApplication.EtPushListener, RatingListener, ETManager.NotificationRequestListener, HomeFragment.UserProfileLikesListener {
 
     protected static final String TAG = "MainActivity";
     private final static int WELCOME_MSG_RESET_TIMER_IN_HOUR = 12; //every this hour, it will try to show the welcome msg to help parking
@@ -195,6 +197,8 @@ public class MainActivity extends BaseActivity
     //internal
     private boolean isFirebaseAnalyticsOn;
 
+    private ActivityListener activityListener;
+
     //GEOFENCE
     public GeofenceManager mGeofenceManager;
     private Animation mMenuActiveMallDotAnim;
@@ -208,6 +212,7 @@ public class MainActivity extends BaseActivity
     private ETPush etPush;
     public static MovieManager sMovieManager;
 
+    private SidePanelManagers sidePanelManager;
     private JanrainRecordManager jrRecordManager;
     private Handler uiHandler = new Handler();
     @Override
@@ -416,7 +421,7 @@ public class MainActivity extends BaseActivity
             });
             return;
         } else {
-            if(KcpAccount.getInstance().isTokenAvailable()) HomeFragment.getInstance().initializeHomeData();
+            if(KcpAccount.getInstance().isTokenAvailable()) {HomeFragment.getInstance().initializeHomeData();}
             else initializeAccount();
             DirectoryFragment.getInstance().initializeDirectoryData();
 //            MapFragment.getInstance().initializeMap(); //TODO: cause int com.mappedin.jpct.Texture.getOpenGLID(int) from MappedIn - investigate
@@ -949,7 +954,7 @@ public class MainActivity extends BaseActivity
         });
 
         //SIDE PANEL MANAGER
-        SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
+        sidePanelManager = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
 
         //version
         TextView tvVersionNumber = (TextView) findViewById(R.id.tvVersionNumber);
@@ -1646,6 +1651,13 @@ public class MainActivity extends BaseActivity
     }
 
 
+    @Override
+    public void onProfileDataUpdated() {
+        sidePanelManager.updateInterests(FavouriteManager.getInstance(this).getInterestFavSize());
+        sidePanelManager.updateDeals(FavouriteManager.getInstance(this).getDealFavSize());
+    }
+
+
     public interface RefreshListener {
         void onRefresh(int msg);
     }
@@ -1707,8 +1719,6 @@ public class MainActivity extends BaseActivity
             if (requestCode == Constants.REQUEST_CODE_CHANGE_INTEREST) {
                 if (resultCode == Activity.RESULT_OK) {
                     HomeFragment.getInstance().downloadNewsAndDeal();
-                } else {
-
                 }
             } else if (requestCode == Constants.REQUEST_CODE_MY_PAGE_TYPE) {
                 if(data == null) {
@@ -1820,6 +1830,9 @@ public class MainActivity extends BaseActivity
         if(mGeofenceManager != null && mGeofenceManager.getGoogleApiClient() != null) {
             mGeofenceManager.getGoogleApiClient().disconnect();
         }
+        if (activityListener != null) {
+            activityListener.onActivityStopped();
+        }
     }
 
     @Override
@@ -1840,6 +1853,10 @@ public class MainActivity extends BaseActivity
         if (Jump.getSignedInUser() != null) {
             jrRecordManager = new JanrainRecordManager(this);
             if (jrRecordManager.isUserSignedIn()) {
+                if (activityListener == null) {
+                    activityListener = Session.getInstance(this);
+                    Session.getInstance(this).refreshUserInSession(this);
+                }
                 toggleUserSignIn(true);
             }
         }
@@ -1870,10 +1887,9 @@ public class MainActivity extends BaseActivity
         if (isSignedIn) {
             GiftCardManager.loadGiftCardsForSingleUserById(jrRecordManager.getUserId());
         } else {
-            AccountManager.signOutAndReset(this);
+            Session.getInstance(this).requestSignOut(this);
         }
         mGiftCardRecyclerViewAdapter.updateData();
-        initializeKcpData(null);
 
     }
 

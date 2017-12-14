@@ -1,9 +1,9 @@
 package com.ivanhoecambridge.mall.constants;
 
+import android.content.Context;
+
 import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
-
-import android.content.Context;
 
 import java.util.Arrays;
 
@@ -20,6 +20,7 @@ public class Constants {
     public enum DetailType {DEAL, STORE}
 
     public final static String KEY_BUNDLE_DEAL_TYPE = "key_bundle_deal_type";
+    public final static String ORG = "icmp";
 
 
     //HEADER

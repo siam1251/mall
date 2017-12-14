@@ -90,6 +90,13 @@ public class FavouriteManager {
         mUnfavsSynced = KcpUtility.loadGsonArrayListString(mContext, KEY_GSON_UNFAV_GENERAL);
     }
 
+    public void resetFavourites() {
+        mDealFavs.clear();
+        mEventFavs.clear();
+        mStoreFavs.clear();
+        mCatFavs.clear();
+    }
+
     public SidePanelManagers.FavouriteListener mFavouriteListener;
     public void setFavouriteListener(SidePanelManagers.FavouriteListener favouriteListener){
         mFavouriteListener = favouriteListener;
@@ -225,7 +232,7 @@ public class FavouriteManager {
     }
 
     public HashMap<String, KcpCategories> getFavCatMap(){
-        return new HashMap<String, KcpCategories>(mCatFavs);
+        return new HashMap<>(mCatFavs);
     }
 
     public HashMap<String, KcpContentPage> getFavStoreMap(){
@@ -248,6 +255,40 @@ public class FavouriteManager {
         return mCatFavs.size();
     }
 
+    /**
+     * Updates the user favourite categories/interests from the returned KCP categories list.
+     * @param categories KCP Categories list.
+     */
+    public void updateUserFingerprintInterests(ArrayList<KcpCategories> categories) {
+        HashMap<String, KcpCategories> likeMap = new HashMap<>();
+        for (KcpCategories category : categories) {
+            likeMap.put(category.getLikeLink(), category);
+        }
+        updateFavCat(likeMap, null, false, null);
+    }
+
+    public void updateUserDeals(ArrayList<KcpContentPage> contentPages) {
+        listToHashMap(mDealFavs, contentPages);
+    }
+
+    public void updateUserEvents(ArrayList<KcpContentPage> contentPages) {
+        listToHashMap(mEventFavs, contentPages);
+    }
+
+    private void listToHashMap(HashMap<String, KcpContentPage> userContentPageMap, ArrayList<KcpContentPage> userContentPages) {
+        for (KcpContentPage content : userContentPages) {
+            userContentPageMap.put(content.getLikeLink(), content);
+        }
+
+    }
+
+    /**
+     * Updates the user favourite categories locally on the device with the option to post changes to the server.
+     * @param likeList User likes list
+     * @param unlikeList User non-likes list
+     * @param postLikeListToServer Set as true to post changes to server, false to keep it local.
+     * @param handler Handler object to handle ui changes
+     */
     public synchronized void updateFavCat(final HashMap<String, KcpCategories> likeList, HashMap<String, KcpCategories> unlikeList, boolean postLikeListToServer, @Nullable Handler handler){
         mCatFavs = likeList;
         AsyncTask.execute(new Runnable() {
