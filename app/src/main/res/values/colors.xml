@@ -61,6 +61,8 @@
     <color name="navy">#000080</color>
     <color name="black">#000000</color>
 
+    <!-- Onboarding Alt Colours -->
+    <color name="onboarding_indicator_bg">#171717</color>
 
     <!--NAVS-->
     <color name="menu_text_unselected">#727272</color>

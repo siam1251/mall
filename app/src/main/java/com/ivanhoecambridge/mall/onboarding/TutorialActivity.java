@@ -9,10 +9,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
@@ -40,6 +42,8 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
     private final int PERMISSION_LOCATION = 1;
     private ArrayList<Fragment> fragmentList;
 
+    @BindView(R.id.rlOnboarding)
+    RelativeLayout rlOnboarding;
     @BindView(R.id.viewPagerOnboarding)
     ViewPager viewPager;
     @BindView(R.id.tlDots)
@@ -82,6 +86,10 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
         viewPager.setAdapter(onbdAdapter);
         viewPager.addOnPageChangeListener(this);
         dotIndicators.setupWithViewPager(viewPager);
+
+        if (BuildConfig.MALL.equalsIgnoreCase("referencemall")) {
+            rlOnboarding.setBackgroundColor(getColor(R.color.onboarding_indicator_bg));
+        }
 
     }
 
