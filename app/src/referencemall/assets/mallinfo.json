@@ -18,8 +18,8 @@
           "title": "Wheelchair \u0026 Walkers"
         }, 
         {
-          "details": "Shop with your gift card at 21 shopping centres nationwide! Offering the perfect gift has never been easier. The Bayshore gift card is welcomed by the mall's hundreds of participating retailers.", 
-          "title": "Bayshore Gift Cards"
+          "details": "Shop with your gift card at 21 shopping centres nationwide! Offering the perfect gift has never been easier. The Ivanhoé Cambridge gift card is welcomed by the mall's hundreds of participating retailers.", 
+          "title": "Ivanhoé Cambridge Gift Cards"
         }, 
         {
           "details": "Please visit the Mall Security office located on the first level by the washrooms (Entrance \u00235) if you are in need of a First Aid Kit.", 
@@ -46,7 +46,7 @@
       ], 
       "hours": "Today", 
       "phoneNumber": "(613) 829-7491", 
-      "details": "At Bayshore, we are committed to providing you with an exceptional shopping experience. Our knowledgeable staff is proud to offer many complimentary and fee services to make your shopping experience memorable.", 
+      "details": "At Ivanhoé Cambridge, we are committed to providing you with an exceptional shopping experience. Our knowledgeable staff is proud to offer many complimentary and fee services to make your shopping experience memorable.", 
       "additionalInfoTitle": "Available Services", 
       "imageURLs": [
         "img_mallinfo_guest"
@@ -58,9 +58,24 @@
         "img_mallinfo_amenities"
       ], 
       "subtitle": "Find the Washrooms, Elevators, ATM, and other amenities", 
-      "details": "Looking for something else not listed? Bayshore offers various amenities and complimentary services. View them on the interactive mall map.\n\nFamily Washrooms\nRestrooms\nWater Bottle Filling Stations\nGuest Services\nNursing Room\nStroller Rental\nWalkers \u0026 Wheelchairs\nStairs, Escalators \u0026 Elevators\nATM\nOC Transpo Station\nElectronic Recycling Bin", 
+      "details": "Looking for something else not listed? Ivanhoé Cambridge offers various amenities and complimentary services. View them on the interactive mall map.\n\nFamily Washrooms\nRestrooms\nWater Bottle Filling Stations\nGuest Services\nNursing Room\nStroller Rental\nWalkers \u0026 Wheelchairs\nStairs, Escalators \u0026 Elevators\nATM\nOC Transpo Station\nElectronic Recycling Bin", 
       "title": "Amenities"
-    }, 
+    },
+    {
+      "menuTitle": "Cinema",
+      "type": "cinema",
+      "title": "SilverCity Ivanhoé Cambridge",
+      "subtitle": "View the movie showtimes at Cineplex SilverCity Ivanhoé Cambridge",
+      "imageURLs": ["mallinfo-banner-cinema"],
+      "locations": [
+        {
+          "name": "SilverCity",
+          "locationType": "theater",
+          "theaterID": "5645",
+          "placeID": "578"
+        }
+      ]
+    },
     {
       "additionalInfo": [
         {
@@ -72,7 +87,7 @@
           "title": "Where to buy your gift card?"
         }
       ], 
-      "subtitle": "Check your Bayshore gift card balance.",
+      "subtitle": "Check your Ivanhoé Cambridge gift card balance.",
       "phoneNumber": "(613) 829-7491",
       "phoneURL": "tel://+16138297491",
       "links": [
@@ -91,28 +106,28 @@
           "name": "First level, by Victoria's Secret"
         }
       ], 
-      "details": "Offering the perfect gift has never been easier. The Bayshore gift card is welcomed by the mall's hundreds of participating retailers.", 
+      "details": "Offering the perfect gift has never been easier. The Ivanhoé Cambridge gift card is welcomed by the mall's hundreds of participating retailers.", 
       "additionalInfoTitle": "Frequently Asked Questions", 
       "imageURLs": [
         "img_mallinfo_giftcard"
       ]
     }, 
     {
-      "subtitle": "Follow us to keep up with trends, promotions, contests and everything Bayshore!", 
+      "subtitle": "Follow us to keep up with trends, promotions, contests and everything Ivanhoé Cambridge!", 
       "instagram": {
-        "url": "https://www.instagram.com/BayshoreOttawa/", 
+        "url": "https://www.instagram.com/BayshoreOttawa/",
         "title": "BayshoreOttawa"
       }, 
       "title": "Social Network", 
       "twitter": {
-        "url": "https://www.twitter.com/BayshoreOttawa/", 
+        "url": "https://www.twitter.com/BayshoreOttawa/",
         "title": "BayshoreOttawa"
       }, 
       "facebook": {
-        "url": "https://www.facebook.com/BayshoreOttawa/", 
+        "url": "https://www.facebook.com/BayshoreOttawa/",
         "title": "BayshoreOttawa"
       }, 
-      "details": "Follow us to keep up with trends, promotions, contests and everything Bayshore!", 
+      "details": "Follow us to keep up with trends, promotions, contests and everything Ivanhoé Cambridge!", 
       "imageURLs": [
         "img_mallinfo_social"
       ]
@@ -122,7 +137,7 @@
         "img_mallinfo_transportation"
       ], 
       "subtitle": "See public transit information and schedules", 
-      "details": "Bayshore is easily accessible from all corners of the city via public transit with its own main bus terminal. Look for main OC Transpo routes 61, 62, 85, and 97. The centre is a short 20-minute ride from downtown Ottawa. In 2021, the city's new LRT system will extend to Bayshore station.", 
+      "details": "Ivanhoé Cambridge is easily accessible from all corners of the city via public transit with its own main bus terminal. Look for main OC Transpo routes 61, 62, 85, and 97. The centre is a short 20-minute ride from downtown Ottawa. In 2021, the city's new LRT system will extend to Ivanhoé Cambridge station.", 
       "links": [
         {
           "linkTitle": "View OC Transpo Schedule", 
@@ -135,21 +150,21 @@
       "imageURLs": [
         "img_mallinfo_main"
       ], 
-      "details": "Located in the rapidly growing western portion of the Ottawa-Gatineau area, Bayshore is a super-regional shopping centre, home to an exciting mix of over 190 retailers. Stylishly designed over three levels, the centre includes a variety of the hottest stores on the market.", 
-      "subtitle": "Learn more about Bayshore", 
+      "details": "Located in the rapidly growing western portion of the Ottawa-Gatineau area, Ivanhoé Cambridge is a super-regional shopping centre, home to an exciting mix of over 190 retailers. Stylishly designed over three levels, the centre includes a variety of the hottest stores on the market.", 
+      "subtitle": "Learn more about Ivanhoé Cambridge", 
       "locations": [
         {
           "locationType": "external", 
           "locationID": "https://www.google.ca/maps?q=@45.3471994,-75.8067581", 
-          "name": "100 Bayshore Dr, Ottawa, ON"
+          "name": "100 Ivanhoé Cambridge Dr, Ottawa, ON"
         }
       ], 
-      "title": "About Bayshore"
+      "title": "About Ivanhoé Cambridge"
     }
   ], 
   "hoursExceptions": [
     "A\u0026W", 
-    "Bayshore Optometrist", 
+    "Ivanhoé Cambridge Optometrist", 
     "Moxie's",
     "Second Cup", 
     "South St. Burger", 
