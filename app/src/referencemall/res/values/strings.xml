@@ -1,15 +1,15 @@
 <resources>
-    <string name="mall_name">Ivanhoe Cambridge</string>
+    <string name="mall_name">Ivanhoé Cambridge</string>
     <string name="applicationId">com.ivanhoecambridge.bayshore</string>
 
     <!--MOVIES-->
     <string name="movie_title">SilverCity Cinema</string>
 
     <!--ACTIVE MALL-->
-    <string name="active_mall_welcome_msg">Welcome to Ivanhoe Cambridge, here’s what’s happening today!</string>
+    <string name="active_mall_welcome_msg">Welcome to Ivanhoé Cambridge, here’s what’s happening today!</string>
 
     <!--ONBOARDING-->
-    <string name="onbd_one_title">Welcome to\nIvanhoe Cambridge\'s \nnew companion app</string>
+    <string name="onbd_one_title">Welcome to\nIvanhoé Cambridge\'s \nnew companion app</string>
 
     <!--PRIVACY-->
     <string name="url_privacy_policy">https://www.bayshoreshoppingcentre.com/en/privacy-policy/</string>
