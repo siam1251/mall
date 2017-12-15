@@ -19,8 +19,8 @@
           "title": "Marchettes et fauteuils roulants"
         },
         {
-          "details": "Magasinez avec votre carte-cadeau dans 21 centres &#224; l'&#233;chelle nationale! Offrir le cadeau parfait n'a jamais &#233;t&#233; aussi simple. La carte-cadeau Bayshore est bien accueillie par les centaines de d&#233;taillants participants du centre commercial.",
-          "title": "Cartes-cadeaux Bayshore"
+          "details": "Magasinez avec votre carte-cadeau dans 21 centres &#224; l'&#233;chelle nationale! Offrir le cadeau parfait n'a jamais &#233;t&#233; aussi simple. La carte-cadeau Ivanhoé Cambridge est bien accueillie par les centaines de d&#233;taillants participants du centre commercial.",
+          "title": "Cartes-cadeaux Ivanhoé Cambridge"
         },
         {
           "details": "Visitez le bureau de s&#233;curit&#233; situ&#233; au premier niveau pr&#232;s des toilettes (entr&#233;e no. 5) si vous avez besoin d'une trousse de premiers soins.",
@@ -47,7 +47,7 @@
       ],
       "hours": "Today",
       "phoneNumber": "(613) 829-7491",
-      "details": "Chez Bayshore, nous nous engageons &#224; vous offrir une exp&#233;rience de magasinage exceptionnelle. Notre personnel comp&#233;tent est fier d'offrir de nombreux services gratuits et tarifaires pour rendre votre exp&#233;rience de magasinage m&#233;morable.",
+      "details": "Chez Ivanhoé Cambridge, nous nous engageons &#224; vous offrir une exp&#233;rience de magasinage exceptionnelle. Notre personnel comp&#233;tent est fier d'offrir de nombreux services gratuits et tarifaires pour rendre votre exp&#233;rience de magasinage m&#233;morable.",
       "additionalInfoTitle": "Services disponibles",
       "imageURLs": [
         "img_mallinfo_guest"
@@ -59,8 +59,23 @@
         "img_mallinfo_amenities"
       ],
       "subtitle": "Trouvez les toilettes, la sécurité, le guichet automatique et d'autres services",
-      "details": "Vous cherchez autre chose qui n'est pas r&#233;pertori&#233;? Bayshore vous propose plusieurs commodit&#233;s et services sans frais. Retrouvez-les sur la carte interactive du centre.\n\nToilettes familiales\nToilettes\nStations de remplissage de bouteilles d'eau\nService &#224; la client&#232;le\nSalle d'allaitement\nPoussettes\nMarchettes et fauteuils roulants\nEscaliers, escaliers roulants et ascenseurs\nGuichet automatique\nStation OC Transpo\nRecyclage de produits &#233;lectroniques",
+      "details": "Vous cherchez autre chose qui n'est pas r&#233;pertori&#233;? Ivanhoé Cambridge vous propose plusieurs commodit&#233;s et services sans frais. Retrouvez-les sur la carte interactive du centre.\n\nToilettes familiales\nToilettes\nStations de remplissage de bouteilles d'eau\nService &#224; la client&#232;le\nSalle d'allaitement\nPoussettes\nMarchettes et fauteuils roulants\nEscaliers, escaliers roulants et ascenseurs\nGuichet automatique\nStation OC Transpo\nRecyclage de produits &#233;lectroniques",
       "title": "Commodités"
+    },
+    {
+      "menuTitle": "Cinema",
+      "type": "cinema",
+      "title": "SilverCity Ivanhoé Cambridge",
+      "subtitle": "View the movie showtimes at Cineplex SilverCity Ivanhoé Cambridge",
+      "imageURLs": ["mallinfo-banner-cinema"],
+      "locations": [
+        {
+          "name": "SilverCity",
+          "locationType": "theater",
+          "theaterID": "5645",
+          "placeID": "578"
+        }
+      ]
     },
     {
       "additionalInfo": [
@@ -90,7 +105,7 @@
           "locationType": "amenity"
         }
       ],
-      "details": "Offrir le cadeau parfait n'a jamais &#233;t&#233; aussi simple. La carte-cadeau Bayshore est bien accueillie par les centaines de d&#233;taillants participants du centre commercial.",
+      "details": "Offrir le cadeau parfait n'a jamais &#233;t&#233; aussi simple. La carte-cadeau Ivanhoé Cambridge est bien accueillie par les centaines de d&#233;taillants participants du centre commercial.",
       "additionalInfoTitle": "Questions fréquemment posées",
       "phoneNumber": "(613) 829-7491",
       "phoneURL": "tel://+16138297491",
@@ -99,21 +114,21 @@
       ]
     },
     {
-      "subtitle": "Restez connecté avec Bayshore",
+      "subtitle": "Restez connecté avec Ivanhoé Cambridge",
       "instagram": {
-        "url": "https://www.instagram.com/BayshoreOttawa/",
-        "title": "BayshoreOttawa"
+        "url": "https://www.instagram.com/Ivanhoé CambridgeOttawa/",
+        "title": "Ivanhoé CambridgeOttawa"
       },
       "title": "Réseaux sociaux",
       "twitter": {
-        "url": "https://www.twitter.com/BayshoreOttawa/",
-        "title": "BayshoreOttawa"
+        "url": "https://www.twitter.com/Ivanhoé CambridgeOttawa/",
+        "title": "Ivanhoé CambridgeOttawa"
       },
       "facebook": {
-        "url": "https://www.facebook.com/BayshoreOttawa/",
-        "title": "BayshoreOttawa"
+        "url": "https://www.facebook.com/Ivanhoé CambridgeOttawa/",
+        "title": "Ivanhoé CambridgeOttawa"
       },
-      "details": "Suivez-nous pour en savoir plus au sujet des tendances, des promotions, des concours et tout ce qui est Bayshore!",
+      "details": "Suivez-nous pour en savoir plus au sujet des tendances, des promotions, des concours et tout ce qui est Ivanhoé Cambridge!",
       "imageURLs": [
         "img_mallinfo_social"
       ]
@@ -123,7 +138,7 @@
         "img_mallinfo_transportation"
       ],
       "subtitle": "Voir l'information sur le transport en commun",
-      "details": "&#192; tous les coins de la ville, Bayshore est accessible par le transport en commun avec un terminal sur site. Recherchez les routes 61, 62, 85 et 97 chez OC Transpo. Le centre se trouve &#224; 20 minutes du centre-ville d'Ottawa. En 2021, le nouveau syst&#232;me TLR de la ville s'&#233;tendra jusqu'&#224; la station Bayshore.",
+      "details": "&#192; tous les coins de la ville, Ivanhoé Cambridge est accessible par le transport en commun avec un terminal sur site. Recherchez les routes 61, 62, 85 et 97 chez OC Transpo. Le centre se trouve &#224; 20 minutes du centre-ville d'Ottawa. En 2021, le nouveau syst&#232;me TLR de la ville s'&#233;tendra jusqu'&#224; la station Ivanhoé Cambridge.",
       "links": [
         {
           "linkTitle": "Consultez l'horaire d'OC Transpo",
@@ -136,21 +151,21 @@
       "imageURLs": [
         "img_mallinfo_main"
       ],
-      "details": "Situ&#233; dans l&#8217;ouest de la r&#233;gion d'Ottawa-Gatineau, Bayshore est un centre commercial super-r&#233;gional, qui abrite un m&#233;lange impressionnant de plus de 190 d&#233;taillants. &#201;l&#233;gamment con&#231;u sur trois niveaux, le centre comprend une vari&#233;t&#233; de magasins parmi les plus populaires sur le march&#233;.",
-      "subtitle": "En savoir davantage sur Bayshore",
+      "details": "Situ&#233; dans l&#8217;ouest de la r&#233;gion d'Ottawa-Gatineau, Ivanhoé Cambridge est un centre commercial super-r&#233;gional, qui abrite un m&#233;lange impressionnant de plus de 190 d&#233;taillants. &#201;l&#233;gamment con&#231;u sur trois niveaux, le centre comprend une vari&#233;t&#233; de magasins parmi les plus populaires sur le march&#233;.",
+      "subtitle": "En savoir davantage sur Ivanhoé Cambridge",
       "locations": [
         {
           "locationType": "external",
           "locationID": "https://www.google.ca/maps?q=@45.3471994,-75.8067581",
-          "name": "100 Bayshore Dr, Ottawa, ON"
+          "name": "100 Ivanhoé Cambridge Dr, Ottawa, ON"
         }
       ],
-      "title": "À propos de Bayshore"
+      "title": "À propos de Ivanhoé Cambridge"
     }
   ],
   "hoursExceptions": [
     "A&W",
-    "Bayshore Optometrist",
+    "Ivanhoé Cambridge Optometrist",
     "Moxie's",
     "Second Cup",
     "South St. Burger",
