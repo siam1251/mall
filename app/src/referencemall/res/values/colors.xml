@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="themeColor">#e96562</color>
-    <color name="themeColorTransparent">#30e96562</color>
+    <color name="themeColor">#e12564</color>
+    <color name="themeColorTransparent">#30e12564</color>
     <color name="warningColor">@color/themeColor</color> <!--#CFff4444-->
     <color name="themeColorDark">@color/themeColor</color>
 

@@ -130,7 +130,36 @@
         }
       ], 
       "title": "Public Transportation"
-    }, 
+    },
+    {
+      "menuTitle":"Tourist Information",
+      "title":"Tourist Information Booth",
+      "subtitle":"Discover Ivanhoé Cambridge",
+      "imageURLs":[
+        "mallinfo-banner-touristinfo"
+      ],
+      "links":[
+        {
+          "linkURL":"http://metropolisatmetrotown.com/tourism",
+          "linkTitle":"View Tourist Information"
+        }
+      ],
+      "details":"Need traveling tips? The Tourist Information Booth is in operation from May to September and is run by the City of Burnaby.  It's located beside the Food Court on the Upper Level."
+    },
+    {
+      "title":"Accessibility",
+      "subtitle":"Ivanhoé Cambridge is committed to excellence in serving all customers",
+      "imageURLs":[
+        "mallinfo-banner-accessibility"
+      ],
+      "details":"Ivanhoé Cambridge is committed to excellence in serving all customers and is an easily-accessible, one level shopping centre with:\n\nA Simple-to-Navigate Racetrack Design\nAutomatic Sliding Doors\nEasily Accessible Washrooms\n76 Prime Designated Accessible Parking Spaces\nComplimentary Wheelchairs and Scooters\nA Telecommunication Teletypewriter (TTY) (available at the Guest Services kiosk)\n\nComplimentary wheelchairs and motorized scooters are available on a first-come, first-served basis. Photo Identification and valid credit card are required. Please note that scooters with a battery life of two green bars or less will not be rented out within two hours of the mall closing.",
+      "phoneNumber":"(905) 879-2110",
+      "phoneURL":"tel://+19058792110",
+      "email":{
+        "title":"info@vaughanmills.com",
+        "url":"mailto:info@vaughanmills.com"
+      }
+    },
     {
       "imageURLs": [
         "img_mallinfo_main"

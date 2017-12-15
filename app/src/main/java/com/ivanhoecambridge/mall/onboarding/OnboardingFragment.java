@@ -5,12 +5,14 @@ import android.os.Handler;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView;
 import com.squareup.picasso.Picasso;
@@ -75,6 +77,9 @@ public class OnboardingFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_onboarding, container, false);
         llOnboarding = (LinearLayout) view;
+        if (BuildConfig.MALL.equalsIgnoreCase("referencemall")) {
+            llOnboarding.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.img_signup_bg));
+        }
         CustomFontTextView tvDesc = view.findViewById(R.id.tvOnbdDesc);
         if (page == 0) {
             tvDesc.setTextSize(21);
