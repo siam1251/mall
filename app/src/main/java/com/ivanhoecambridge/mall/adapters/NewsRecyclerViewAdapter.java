@@ -68,6 +68,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     private FavouriteInterface mFavouriteInterface;
     private boolean showInstagramFeed = false;
     private EventRecyclerViewAdapter mEventRecyclerViewAdapter;
+    private String manualContentTypes[];
 
     //use mNewsFeedOrder to manually rearrange the order of news feed content type
     private static ArrayList<Integer> mNewsFeedOrder = new ArrayList<Integer>();
@@ -119,6 +120,8 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public void updateData(ArrayList<KcpContentPage> kcpContentPages) {
+
+        kcpContentPages = updatePagesWithManualContent(kcpContentPages);
         kcpContentPages = removeInterestIfNeeded(kcpContentPages);
         kcpContentPages = removeInstagram(kcpContentPages);
 
@@ -137,6 +140,34 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         mKcpContentPagesNews.addAll(kcpContentPages);
 
         notifyDataSetChanged();
+    }
+
+    /**
+     * Use this method to set the manual content types which will be added to the data source for any required pages that need to
+     * be inserted manually. ie. Cinema on malls that don't return the cinema content type from KCP servers.
+     * @param manualContentTypes content_type of the content required.
+     */
+    public void setManualContentTypes(String[] manualContentTypes) {
+        this.manualContentTypes = manualContentTypes;
+    }
+
+    /**
+     * This will check for any manually added content_types and add them as empty KcpContentPages to the data source.
+     * @param contentPages Existing KCPContentPages list that will be used as the data source.
+     * @return
+     */
+    private ArrayList<KcpContentPage> updatePagesWithManualContent(ArrayList<KcpContentPage> contentPages) {
+        if (manualContentTypes == null) return contentPages;
+        for (String contentType : manualContentTypes) {
+            contentPages.add(addManualContentInKcpContentPages(contentType));
+        }
+        return contentPages;
+    }
+
+    private KcpContentPage addManualContentInKcpContentPages(String contentType) {
+        KcpContentPage contentPage = new KcpContentPage();
+        contentPage.content_type = contentType;
+        return contentPage;
     }
 
     public void setFavouriteListener(FavouriteInterface favouriteInterface){
