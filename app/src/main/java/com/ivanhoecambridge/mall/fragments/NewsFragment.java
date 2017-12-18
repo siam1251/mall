@@ -18,6 +18,7 @@ import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.adapters.NewsRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
+import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.views.NewsRecyclerItemDecoration;
 import com.ivanhoecambridge.mall.widget.EndlessRecyclerViewScrollListener;
 
@@ -124,7 +125,7 @@ public class NewsFragment extends BaseFragment {
         if (kcpMallInfo != null) {
             for (InfoList infoItem : kcpMallInfo.getInfoList()) {
                 if (infoItem.getMenuTitle() != null && infoItem.getMenuTitle().equalsIgnoreCase("cinema")) {
-                    mNewsRecyclerViewAdapter.setManualContentTypes(new String[] {"movie"});
+                    mNewsRecyclerViewAdapter.setManualContentTypes(new String[] {KcpContentTypeFactory.CONTENT_TYPE_MOVIE});
                     break;
                 }
             }
