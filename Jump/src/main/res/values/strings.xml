@@ -110,4 +110,7 @@
     <string name="browser_appauth_default_label">AppAuth heuristic selection</string>
     <string name="custom_tab_label">"%1$s (custom tab)"</string>
 
+    <!-- Header Overrides -->
+    <string name="header_safe_rename"/>
+
 </resources>

@@ -267,7 +267,11 @@ public class JRSession implements JRConnectionManagerDelegate {
                 // any invalid state.
                 throw new Archiver.LoadException("New library version with old serialized state");
             }
-            mUserAgent = getApplicationContext().getPackageManager().getApplicationLabel(ai).toString() ;
+            mUserAgent = getApplicationContext().getPackageManager().getApplicationLabel(ai).toString();
+            String headerSafeRename = getApplicationContext().getString(R.string.header_safe_rename);
+            if (!headerSafeRename.isEmpty()) {
+                mUserAgent = headerSafeRename;
+            }
             PackageInfo info = null;
             try {
                 String packageName = getApplicationContext().getPackageName();
