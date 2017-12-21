@@ -14,4 +14,8 @@
     <!--PRIVACY-->
     <string name="url_privacy_policy">https://www.bayshoreshoppingcentre.com/en/privacy-policy/</string>
     <string name="url_terms">https://www.bayshoreshoppingcentre.com/en/terms-conditions/</string>
+
+    <!-- Header Overrides -->
+    <string name="header_safe_rename">Ivanhoe Cambridge</string>
+
 </resources>
