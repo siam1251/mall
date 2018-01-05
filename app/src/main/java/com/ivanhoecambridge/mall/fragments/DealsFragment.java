@@ -14,15 +14,15 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.adapters.DealsRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.constants.Constants;
-import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.views.DealRecyclerItemDecoration;
 import com.ivanhoecambridge.mall.widget.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 
-public class DealsFragment extends BaseFragment {
+public class DealsFragment extends BaseFragment{
 
     private final int COLUMN_COUNT = 2;
     public DealsRecyclerViewAdapter mDealsRecyclerViewAdapter;
@@ -106,4 +106,9 @@ public class DealsFragment extends BaseFragment {
         DealRecyclerItemDecoration itemDecoration = new DealRecyclerItemDecoration(getActivity(), R.dimen.card_vertical_margin, mDealsRecyclerViewAdapter);
         recyclerView.addItemDecoration(itemDecoration);
     }
+
+    public void resetDeals() {
+        mDealsRecyclerViewAdapter.resetDealsData();
+    }
+
 }

@@ -185,6 +185,12 @@ public class MainActivity extends BaseActivity
     private TextView        tvSignInOrOut;
     private TextView        tvDrawerLayoutAccount;
     private CircleImageView ivDrawerLayoutUser;
+    private ProgressBar pbProfileUpdate;
+    private TextView tvProfileUpdate;
+    private FrameLayout flDeals;
+    private FrameLayout flEvents;
+    private FrameLayout flStores;
+    private FrameLayout flInterests;
 
     private BadgeView badgeDeals;
     private BadgeView badgeEvents;
@@ -705,24 +711,25 @@ public class MainActivity extends BaseActivity
     // ------------------------------------- END OF MAP FRAGMENT -------------------------------------
 
     private void initializeAccount(){
-        AccountManager accountManager = new AccountManager(this, HeaderFactory.getHeaders(), new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message inputMessage) {
-                switch (inputMessage.arg1) {
-                    case KcpCategoryManager.DOWNLOAD_FAILED:
-                        HomeFragment.getInstance().initializeHomeData();
-                        break;
-                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                        HomeFragment.getInstance().initializeHomeData();
-                        break;
-                    default:
-                        super.handleMessage(inputMessage);
-                }
-            }
-        });
+        AccountManager accountManager = new AccountManager(this, HeaderFactory.getHeaders(), newAccountHandler);
         accountManager.downloadUserToken();
-
     }
+
+    private Handler newAccountHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message inputMessage) {
+            switch (inputMessage.arg1) {
+                case KcpCategoryManager.DOWNLOAD_FAILED:
+                    HomeFragment.getInstance().initializeHomeData();
+                    break;
+                case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                    HomeFragment.getInstance().initializeHomeData();
+                    break;
+                default:
+                    super.handleMessage(inputMessage);
+            }
+        }
+    };
 
     /**
      * Checks for the <em>amenities.json</em> file based on the locale. If the locale file does not exist for that mall, it will default to the english file.
@@ -787,6 +794,14 @@ public class MainActivity extends BaseActivity
 
 
     private void setUpLeftSidePanel(){
+        pbProfileUpdate = findViewById(R.id.pbProfileFavourites);
+        tvProfileUpdate = findViewById(R.id.tvProfileUpdating);
+
+        flDeals = findViewById(R.id.flDeals);
+        flEvents = findViewById(R.id.flEvents);
+        flStores = findViewById(R.id.flStores);
+        flInterests = findViewById(R.id.flInterests);
+
         pbGCUpdate = findViewById(R.id.pbGCUpdate);
         tvGCUpdateMessage = findViewById(R.id.tvGCUpdateMessage);
         ivDrawerLayoutBg = (ImageView) findViewById(R.id.ivDrawerLayoutBg);
@@ -1653,10 +1668,34 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onProfileDataUpdated() {
+        Session.getInstance(this).setSessionSynced(true);
         sidePanelManager.updateInterests(FavouriteManager.getInstance(this).getInterestFavSize());
         sidePanelManager.updateDeals(FavouriteManager.getInstance(this).getDealFavSize());
     }
 
+    @Override
+    public void setProfileProgressIndicator(boolean isShowing) {
+        View[] profileFavourites = {flDeals, flEvents, flStores, flInterests};
+        if (isShowing) {
+           setVisibility(pbProfileUpdate, true);
+           setVisibility(tvProfileUpdate, true);
+           setMultiVisibility(profileFavourites, false);
+        } else {
+            setMultiVisibility(profileFavourites, true);
+            setVisibility(pbProfileUpdate, false);
+            setVisibility(tvProfileUpdate, false);
+        }
+    }
+
+    private void setVisibility(View view, boolean isVisible) {
+        view.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+    }
+
+    private void setMultiVisibility(View[] views, boolean isVisible) {
+        for (View v : views) {
+            setVisibility(v, isVisible);
+        }
+    }
 
     public interface RefreshListener {
         void onRefresh(int msg);
@@ -1852,11 +1891,11 @@ public class MainActivity extends BaseActivity
     private void loadUserDetails() {
         if (Jump.getSignedInUser() != null) {
             jrRecordManager = new JanrainRecordManager(this);
-            if (jrRecordManager.isUserSignedIn()) {
+            if (jrRecordManager.isUserSignedIn() && Session.isInitialized()) {
                 if (activityListener == null) {
                     activityListener = Session.getInstance(this);
-                    Session.getInstance(this).refreshUserInSession(this);
                 }
+                Session.getInstance(this).refreshUserInSession(this);
                 toggleUserSignIn(true);
             }
         }
@@ -1885,9 +1924,13 @@ public class MainActivity extends BaseActivity
 
         KcpUtility.saveToSharedPreferences(this, JanrainRecordManager.KEY_USER_SIGNED_IN, isSignedIn);
         if (isSignedIn) {
+            if (!Session.getInstance(this).isSessionSynced()) {
+                HomeFragment.getInstance().downloadUserData();
+            }
             GiftCardManager.loadGiftCardsForSingleUserById(jrRecordManager.getUserId());
         } else {
-            Session.getInstance(this).requestSignOut(this);
+            setProfileProgressIndicator(true);
+            Session.getInstance(this).requestSignOut(this, newAccountHandler);
         }
         mGiftCardRecyclerViewAdapter.updateData();
 

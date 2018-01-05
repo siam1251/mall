@@ -7,7 +7,9 @@ import android.util.Log;
 
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
+import com.ivanhoecambridge.kcpandroidsdk.managers.KcpManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpNavigationRootManager;
+import com.ivanhoecambridge.kcpandroidsdk.managers.KcpService;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpSocialFeedManager;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationPage;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpNavigationRoot;
@@ -46,9 +48,9 @@ public class HomePresenter implements Session.Callbacks{
      */
     private final int NEWS_MODE_COUNT_DEFAULT = 4;
     /**
-     * Deals, Events, Stores, Interests
+     * Deals, Events, Stores, Interests (currently without stores)
      */
-    private final int DOWNLOAD_COUNT_USER = 3;
+    private final int DOWNLOAD_COUNT_USER = 2;
 
     private HomeView homeView;
     private Session session;
@@ -62,6 +64,7 @@ public class HomePresenter implements Session.Callbacks{
     private AtomicInteger downloadCount;
     private AtomicInteger newsModeCount;
     private int newsModeCurrentCount;
+    private boolean isCurrentlyDownloading = false;
 
     public HomePresenter(HomeView homeView) {
         this.homeView = homeView;
@@ -77,19 +80,32 @@ public class HomePresenter implements Session.Callbacks{
                     String mode = (String) inputMessage.obj;
                     homeView.onNewsAndDealsUpdated(false, (String) inputMessage.obj, KcpNavigationRoot.getInstance().getNavigationpage(mode).getKcpContentPageList(true));
                     newsModeCurrentCount = newsModeCount.decrementAndGet();
+                    Log.i("NewsCount", "Decrement on complete " + newsModeCurrentCount + " : " + inputMessage.obj);
                     break;
                 case KcpNavigationRootManager.DATA_ADDED:
                     homeView.onNewsAndDealsUpdated(true, (String) inputMessage.obj, kcpNavigationRootManager.getKcpContentPageList());
+                    Log.i("NewsCount", "Data added");
                     break;
                 case KcpNavigationRootManager.DOWNLOAD_USER_CONTENT:
                     String contentType = (String) inputMessage.obj;
                     updateUserContentPages(contentType);
+                    Log.i("NewsCount", "User content downloaded");
+                    notifyDataDownloaded();
                     break;
                 case KcpNavigationRootManager.DOWNLOAD_FAILED:
                     homeView.onDataDownloadFailure(NEWS_DEALS);
+                    newsModeCurrentCount = newsModeCount.decrementAndGet();
+                    Log.i("NewsCount", "Decrement on failed " + newsModeCurrentCount + " : " + inputMessage.obj);
+                    break;
+                case KcpNavigationRootManager.DOWNLOAD_MODE_COUNT:
+                    homeView.onPreDataDownload();
+                    newsModeCount = new AtomicInteger((int) inputMessage.obj);
+                    newsModeCurrentCount = newsModeCount.get();
+                    Log.i("NewsCount", "Set to " + newsModeCurrentCount);
                     break;
             }
             if (newsModeCurrentCount == 0) {
+                Log.i("NewsCount", "N&D DL");
                 notifyDataDownloaded();
             }
         }
@@ -109,6 +125,7 @@ public class HomePresenter implements Session.Callbacks{
                     homeView.onDataDownloadFailure(SOCIAL);
                     break;
             }
+            Log.i("NewsCount", "Social DL");
             notifyDataDownloaded();
         }
     };
@@ -126,6 +143,7 @@ public class HomePresenter implements Session.Callbacks{
                     homeView.onDataDownloadFailure(FINGERPRINT);
                     break;
             }
+            Log.i("NewsCount", "FP DL");
             notifyDataDownloaded();
         }
     };
@@ -152,7 +170,12 @@ public class HomePresenter implements Session.Callbacks{
         }
     }
 
+    public boolean isDownloadInProgress() {
+        return isCurrentlyDownloading;
+    }
+
     private void preDownloadSetup() {
+        homeView.setProgressIndicator(true);
         if (kcpNavigationRootManager == null) {
             kcpNavigationRootManager = new KcpNavigationRootManager(homeView.getContext(), R.layout.layout_loading_item, HeaderFactory.getHeaders(), newsAndDealsHandler);
         }
@@ -167,7 +190,9 @@ public class HomePresenter implements Session.Callbacks{
 
         newsModeCount = new AtomicInteger(NEWS_MODE_COUNT_DEFAULT);
         //todo: optimize downloading for user vs core downloads via caching
-        downloadCount = new AtomicInteger(isUserSignedIn ? DOWNLOAD_COUNT_DEFAULT : DOWNLOAD_COUNT_DEFAULT + DOWNLOAD_COUNT_USER);
+        downloadCount = new AtomicInteger(isUserSignedIn ? DOWNLOAD_COUNT_DEFAULT + DOWNLOAD_COUNT_USER : DOWNLOAD_COUNT_DEFAULT);
+        Log.i("NewsCount - DLC", "Set to " + downloadCount.get());
+        isCurrentlyDownloading = true;
     }
 
     public void refreshAdapterData() {
@@ -180,9 +205,12 @@ public class HomePresenter implements Session.Callbacks{
 
     private void notifyDataDownloaded() {
         int downloadCountdown = downloadCount.decrementAndGet();
+        Log.i("NewsCount - DLC", downloadCountdown + "");
         if (downloadCountdown == 0) {
             homeView.updateProfileData();
             homeView.onAllDataDownloadSuccess();
+            homeView.setProgressIndicator(false);
+            isCurrentlyDownloading = false;
         }
     }
 
@@ -194,4 +222,30 @@ public class HomePresenter implements Session.Callbacks{
     public void onSessionStopped() {
         Log.i(TAG, "Launching POST likes call via Intent-Service");
     }
+
+    @Override
+    public void onSessionStarted() {
+        Log.i("Session", "Started");
+      updateKcpService(KcpManager.recreateKcpService(homeView.getContext(), HeaderFactory.getHeaders()));
+    }
+
+    @Override
+    public void onSessionEnded() {
+        Log.i("Session", "Ended");
+        homeView.updateProfileData();
+    }
+
+    /**
+     * Updates the KCP service end-point with the authorized user bearer-token for each download manager.
+     */
+    private void updateKcpService(KcpService kcpService) {
+        if (kcpNavigationRootManager != null) {
+            kcpNavigationRootManager.updateKcpService(kcpService);
+        }
+        if (kcpCategoryManager != null) {
+            kcpCategoryManager.updateKcpService(kcpService);
+        }
+    }
+
+
 }

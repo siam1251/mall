@@ -206,6 +206,7 @@
     <string name="drawer_sign_in">Sign Up</string>
     <!-- Sign out from drawer is temporary -->
     <string name="drawer_sign_out">Sign Out</string>
+    <string name="drawer_profile_updating">Updating profile data&#8230;</string>
 
     <string name="drawer_todays_deals">Today’s Deals</string>
     <string name="drawer_todays_events">Today’s Events</string>

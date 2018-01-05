@@ -39,6 +39,7 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener, Hom
 
     public interface UserProfileLikesListener {
         void onProfileDataUpdated();
+        void setProfileProgressIndicator(boolean isShowing);
     }
 
     private HomePresenter            homePresenter;
@@ -108,12 +109,20 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener, Hom
             setOnFragmentInteractionListener(new OnFragmentInteractionListener() {
                 @Override
                 public void onFragmentInteraction() {
-                    homePresenter.downloadNewData();
+                    if (!homePresenter.isDownloadInProgress()) {
+                        homePresenter.downloadNewData();
+                    }
                 }
             });
         }
 
         homePresenter.downloadNewData();
+    }
+
+    public void downloadUserData() {
+        if (homePresenter != null && !homePresenter.isDownloadInProgress()) {
+            homePresenter.downloadNewData();
+        }
     }
 
 
@@ -301,12 +310,15 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener, Hom
 
     @Override
     public void setProgressIndicator(boolean isShowing) {
-
+        if (userProfileLikesListener != null) {
+            userProfileLikesListener.setProfileProgressIndicator(isShowing);
+        }
     }
 
 
     @Override
     public void onAdapterDataRefresh(String mode, ArrayList<KcpContentPage> kcpContentPages) {
+        if (kcpContentPages == null) return;
         updateAdapter(mode, kcpContentPages);
     }
 
@@ -318,6 +330,11 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener, Hom
             mNewsFragment.mNewsRecyclerViewAdapter.addData(kcpContentPages);
             mNewsFragment.mEndlessRecyclerViewScrollListener.onLoadDone();
         }
+    }
+
+    @Override
+    public void onPreDataDownload() {
+        mDealsFragment.resetDeals();
     }
 
     @Override

@@ -16,6 +16,7 @@ import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.interfaces.CompletionListener;
 import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
 import com.ivanhoecambridge.mall.models.MultiLike;
 
@@ -34,6 +35,10 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * Created by Kay on 2016-07-05.
  */
 public class FavouriteManager {
+
+    interface FavouriteListener {
+        void onFavouriteReset();
+    }
 
     /**
      * KEEP IN MIND TO REDUCE THE CALLS (SAVE/LOAD) TO SHAREDPREF TO MINIMUM THROUGH THIS MANAGER
@@ -90,11 +95,23 @@ public class FavouriteManager {
         mUnfavsSynced = KcpUtility.loadGsonArrayListString(mContext, KEY_GSON_UNFAV_GENERAL);
     }
 
-    public void resetFavourites() {
+    public void resetFavourites(Context context, CompletionListener completionListener) {
         mDealFavs.clear();
         mEventFavs.clear();
         mStoreFavs.clear();
         mCatFavs.clear();
+        clearFavouritesFromCache(context, completionListener);
+    }
+
+    private void clearFavouritesFromCache(final Context context, final CompletionListener completionListener) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                KcpUtility.saveGson(context, KEY_GSON_FAV_STORE, mStoreFavs);
+                KcpUtility.saveGson(context, KEY_GSON_FAV_CAT, mCatFavs);
+                completionListener.onComplete(true);
+            }
+        });
     }
 
     public SidePanelManagers.FavouriteListener mFavouriteListener;

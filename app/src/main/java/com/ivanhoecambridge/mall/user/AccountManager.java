@@ -2,6 +2,7 @@ package com.ivanhoecambridge.mall.user;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.mall.account.KcpAccount;
+import com.ivanhoecambridge.mall.interfaces.CompletionListener;
 import com.ivanhoecambridge.mall.managers.ETManager;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
@@ -82,14 +84,20 @@ public class AccountManager {
         logger = new Logger(getClass().getName());
     }
 
+    public void setUiHandler(Handler handler) {
+        if (mHandler == null) {
+            this.mHandler = handler;
+        }
+    }
+
     public UserService getKcpService(){
-        ServiceFactory serviceFactory = new ServiceFactory();
-        if(mUserService == null) mUserService = serviceFactory.createRetrofitService(mContext, mHeadersMap, UserService.class, KcpConstants.getBaseURL());
+        if(mUserService == null) mUserService = ServiceFactory.createRetrofitService(mContext, mHeadersMap, UserService.class, KcpConstants.getBaseURL());
         return mUserService;
     }
 
     public void downloadUserToken() {
         postToCreateToken();
+
     }
 
     protected void postToCreateToken(){
@@ -117,6 +125,7 @@ public class AccountManager {
                             if(response.isSuccessful()){
                                 String token = response.body().getToken();
                                 if(!token.equals("")){
+                                    Log.i(TAG, "LOCAL TOKEN: " + token);
                                     updateResponseBearerToken(token);
                                     handleState(DOWNLOAD_COMPLETE);
                                 }
@@ -154,6 +163,7 @@ public class AccountManager {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if (response.isSuccessful()) {
+                    Log.i(TAG, "Sign In Token:" + response.body().getToken());
                     updateResponseBearerToken(response.body().getToken());
                     updateGiftCards(identifier);
                     updateETSubscriberKey(identifier);
@@ -210,6 +220,9 @@ public class AccountManager {
         if (!token.isEmpty()) {
             KcpAccount.getInstance().saveGsonUserToken(mContext, token);
             HeaderFactory.constructHeader();
+            mHeadersMap = HeaderFactory.getHeaders();
+            Log.i(TAG, "Latest token: " + mHeadersMap.get("Authorization"));
+            mUserService = ServiceFactory.createRetrofitService(mContext, mHeadersMap , UserService.class, KcpConstants.getBaseURL());
         }
     }
 
@@ -222,6 +235,7 @@ public class AccountManager {
         deleteToken.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.i(TAG, "DELETE with token: " + response.raw().request().header("Authorization"));
                 if (response.isSuccessful()) {
                     resetUserProfile();
                 } else {
@@ -235,6 +249,8 @@ public class AccountManager {
             }
         });
     }
+
+
 
     /**
      * Updates any existing gift cards to be merged into the new account.
@@ -286,16 +302,27 @@ public class AccountManager {
      * Sends a DELETE request to KCP for the user bearer token.
      */
     public void signOutAndReset() {
-        //on token delete call ->
         deleteUserToken();
+        downloadUserToken();
         //create new device user -> invalidate token -> downloadUserToken()
     }
 
     private void resetUserProfile() {
         GiftCardManager.getInstance(mContext).reset();
-        FavouriteManager.getInstance(mContext).resetFavourites();
-        Session.getInstance(mContext).endSession(mContext);
+        FavouriteManager.getInstance(mContext).resetFavourites(mContext, new CompletionListener() {
+            @Override
+            public void onComplete(boolean success) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Session.getInstance(mContext).endSession(mContext);
+                    }
+                });
+            }
+        });
+
     }
+
 
     public interface UserService {
         @POST

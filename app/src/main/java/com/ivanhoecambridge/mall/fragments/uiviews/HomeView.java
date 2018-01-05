@@ -19,4 +19,5 @@ public interface HomeView extends BaseView {
     void updateProfileData();
     void onAllDataDownloadSuccess();
     void onDataDownloadFailure(int failedOn);
+    void onPreDataDownload();
 }
