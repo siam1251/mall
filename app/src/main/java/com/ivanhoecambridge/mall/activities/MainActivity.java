@@ -1669,8 +1669,10 @@ public class MainActivity extends BaseActivity
     @Override
     public void onProfileDataUpdated() {
         Session.getInstance(this).setSessionSynced(true);
-        sidePanelManager.updateInterests(FavouriteManager.getInstance(this).getInterestFavSize());
-        sidePanelManager.updateDeals(FavouriteManager.getInstance(this).getDealFavSize());
+        sidePanelManager.updateFavourites(SidePanelManagers.BADGE_DEALS, FavouriteManager.getInstance(this).getDealFavSize());
+        sidePanelManager.updateFavourites(SidePanelManagers.BADGE_EVENTS, FavouriteManager.getInstance(this).getEventAnnouncementFavSize());
+        sidePanelManager.updateFavourites(SidePanelManagers.BADGE_STORES, FavouriteManager.getInstance(this).getStoreFavSize());
+        sidePanelManager.updateFavourites(SidePanelManagers.BADGE_INTERESTS, FavouriteManager.getInstance(this).getInterestFavSize());
     }
 
     @Override

@@ -1,5 +1,7 @@
 package factory;
 
+import android.util.Log;
+
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.constants.Constants;
 
@@ -42,7 +44,7 @@ public class HeaderFactory {
     }
 
     public static void constructHeader() {
-        mHeaders = new HashMap<String, String>();
+        mHeaders = new HashMap<>();
 
         mHeaders.put(HEADER_KEY_DATAHUB_CATALOG,    HEADER_VALUE_DATAHUB_CATALOG);
         mHeaders.put(HEADER_KEY_DATAHUB_LOCALE,     Constants.HEADER_VALUE_DATAHUB_LOCALE);
@@ -52,6 +54,16 @@ public class HeaderFactory {
         //below two headers are specially needed for view_all_content
         mHeaders.put(HEADER_KEY_CONTENT_TYPE,       Constants.HEADER_VALUE_CONTENT_TYPE);
         mHeaders.put(HEADER_KEY_ACCEPT,             HEADER_VALUE_ACCEPT);
+    }
+
+    /**
+     * Utility method to update the authorization token.
+     * @param token Authorization token.
+     */
+    public static void updateAuthorizationToken(String token) {
+        if (mHeaders == null) return;
+        Log.i("Autho", "Update with " + token);
+        mHeaders.put(HEADER_KEY_AUTHORIZATION, token);
     }
 
     public static String getClientToken(){

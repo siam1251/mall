@@ -13,6 +13,7 @@ import com.google.gson.annotations.SerializedName;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
+import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.interfaces.CompletionListener;
 import com.ivanhoecambridge.mall.managers.ETManager;
@@ -91,15 +92,32 @@ public class AccountManager {
     }
 
     public UserService getKcpService(){
-        if(mUserService == null) mUserService = ServiceFactory.createRetrofitService(mContext, mHeadersMap, UserService.class, KcpConstants.getBaseURL());
+        if(mUserService == null) {
+            mUserService = ServiceFactory.createRetrofitService(mContext, mHeadersMap, UserService.class, KcpConstants.getBaseURL());
+        }
         return mUserService;
     }
 
-    public void downloadUserToken() {
-        postToCreateToken();
-
+    /**
+     * Recreates the KCP service. Use this when headers have changed (ie Auth. token)
+     * and a service requires the latest headers.
+     */
+    private void recreateKcpService() {
+        this.mHeadersMap = HeaderFactory.getHeaders();
+        this.mUserService = ServiceFactory.createRetrofitService(mContext, mHeadersMap, UserService.class, KcpConstants.getBaseURL());
     }
 
+    /**
+     * Utility method to execute a call for a  new user to KCP
+     */
+    public void downloadUserToken() {
+        postToCreateToken();
+    }
+
+    /**
+     * Creates a new local user and uses the generated id and password to obtain
+     * a token from KCP.
+     */
     protected void postToCreateToken(){
         final String identifier = UUID.randomUUID().toString();
         String password = UUID.randomUUID().toString();
@@ -125,7 +143,6 @@ public class AccountManager {
                             if(response.isSuccessful()){
                                 String token = response.body().getToken();
                                 if(!token.equals("")){
-                                    Log.i(TAG, "LOCAL TOKEN: " + token);
                                     updateResponseBearerToken(token);
                                     handleState(DOWNLOAD_COMPLETE);
                                 }
@@ -163,7 +180,6 @@ public class AccountManager {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if (response.isSuccessful()) {
-                    Log.i(TAG, "Sign In Token:" + response.body().getToken());
                     updateResponseBearerToken(response.body().getToken());
                     updateGiftCards(identifier);
                     updateETSubscriberKey(identifier);
@@ -218,29 +234,25 @@ public class AccountManager {
      */
     private void updateResponseBearerToken(String token) {
         if (!token.isEmpty()) {
-            KcpAccount.getInstance().saveGsonUserToken(mContext, token);
-            HeaderFactory.constructHeader();
-            mHeadersMap = HeaderFactory.getHeaders();
-            Log.i(TAG, "Latest token: " + mHeadersMap.get("Authorization"));
-            mUserService = ServiceFactory.createRetrofitService(mContext, mHeadersMap , UserService.class, KcpConstants.getBaseURL());
+            KcpAccount.getInstance().saveUserTokenWithRefresh(mContext, token);
         }
     }
 
     /**
      * Deletes the user bearer token when the user signs out of the app.
-     * On success, all profile data is reset and a new user is created.
+     * All profile data is deleted whether the response was successful or not.
      */
-    private void deleteUserToken() {
+    private void deleteUserToken(final CompletionListener completionListener) {
+        recreateKcpService();
         Call<ResponseBody> deleteToken = getKcpService().deleteUserToken();
         deleteToken.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.i(TAG, "DELETE with token: " + response.raw().request().header("Authorization"));
-                if (response.isSuccessful()) {
-                    resetUserProfile();
-                } else {
-                    Log.e(TAG, response.errorBody().toString());
+                if (!response.isSuccessful() && BuildConfig.DEBUG) {
+                    Log.e(TAG, response.raw().message() + " token: " + response.raw().request().header("Authorization"));
                 }
+                resetUserProfile();
+                completionListener.onComplete(response.isSuccessful());
             }
 
             @Override
@@ -249,7 +261,6 @@ public class AccountManager {
             }
         });
     }
-
 
 
     /**
@@ -299,12 +310,17 @@ public class AccountManager {
     }
 
     /**
-     * Sends a DELETE request to KCP for the user bearer token.
+     * Sends a DELETE request to KCP to delete the current user bearer token.
+     * Once complete a new user is created and fresh data is downloaded.
      */
     public void signOutAndReset() {
-        deleteUserToken();
-        downloadUserToken();
-        //create new device user -> invalidate token -> downloadUserToken()
+        deleteUserToken(new CompletionListener() {
+            @Override
+            public void onComplete(boolean success) {
+                downloadUserToken();
+            }
+        });
+
     }
 
     private void resetUserProfile() {

@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.interfaces.CompletionListener;
@@ -292,6 +293,10 @@ public class FavouriteManager {
         listToHashMap(mEventFavs, contentPages);
     }
 
+    public void updateUserPlaces(ArrayList<KcpPlaces> userPlaces, CompletionListener completionListener) {
+        updateFavouriteStores(userPlaces, completionListener);
+    }
+
     private void listToHashMap(HashMap<String, KcpContentPage> userContentPageMap, ArrayList<KcpContentPage> userContentPages) {
         for (KcpContentPage content : userContentPages) {
             userContentPageMap.put(content.getLikeLink(), content);
@@ -332,6 +337,23 @@ public class FavouriteManager {
             KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, new HeaderFactory().getHeaders(), new LikeListHandler(handler));
             kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch( getLikeListFromContentPage(likeList) , getLikeListFromContentPage(unlikeList)));
         }
+    }
+
+    private void updateFavouriteStores(final ArrayList<KcpPlaces> userPlaces, final CompletionListener completionListener) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, KcpContentPage> userFavouriteStores = new HashMap<>();
+                for (KcpPlaces place : userPlaces) {
+                    KcpContentPage kcpContentPage = new KcpContentPage();
+                    kcpContentPage.setPlaceList(CONTENT_TYPE_STORE, place);
+                    userFavouriteStores.put(place.getLikeLink(), kcpContentPage);
+                }
+                mStoreFavs = userFavouriteStores;
+                KcpUtility.saveGson(mContext, KEY_GSON_FAV_STORE, mStoreFavs);
+                completionListener.onComplete(true);
+            }
+        });
     }
 
     /**

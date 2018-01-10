@@ -3,7 +3,8 @@ package com.ivanhoecambridge.mall.account;
 import android.content.Context;
 
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
-import com.ivanhoecambridge.mall.user.AccountManager;
+
+import factory.HeaderFactory;
 
 /**
  * Created by Kay on 2016-11-02.
@@ -39,6 +40,21 @@ public class KcpAccount {
     public void saveGsonUserToken(Context context, String token){
         KcpUtility.cacheToPreferences(context, PREFS_KEY_USER_TOKEN, token);
         mUserToken = token;
+    }
+
+    /**
+     * Saves the token used to identify the user to the cache and updates
+     * authorization headers in <em>HeaderFactory</em> all subsequent calls to
+     * <em>HeaderFactory.getHeaders()</em> will return the updated token.
+     * @param context Context object.
+     * @param token Authorization token.
+     */
+    public void saveUserTokenWithRefresh(Context context, String token) {
+        if (!token.contains(TOKEN_PREFIX_BEARER)) {
+            mUserToken = TOKEN_PREFIX_BEARER + token;
+        }
+        HeaderFactory.updateAuthorizationToken(mUserToken);
+        KcpUtility.cacheToPreferences(context, PREFS_KEY_USER_TOKEN, mUserToken);
     }
 
     public String loadUserToken(Context context){

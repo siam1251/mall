@@ -18,6 +18,7 @@ import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.uiviews.HomeView;
+import com.ivanhoecambridge.mall.interfaces.CompletionListener;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.user.Session;
 
@@ -48,9 +49,9 @@ public class HomePresenter implements Session.Callbacks{
      */
     private final int NEWS_MODE_COUNT_DEFAULT = 4;
     /**
-     * Deals, Events, Stores, Interests (currently without stores)
+     * Deals, Events, Stores, Interests
      */
-    private final int DOWNLOAD_COUNT_USER = 2;
+    private final int DOWNLOAD_COUNT_USER = 3;
 
     private HomeView homeView;
     private Session session;
@@ -90,6 +91,11 @@ public class HomePresenter implements Session.Callbacks{
                     String contentType = (String) inputMessage.obj;
                     updateUserContentPages(contentType);
                     Log.i("NewsCount", "User content downloaded");
+                    notifyDataDownloaded();
+                    break;
+                case KcpNavigationRootManager.DOWNLOAD_USER_CONTENT_FAILED:
+                    String error = (String) inputMessage.obj;
+                    Log.i(TAG, error);
                     notifyDataDownloaded();
                     break;
                 case KcpNavigationRootManager.DOWNLOAD_FAILED:
@@ -139,6 +145,9 @@ public class HomePresenter implements Session.Callbacks{
                         FavouriteManager.getInstance(homeView.getContext()).updateUserFingerprintInterests(KcpUserLikes.getInstance().getUserCategories());
                     }
                     break;
+                case KcpNavigationRootManager.DOWNLOAD_USER_STORES:
+                    updateUserContentPages(KcpContentTypeFactory.CONTENT_TYPE_PLACES);
+                    break;
                 case KcpCategoryManager.DOWNLOAD_FAILED:
                     homeView.onDataDownloadFailure(FINGERPRINT);
                     break;
@@ -153,6 +162,13 @@ public class HomePresenter implements Session.Callbacks{
             FavouriteManager.getInstance(homeView.getContext()).updateUserDeals(KcpUserLikes.getInstance().getUserContentPage(contentType));
         } else if (contentType.contains(KcpContentTypeFactory.CONTENT_TYPE_EVENT)) {
             FavouriteManager.getInstance(homeView.getContext()).updateUserEvents(KcpUserLikes.getInstance().getUserContentPage(contentType));
+        } else if (contentType.contains(KcpContentTypeFactory.CONTENT_TYPE_PLACES)) {
+            FavouriteManager.getInstance(homeView.getContext()).updateUserPlaces(KcpUserLikes.getInstance().getUserPlaces(), new CompletionListener() {
+                @Override
+                public void onComplete(boolean success) {
+                    notifyDataDownloaded();
+                }
+            });
         }
     }
 
@@ -167,6 +183,7 @@ public class HomePresenter implements Session.Callbacks{
         if (isUserSignedIn) {
             kcpNavigationRootManager.downloadContentPagesForUser(String.format(KcpConstants.QUERY_CONTENT_TYPE_DEALS, Constants.ORG));
             kcpNavigationRootManager.downloadContentPagesForUser(String.format(KcpConstants.QUERY_CONTENT_TYPE_EVENT, Constants.ORG));
+            kcpCategoryManager.downloadUserPlaces();
         }
     }
 
