@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
@@ -37,9 +38,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  */
 public class FavouriteManager {
 
-    interface FavouriteListener {
-        void onFavouriteReset();
-    }
+    private final static String TAG = "FavouriteManager";
 
     /**
      * KEEP IN MIND TO REDUCE THE CALLS (SAVE/LOAD) TO SHAREDPREF TO MINIMUM THROUGH THIS MANAGER
@@ -321,7 +320,7 @@ public class FavouriteManager {
         });
         if(postLikeListToServer) {
             KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, HeaderFactory.getHeaders(), new LikeListHandler(handler));
-            kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch( getLikeListFromMap(likeList) , getLikeListFromMap(unlikeList)));
+            kcpCategoryManager.postMultiLike(getDeltaMultiLikeBatch( getLikeListFromMap(likeList) , getLikeListFromMap(unlikeList)));
         }
     }
 
@@ -335,7 +334,7 @@ public class FavouriteManager {
         });
         if(postLikeListToServer) {
             KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, new HeaderFactory().getHeaders(), new LikeListHandler(handler));
-            kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch( getLikeListFromContentPage(likeList) , getLikeListFromContentPage(unlikeList)));
+            kcpCategoryManager.postMultiLike(getDeltaMultiLikeBatch( getLikeListFromContentPage(likeList) , getLikeListFromContentPage(unlikeList)));
         }
     }
 
@@ -395,7 +394,7 @@ public class FavouriteManager {
                     }
                 }
             });
-            kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch(favs, unFavs));
+            kcpCategoryManager.postMultiLike(getDeltaMultiLikeBatch(favs, unFavs));
         }
     }
 
@@ -444,6 +443,44 @@ public class FavouriteManager {
 
         }
     }
+
+    private ArrayList<String> collectAllFavourites() {
+        ArrayList<String> deviceFavourites = new ArrayList<>();
+        deviceFavourites.addAll(mDealFavs.keySet());
+        deviceFavourites.addAll(mEventFavs.keySet());
+        deviceFavourites.addAll(mStoreFavs.keySet());
+        deviceFavourites.addAll(mCatFavs.keySet());
+        return deviceFavourites;
+    }
+
+    /**
+     * Updates any likes stored as a local user to the newly signed-in and synced KCP user. This will be called for both:
+     * <ul>
+     *     <li>A newly signed-up user</li>
+     *     <li>An existing user that has just signed in</li>
+     * </ul>
+     * @param context Context object.
+     * @param completionListener Completion listener. Cannot be null, will be used to update the UI and proceed to the next step.
+     */
+    public void updateKCPProfileWithDeviceUser(Context context, @NonNull final CompletionListener completionListener) {
+        KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(context, 0, HeaderFactory.getHeaders(), new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                        completionListener.onComplete(true);
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        String errorMessage = (String) inputMessage.obj;
+                        completionListener.onComplete(false);
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        kcpCategoryManager.postMultiLike(getDeltaMultiLikeBatch(collectAllFavourites(), null));
+    }
+
 
 
 }

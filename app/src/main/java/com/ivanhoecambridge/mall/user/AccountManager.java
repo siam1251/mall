@@ -178,11 +178,21 @@ public class AccountManager {
         Call<Token> requestNewBearerToken = getKcpService().postToUserService(KcpConstants.URL_POST_CREATE_TOKEN, janrainPayload);
         requestNewBearerToken.enqueue(new Callback<Token>() {
             @Override
-            public void onResponse(Call<Token> call, Response<Token> response) {
+            public void onResponse(Call<Token> call, final Response<Token> response) {
                 if (response.isSuccessful()) {
                     updateResponseBearerToken(response.body().getToken());
                     updateGiftCards(identifier);
                     updateETSubscriberKey(identifier);
+                    FavouriteManager.getInstance(mContext).updateKCPProfileWithDeviceUser(mContext, new CompletionListener() {
+                        @Override
+                        public void onComplete(boolean success) {
+                            if (success) {
+                                mergeListener.onAccountMergeSuccess();
+                            } else {
+                                mergeListener.onAccountMergeFailed(-1, response.errorBody().toString());
+                            }
+                        }
+                    });
                     mergeListener.onAccountMergeSuccess();
                 } else {
                     if (response.code() == 422) {

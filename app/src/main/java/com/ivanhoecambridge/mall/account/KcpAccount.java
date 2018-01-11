@@ -54,7 +54,7 @@ public class KcpAccount {
             mUserToken = TOKEN_PREFIX_BEARER + token;
         }
         HeaderFactory.updateAuthorizationToken(mUserToken);
-        KcpUtility.cacheToPreferences(context, PREFS_KEY_USER_TOKEN, mUserToken);
+        KcpUtility.cacheToPreferences(context, PREFS_KEY_USER_TOKEN, token);
     }
 
     public String loadUserToken(Context context){
@@ -62,7 +62,7 @@ public class KcpAccount {
     }
 
     public String getUserTokenWithBearer(){
-        if(!mUserToken.equals("")){
+        if(!mUserToken.isEmpty() && !mUserToken.contains(TOKEN_PREFIX_BEARER)){
             return TOKEN_PREFIX_BEARER + mUserToken;
         }
         return mUserToken;

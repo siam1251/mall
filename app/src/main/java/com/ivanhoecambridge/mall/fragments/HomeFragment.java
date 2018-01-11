@@ -372,10 +372,21 @@ public class HomeFragment extends BaseFragment implements ViewPagerListener, Hom
 
     @Override
     public void onDataDownloadFailure(int failedOn) {
-        if (failedOn == HomePresenter.NEWS_DEALS) {
-            mMainActivity.mIsDataLoaded = false;
-            mMainActivity.onDataDownloaded();
-            if(mMainActivity.mOnRefreshListener != null) mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
+        switch (failedOn) {
+            case HomePresenter.NEWS_DEALS:
+                mMainActivity.mIsDataLoaded = false;
+                mMainActivity.onDataDownloaded();
+                if (mMainActivity.mOnRefreshListener != null) {
+                    mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_download_failed);
+                }
+                break;
+            case HomePresenter.USER_CONTENT_DEALS_EVENTS:
+            case HomePresenter.USER_CONTENT_PLACES:
+            case HomePresenter.FINGERPRINT:
+                if (mMainActivity.mOnRefreshListener != null) {
+                    mMainActivity.mOnRefreshListener.onRefresh(R.string.warning_user_content_download_failed);
+                }
+                break;
         }
     }
 }

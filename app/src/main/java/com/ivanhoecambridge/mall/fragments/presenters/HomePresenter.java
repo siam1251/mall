@@ -37,8 +37,11 @@ public class HomePresenter implements Session.Callbacks{
     public final static int NEWS_DEALS = 1;
     public final static int FINGERPRINT = 2;
     public final static int SOCIAL = 3;
+    public final static int SOCIAL_FEED_IG = 4;
+    public final static int USER_CONTENT_DEALS_EVENTS = 5;
+    public final static int USER_CONTENT_PLACES = 6;
     public final static int SOCIAL_FEED_TWITTER = 0;
-    public final static int SOCIAL_FEED_IG = 1;
+
 
     /**
      * News & Deals, Interests (Categories), Social Feed
@@ -81,37 +84,30 @@ public class HomePresenter implements Session.Callbacks{
                     String mode = (String) inputMessage.obj;
                     homeView.onNewsAndDealsUpdated(false, (String) inputMessage.obj, KcpNavigationRoot.getInstance().getNavigationpage(mode).getKcpContentPageList(true));
                     newsModeCurrentCount = newsModeCount.decrementAndGet();
-                    Log.i("NewsCount", "Decrement on complete " + newsModeCurrentCount + " : " + inputMessage.obj);
                     break;
                 case KcpNavigationRootManager.DATA_ADDED:
                     homeView.onNewsAndDealsUpdated(true, (String) inputMessage.obj, kcpNavigationRootManager.getKcpContentPageList());
-                    Log.i("NewsCount", "Data added");
                     break;
                 case KcpNavigationRootManager.DOWNLOAD_USER_CONTENT:
                     String contentType = (String) inputMessage.obj;
                     updateUserContentPages(contentType);
-                    Log.i("NewsCount", "User content downloaded");
                     notifyDataDownloaded();
                     break;
                 case KcpNavigationRootManager.DOWNLOAD_USER_CONTENT_FAILED:
                     String error = (String) inputMessage.obj;
                     Log.i(TAG, error);
-                    notifyDataDownloaded();
+                    homeView.onDataDownloadFailure(USER_CONTENT_DEALS_EVENTS);
                     break;
                 case KcpNavigationRootManager.DOWNLOAD_FAILED:
                     homeView.onDataDownloadFailure(NEWS_DEALS);
                     newsModeCurrentCount = newsModeCount.decrementAndGet();
-                    Log.i("NewsCount", "Decrement on failed " + newsModeCurrentCount + " : " + inputMessage.obj);
                     break;
                 case KcpNavigationRootManager.DOWNLOAD_MODE_COUNT:
                     homeView.onPreDataDownload();
                     newsModeCount = new AtomicInteger((int) inputMessage.obj);
-                    newsModeCurrentCount = newsModeCount.get();
-                    Log.i("NewsCount", "Set to " + newsModeCurrentCount);
                     break;
             }
             if (newsModeCurrentCount == 0) {
-                Log.i("NewsCount", "N&D DL");
                 notifyDataDownloaded();
             }
         }
@@ -131,7 +127,6 @@ public class HomePresenter implements Session.Callbacks{
                     homeView.onDataDownloadFailure(SOCIAL);
                     break;
             }
-            Log.i("NewsCount", "Social DL");
             notifyDataDownloaded();
         }
     };
@@ -145,14 +140,17 @@ public class HomePresenter implements Session.Callbacks{
                         FavouriteManager.getInstance(homeView.getContext()).updateUserFingerprintInterests(KcpUserLikes.getInstance().getUserCategories());
                     }
                     break;
-                case KcpNavigationRootManager.DOWNLOAD_USER_STORES:
+                case KcpCategoryManager.DOWNLOAD_USER_STORES:
                     updateUserContentPages(KcpContentTypeFactory.CONTENT_TYPE_PLACES);
                     break;
+                case KcpCategoryManager.DOWNLOAD_USER_STORES_FAILED:
+                    homeView.onDataDownloadFailure(USER_CONTENT_PLACES);
+                    break;
+                case KcpCategoryManager.DOWNLOAD_USER_FP_FAILED:
                 case KcpCategoryManager.DOWNLOAD_FAILED:
                     homeView.onDataDownloadFailure(FINGERPRINT);
                     break;
             }
-            Log.i("NewsCount", "FP DL");
             notifyDataDownloaded();
         }
     };
@@ -166,7 +164,13 @@ public class HomePresenter implements Session.Callbacks{
             FavouriteManager.getInstance(homeView.getContext()).updateUserPlaces(KcpUserLikes.getInstance().getUserPlaces(), new CompletionListener() {
                 @Override
                 public void onComplete(boolean success) {
-                    notifyDataDownloaded();
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            notifyDataDownloaded();
+                        }
+                    });
+
                 }
             });
         }
@@ -208,7 +212,6 @@ public class HomePresenter implements Session.Callbacks{
         newsModeCount = new AtomicInteger(NEWS_MODE_COUNT_DEFAULT);
         //todo: optimize downloading for user vs core downloads via caching
         downloadCount = new AtomicInteger(isUserSignedIn ? DOWNLOAD_COUNT_DEFAULT + DOWNLOAD_COUNT_USER : DOWNLOAD_COUNT_DEFAULT);
-        Log.i("NewsCount - DLC", "Set to " + downloadCount.get());
         isCurrentlyDownloading = true;
     }
 
@@ -222,7 +225,6 @@ public class HomePresenter implements Session.Callbacks{
 
     private void notifyDataDownloaded() {
         int downloadCountdown = downloadCount.decrementAndGet();
-        Log.i("NewsCount - DLC", downloadCountdown + "");
         if (downloadCountdown == 0) {
             homeView.updateProfileData();
             homeView.onAllDataDownloadSuccess();
@@ -242,13 +244,11 @@ public class HomePresenter implements Session.Callbacks{
 
     @Override
     public void onSessionStarted() {
-        Log.i("Session", "Started");
       updateKcpService(KcpManager.recreateKcpService(homeView.getContext(), HeaderFactory.getHeaders()));
     }
 
     @Override
     public void onSessionEnded() {
-        Log.i("Session", "Ended");
         homeView.updateProfileData();
     }
 
