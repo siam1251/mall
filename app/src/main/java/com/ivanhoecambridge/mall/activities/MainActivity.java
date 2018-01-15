@@ -72,8 +72,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.exacttarget.etpushsdk.ETPush;
-import com.exacttarget.etpushsdk.util.EventBus;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
@@ -104,7 +102,7 @@ import com.ivanhoecambridge.mall.fragments.MapFragment;
 import com.ivanhoecambridge.mall.geofence.GeofenceManager;
 import com.ivanhoecambridge.mall.interfaces.MapInterface;
 import com.ivanhoecambridge.mall.managers.DeepLinkManager;
-import com.ivanhoecambridge.mall.managers.ETManager;
+import com.ivanhoecambridge.mall.managers.MarketingCloudManager;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
 import com.ivanhoecambridge.mall.managers.KcpNotificationManager;
@@ -130,6 +128,7 @@ import com.ivanhoecambridge.mall.views.KcpAnimatedViewPager;
 import com.ivanhoecambridge.mall.views.ThemeColorImageView;
 import com.janrain.android.Jump;
 import com.mappedin.sdk.Polygon;
+import com.salesforce.marketingcloud.MarketingCloudSdk;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -145,7 +144,7 @@ import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOn
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, KcpApplication.EtPushListener, RatingListener, ETManager.NotificationRequestListener{
+        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, RatingListener, MarketingCloudManager.NotificationRequestListener{
 
     protected static final String TAG = "MainActivity";
     private final static int WELCOME_MSG_RESET_TIMER_IN_HOUR = 12; //every this hour, it will try to show the welcome msg to help parking
@@ -203,8 +202,8 @@ public class MainActivity extends BaseActivity
     public IndexableRecylerView rvMap; //Store rv from Map Fragment
     public boolean mIsDataLoaded = false;
 
-    //ET Push
-    private ETPush etPush;
+    //MarkingCloud Push
+    private MarketingCloudSdk marketingCloud;
     public static MovieManager sMovieManager;
 
     private JanrainRecordManager jrRecordManager;
@@ -361,16 +360,8 @@ public class MainActivity extends BaseActivity
         setActiveMall(false, false);
 
 
-        //ET Push
-        EventBus.getInstance().register(this);
-        if (etPush == null) {
-            // If etPush is null then get it from our application class or register for updates
-            etPush = KcpApplication.getEtPush(this);
-            if (etPush != null) {
-                // We can assume that we need to execute the tasks in our interface if our previous call resulted in a non-null etPush otherwise this would have already executed and our etPush would not have been null to begin with :)
-                this.onReadyForPush(etPush);
-            }
-        }
+        //MarketingCloud
+        initializeMarketingCloud();
 
         if(BuildConfig.DEBUG) {
             PackageManager pm = getPackageManager();
@@ -424,6 +415,19 @@ public class MainActivity extends BaseActivity
             initializeParkingData();
             initializeSeachIndex();
             if(BuildConfig.MOVIE)initializeMovieData();
+        }
+    }
+
+    private void initializeMarketingCloud() {
+        if (marketingCloud == null) {
+            KcpApplication.registerMarketingCloudListener(new KcpApplication.MarketingCloudListener() {
+                @Override
+                public void onReadyForPush(MarketingCloudSdk marketingCloudSdk) {
+                    if (marketingCloudSdk != null) {
+                        marketingCloud = marketingCloudSdk;
+                    }
+                }
+            });
         }
     }
 
@@ -957,7 +961,7 @@ public class MainActivity extends BaseActivity
         tvVersionNumber.setText(getString(R.string.version_name_prefix) + " " + BuildConfig.VERSION_NAME + versionNameSuffix);
 
         TextView tvTargetDeviceId = findViewById(R.id.tvTargetDeviceId);
-        String deviceId = ETManager.getDeviceId();
+        String deviceId = MarketingCloudManager.getDeviceId();
         if (BuildConfig.DEBUG && !deviceId.isEmpty()) {
             tvTargetDeviceId.setText(getString(R.string.title_debug_target_device, deviceId));
             tvTargetDeviceId.setVisibility(View.VISIBLE);
@@ -1604,7 +1608,7 @@ public class MainActivity extends BaseActivity
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    ETManager.requestNotificationPermission(MainActivity.this, MainActivity.this);
+                    MarketingCloudManager.requestNotificationPermission(MainActivity.this, MainActivity.this);
                 }
             }, 1500);
 
@@ -1616,10 +1620,6 @@ public class MainActivity extends BaseActivity
         mOnRefreshListener = refreshListener;
     }
 
-    @Override
-    public void onReadyForPush(ETPush etPush) {
-        this.etPush = etPush;
-    }
 
     @Override
     public void onNotificationRequestRequired() {
@@ -1629,14 +1629,14 @@ public class MainActivity extends BaseActivity
                 .setPositiveButton(getString(R.string.notif_dialog_action_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ETManager.toggleAllNotifications(true);
+                        MarketingCloudManager.toggleAllNotifications(true);
                         dialog.dismiss();
                     }
                 })
                 .setNegativeButton(getString(R.string.notif_dialog_action_no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ETManager.toggleAllNotifications(false);
+                        MarketingCloudManager.toggleAllNotifications(false);
                         dialog.dismiss();
                     }
                 })
@@ -1949,7 +1949,7 @@ public class MainActivity extends BaseActivity
                 if (mGeofenceManager.canAccessLocation()) {
                     mGeofenceManager.setGeofence(true);
                     logLocationAccessEvent("Allow");
-                    ETManager.requestNotificationPermission(this, this);
+                    MarketingCloudManager.requestNotificationPermission(this, this);
                 } else {
                     if (Build.VERSION.SDK_INT >= 23) {
                         for (int i = 0, len = permissions.length; i < len; i++) {
@@ -1988,7 +1988,7 @@ public class MainActivity extends BaseActivity
                                     builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                         @Override
                                         public void onDismiss(DialogInterface dialog) {
-                                            ETManager.requestNotificationPermission(MainActivity.this, MainActivity.this);
+                                            MarketingCloudManager.requestNotificationPermission(MainActivity.this, MainActivity.this);
                                         }
                                     });
                                     builder.setView(v);

@@ -7,16 +7,12 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.SwitchPreferenceCompat;
 import android.util.Log;
 
-import com.exacttarget.etpushsdk.ETException;
-import com.exacttarget.etpushsdk.ETPush;
-import com.exacttarget.etpushsdk.data.Attribute;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.analytics.Analytics;
-import com.ivanhoecambridge.mall.managers.ETManager;
+import com.ivanhoecambridge.mall.managers.MarketingCloudManager;
+import com.salesforce.marketingcloud.registration.Attribute;
 
-import org.w3c.dom.Attr;
-
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Kay on 2017-03-01.
@@ -78,13 +74,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     private void setSwitch(){
        updateFromSwitchFlag(true);
         try {
-            ArrayList<Attribute> attributes = ETManager.getETAttributes();
+            List<Attribute> attributes = MarketingCloudManager.getRegistrationAttributes();
             for(Attribute attribute : attributes) {
-                if(attribute.getKey().equals(KEY_ATTRIBUTE_WEEKLY_NOTIFICATION)){
+                if(attribute.key().equals(KEY_ATTRIBUTE_WEEKLY_NOTIFICATION)){
                     if(spWeeklyDigest != null) {
                         spWeeklyDigest.setChecked(isEnabled(attribute));
                     }
-                }  else if(attribute.getKey().equals(KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION)) {
+                }  else if(attribute.key().equals(KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION)) {
                     if(spDailyDigest != null) {
                         spDailyDigest.setChecked(isEnabled(attribute));
                     }
@@ -93,13 +89,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             updateAllETAttributes();
         } catch (Exception e) {
             updateFromSwitchFlag(false);
-            Log.e(TAG, "error setting switch from ETManager.getETAttributes()");
+            Log.e(TAG, "error setting switch from MarketingCloudManager.getRegistrationAttributes()");
         }
     }
 
     private boolean isEnabled(Attribute attr) {
-        if (attr.getValue() == null) return false;
-        return Boolean.valueOf(attr.getValue());
+        if (attr.value() == null) return false;
+        return Boolean.valueOf(attr.value());
     }
 
 
@@ -113,19 +109,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (fromSwitch) return;
-        boolean weeklyAttributeAdded = false;
-        boolean dailyDealAttributeAdded = false;
-        boolean dailyEventAttributeAdded = false;
         if(key.equals(KEY_ATTRIBUTE_WEEKLY_NOTIFICATION)) {
-            weeklyAttributeAdded = ETManager.addETAttribute(KEY_ATTRIBUTE_WEEKLY_NOTIFICATION, String.valueOf(sharedPreferences.getBoolean(KEY_ATTRIBUTE_WEEKLY_NOTIFICATION, false)));
+            MarketingCloudManager.addRegistrationAttribute(KEY_ATTRIBUTE_WEEKLY_NOTIFICATION, String.valueOf(sharedPreferences.getBoolean(KEY_ATTRIBUTE_WEEKLY_NOTIFICATION, false)));
         } else if(key.equals(KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION)){
-            dailyDealAttributeAdded = ETManager.addETAttribute(KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION, String.valueOf(sharedPreferences.getBoolean(KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION, false)));
-            dailyEventAttributeAdded = ETManager.addETAttribute(KEY_ATTRIBUTE_DAILY_EVENT_NOTIFICATION, String.valueOf(sharedPreferences.getBoolean(KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION, false)));
+            MarketingCloudManager.addRegistrationAttribute(KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION, String.valueOf(sharedPreferences.getBoolean(KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION, false)));
+            MarketingCloudManager.addRegistrationAttribute(KEY_ATTRIBUTE_DAILY_EVENT_NOTIFICATION, String.valueOf(sharedPreferences.getBoolean(KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION, false)));
         }
 
-        if(weeklyAttributeAdded || dailyDealAttributeAdded || dailyEventAttributeAdded) {
-           ETManager.updateET();
-        }
     }
 
     private void updateFromSwitchFlag(boolean isFromSetSwitch) {
@@ -133,9 +123,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     private void updateAllETAttributes() {
-        ETManager.addETAttribute(ETManager.KEY_ATTRIBUTE_WEEKLY_NOTIFICATION, String.valueOf(spWeeklyDigest.isChecked()));
-        ETManager.addETAttribute(ETManager.KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION, String.valueOf(spDailyDigest.isChecked()));
-        ETManager.addETAttribute(ETManager.KEY_ATTRIBUTE_DAILY_EVENT_NOTIFICATION, String.valueOf(spDailyDigest.isChecked()));
+        MarketingCloudManager.addRegistrationAttribute(MarketingCloudManager.KEY_ATTRIBUTE_WEEKLY_NOTIFICATION, String.valueOf(spWeeklyDigest.isChecked()));
+        MarketingCloudManager.addRegistrationAttribute(MarketingCloudManager.KEY_ATTRIBUTE_DAILY_DEAL_NOTIFICATION, String.valueOf(spDailyDigest.isChecked()));
+        MarketingCloudManager.addRegistrationAttribute(MarketingCloudManager.KEY_ATTRIBUTE_DAILY_EVENT_NOTIFICATION, String.valueOf(spDailyDigest.isChecked()));
         updateFromSwitchFlag(false);
     }
 }

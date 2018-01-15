@@ -17,3 +17,4 @@
 #}
 -keep class com.exacttarget.etpushsdk.** { *; }
  -keepattributes InnerClasses
+-dontwarn org.altbeacon.**

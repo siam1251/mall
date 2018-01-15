@@ -1,8 +1,11 @@
 package com.ivanhoecambridge.mall.activities;
 
+import android.annotation.TargetApi;
+import android.app.NotificationChannel;
+import android.app.NotificationChannelGroup;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
@@ -10,15 +13,6 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.crashlytics.android.core.CrashlyticsListener;
-import com.exacttarget.etpushsdk.ETAnalytics;
-import com.exacttarget.etpushsdk.ETException;
-import com.exacttarget.etpushsdk.ETLogListener;
-import com.exacttarget.etpushsdk.ETPush;
-import com.exacttarget.etpushsdk.ETPushConfig;
-import com.exacttarget.etpushsdk.ETPushConfigureSdkListener;
-import com.exacttarget.etpushsdk.ETRequestStatus;
-import com.exacttarget.etpushsdk.util.EventBus;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
@@ -30,6 +24,10 @@ import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.constants.Janrain;
 import com.ivanhoecambridge.mall.rating.AppRatingManager;
 import com.janrain.android.Jump;
+import com.salesforce.marketingcloud.InitializationStatus;
+import com.salesforce.marketingcloud.MarketingCloudConfig;
+import com.salesforce.marketingcloud.MarketingCloudSdk;
+import com.salesforce.marketingcloud.notifications.NotificationMessage;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.tweetui.TweetUi;
@@ -43,16 +41,15 @@ import io.fabric.sdk.android.Fabric;
 /**
  * Created by Kay on 2016-04-28.
  */
-public class KcpApplication extends MultiDexApplication implements ETLogListener, ETPushConfigureSdkListener {
+public class KcpApplication extends MultiDexApplication implements MarketingCloudSdk.InitializationListener, MarketingCloudSdk.WhenReadyListener {
 
-    private static final String TAG = "KcpApplication";
-    public static final boolean ANALYTICS_ENABLED = true;
-    public static final boolean CLOUD_PAGES_ENABLED = false;
-    public static final boolean WAMA_ENABLED = true;
-    public static final boolean PROXIMITY_ENABLED = false;
-    public static final boolean LOCATION_ENABLED = true;
-    private static final LinkedHashSet<EtPushListener> listeners = new LinkedHashSet<>();
-    private static ETPush etPush;
+    private static final String                                    TAG                 = "KcpApplication";
+    public static final boolean                                    ANALYTICS_ENABLED   = true;
+    public static final boolean                                    CLOUD_PAGES_ENABLED = false;
+    public static final boolean                                    WAMA_ENABLED        = true;
+    public static final boolean                                    PROXIMITY_ENABLED   = false;
+    public static final boolean                                    LOCATION_ENABLED    = true;
+    private static final LinkedHashSet<MarketingCloudListener> listeners = new LinkedHashSet<>();
 
     @Override
     protected void attachBaseContext(Context newBase) { //http://stackoverflow.com/questions/37045787/java-lang-noclassdeffounderror-retrofit2-utils-in-android/37178366
@@ -60,12 +57,6 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
         super.attachBaseContext(newBase);
     }
 
-    public static ETPush getEtPush(@NonNull final EtPushListener etPushListener) {
-        if (etPush == null) {
-            listeners.add(etPushListener);
-        }
-        return etPush;
-    }
 
     @Override
     public void onCreate() {
@@ -94,31 +85,30 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
 
         KcpUtility.cacheToPreferences(this, Constants.PREF_KEY_WELCOME_MSG_DID_APPEAR, false); //resetting the welcome message flag as false to indicate it has never shown for this app launch
         if(BuildConfig.PUSH){
-            //EXACT TARGET
-            EventBus.getInstance().register(this);
+
+            createNotificationChannel();
+
             try {
-
-                 String appId = MallConstants.ET_APP_ID;
-                 String accessToken = MallConstants.ET_ACCESS_TOKEN;
-                 String gcmSenderId = MallConstants.GCM_SENDER_ID;
-
-
-                ETPush.configureSdk(new ETPushConfig.Builder(this)
-                                .setEtAppId(appId)
-                                .setAccessToken(accessToken)
-                                .setGcmSenderId(gcmSenderId)
-                                .setOpenDirectRecipientClass(MainActivity.class) //prevent the SDK from using the default ETLandingPage activity to open the OpenDirect URL sent with the message payload
-                                .setAnalyticsEnabled(ANALYTICS_ENABLED)
-                                .setLocationEnabled(LOCATION_ENABLED)
-                                .setPiAnalyticsEnabled(WAMA_ENABLED)
-                                .setCloudPagesEnabled(CLOUD_PAGES_ENABLED)
-                                .setProximityEnabled(PROXIMITY_ENABLED)
-                                .setNotificationResourceId(R.drawable.icn_noti)
-                                .build()
-                        , this // Our ETPushConfigureSdkListener
-                );
-            } catch (ETException e) {
-                Log.e(TAG, e.getMessage(), e);
+                MarketingCloudSdk.init(this, MarketingCloudConfig.builder()
+                        .setApplicationId(MallConstants.ET_APP_ID)
+                        .setAccessToken(MallConstants.ET_ACCESS_TOKEN)
+                        .setGcmSenderId(MallConstants.GCM_SENDER_ID)
+                        .setOpenDirectRecipient(MainActivity.class)
+                        .setAnalyticsEnabled(ANALYTICS_ENABLED)
+                        .setGeofencingEnabled(LOCATION_ENABLED)
+                        .setPiAnalyticsEnabled(WAMA_ENABLED)
+                        .setCloudPagesEnabled(CLOUD_PAGES_ENABLED)
+                        .setProximityEnabled(PROXIMITY_ENABLED)
+                        .setNotificationSmallIconResId(R.drawable.icn_noti)
+                        .setNotificationChannelIdProvider(new com.salesforce.marketingcloud.notifications.NotificationManager.NotificationChannelIdProvider() {
+                            @Override
+                            public String getNotificationChannelId(@NonNull Context context, @NonNull NotificationMessage notificationMessage) {
+                                return Constants.CHANNEL_NAME;
+                            }
+                        })
+                        .build(), this);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
             }
         }
 
@@ -140,46 +130,65 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
 
     }
 
-    @Override
-    public void out(int i, String s, String s1, @Nullable Throwable throwable) {
+    @TargetApi(26)
+    private void createNotificationChannel() {
 
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannelGroup(new NotificationChannelGroup(BuildConfig.MARKETING_CLOUD_ID, Constants.NOTIFICATION_GROUP_NAME));
+
+
+        NotificationChannel channel = new NotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription("Something about notifications");
+        channel.setGroup(BuildConfig.MARKETING_CLOUD_ID);
     }
 
     @Override
-    public void onETPushConfigurationSuccess(ETPush etPush, ETRequestStatus etRequestStatus) {
-        KcpApplication.etPush = etPush;
-        ETAnalytics.trackPageView("data://ReadyAimFireCompleted", "Marketing Cloud SDK Initialization Complete");
-
-        // If there was an user recoverable issue with Google Play Services then show a notification to the user
-        int googlePlayServicesStatus = etRequestStatus.getGooglePlayServiceStatusCode();
-        if (googlePlayServicesStatus != ConnectionResult.SUCCESS && GoogleApiAvailability.getInstance().isUserResolvableError(googlePlayServicesStatus)) {
-            GoogleApiAvailability.getInstance().showErrorNotification(this, googlePlayServicesStatus);
-        }
-
-        String sdkState;
-        try {
-            sdkState = ETPush.getInstance().getSDKState();
-        } catch (ETException e) {
-            sdkState = e.getMessage();
-        }
-        Log.v(TAG, sdkState); // Write the current SDK State to the Logs.
-
-        if (!listeners.isEmpty()) { // Tell our listeners that the SDK is ready for use
-            for (EtPushListener listener : listeners) {
-                if (listener != null) {
-                    listener.onReadyForPush(etPush);
+    public void complete(InitializationStatus status) {
+        if (status.isUsable()) {
+            if (status.status() == InitializationStatus.Status.COMPLETED_WITH_DEGRADED_FUNCTIONALITY) {
+                if (status.locationsError()) {
+                    GoogleApiAvailability.getInstance()
+                            .showErrorNotification(this, status.locationPlayServicesStatus());
                 }
             }
-            listeners.clear();
+        } else {
+            Log.e(TAG, "Failed to initialize MarketingCloudSDK: " + status.status().toString());
+            Log.e(TAG, status.unrecoverableException().getMessage());
         }
+
     }
 
     @Override
-    public void onETPushConfigurationFailed(ETException etException) {
-        Log.e(TAG, etException.getMessage(), etException);
+    public void ready(MarketingCloudSdk marketingCloud) {
+        if (marketingCloud != null) {
+            marketingCloud.getAnalyticsManager().trackPageView("data://ReadyAimFireCompleted", "Marketing Cloud SDK Initialization Complete");
+            notifyListeners();
+        }
     }
 
-    public interface EtPushListener {
-        void onReadyForPush(ETPush etPush);
+
+    public static void registerMarketingCloudListener(MarketingCloudListener listener) {
+       listeners.add(listener);
+       try {
+           if (MarketingCloudSdk.getInstance() != null) {
+               notifyListeners();
+           }
+       } catch (IllegalStateException e) {
+           Log.e(TAG, "Marketing not initialized");
+       }
     }
+
+    private static void notifyListeners() {
+        if (!listeners.isEmpty()) {
+            for (MarketingCloudListener marketingCloudListener : listeners) {
+                marketingCloudListener.onReadyForPush(MarketingCloudSdk.getInstance());
+            }
+        }
+    }
+
+
+    public interface MarketingCloudListener {
+        void onReadyForPush(MarketingCloudSdk marketingCloudSdk);
+    }
+
 }

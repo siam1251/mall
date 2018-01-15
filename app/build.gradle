@@ -74,6 +74,7 @@ android {
             flavor.resValue 'string', fieldAppName, flavorData.appName
             flavor.resValue 'string', 'google_client_id', flavorData.appAuthRedirectScheme + rootProject.ext.client_id_scheme
             flavor.resValue 'string', 'google_auth_redirect_uri', rootProject.ext.redirect_uri_scheme + flavorData.appAuthRedirectScheme + ':/oauth2redirect'
+            flavor.buildConfigField 'String', fieldNotificationId, "\"${flavor.name}" + '-marketing-cloud-id"'
             flavor.buildConfigField 'String', fieldMall, flavorData.mallName
             flavor.buildConfigField 'Boolean', fieldPush, flavorData.hasPush
             flavor.buildConfigField 'Boolean', fieldParkingPolygon, flavorData.hasParkingPolygon
@@ -81,6 +82,7 @@ android {
             flavor.buildConfigField 'Boolean', fieldWhiteFav, flavorData.hasWhiteFav
             flavor.buildConfigField 'Boolean', fieldNearestParkingImg, flavorData.hasNearestParkingImg
             flavor.buildConfigField 'Boolean', fieldBlueDot, flavorData.hasBlueDot
+
         }
 
     }
@@ -135,7 +137,9 @@ dependencies {
     }
 
     compile "org.msgpack:msgpack-core:${msgPack}"
-    compile "com.exacttarget.etpushsdk:etsdk:${exactTarget}"
+    compile ("com.salesforce.marketingcloud:marketingcloudsdk:${exactTarget}") {
+        exclude module: "${salesForceBeaconLib}"
+    }
     compile "com.jakewharton:butterknife:${butterKnife}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterKnife}"
 }
