@@ -138,7 +138,7 @@ public class KcpApplication extends MultiDexApplication implements MarketingClou
 
 
         NotificationChannel channel = new NotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setDescription("Something about notifications");
+        channel.setDescription(getString(R.string.notification_description));
         channel.setGroup(BuildConfig.MARKETING_CLOUD_ID);
     }
 
