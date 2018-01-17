@@ -1,7 +1,5 @@
 package factory;
 
-import android.util.Log;
-
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.constants.Constants;
 
@@ -56,15 +54,7 @@ public class HeaderFactory {
         mHeaders.put(HEADER_KEY_ACCEPT,             HEADER_VALUE_ACCEPT);
     }
 
-    /**
-     * Utility method to update the authorization token.
-     * @param token Authorization token.
-     */
-    public static void updateAuthorizationToken(String token) {
-        if (mHeaders == null) return;
-        Log.i("Autho", "Update with " + token);
-        mHeaders.put(HEADER_KEY_AUTHORIZATION, token);
-    }
+
 
     public static String getClientToken(){
         if(Constants.IS_APP_IN_PRODUCTION) return Constants.HEADER_VALUE_CLIENT_TOKEN_PRODUCTION;

@@ -109,6 +109,7 @@
     <string name="warning_download_completed">Download completed</string>
     <string name="warning_download_failed">Could not download data.</string>
     <string name="warning_user_content_download_failed">Could not download user profile.</string>
+    <string name="warning_user_profile_update_failed">Could not update user profile.</string>
     <string name="warning_no_internet_connection">No Internet Connection</string>
     <string name="warning_retry">RETRY</string>
     <string name="warning_empty_news">There are no news or announcements.</string>

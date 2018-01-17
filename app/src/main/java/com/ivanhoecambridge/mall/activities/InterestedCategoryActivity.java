@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,7 +34,6 @@ import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.CategoryIconFactory;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
-import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
@@ -91,7 +89,8 @@ public class InterestedCategoryActivity extends AppCompatActivity {
 
                         switch (inputMessage.arg1) {
                             case KcpCategoryManager.DOWNLOAD_FAILED:
-                                if(NetworkManager.isConnected(InterestedCategoryActivity.this)) return;
+                                setResult(Activity.RESULT_CANCELED);
+                                onFinish();
                                 break;
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
                                 InterestedCategoryActivity.this.startActivityForResult(new Intent(InterestedCategoryActivity.this, InterestedStoreActivity.class), Constants.REQUEST_CODE_CHANGE_INTEREST);
@@ -324,7 +323,8 @@ public class InterestedCategoryActivity extends AppCompatActivity {
                 setResult(Activity.RESULT_OK, new Intent());
                 onFinish();
             } else if (resultCode == Constants.RESULT_DONE_PRESSED_WITHOUT_CHANGE) {
-                Log.e(TAG, "SHOULD NEVER ENTER HERE");
+                setResult(Activity.RESULT_CANCELED);
+                onFinish();
             } else if (resultCode == Constants.RESULT_EXIT){
                 setResult(Activity.RESULT_OK, new Intent());
             } else if (requestCode == Constants.REQUEST_CODE_VIEW_STORE_ON_MAP) {

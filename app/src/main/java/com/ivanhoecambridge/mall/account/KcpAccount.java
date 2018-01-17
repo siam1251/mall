@@ -3,8 +3,7 @@ package com.ivanhoecambridge.mall.account;
 import android.content.Context;
 
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
-
-import factory.HeaderFactory;
+import com.ivanhoecambridge.mall.constants.Constants;
 
 /**
  * Created by Kay on 2016-11-02.
@@ -53,7 +52,7 @@ public class KcpAccount {
         if (!token.contains(TOKEN_PREFIX_BEARER)) {
             mUserToken = TOKEN_PREFIX_BEARER + token;
         }
-        HeaderFactory.updateAuthorizationToken(mUserToken);
+        Constants.updateHeadersAuthorizationToken(mUserToken);
         KcpUtility.cacheToPreferences(context, PREFS_KEY_USER_TOKEN, token);
     }
 

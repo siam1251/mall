@@ -38,9 +38,10 @@ public class HomePresenter implements Session.Callbacks{
     public final static int FINGERPRINT = 2;
     public final static int SOCIAL = 3;
     public final static int SOCIAL_FEED_IG = 4;
-    public final static int USER_CONTENT_DEALS_EVENTS = 5;
-    public final static int USER_CONTENT_PLACES = 6;
-    public final static int SOCIAL_FEED_TWITTER = 0;
+    public final static int SOCIAL_FEED_TWITTER = 5;
+    public final static int USER_CONTENT_DEALS_EVENTS = 6;
+    public final static int USER_CONTENT_PLACES = 7;
+
 
 
     /**

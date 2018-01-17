@@ -427,7 +427,9 @@ public class MainActivity extends BaseActivity
             });
             return;
         } else {
-            if(KcpAccount.getInstance().isTokenAvailable()) {HomeFragment.getInstance().initializeHomeData();}
+            if(KcpAccount.getInstance().isTokenAvailable()) {
+                HomeFragment.getInstance().initializeHomeData();
+            }
             else initializeAccount();
             DirectoryFragment.getInstance().initializeDirectoryData();
 //            MapFragment.getInstance().initializeMap(); //TODO: cause int com.mappedin.jpct.Texture.getOpenGLID(int) from MappedIn - investigate
@@ -1447,6 +1449,10 @@ public class MainActivity extends BaseActivity
         showSnackBar(msg, action, 0, onClickListener);
     }
 
+    private void showSnackBarError(int errorResource) {
+        showSnackBar(errorResource, 0, 0, null);
+    }
+
     private void animateHamburgerToArrow() {
         ValueAnimator anim = ValueAnimator.ofFloat(0f, 1f);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -1678,15 +1684,9 @@ public class MainActivity extends BaseActivity
     @Override
     public void setProfileProgressIndicator(boolean isShowing) {
         View[] profileFavourites = {flDeals, flEvents, flStores, flInterests};
-        if (isShowing) {
-           setVisibility(pbProfileUpdate, true);
-           setVisibility(tvProfileUpdate, true);
-           setMultiVisibility(profileFavourites, false);
-        } else {
-            setMultiVisibility(profileFavourites, true);
-            setVisibility(pbProfileUpdate, false);
-            setVisibility(tvProfileUpdate, false);
-        }
+           setVisibility(pbProfileUpdate, isShowing);
+           setVisibility(tvProfileUpdate, isShowing);
+           setMultiVisibility(profileFavourites, !isShowing);
     }
 
     private void setVisibility(View view, boolean isVisible) {
@@ -1760,6 +1760,8 @@ public class MainActivity extends BaseActivity
             if (requestCode == Constants.REQUEST_CODE_CHANGE_INTEREST) {
                 if (resultCode == Activity.RESULT_OK) {
                     HomeFragment.getInstance().downloadNewsAndDeal();
+                } else {
+                    showSnackBarError(R.string.warning_user_profile_update_failed);
                 }
             } else if (requestCode == Constants.REQUEST_CODE_MY_PAGE_TYPE) {
                 if(data == null) {

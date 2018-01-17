@@ -124,19 +124,7 @@ public class KcpApplication extends MultiDexApplication implements ETLogListener
 
         //disable Fabric crashlytics for staging
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build(), new Crashlytics());
-        //disable Firebase crashlytics for staging but this stops error log from showing in debug mode
-        /*Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException (Thread thread, Throwable e) {
-                if(BuildConfig.REPORT_CRASH) FirebaseCrash.report( e);
-            }
-        });*/
-
-        if (!BuildConfig.JANRAIN_DEV) {
-            Jump.init(getApplicationContext(), Janrain.configure(Janrain.AppType.DEV));
-        } else {
-            Jump.init(getApplicationContext(), Janrain.configure(Janrain.AppType.PROD));
-        }
+        Jump.init(getApplicationContext(), Janrain.configure(Janrain.AppType.PROD));
 
     }
 

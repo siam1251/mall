@@ -28,7 +28,6 @@ import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
-import com.ivanhoecambridge.mall.managers.NetworkManager;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
@@ -74,15 +73,15 @@ public class InterestedStoreActivity extends AppCompatActivity {
                     public void handleMessage(Message inputMessage) {
                         switch (inputMessage.arg1) {
                             case KcpCategoryManager.DOWNLOAD_FAILED:
-                                if(NetworkManager.isConnected(InterestedStoreActivity.this)) return;
+                                setResult(Constants.RESULT_DONE_PRESSED_WITHOUT_CHANGE);
                                 break;
                             case KcpCategoryManager.DOWNLOAD_COMPLETE:
                                 setResult(Constants.RESULT_DONE_PRESSED_WITH_CHANGE, new Intent());
-                                onFinish();
                                 break;
                             default:
                                 super.handleMessage(inputMessage);
                         }
+                        onFinish();
                     }
                 });
             }
