@@ -2,7 +2,6 @@ package com.ivanhoecambridge.mall.activities;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpPlaceManager;
@@ -37,12 +37,11 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpTimeConverter;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
+import com.ivanhoecambridge.mall.adapters.DealsRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.GlideFactory;
-import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
-import com.ivanhoecambridge.mall.adapters.DealsRecyclerViewAdapter;
 import com.ivanhoecambridge.mall.fragments.DirectoryFragment;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.NetworkManager;
@@ -51,7 +50,6 @@ import com.ivanhoecambridge.mall.views.CTA;
 import com.ivanhoecambridge.mall.views.CustomAnimation;
 import com.ivanhoecambridge.mall.views.HtmlTextView;
 import com.ivanhoecambridge.mall.views.SpacesItemDecoration;
-import factory.HeaderFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,7 +58,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class DetailActivity extends AppCompatActivity implements View.OnClickListener{
+import factory.HeaderFactory;
+
+public class DetailActivity extends AppCompatActivity{
 
     protected final Logger logger = new Logger(getClass().getName());
     private ViewGroup mParentView;
@@ -76,6 +76,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     private KcpContentPage mKcpContentPage;
     private ImageView ivFav;
     private ImageView ivShare;
+    private final String dummyUrl = "www.google.ca";
 
 
     @Override
@@ -121,7 +122,13 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
             ivFav = (ImageView) toolbar.findViewById(R.id.ivFav);
             ivShare = (ImageView) toolbar.findViewById(R.id.ivShare);
-            ivShare.setOnClickListener(this);
+            ivShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO: Get real url from backend
+                    shareDeal(null);
+                }
+            });
             if(BuildConfig.WHITE_FAV){
                 ivFav.setImageResource(R.drawable.btn_fav_white);
             }
@@ -135,19 +142,16 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             logger.error(e);
         }
     }
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.ivShare) {
-            // TODO: change it to the actual target url --- share(mKcpContentPage.getLikeLink());
-            share("www.google.com");
-        }
-    }
 
-    private void share(String url) {
+
+    private void shareDeal(String url) {
+        if (url == null || url.isEmpty()) {
+            url = dummyUrl;
+        }
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, url);
         sendIntent.setType("text/plain");
-        this.startActivity(sendIntent);
+        startActivity(sendIntent);
     }
 
     private void setFav(){
