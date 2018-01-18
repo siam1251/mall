@@ -1,9 +1,9 @@
 package com.ivanhoecambridge.mall.constants;
 
+import android.content.Context;
+
 import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
-
-import android.content.Context;
 
 import java.util.Arrays;
 
@@ -139,6 +139,10 @@ public class Constants {
 
     //VERSION
     public final static String KEY_APP_VERSION = "app_version";
+
+    public final static String NOTIFICATION_GROUP_NAME = "All Deals";
+    public final static String CHANNEL_ID = "deals_id_01";
+    public final static String CHANNEL_NAME = "Deals";
 
     public static String getStringFromResources(Context context, int resourceId) {
         return context.getString(resourceId);
