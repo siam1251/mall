@@ -1,6 +1,5 @@
 package com.ivanhoecambridge.mall.activities;
 
-import android.annotation.TargetApi;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
@@ -86,7 +85,9 @@ public class KcpApplication extends MultiDexApplication implements MarketingClou
         KcpUtility.cacheToPreferences(this, Constants.PREF_KEY_WELCOME_MSG_DID_APPEAR, false); //resetting the welcome message flag as false to indicate it has never shown for this app launch
         if(BuildConfig.PUSH){
 
-            createNotificationChannel();
+            if (KcpUtility.isVersionAtLeast(26)) {
+                createNotificationChannel();
+            }
 
             try {
                 MarketingCloudSdk.init(this, MarketingCloudConfig.builder()
@@ -130,12 +131,10 @@ public class KcpApplication extends MultiDexApplication implements MarketingClou
 
     }
 
-    @TargetApi(26)
-    private void createNotificationChannel() {
 
+    private void createNotificationChannel() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.createNotificationChannelGroup(new NotificationChannelGroup(BuildConfig.MARKETING_CLOUD_ID, Constants.NOTIFICATION_GROUP_NAME));
-
 
         NotificationChannel channel = new NotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
         channel.setDescription(getString(R.string.notification_description));
