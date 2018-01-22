@@ -34,7 +34,7 @@ android {
     buildToolsVersion "26.0.2"
     defaultConfig {
         versionName "1.6.4"
-        versionCode 1
+        versionCode Integer.parseInt(System.getenv("BITRISE_BUILD_NUMBER") ?: "1")
 
         minSdkVersion 16
         targetSdkVersion 26
@@ -85,7 +85,6 @@ android {
             flavor.buildConfigField 'Boolean', fieldWhiteFav, flavorData.hasWhiteFav
             flavor.buildConfigField 'Boolean', fieldNearestParkingImg, flavorData.hasNearestParkingImg
             flavor.buildConfigField 'Boolean', fieldBlueDot, flavorData.hasBlueDot
-
         }
 
     }
