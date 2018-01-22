@@ -22,14 +22,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-    signingConfigs {
-        release {
-            keyAlias 'Android'
-            keyPassword 'KineticCafe16'
-            storeFile file('vaughanmills.jks')
-            storePassword 'KineticCafe16'
-        }
-    }
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
     defaultConfig {
@@ -54,7 +46,6 @@ android {
             buildConfigField "Boolean", "JANRAIN_DEV", 'false'
             buildConfigField "Boolean", "IS_APP_IN_PRODUCTION", "true"
             debuggable false
-            signingConfig signingConfigs.release
         }
         debug {
             buildConfigField "Boolean", "JANRAIN_DEV", 'true'
