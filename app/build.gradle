@@ -62,6 +62,9 @@ android {
             buildConfigField "Boolean", "IS_APP_IN_PRODUCTION", "false"
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 
     productFlavors.whenObjectAdded { flavor ->
         if (rootProject.hasProperty(flavor.name)) {
