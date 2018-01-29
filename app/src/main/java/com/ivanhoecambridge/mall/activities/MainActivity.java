@@ -208,6 +208,11 @@ public class MainActivity extends BaseActivity
 
     private JanrainRecordManager jrRecordManager;
     private Handler uiHandler = new Handler();
+
+    private ImageView ivFilterParking;
+    private RelativeLayout rlSeeParking;
+    private TextView tvFilterParking;
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -285,6 +290,10 @@ public class MainActivity extends BaseActivity
         ImageView ivBack = (ImageView) findViewById(R.id.ivBack);
         etStartStore = (EditText) findViewById(R.id.etStartStore);
         etDestStore = (EditText) findViewById(R.id.etDestStore);
+
+        ivFilterParking = findViewById(R.id.ivFilterParking);
+        rlSeeParking = findViewById(R.id.rlSeeParking);
+        tvFilterParking = findViewById(R.id.tvFilterParking);
 
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -490,6 +499,9 @@ public class MainActivity extends BaseActivity
         mDrawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
+                setParkingStatus(Amenities.isToggled(MainActivity.this, Amenities.GSON_KEY_PARKING, false),
+                        rlSeeParking, tvFilterParking, ivFilterParking, getResources().getString(R.string.map_filter_hide_parking),
+                        getResources().getString(R.string.map_filter_see_parking));
                 setActiveMallDot(false);
             }
 

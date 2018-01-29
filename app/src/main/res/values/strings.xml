@@ -255,6 +255,7 @@
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="hint_Birthday">Date of Birth (Optional)</string>
     <string name="hint_card_number">Card Number</string>
+    <string name="hint_item_menu_parking">Parking</string>
 
     <string name="bluedot_my_location">Your Location</string>
 

@@ -228,6 +228,8 @@
     <string name="hint_confirm_password">Confirmer le mot de passe</string>
     <string name="hint_Birthday">Anniversaire (optionnel)</string>
     <string name="hint_card_number">Numéro de la carte</string>
+    <string name="hint_item_menu_parking">Car park</string>
+
 
     <!--PARKING-->
     <string name="parking_question_one">Près de quelle entrée avez-vous stationné?</string>
