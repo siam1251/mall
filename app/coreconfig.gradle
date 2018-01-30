@@ -8,6 +8,7 @@ ext {
     fieldNearestParkingImg = 'NEAREST_PARKING_IMG'
     fieldBlueDot = 'BLUEDOT'
     fieldAppName = 'app_name'
+    fieldNotificationId = 'MARKETING_CLOUD_ID'
     defaultMallName = '"Kinetic Cafe Office"'
 
     supportLibrary = '26.0.2'
@@ -19,6 +20,8 @@ ext {
     crashlytics = '2.6.8@aar'
     twitter = '1.14.1@aar'
     msgPack = '0.8.9'
-    exactTarget = '4.5.0@aar'
+    exactTarget = '5.3.2'
     butterKnife = '8.5.1'
+
+    salesForceBeaconLib = 'android-beacon-library'
 }

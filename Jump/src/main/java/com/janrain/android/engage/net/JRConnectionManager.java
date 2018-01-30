@@ -33,8 +33,11 @@ package com.janrain.android.engage.net;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Pair;
+
 import com.janrain.android.utils.ApacheSetFromMap;
 import com.janrain.android.utils.ThreadUtils;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -42,6 +45,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.entity.ByteArrayEntity;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -96,9 +100,24 @@ public class JRConnectionManager {
         if (requestHeaders == null) requestHeaders = new ArrayList<NameValuePair>();
 
         ManagedConnection managedConnection =
-                new ManagedConnection(delegate, tag, requestUrl, postData, requestHeaders, followRedirects);
-
+                new ManagedConnection(delegate, tag, requestUrl, postData, checkForUnsafeUserAgent(requestHeaders), followRedirects);
         trackAndStartConnection(delegate, managedConnection);
+    }
+
+
+    private static List<NameValuePair> checkForUnsafeUserAgent(List<NameValuePair> requestHeaders) {
+        if (requestHeaders != null) {
+            for (NameValuePair element : requestHeaders) {
+                if (element.getName().equalsIgnoreCase("User-Agent")) {
+                    String replacedValue = Normalizer.normalize(element.getValue(), Normalizer.Form.NFD)
+                            .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+                    requestHeaders.remove(element);
+                    requestHeaders.add((NameValuePair) new Pair<>("User-Agent", replacedValue));
+                    return requestHeaders;
+                }
+            }
+        }
+        return requestHeaders;
     }
 
     private static void trackAndStartConnection(JRConnectionManagerDelegate delegate,

@@ -167,6 +167,8 @@ public class MapFragment extends BaseFragment
     private String mSearchString = "";
     public  MenuItem                         mSearchItem;
     private MenuItem                         mFilterItem;
+    private MenuItem parkingItem;
+    private boolean isParkingItemSelected;
     public  CategoryStoreRecyclerViewAdapter mPlaceRecyclerViewAdapter;
     private Drawable                         mAmeityDrawable;
 
@@ -935,6 +937,7 @@ public class MapFragment extends BaseFragment
         showInstruction(maps[mCurrentLevelIndex].getAltitude());
     }
 
+    @Override
     public boolean didTapPolygon(Polygon polygon) {
         deferredPolygon = null;
         try {
@@ -1126,9 +1129,11 @@ public class MapFragment extends BaseFragment
         }
     }
 
+    @Override
     public boolean didTapOverlay(Overlay overlay) {
         LocationLabelClicker clicker = overlays.get(overlay);
         if (clicker != null) {
+            clearHighlightedColours();
             clicker.onClick();
         }
         return true;
@@ -1159,6 +1164,7 @@ public class MapFragment extends BaseFragment
         replaceSelectedPinWithRemovedPin();
     }
 
+    @Override
     public void didTapNothing() {
 
         if (path == null) {
@@ -1325,8 +1331,10 @@ public class MapFragment extends BaseFragment
                                 public void okClicked() {
                                     didTapNothing();
                                     removePin(sParkingPin.getParkingCoordinatePin().getOverlay2DImage(), sParkingPin.getParkingCoordinatePin().getCoordinate());
+
                                     ParkingManager.removeParkingLot(getActivity());
                                     Amenities.saveToggle(getActivity(), Amenities.GSON_KEY_PARKING, false); //make sure to set this as false otherwise everytime map fragment's tapped, it will start parkingActivity
+                                    toggleParkingCTA(false);
                                     mMainActivity.setUpRightSidePanel();
                                     Toast.makeText(getActivity(), "Removed Parking Spot", Toast.LENGTH_SHORT).show();
                                 }
@@ -1419,9 +1427,9 @@ public class MapFragment extends BaseFragment
                                     } /*else {*/
                                     didTapNothing();
                                     removePin(location);
-
                                     ParkingManager.removeParkingLot(getActivity());
                                     Amenities.saveToggle(getActivity(), Amenities.GSON_KEY_PARKING, false); //make sure to set this as false otherwise everytime map fragment's tapped, it will start parkingActivity
+                                    toggleParkingCTA(false);
                                     mMainActivity.setUpRightSidePanel();
                                     Toast.makeText(getActivity(), "Removed Parking Spot", Toast.LENGTH_SHORT).show();
                                 }
@@ -2226,6 +2234,8 @@ public class MapFragment extends BaseFragment
                 final Intent intent = new Intent(getActivity(), ParkingActivity.class);
                 getActivity().startActivityForResult(intent, Constants.REQUEST_CODE_SAVE_PARKING_SPOT);
             } else {
+                toggleParkingCTA(enabled);
+
                 setFollowMode(FollowMode.NONE);
                 if (BuildConfig.PARKING_POLYGON) {
                     if (ParkingManager.getMyEntrance(getActivity()) != null) {
@@ -2460,6 +2470,7 @@ public class MapFragment extends BaseFragment
         super.onPrepareOptionsMenu(menu);
     }
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -2467,8 +2478,16 @@ public class MapFragment extends BaseFragment
 
         mSearchItem = menu.findItem(R.id.action_search);
         mFilterItem = menu.findItem(R.id.action_filter);
-        mFilterItem.setIcon(ThemeManager.getThemedMenuDrawable(getActivity(), R.drawable.icn_filter));
-        mSearchItem.setIcon(ThemeManager.getThemedMenuDrawable(getActivity(), R.drawable.icn_search));
+        parkingItem = menu.findItem(R.id.action_parking);
+
+        mFilterItem.setIcon(ThemeManager.getThemedMenuDrawable(getContext(), R.drawable.icn_filter));
+        mSearchItem.setIcon(ThemeManager.getThemedMenuDrawable(getContext(), R.drawable.icn_search));
+
+        parkingItem.setIcon(ThemeManager.getThemedMenuDrawable(getContext(), R.drawable.icn_car));
+
+        isParkingItemSelected = Amenities.isToggled(getContext(), Amenities.GSON_KEY_PARKING, false);
+        toggleParkingCTA(isParkingItemSelected);
+
         SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
         mSearchView.setOnQueryTextListener(new QueryTextListener());
         mSearchView.setQueryHint(getString(R.string.hint_search_store));
@@ -2777,6 +2796,16 @@ public class MapFragment extends BaseFragment
     public void showDirectionEditor(String start, String dest) {
         mMainActivity.toggleDestinationEditor(false, start, dest, new FocusListener());
     }
+    private void toggleParkingCTA(boolean selected) {
+        isParkingItemSelected = selected;
+        Amenities.saveToggle(getContext(), Amenities.GSON_KEY_PARKING, isParkingItemSelected);
+        if (parkingItem != null) {
+            Drawable parkingItemIcon = parkingItem.getIcon();
+            if (parkingItemIcon != null){
+                parkingItemIcon.setColorFilter(ContextCompat.getColor(getContext(), selected ? R.color.themeColor : R.color.filter_off_color), PorterDuff.Mode.SRC_IN);
+            }
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -2784,6 +2813,11 @@ public class MapFragment extends BaseFragment
         if (id == R.id.action_filter) {
             mMainActivity.openRightDrawerLayout();
             return true;
+        }
+        if (id == R.id.action_parking) {
+            isParkingItemSelected = !isParkingItemSelected;
+            onParkingClick(isParkingItemSelected, isParkingItemSelected);
+
         }
         return super.onOptionsItemSelected(item);
     }

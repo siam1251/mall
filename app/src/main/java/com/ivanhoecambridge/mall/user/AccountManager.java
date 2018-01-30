@@ -7,8 +7,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.exacttarget.etpushsdk.ETException;
-import com.exacttarget.etpushsdk.ETPush;
 import com.google.gson.annotations.SerializedName;
 import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
@@ -19,6 +17,11 @@ import com.ivanhoecambridge.mall.interfaces.CompletionListener;
 import com.ivanhoecambridge.mall.managers.ETManager;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
+import com.ivanhoecambridge.mall.account.KcpAccount;
+import com.ivanhoecambridge.mall.activities.KcpApplication;
+import com.ivanhoecambridge.mall.managers.MarketingCloudManager;
+import com.salesforce.marketingcloud.MarketingCloudSdk;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +63,7 @@ public class AccountManager {
     protected Logger logger = null;
     protected Context mContext;
     protected HashMap<String, String> mHeadersMap;
+    private String identifier;
 
     public interface KcpAccountMergeListener {
         void onAccountMergeSuccess();
@@ -77,6 +81,14 @@ public class AccountManager {
         mHandler = handler;
         mHeadersMap = headersMap;
         logger = new Logger(getClass().getName());
+        MarketingCloudManager.registerMarketingCloudListener(new KcpApplication.MarketingCloudListener() {
+            @Override
+            public void onReadyForPush(MarketingCloudSdk marketingCloudSdk) {
+                if (identifier != null && !identifier.isEmpty()) {
+                    MarketingCloudManager.updateContactKey(identifier);
+                }
+            }
+        });
     }
 
     public AccountManager(Context context) {
@@ -119,15 +131,11 @@ public class AccountManager {
      * a token from KCP.
      */
     protected void postToCreateToken(){
-        final String identifier = UUID.randomUUID().toString();
+        identifier = UUID.randomUUID().toString();
         String password = UUID.randomUUID().toString();
         Log.d(TAG, "identifier: " + identifier + " password: " + password);
 
-        try {
-            ETPush.getInstance().setSubscriberKey(identifier);
-        } catch (ETException e) {
-            e.printStackTrace();
-        }
+        MarketingCloudManager.updateContactKey(identifier);
 
         final KcpUser kcpUser = new KcpUser(identifier, password);
         Call<Token> createUser = getKcpService().postToUserService(KcpConstants.URL_POST_CREATE_USER, kcpUser.kcpUser);

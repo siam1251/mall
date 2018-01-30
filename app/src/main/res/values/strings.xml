@@ -92,6 +92,7 @@
     <string name="transition_store_name">transition store name</string>
     <string name="transition_news_expiry_date">transition expiry date</string>
     <string name="transition_fav">transition fav</string>
+    <string name="transition_share">transition share</string>
     <string name="transition_category_name">transition category name</string>
     <string name="transition_movie_poster">transition movie poster</string>
 
@@ -257,6 +258,7 @@
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="hint_Birthday">Date of Birth (Optional)</string>
     <string name="hint_card_number">Card Number</string>
+    <string name="hint_item_menu_parking">Parking</string>
 
     <string name="bluedot_my_location">Your Location</string>
 
@@ -469,5 +471,6 @@
     <string name="notif_dialog_message">Notifications may include alerts, sounds, and icon badges. These can be configured in Settings.</string>
     <string name="notif_dialog_action_ok">OK</string>
     <string name="notif_dialog_action_no">Don\'t allow</string>
+    <string name="notification_description">Configure deals and recommendation notifications.</string>
 
 </resources>

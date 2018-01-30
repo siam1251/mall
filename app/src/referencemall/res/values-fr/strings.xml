@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--ONBOARDING-->
+
+    <string name="onbd_one_title">Bienvenue dans la\n nouvelle appli Ivanhoé Cambridge</string>
+    <!-- ACTIVE MALL -->
+    <string name="active_mall_welcome_msg">Bienvenue à Ivanhoé Cambridge, Présentement en cours</string>
+
+    <!--PRIVACY-->
+    <string name="url_privacy_policy">https://www.bayshoreshoppingcentre.com/fr/politique-de-confidentialite/</string>
+    <string name="url_terms">https://www.bayshoreshoppingcentre.com/fr/mentions-legales/</string>
+</resources>

@@ -70,6 +70,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
@@ -323,6 +324,11 @@ import static com.janrain.android.engage.net.JRConnectionManager.ManagedConnecti
     }
 
     public static void setCustomUserAgent(String customUserAgent) {
-        USER_AGENT = customUserAgent;
+        USER_AGENT = checkForUnsafeUserAgent(customUserAgent);
+    }
+
+    private static String checkForUnsafeUserAgent(String userAgent) {
+        return Normalizer.normalize(userAgent, Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
 }

@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_parking"
+        app:showAsAction="always"
+        android:icon="@drawable/icn_car"
+        android:title="@string/hint_item_menu_parking"
+        />
+    <item
         android:id="@+id/action_search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"

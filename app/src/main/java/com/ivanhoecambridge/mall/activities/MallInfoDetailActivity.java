@@ -3,13 +3,11 @@ package com.ivanhoecambridge.mall.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +27,6 @@ import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.analytics.Analytics;
 import com.ivanhoecambridge.mall.constants.Constants;
-
-import constants.MallConstants;
-import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.CTA;
@@ -41,6 +36,9 @@ import com.ivanhoecambridge.mall.views.HtmlTextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import constants.MallConstants;
+import factory.HeaderFactory;
 
 /**
  * Created by Kay on 2016-06-28.
