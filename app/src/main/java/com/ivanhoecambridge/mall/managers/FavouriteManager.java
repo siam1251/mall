@@ -471,7 +471,6 @@ public class FavouriteManager {
                         completionListener.onComplete(true);
                         break;
                     case KcpCategoryManager.DOWNLOAD_FAILED:
-                        String errorMessage = (String) inputMessage.obj;
                         completionListener.onComplete(false);
                     default:
                         super.handleMessage(inputMessage);

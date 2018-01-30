@@ -14,10 +14,8 @@ import com.ivanhoecambridge.kcpandroidsdk.service.ServiceFactory;
 import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.interfaces.CompletionListener;
-import com.ivanhoecambridge.mall.managers.ETManager;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.managers.GiftCardManager;
-import com.ivanhoecambridge.mall.account.KcpAccount;
 import com.ivanhoecambridge.mall.activities.KcpApplication;
 import com.ivanhoecambridge.mall.managers.MarketingCloudManager;
 import com.salesforce.marketingcloud.MarketingCloudSdk;
@@ -190,7 +188,7 @@ public class AccountManager {
                 if (response.isSuccessful()) {
                     updateResponseBearerToken(response.body().getToken());
                     updateGiftCards(identifier);
-                    updateETSubscriberKey(identifier);
+                    updateMarketingCloudContactKey(identifier);
                     FavouriteManager.getInstance(mContext).updateKCPProfileWithDeviceUser(mContext, new CompletionListener() {
                         @Override
                         public void onComplete(boolean success) {
@@ -290,11 +288,11 @@ public class AccountManager {
     }
 
     /**
-     * Updates the ExactTarget subscriber key with the newly merged Janrain Id
+     * Updates the MarketingCloud contact key with the newly merged Janrain Id
      * @param userId Janrain userId
      */
-    private void updateETSubscriberKey(String userId) {
-        ETManager.updateSubscriberKey(userId);
+    private void updateMarketingCloudContactKey(String userId) {
+        MarketingCloudManager.updateContactKey(userId);
     }
 
     private HashMap<String, String> createJanrainPayload(String janrainId) {

@@ -95,8 +95,6 @@ public class HomePresenter implements Session.Callbacks{
                     notifyDataDownloaded();
                     break;
                 case KcpNavigationRootManager.DOWNLOAD_USER_CONTENT_FAILED:
-                    String error = (String) inputMessage.obj;
-                    Log.i(TAG, error);
                     homeView.onDataDownloadFailure(USER_CONTENT_DEALS_EVENTS);
                     break;
                 case KcpNavigationRootManager.DOWNLOAD_FAILED:
