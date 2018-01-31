@@ -85,7 +85,7 @@ android {
         crossironmills {}
         eatoncentre {}
         metropolis {}
-        seniondemo {}
+        //seniondemo {}
         tsawwassenmills {}
         vaughanmills {}
         referencemall {}
