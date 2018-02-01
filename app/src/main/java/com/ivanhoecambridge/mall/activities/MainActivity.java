@@ -119,6 +119,8 @@ import com.ivanhoecambridge.mall.rating.RatingListener;
 import com.ivanhoecambridge.mall.searchIndex.IndexManager;
 import com.ivanhoecambridge.mall.signup.JanrainRecordManager;
 import com.ivanhoecambridge.mall.user.AccountManager;
+import com.ivanhoecambridge.mall.user.ActivityListener;
+import com.ivanhoecambridge.mall.user.Session;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
 import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
@@ -143,8 +145,8 @@ import static com.ivanhoecambridge.mall.activities.ParkingActivity.PARKING_RESUL
 import static com.ivanhoecambridge.mall.bluedot.BluetoothManager.mDidAskToTurnOnBluetooth;
 import static com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl.mAskForBluetooth;
 
-public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, RatingListener, MarketingCloudManager.NotificationRequestListener{
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, KcpDataListener, MarketingCloudManager.NotificationRequestListener, RatingListener, HomeFragment.UserProfileLikesListener {
+
 
     protected static final String TAG = "MainActivity";
     private final static int WELCOME_MSG_RESET_TIMER_IN_HOUR = 12; //every this hour, it will try to show the welcome msg to help parking
@@ -176,11 +178,18 @@ public class MainActivity extends BaseActivity
     private TextView tvGCUpdateMessage;
 
 
+
     private ImageView       ivDrawerLayoutBg;
     private LinearLayout    llDisplayNameSettings;
     private TextView        tvSignInOrOut;
     private TextView        tvDrawerLayoutAccount;
     private CircleImageView ivDrawerLayoutUser;
+    private ProgressBar pbProfileUpdate;
+    private TextView tvProfileUpdate;
+    private FrameLayout flDeals;
+    private FrameLayout flEvents;
+    private FrameLayout flStores;
+    private FrameLayout flInterests;
 
     private BadgeView badgeDeals;
     private BadgeView badgeEvents;
@@ -192,6 +201,8 @@ public class MainActivity extends BaseActivity
 
     //internal
     private boolean isFirebaseAnalyticsOn;
+
+    private ActivityListener activityListener;
 
     //GEOFENCE
     public GeofenceManager mGeofenceManager;
@@ -206,6 +217,7 @@ public class MainActivity extends BaseActivity
     private MarketingCloudSdk marketingCloud;
     public static MovieManager sMovieManager;
 
+    private SidePanelManagers sidePanelManager;
     private JanrainRecordManager jrRecordManager;
     private Handler uiHandler = new Handler();
 
@@ -415,7 +427,9 @@ public class MainActivity extends BaseActivity
             });
             return;
         } else {
-            if(KcpAccount.getInstance().isTokenAvailable()) HomeFragment.getInstance().initializeHomeData();
+            if(KcpAccount.getInstance().isTokenAvailable()) {
+                HomeFragment.getInstance().initializeHomeData();
+            }
             else initializeAccount();
             DirectoryFragment.getInstance().initializeDirectoryData();
 //            MapFragment.getInstance().initializeMap(); //TODO: cause int com.mappedin.jpct.Texture.getOpenGLID(int) from MappedIn - investigate
@@ -715,24 +729,25 @@ public class MainActivity extends BaseActivity
     // ------------------------------------- END OF MAP FRAGMENT -------------------------------------
 
     private void initializeAccount(){
-        AccountManager accountManager = new AccountManager(this, HeaderFactory.getHeaders(), new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message inputMessage) {
-                switch (inputMessage.arg1) {
-                    case KcpCategoryManager.DOWNLOAD_FAILED:
-                        HomeFragment.getInstance().initializeHomeData();
-                        break;
-                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
-                        HomeFragment.getInstance().initializeHomeData();
-                        break;
-                    default:
-                        super.handleMessage(inputMessage);
-                }
-            }
-        });
+        AccountManager accountManager = new AccountManager(this, HeaderFactory.getHeaders(), newAccountHandler);
         accountManager.downloadUserToken();
-
     }
+
+    private Handler newAccountHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message inputMessage) {
+            switch (inputMessage.arg1) {
+                case KcpCategoryManager.DOWNLOAD_FAILED:
+                    HomeFragment.getInstance().initializeHomeData();
+                    break;
+                case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                    HomeFragment.getInstance().initializeHomeData();
+                    break;
+                default:
+                    super.handleMessage(inputMessage);
+            }
+        }
+    };
 
     /**
      * Checks for the <em>amenities.json</em> file based on the locale. If the locale file does not exist for that mall, it will default to the english file.
@@ -797,6 +812,14 @@ public class MainActivity extends BaseActivity
 
 
     private void setUpLeftSidePanel(){
+        pbProfileUpdate = findViewById(R.id.pbProfileFavourites);
+        tvProfileUpdate = findViewById(R.id.tvProfileUpdating);
+
+        flDeals = findViewById(R.id.flDeals);
+        flEvents = findViewById(R.id.flEvents);
+        flStores = findViewById(R.id.flStores);
+        flInterests = findViewById(R.id.flInterests);
+
         pbGCUpdate = findViewById(R.id.pbGCUpdate);
         tvGCUpdateMessage = findViewById(R.id.tvGCUpdateMessage);
         ivDrawerLayoutBg = (ImageView) findViewById(R.id.ivDrawerLayoutBg);
@@ -964,7 +987,7 @@ public class MainActivity extends BaseActivity
         });
 
         //SIDE PANEL MANAGER
-        SidePanelManagers sidePanelManagers = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
+        sidePanelManager = new SidePanelManagers(this, badgeDeals, badgeEvents, badgeStores, badgeInterests);
 
         //version
         TextView tvVersionNumber = (TextView) findViewById(R.id.tvVersionNumber);
@@ -1442,6 +1465,10 @@ public class MainActivity extends BaseActivity
         showSnackBar(msg, action, 0, onClickListener);
     }
 
+    private void showSnackBarError(int errorResource) {
+        showSnackBar(errorResource, 0, 0, null);
+    }
+
     private void animateHamburgerToArrow() {
         ValueAnimator anim = ValueAnimator.ofFloat(0f, 1f);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -1562,8 +1589,8 @@ public class MainActivity extends BaseActivity
             case R.id.home:
                 break;
             case R.id.action_test:
-                GiftCardManager.getInstance(this).fakeReduce();
-                // setActiveMall(true, !mActiveMall); //enable to toggle geofence for testing
+                GiftCardManager.getInstance(this).injectLegacyGiftCard(this);
+                GiftCardManager.migrateLegacyGiftCards(this, jrRecordManager.getUserId());
                 break;
             case R.id.action_geofence_test:
                 mGeofenceManager.setGeofence(true);
@@ -1657,6 +1684,33 @@ public class MainActivity extends BaseActivity
     }
 
 
+    @Override
+    public void onProfileDataUpdated() {
+        Session.getInstance(this).setSessionSynced(true);
+        sidePanelManager.updateFavourites(SidePanelManagers.BADGE_DEALS, FavouriteManager.getInstance(this).getDealFavSize());
+        sidePanelManager.updateFavourites(SidePanelManagers.BADGE_EVENTS, FavouriteManager.getInstance(this).getEventAnnouncementFavSize());
+        sidePanelManager.updateFavourites(SidePanelManagers.BADGE_STORES, FavouriteManager.getInstance(this).getStoreFavSize());
+        sidePanelManager.updateFavourites(SidePanelManagers.BADGE_INTERESTS, FavouriteManager.getInstance(this).getInterestFavSize());
+    }
+
+    @Override
+    public void setProfileProgressIndicator(boolean isShowing) {
+        View[] profileFavourites = {flDeals, flEvents, flStores, flInterests};
+           setVisibility(pbProfileUpdate, isShowing);
+           setVisibility(tvProfileUpdate, isShowing);
+           setMultiVisibility(profileFavourites, !isShowing);
+    }
+
+    private void setVisibility(View view, boolean isVisible) {
+        view.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+    }
+
+    private void setMultiVisibility(View[] views, boolean isVisible) {
+        for (View v : views) {
+            setVisibility(v, isVisible);
+        }
+    }
+
     public interface RefreshListener {
         void onRefresh(int msg);
     }
@@ -1719,7 +1773,7 @@ public class MainActivity extends BaseActivity
                 if (resultCode == Activity.RESULT_OK) {
                     HomeFragment.getInstance().downloadNewsAndDeal();
                 } else {
-
+                    showSnackBarError(R.string.warning_user_profile_update_failed);
                 }
             } else if (requestCode == Constants.REQUEST_CODE_MY_PAGE_TYPE) {
                 if(data == null) {
@@ -1831,6 +1885,9 @@ public class MainActivity extends BaseActivity
         if(mGeofenceManager != null && mGeofenceManager.getGoogleApiClient() != null) {
             mGeofenceManager.getGoogleApiClient().disconnect();
         }
+        if (activityListener != null) {
+            activityListener.onActivityStopped();
+        }
     }
 
     @Override
@@ -1850,7 +1907,11 @@ public class MainActivity extends BaseActivity
     private void loadUserDetails() {
         if (Jump.getSignedInUser() != null) {
             jrRecordManager = new JanrainRecordManager(this);
-            if (jrRecordManager.isUserSignedIn()) {
+            if (jrRecordManager.isUserSignedIn() && Session.isInitialized()) {
+                if (activityListener == null) {
+                    activityListener = Session.getInstance(this);
+                }
+                Session.getInstance(this).refreshUserInSession(this);
                 toggleUserSignIn(true);
             }
         }
@@ -1878,6 +1939,16 @@ public class MainActivity extends BaseActivity
         updateUserViews(isSignedIn);
 
         KcpUtility.saveToSharedPreferences(this, JanrainRecordManager.KEY_USER_SIGNED_IN, isSignedIn);
+        if (isSignedIn) {
+            if (!Session.getInstance(this).isSessionSynced()) {
+                HomeFragment.getInstance().downloadUserData();
+            }
+            GiftCardManager.loadGiftCardsForSingleUserById(jrRecordManager.getUserId());
+        } else {
+            setProfileProgressIndicator(true);
+            Session.getInstance(this).requestSignOut(this, newAccountHandler);
+        }
+        mGiftCardRecyclerViewAdapter.updateData();
 
     }
 

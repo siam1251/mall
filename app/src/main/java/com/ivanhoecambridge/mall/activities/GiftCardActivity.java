@@ -66,6 +66,7 @@ public class GiftCardActivity extends BaseActivity implements GiftCardManager.Gi
     private GiftCardManager gcManager;
     private GiftCard        giftCard;
     private boolean         isUserSignedIn;
+    private String uid;
 
 
     private final String TAG = getClass().getSimpleName();
@@ -95,7 +96,8 @@ public class GiftCardActivity extends BaseActivity implements GiftCardManager.Gi
 
 
     private void initializeView() {
-        isUserSignedIn = checkUserSignedIn();
+        uid = getSignedInUser();
+        isUserSignedIn = (uid != null);
         tvSaveCardBalance.setText(getString(isUserSignedIn ? R.string.gc_save_card_balance : R.string.gc_sign_up_save_card_balance));
 
         gcManager = new GiftCardManager(this, new Handler(Looper.getMainLooper()) {
@@ -194,9 +196,10 @@ public class GiftCardActivity extends BaseActivity implements GiftCardManager.Gi
         }
     }
 
-    private boolean checkUserSignedIn() {
-        return KcpUtility.loadFromSharedPreferences(this, JanrainRecordManager.KEY_USER_SIGNED_IN, false);
+    private String getSignedInUser() {
+        return KcpUtility.loadFromCache(this, JanrainRecordManager.KEY_USER_ID, null);
     }
+
 
     private void checkCardBalance() {
         setProgressIndicator(true);
@@ -208,7 +211,7 @@ public class GiftCardActivity extends BaseActivity implements GiftCardManager.Gi
     @OnClick(R.id.tvSaveCardBalance)
     public void onSaveCardBalance() {
         if (isUserSignedIn) {
-            gcManager.saveCardToAccount(giftCard);
+            gcManager.saveCardToAccount(uid, giftCard);
         } else {
            startSignUpActivity(giftCard);
         }

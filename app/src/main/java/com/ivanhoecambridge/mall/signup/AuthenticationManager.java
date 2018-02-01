@@ -1,14 +1,15 @@
 package com.ivanhoecambridge.mall.signup;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
+import com.ivanhoecambridge.mall.user.AccountManager;
 import com.janrain.android.Jump;
-import com.janrain.android.engage.JREngage;
 import com.janrain.android.engage.session.JRSession;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,12 +19,16 @@ import org.json.JSONObject;
  * Created by petar on 2017-09-01.
  */
 
-public class AuthenticationManager implements Jump.SignInResultHandler {
+public class AuthenticationManager implements Jump.SignInResultHandler, AccountManager.KcpAccountMergeListener {
 
     private final String TAG = "AuthenticationManager";
-    private String provider;
-    private String errorRawReason;
+    private Context                       context;
+    private String                        provider;
+    private String                        errorRawReason;
     private onJanrainAuthenticateListener onJanrainAuthenticateListener;
+    private String uuid;
+
+
 
     public enum ERROR_REASON {CANCELLED, INVALID_CREDENTIALS, INVALID_CREDENTIALS_SIGNIN, SOCIAL_ONLY, INVALID_FORM_INPUT, UNKNOWN}
 
@@ -61,11 +66,11 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
         void onAuthenticateFailure(ERROR_REASON errorReason, String errorRawReason, String provider);
     }
 
-    public AuthenticationManager(onJanrainAuthenticateListener onJanrainAuthenticateListener, Handler socketTimeHandler) {
+    public AuthenticationManager(Context context, onJanrainAuthenticateListener onJanrainAuthenticateListener, Handler socketTimeHandler) {
+        this.context = context;
         this.onJanrainAuthenticateListener = onJanrainAuthenticateListener;
         this.socketTimeHandler = socketTimeHandler;
     }
-
 
     /**
      * Sets the socket timeout duration. Default is 1 minute.
@@ -116,7 +121,8 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
 
     @Override
     public void onSuccess() {
-        onJanrainAuthenticateListener.onAuthenticateSuccess();
+        updateUUID();
+        mergeToKcpAccount();
     }
 
     @Override
@@ -222,4 +228,38 @@ public class AuthenticationManager implements Jump.SignInResultHandler {
     public boolean isProviderEnabled(String provider) {
         return JRSession.getInstance().getProviderByName(provider) != null;
     }
+
+    private void updateUUID() {
+        try {
+            uuid = Jump.getSignedInUser().getString("uuid");
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+    private void mergeToKcpAccount() {
+        AccountManager accountManager = null;
+        if (context != null) {
+            accountManager = new AccountManager(context);
+        }
+        if (accountManager == null || uuid == null) {
+            onJanrainAuthenticateListener.onAuthenticateFailure(ERROR_REASON.UNKNOWN, null, provider);
+        } else {
+            accountManager.updateUserTokenWithJanrainId(uuid, this);
+        }
+
+    }
+
+    @Override
+    public void onAccountMergeSuccess() {
+        KcpUtility.cacheToPreferences(context, JanrainRecordManager.KEY_USER_ID, uuid);
+        onJanrainAuthenticateListener.onAuthenticateSuccess();
+    }
+
+    @Override
+    public void onAccountMergeFailed(int errorCode, String error) {
+        Log.i(TAG, errorCode + ": " + error);
+        onJanrainAuthenticateListener.onAuthenticateFailure(ERROR_REASON.UNKNOWN, null, provider);
+    }
+
 }

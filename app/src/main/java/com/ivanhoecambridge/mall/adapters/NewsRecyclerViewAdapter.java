@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -500,6 +501,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter {
         } else if (getItemViewType(position) == KcpContentTypeFactory.ITEM_TYPE_EVENT) {
             final EventViewHolder eventHolder = (EventViewHolder) holder;
             mEventRecyclerViewAdapter = new EventRecyclerViewAdapter(mContext, mEvents, false, mFavouriteInterface);
+            ViewCompat.setNestedScrollingEnabled(eventHolder.rvEventChild, false);
             eventHolder.rvEventChild.setAdapter(mEventRecyclerViewAdapter);
             eventHolder.rvEventChild.setNestedScrollingEnabled(false);
             eventHolder.mView.setOnClickListener(new View.OnClickListener() {

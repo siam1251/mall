@@ -22,10 +22,12 @@ public class MultiLike {
             likeArray.add(likeMap);
         }
 
-        for (String value : unlikedstores) {
-            HashMap<String, String> unlikeMap = new HashMap<String, String>();
-            unlikeMap.put("like_link", value);
-            unlikeArray.add(unlikeMap);
+        if (unlikedstores != null) {
+            for (String value : unlikedstores) {
+                HashMap<String, String> unlikeMap = new HashMap<String, String>();
+                unlikeMap.put("like_link", value);
+                unlikeArray.add(unlikeMap);
+            }
         }
 
         multiLikeMap.put("like", likeArray);

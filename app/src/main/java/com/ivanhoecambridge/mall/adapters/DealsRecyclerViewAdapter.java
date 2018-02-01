@@ -22,19 +22,17 @@ import com.ivanhoecambridge.kcpandroidsdk.constant.KcpConstants;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
-import com.ivanhoecambridge.mall.analytics.Analytics;
-import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.activities.DetailActivity;
 import com.ivanhoecambridge.mall.activities.InterestedCategoryActivity;
-import com.ivanhoecambridge.mall.factory.GlideFactory;
+import com.ivanhoecambridge.mall.analytics.Analytics;
+import com.ivanhoecambridge.mall.constants.Constants;
 import com.ivanhoecambridge.mall.factory.KcpContentTypeFactory;
 import com.ivanhoecambridge.mall.fragments.HomeFragment;
 import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
-import com.ivanhoecambridge.mall.views.KCPSetRatioImageView;
-import com.ivanhoecambridge.mall.views.RecyclerViewFooter;
 import com.ivanhoecambridge.mall.managers.FavouriteManager;
 import com.ivanhoecambridge.mall.utility.Utility;
 import com.ivanhoecambridge.mall.views.ActivityAnimation;
+import com.ivanhoecambridge.mall.views.RecyclerViewFooter;
 
 import java.util.ArrayList;
 
@@ -103,6 +101,15 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter {
         }
 
         notifyDataSetChanged();
+    }
+
+    public void resetDealsData() {
+        if (mKcpContentPagesOtherDeals != null) {
+            mKcpContentPagesOtherDeals.clear();
+        }
+        if (mKcpContentPagesRecommendedDeals != null) {
+            mKcpContentPagesRecommendedDeals.clear();
+        }
     }
 
     public void updateRecommendedDealData(ArrayList<KcpContentPage> recommendedDeals) {

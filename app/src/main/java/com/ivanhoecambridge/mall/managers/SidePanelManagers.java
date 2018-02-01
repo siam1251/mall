@@ -14,6 +14,10 @@ public class SidePanelManagers {
     private BadgeView badgeEvents;
     private BadgeView badgeStores;
     private BadgeView badgeInterests;
+    public final static int BADGE_DEALS = 1;
+    public final static int BADGE_EVENTS = 2;
+    public final static int BADGE_STORES = 3;
+    public final static int BADGE_INTERESTS = 4;
 
     public SidePanelManagers(final Context context, BadgeView badgeDeals, BadgeView badgeEvents, BadgeView badgeStores, BadgeView badgeInterests){
         this.badgeDeals = badgeDeals;
@@ -40,6 +44,35 @@ public class SidePanelManagers {
                 SidePanelManagers.this.badgeInterests.setBadgeText(FavouriteManager.getInstance(context).getInterestFavSize());
             }
         });
+    }
+
+    public void updateInterests(int size) {
+        badgeInterests.setBadgeText(size);
+    }
+
+    public void updateDeals(int size) {
+        badgeDeals.setBadgeText(size);
+    }
+
+    public void updateStores(int size) {
+        badgeStores.setBadgeText(size);
+    }
+
+    public void updateFavourites(int favouriteType, int favouriteSize) {
+        switch (favouriteType) {
+            case BADGE_DEALS:
+                badgeDeals.setBadgeText(favouriteSize);
+                break;
+            case BADGE_EVENTS:
+                badgeEvents.setBadgeText(favouriteSize);
+                break;
+            case BADGE_STORES:
+                badgeStores.setBadgeText(favouriteSize);
+                break;
+            case BADGE_INTERESTS:
+                badgeInterests.setBadgeText(favouriteSize);
+                break;
+        }
     }
 
     public interface FavouriteListener {

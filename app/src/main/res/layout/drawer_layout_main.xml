@@ -139,6 +139,25 @@
                 android:textSize="16dp"
                 app:fontFamily="@string/fontFamily_roboto_light" />
 
+            <ProgressBar
+                android:theme="@style/ProgressBarStyle"
+                android:id="@+id/pbProfileFavourites"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"/>
+
+            <com.ivanhoecambridge.mall.views.CustomFontView.CustomFontTextView
+                android:id="@+id/tvProfileUpdating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/drawer_profile_updating"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                app:fontFamily="@string/fontFamily_roboto_light"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"/>
+
             <FrameLayout
                 android:id="@+id/flDeals"
                 style="@style/DrawerLayoutFavouriteItemsFrameLayout">

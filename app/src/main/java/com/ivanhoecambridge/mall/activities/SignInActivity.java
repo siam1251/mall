@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.transition.Scene;
 import android.support.transition.TransitionManager;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -47,6 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -130,7 +130,7 @@ public class SignInActivity extends BaseActivity implements FormFillInterface, B
 
         initializeView();
         validateView();
-        authenticationManager = new AuthenticationManager(this, new Handler(Looper.getMainLooper()));
+        authenticationManager = new AuthenticationManager(this, this, new Handler(Looper.getMainLooper()));
 
     }
 

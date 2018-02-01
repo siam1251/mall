@@ -87,6 +87,7 @@
 
     <string name="warning_download_completed">Download completed</string>
     <string name="warning_download_failed">Les données n\'ont pu être téléchargées</string>
+    <string name="warning_user_profile_update_failed">impossible de mettre à jour votre profil.</string>
     <string name="warning_no_internet_connection">Aucune connexion internet</string>
     <string name="warning_retry">Réessayer</string>
     <string name="warning_empty_news">Aucune nouvelle ou annonce</string>
@@ -179,6 +180,7 @@
     <string name="drawer_sign_in">Se connecter</string>
     <!-- Sign out from drawer is temporary -->
     <string name="drawer_sign_out">Se déconnecter</string>
+    <string name="drawer_profile_updating">Mise à jour de votre profil&#8230;</string>
 
     <string name="drawer_todays_deals">Offres du jour</string>
     <string name="drawer_todays_events">Événement du jour</string>

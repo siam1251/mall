@@ -6,6 +6,9 @@ import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 
 import java.util.Arrays;
+import java.util.HashMap;
+
+import factory.HeaderFactory;
 
 public class Constants {
     public final static boolean IS_APP_IN_PRODUCTION = BuildConfig.IS_APP_IN_PRODUCTION;
@@ -20,6 +23,7 @@ public class Constants {
     public enum DetailType {DEAL, STORE}
 
     public final static String KEY_BUNDLE_DEAL_TYPE = "key_bundle_deal_type";
+    public final static String ORG = "icmp";
 
 
     //HEADER
@@ -163,6 +167,17 @@ public class Constants {
         } else {
             HEADER_VALUE_DATAHUB_LOCALE = HEADER_VALUE_LOCALE_DEFAULT;
         }
+    }
+
+    /**
+     * Utility method to update the authorization token in the HeaderFactory for each
+     * respective flavour.
+     * @param token Authorization token.
+     */
+    public static void updateHeadersAuthorizationToken(String token) {
+        HashMap<String, String> headers = HeaderFactory.getHeaders();
+        if (headers == null) return;
+        headers.put(HEADER_KEY_AUTHORIZATION, token);
     }
 
 }

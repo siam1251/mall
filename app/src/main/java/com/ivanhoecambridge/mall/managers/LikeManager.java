@@ -3,19 +3,17 @@ package com.ivanhoecambridge.mall.managers;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
-import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
-import com.ivanhoecambridge.mall.R;
-import factory.HeaderFactory;
 import com.ivanhoecambridge.mall.models.MultiLike;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import factory.HeaderFactory;
 
 /**
  * Created by Kay on 2016-10-21.
@@ -113,7 +111,7 @@ public class LikeManager {
 
     public synchronized void postLikeListToServer(Handler handler){
         KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, new HeaderFactory().getHeaders(), new LikeListHandler(handler));
-        kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch());
+        kcpCategoryManager.postMultiLike(getDeltaMultiLikeBatch());
     }
 
     public class LikeListHandler extends Handler {

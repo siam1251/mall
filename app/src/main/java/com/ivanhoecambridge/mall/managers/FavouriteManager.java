@@ -2,27 +2,23 @@ package com.ivanhoecambridge.mall.managers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.ivanhoecambridge.kcpandroidsdk.managers.KcpCategoryManager;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpCategories;
 import com.ivanhoecambridge.kcpandroidsdk.models.KcpContentPage;
+import com.ivanhoecambridge.kcpandroidsdk.models.KcpPlaces;
 import com.ivanhoecambridge.kcpandroidsdk.utils.KcpUtility;
 import com.ivanhoecambridge.mall.R;
-import factory.HeaderFactory;
-
-import com.ivanhoecambridge.mall.activities.InterestedStoreActivity;
-import com.ivanhoecambridge.mall.activities.MainActivity;
-import com.ivanhoecambridge.mall.constants.Constants;
+import com.ivanhoecambridge.mall.interfaces.CompletionListener;
 import com.ivanhoecambridge.mall.interfaces.FavouriteInterface;
 import com.ivanhoecambridge.mall.models.MultiLike;
 
@@ -33,12 +29,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
+import factory.HeaderFactory;
+
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * Created by Kay on 2016-07-05.
  */
 public class FavouriteManager {
+
+    private final static String TAG = "FavouriteManager";
 
     /**
      * KEEP IN MIND TO REDUCE THE CALLS (SAVE/LOAD) TO SHAREDPREF TO MINIMUM THROUGH THIS MANAGER
@@ -93,6 +93,25 @@ public class FavouriteManager {
 
         mFavsSynced = KcpUtility.loadGsonArrayListString(mContext, KEY_GSON_FAV_GENERAL);
         mUnfavsSynced = KcpUtility.loadGsonArrayListString(mContext, KEY_GSON_UNFAV_GENERAL);
+    }
+
+    public void resetFavourites(Context context, CompletionListener completionListener) {
+        mDealFavs.clear();
+        mEventFavs.clear();
+        mStoreFavs.clear();
+        mCatFavs.clear();
+        clearFavouritesFromCache(context, completionListener);
+    }
+
+    private void clearFavouritesFromCache(final Context context, final CompletionListener completionListener) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                KcpUtility.saveGson(context, KEY_GSON_FAV_STORE, mStoreFavs);
+                KcpUtility.saveGson(context, KEY_GSON_FAV_CAT, mCatFavs);
+                completionListener.onComplete(true);
+            }
+        });
     }
 
     public SidePanelManagers.FavouriteListener mFavouriteListener;
@@ -230,7 +249,7 @@ public class FavouriteManager {
     }
 
     public HashMap<String, KcpCategories> getFavCatMap(){
-        return new HashMap<String, KcpCategories>(mCatFavs);
+        return new HashMap<>(mCatFavs);
     }
 
     public HashMap<String, KcpContentPage> getFavStoreMap(){
@@ -253,6 +272,44 @@ public class FavouriteManager {
         return mCatFavs.size();
     }
 
+    /**
+     * Updates the user favourite categories/interests from the returned KCP categories list.
+     * @param categories KCP Categories list.
+     */
+    public void updateUserFingerprintInterests(ArrayList<KcpCategories> categories) {
+        HashMap<String, KcpCategories> likeMap = new HashMap<>();
+        for (KcpCategories category : categories) {
+            likeMap.put(category.getLikeLink(), category);
+        }
+        updateFavCat(likeMap, null, false, null);
+    }
+
+    public void updateUserDeals(ArrayList<KcpContentPage> contentPages) {
+        listToHashMap(mDealFavs, contentPages);
+    }
+
+    public void updateUserEvents(ArrayList<KcpContentPage> contentPages) {
+        listToHashMap(mEventFavs, contentPages);
+    }
+
+    public void updateUserPlaces(ArrayList<KcpPlaces> userPlaces, CompletionListener completionListener) {
+        updateFavouriteStores(userPlaces, completionListener);
+    }
+
+    private void listToHashMap(HashMap<String, KcpContentPage> userContentPageMap, ArrayList<KcpContentPage> userContentPages) {
+        for (KcpContentPage content : userContentPages) {
+            userContentPageMap.put(content.getLikeLink(), content);
+        }
+
+    }
+
+    /**
+     * Updates the user favourite categories locally on the device with the option to post changes to the server.
+     * @param likeList User likes list
+     * @param unlikeList User non-likes list
+     * @param postLikeListToServer Set as true to post changes to server, false to keep it local.
+     * @param handler Handler object to handle ui changes
+     */
     public synchronized void updateFavCat(final HashMap<String, KcpCategories> likeList, HashMap<String, KcpCategories> unlikeList, boolean postLikeListToServer, @Nullable Handler handler){
         mCatFavs = likeList;
         AsyncTask.execute(new Runnable() {
@@ -262,8 +319,8 @@ public class FavouriteManager {
             }
         });
         if(postLikeListToServer) {
-            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, new HeaderFactory().getHeaders(), new LikeListHandler(handler));
-            kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch( getLikeListFromMap(likeList) , getLikeListFromMap(unlikeList)));
+            KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, HeaderFactory.getHeaders(), new LikeListHandler(handler));
+            kcpCategoryManager.postMultiLike(getDeltaMultiLikeBatch( getLikeListFromMap(likeList) , getLikeListFromMap(unlikeList)));
         }
     }
 
@@ -277,8 +334,25 @@ public class FavouriteManager {
         });
         if(postLikeListToServer) {
             KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(mContext, 0, new HeaderFactory().getHeaders(), new LikeListHandler(handler));
-            kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch( getLikeListFromContentPage(likeList) , getLikeListFromContentPage(unlikeList)));
+            kcpCategoryManager.postMultiLike(getDeltaMultiLikeBatch( getLikeListFromContentPage(likeList) , getLikeListFromContentPage(unlikeList)));
         }
+    }
+
+    private void updateFavouriteStores(final ArrayList<KcpPlaces> userPlaces, final CompletionListener completionListener) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, KcpContentPage> userFavouriteStores = new HashMap<>();
+                for (KcpPlaces place : userPlaces) {
+                    KcpContentPage kcpContentPage = new KcpContentPage();
+                    kcpContentPage.setPlaceList(CONTENT_TYPE_STORE, place);
+                    userFavouriteStores.put(place.getLikeLink(), kcpContentPage);
+                }
+                mStoreFavs = userFavouriteStores;
+                KcpUtility.saveGson(mContext, KEY_GSON_FAV_STORE, mStoreFavs);
+                completionListener.onComplete(true);
+            }
+        });
     }
 
     /**
@@ -320,7 +394,7 @@ public class FavouriteManager {
                     }
                 }
             });
-            kcpCategoryManager.postInterestedCategories(getDeltaMultiLikeBatch(favs, unFavs));
+            kcpCategoryManager.postMultiLike(getDeltaMultiLikeBatch(favs, unFavs));
         }
     }
 
@@ -369,6 +443,43 @@ public class FavouriteManager {
 
         }
     }
+
+    private ArrayList<String> collectAllFavourites() {
+        ArrayList<String> deviceFavourites = new ArrayList<>();
+        deviceFavourites.addAll(mDealFavs.keySet());
+        deviceFavourites.addAll(mEventFavs.keySet());
+        deviceFavourites.addAll(mStoreFavs.keySet());
+        deviceFavourites.addAll(mCatFavs.keySet());
+        return deviceFavourites;
+    }
+
+    /**
+     * Updates any likes stored as a local user to the newly signed-in and synced KCP user. This will be called for both:
+     * <ul>
+     *     <li>A newly signed-up user</li>
+     *     <li>An existing user that has just signed in</li>
+     * </ul>
+     * @param context Context object.
+     * @param completionListener Completion listener. Cannot be null, will be used to update the UI and proceed to the next step.
+     */
+    public void updateKCPProfileWithDeviceUser(Context context, @NonNull final CompletionListener completionListener) {
+        KcpCategoryManager kcpCategoryManager = new KcpCategoryManager(context, 0, HeaderFactory.getHeaders(), new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message inputMessage) {
+                switch (inputMessage.arg1) {
+                    case KcpCategoryManager.DOWNLOAD_COMPLETE:
+                        completionListener.onComplete(true);
+                        break;
+                    case KcpCategoryManager.DOWNLOAD_FAILED:
+                        completionListener.onComplete(false);
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        });
+        kcpCategoryManager.postMultiLike(getDeltaMultiLikeBatch(collectAllFavourites(), null));
+    }
+
 
 
 }

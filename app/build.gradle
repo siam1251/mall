@@ -51,13 +51,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "Boolean", "REPORT_CRASH", 'true'
-            buildConfigField "Boolean", "JANRAIN_DEV", 'false'
+            buildConfigField "Boolean", "JANRAIN_PROD", 'true'
             buildConfigField "Boolean", "IS_APP_IN_PRODUCTION", "true"
             debuggable false
             signingConfig signingConfigs.release
         }
         debug {
-            buildConfigField "Boolean", "JANRAIN_DEV", 'true'
+            buildConfigField "Boolean", "JANRAIN_PROD", 'false'
             buildConfigField "Boolean", "REPORT_CRASH", 'false'
             buildConfigField "Boolean", "IS_APP_IN_PRODUCTION", "false"
         }

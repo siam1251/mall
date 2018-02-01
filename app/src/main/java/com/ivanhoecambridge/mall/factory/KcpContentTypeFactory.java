@@ -15,6 +15,7 @@ public class KcpContentTypeFactory {
     public static final String CONTENT_TYPE_TWITTER = "twitter";
     public static final String CONTENT_TYPE_INSTAGRAM = "instagram";
     public static final String CONTENT_TYPE_STORE = "store";
+    public static final String CONTENT_TYPE_PLACES = "places";
     public static final String CONTENT_TYPE_CATEGORY = "category";
     public static final String CONTENT_TYPE_FOOTER = "footer";
     public static final String CONTENT_TYPE_MOVIE = "movie";

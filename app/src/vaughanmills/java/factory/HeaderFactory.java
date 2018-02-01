@@ -42,7 +42,7 @@ public class HeaderFactory {
     }
 
     public static void constructHeader() {
-        mHeaders = new HashMap<String, String>();
+        mHeaders = new HashMap<>();
 
         mHeaders.put(HEADER_KEY_DATAHUB_CATALOG,    HEADER_VALUE_DATAHUB_CATALOG);
         mHeaders.put(HEADER_KEY_DATAHUB_LOCALE,     Constants.HEADER_VALUE_DATAHUB_LOCALE);
@@ -53,6 +53,8 @@ public class HeaderFactory {
         mHeaders.put(HEADER_KEY_CONTENT_TYPE,       Constants.HEADER_VALUE_CONTENT_TYPE);
         mHeaders.put(HEADER_KEY_ACCEPT,             HEADER_VALUE_ACCEPT);
     }
+
+
 
     public static String getClientToken(){
         if(Constants.IS_APP_IN_PRODUCTION) return Constants.HEADER_VALUE_CLIENT_TOKEN_PRODUCTION;
