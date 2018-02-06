@@ -70,6 +70,30 @@
         "Stairs",
         "Escalator"
       ]
+    },
+    {
+      "type":"10",
+      "enabled":false,
+      "title":"Chaises roulantes",
+      "externalIds":[
+        "Wheelchair"
+      ]
+    },
+    {
+      "type":"11",
+      "enabled":false,
+      "title":"Salle d'allaitement",
+      "externalIds":[
+        "nursing-room"
+      ]
+    },
+    {
+      "type":"12",
+      "enabled":false,
+      "title":"Consigne",
+      "externalIds":[
+        "bag-check"
+      ]
     }
   ]
 }
