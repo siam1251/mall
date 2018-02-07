@@ -70,6 +70,31 @@
         "Stairs",
         "Escalator"
       ]
+    },
+    {
+      "type":"10",
+      "enabled":false,
+      "title":"Wheelchair",
+      "externalIds":[
+        "Wheelchair"
+      ]
+    },
+    {
+      "type":"11",
+      "enabled":false,
+      "title":"Nursing Room",
+      "externalIds":[
+        "nursing-room"
+      ]
+    },
+    {
+      "type":"12",
+      "enabled":false,
+      "title":"Bag Check",
+      "externalIds":[
+        "bag-check"
+      ]
     }
+
   ]
 }
