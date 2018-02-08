@@ -22,14 +22,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-    signingConfigs {
-        release {
-            keyAlias 'Android'
-            keyPassword 'KineticCafe16'
-            storeFile file('vaughanmills.jks')
-            storePassword 'KineticCafe16'
-        }
-    }
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
     defaultConfig {
@@ -54,13 +46,15 @@ android {
             buildConfigField "Boolean", "JANRAIN_PROD", 'true'
             buildConfigField "Boolean", "IS_APP_IN_PRODUCTION", "true"
             debuggable false
-            signingConfig signingConfigs.release
         }
         debug {
             buildConfigField "Boolean", "JANRAIN_PROD", 'false'
             buildConfigField "Boolean", "REPORT_CRASH", 'false'
             buildConfigField "Boolean", "IS_APP_IN_PRODUCTION", "false"
         }
+    }
+    lintOptions {
+        abortOnError false
     }
 
     productFlavors.whenObjectAdded { flavor ->
@@ -82,7 +76,6 @@ android {
             flavor.buildConfigField 'Boolean', fieldWhiteFav, flavorData.hasWhiteFav
             flavor.buildConfigField 'Boolean', fieldNearestParkingImg, flavorData.hasNearestParkingImg
             flavor.buildConfigField 'Boolean', fieldBlueDot, flavorData.hasBlueDot
-
         }
 
     }
@@ -92,7 +85,7 @@ android {
         crossironmills {}
         eatoncentre {}
         metropolis {}
-        seniondemo {}
+        //seniondemo {}
         tsawwassenmills {}
         vaughanmills {}
         referencemall {}
