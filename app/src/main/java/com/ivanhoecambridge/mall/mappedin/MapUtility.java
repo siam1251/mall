@@ -32,11 +32,11 @@ public class MapUtility {
         double nearestDistance = 0;
         for(int i = 0; i < navigatableCoords.size(); i++) {
             Coordinate coordinate = navigatableCoords.get(i);
-            double distance = coordinate.metersFrom(store);
-            if(nearestDistance == 0 || nearestDistance > distance) {
-                position = i;
-                nearestDistance = distance;
-            }
+            //MAP-REPLACE  double distance = coordinate.metersFrom(store);
+//            if(nearestDistance == 0 || nearestDistance > distance) {
+//                position = i;
+//                nearestDistance = distance;
+//            }
         }
         return position;
     }

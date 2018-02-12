@@ -473,4 +473,7 @@
     <string name="notif_dialog_action_no">Don\'t allow</string>
     <string name="notification_description">Configure deals and recommendation notifications.</string>
 
+    <!-- MAPPEDIN -->
+    <string name="mappedin_invalid_selection">Selected location is currently unavailable.</string>
+
 </resources>

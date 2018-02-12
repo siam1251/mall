@@ -12,6 +12,7 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -84,6 +85,7 @@ import com.ivanhoecambridge.mall.views.ThemeColorImageView;
 import com.mappedin.jpct.Logger;
 import com.mappedin.sdk.Coordinate;
 import com.mappedin.sdk.Directions;
+import com.mappedin.sdk.Focusable;
 import com.mappedin.sdk.Instruction;
 import com.mappedin.sdk.Location;
 import com.mappedin.sdk.LocationGenerator;
@@ -180,7 +182,24 @@ public class MapFragment extends BaseFragment
     private final int PIN_VORTEX_IMAGE_SIZE_DP  = 24; //ends up 64 px
     private final int PIN_BLUEDOT               = 20; //ends up 64 px
     private final int PIN_PARKING_IMAGE_SIZE_DP = 30; //ends up 64 px
+    private final float PATH_WIDTH = 1.5f;
+    private final float PATH_HEIGHT = 1.5f;
+    private final float DEFAULT_TILT = (float) Math.PI / 5;
+    private final static int START_LOCATION = 1;
+    private final static int DESTINATION_LOCATION = 2;
 
+    /**
+     * Flag to check if an error toast is currently scheduled to be shown.
+     * For some reason some Polygons although existing on the map, are not actually valid.
+     */
+    private boolean isShowingErrorToast = false;
+    /**
+     * Flag to notify that an error toast is actually a false positive and should be ignored.
+     * This occurs because didTapPolygon() can be called multiple times when selecting one polygon
+     * as a result it can cause the locations size check to return null or 0 when first called
+     * and a valid location on subsequent calls leading to a false positive.
+     */
+    private boolean isFalsePositive = false;
 
     private final int             CAMERA_ZOOM_LEVEL_NEAREST_PARKING = 90; //
     private final int             CAMERA_ZOOM_LEVEL_DEFAULT         = 5; //BIGGER - farther, SMALLER - closer
@@ -297,8 +316,9 @@ public class MapFragment extends BaseFragment
                     }
                 }));
                 flCompass.setVisibility(View.INVISIBLE);
-                mapView.getCamera().setPositionTo(0, 0);
-                mapView.getCamera().setRotationTo(DEFAULT_PITCH, 0);
+
+               // mapView.getCamera().setPositionTo(0, 0);
+               // mapView.getCamera().setRotationTo(DEFAULT_PITCH, 0);
             }
         });
 
@@ -611,7 +631,7 @@ public class MapFragment extends BaseFragment
                 }
             };
             LocationGenerator[] locationGenerators = {tenant, amenity, elevators, escalatorStairs};
-            mappedIn.getVenue(activeVenue, accessibleDirections, locationGenerators, new GetVenueCallback());
+            mappedIn.getVenue(activeVenue, locationGenerators, new GetVenueCallback());
 
         }
 
@@ -850,8 +870,9 @@ public class MapFragment extends BaseFragment
     }
 
     public void showStoreOnTheMapFromDetailActivity(Polygon polygon) {
+        float tilt = (float) Math.PI / 5;
         try {
-            mapView.getCamera().focusOn(polygon);
+            focusOn(polygon, 0, tilt);
 
             destinationPolygon = null;
             showDirectionCard(false, null, 0, null, null, null);
@@ -861,7 +882,7 @@ public class MapFragment extends BaseFragment
             e.printStackTrace();
         }
         MapFragment.getInstance().didTapPolygon(polygon);
-        zoomInOut();
+        tiltCamera(polygon, tilt);
     }
 
     private void setIsMapFullyLoaded(boolean isMapFullyLoaded) {
@@ -869,6 +890,10 @@ public class MapFragment extends BaseFragment
         if (isMapFullyLoaded) {
             highlightDeferredFromStore();
         }
+    }
+
+    private void focusOn(Focusable focusItem, float heading, float tilt) {
+        mapView.orbit(focusItem, heading, tilt, 0);
     }
 
     private void drawPath() {
@@ -902,9 +927,8 @@ public class MapFragment extends BaseFragment
         }
 
         if (directions != null) {
-
-            path = new Path(directions.getPath(), 1.5f, 1.5f, ContextCompat.getColor(getContext(), R.color.map_wayfinding_path));
-            mapView.addPath(path);
+            path = new Path(directions.getPath(), 1.5f, 1.5f, ContextCompat.getColor(getContext(), R.color.map_wayfinding_path), 0);
+            mapView.addElement(path);
             setMapLevelsInPath(directions.getPath());
         }
 
@@ -937,14 +961,213 @@ public class MapFragment extends BaseFragment
         showInstruction(maps[mCurrentLevelIndex].getAltitude());
     }
 
+    private void filterSearchMode(Polygon polygon, SearchMode searchMode) {
+        if (searchMode.equals(SearchMode.STORE) || searchMode.equals(SearchMode.ROUTE_DESTINATION)) {
+            updateDestinationPolygon(polygon);
+        } else if (searchMode.equals(SearchMode.ROUTE_START)) {
+            updateStartPolygon(polygon);
+        }
+    }
+
+    private void updateStartPolygon(Polygon startPolygon) {
+        this.startPolygon = startPolygon;
+    }
+
+    private void updateDestinationPolygon(Polygon destinationPolygon) {
+        if (getLocationSizeForPolygon(destinationPolygon) > 0) {
+            this.destinationPolygon = destinationPolygon;
+        }
+    }
+
+    private void clearDestinationPolygon() {
+        this.destinationPolygon = null;
+    }
+
+
+    private boolean setupForNavigation(Polygon polygon) {
+        if (path != null) {
+            didTapNothing();
+            return false;
+        }
+
+        Directions directions = getDirections(getLocation(START_LOCATION), getLocation(DESTINATION_LOCATION),
+                getDestinationNavigatable(), getStartPolygon());
+        if (directions == null) {
+            return false;
+        }
+        path = createPath(directions.getPath());
+        mapView.addElement(path);
+        frameBetweenPolygons(path, getStartPolygon(), getDestinationPolygon());
+
+
+        Coordinate destinationPolygonCoords = null;
+        if (getDestinationNavigatable() instanceof Polygon) {
+            highlightPolygon(getDestinationPolygon(), R.color.colorAccent);
+            destinationPolygonCoords = getDestinationPolygon().getAnchor();
+        } else if (getDestinationNavigatable() instanceof Coordinate) {
+            clearHighlightedColours();
+            LocationLabelClicker locationLabelClicker = mLocationClickersMap.get(getDestinationNavigatable());
+            if (locationLabelClicker != null) {
+                destinationPolygonCoords = (Coordinate) getDestinationNavigatable();
+                locationLabelClicker.highlightThisLabel();
+            }
+        } else {
+            destinationPolygonCoords = getDestinationNavigatable().getNavigatableCoordinates()[0];
+        }
+
+        if (getStartPolygon().getMap().getShortName() != null) {
+            setMapLevel(-50, getStartPolygon().getMap().getShortName(), null);
+        }
+        highlightPolygon(getStartPolygon(), R.color.colorAccent);
+        showDirectionCardNull();
+        dropDestinationPin(destinationPolygonCoords, ContextCompat.getDrawable(getContext(), R.drawable.icn_wayfinding_destination));
+        dropVortexOnThePath(directions.getInstructions());
+        showInstruction(maps[mCurrentLevelIndex].getAltitude());
+
+        return true;
+    }
+
+    private Directions getDirections(Location start, Location destination, Navigatable fromNavigatable, Navigatable toNavigatable) {
+        if (start == null || destination == null) return null;
+        return toNavigatable.directionsFrom(activeVenue, fromNavigatable, start, destination);
+    }
+
+    private Location getLocation(int whichLocation) {
+        Location location = null;
+        switch (whichLocation) {
+            case START_LOCATION:
+                if (getLocationSizeForPolygon(getStartPolygon()) > 0) {
+                    location = getStartPolygon().getLocations()[0];
+                }
+                break;
+            case DESTINATION_LOCATION:
+                default:
+                    if (getLocationSizeForPolygon(getDestinationPolygon()) > 0) {
+                        location = getDestinationPolygon().getLocations()[0];
+                    }
+                    break;
+        }
+        return location;
+    }
+
+    private int getLocationSizeForPolygon(Polygon polygon) {
+        return polygon.getLocations() == null ? 0 : polygon.getLocations().length;
+    }
+
+    void setFalsePositive(boolean isFalsePositive) {
+        this.isFalsePositive = isFalsePositive;
+    }
+
+    void setShowingErrorToast(boolean isShowingErrorToast) {
+        this.isShowingErrorToast = isShowingErrorToast;
+    }
+
     @Override
     public boolean didTapPolygon(Polygon polygon) {
+        setFalsePositive(false);
         deferredPolygon = null;
+        if (!isMapFullyLoaded) {
+            isMapFullyLoaded = true;
+        }
+        boolean stopGoingToNextPolygon = true;
+
+        try {
+            replaceSelectedPinWithRemovedPin();
+
+            if (isDeselection(polygon, mSearchMode)) {
+                setFalsePositive(true);
+                setShowingErrorToast(false);
+                return true;
+            }
+
+            filterSearchMode(polygon, mSearchMode);
+            int polygonLocations = (polygon.getLocations() == null) ? 0 : polygon.getLocations().length;
+            if (polygonLocations == 0) {
+                if (!isShowingErrorToast) {
+                    isShowingErrorToast = true;
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isFalsePositive) {
+                                showErrorAsToast(getString(R.string.mappedin_invalid_selection));
+                                setShowingErrorToast(false);
+                            }
+                        }
+                    }, 100);
+                }
+
+                stopGoingToNextPolygon = false;
+                return false;
+            }
+
+            setFalsePositive(true);
+            setShowingErrorToast(false);
+
+            setFollowMode(FollowMode.NONE);
+
+            if (navigationMode) {
+                stopGoingToNextPolygon = setupForNavigation(polygon);
+            } else {
+                clearHighlightedColours();
+                highlightPolygon(polygon, R.color.colorAccent);
+                if (mSavedParkingPolygon != null && destinationPolygon == mSavedParkingPolygon) {
+                    focusOn(polygon, 0, 0);
+                    tiltCamera(polygon, 0);
+                    showSavedParkingDetail();
+                } else {
+                    showNavigatableDetails(polygon.getLocations()[0]);
+                }
+            }
+        } catch (Exception e) {
+            Log.e("TapPolygon", e.getMessage());
+        }
+        return stopGoingToNextPolygon;
+    }
+
+    private void showErrorAsToast(String error) {
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Checks if the given Polygon is the last selected destination Polygon. (This will be the case if the user tapped on the Polygon)
+     * If the polygons match, then the polygon will be deselected and the return will be true.
+     * @param polygon Polygon to compare against.
+     * @param searchMode SearchMode, will only validate if the SearchMode is SearchMode.STORE
+     * @return true if the given Polygon matches the destination polygon, false otherwise.
+     */
+    private boolean isDeselection(Polygon polygon, SearchMode searchMode) {
+        if (searchMode.equals(SearchMode.STORE) && isPolygonLastSelectedDestination(polygon)
+                && mSavedParkingPolygon != polygon) {
+            clearDestinationPolygon();
+            showDirectionCardNull();
+            deselectPolygon(polygon);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isPolygonLastSelectedDestination(Polygon polygon) {
+        if (getDestinationPolygon() == null || getLocationSizeForPolygon(getDestinationPolygon()) == 0) return false;
+        return getLocationSizeForPolygon(polygon) != 0 &&
+                getDestinationPolygon().getLocations()[0].getName().equals(polygon.getLocations()[0].getName());
+
+    }
+
+    private void deselectPolygon(Polygon polygon) {
+        if (polygon != null) {
+            mapView.resetPolygon(polygon);
+        }
+    }
+
+    public boolean didTapPolygonOld(Polygon polygon) {
+        deferredPolygon = null;
+        boolean stopGoingToNextPolygon = true;
         try {
             if (path != null || polygon == null)
                 return true; //map shouldn't be clicakble when the paths drawn
             if (polygon.getLocations().length == 0) { //TODO: clearHighlightedColours() used to be above this line - polygon.getLocationWithExternalCode().size() was sometimes 0 resulting in skipping highlightPolygon (it returned)
-                return true;
+                stopGoingToNextPolygon = false;
+                return stopGoingToNextPolygon;
             }
             replaceSelectedPinWithRemovedPin();
             //tapping the same polygon should dismiss the detail and remove the highlights
@@ -952,13 +1175,14 @@ public class MapFragment extends BaseFragment
                 destinationPolygon = null;
                 showDirectionCard(false, null, 0, null, null, null);
                 clearHighlightedColours();
-                return true;
+                stopGoingToNextPolygon = true;
             }
 
             if (mSearchMode.equals(SearchMode.STORE)) {
                 destinationPolygon = polygon;
             } else if (mSearchMode.equals(SearchMode.ROUTE_START)) {
                 startPolygon = polygon;
+
             } else if (mSearchMode.equals(SearchMode.ROUTE_DESTINATION)) {
                 destinationPolygon = polygon;
             }
@@ -968,15 +1192,15 @@ public class MapFragment extends BaseFragment
             if (navigationMode) {
                 if (path != null) {
                     didTapNothing();
-                    return true;
+                    stopGoingToNextPolygon = true;
                 }
 
                 if (polygon.getLocations().length == 0) {
-                    return true;
+                    stopGoingToNextPolygon = true;
                 }
 
                 //because only destinationPolygon can either be polygon or location
-                Directions directions = null;
+                Directions directions;
                 Location arriveAtLocation = null;
 
                 if (destinationPolygon instanceof Polygon) {
@@ -990,8 +1214,9 @@ public class MapFragment extends BaseFragment
                 directions = destinationPolygon.directionsFrom(activeVenue, startPolygon, ((Polygon) startPolygon).getLocations()[0], arriveAtLocation); //real use
 
                 if (directions != null) {
-                    path = new Path(directions.getPath(), 1.5f, 1.5f, getResources().getColor(R.color.map_wayfinding_path));
-                    mapView.addPath(path);
+                    path = createPath(directions.getPath());
+                    mapView.addElement(path);
+                    frameBetweenPolygons(path, getStartPolygon(), getDestinationPolygon());
                     setMapLevelsInPath(directions.getPath());
                 }
 
@@ -1021,7 +1246,7 @@ public class MapFragment extends BaseFragment
                 dropVortexOnThePath(directions.getInstructions());
                 showInstruction(maps[mCurrentLevelIndex].getAltitude());
 
-                return true;
+                stopGoingToNextPolygon = true;
             } else {
                 clearHighlightedColours();
                 if (destinationPolygon instanceof Polygon) {
@@ -1029,8 +1254,8 @@ public class MapFragment extends BaseFragment
                     highlightPolygon(destination, R.color.themeColor);
                     try {
                         if (mSavedParkingPolygon != null && destinationPolygon == mSavedParkingPolygon) {
-                            mapView.getCamera().focusOn(polygon);
-                            zoomInOut();
+                            focusOn(polygon, 0 , 0);
+                            tiltCamera(polygon, 0);
                             showSavedParkingDetail();
                         } else {
                             showNavigatableDetails(destination.getLocations()[0]);
@@ -1058,12 +1283,39 @@ public class MapFragment extends BaseFragment
             logger.error(e);
             e.printStackTrace();
         }
-        return true;
+        return stopGoingToNextPolygon;
+    }
+
+    private Path createPath(Coordinate[] pathCoordinates) {
+        return new Path(pathCoordinates, PATH_WIDTH, PATH_HEIGHT, ContextCompat.getColor(getContext(), R.color.map_wayfinding_path), 0);
+    }
+
+    private void frameBetweenPolygons(Path path, Polygon from, Polygon to) {
+        if (path != null && from != null && to != null) {
+            mapView.frame(new Focusable[] {path, to, from}, 0, DEFAULT_TILT, 0);
+        }
+
+    }
+
+    private Polygon getStartPolygon() {
+        return (Polygon) startPolygon;
+    }
+
+    private Polygon getDestinationPolygon() {
+        if (destinationPolygon instanceof Coordinate) return null;
+        return (Polygon) destinationPolygon;
+    }
+
+    private Navigatable getStartNavigatable() {
+        return startPolygon;
+    }
+
+    private Navigatable getDestinationNavigatable() {
+        return destinationPolygon;
     }
 
     private void dropVortexOnThePath(List<Instruction> instructions) {
         for (Instruction instruction : instructions) {
-            logger.debug("type : " + instruction.atLocation.getType() + " : " + instruction.instruction);
             if (VortexPin.isVortex(instruction)) {
                 VortexPin vortexPin = new VortexPin(getActivity(), instruction);
                 mVortexPins.add(vortexPin);
@@ -1076,7 +1328,7 @@ public class MapFragment extends BaseFragment
         Overlay2DImage label = new Overlay2DImage(getVortexAndDestinationPinSize(), getVortexAndDestinationPinSize(), vortexPin.getVortexPinDrawable(), getVortexAndDestinationPinSize() / 2, getVortexAndDestinationPinSize() / 2);
         label.setPosition(vortexPin.getVortexCoordinate());
         vortexPin.setVortexPin(new Pin(vortexPin.getVortexCoordinate(), label));
-        mapView.addMarker(label, false);
+        mapView.addElement(label);
     }
 
     private void showInstruction(double elevation) {
@@ -1104,15 +1356,10 @@ public class MapFragment extends BaseFragment
         }
     }
 
-    private void highlightMapArrow() {
-
-    }
 
 
-    private void zoomInOut() {
-        if (mapView.getCamera() != null) {
-            mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_DEFAULT);
-        }
+    private void tiltCamera(Focusable focusItem, float tiltRadians) {
+        mapView.orbit(focusItem, 0, tiltRadians, 0);
     }
 
     private void showSavedParkingDetail() {
@@ -1150,13 +1397,15 @@ public class MapFragment extends BaseFragment
         mMapInPath.clear();
         setLevelImageView(maps);
         if (mDestinationPin != null) {
-            mapView.removeMarker(mDestinationPin.getOverlay2DImage());
+            mapView.removeElement(mDestinationPin.getOverlay2DImage());
             mDestinationPin = null;
         }
 
         if (mVortexPins.size() > 0) {
             for (VortexPin vortexPin : mVortexPins) {
-                mapView.removeMarker(vortexPin.getVortexPin().getOverlay2DImage());
+                if (vortexPin != null && vortexPin.getVortexPin() != null) {
+                    mapView.removeElement(vortexPin.getVortexPin().getOverlay2DImage());
+                }
             }
             mVortexPins.clear();
         }
@@ -1179,13 +1428,15 @@ public class MapFragment extends BaseFragment
             mMapInPath.clear();
             setLevelImageView(maps);
             if (mDestinationPin != null) {
-                mapView.removeMarker(mDestinationPin.getOverlay2DImage());
+                mapView.removeElement(mDestinationPin.getOverlay2DImage());
                 mDestinationPin = null;
             }
 
             if (mVortexPins.size() > 0) {
                 for (VortexPin vortexPin : mVortexPins) {
-                    mapView.removeMarker(vortexPin.getVortexPin().getOverlay2DImage());
+                    if (vortexPin != null && vortexPin.getVortexPin() != null) {
+                        mapView.removeElement(vortexPin.getVortexPin().getOverlay2DImage());
+                    }
                 }
                 mVortexPins.clear();
             }
@@ -1211,6 +1462,11 @@ public class MapFragment extends BaseFragment
         });
     }
 
+    @Override
+    public void manipulatedCamera() {
+
+    }
+
 
     private void setProgressIndicator(boolean toggleVisible) {
         flProgressOverlay.setVisibility(toggleVisible ? View.VISIBLE : View.GONE);
@@ -1224,7 +1480,6 @@ public class MapFragment extends BaseFragment
         if (deferredPolygon != null) {
            isDeferred = true;
            highlightPolygon(deferredPolygon, R.color.themeColor);
-           zoomInOut();
         }
     }
 
@@ -1248,7 +1503,7 @@ public class MapFragment extends BaseFragment
                 public void run() {
                     if (mapView != null) {
                         try {
-                            mapView.setColor(polygon, ContextCompat.getColor(getContext(), color));
+                            setColorOnPolygon(polygon, color);
                         } catch (NullPointerException e) {
                             Log.e(TAG, e.getMessage());
                         }
@@ -1261,10 +1516,19 @@ public class MapFragment extends BaseFragment
 
     }
 
+    private void setColorOnPolygon(Polygon polygon, int color) {
+        if (color <= 0) {
+            mapView.resetPolygon(polygon);
+        } else {
+            mapView.setColor(polygon, ContextCompat.getColor(getContext(), color), 0);
+        }
+
+    }
+
     private void clearHighlightedColours() {
         Set<java.util.Map.Entry<Polygon, Integer>> colours = originalColors.entrySet();
         for (java.util.Map.Entry<Polygon, Integer> pair : colours) {
-            mapView.setColor(pair.getKey(), pair.getValue());
+            setColorOnPolygon(pair.getKey(), pair.getValue());
         }
 
         originalColors.clear();
@@ -1569,7 +1833,7 @@ public class MapFragment extends BaseFragment
     }
 
     private void clearMarkers() {
-        mapView.removeAllMarkers();
+        mapView.removeAllElements();
     }
 
     private void startNavigation() {
@@ -1580,7 +1844,9 @@ public class MapFragment extends BaseFragment
     }
 
     private void stopNavigation() {
-        mapView.removeAllPaths();
+        if (path != null) {
+            mapView.removeElement(path);
+        }
         navigationMode = false;
         path = null;
     }
@@ -1659,7 +1925,7 @@ public class MapFragment extends BaseFragment
         //removed label's LocationLabelClicker gets called again so shouldn't add another labelClicker
         mSelectedPin = new Pin(coordinate, label);
         overlays.put(label, mLocationClickersMap.get(coordinate)); //should add to overlays so when removing pins, selected (highlighted) ones get removed too
-        mapView.addMarker(label, false);
+        mapView.addElement(label);
     }
 
     private int getImagePinSize() {
@@ -1692,7 +1958,7 @@ public class MapFragment extends BaseFragment
 
     @Override
     public void removeTempParkingPinAtCoordinate(Pin parkingCoordinatePin) {
-        mapView.removeMarker(parkingCoordinatePin.getOverlay2DImage());
+        mapView.removeElement(parkingCoordinatePin.getOverlay2DImage());
     }
 
     @Override
@@ -1712,7 +1978,7 @@ public class MapFragment extends BaseFragment
             startPulseAnimation();
             setFollowMode(FollowMode.CENTER); //very first time it's found
         } else {
-            mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
+            mapView.removeElement(mBlueDotPin.getOverlay2DImage());
             if (mGreyDotDropped) {
                 label = new Overlay2DImage(getBlueDotSize(), getBlueDotSize(), getResources().getDrawable(R.drawable.icn_bluebutton), getBlueDotSize() / 2, getBlueDotSize() / 2);
                 mBlueDotPin = new Pin(coordinate, label, x, y);
@@ -1723,7 +1989,7 @@ public class MapFragment extends BaseFragment
         }
 
         label.setPosition(coordinate);
-        mapView.addMarker(label, false);
+        mapView.addElement(label);
 
         mGreyDotDropped = false;
     }
@@ -1735,15 +2001,15 @@ public class MapFragment extends BaseFragment
             int mapIndex = MapUtility.getIndexWithMapElevation(maps, mBlueDotPin.getCoordinate().getMap().getAltitude());
             Overlay2DImage label;
             Coordinate coordinate = new Coordinate(targetLocation, maps[mapIndex]);
-            mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
+            mapView.removeElement(mBlueDotPin.getOverlay2DImage());
             label = new Overlay2DImage(getBlueDotSize(), getBlueDotSize(), getResources().getDrawable(R.drawable.icn_greybutton), getBlueDotSize() / 2, getBlueDotSize() / 2);
             mBlueDotPin.setOverlay2DImage(label);
             label.setPosition(coordinate);
-            mapView.addMarker(label, false);
+            mapView.addElement(label);
             mGreyDotDropped = true;
 
             if (mBlueDotCompass != null) {
-                mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
+                mapView.removeElement(mBlueDotCompass.getOverlay2DImage());
             }
         }
     }
@@ -1767,12 +2033,14 @@ public class MapFragment extends BaseFragment
                 label = mBlueDotCompass.getOverlay2DImage();
             }
             Coordinate coordinate = new Coordinate(targetLocation, maps[mapIndex]);
-            if (mBlueDotCompass != null) mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
+            if (mBlueDotCompass != null) {
+                mapView.removeElement(mBlueDotCompass.getOverlay2DImage());
+            }
             mBlueDotCompass = new Pin(coordinate, label);
             mBlueDotCompass.setCoordinate(coordinate);
             label.setRotation((float) Math.toRadians(heading) + (float) mBearingFromCamera);
             label.setPosition(coordinate);
-            mapView.addMarker(label, false);
+            mapView.addElement(label);
             tempHeading = heading;
             headingDropped = true;
         } catch (Resources.NotFoundException e) {
@@ -1786,6 +2054,7 @@ public class MapFragment extends BaseFragment
             Toast.makeText(getActivity(), "SetGeofence(true)", Toast.LENGTH_SHORT).show();
             mMainActivity.mGeofenceManager.setGeofence(false);
             mMainActivity.mGeofenceManager.setGeofence(true);
+
         }
     };
 
@@ -1832,9 +2101,8 @@ public class MapFragment extends BaseFragment
 
                 Polygon placePolygon = getPolygonWithPlaceExternalId(externalCode);
                 if (placePolygon != null) {
-                    mapView.getCamera().focusOn(placePolygon);
+                    focusOn(placePolygon, 0, (float) Math.PI/5);
                     didTapPolygon(placePolygon);
-                    zoomInOut();
                 } else {
                     showDirectionCard(true, IdType.ID, storeId, storeName, categoryName, null);
                 }
@@ -1921,7 +2189,7 @@ public class MapFragment extends BaseFragment
                 case NONE:
 
                     if (mBlueDotCompass != null) {
-                        mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
+                        mapView.removeElement(mBlueDotCompass.getOverlay2DImage());
                         mBlueDotCompass = null;
                     }
 
@@ -1932,7 +2200,7 @@ public class MapFragment extends BaseFragment
                 case CENTER:
 
                     if (mBlueDotCompass != null) {
-                        mapView.removeMarker(mBlueDotCompass.getOverlay2DImage());
+                        mapView.removeElement(mBlueDotCompass.getOverlay2DImage());
                         mBlueDotCompass = null;
                     }
 
@@ -1953,8 +2221,7 @@ public class MapFragment extends BaseFragment
                 if (mCurrentLevelIndex != floor) {
                     setMapLevel(floor, null, mapName);
                 }
-                mapView.getCamera().focusOn(mBlueDotPin.getCoordinate());
-                mapView.getCamera().setRotationTo(0, 0);
+                focusOn(mBlueDotPin.getCoordinate(), 0, 0);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1974,7 +2241,7 @@ public class MapFragment extends BaseFragment
     @Override
     public void removeBlueDot() {
         if (mBlueDotPin != null) {
-            mapView.removeMarker(mBlueDotPin.getOverlay2DImage());
+            mapView.removeElement(mBlueDotPin.getOverlay2DImage());
             mBlueDotPin = null;
             mSLHeadingStatus = SLHeadingStatus.UNDEFINED;
         }
@@ -1989,7 +2256,7 @@ public class MapFragment extends BaseFragment
         LocationLabelClicker clicker = new LocationLabelClicker(location, pinDrawable, label, coordinate);
         overlays.put(label, clicker);
         mLocationClickersMap.put(coordinate, clicker);
-        mapView.addMarker(label, false);
+        mapView.addElement(label);
         return label;
     }
 
@@ -2010,14 +2277,14 @@ public class MapFragment extends BaseFragment
         dealsPinOverlays.add(label);
         mLocationClickersMap.put(coordinate, clicker);
 
-        mapView.addMarker(label, false);
+        mapView.addElement(label);
     }
 
     private void dropDestinationPin(final Coordinate coordinate, final Drawable pinDrawable) {
         Overlay2DImage label = new Overlay2DImage(getVortexAndDestinationPinSize(), getVortexAndDestinationPinSize(), pinDrawable, getVortexAndDestinationPinSize() / 2, getVortexAndDestinationPinSize() / 2);
         label.setPosition(coordinate);
         mDestinationPin = new Pin(coordinate, label);
-        mapView.addMarker(label, false);
+        mapView.addElement(label);
     }
 
     public void clickOverlayWithNameAndPosition(String amenityName, String mapName) {
@@ -2041,7 +2308,7 @@ public class MapFragment extends BaseFragment
 
     public void removePin(Overlay overlay, Coordinate coordinate) {
         try {
-            mapView.removeMarker(overlay);
+            mapView.removeElement(overlay);
             if (mLocationClickersMap.containsKey(coordinate))
                 mLocationClickersMap.remove(coordinate);
             if (overlays.containsKey(overlay)) overlays.remove(overlay);
@@ -2060,7 +2327,7 @@ public class MapFragment extends BaseFragment
                 if (locationLabelClicker.amenity == location || locationLabelClicker.escalatorStairs == location
                         || locationLabelClicker.elevator == location) {
 
-                    mapView.removeMarker(overlay);
+                    mapView.removeElement(overlay);
 
                     mLocationClickersMap.remove(overlay.getPosition());
                     overlays.remove(overlay);
@@ -2075,7 +2342,7 @@ public class MapFragment extends BaseFragment
         try {
             mLocationClickersMap.remove(overlay.getPosition());
             overlays.remove(overlay);
-            mapView.removeMarker(overlay);
+            mapView.removeElement(overlay);
 
         } catch (Exception e) {
             logger.error(e);
@@ -2135,8 +2402,8 @@ public class MapFragment extends BaseFragment
         Overlay2DImage label = dropPin(mBlueDotPin.getCoordinate(), null, amenityDrawable);
         sParkingPin.setTempParkingCoordinatePin(new Pin(mBlueDotPin.getCoordinate(), label, mBlueDotPin.getLatitude(), mBlueDotPin.getLongitude()));
         showParkingDetail(true);
-        mapView.getCamera().focusOn(mBlueDotPin.getCoordinate());
-        mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_NEAREST_PARKING);
+        focusOn(mBlueDotPin.getCoordinate(), 0, 0);
+        //MAP-REPLACE mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_NEAREST_PARKING); -- investigate for new SDK 0.14.0
         destinationPolygon = sParkingPin.getTempParkingCoordinatePin().getCoordinate();
     }
 
@@ -2148,7 +2415,7 @@ public class MapFragment extends BaseFragment
         try {
             if (polygon == null) return;
             if (BuildConfig.PARKING_POLYGON) {
-                mapView.getCamera().focusOn(polygon);
+                focusOn(polygon, 0, DEFAULT_TILT);
                 didTapPolygon(polygon);
             }
 
@@ -2191,8 +2458,8 @@ public class MapFragment extends BaseFragment
 
                 Drawable amenityDrawable = getDrawableFromView(R.drawable.icn_car, R.drawable.circle_imageview_background_black);
                 dropPin(mTemporaryParkingLocation.getNavigatableCoordinates()[0], mTemporaryParkingLocation, amenityDrawable);
-                mapView.getCamera().focusOn(polygon);
-                mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_NEAREST_PARKING);
+                focusOn(polygon, 0, DEFAULT_TILT);
+                //MAP-REPLACE mapView.getCamera().setZoomTo(CAMERA_ZOOM_LEVEL_NEAREST_PARKING); -- investigate for new SDK 0.14.0
 
                 destinationPolygon = mTemporaryParkingLocation;
             }
@@ -2213,8 +2480,8 @@ public class MapFragment extends BaseFragment
                 mSavedParkingPolygon = polygons.get(0);
                 didTapPolygon(mSavedParkingPolygon);
                 if (focus) {
-                    mapView.getCamera().focusOn(mSavedParkingPolygon);
-                    zoomInOut();
+                    focusOn(mSavedParkingPolygon, 0, DEFAULT_TILT);
+
                 }
             } else {
                 if (mSavedParkingPolygon != null) { //mSavedParkingPolygon.setColor(mOriginalColorsForParking);
@@ -2260,8 +2527,7 @@ public class MapFragment extends BaseFragment
                                 }
                                 destinationPolygon = sParkingPin.getParkingLocationPin();
                                 if (focus) {
-                                    mapView.getCamera().focusOn(coordinate);
-                                    zoomInOut();
+                                    focusOn(coordinate, 0, DEFAULT_TILT);
                                     showSavedParkingDetail();
                                 }
                                 break; //prevent it from dropping two pin images in case there is more than one polygon
@@ -2296,8 +2562,7 @@ public class MapFragment extends BaseFragment
                             sParkingPin.setParkingCoordinatePin(parkingSpotPin);
                             destinationPolygon = sParkingPin.getParkingCoordinatePin().getCoordinate();
                             if (focus) {
-                                mapView.getCamera().focusOn(sParkingPin.getParkingCoordinatePin().getCoordinate());
-                                zoomInOut();
+                                focusOn(sParkingPin.getParkingCoordinatePin().getCoordinate(), 0, DEFAULT_TILT);
                                 showSavedParkingDetail();
                             }
 
@@ -2395,8 +2660,7 @@ public class MapFragment extends BaseFragment
                 } else {
                     if (label == sParkingPin.getParkingCoordinatePin().getOverlay2DImage()) {
                         showParkingDetail(false);
-                        mapView.getCamera().focusOn(coordinate);
-                        zoomInOut();
+                        focusOn(coordinate, 0, DEFAULT_TILT);
                         destinationPolygon = coordinate;
                     } else if (label == mBlueDotPin.getOverlay2DImage()) {
                         //user's clicking on blue dot that's above the parking lot pin
@@ -2408,9 +2672,7 @@ public class MapFragment extends BaseFragment
         }
 
         private void focusAmenity(Location location) {
-            mapView.getCamera().focusOn(coordinate);
-            zoomInOut();
-
+            focusOn(coordinate, 0, DEFAULT_TILT);
             destinationPolygon = coordinate;
 
             if (mSelectedPin == null) {
@@ -2427,25 +2689,25 @@ public class MapFragment extends BaseFragment
             }
         }
 
-        public void highlightThisLabel() {
+        void highlightThisLabel() {
             dropPinWithColor(coordinate, drawable);
 
             if (amenity != null || escalatorStairs != null || elevator != null) {
                 mRemovedPin = new Pin(coordinate, label);
             }
 
-            mapView.removeMarker(label);
+            mapView.removeElement(label);
         }
     }
 
     private void replaceSelectedPinWithRemovedPin() {
         if (mSelectedPin != null) {
-            mapView.removeMarker(mSelectedPin.getOverlay2DImage());
+            mapView.removeElement(mSelectedPin.getOverlay2DImage());
             overlays.remove(mSelectedPin.getOverlay2DImage());
             mSelectedPin = null;
         }
         if (mRemovedPin != null) {
-            mapView.addMarker(mRemovedPin.getOverlay2DImage(), false);
+            mapView.addElement(mRemovedPin.getOverlay2DImage());
             mRemovedPin = null;
             showDirectionCard(false, null, 0, null, null, null);
         }
@@ -2616,6 +2878,10 @@ public class MapFragment extends BaseFragment
             return false;
         }
         return rlDirection.getVisibility() == View.VISIBLE;
+    }
+
+    private void showDirectionCardNull() {
+        showDirectionCard(false, null, 0, null, null, null);
     }
 
     /**
