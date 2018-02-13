@@ -8,7 +8,6 @@ import android.support.v4.content.ContextCompat;
 
 import com.ivanhoecambridge.kcpandroidsdk.logger.Logger;
 import com.ivanhoecambridge.mall.activities.MainActivity;
-import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
 import com.senionlab.slutilities.geofencing.geometries.SLCircle;
 import com.senionlab.slutilities.geofencing.geometries.SLGeometryId;
 import com.senionlab.slutilities.geofencing.interfaces.SLGeometry;
@@ -138,7 +137,9 @@ public class SLIndoorLocationPresenterImpl implements  SLIndoorLocationPresenter
     @Override
     public void onResume() {
         mapViewWithBlueDot.dropGreyBlueDot();
-        initService();
+        if (serviceManager == null) {
+            initService();
+        }
     }
 
     public void initService(){

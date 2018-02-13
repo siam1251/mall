@@ -25,20 +25,16 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.ivanhoecambridge.mall.BuildConfig;
 import com.ivanhoecambridge.mall.R;
 import com.ivanhoecambridge.mall.activities.MainActivity;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
 import com.ivanhoecambridge.mall.crashReports.CustomizedExceptionHandler;
-import com.ivanhoecambridge.mall.views.AlertDialogForInterest;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 import geofence.GeofenceConstants;
 
-import static com.ivanhoecambridge.mall.bluedot.PositionAndHeadingMapVisualization.sGeofenceEntered;
 import static slutilities.SLSettings.GEOFENCE_LOCATIONS;
 
 /**
@@ -64,6 +60,7 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
     private SharedPreferences mSharedPreferences;
     private MyWebRequestReceiver mMyWebRequestReceiver;
     private SLIndoorLocationPresenterImpl mSLIndoorLocationPresenterImpl;
+    private boolean isUpdateAwaiting = false;
 
 
     public GeofenceManager(Context context) {
@@ -81,6 +78,9 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
 
     public void setSLIndoorLocationPresenterImpl(SLIndoorLocationPresenterImpl slIndoorLocationPresenterImpl){
         mSLIndoorLocationPresenterImpl = slIndoorLocationPresenterImpl;
+        if (isUpdateAwaiting) {
+            mSLIndoorLocationPresenterImpl.updateFromGPS();
+        }
     }
 
     private void initialize() {
@@ -308,7 +308,11 @@ public class GeofenceManager implements GoogleApiClient.ConnectionCallbacks, Goo
                     ((MainActivity) mContext).setActiveMall(false, false);
                 }
             }
-            if(mSLIndoorLocationPresenterImpl != null) mSLIndoorLocationPresenterImpl.updateFromGPS();
+            if(mSLIndoorLocationPresenterImpl != null) {
+                mSLIndoorLocationPresenterImpl.updateFromGPS();
+            } else {
+                isUpdateAwaiting = true;
+            }
         }
     }
 

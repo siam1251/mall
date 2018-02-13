@@ -185,6 +185,8 @@ public class MapFragment extends BaseFragment
     private final float PATH_WIDTH = 1.5f;
     private final float PATH_HEIGHT = 1.5f;
     private final float DEFAULT_TILT = (float) Math.PI / 5;
+    private final static int CURRENT_TILT = -1;
+    private final static int CURRENT_HEADING = -1;
     private final static int START_LOCATION = 1;
     private final static int DESTINATION_LOCATION = 2;
 
@@ -565,6 +567,7 @@ public class MapFragment extends BaseFragment
     // Get the basic info for all Venues we have access to
     private class GetVenuesCallback implements MappedinCallback<List<Venue>> {
 
+
         @Override
         public void onCompleted(List<Venue> venues) {
             //todo: disabled for testing
@@ -893,7 +896,18 @@ public class MapFragment extends BaseFragment
     }
 
     private void focusOn(Focusable focusItem, float heading, float tilt) {
-        mapView.orbit(focusItem, heading, tilt, 0);
+        if (tilt == CURRENT_TILT) {
+            tilt = mapView.getCameraTilting();
+        }
+        if (heading == CURRENT_HEADING) {
+            heading = mapView.getCameraHeading();
+        }
+        mapView.frame(focusItem, heading, DEFAULT_TILT, 0);
+    }
+
+    private void focusOn(Focusable focusItem, float heading, float tilt, Map mapAttrs) {
+        setMapLevel(mapAttrs.getFloor(), mapAttrs.getShortName(), mapAttrs.getName());
+        focusOn(focusItem, heading, tilt);
     }
 
     private void drawPath() {
@@ -1111,7 +1125,7 @@ public class MapFragment extends BaseFragment
                 clearHighlightedColours();
                 highlightPolygon(polygon, R.color.colorAccent);
                 if (mSavedParkingPolygon != null && destinationPolygon == mSavedParkingPolygon) {
-                    focusOn(polygon, 0, 0);
+                    focusOn(polygon, CURRENT_HEADING, CURRENT_TILT);
                     tiltCamera(polygon, 0);
                     showSavedParkingDetail();
                 } else {
@@ -1447,6 +1461,7 @@ public class MapFragment extends BaseFragment
 
     @Override
     public void onCameraBearingChange(final double bearing) {
+
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -1464,7 +1479,6 @@ public class MapFragment extends BaseFragment
 
     @Override
     public void manipulatedCamera() {
-
     }
 
 
@@ -1968,7 +1982,6 @@ public class MapFragment extends BaseFragment
         if (mFollowMode == FollowMode.CENTER) {
             focusOnBlueDot(floor, null);
         }
-
         android.location.Location targetLocation = MapUtility.getLocation(x, y);
         Overlay2DImage label;
         Coordinate coordinate = new Coordinate(targetLocation, maps[floor]);
@@ -2527,6 +2540,7 @@ public class MapFragment extends BaseFragment
                                 }
                                 destinationPolygon = sParkingPin.getParkingLocationPin();
                                 if (focus) {
+                                   // focusOn(coordinate, 0, DEFAULT_TILT, coordinate.getMap());
                                     focusOn(coordinate, 0, DEFAULT_TILT);
                                     showSavedParkingDetail();
                                 }
@@ -2672,12 +2686,14 @@ public class MapFragment extends BaseFragment
         }
 
         private void focusAmenity(Location location) {
-            focusOn(coordinate, 0, DEFAULT_TILT);
+
             destinationPolygon = coordinate;
+            boolean shouldFocus = false;
 
             if (mSelectedPin == null) {
                 highlightThisLabel();
                 showAmenityDetail(location, drawable);
+                shouldFocus = true;
             } else {
                 Coordinate removableMarkerCoordinate = mSelectedPin.getCoordinate();
                 replaceSelectedPinWithRemovedPin();
@@ -2685,7 +2701,11 @@ public class MapFragment extends BaseFragment
                 if (removableMarkerCoordinate != coordinate) {
                     highlightThisLabel();
                     showAmenityDetail(location, drawable);
+                    shouldFocus = true;
                 }
+            }
+            if (shouldFocus) {
+                focusOn(coordinate, CURRENT_HEADING, CURRENT_TILT);
             }
         }
 

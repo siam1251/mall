@@ -62,10 +62,10 @@ public class VortexPin {
         } else {
             vortexDirection = VortexDirection.UP;
         }
-        //vortexType = getVortexType(instruction.atLocation.getType());
-        //MAP-REPLACE vortexType = getVortexType(instruction.atLocation.getType());
-        //MAP-REPLACE   vortexPinDrawable = getVortexPinDrawable(instruction.atLocation.getType());
-        //MAP-REPLACE  vortexInstructionDrawable = getVortexInstructionDrawable(instruction.atLocation.getType());
+
+        vortexType = getVortexType(instruction.atLocation.getType());
+        vortexPinDrawable = getVortexPinDrawable(instruction.atLocation.getType());
+        vortexInstructionDrawable = getVortexInstructionDrawable(instruction.atLocation.getType());
         vortexCoordinate = instruction.coordinate;
     }
 

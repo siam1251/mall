@@ -3,13 +3,10 @@ package slutilities;
 import com.ivanhoecambridge.mall.bluedot.SLIndoorLocationPresenterImpl;
 import com.ivanhoecambridge.mall.slutilities.SLGeofencingArea;
 import com.ivanhoecambridge.mall.slutilities.SLPointOfInterest;
-import com.senionlab.slutilities.type.FloorNr;
-import com.senionlab.slutilities.type.SLCoordinate3D;
 
 import java.util.HashMap;
 
 public class SLSettings {
-
     public static final String MAP_KEY = "238493a3-b390-44ef-90e3-ab65e25f94e5";
     public static final String CUSTOMER_ID = "D7881A02-138F-4159-A642-8E4F9C76669F";
     public static double INITIAL_MAP_SLOPE = 32; //how much is the map north inclined in the beginning
