@@ -62,6 +62,28 @@
 
     </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/fl_map_debug_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black_overlay"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvTilt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tvHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginTop="25dp" />
+
+    </FrameLayout>
+
     <LinearLayout
         android:layout_below="@+id/flCompass"
         android:layout_alignParentRight="true"

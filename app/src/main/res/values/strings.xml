@@ -475,5 +475,6 @@
 
     <!-- MAPPEDIN -->
     <string name="mappedin_invalid_selection">Selected location is currently unavailable.</string>
-
+    <string name="mappedin_debug_overlay_tilt">Tilt: %1$f (%2$f)</string>
+    <string name="mappedin_debug_overlay_heading">Heading: %1$f (%2$f)</string>
 </resources>

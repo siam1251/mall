@@ -164,6 +164,8 @@ public class MapFragment extends BaseFragment
     private RelativeLayout      rlSlidingPanel; ///todo: disabled for testing
     private FrameLayout         flProgressOverlay;
     private ProgressBar         pbMap;
+    private TextView tvTilt;
+    private TextView tvHeading;
 
     private RelativeLayout rlRoute;
     private String mSearchString = "";
@@ -185,10 +187,12 @@ public class MapFragment extends BaseFragment
     private final float PATH_WIDTH = 1.5f;
     private final float PATH_HEIGHT = 1.5f;
     private final float DEFAULT_TILT = (float) Math.PI / 5;
+    private final float DEFAULT_HEADING = 0;
     private final static int CURRENT_TILT = -1;
     private final static int CURRENT_HEADING = -1;
     private final static int START_LOCATION = 1;
     private final static int DESTINATION_LOCATION = 2;
+    private boolean isDestinationNonPolygon = false;
 
     /**
      * Flag to check if an error toast is currently scheduled to be shown.
@@ -294,6 +298,8 @@ public class MapFragment extends BaseFragment
         ivCompass.bringToFront();
         flCompass = (FrameLayout) view.findViewById(R.id.flCompass);
         rlSlidingPanel = (RelativeLayout) view.findViewById(R.id.rlSlidingPanel);
+        tvTilt =  view.findViewById(R.id.tvTilt);
+        tvHeading = view.findViewById(R.id.tvHeading);
 //        rlSlidingPanel.setVisibility(View.GONE); //DELETED FOR TESTING
 
 
@@ -902,7 +908,7 @@ public class MapFragment extends BaseFragment
         if (heading == CURRENT_HEADING) {
             heading = mapView.getCameraHeading();
         }
-        mapView.frame(focusItem, heading, DEFAULT_TILT, 0);
+        mapView.frame(focusItem, heading, DEFAULT_TILT, 2.5f);
     }
 
     private void focusOn(Focusable focusItem, float heading, float tilt, Map mapAttrs) {
@@ -1005,13 +1011,17 @@ public class MapFragment extends BaseFragment
         }
 
         Directions directions = getDirections(getLocation(START_LOCATION), getLocation(DESTINATION_LOCATION),
-                getDestinationNavigatable(), getStartPolygon());
+                getStartNavigatable(), getDestinationNavigatable());
         if (directions == null) {
             return false;
         }
         path = createPath(directions.getPath());
         mapView.addElement(path);
-        frameBetweenPolygons(path, getStartPolygon(), getDestinationPolygon());
+        if (isDestinationNonPolygon()) {
+            frameMultipleFocusabes(path, new Focusable[] {getStartPolygon(), (Coordinate) getDestinationNavigatable()});
+        } else {
+            frameBetweenPolygons(path, getStartPolygon(), getDestinationPolygon());
+        }
 
 
         Coordinate destinationPolygonCoords = null;
@@ -1042,7 +1052,6 @@ public class MapFragment extends BaseFragment
     }
 
     private Directions getDirections(Location start, Location destination, Navigatable fromNavigatable, Navigatable toNavigatable) {
-        if (start == null || destination == null) return null;
         return toNavigatable.directionsFrom(activeVenue, fromNavigatable, start, destination);
     }
 
@@ -1055,17 +1064,31 @@ public class MapFragment extends BaseFragment
                 }
                 break;
             case DESTINATION_LOCATION:
-                default:
-                    if (getLocationSizeForPolygon(getDestinationPolygon()) > 0) {
-                        location = getDestinationPolygon().getLocations()[0];
+                    if (getDestinationNavigatable() instanceof Polygon) {
+                        if (getLocationSizeForPolygon(getDestinationPolygon()) > 0) {
+                            location = getDestinationPolygon().getLocations()[0];
+                        }
+                        setDestinationNonPolygon(false);
+                    } else if (getDestinationNavigatable() instanceof Coordinate) {
+                        location = null;
+                        setDestinationNonPolygon(true);
                     }
                     break;
         }
         return location;
     }
 
+
     private int getLocationSizeForPolygon(Polygon polygon) {
         return polygon.getLocations() == null ? 0 : polygon.getLocations().length;
+    }
+
+    private void setDestinationNonPolygon(boolean isDestinationNonPolygon) {
+        this.isDestinationNonPolygon = isDestinationNonPolygon;
+    }
+
+    private boolean isDestinationNonPolygon() {
+        return isDestinationNonPolygon;
     }
 
     void setFalsePositive(boolean isFalsePositive) {
@@ -1124,8 +1147,8 @@ public class MapFragment extends BaseFragment
             } else {
                 clearHighlightedColours();
                 highlightPolygon(polygon, R.color.colorAccent);
+                focusOn(polygon, DEFAULT_HEADING, DEFAULT_TILT);
                 if (mSavedParkingPolygon != null && destinationPolygon == mSavedParkingPolygon) {
-                    focusOn(polygon, CURRENT_HEADING, CURRENT_TILT);
                     tiltCamera(polygon, 0);
                     showSavedParkingDetail();
                 } else {
@@ -1311,12 +1334,17 @@ public class MapFragment extends BaseFragment
 
     }
 
+    private void frameMultipleFocusabes(Path path, Focusable[] focusables) {
+        if (path != null && focusables != null) {
+            mapView.frame(focusables, 0, DEFAULT_TILT, 2.5f);
+        }
+    }
+
     private Polygon getStartPolygon() {
         return (Polygon) startPolygon;
     }
 
     private Polygon getDestinationPolygon() {
-        if (destinationPolygon instanceof Coordinate) return null;
         return (Polygon) destinationPolygon;
     }
 
@@ -1479,6 +1507,8 @@ public class MapFragment extends BaseFragment
 
     @Override
     public void manipulatedCamera() {
+       tvHeading.setText(getString(R.string.mappedin_debug_overlay_heading, mapView.getCameraHeading(), Math.toDegrees(mapView.getCameraHeading())));
+       tvTilt.setText(getString(R.string.mappedin_debug_overlay_tilt, mapView.getCameraTilting(), Math.toDegrees(mapView.getCameraTilting())));
     }
 
 
@@ -2674,7 +2704,7 @@ public class MapFragment extends BaseFragment
                 } else {
                     if (label == sParkingPin.getParkingCoordinatePin().getOverlay2DImage()) {
                         showParkingDetail(false);
-                        focusOn(coordinate, 0, DEFAULT_TILT);
+                        focusOn(coordinate, DEFAULT_HEADING, DEFAULT_TILT);
                         destinationPolygon = coordinate;
                     } else if (label == mBlueDotPin.getOverlay2DImage()) {
                         //user's clicking on blue dot that's above the parking lot pin
