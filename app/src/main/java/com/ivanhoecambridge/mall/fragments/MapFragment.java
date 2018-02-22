@@ -267,9 +267,9 @@ public class MapFragment extends BaseFragment
     private boolean isDeferred             = false;
 
 
-    private static HashMap<String, Tenant>   locationHashmapByExternalId = new HashMap<>(); //used to find polygons for stores - that use external iD
-    private static HashMap<String, Amenity>  parkingHashMap              = new HashMap<>();
-    private static HashMap<String, Location> amenityMap                  = new HashMap<>();
+    private static HashMap<String, Tenant> locationHashmapByExternalId = new HashMap<>(); //used to find polygons for stores - that use external iD
+    private static HashMap<String, Amenity>   parkingHashMap              = new HashMap<>();
+    private static HashMap<String, Location>  amenityMap                  = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -639,7 +639,12 @@ public class MapFragment extends BaseFragment
                     return escalatorStairs;
                 }
             };
-            LocationGenerator[] locationGenerators = {tenant, amenity, elevators, escalatorStairs};
+            LocationGenerator[] locationGenerators;
+            if (getString(R.string.app_name).equals("Kinetic Cafe Office")) {
+               locationGenerators = new LocationGenerator[]{tenant};
+            } else {
+                locationGenerators = new LocationGenerator[]{tenant, amenity, elevators, escalatorStairs};
+            }
             mappedIn.getVenue(activeVenue, locationGenerators, new GetVenueCallback());
 
         }
@@ -682,7 +687,7 @@ public class MapFragment extends BaseFragment
             mMapLoaded = true;
             if (mMapInterface != null) mMapInterface.mapLoaded();
             //MappedIn has their own progress bar that's not accessible, if our progress bar isn't delayed then we would
-            //briefly see the ugly MappedIn one.
+            //briefly see the ugly MappedIn one.no
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -2669,7 +2674,7 @@ public class MapFragment extends BaseFragment
 
         public EscalatorStairs escalatorStairs = null;
         public Elevator        elevator        = null;
-        public Tenant          tenant          = null;
+        public Tenant       tenant          = null;
         public Amenity         amenity         = null;
         public Drawable        drawable        = null;
         public Overlay2DImage  label           = null;
