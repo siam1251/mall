@@ -61,9 +61,21 @@ android {
         if (rootProject.hasProperty(flavor.name)) {
             applicationId rootProject.ext.packageName + ".${flavor.name}"
 
+            def mappedInUsernameVal = mappedInUsername
+            def mappedInPasswordVal = mappedInPassword
+            def mappedInDataSchemaVal = mappedInDataSchema
+            if (flavor.name == 'seniondemo') {
+                mappedInUsernameVal = mappedInUsernameKC
+                mappedInPasswordVal = mappedInPasswordKC
+                mappedInDataSchemaVal = mappedInDataSchemaKC
+            }
+
             def flavorData = rootProject.ext[flavor.name]
             flavor.manifestPlaceholders = [
-                    'appAuthRedirectScheme': rootProject.ext.redirect_uri_scheme + flavorData.appAuthRedirectScheme
+                    'appAuthRedirectScheme': rootProject.ext.redirect_uri_scheme + flavorData.appAuthRedirectScheme,
+                    'mappedInUsername' : mappedInUsernameVal,
+                    'mappedInPassword' : mappedInPasswordVal,
+                    'mappedInDataSchema' : mappedInDataSchemaVal
             ]
             flavor.resValue 'string', fieldAppName, flavorData.appName
             flavor.resValue 'string', 'google_client_id', flavorData.appAuthRedirectScheme + rootProject.ext.client_id_scheme
