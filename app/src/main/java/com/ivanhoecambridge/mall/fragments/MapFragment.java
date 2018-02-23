@@ -70,6 +70,7 @@ import com.ivanhoecambridge.mall.mappedin.AmenitiesManager;
 import com.ivanhoecambridge.mall.mappedin.Amenity;
 import com.ivanhoecambridge.mall.mappedin.Elevator;
 import com.ivanhoecambridge.mall.mappedin.EscalatorStairs;
+import com.ivanhoecambridge.mall.mappedin.LocationGeneratorFactory;
 import com.ivanhoecambridge.mall.mappedin.MapUtility;
 import com.ivanhoecambridge.mall.mappedin.ParkingPin;
 import com.ivanhoecambridge.mall.mappedin.ParkingPinInterface;
@@ -102,7 +103,6 @@ import com.mappedin.sdk.Polygon;
 import com.mappedin.sdk.Venue;
 import com.senionlab.slutilities.type.SLHeadingStatus;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -117,7 +117,7 @@ import factory.HeaderFactory;
  * Created by Kay on 2016-06-20.
  */
 public class MapFragment extends BaseFragment
-        implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot, ParkingPinInterface {
+        implements MapViewDelegate, Amenities.OnAmenityClickListener, Amenities.OnDealsClickListener, OnParkingClickListener, MapViewWithBlueDot, ParkingPinInterface, LocationGeneratorFactory.LocationGeneratedListener {
 
     private final String TAG = "MapFragment";
     private static MapFragment sMapFragment;
@@ -126,6 +126,8 @@ public class MapFragment extends BaseFragment
         if (sMapFragment == null) sMapFragment = new MapFragment();
         return sMapFragment;
     }
+
+    
 
     private enum SearchMode {STORE, ROUTE_START, ROUTE_DESTINATION}
 
@@ -267,9 +269,9 @@ public class MapFragment extends BaseFragment
     private boolean isDeferred             = false;
 
 
-    private static HashMap<String, Tenant> locationHashmapByExternalId = new HashMap<>(); //used to find polygons for stores - that use external iD
-    private static HashMap<String, Amenity>   parkingHashMap              = new HashMap<>();
-    private static HashMap<String, Location>  amenityMap                  = new HashMap<>();
+    private static HashMap<String, Tenant>   locationHashmapByExternalId = new HashMap<>(); //used to find polygons for stores - that use external iD
+    private static HashMap<String, Amenity>  parkingHashMap              = new HashMap<>();
+    private static HashMap<String, Location> amenityMap                  = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -598,47 +600,12 @@ public class MapFragment extends BaseFragment
 
             mapView.setDelegate(delegate);
 
+            
+            LocationGenerator amenity = LocationGeneratorFactory.prepareLocation(LocationGeneratorFactory.AMENITY, getLocationGeneratedListener());
+            LocationGenerator tenant = LocationGeneratorFactory.prepareLocation(LocationGeneratorFactory.TENANT, getLocationGeneratedListener());
+            LocationGenerator elevators = LocationGeneratorFactory.prepareLocation(LocationGeneratorFactory.ELEVATOR, getLocationGeneratedListener());
+            LocationGenerator escalatorStairs = LocationGeneratorFactory.prepareLocation(LocationGeneratorFactory.ESCALATOR_STAIRS, getLocationGeneratedListener());
 
-            LocationGenerator amenity = new LocationGenerator() {
-                @Override
-                public Location locationGenerator(ByteBuffer data, int _index, Venue venue) {
-                    Amenity amenity = new Amenity(data, _index, venue);
-                    addLocationToAmenityMap(amenity);
-                    if (amenity.amenityType != null && amenity.amenityType.equals("parking")) {
-                        if (amenity.id != null) {
-                            parkingHashMap.put(amenity.id, amenity);
-                        }
-                    }
-                    return amenity;
-                }
-            };
-            LocationGenerator tenant = new LocationGenerator() {
-                @Override
-                public Location locationGenerator(ByteBuffer data, int _index, Venue venue) {
-                    Tenant tenant = new Tenant(data, _index, venue);
-
-                    if (tenant.externalId != null) {
-                        locationHashmapByExternalId.put(tenant.externalId, tenant);
-                    }
-                    return tenant;
-                }
-            };
-            LocationGenerator elevators = new LocationGenerator() {
-                @Override
-                public Location locationGenerator(ByteBuffer byteBuffer, int i, Venue venue) {
-                    Elevator elevator = new Elevator(byteBuffer, i, venue);
-                    addLocationToAmenityMap(elevator);
-                    return elevator;
-                }
-            };
-            LocationGenerator escalatorStairs = new LocationGenerator() {
-                @Override
-                public Location locationGenerator(ByteBuffer byteBuffer, int i, Venue venue) {
-                    EscalatorStairs escalatorStairs = new EscalatorStairs(byteBuffer, i, venue);
-                    addLocationToAmenityMap(escalatorStairs);
-                    return escalatorStairs;
-                }
-            };
             LocationGenerator[] locationGenerators;
             if (getString(R.string.app_name).equals("Kinetic Cafe Office")) {
                locationGenerators = new LocationGenerator[]{tenant};
@@ -703,6 +670,37 @@ public class MapFragment extends BaseFragment
         public void onError(Exception e) {
             Logger.log("Error loading Venue: " + e);
         }
+    }
+
+    @Override
+    public void onTenantGenerated(Tenant tenant) {
+        if (tenant.externalId != null) {
+            locationHashmapByExternalId.put(tenant.externalId, tenant);
+        }
+    }
+
+    @Override
+    public void onAmenityGenerated(Amenity amenity) {
+        addLocationToAmenityMap(amenity);
+        if (amenity.amenityType != null && amenity.amenityType.equals("parking")) {
+            if (amenity.id != null) {
+                parkingHashMap.put(amenity.id, amenity);
+            }
+        }
+    }
+
+    @Override
+    public void onEscalatorStairsGenerated(EscalatorStairs escalatorStairs) {
+        addLocationToAmenityMap(escalatorStairs);
+    }
+
+    @Override
+    public void onElevatorGenerated(Elevator elevator) {
+        addLocationToAmenityMap(elevator);
+    }
+
+    public LocationGeneratorFactory.LocationGeneratedListener getLocationGeneratedListener() {
+        return this;
     }
 
     private void addLocationToAmenityMap(Location locationData) {
@@ -2644,7 +2642,7 @@ public class MapFragment extends BaseFragment
         public LocationLabelClicker(Location location, Drawable pinDrawable, Overlay2DImage label, Coordinate coordinate) {
 
             if (location instanceof Tenant) {
-                this.tenant = (Tenant) location;
+                this.Tenant = (Tenant) location;
             } else if (location instanceof EscalatorStairs) {
                 this.escalatorStairs = (EscalatorStairs) location;
             } else if (location instanceof Elevator) {
@@ -2660,8 +2658,8 @@ public class MapFragment extends BaseFragment
 
         //if there is store associated with this location label
         public LocationLabelClicker(Location location, Drawable pinDrawable, Overlay2DImage label, Coordinate coordinate, String placeExternalId) {
-            if (location.getType().equals("tenant")) {
-                this.tenant = (Tenant) location;
+            if (location.getType().equals("Tenant")) {
+                this.Tenant = (Tenant) location;
             } else {
                 this.amenity = (Amenity) location;
             }
@@ -2674,7 +2672,7 @@ public class MapFragment extends BaseFragment
 
         public EscalatorStairs escalatorStairs = null;
         public Elevator        elevator        = null;
-        public Tenant       tenant          = null;
+        public Tenant          Tenant          = null;
         public Amenity         amenity         = null;
         public Drawable        drawable        = null;
         public Overlay2DImage  label           = null;
@@ -3069,12 +3067,12 @@ public class MapFragment extends BaseFragment
     //internal method to test highlighting
     public void focusAll() {
         int delayMore = 0;
-        for (final Tenant tenant : locationHashmapByExternalId.values()) {
+        for (final Tenant Tenant : locationHashmapByExternalId.values()) {
             focusHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (tenant.getPolygons().length > 0) {
-                        Polygon polygon = tenant.getPolygons()[0];
+                    if (Tenant.getPolygons().length > 0) {
+                        Polygon polygon = Tenant.getPolygons()[0];
                         clearHighlightedColours();
                         highlightPolygon(polygon, R.color.themeColor);
                     }

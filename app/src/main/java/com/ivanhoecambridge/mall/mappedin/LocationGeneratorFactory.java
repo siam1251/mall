@@ -12,10 +12,32 @@ import java.nio.ByteBuffer;
 
 public class LocationGeneratorFactory {
 
+    /**
+     * Listener to notify when a location has been generated.
+     */
     public interface LocationGeneratedListener {
-        void onTenantGenerated(TenantOld tenant);
+        /**
+         * Callback that will be invoked when a Tenant has been successfully generated through MappedIn.
+         * @param tenant Tenant
+         */
+        void onTenantGenerated(Tenant tenant);
+
+        /**
+         * Callback that will be invoked when an Amenity has been successfully generated through MappedIn.
+         * @param amenity Amenity
+         */
         void onAmenityGenerated(Amenity amenity);
+
+        /**
+         * Callback that will be invoked when EscalatorStairs has been successfully generated through MappedIn.
+         * @param escalatorStairs EscalatorStairs, this can be either Escalators or Stairs.
+         */
         void onEscalatorStairsGenerated(EscalatorStairs escalatorStairs);
+
+        /**
+         * Callback that will be invoked when an Elevator has been successfully generated through MappedIn.
+         * @param elevator Elevator
+         */
         void onElevatorGenerated(Elevator elevator);
     }
 
@@ -25,13 +47,22 @@ public class LocationGeneratorFactory {
     public final static int ELEVATOR = 4;
 
 
+    /**
+     * Prepares the specified Location for MappedIn, these are callbacks that are triggered by MappedIn's SDK which provides data
+     * that is transformed into the specified type. When the location is generated onLocationGeneratedListener will issue a callback
+     * for the given location.
+     * @param locationType Location type to prepare.
+     * @param onLocationGeneratedListener LocationGeneratedListener will provide a callback when the specified location has been generated.
+     * @return LocationGenerator for the given type.
+     * @throws IllegalArgumentException if no location type is given or is incorrect.
+     */
     public static LocationGenerator prepareLocation(int locationType, final LocationGeneratedListener onLocationGeneratedListener) {
         switch (locationType) {
             case TENANT:
                 return new LocationGenerator() {
                     @Override
                     public Location locationGenerator(ByteBuffer data, int _index, Venue venue) {
-                        TenantOld tenant = new TenantOld(data, _index, venue);
+                        Tenant tenant = new Tenant(data, _index, venue);
                         onLocationGeneratedListener.onTenantGenerated(tenant);
                         return tenant;
                     }

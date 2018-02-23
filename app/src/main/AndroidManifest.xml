@@ -171,24 +171,24 @@
 
         <!-- MAPPED IN ICMP-->
 
-       <!-- <meta-data
+       <meta-data
             android:name="com.mappedin.sdk.Username"
             android:value="573dc77e7ee965268a000000" />
         <meta-data
             android:name="com.mappedin.sdk.Password"
-            android:value="19c77f16c6d2af867c7b71e675070e49" />-->
+            android:value="19c77f16c6d2af867c7b71e675070e49" />
 
         <meta-data
             android:name="com.mappedin.sdk.DataSchema"
             android:value="ae3e0662"/>
 
         <!-- MAPPED IN KINETIC OFFICE-->
-       <meta-data
+       <!--<meta-data
             android:name="com.mappedin.sdk.Username"
             android:value="571a61f8c753ca0c5c000001"/>
         <meta-data
             android:name="com.mappedin.sdk.Password"
-            android:value="f4a241fc2f4d2b5666d5c322b60d7f7a" />
+            android:value="f4a241fc2f4d2b5666d5c322b60d7f7a" />-->
 
 
         <!-- FABRIC CRASHLYTICS -->
